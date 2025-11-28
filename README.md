@@ -1,11 +1,10 @@
 # Formosoul
 
 ## 通用原則
-
-　　PascalCase：組件名（e.g., MyComponent）。
-　　camelCase：變數/方法（e.g., myFunction）。
-　　kebab-case：class/事件（e.g., my-class）。
-　　多字詞描述，避免縮寫；布林以 is/has 開頭。
+- PascalCase：組件名（e.g., MyComponent）。
+- camelCase：變數/方法（e.g., myFunction）。
+- kebab-case：class/事件（e.g., my-class）。
+- 多字詞描述，避免縮寫；布林以 is/has 開頭。
 
 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
