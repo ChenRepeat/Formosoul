@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+
 // 圖片陣列
 const cards = ref([
   { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
@@ -9,6 +10,9 @@ const cards = ref([
 
 const canvasRefs = ref([])
 const pi = x => x * Math.PI / 180
+// const function pi(x){
+//  x * Math.PI / 180
+//} 
 
 function draw(canvasElement, long, Camera, radius, imageSrc) {
   const canvas = canvasElement; 
