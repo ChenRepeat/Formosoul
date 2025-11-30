@@ -47,7 +47,7 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    draw(canvasEl, 280, 70, 16, imageUrl);
+    draw(canvasEl, 280, 70, 32, imageUrl);
   })
 })
 </script>
@@ -77,7 +77,7 @@ onMounted(() => {
     height: 300px;
     background-color: #ccc;
     position: relative;
-    border-radius: 16px;
+    border-radius: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
