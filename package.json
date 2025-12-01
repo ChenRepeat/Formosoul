@@ -10,6 +10,7 @@
     "安裝套件windows": "npm i",
     "安裝套件ios": "sudo npm i",
     "安裝sass": " npm install -D sass",
+    "iOS安裝sass": "sudo npm install -D sass",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
