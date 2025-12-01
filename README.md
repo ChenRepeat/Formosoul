@@ -2,7 +2,7 @@
 
 ## 通用原則
 
-　　PascalCase：組件名（e.g., MyComponent）。  
+　　PascalCase：組件名（e.g., MyComponent）。
 　　camelCase：變數/方法（e.g., myFunction 。  
 　　kebab-case：class/事件（e.g., my-class）。  
 　　多字詞描述，避免縮寫；布林以 is/has 開頭。  
@@ -12,10 +12,10 @@
 ## JS 相關命名
 
 　　變數/Props: camelCase（e.g., userName, userId）。  
-　　常數: SNAKE_CASE（e.g., MAX_USERS）。  
-　　函式/方法: camelCase，以動詞開頭（e.g., fetchUserData()）。  
-　　Events: kebab-case（e.g., 'update-user'）。  
 　　Computed等有傳回值的函式: camelCase（e.g., fullName）。  
+　　函式/方法: camelCase，以動詞開頭（e.g., fetchUserData()）。 
+
+　　常數: SNAKE_CASE（e.g., MAX_USERS）。  
 
 ---
 
