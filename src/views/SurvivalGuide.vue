@@ -9,9 +9,11 @@
 <template>
   <main class="survival-guide">
     <section>
-      
+      <div class="">
+        <h3>Welcome to survival guide！</h3>
 
 
+      </div>
     </section>
   </main>
 

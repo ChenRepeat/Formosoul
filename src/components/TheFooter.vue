@@ -52,7 +52,7 @@
   </main>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   a{
     width: 100%;
     display: block;
@@ -84,9 +84,9 @@
     justify-content: start;
     gap: 60px;
   }
-  .dp-flex{
-    display: flex;
-  }
+  // .dp-flex{
+  //   display: flex;
+  // }
   .dp-flex-col{
     display: flex;
     flex-direction: column;

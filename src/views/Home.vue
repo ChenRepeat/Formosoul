@@ -8,7 +8,5 @@
 </template>
 
 <style lang="scss" scoped>
-  .a123{
-    color: $color-primary;
-  }
+
 </style>
