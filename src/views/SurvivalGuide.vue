@@ -6,9 +6,10 @@
 
 
 <template>
+<!-- :style="{top: `${position.y}px`, left: `${position.x}px`}" -->
   <main class="survival-case">
-    <div ref="lanternRef" class="survial-lantern-case" :style="{top: `${position.y}px`, left: `${position.x}px`}">
-      <img src="/public/" class="survial-lantern-img-case" alt="">
+    <div ref="lanternRef" class="survial-lantern-case" >
+      <img src="/public/SurvivalGuide/lantern-image.png" class="survial-lantern-img-case" alt="">
     </div>
 
     <section>
