@@ -1,6 +1,8 @@
 <script setup>
   import siteLogo from '@/assets/logo_white_L.png'; 
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  
+
 </script>
 
 <template>
@@ -9,7 +11,9 @@
       <div class="footer-icons-case dp-flex-col">
           <img :src="siteLogo" alt="Logo" class="logo-style">
           <div class="footer-social-link">
-            <a href=""><font-awesome-icon icon="fa-brands fa-twitter" beat class="footer-socialIcons" /></a>
+            <a href=""><font-awesome-icon icon="fa-brands fa-twitter" beat class="footer-socialIcons" />
+            </a>
+
           </div>
       </div>
 
@@ -58,12 +62,16 @@
 </template>
 
 <style scoped lang="scss">
+
   a{
     width: 100%;
     display: block;
   }
   ul{
     list-style: none;
+  }
+  hr{
+    margin: 0;
   }
   .footer-icons-case{
     height: auto;
@@ -109,7 +117,7 @@
     font-size: 28px;
   }
   .footer-link-case{
-    width: 461px;
+    width: auto;
     position: relative;
   }
   .footer-classes-link{
@@ -148,7 +156,6 @@
   }
   .hr-thick{
     width: 73%;
-    margin-left: 0;
     transform: scaleY(0.5);
   }
   .tibame-policy a{
@@ -165,6 +172,8 @@
     .footer-link-corner{
       flex-direction: column;
       width: max-content;
+      margin: 0 50px;
+      box-sizing: border-box;
     }
     .footer-page-link a{
       font-size: 20px;
@@ -172,8 +181,11 @@
     .trim-case-policy,.trim-case-link{
       transform: rotate(90deg);
       transform-origin: 0 50%;
-      top: -12px;left: -12px;
+      top: -8px;left: -12px;
       position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     .trim-case-link{
       width: 241px;
