@@ -14,7 +14,7 @@
 
 <template>
   <div class="header-outer-case dp-flex">
-    <img :src="siteLogo" alt="SiteLogo">
+    <a href="/"><img :src="siteLogo" alt="SiteLogo"></a>
     <div class="header-link dp-flex">
       <div class="header-lang-trigger dp-flex">
         <h6 class="trigger-lang">EN</h6>
