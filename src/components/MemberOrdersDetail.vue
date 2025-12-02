@@ -107,7 +107,7 @@
         {
             number: 'OD20250003',
             date: '2025-01-03',
-            prices: '$800',
+            prices: '$80d0',
             payment: 'APPLE PAY',
             status: 'Pending',
             shipping: 'Home delivery',
@@ -115,7 +115,7 @@
         {
             number: 'OD20250003',
             date: '2025-01-03',
-            prices: '$800',
+            prices: '$8d00',
             payment: 'APPLE PAY',
             status: 'Pending',
             shipping: 'Home delivery',
@@ -128,6 +128,16 @@
         const start = (props.currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         return orders.value.slice(start, end);
+    });
+
+    const totalPages = computed(() =>{
+        return Math.ceil(orders.value.length / itemsPerPage);
+    });
+
+    // 用 expose 把數據暴露給父組件
+    defineExpose({
+        orders,
+        totalPages,
     });
 </script>
 
