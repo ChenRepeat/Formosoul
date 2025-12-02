@@ -141,7 +141,7 @@
     });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .orders-contain{
         width: 100%;
         display: flex;
