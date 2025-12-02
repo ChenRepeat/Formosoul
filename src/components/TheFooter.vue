@@ -111,10 +111,7 @@
     color: $color-fsWhite;
     cursor: pointer;
   }
-  .dp-flex-col{
-    display: flex;
-    flex-direction: column;
-  }
+
   .footer-page-link{
     gap: 14px;
     padding: 0;

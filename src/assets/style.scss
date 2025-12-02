@@ -8,6 +8,7 @@ html {
   font-family: 'Ubuntu','Roboto', 'Noto Sans TC', sans-serif; 
   font-size: 62.5%;               /* 預設字級調整為10px */
   letter-spacing: 0.05em;
+  height: 100%;
 }
 
 *, *::before, *::after {
@@ -137,12 +138,19 @@ p {font-size: 1.6rem;}
 
 
 // -----------------------------------
-//其他預設class
+//排版用class
 
 .dp-flex{
   display: flex;
+  flex-direction: row;
+}
+.dp-flex-col{
+  display: flex;
+  flex-direction: column;
 }
 
+// -----------------------------------
+//其他預設class
 
 // -----------------------------------
 
