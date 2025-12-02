@@ -57,7 +57,7 @@ const cards = ref([
   height: 100%;
   object-fit: cover;
   object-position: center;
-  z-index: -10;
+  z-index: 2;
   transition: filter 0.3s ease;
 
   clip-path: polygon(
@@ -77,6 +77,8 @@ const cards = ref([
   justify-content: space-between;
   padding: 14px 30px 28px;
   text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 5;
 }
 
 // 右下白色三角(common statement)
@@ -102,7 +104,7 @@ const cards = ref([
 }
 
 .newscard-container:hover .newscard-container-pics {
-  filter: brightness(1.2);
+  filter: brightness(1.1);
 }
 
 .newscard-container:hover {

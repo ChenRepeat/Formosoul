@@ -1,103 +1,111 @@
 <script setup>
-<<<<<<< HEAD
-  import siteLogo from '@/assets/logo_white_L.png'; 
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  
-
-=======
 import siteLogo from '@/assets/logo_white_L.png'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
->>>>>>> Timings
 </script>
 
 <template>
   <main class="footer-case">
     <section class="footer-outer-case dp-flex">
       <div class="footer-icons-case dp-flex-col">
-<<<<<<< HEAD
-          <img :src="siteLogo" alt="Logo" class="logo-style">
-          <div class="footer-social-link dp-flex">
-            <a href=""><font-awesome-icon icon="fa-brands fa-github" class="footer-socialIcons" /></a>
-            <a href=""><font-awesome-icon icon="fa-brands fa-instagram" class="footer-socialIcons" /></a>
-            <a href=""><font-awesome-icon icon="fa-brands fa-square-facebook" class="footer-socialIcons" /></a>
-            <a href=""><font-awesome-icon icon="fa-brands fa-x-twitter"  class="footer-socialIcons" /></a>
-            
-          </div>
-=======
         <img :src="siteLogo" alt="Logo" class="logo-style" />
-        <div class="footer-social-link">
+        <div class="footer-social-link dp-flex">
           <a href=""
             ><font-awesome-icon
-              icon="fa-brands fa-twitter"
-              beat
+              icon="fa-brands fa-github"
+              class="footer-socialIcons"
+          /></a>
+          <a href=""
+            ><font-awesome-icon
+              icon="fa-brands fa-instagram"
+              class="footer-socialIcons"
+          /></a>
+          <a href=""
+            ><font-awesome-icon
+              icon="fa-brands fa-square-facebook"
+              class="footer-socialIcons"
+          /></a>
+          <a href=""
+            ><font-awesome-icon
+              icon="fa-brands fa-x-twitter"
               class="footer-socialIcons"
           /></a>
         </div>
->>>>>>> Timings
       </div>
 
       <div class="footer-link-corner dp-flex">
         <div class="footer-link-case">
-<<<<<<< HEAD
           <div class="trim-case-link dp-flex-col">
-            <hr>
-            <hr class="hr-thick">
-=======
-          <div class="trim-case-link">
             <hr />
             <hr class="hr-thick" />
->>>>>>> Timings
           </div>
           <div class="footer-inner-case dp-flex">
             <ul class="footer-page-link dp-flex-col">
-              <li><a href="/"><h5>Home</h5></a></li>
-              <li><a href="/news"><h5>News</h5></a></li>
-              <li><a href="/annualevent"><h5>Annual Event</h5></a></li>
-              <li><a href="/professorsintroduction"><h5>Professors</h5></a></li>
-              <li><a href="/survivalguide"><h5> Rules</h5></a></li>
-              <li><a href="/shop"><h5>Diagon Alley</h5></a></li>
+              <li>
+                <a href="/"><h5>Home</h5></a>
+              </li>
+              <li>
+                <a href="/news"><h5>News</h5></a>
+              </li>
+              <li>
+                <a href="/annualevent"><h5>Annual Event</h5></a>
+              </li>
+              <li>
+                <a href="/professorsintroduction"><h5>Professors</h5></a>
+              </li>
+              <li>
+                <a href="/survivalguide"><h5>Rules</h5></a>
+              </li>
+              <li>
+                <a href="/shop"><h5>Diagon Alley</h5></a>
+              </li>
             </ul>
             <ul class="footer-classes-link dp-flex-col">
-<<<<<<< HEAD
-              <li class="footer-class-link-title"><a href="/classes"><h5>Classes</h5></a></li>
-              <li><a href=""><p>Motorcycle</p></a></li>
-              <li><a href=""><p>Endemic Species</p></a></li>
-              <li><a href=""><p>History of Magic</p></a></li>
-              <li><a href=""><p>Spells & Charms</p></a></li>
-              <li><a href=""><p>Potions</p></a></li>
-              <li><a href=""><p>Divination</p></a></li>
-=======
               <li class="footer-class-link-title">
-                <a href="/classes">Classes</a>
+                <a href="/classes"><h5>Classes</h5></a>
               </li>
-              <li><a href="">Motorcycle</a></li>
-              <li><a href="">Endemic Species</a></li>
-              <li><a href="">History of Magic</a></li>
-              <li><a href="">Spells & Charms</a></li>
-              <li><a href="">Potions</a></li>
-              <li><a href="">Divination</a></li>
->>>>>>> Timings
+              <li>
+                <a href=""><p>Motorcycle</p></a>
+              </li>
+              <li>
+                <a href=""><p>Endemic Species</p></a>
+              </li>
+              <li>
+                <a href=""><p>History of Magic</p></a>
+              </li>
+              <li>
+                <a href=""><p>Spells & Charms</p></a>
+              </li>
+              <li>
+                <a href=""><p>Potions</p></a>
+              </li>
+              <li>
+                <a href=""><p>Divination</p></a>
+              </li>
               <li></li>
             </ul>
           </div>
         </div>
         <div class="footer-policy-case">
-<<<<<<< HEAD
           <div class="trim-case-policy dp-flex-col">
-            <hr>
-            <hr class="hr-thick">
-=======
-          <div class="trim-case-policy">
             <hr />
             <hr class="hr-thick" />
->>>>>>> Timings
           </div>
           <ul class="policy-inner-case dp-flex-col">
-            <li><a href="/policy"><h5>Policy</h5></a></li>
-            <li><a href=""><p>Payment</p></a></li>
-            <li><a href=""><p>Delivery</p></a></li>
-            <li><a href=""><p>Returns</p></a></li>
-            <li><a href=""><p>Privacy Policy</p></a></li>
+            <li>
+              <a href="/policy"><h5>Policy</h5></a>
+            </li>
+            <li>
+              <a href=""><p>Payment</p></a>
+            </li>
+            <li>
+              <a href=""><p>Delivery</p></a>
+            </li>
+            <li>
+              <a href=""><p>Returns</p></a>
+            </li>
+            <li>
+              <a href=""><p>Privacy Policy</p></a>
+            </li>
           </ul>
         </div>
       </div>
@@ -112,116 +120,20 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 </template>
 
 <style scoped lang="scss">
-<<<<<<< HEAD
-
-  .footer-link-corner a{
-    width: 100%;
-    display: block;
-  }
-  ul{
-    list-style: none;
-  }
-  hr{
-    margin: 0;
-  }
-  .footer-icons-case{
-    height: auto;
-    justify-content: center;
-    gap: 60px;
-  }
-  .logo-style{
-    align-self: center;
-  }
-  .footer-link-corner{
-    gap: 60px;
-  }
-  .footer-case{
-    background-color: #041426;
-    width: 100%;
-    padding-top: 60px;
-    padding-bottom: 16px;
-    height: 100%;
-  }
-  .footer-outer-case{
-    gap: 60px;
-    justify-content: center;
-  }
-  .footer-inner-case{
-    justify-content: start;
-    gap: 60px;
-  }
-  .footer-social-link{
-    text-align: center;
-    gap: 8px;
-    justify-content: center;
-  }
-  .footer-socialIcons{
-    font-size: 32px;
-    color: $color-fsWhite;
-    cursor: pointer;
-  }
-
-  .footer-page-link{
-    gap: 14px;
-    padding: 0;
-  }
-  .footer-link-case{
-    width: auto;
-    position: relative;
-  }
-  .footer-classes-link{
-    gap: 16px;
-    padding: 0;
-  }
-  .footer-class-link-title{
-    margin-bottom: 8px;
-    font-size: 28px;
-  }
-  .footer-policy-case{
-    width: auto;
-    position: relative;
-  }
-  .footer-policy-case ul{
-    padding: 0;
-  }
-  .tibame-policy{
-    text-align: center;
-    font-size: 12px;
-    color:#B0B0B0;
-    margin-top: 60px;
-  }
-  .trim-case-policy,.trim-case-link{
-    gap:8px;
-    margin-bottom: 40px;
-  }
-
-  ul a{
-    text-decoration: none;
-    color: #fff;
-
-  }
-  .policy-inner-case{
-    gap: 16px;
-    width: max-content;
-    
-  }
-  .policy-inner-case li{
-    width: max-content;
-  }
-  .hr-thick{
-    width: 73%;
-    transform: scaleY(0.5);
-=======
-a {
+.footer-link-corner a {
   width: 100%;
   display: block;
 }
 ul {
   list-style: none;
 }
+hr {
+  margin: 0;
+}
 .footer-icons-case {
   height: auto;
   justify-content: center;
+  gap: 60px;
 }
 .logo-style {
   align-self: center;
@@ -234,6 +146,7 @@ ul {
   width: 100%;
   padding-top: 60px;
   padding-bottom: 16px;
+  height: 100%;
 }
 .footer-outer-case {
   gap: 60px;
@@ -245,25 +158,21 @@ ul {
 }
 .footer-social-link {
   text-align: center;
+  gap: 8px;
+  justify-content: center;
 }
 .footer-socialIcons {
   font-size: 32px;
   color: $color-fsWhite;
   cursor: pointer;
 }
-.dp-flex-col {
-  display: flex;
-  flex-direction: column;
-}
+
 .footer-page-link {
   gap: 14px;
   padding: 0;
 }
-.footer-page-link a {
-  font-size: 28px;
-}
 .footer-link-case {
-  width: 461px;
+  width: auto;
   position: relative;
 }
 .footer-classes-link {
@@ -287,6 +196,12 @@ ul {
   color: #b0b0b0;
   margin-top: 60px;
 }
+.trim-case-policy,
+.trim-case-link {
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
 ul a {
   text-decoration: none;
   color: #fff;
@@ -300,12 +215,15 @@ ul a {
 }
 .hr-thick {
   width: 73%;
-  margin-left: 0;
   transform: scaleY(0.5);
 }
-.tibame-policy a {
-  display: inline;
-  color: #b0b0b0;
+.trim-case-policy,
+.trim-case-link {
+  transform: rotate(90deg);
+  transform-origin: 0 50%;
+  top: -12px;
+  left: -12px;
+  position: absolute;
 }
 @media screen and (max-width: 1200px) {
   .footer-outer-case {
@@ -317,58 +235,31 @@ ul a {
   .footer-link-corner {
     flex-direction: column;
     width: max-content;
+    margin: 0 50px;
+    box-sizing: border-box;
   }
   .footer-page-link a {
     font-size: 20px;
->>>>>>> Timings
   }
   .trim-case-policy,
   .trim-case-link {
     transform: rotate(90deg);
     transform-origin: 0 50%;
-    top: -12px;
+    top: -8px;
     left: -12px;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-<<<<<<< HEAD
-  @media screen and (max-width: 1200px){
-    .footer-outer-case{
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 32px;
-      align-items: center;
-    }
-    .footer-link-corner{
-      flex-direction: column;
-      width: max-content;
-      margin: 0 50px;
-      box-sizing: border-box;
-    }
-    .footer-page-link a{
-      font-size: 20px;
-    }
-    .trim-case-policy,.trim-case-link{
-      transform: rotate(90deg);
-      transform-origin: 0 50%;
-      top: -8px;left: -12px;
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .trim-case-link{
-      width: 241px;
-    }
-    .trim-case-policy{
-      width: 80px;
-    }
-=======
   .trim-case-link {
     width: 241px;
->>>>>>> Timings
   }
   .trim-case-policy {
     width: 80px;
   }
+}
+.trim-case-policy {
+  width: 80px;
 }
 </style>
