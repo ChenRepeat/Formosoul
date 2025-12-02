@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import ProductCard from '@/components/ProductCard.vue';
-import TheFooter from '@/components/TheFooter.vue';
-
+  import TheHeader from '@/components/TheHeader.vue';
 </script>
 
 <template>
-  <!-- <ProductCard /> -->
-  <TheFooter />
+  <TheHeader />
 </template>
 
 <style>
