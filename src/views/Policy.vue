@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import MemberOrders from '@/components/memberOrders.vue';
-import MemberPagebutton from '@/components/memberPagebutton.vue';
-import Pagelinebar from '@/components/Pagelinebar.vue';
+import MemberOrders from '@/components/Member/Orders/MemberOrders.vue';
+import MemberPagebutton from '@/components/Member/MemberPagebutton.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const images = [
@@ -64,8 +63,8 @@ onUnmounted(() => clearInterval(interval))
     </div>
   </div>
   <MemberPagebutton />
-  <Pagelinebar />
-  <MemberOrders />
+
+  <!-- <MemberOrders /> -->
 </template>
 
 <style>

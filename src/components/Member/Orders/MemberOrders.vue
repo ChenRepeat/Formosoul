@@ -25,9 +25,6 @@
             >
                 {{ page }}
             </button>
-            <!-- <button @click="goToPage(1)">1</button>
-            <button @click="goToPage(2)">2</button>
-            <button @click="goToPage(3)">3</button> -->
             <button @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></button>
         </div>
     </div>
@@ -107,14 +104,19 @@ const goToPage = (pageNumber) => {
     }
     .orderspage-btn > button{
         font-size: 16px;
-        background-color: #ffcc46;
+        background-color: transparent;
         width: 24px;
         height: 24px;
-        border: 0;
+        border: 1px solid #ffcc46;
         border-radius: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
+    }
+
+    .orderspage-btn > button.active {
+        background-color: #ffcc46;
+        color: white;
     }
 </style>
