@@ -88,6 +88,7 @@
     width: 100%;
     padding-top: 60px;
     padding-bottom: 16px;
+    height: 100%;
   }
   .footer-outer-case{
     gap: 60px;
