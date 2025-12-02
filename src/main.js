@@ -13,11 +13,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* 3. 引入你想使用的特定圖示 */
 // 注意：為了效能，建議只引入有用到的圖示，而不是全部
-import { faUserSecret, faHouse } from '@fortawesome/free-solid-svg-icons'
-import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+// import { faUserSecret, faHouse } from '@fortawesome/free-solid-svg-icons'
+// import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
 /* 4. 將圖示加入 Library */
-library.add(faUserSecret, faHouse, faTwitter)
+library.add(fas,fab)
 
 const app = createApp(App)
 
