@@ -10,42 +10,44 @@
     <section class="footer-outer-case dp-flex">
       <div class="footer-icons-case dp-flex-col">
           <img :src="siteLogo" alt="Logo" class="logo-style">
-          <div class="footer-social-link">
-            <a href=""><font-awesome-icon icon="fa-brands fa-twitter" beat class="footer-socialIcons" />
-            </a>
-
+          <div class="footer-social-link dp-flex">
+            <a href=""><font-awesome-icon icon="fa-brands fa-github" class="footer-socialIcons" /></a>
+            <a href=""><font-awesome-icon icon="fa-brands fa-instagram" class="footer-socialIcons" /></a>
+            <a href=""><font-awesome-icon icon="fa-brands fa-square-facebook" class="footer-socialIcons" /></a>
+            <a href=""><font-awesome-icon icon="fa-brands fa-x-twitter"  class="footer-socialIcons" /></a>
+            
           </div>
       </div>
 
       <div class="footer-link-corner dp-flex">
         <div class="footer-link-case">
-          <div class="trim-case-link">
+          <div class="trim-case-link dp-flex-col">
             <hr>
             <hr class="hr-thick">
           </div>
           <div class="footer-inner-case dp-flex">
             <ul class="footer-page-link dp-flex-col">
-              <li><a href="/">Home</a></li>
-              <li><a href="/news">News</a></li>
-              <li><a href="/annualevent">Annual Event</a></li>
-              <li><a href="/professorsintroduction">Professors</a></li>
-              <li><a href="/survivalguide">Survival Rules</a></li>
-              <li><a href="/shop">Diagon Alley</a></li>
+              <li><a href="/"><h5>Home</h5></a></li>
+              <li><a href="/news"><h5>News</h5></a></li>
+              <li><a href="/annualevent"><h5>Annual Event</h5></a></li>
+              <li><a href="/professorsintroduction"><h5>Professors</h5></a></li>
+              <li><a href="/survivalguide"><h5> Rules</h5></a></li>
+              <li><a href="/shop"><h5>Diagon Alley</h5></a></li>
             </ul>
             <ul class="footer-classes-link dp-flex-col">
-              <li class="footer-class-link-title"><a href="/classes">Classes</a></li>
-              <li><a href="">Motorcycle</a></li>
-              <li><a href="">Endemic Species</a></li>
-              <li><a href="">History of Magic</a></li>
-              <li><a href="">Spells & Charms</a></li>
-              <li><a href="">Potions</a></li>
-              <li><a href="">Divination</a></li>
+              <li class="footer-class-link-title"><a href="/classes"><h5>Classes</h5></a></li>
+              <li><a href=""><p>Motorcycle</p></a></li>
+              <li><a href=""><p>Endemic Species</p></a></li>
+              <li><a href=""><p>History of Magic</p></a></li>
+              <li><a href=""><p>Spells & Charms</p></a></li>
+              <li><a href=""><p>Potions</p></a></li>
+              <li><a href=""><p>Divination</p></a></li>
               <li></li>
             </ul>
           </div>
         </div>
         <div class="footer-policy-case">
-          <div class="trim-case-policy">
+          <div class="trim-case-policy dp-flex-col">
             <hr>
             <hr class="hr-thick">
           </div>
@@ -63,7 +65,7 @@
 
 <style scoped lang="scss">
 
-  a{
+  .footer-link-corner a{
     width: 100%;
     display: block;
   }
@@ -76,6 +78,7 @@
   .footer-icons-case{
     height: auto;
     justify-content: center;
+    gap: 60px;
   }
   .logo-style{
     align-self: center;
@@ -100,6 +103,8 @@
   }
   .footer-social-link{
     text-align: center;
+    gap: 8px;
+    justify-content: center;
   }
   .footer-socialIcons{
     font-size: 32px;
@@ -113,9 +118,6 @@
   .footer-page-link{
     gap: 14px;
     padding: 0;
-  }
-  .footer-page-link a{
-    font-size: 28px;
   }
   .footer-link-case{
     width: auto;
@@ -142,6 +144,11 @@
     color:#B0B0B0;
     margin-top: 60px;
   }
+  .trim-case-policy,.trim-case-link{
+    gap:8px;
+    margin-bottom: 40px;
+  }
+
   ul a{
     text-decoration: none;
     color: #fff;
