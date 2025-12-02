@@ -25,6 +25,7 @@ function draw(canvasElement, long, Camera, radius, imageSrc) {
 
   const img = new Image();
 
+  
   img.onload = () => {
     context.clearRect(0, 0, long, long);
     

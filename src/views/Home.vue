@@ -1,9 +1,12 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <div class="a123">123</div>
   </main>
 </template>
+
+<style lang="scss" scoped>
+
+</style>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Footer from '@/components/footer.vue';
 import ProductCard from '@/components/ProductCard.vue';
+import TheFooter from '@/components/TheFooter.vue';
 
 </script>
 
 <template>
   <!-- <ProductCard /> -->
-  <Footer />
+  <TheFooter />
 </template>
 
 <style>

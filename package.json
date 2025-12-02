@@ -9,6 +9,8 @@
   "scripts": {
     "安裝套件windows": "npm i",
     "安裝套件ios": "sudo npm i",
+    "安裝sass": " npm install -D sass",
+    "iOS安裝sass": "sudo npm install -D sass",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
@@ -22,6 +24,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.2",
+    "sass": "^1.94.2",
+    "sass-embedded": "^1.93.3",
     "vite": "^7.2.4",
     "vite-plugin-vue-devtools": "^8.0.5"
   }
