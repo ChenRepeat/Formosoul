@@ -1,6 +1,5 @@
 <template>
-
-
+  <NewsCard></NewsCard>
 </template>
 
 <style>
@@ -12,3 +11,7 @@
   }
 }
 </style>
+
+<script setup>
+import NewsCard from '@/components/NewsCard.vue'
+</script>
