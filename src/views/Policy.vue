@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import MemberOrders from '@/components/memberOrders.vue';
-import MemberPagebutton from '@/components/memberPagebutton.vue';
-import Pagelinebar from '@/components/Pagelinebar.vue';
+import MemberPagebutton from '@/components/Member/MemberPagebutton.vue';
+import TheFooter from '@/components/TheFooter.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const images = [
@@ -49,44 +48,56 @@ onUnmounted(() => clearInterval(interval))
 </script>
 
 <template>
-  <div class="backgrond">
-    <div class="backgroundball">
-    <img 
-      v-for="(img, idx) in images" 
-      :key="idx"
-      :src="img" 
-      :style="{ 
-        left: positions[idx].x + '%', 
-        top: positions[idx].y + '%',
-        zindex: positions[idx].zindex
-      }"
-    />
+
+    <div class="backgrond">
+      <div class="backgroundball">
+      <img 
+        v-for="(img, idx) in images" 
+        :key="idx"
+        :src="img" 
+        :style="{ 
+          left: positions[idx].x + '%', 
+          top: positions[idx].y + '%',
+          zindex: positions[idx].zindex
+        }"
+      />
+      </div>
     </div>
-  </div>
   <MemberPagebutton />
-  <Pagelinebar />
-  <MemberOrders />
+  <TheFooter></TheFooter>
+
 </template>
 
 <style>
 @media (min-width: 1024px) {
   .about {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     display: flex;
     align-items: center;
   }
 }
 
-.backgrond{
-  height: 100%;
-  width: 100%;
-  z-index: -1;
+
+.backgrond {
   position: absolute;
-  filter: blur(20px); 
-  transform: scale(1.3, 1.3);
-  background-color: #00529F;
+  width: 100%;       
+  height: 100vh;     
+  overflow: hidden;  
+  z-index: -2; 
+
 }
 
+
+.backgroundball {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  right: -30px;
+  bottom: -30px;
+  background-color: #00529F;
+  filter: blur(20px);
+  z-index: -1; 
+}
 
 .backgroundball > img{
   position: absolute;

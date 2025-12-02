@@ -16,8 +16,8 @@
         <MemberOrdersDetail ref="detailComponent" :currentPage="currentPage" />
         <div class="orderspage-btn">
             
-            <button @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></button>
-            <button
+            <button class="btn-yellow-fill" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></button>
+            <button class="btn-yellow-fill"
                 v-for="page in totalPages"
                 :key="page"
                 @click="goToPage(page)"
@@ -25,10 +25,7 @@
             >
                 {{ page }}
             </button>
-            <!-- <button @click="goToPage(1)">1</button>
-            <button @click="goToPage(2)">2</button>
-            <button @click="goToPage(3)">3</button> -->
-            <button @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></button>
+            <button class="btn-yellow-fill" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></button>
         </div>
     </div>
 </template>
@@ -67,21 +64,21 @@ const goToPage = (pageNumber) => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .member-orders{
         margin: 0 auto;
         width: 1200px;
     }
-    h2{ 
-        display: flex;
-        font-size: 52px;
-        align-items: center;
+    h2{
+        text-align: center;
         color: #041416;
-        justify-content: center;
+
     }
     .orders{
         margin: 0 auto;
-        width: 1200px;  
+        width: 1200px;
+        padding-top: 16px;
+        padding-bottom: 16px; 
     }
     .title-orders{
         width: 100%;
@@ -106,15 +103,16 @@ const goToPage = (pageNumber) => {
         gap: 16px;
     }
     .orderspage-btn > button{
-        font-size: 16px;
+        background-color: transparent;
+        transition:  0.2s ease;
+
+    }
+    .orderspage-btn > button:hover{
         background-color: #ffcc46;
-        width: 24px;
-        height: 24px;
-        border: 0;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+        color: white; 
+    }
+    .orderspage-btn > button.active {
+        background-color: #ffcc46;
+        color: white;
     }
 </style>
