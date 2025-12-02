@@ -16,8 +16,8 @@
         <MemberOrdersDetail ref="detailComponent" :currentPage="currentPage" />
         <div class="orderspage-btn">
             
-            <button @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></button>
-            <button
+            <button class="btn-yellow-fill" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></button>
+            <button class="btn-yellow-fill"
                 v-for="page in totalPages"
                 :key="page"
                 @click="goToPage(page)"
@@ -25,7 +25,7 @@
             >
                 {{ page }}
             </button>
-            <button @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></button>
+            <button class="btn-yellow-fill" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></button>
         </div>
     </div>
 </template>
@@ -103,16 +103,9 @@ const goToPage = (pageNumber) => {
         gap: 16px;
     }
     .orderspage-btn > button{
-        font-size: 16px;
         background-color: transparent;
-        width: 24px;
-        height: 24px;
-        border: 1px solid #ffcc46;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+        transition:  0.2s ease;
+
     }
 
     .orderspage-btn > button.active {
