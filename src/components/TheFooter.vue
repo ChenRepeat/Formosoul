@@ -1,6 +1,6 @@
 <script setup>
   import siteLogo from '@/assets/logo_white_L.png'; 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 </script>
 
 <template>
@@ -8,11 +8,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     <section class="footer-outer-case dp-flex">
       <div class="footer-icons-case dp-flex-col">
           <img :src="siteLogo" alt="Logo" class="logo-style">
+          <div class="footer-social-link">
+            <a href=""><font-awesome-icon icon="fa-brands fa-twitter" beat class="footer-socialIcons" /></a>
+          </div>
       </div>
 
       <div class="footer-link-corner dp-flex">
         <div class="footer-link-case">
-          <div class="trim-case">
+          <div class="trim-case-link">
             <hr>
             <hr class="hr-thick">
           </div>
@@ -33,12 +36,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
               <li><a href="">Spells & Charms</a></li>
               <li><a href="">Potions</a></li>
               <li><a href="">Divination</a></li>
-              <li><font-awesome-icon icon="fa-brands fa-twitter" beat style="cursor: pointer;" /></li>
+              <li></li>
             </ul>
           </div>
         </div>
         <div class="footer-policy-case">
-          <div class="trim-case">
+          <div class="trim-case-policy">
             <hr>
             <hr class="hr-thick">
           </div>
@@ -86,9 +89,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     justify-content: start;
     gap: 60px;
   }
-  // .dp-flex{
-  //   display: flex;
-  // }
+  .footer-social-link{
+    text-align: center;
+  }
+  .footer-socialIcons{
+    font-size: 32px;
+    color: $color-fsWhite;
+    cursor: pointer;
+  }
   .dp-flex-col{
     display: flex;
     flex-direction: column;
@@ -102,6 +110,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   }
   .footer-link-case{
     width: 461px;
+    position: relative;
   }
   .footer-classes-link{
     gap: 16px;
@@ -113,6 +122,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   }
   .footer-policy-case{
     width: auto;
+    position: relative;
   }
   .footer-policy-case ul{
     padding: 0;
@@ -126,9 +136,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   ul a{
     text-decoration: none;
     color: #fff;
+
   }
   .policy-inner-case{
     gap: 16px;
+    width: max-content;
+    
+  }
+  .policy-inner-case li{
+    width: max-content;
   }
   .hr-thick{
     width: 73%;
@@ -140,20 +156,30 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     color:#B0B0B0;
   }
   @media screen and (max-width: 1200px){
-
     .footer-outer-case{
       display: flex;
       flex-direction: column-reverse;
       gap: 32px;
+      align-items: center;
     }
     .footer-link-corner{
       flex-direction: column;
+      width: max-content;
     }
     .footer-page-link a{
-    font-size: 20px;
-  }
-  .trim-case{
-    transform: rotate(90deg);
-  }
+      font-size: 20px;
+    }
+    .trim-case-policy,.trim-case-link{
+      transform: rotate(90deg);
+      transform-origin: 0 50%;
+      top: -12px;left: -12px;
+      position: absolute;
+    }
+    .trim-case-link{
+      width: 241px;
+    }
+    .trim-case-policy{
+      width: 80px;
+    }
   }
 </style>

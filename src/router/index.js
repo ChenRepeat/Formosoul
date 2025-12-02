@@ -66,7 +66,6 @@ const router = createRouter({
       name: 'Policy',
       component: Policy,
     },
-    
   ],
 })
 
