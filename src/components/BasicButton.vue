@@ -6,7 +6,11 @@
 
 
   //  範例如下
+
+  //  要使用到事件切換的話，class名在這邊定義
   //  const currentClass = ref('btn'); 
+
+  //  切換 class 實例
   //  const ch = () => {
   //    if (currentClass.value === 'btn') {
   //       currentClass.value = 'btn-a'; 
