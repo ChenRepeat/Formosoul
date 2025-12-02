@@ -64,21 +64,21 @@ const goToPage = (pageNumber) => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .member-orders{
         margin: 0 auto;
         width: 1200px;
     }
-    h2{ 
-        display: flex;
-        font-size: 52px;
-        align-items: center;
+    h2{
+        text-align: center;
         color: #041416;
-        justify-content: center;
+
     }
     .orders{
         margin: 0 auto;
-        width: 1200px;  
+        width: 1200px;
+        padding-top: 16px;
+        padding-bottom: 16px; 
     }
     .title-orders{
         width: 100%;
@@ -107,7 +107,10 @@ const goToPage = (pageNumber) => {
         transition:  0.2s ease;
 
     }
-
+    .orderspage-btn > button:hover{
+        background-color: #ffcc46;
+        color: white; 
+    }
     .orderspage-btn > button.active {
         background-color: #ffcc46;
         color: white;
