@@ -52,9 +52,11 @@
             <hr class="hr-thick">
           </div>
           <ul class="policy-inner-case dp-flex-col">
-            <li><a href="/policy">Policy</a></li>
-            <li><a href="">Overseas Purchase Payment</a></li>
-            <li><a href="">Privacy Policy</a></li>
+            <li><a href="/policy"><h5>Policy</h5></a></li>
+            <li><a href=""><p>Payment</p></a></li>
+            <li><a href=""><p>Delivery</p></a></li>
+            <li><a href=""><p>Returns</p></a></li>
+            <li><a href=""><p>Privacy Policy</p></a></li>
           </ul>
         </div>
       </div>
