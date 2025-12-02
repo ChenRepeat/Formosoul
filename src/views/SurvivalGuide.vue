@@ -35,7 +35,7 @@
 }
 
 .survival-headline-case {
-  color: $color-primary;
+  // color: $color-primary;
   font-weight: bold;
 }
 
