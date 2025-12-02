@@ -1,5 +1,6 @@
 <script setup>
   import siteLogo from '@/assets/logo_white_L.png'; 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 </script>
 
 <template>
@@ -32,6 +33,7 @@
               <li><a href="">Spells & Charms</a></li>
               <li><a href="">Potions</a></li>
               <li><a href="">Divination</a></li>
+              <li><font-awesome-icon icon="fa-brands fa-twitter" beat style="cursor: pointer;" /></li>
             </ul>
           </div>
         </div>
