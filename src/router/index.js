@@ -8,6 +8,11 @@ import Policy from '@/views/Policy.vue'
 import Classes from '@/views/Classes.vue'
 import AnnualEvent from '@/views/AnnualEvent.vue'
 import SurvivalGuide from '@/views/SurvivalGuide.vue'
+import MemberOrders from '@/components/Member/Orders/MemberOrders.vue'
+import Information from '@/components/Member/information/information.vue'
+import Changepassword from '@/components/Member/changepassword/changepassword.vue'
+import Mycollections from '@/components/Member/mycollections/mycollections.vue'
+import Coupons from '@/components/Member/coupons/coupons.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +70,13 @@ const router = createRouter({
       path: '/policy',
       name: 'Policy',
       component: Policy,
+      children:[
+        {path: 'information', component: Information},  
+        {path: 'changepassword', component: Changepassword},  
+        {path: 'Orderslist', component: MemberOrders},  
+        {path: 'mycollections', component: Mycollections},  
+        {path: 'coupons', component: Coupons},  
+      ]
     },
     
   ],
