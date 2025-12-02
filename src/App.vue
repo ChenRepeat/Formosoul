@@ -15,7 +15,9 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/news">News</RouterLink>
         <RouterLink to="/annualevent">Annual Event</RouterLink>
-        <RouterLink to="/professorsintroduction">Professor Introduction</RouterLink>
+        <RouterLink to="/professorsintroduction"
+          >Professor Introduction</RouterLink
+        >
         <RouterLink to="/shop">Diagon Alley</RouterLink>
         <RouterLink to="/survivalguide">Survival Guide</RouterLink>
         <RouterLink to="/classes">Classes</RouterLink>

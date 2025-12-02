@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import ProductCard from '@/components/ProductCard.vue';
-import TheFooter from '@/components/TheFooter.vue';
-
+import ProductCard from '@/components/ProductCard.vue'
+import TheFooter from '@/components/TheFooter.vue'
 </script>
 
 <template>
