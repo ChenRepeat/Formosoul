@@ -7,7 +7,7 @@
             <span>{{ order.status }}</span>
             <span>{{ order.shipping }}</span>
             <span>
-                <button class="btn-yellow-fill"><router-link to="/policy/orderslist/orderscontain">Check</router-link></button>
+                <basic-button class="btn-yellow-fill"><router-link to="/Policy/Orderslist/orderscontain">Check</router-link></basic-button>
             </span>
         </div>
 
@@ -15,6 +15,7 @@
 
 <script setup>
     import { computed, ref } from 'vue';
+    import BasicButton from '@/components/BasicButton.vue';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
         currentPage: {
@@ -159,7 +160,7 @@
         align-items: center;
 
     }
-
+    
     .btn-yellow-fill > a{
         color: $color-fsTitle;
         text-decoration: none;

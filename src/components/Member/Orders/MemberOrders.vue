@@ -18,16 +18,16 @@
                 <MemberOrdersDetail ref="detailComponent" :currentPage="currentPage" />
                 <div class="orderspage-btn">
                     
-                    <button class="btn-yellow-fill" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></button>
-                    <button class="btn-yellow-fill"
+                    <basic-button class="btn-yellow-fill" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></basic-button>
+                    <basic-button class="btn-yellow-fill"
                         v-for="page in totalPages"
                         :key="page"
                         @click="goToPage(page)"
                         :class="{ active: currentPage == page}"
                     >
                         {{ page }}
-                    </button>
-                    <button class="btn-yellow-fill" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></button>
+                    </basic-button>
+                    <basic-button class="btn-yellow-fill" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></basic-button>
                 </div>
             </div>
     </template>
@@ -39,7 +39,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { computed, ref } from 'vue';
 import MemberOrdersDetail from './MemberOrdersDetail.vue';
 import { useRoute } from 'vue-router';
-
+import BasicButton from '@/components/BasicButton.vue';
 const currentPage = ref(1);
 // 獲得每頁幾筆的資訊
 const itemsPerPage = 5;

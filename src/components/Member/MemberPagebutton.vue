@@ -11,10 +11,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Pagelinebar from './Pagelinebar.vue';
+import { useRoute } from 'vue-router';
 
 const activeIndex = ref(0);
+const route = useRoute();
+
+const routeToIndex ={
+  '/Policy/information': 0,
+  '/Policy/changepassword': 1,
+  '/Policy/Orderslist': 2,
+  '/Policy/mycollections': 3,
+  '/Policy/coupons': 4,
+}
+
+activeIndex.value = routeToIndex[route.path] ?? 0;
+
+watch(
+  () => route.path,
+  (newPath) => {
+    activeIndex.value = routeToIndex[newPath] ?? 0;
+  }
+);
 
 </script>
 

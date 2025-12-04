@@ -37,13 +37,14 @@
         </div>
 
         <div class="back-to-member">
-            <button class="btn-yellow-fill"><router-link to="/policy/orderslist"><h6><font-awesome-icon icon="fa-solid fa-angle-left" /> Back to Query orders</h6></router-link></button>
+            <basic-button class="btn-yellow-fill"><router-link to="/policy/orderslist"><h6><font-awesome-icon icon="fa-solid fa-angle-left" /> Back to Query orders</h6></router-link></basic-button>
         </div>
     </div>
 </template>
 <script setup>
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import BasicButton from '@/components/BasicButton.vue';
 
 
     const orders = ref([
