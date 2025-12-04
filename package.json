@@ -8,11 +8,9 @@
   },
   "scripts": {
     "安裝fa": " npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome@latest-3",
-    "安裝jQuery": "npm install jquery",
     "安裝three.js": "npm install three",
     "安裝sass": " npm install -D sass",
     "ios安裝fa": "sudo npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome@latest-3",
-    "ios安裝jQuery": "sudo npm install jquery",
     "ios安裝three.js": "sudo npm install three",
     "iOS安裝sass": "sudo npm install -D sass",
     "安裝套件windows": "npm i",

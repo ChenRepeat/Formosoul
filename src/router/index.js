@@ -11,7 +11,7 @@ import SurvivalGuide from '@/views/SurvivalGuide.vue'
 import MemberOrders from '@/components/Member/Orders/MemberOrders.vue'
 import Information from '@/components/Member/information/information.vue'
 import Changepassword from '@/components/Member/changepassword/changepassword.vue'
-import Mycollections from '@/components/Member/mycollections/mycollections.vue'
+import Mycollections from '@/components/Member/mycollections/mycollections.vue' 
 import Coupons from '@/components/Member/coupons/coupons.vue'
 import MemberOrderscontain from '@/components/Member/Orders/MemberOrderscontain.vue'
 

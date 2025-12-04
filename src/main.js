@@ -19,6 +19,13 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 
+import $ from 'jquery'
+window.$ = window.jQuery = $ // 掛載到全域
+
+// 引入 jQuery UI
+import 'jquery-ui-dist/jquery-ui'
+import 'jquery-ui-dist/jquery-ui.css'
+
 /* 4. 將圖示加入 Library */
 library.add(fas,fab,far)
 
