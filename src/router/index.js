@@ -59,6 +59,7 @@ const router = createRouter({
     {
       path: '/classes',
       name: 'Classes',
+      // component: Classtest,
       component: Classes,
     },
     {
