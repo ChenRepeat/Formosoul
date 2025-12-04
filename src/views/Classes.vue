@@ -203,7 +203,6 @@
 
     </div>
   </div>
-  <BasicButton @click="jump">  </BasicButton>
 </template>
 
 <script setup>

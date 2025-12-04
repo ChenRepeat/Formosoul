@@ -2,10 +2,7 @@
   import { ref, onMounted } from 'vue';
   import siteLogo from '@/assets/logo_white_S.png'; 
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  import $ from 'jquery'; // 需要導入 jQuery
-// 引入 jQuery UI
-import 'jquery-ui-dist/jquery-ui'
-import 'jquery-ui-dist/jquery-ui.css'
+
   const isMenuOpen = ref(false); 
   const userIcon = ref(null); // 添加 ref 來引用元素
 
@@ -13,15 +10,7 @@ import 'jquery-ui-dist/jquery-ui.css'
       isMenuOpen.value = !isMenuOpen.value;
   }
 
-  onMounted(() => {
-    // 在組件掛載後初始化 draggable
-    if (userIcon.value) {
-      $(userIcon.value.$el).draggable({ // 修正拼寫: dragable -> draggable
-        containment: 'window', // 修正: 'parent' 可能不適用,改為 'window'
-        cursor: 'move'
-      });
-    }
-  });
+
 </script>
 
 <template>
@@ -69,6 +58,7 @@ import 'jquery-ui-dist/jquery-ui.css'
     top: 0;
     left: 0;
     z-index: 1000;
+    position: fixed;
   }
   img{
     object-fit: none;

@@ -29,6 +29,7 @@
     "boostrap": "^2.0.0",
     "jquery": "^3.7.1",
     "jquery-ui-dist": "^1.13.3",
+    "page-flip": "^2.0.7",
     "pinia": "^3.0.4",
     "three": "^0.181.2",
     "vue": "^3.5.25",

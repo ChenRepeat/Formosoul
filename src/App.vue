@@ -6,7 +6,7 @@ import TheHeader from './components/TheHeader.vue';
 
 <template>
   <div class="wrapper dp-flex-col">
-    <TheHeader />
+    <!-- <TheHeader /> -->
     <div class="dp-flex part-time">
       <RouterLink to="/"><h6>Home</h6></RouterLink>
       <RouterLink to="/about"><h6>About</h6></RouterLink>
