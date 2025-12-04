@@ -217,14 +217,7 @@ ul a {
   width: 73%;
   transform: scaleY(0.5);
 }
-.trim-case-policy,
-.trim-case-link {
-  transform: rotate(90deg);
-  transform-origin: 0 50%;
-  top: -12px;
-  left: -12px;
-  position: absolute;
-}
+
 @media screen and (max-width: 1200px) {
   .footer-outer-case {
     display: flex;
@@ -245,21 +238,19 @@ ul a {
   .trim-case-link {
     transform: rotate(90deg);
     transform-origin: 0 50%;
-    top: -8px;
-    left: -12px;
+    top: 0px;
+    left: -40px;
     position: absolute;
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
   .trim-case-link {
-    width: 241px;
+    width: 339px;
   }
   .trim-case-policy {
-    width: 80px;
+    width: 212px;
   }
 }
-.trim-case-policy {
-  width: 80px;
-}
+
 </style>
