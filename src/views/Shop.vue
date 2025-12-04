@@ -1,4 +1,5 @@
 <script setup>
+import Backgroundaction from '@/components/backgroundaction.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 
@@ -7,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 <template>
 <button class="btn-yellow-fill">next <font-awesome-icon icon="fa-solid fa-angle-right" /> </button>
-
+<Backgroundaction></Backgroundaction>
 </template>
 
 <style scoped lang="scss">

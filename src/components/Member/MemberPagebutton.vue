@@ -18,19 +18,17 @@ const activeIndex = ref(0);
 
 </script>
 
-<style scoped>
+<style lang="scss" coped>
     .member-page-button{
         margin: 0 auto;
         width: 1200px;
         height: 48px;
-        /* background-color: #; */
     }
     .page-button{
         width: 240px;
         height: 48px;
         border: 0;
         background-color: transparent;
-        color: #041416;
         cursor: pointer;
         font-size: 16px;
     }
@@ -40,5 +38,11 @@ const activeIndex = ref(0);
         display: flex;
         width: 100%;
         height: 100%;
+        color: $color-fsCaption;
+        text-decoration: none;
+    }
+
+    .page-button.active > a{
+        color: $color-fsTitle;
     }
 </style>

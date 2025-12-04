@@ -159,7 +159,10 @@
         align-items: center;
 
     }
-    .btn-yellow-fill{
-        color: white;
+
+    .btn-yellow-fill > a{
+        color: $color-fsTitle;
+        text-decoration: none;
     }
+
 </style>
