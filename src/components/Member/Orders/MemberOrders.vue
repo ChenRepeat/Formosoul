@@ -119,12 +119,16 @@ const goToPage = (pageNumber) => {
         transition:  0.2s ease;
 
     }
+
+    .orderspage-btn > button{
+        color: $color-fsTitle;
+    }
     .orderspage-btn > button:hover{
-        background-color: #ffcc46;
+        background-color: $color-fsBlue900;
         color: white; 
     }
     .orderspage-btn > button.active {
-        background-color: #ffcc46;
+        background-color: $color-fsBlue900;
         color: white;
     }
 </style>
