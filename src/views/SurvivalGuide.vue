@@ -63,7 +63,7 @@ onUnmounted(() => clearInterval(interval))
       <img v-for="( img, index) in moveimg" :key="index" :src="img" :style="{ 
           left: positions[index].x + '%', 
           top: positions[index].y + '%',
-          zindex: positions[index].zindex
+          zindex: positions[index].z-index
         }" />
     </div>
 
