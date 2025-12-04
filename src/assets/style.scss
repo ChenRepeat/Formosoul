@@ -30,6 +30,15 @@ h6 {font-size: 2.0rem;}
 p {font-size: 1.6rem;}
 
 
+//字體粗細，預設 normal 400 ，不用特別設定
+//其他粗細請直接加下方class
+
+// Light
+.fw200{font-weight: 200;}
+
+// Medium
+.fw600{font-weight: 600;}
+
 
 
 
@@ -83,3 +92,10 @@ p {font-size: 1.6rem;}
 // <font-awesome-icon icon="fa-solid fa-circle-user" />
 // 購物袋
 // <font-awesome-icon icon="fa-solid fa-bag-shopping" />
+
+//搜尋
+// <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+//刪除
+// <font-awesome-icon icon="fa-regular fa-trash-can" />
+//下拉箭頭
+// <font-awesome-icon icon="fa-solid fa-angle-down" />
