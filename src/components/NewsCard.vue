@@ -9,13 +9,19 @@ const cards = ref([
     id: 1,
     img: 'https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH',
     event: 'Taiwan’s AI-driven',
-    date: '2025.11.20',
+    date: '2025.2.5',
   },
   {
     id: 2,
     img: 'https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg',
     event: 'Taiwan’s AI-driven',
-    date: '2025.11.20',
+    date: '2025.6.20',
+  },
+  {
+    id: 3,
+    img: 'https://www.travel.taipei/image/90806/?r=1515479579958',
+    event: 'Taiwan’s Flowers-driven',
+    date: '2025.7.18',
   },
 ])
 </script>
@@ -86,6 +92,7 @@ const cards = ref([
   width: 56px;
   height: 56px;
   background: linear-gradient(135deg, transparent 50%, #fff 50%);
+  // 畫一個漸層背景，方向是 135 度，前 50% 是透明的，後 50% 是白色的，no模糊。 Hard Stop - 前一個顏色結束在 50%，後一個顏色馬上從 50% 開始，中間就沒有過渡空間，變成一條銳利的直線
   position: absolute;
   bottom: 16px;
   right: 16px;
@@ -93,6 +100,7 @@ const cards = ref([
   transition: all 1s ease;
 }
 
+// 以下為hover效果
 .newscard-container:hover .triangle-white-small {
   width: 80px;
   height: 80px;

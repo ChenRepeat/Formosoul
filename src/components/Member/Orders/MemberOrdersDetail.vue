@@ -1,5 +1,5 @@
 <template>
-        <div v-for="(order, index) in calorderpage" :key="index" class="orders-contain">
+        <div v-for="order in calorderpage" :key="order.id" class="orders-contain">
             <span>{{ order.number }}</span>
             <span>{{ order.date }}</span>
             <span>{{ order.prices }}</span>
@@ -7,9 +7,10 @@
             <span>{{ order.status }}</span>
             <span>{{ order.shipping }}</span>
             <span>
-                <button>Check</button>
+                <button class="btn-yellow-fill"><router-link to="/policy/orderslist/orderscontain">Check</router-link></button>
             </span>
         </div>
+
 </template>
 
 <script setup>
@@ -153,8 +154,12 @@
     }
     .orders-contain > span{
         width: 160px;
-        display: flex;
+        display: inline-flex;
         justify-content: center;
-        
+        align-items: center;
+
+    }
+    .btn-yellow-fill{
+        color: white;
     }
 </style>
