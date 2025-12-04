@@ -30,7 +30,7 @@ import TheHeader from './components/TheHeader.vue';
 <style scoped>
 .wrapper {
   min-height: 100vh;
-  background-color: #000;
+  /* background-color: #000; */
   position: relative;
 }
 .content {

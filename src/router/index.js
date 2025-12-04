@@ -13,6 +13,7 @@ import Information from '@/components/Member/information/information.vue'
 import Changepassword from '@/components/Member/changepassword/changepassword.vue'
 import Mycollections from '@/components/Member/mycollections/mycollections.vue'
 import Coupons from '@/components/Member/coupons/coupons.vue'
+import MemberOrderscontain from '@/components/Member/Orders/MemberOrderscontain.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,9 +74,14 @@ const router = createRouter({
       children: [
         { path: 'information', component: Information },
         { path: 'changepassword', component: Changepassword },
-        { path: 'Orderslist', component: MemberOrders },
+        { path: 'orderslist', component: MemberOrders,
+          children: [
+            { path: 'orderscontain', component: MemberOrderscontain},
+          ],
+        },
         { path: 'mycollections', component: Mycollections },
         { path: 'coupons', component: Coupons },
+        { path: 'orderscontain', component: MemberOrderscontain}
       ],
     },
   ],
