@@ -13,6 +13,7 @@ import Information from '@/components/Member/information/information.vue'
 import Changepassword from '@/components/Member/changepassword/changepassword.vue'
 import Mycollections from '@/components/Member/mycollections/mycollections.vue'
 import Coupons from '@/components/Member/coupons/coupons.vue'
+import Classtest from '@/views/classtest.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,7 +59,8 @@ const router = createRouter({
     {
       path: '/classes',
       name: 'Classes',
-      component: Classes,
+      component: Classtest,
+      // component: Classes,
     },
     {
       path: '/member',
