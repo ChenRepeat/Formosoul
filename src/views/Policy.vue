@@ -64,7 +64,6 @@ onUnmounted(() => clearInterval(interval))
       </div>
     </div>
   <MemberPagebutton />
-  <TheFooter></TheFooter>
 
 </template>
 

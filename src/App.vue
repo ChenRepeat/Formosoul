@@ -1,93 +1,50 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import TheFooter from './components/TheFooter.vue';
+import TheHeader from './components/TheHeader.vue';
 </script>
 
 <template>
-  <header>
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
+  <div class="wrapper dp-flex-col">
+    <!-- <TheHeader /> -->
+    <div class="dp-flex part-time">
+      <RouterLink to="/"><h6>Home</h6></RouterLink>
+      <RouterLink to="/about"><h6>About</h6></RouterLink>
+      <RouterLink to="/news"><h6>News</h6></RouterLink>
+      <RouterLink to="/annualevent"><h6>Annual Event</h6></RouterLink>
+      <RouterLink to="/professorsintroduction"><h6>Professor Introduction</h6></RouterLink>
+      <RouterLink to="/shop"><h6>Diagon Alley</h6></RouterLink>
+      <RouterLink to="/survivalguide"><h6>Survival Guide</h6></RouterLink>
+      <RouterLink to="/classes"><h6>Classes</h6></RouterLink>
+      <RouterLink to="/member"><h6>Member</h6></RouterLink>
+      <RouterLink to="/policy"><h6>Policy</h6></RouterLink>
 
-    <div class="wrapper">
-      <!-- <HelloWorld msg="You did it!" /> -->
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/news">News</RouterLink>
-        <RouterLink to="/annualevent">Annual Event</RouterLink>
-        <RouterLink to="/professorsintroduction">Professor Introduction</RouterLink>
-        <RouterLink to="/shop">Diagon Alley</RouterLink>
-        <RouterLink to="/survivalguide">Survival Guide</RouterLink>
-        <RouterLink to="/classes">Classes</RouterLink>
-        <RouterLink to="/member">Member</RouterLink>
-        <RouterLink to="/policy">Policy</RouterLink>
-      </nav>
     </div>
-  </header>
-
-  <RouterView />
+    <main class="content">
+      <RouterView />
+    </main>
+    <TheFooter />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.wrapper {
+  min-height: 100vh;
+  background-color: #000;
+  position: relative;
 }
-
-.logo {
+.content {
   display: block;
-  margin: 0 auto 2rem;
+  flex-grow: 1;
+  overflow: hidden;
+  min-height: 1px;
+  padding-top: 100px;
+}
+.part-time{
+  gap: 12px;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
 
 @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>

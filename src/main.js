@@ -17,9 +17,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 // import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
 
 /* 4. 將圖示加入 Library */
-library.add(fas,fab)
+library.add(fas,fab,far)
 
 const app = createApp(App)
 

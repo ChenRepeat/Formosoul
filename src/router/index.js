@@ -70,13 +70,13 @@ const router = createRouter({
       path: '/policy',
       name: 'Policy',
       component: Policy,
-      children:[
-        {path: 'information', component: Information},  
-        {path: 'changepassword', component: Changepassword},  
-        {path: 'Orderslist', component: MemberOrders},  
-        {path: 'mycollections', component: Mycollections},  
-        {path: 'coupons', component: Coupons},  
-      ]
+      children: [
+        { path: 'information', component: Information },
+        { path: 'changepassword', component: Changepassword },
+        { path: 'Orderslist', component: MemberOrders },
+        { path: 'mycollections', component: Mycollections },
+        { path: 'coupons', component: Coupons },
+      ],
     },
   ],
 })

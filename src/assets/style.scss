@@ -8,6 +8,7 @@ html {
   font-family: 'Ubuntu','Roboto', 'Noto Sans TC', sans-serif; 
   font-size: 62.5%;               /* 預設字級調整為10px */
   letter-spacing: 0.05em;
+  height: 100%;
 }
 
 *, *::before, *::after {
@@ -31,7 +32,7 @@ p {font-size: 1.6rem;}
 
 
 // -----------------------------------
-//Button 『預設桌機，手機版請加下方class』
+//Button 『預設桌機，手機版 <p> 請加最下方class』
 //填色btn
 .btn-icon-yellow-fill{
   font-size: 16px;
@@ -124,7 +125,7 @@ p {font-size: 1.6rem;}
 
 
 
-//手機版請加這個class
+//手機版 <p> 請加這個class
 .btn-moblie{
   font-size: 14px;
 }
@@ -137,16 +138,51 @@ p {font-size: 1.6rem;}
 
 
 // -----------------------------------
-//其他預設class
+//排版用class
 
 .dp-flex{
   display: flex;
+  flex-direction: row;
+}
+.dp-flex-col{
+  display: flex;
+  flex-direction: column;
 }
 
+// -----------------------------------
+//其他預設class
 
 // -----------------------------------
 
 // icon
+
 // 左箭頭
+// <font-awesome-icon icon="fa-solid fa-angle-left" />
 // 右箭頭
+// <font-awesome-icon icon="fa-solid fa-angle-right" />
 // 置頂箭頭
+// <font-awesome-icon icon="fa-solid fa-angles-up" />
+// 遊戲右箭頭
+// <font-awesome-icon icon="fa-solid fa-arrow-right" />
+// 遊戲左箭頭
+// <font-awesome-icon icon="fa-solid fa-arrow-left" />
+// 童玩
+// <font-awesome-icon icon="fa-solid fa-gamepad" />
+// 體驗卷
+// <font-awesome-icon icon="fa-solid fa-ticket" />
+// 客製化 
+// <font-awesome-icon icon="fa-solid fa-box-open" />
+// 飾品
+// <font-awesome-icon icon="fa-solid fa-ring" />
+// 加入購物車
+// <font-awesome-icon icon="fa-solid fa-cart-plus" />
+// 收藏
+// <font-awesome-icon icon="fa-regular fa-heart" />
+// <font-awesome-icon icon="fa-solid fa-heart" />
+
+// 會員-未登入
+// <font-awesome-icon icon="fa-regular fa-circle-user" />
+// 會員-已登入
+// <font-awesome-icon icon="fa-solid fa-circle-user" />
+// 購物袋
+// <font-awesome-icon icon="fa-solid fa-bag-shopping" />
