@@ -1,5 +1,5 @@
 <template>
-    <div class="detail">
+    <div class="detail" @click="activeIndex = 2">
         <h2>Orders Detail</h2>
         <div class="detailbar">
             <h3>Orders Information</h3>
