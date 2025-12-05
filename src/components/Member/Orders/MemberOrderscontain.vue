@@ -98,6 +98,7 @@ import BasicButton from '@/components/BasicButton.vue';
 
     h2{
         text-align: center;
+        margin: 100px 0 100px 0;
     }
 
     h3{

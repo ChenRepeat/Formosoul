@@ -84,6 +84,7 @@ const goToPage = (pageNumber) => {
     h2{
         text-align: center;
         color: #041416;
+        margin: 100px 0 100px 0;
 
     }
     .orders{
