@@ -14,10 +14,10 @@ import TheHeader from './components/TheHeader.vue';
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .wrapper {
   min-height: 100vh;
-  /* background-color: #000; */
+  background-color: $color-fsTitle;
   position: relative;
 }
 .content {

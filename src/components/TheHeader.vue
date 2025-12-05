@@ -27,7 +27,7 @@ function toggleLang(){
       <!-- 內容層 -->
       <div class="liquidGlass-content dp-flex" style="align-items: center; gap: 16px; width: auto;">
         
-        <div class="header-lang-trigger dp-flex"  @click="toggleLang">
+        <div class="header-lang-trigger dp-flex"  @click="toggleLang" :class="{ right: isEnglish }">
           <div class="header-lang-switcher" :class="{ right: isEnglish }"></div>
           <h6 class="trigger-lang">EN</h6>
           <h6 class="trigger-lang">CN</h6>
@@ -103,12 +103,18 @@ img { object-fit: none; }
   border-radius: 20px;
   position: relative;
   cursor: pointer;
+  background-color: unset;
+  transition: all 1s 0.3s;
+}
+.header-lang-trigger.right{
+  border: 1px solid $color-fsTitle;
+  background-color: $color-fsTitle;
 }
 .header-lang-switcher{
   width: 30px;
   height: 30px;
   position: absolute;
-  background-color: #000;
+  background-color: $color-fsTitle;
   z-index: 1001;
   border-radius: 50%;
   top: 4px;
@@ -117,6 +123,8 @@ img { object-fit: none; }
 }
 .header-lang-switcher.right{
   left: 37px;
+  background-color: $color-fsWhite;
+
 }
 .header-link {
   border-radius: 36px;
