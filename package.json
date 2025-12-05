@@ -7,8 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "執行run dev":"npm run dev",
-    "ios執行run dev":"sudo npm run dev",
+    "執行run dev": "npm run dev",
+    "ios執行run dev": "sudo npm run dev",
     "安裝fa": " npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome@latest-3",
     "安裝three.js": "npm install three",
     "安裝page-flip": "npm install page-flip",
