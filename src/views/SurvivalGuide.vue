@@ -12,6 +12,7 @@ const imgLeft = '/SurvivalGuide/night_market_island_0.png'
 
 const imgRight ='/SurvivalGuide/Gemini_Generated_Image_gxbta6gxbta6gxbt_noback2.png'
 
+
 // 做後面漂浮的圖片
 const moveimg = [
   'SurvivalGuide/lantern_image.png',
@@ -119,10 +120,14 @@ onUnmounted(() => clearInterval(interval))
 <style scoped lang="scss">
 
 .survival-case {
+  background-color: #000;  // 設定黑色背景
+  min-height: 100vh;       // 【關鍵】強制撐滿整個視窗高度
+  width: 100%;             // 確保寬度佔滿
+
   display: flex;
   flex-direction: column;
   gap: 100px;
-  margin-bottom: 100px;
+  padding-bottom: 100px;
   position: relative;
 }
 

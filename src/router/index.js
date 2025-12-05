@@ -74,7 +74,7 @@ const router = createRouter({
       children: [
         { path: 'information', component: Information },
         { path: 'changepassword', component: Changepassword },
-        { path: 'orderslist', name: 'Orderslist', component: MemberOrders,
+        { path: 'orderslist', component: MemberOrders,
           children: [
             { path: 'orderscontain', component: MemberOrderscontain},
           ],

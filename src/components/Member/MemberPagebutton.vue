@@ -1,12 +1,12 @@
 <template>
     <div class="member-page-button">
-            <button class="page-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/Policy/information">Member information</router-link></button>
-            <button class="page-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/Policy/changepassword">Change password</router-link></button>
-            <button class="page-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/Policy/Orderslist">Query Orders</router-link></button>
-            <button class="page-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/Policy/mycollections">My Collections</router-link></button>
-            <button class="page-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/Policy/coupons">Coupons</router-link></button>
+            <button class="page-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/policy/information">Member information</router-link></button>
+            <button class="page-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/policy/changepassword">Change password</router-link></button>
+            <button class="page-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/policy/orderslist">Query Orders</router-link></button>
+            <button class="page-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/policy/mycollections">My Collections</router-link></button>
+            <button class="page-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/policy/coupons">Coupons</router-link></button>
     </div>
-    <Pagelinebar :activeIndex="activeIndex" />
+    <Pagelinebar :linebarposition="240" :activeIndex="activeIndex" />
       <router-view></router-view>
 </template>
 
@@ -14,24 +14,32 @@
 import { ref, watch } from 'vue';
 import Pagelinebar from './Pagelinebar.vue';
 import { useRoute } from 'vue-router';
+const props = defineProps({
+  page:{
+    type: Number,
+    validator: (value) => value >= 0 && value <= 4,
+  },
+});
 
-const activeIndex = ref(0);
+const activeIndex = ref(props.page);
 const route = useRoute();
 
-const routeToIndex ={
-  '/Policy/information': 0,
-  '/Policy/changepassword': 1,
-  '/Policy/Orderslist': 2,
-  '/Policy/mycollections': 3,
-  '/Policy/coupons': 4,
+
+const getcurrentpage = (path) => {
+  if (path.includes('information')) return 0;
+  if (path.includes('changepassword')) return 1;
+  if (path.includes('orderslist')) return 2;
+  if (path.includes('mycollections')) return 3;
+  if (path.includes('coupons')) return 4;
+  return 0;
 }
 
-activeIndex.value = routeToIndex[route.path] ?? 0;
+activeIndex.value = getcurrentpage(route.path);
 
 watch(
   () => route.path,
   (newPath) => {
-    activeIndex.value = routeToIndex[newPath] ?? 0;
+    activeIndex.value = getcurrentpage(newPath);
   }
 );
 
