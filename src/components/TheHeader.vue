@@ -34,8 +34,8 @@ function toggleLang(){
         </div>
 
         <div class="header-icons-list dp-flex">
-          <font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/>
-          <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/>
+          <a href="/shop"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
+          <a href="/member"><font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/></a>
           
           <div class="transition hamburger-btn dp-flex-col" 
                @click="toggleMenu"
@@ -51,16 +51,14 @@ function toggleLang(){
       </div>
 
       <ul class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/news">News</a></li>
-        <li><a href="/annualevent">Annual Event</a></li>
-        <li><a href="/professorsintroduction">Professor Introduction</a></li>
-        <li><a href="/shop">Diagon Alley</a></li>
-        <li><a href="/survivalguide">Survival Guide</a></li>
-        <li><a href="/classes">Classes</a></li>
-        <li><a href="/member">Member</a></li>
-        <li><a href="/policy">Policy</a></li>
+        <li><a href="/"><h4>Home</h4></a></li>
+        <li><a href="/about"><h4>About</h4></a></li>
+        <li><a href="/news"><h4>News</h4></a></li>
+        <li><a href="/annualevent"><h4>Annual Event</h4></a></li>
+        <li><a href="/professorsintroduction"><h4>Professor</h4></a></li>
+        <li><a href="/survivalguide"><h4>Survival Guide</h4></a></li>
+        <li><a href="/classes"><h4>Classes</h4></a></li>
+        <li><a href="/policy"><h4>Policy</h4></a></li>
       </ul>
 
     </div>
