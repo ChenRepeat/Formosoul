@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-const all = [
-  '/ProfessorIntroduction/Jiǔtiān Xuánnǚ.png',
+const all = [  '/ProfessorIntroduction/Jiǔtiān Xuánnǚ.png',
   '/ProfessorIntroduction/Guān Shèng Dìjūn.png',
   '/ProfessorIntroduction/Fǎzhǔ Shèngjūn.png',
   '/ProfessorIntroduction/Bǎoshēng Dàdì.png',
@@ -17,15 +16,19 @@ const all = [
   '/ProfessorIntroduction/Nándǒu Liùxīng.png',
   '/ProfessorIntroduction/Tiānshàng Shèngmǔ.png',
   '/ProfessorIntroduction/Línshuǐ Fūrén.png',
-  '/ProfessorIntroduction/Běidǒu Qīxīng.png',
-]
-// 記得先定義變數，給初始值 
+  '/ProfessorIntroduction/Běidǒu Qīxīng.png',]
+// 記得先定義變數，給初始值
+const doubleAll = ref([]) 
 const refList = ref(null)
-const cardWidthRef = ref(0)
 const cardWidth = ref(0) 
 
 // 在 DOM 生成後才去抓取寬度
 onMounted(() => {
+  for(let i=0; i< all.length * 2; i++){
+    let id = i
+    let src = all[i % all.length]
+    doubleAll.value.push([id, src]); // id= 0 ~ 31, src = 0 ~ 15 
+  } 
   // querySelector 只會抓「第一個」符合的元素，剛好適合拿來量單張卡片寬度
   const cardElement = document.querySelector('.professor-photo-wrapper')
   
@@ -34,25 +37,27 @@ onMounted(() => {
     // 記得要用 .value 寫入
     cardWidth.value = cardElement.offsetWidth 
     
-    console.log('抓到的寬度:', cardWidth.value) // 檢查用
   }
-})
-let index = 0; // 計數器
-const slider = () => {
-  if( index > all.length - 1 ) {
-    index = 0 // index 大於 圖片陣列 則回到第一張
-  } 
-  refList.value.style.transform = `translateX(${-index * cardWidth.value}px)` //左移一張
-  // 記得要加 value
-  // const cardWidth = document.querySelectorAll('.professor-photo-wrapper').width ; // 262px
-  
-} 
-const move = () =>{
-  index++
-  slider()
-}
-setInterval(move, 1500)
+  let index = 0; // 計數器
+  const slider = () => {
+    if( index > all.length - 1 ) {
+      // index = 0 // index 大於 圖片陣列 則回到第一張
+      refList.value.style.transform = `translateX(0)` // 瞬移回沒複製的第一張
+      index = 0
+      } else{
+        refList.value.style.transform = `translateX(${-index * cardWidth.value}px)` //左移一張
+      }
 
+    // ***goal: 判斷式改成 i>15後  自動切回第一張
+    // 記得要加 value
+    
+  } 
+  const move = () =>{
+    index++
+    slider()
+  }
+ setInterval(move, 1500) 
+})
   
 
 </script>
