@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 
 // 圖片陣列
@@ -11,13 +11,28 @@ const props = defineProps({
 });
 
 const cards = ref(props.images);
+const canvasRefs = ref([]);
+// 改變頁碼時 讓新的 canvas 要重新渲染
+watch(() => props.images, (newImages) => {
+  cards.value = newImages;
+  canvasRefs.value = [];  //  清空舊的 ref 陣列
+  // 延遲執行，等待 DOM 更新完成
+  setTimeout(() => {
+    canvasRefs.value.forEach((canvasEl, index) => {
+      if(newImages[index]){
+        const imageUrl = newImages[index].img;
+        draw(canvasEl, 280, 70, 32, imageUrl);
+      }
+    })
+  }, 0);
+}, { deep: true });
 
 // const cards = ref([
 //   { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
 //   { id: 2, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' }
 // ])
 
-const canvasRefs = ref([])
+
 const pi = x => x * Math.PI / 180
 // const function pi(x){
 //  x * Math.PI / 180
@@ -63,7 +78,7 @@ onMounted(() => {
     const imageUrl = cards.value[index].img;
     draw(canvasEl, 280, 70, 32, imageUrl);
   })
-})
+});
 </script>
 
 <template>
