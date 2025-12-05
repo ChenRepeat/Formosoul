@@ -3,10 +3,19 @@ import { ref, onMounted } from 'vue'
 
 
 // 圖片陣列
-const cards = ref([
-  { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-  { id: 2, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' }
-])
+const props = defineProps({
+  images: {
+    type: Array,
+    required: true
+  }
+});
+
+const cards = ref(props.images);
+
+// const cards = ref([
+//   { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
+//   { id: 2, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' }
+// ])
 
 const canvasRefs = ref([])
 const pi = x => x * Math.PI / 180
