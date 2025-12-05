@@ -19,18 +19,18 @@ const all = [
   '/ProfessorIntroduction/Línshuǐ Fūrén.png',
   '/ProfessorIntroduction/Běidǒu Qīxīng.png',
 ]
+// 記得先定義變數，給初始值 
 const refList = ref(null)
 const cardWidthRef = ref(0)
-// 1. 先定義變數，給初始值 0
 const cardWidth = ref(0) 
 
-// 2. 在 DOM 生成後才去抓取寬度
+// 在 DOM 生成後才去抓取寬度
 onMounted(() => {
-  // 注意：querySelector 只會抓「第一個」符合的元素，剛好適合拿來量單張卡片寬度
+  // querySelector 只會抓「第一個」符合的元素，剛好適合拿來量單張卡片寬度
   const cardElement = document.querySelector('.professor-photo-wrapper')
   
   if (cardElement) {
-    // 3. 讀取 offsetWidth (包含 padding + border) 或 clientWidth (包含 padding)
+    // 讀取 offsetWidth (包含 padding + border) 
     // 記得要用 .value 寫入
     cardWidth.value = cardElement.offsetWidth 
     
@@ -125,12 +125,13 @@ setInterval(move, 1500)
   transition: all .5s;
 
   // transform: rotate(-1deg); 
-  gap: 12px;
+  // gap: 12px;
 }
 .professor-photo-wrapper{
   height: 250px;
   flex-basis: 250px;
   flex-shrink: 0; // 預設是1
+  padding: 0 12px;
   overflow: hidden;
 
   position: relative;

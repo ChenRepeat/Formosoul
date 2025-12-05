@@ -83,7 +83,8 @@ const goToPage = (pageNumber) => {
     }
     h2{
         text-align: center;
-        color: #041416;
+        color: $color-fsTitle;
+        margin: 100px 0 100px 0;
 
     }
     .orders{
@@ -106,7 +107,7 @@ const goToPage = (pageNumber) => {
     }
     .title-orders-line{
         height: 2px;
-        background-color: #041416;
+        background-color: $color-fsTitle;
     }
     .orderspage-btn{
         padding-top: 16px;
