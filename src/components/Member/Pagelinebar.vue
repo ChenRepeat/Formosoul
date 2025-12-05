@@ -13,16 +13,22 @@
 import { computed } from 'vue';
 
 const props = defineProps({
+    // 在你的頁面引用時 應該會是這樣
+    // <Pagelinebar :linebarposition="視當前頁面的標籤" :activeIndex="activeIndex" />
     activeIndex: {
         type: Number,
         default: 0
+    },
+    linebarposition: {
+        type: Number,
+        default: 0,
     }
 });
 
 
 
 const positions = computed(() => {
-    return `${props.activeIndex * 240}px`
+    return `${props.activeIndex * props.linebarposition}px`
 });
 </script>
 

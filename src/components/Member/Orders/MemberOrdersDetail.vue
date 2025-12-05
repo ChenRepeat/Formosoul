@@ -7,7 +7,7 @@
             <span>{{ order.status }}</span>
             <span>{{ order.shipping }}</span>
             <span>
-                <basic-button class="btn-yellow-fill"><router-link to="/Policy/Orderslist/orderscontain">Check</router-link></basic-button>
+                <basic-button class="btn-yellow-fill"><router-link to="/policy/orderslist/orderscontain">Check</router-link></basic-button>
             </span>
         </div>
 
