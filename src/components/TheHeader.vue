@@ -92,7 +92,7 @@ img { object-fit: none; }
 .trigger-lang { color: $color-fsWhite; margin: 0; }
 
 .header-lang-trigger {
-  width: 75px;
+  width: 85px;
   height: 40px;
   border: 1px solid $color-fsWhite;
   padding: 0 10px;
@@ -120,7 +120,7 @@ img { object-fit: none; }
   transition: all 1s ease;
 }
 .header-lang-switcher.right{
-  left: 37px;
+  left: 45px;
   background-color: $color-fsWhite;
 
 }
@@ -140,7 +140,7 @@ img { object-fit: none; }
 
 .header-link.open {
   height: 100vh; 
-  transform: translateY(44.5vh);
+  transform: translateY(46vh);
 }
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
@@ -165,7 +165,7 @@ img { object-fit: none; }
 .header-icons-list { gap: 16px; align-items: center; }
 
 .header-icon { color: $color-fsWhite; font-size: 32px; cursor: pointer; }
-.draggable-icon { cursor: move !important; position: relative; z-index: 1001; }
+.draggable-icon { cursor: move ; position: relative; z-index: 1001;}
 
 .burger-list {
   list-style: none;

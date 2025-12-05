@@ -209,9 +209,6 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { PageFlip } from 'page-flip';
 import ProductCard from '@/components/ProductCard.vue';
-import HelloWorld from '@/components/HelloWorld.vue';
-import BasicButton from '@/components/BasicButton.vue';
-import TheHeader from '@/components/TheHeader.vue';
 
 const bookRef = ref(null);
 let pageFlip = null;
@@ -264,7 +261,7 @@ onUnmounted(() => {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /* 🔥 關鍵修正：這裡原本是 width: 1; 改成 100% 才能看到 */
 .book-section {
   width: 100%; 
@@ -272,13 +269,9 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #2c3e50;
+  background-color: $color-fsTitle;
   overflow: hidden; 
   user-select: none; 
-}
-
-.book {
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
 .page {
@@ -286,7 +279,7 @@ onUnmounted(() => {
   background-color: #ccc;
   border: 1px solid #c2b5a3;
   overflow: hidden;
-  transition: none !important; 
+  transition: none; 
   transform-style: preserve-3d;
 }
 
