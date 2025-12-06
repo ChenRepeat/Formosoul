@@ -116,11 +116,11 @@ img { object-fit: none; }
   z-index: 1001;
   border-radius: 50%;
   top: 4px;
-  left: 8px;
+  left: 9px;
   transition: all 1s ease;
 }
 .header-lang-switcher.right{
-  left: 45px;
+  left: 44px;
   background-color: $color-fsWhite;
 
 }
@@ -140,7 +140,7 @@ img { object-fit: none; }
 
 .header-link.open {
   height: 100vh; 
-  transform: translateY(46vh);
+  transform: translateY(45vh);
 }
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
