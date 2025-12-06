@@ -14,6 +14,7 @@
 import { ref, watch } from 'vue';
 import Pagelinebar from './Pagelinebar.vue';
 import { useRoute } from 'vue-router';
+import Information from './information/information.vue';
 const props = defineProps({
   page:{
     type: Number,
@@ -34,6 +35,7 @@ const getcurrentpage = (path) => {
   return 0;
 }
 
+console.log(route.path);
 activeIndex.value = getcurrentpage(route.path);
 
 watch(
@@ -51,6 +53,11 @@ watch(
         width: 1200px;
         height: 48px;
     }
+
+    .member-page-button{
+      margin-top: 100px;
+    }
+
     .page-button{
         width: 240px;
         height: 48px;
