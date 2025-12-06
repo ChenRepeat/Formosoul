@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-const all = [
-  '/ProfessorIntroduction/Jiǔtiān Xuánnǚ.png',
+const all = [  '/ProfessorIntroduction/Jiǔtiān Xuánnǚ.png',
   '/ProfessorIntroduction/Guān Shèng Dìjūn.png',
   '/ProfessorIntroduction/Fǎzhǔ Shèngjūn.png',
   '/ProfessorIntroduction/Bǎoshēng Dàdì.png',
@@ -17,16 +16,18 @@ const all = [
   '/ProfessorIntroduction/Nándǒu Liùxīng.png',
   '/ProfessorIntroduction/Tiānshàng Shèngmǔ.png',
   '/ProfessorIntroduction/Línshuǐ Fūrén.png',
-  '/ProfessorIntroduction/Běidǒu Qīxīng.png',
-]
-// 記得先定義變數，給初始值 
+  '/ProfessorIntroduction/Běidǒu Qīxīng.png',]
+//----------------ref----------------------------------
+const doubleAll = ref([]) 
 const refList = ref(null)
-const cardWidthRef = ref(0)
 const cardWidth = ref(0) 
 
-// 在 DOM 生成後才去抓取寬度
-onMounted(() => {
-  // querySelector 只會抓「第一個」符合的元素，剛好適合拿來量單張卡片寬度
+for(let i=0; i< all.length * 2; i++){
+  let src = all[i % all.length]
+  doubleAll.value.push(src); // id= 0 ~ 31, src = 0 ~ 15 
+} 
+onMounted(() => { // 在 DOM 生成後
+  // querySelector 只會抓「第一個」符合的元素
   const cardElement = document.querySelector('.professor-photo-wrapper')
   
   if (cardElement) {
@@ -34,25 +35,28 @@ onMounted(() => {
     // 記得要用 .value 寫入
     cardWidth.value = cardElement.offsetWidth 
     
-    console.log('抓到的寬度:', cardWidth.value) // 檢查用
   }
-})
-let index = 0; // 計數器
-const slider = () => {
-  if( index > all.length - 1 ) {
-    index = 0 // index 大於 圖片陣列 則回到第一張
+  let index = 0; // 計數器
+  const slider = () => {
+    refList.value.style.transition = 'all .5s'
+    refList.value.style.transform = `translateX(${-index * cardWidth.value}px)` //左移一張}
+    if( index == all.length ){ // 超出原始長度走到複製資料第一張 
+      setTimeout(()=>{
+        refList.value.style.transition = 'none'
+        index = 0
+        refList.value.style.transform = 'translateX(0)'
+      }, 500)
+      
+    }
+    
+    
   } 
-  refList.value.style.transform = `translateX(${-index * cardWidth.value}px)` //左移一張
-  // 記得要加 value
-  // const cardWidth = document.querySelectorAll('.professor-photo-wrapper').width ; // 262px
-  
-} 
-const move = () =>{
-  index++
-  slider()
-}
-setInterval(move, 1500)
-
+  const move = () =>{
+    index++
+    slider()
+  }
+ setInterval(move, 1500) 
+})
   
 
 </script>
@@ -62,35 +66,8 @@ setInterval(move, 1500)
 
     <div class="professor-carousel-container">
       <ul class="professor-list" ref="refList">
-        <!-- ratio: thin [8,11,12,15]top: -50px; [13,14]top: -36px;-->
-        <li  class="professor-photo-wrapper"><img :src='all[15]' class="professor-photo top-50" ref="cardWidth"></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[14]' class="professor-photo top-36" ></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[13]' class="professor-photo top-36" ></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[12]' class="professor-photo top-50" ></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[11]' class="professor-photo top-50" ></img></li>
-
-        <!-- size="800" [10]top: -50~-58px;-->
-        <li  class="professor-photo-wrapper"><img :src='all[10]' class="professor-photo top-50" ></img></li>
-
-        <!-- size="801" [0]top: -28px;-->
-        <li  class="professor-photo-wrapper"><img :src='all[0]' class="professor-photo " ></img></li>
-        <!-- size="864" -->
-        <li  class="professor-photo-wrapper"><img :src='all[1]' class="professor-photo"></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[2]' class="professor-photo"></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[3]' class="professor-photo"></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[4]' class="professor-photo"></img></li>
-          <!-- [4]top: -40px; [864-rest] top:-8px;-->
-        <li  class="professor-photo-wrapper"><img :src='all[5]' class="professor-photo"></img></li>
-        <li  class="professor-photo-wrapper"><img :src='all[6]' class="professor-photo"></img></li>
-        <!-- size="832" -->
-        <li  class="professor-photo-wrapper"><img :src='all[7]' class="professor-photo"></img></li>
-        <!-- [7] top: -30px;-->
-        <li  class="professor-photo-wrapper"><img :src='all[8]' class="professor-photo top-50"></img></li>
-
-        <!-- size="1888*..." -->
-        <li  class="professor-photo-wrapper"><img :src='all[9]' class="professor-photo"></img></li>
-          <!-- this. img-class與其他不同 之後可寫在id -->
-        
+        <!-- <li class="professor-photo-wrapper" v-for="(photo, index) in all" :id="'photo'+index+1"><img :src='all[index]' class="professor-photo " ></img></li> -->
+        <li  class="professor-photo-wrapper" v-for="(photo, index) in doubleAll" :id="'photo'+index"><img :src='photo' class="professor-photo" ></img></li>
       </ul>    
     </div>
 
@@ -118,7 +95,6 @@ setInterval(move, 1500)
 .professor-carousel-container{
   width: 100%; 
   height: 250px; 
-  outline: 1px solid red;
 }
 .professor-list{
   display: flex;
@@ -131,7 +107,7 @@ setInterval(move, 1500)
   height: 250px;
   flex-basis: 250px;
   flex-shrink: 0; // 預設是1
-  padding: 0 12px;
+  // padding: 0 12px;
   overflow: hidden;
 
   position: relative;
@@ -142,11 +118,12 @@ setInterval(move, 1500)
 
   position:absolute;
   top: -28px;
-  .top-50{
-  top: -50px;
-  }
-  .top-36{
+
+  #photo13, #photo14{
   top: -36px;
+  }
+  #photo8, #photo10, #photo11, #photo12, #photo15{
+  top: -50px;
   }
 }
 
