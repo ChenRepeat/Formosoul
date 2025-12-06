@@ -47,7 +47,6 @@ function toggleLang(){
 
           <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" />
         </div>
-
       </div>
 
       <ul class="burger-list" :class="{ 'active': isMenuOpen }">
