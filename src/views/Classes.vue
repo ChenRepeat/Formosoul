@@ -17,7 +17,7 @@
       </div>
       <div class="page">
         <div class="page-content text-page">
-          <ClassPageIndex />
+          <ClassPageIndex @flip="goToPage"/>
         </div>
       </div>
 
@@ -187,7 +187,7 @@
       </div>
       <div class="page">
       <div class="page-content">
-        <ProductCard />
+        <ClassPageIndex @flip="goToPage"/>
       </div>
       </div>
             <div class="page">
@@ -239,6 +239,12 @@ const getEquipName = (icon) => {
   const map = { '🗡️': 'Excalibur', '🍷': '阿嬤的藥水', '📜': 'Vue 文件', '🗺️': '藏寶圖' };
   return map[icon] || '未知物品';
 };
+
+const goToPage = (pageNumber) => {
+  if (pageFlip) {
+    pageFlip.flip(pageNumber,'top')
+  }
+}
 // -----------------------
 onMounted(() => {
   pageFlip = new PageFlip(bookRef.value, {
