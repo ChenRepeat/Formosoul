@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import siteLogo from '@/assets/logo_white_S.png'; 
+import siteLogo from '@/assets/logo_white.svg'; 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const isMenuOpen = ref(false);

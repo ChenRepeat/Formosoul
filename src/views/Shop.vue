@@ -1,7 +1,7 @@
 <script setup>
 import Backgroundaction from '@/components/backgroundaction.vue';
 import BasicButton from '@/components/BasicButton.vue';
-import ProductCard from '@/components/ProductCard.vue';
+import TestProductCard from '@/components/TestProductCard.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 
@@ -60,7 +60,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 <!-- 中間商品列表 -->
   <section>
-    <ProductCard />
+    
+    
+    <TestProductCard />
+
+    
   </section>
 
   <!-- 下方頁碼 -->
