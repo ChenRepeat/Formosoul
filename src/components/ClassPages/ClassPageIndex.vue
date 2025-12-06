@@ -3,8 +3,7 @@
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop
-      @click="turnToPage(2)">
+      @touchstart.stop>
         <IconHelmet />Motorcycle
       </h5>
     </li>

@@ -58,6 +58,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
               <li>
                 <a href="/shop"><h5>Diagon Alley</h5></a>
               </li>
+              <li>
+                <a href="/about"><h5>About</h5></a>
+              </li>
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
@@ -246,7 +249,7 @@ ul a {
     gap: 8px;
   }
   .trim-case-link {
-    width: 339px;
+    width: 397px;
   }
   .trim-case-policy {
     width: 212px;

@@ -3,7 +3,6 @@ import { ref, onMounted, onUnmounted } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-// 引入你剛剛建立的卡片元件 (請確認路徑是否正確)
 import NewsCard from "@/components/NewsCard.vue";
 
 // 註冊 GSAP Plugin
@@ -147,7 +146,7 @@ onUnmounted(() => {
   <div class="news-page-container">
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
-        <h2 class="news-main-text">I solemnly swear that I am up to no good.</h2>
+        <h5 class="news-main-text">I solemnly swear that I am up to no good.</h5>
       </div>
 
       <div class="news-cards-container">
@@ -167,14 +166,14 @@ onUnmounted(() => {
 
     <section class="news-quote-section">
       <div class="news-quote-content">
-        <p>Curiosity, friction, iteration:</p>
-        <p>The machinery of my design</p>
+        <h5>Curiosity, friction, iteration:</h5>
+        <h5>The machinery of my design</h5>
       </div>
     </section>
 
     <section class="news-updates-section">
       <div class="news-updates-header">
-        <h3 class="news-updates-title">UPDATES</h3>
+        <h2 class="news-updates-title">UPDATES</h2>
       </div>
 
       <div class="news-updates-grid">
@@ -184,11 +183,7 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped>
-/* 注意：Global 的設定 (body, *) 應該移到 App.vue 或 main.css 
-   這裡只保留該頁面特定的樣式 
-*/
-
+<style lang="scss" scoped>
 .news-page-container {
   width: 100%;
   position: relative;
@@ -244,11 +239,7 @@ onUnmounted(() => {
   width: 270px;
   height: 290px;
   will-change: transform;
-  /* 若你希望連「點擊」都不要被這些卡片擋住（變成純裝飾背景），
-     可以把 auto 改成 none。
-     目前保留 auto 讓你以後想加點擊功能時可以直接用。
-  */
-  pointer-events: auto !important;
+  pointer-events:none;
 }
 
 .news-card-inner {
@@ -264,11 +255,9 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* 移除了 transition 和 filter，讓它保持原樣 */
   filter: sepia(20%) contrast(110%);
 }
 
-/* ★ 已移除 hover 效果的 CSS */
 
 /* --- 引言區塊 --- */
 .news-quote-section {
