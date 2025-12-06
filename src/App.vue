@@ -25,6 +25,7 @@ import TheHeader from './components/TheHeader.vue';
   flex-grow: 1;
   overflow: hidden;
   min-height: 1px;
+  padding-top: 100px;
 }
 .part-time{
   gap: 12px;

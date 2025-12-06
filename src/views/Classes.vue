@@ -11,12 +11,13 @@
           <p class="hint">請拖曳書角或雙擊翻頁</p>
         </div>
       </div>
-
       <div class="page">
         <div class="page-content text-page">
-          <h3>院長致詞</h3>
-          <p>歡迎來到這片充滿奇蹟的土地。在這裡，程式碼是咒語，瀏覽器是我們的魔杖。</p>
-          <p>請小心翻閱，知識是有重量的。</p>
+        </div>
+      </div>
+      <div class="page">
+        <div class="page-content text-page">
+          <ClassPageIndex />
         </div>
       </div>
 
@@ -209,6 +210,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { PageFlip } from 'page-flip';
 import ProductCard from '@/components/ProductCard.vue';
+import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 
 const bookRef = ref(null);
 let pageFlip = null;
