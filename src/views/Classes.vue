@@ -192,7 +192,7 @@
       </div>
             <div class="page">
       <div class="page-content">
-        <HelloWorld />
+
       </div>
       </div>
       <div class="page cover">
@@ -240,7 +240,6 @@ const getEquipName = (icon) => {
   return map[icon] || '未知物品';
 };
 // -----------------------
-
 onMounted(() => {
   pageFlip = new PageFlip(bookRef.value, {
     width: 400,
@@ -253,7 +252,6 @@ onMounted(() => {
     showCover: true,
     maxShadowOpacity: 0.2, 
   });
-
   pageFlip.loadFromHTML(bookRef.value.querySelectorAll('.page'));
 });
 
