@@ -3,42 +3,49 @@
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop>
+      @touchstart.stop
+      @click="goToPage(3)"
+      >
         <IconHelmet />Motorcycle
       </h5>
     </li>
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop>
+      @touchstart.stop
+      @click="goToPage(5)">
         <IconFoot /> Endemic Species
       </h5>
     </li>
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop>
+      @touchstart.stop
+      @click="goToPage(7)">
         <IconHistory /> History of Magic
       </h5>
     </li>
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop>
+      @touchstart.stop
+      @click="goToPage(9)">
         <IconCharm size="43"/>Spell & Charms
       </h5>
     </li>
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop>
+      @touchstart.stop
+      @click="goToPage(11)">
         <IconPotion />Potions
       </h5>
     </li>
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
-      @touchstart.stop>
+      @touchstart.stop
+      @click="goToPage(13)">
         <IconBue />Divinations
       </h5>
     </li>
@@ -46,13 +53,19 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { ref ,defineEmits } from 'vue';
   import IconHelmet from '../icons/SVG/IconHelmet.vue';
   import IconFoot from '../icons/SVG/IconFoot.vue';
   import IconHistory from '../icons/SVG/IconHistory.vue';
   import IconBue from '../icons/SVG/IconBue.vue';
   import IconPotion from '../icons/SVG/IconPotion.vue';
   import IconCharm from '../icons/SVG/IconCharm.vue';  
+
+  const emit = defineEmits(['flip'])
+
+  const goToPage = (pageNumber) => {
+    emit('flip', pageNumber)
+  }
 </script>
 
 <style lang="scss" scoped>
