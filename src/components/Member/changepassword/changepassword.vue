@@ -9,7 +9,7 @@
             name="oldpassword" 
             id="oldpassword"
             placeholder="請輸入舊密碼"/>
-            <span v-if="errors.oldpassword" class="error-text">{{ errors.oldpassword }}</span>
+            <span v-if="errors.oldpassword" class="error-text"><p>{{ errors.oldpassword }}</p></span>
             <label for="Newpassword"><h5>New password:</h5></label>
             <input 
             v-model="Newpassword"
@@ -198,6 +198,7 @@ const handleChangePassword  = () => {
 
     h6{
         color: $color-fsCaption;
+        text-align: center;
     }
 
     p{
