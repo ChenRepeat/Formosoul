@@ -1,5 +1,5 @@
 <template>
-    <Changepassword></Changepassword>
+    <!-- <Changepassword></Changepassword> -->
 </template>
 
 <script setup>

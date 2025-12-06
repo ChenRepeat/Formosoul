@@ -70,6 +70,8 @@ const router = createRouter({
     {
       path: '/policy',
       name: 'Policy',
+      // 重新導向 能夠讓點入頁面時導向另一個網址
+      redirect: '/policy/information',
       component: Policy,
       children: [
         { path: 'information', component: Information },
