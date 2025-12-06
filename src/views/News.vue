@@ -147,7 +147,7 @@ onUnmounted(() => {
   <div class="news-page-container">
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
-        <h2 class="news-main-text">I solemnly swear that I am up to no good.</h2>
+        <h5 class="news-main-text">I solemnly swear that I am up to no good.</h5>
       </div>
 
       <div class="news-cards-container">
@@ -167,14 +167,14 @@ onUnmounted(() => {
 
     <section class="news-quote-section">
       <div class="news-quote-content">
-        <p>Curiosity, friction, iteration:</p>
-        <p>The machinery of my design</p>
+        <h5>Curiosity, friction, iteration:</h5>
+        <h5>The machinery of my design</h5>
       </div>
     </section>
 
     <section class="news-updates-section">
       <div class="news-updates-header">
-        <h3 class="news-updates-title">UPDATES</h3>
+        <h2 class="news-updates-title">UPDATES</h2>
       </div>
 
       <div class="news-updates-grid">
