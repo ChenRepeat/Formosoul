@@ -343,6 +343,12 @@ onUnmounted(() => {
   transition: none; 
   transform-style: preserve-3d;
   border-radius: 0 16px 16px 0;
+  box-shadow:
+   6px 1px 20px $color-fsWhite,
+   6px 1px 20px $color-fsGold300,
+   -6px -3px 20px $color-fsWhite,
+   -6px -3px 6px $color-fsGold300;
+
 }
 
 .page::before {
