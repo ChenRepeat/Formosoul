@@ -126,7 +126,8 @@ onUnmounted(() => clearInterval(interval))
 
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 50px;
+  padding-top: 60px;
   padding-bottom: 100px;
   position: relative;
 }
