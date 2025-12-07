@@ -2,7 +2,8 @@
     <div class="page-line-bar">
         <div
         :style="{
-            left: positions
+            left: positions,
+            width: linerbarlength,
         }"
         class="line-bar">
         </div>
@@ -14,7 +15,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     // 在你的頁面引用時 應該會是這樣
-    // <Pagelinebar :linebarposition="視當前頁面的標籤" :activeIndex="activeIndex" />
+    // <Pagelinebar :linebarposition="視當前頁面的標籤數量去決定長度" :activeIndex="activeIndex" />
     activeIndex: {
         type: Number,
         default: 0
@@ -28,7 +29,11 @@ const props = defineProps({
 
 
 const positions = computed(() => {
-    return `${props.activeIndex * props.linebarposition}px`
+    return `${props.activeIndex * props.linebarposition}px`;
+});
+
+const linerbarlength = computed(() => {
+    return `${props.linebarposition}px`;
 });
 </script>
 
@@ -43,7 +48,7 @@ const positions = computed(() => {
         position: relative;
     }
     .line-bar{
-        width: 240px;
+
         height: 8px;
         border: 0;
         border-radius: 999px;
