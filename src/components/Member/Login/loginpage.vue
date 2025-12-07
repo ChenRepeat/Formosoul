@@ -1,7 +1,7 @@
 <template>
-    <div class="Loginpage" :class="{ 'active': isLoginOpen}">
+    <div class="Loginpage" :class="{ 'active': isLoginOpen}" @click.self="toggleLogin">
         123
-        <div class="Logincontain" @click="toggleLogin">
+        <div class="Logincontain">
             123
             <Logincontain></Logincontain>
         </div>
