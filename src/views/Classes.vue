@@ -192,6 +192,7 @@ import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
 import MotorRight from '@/components/ClassPages/MotorRight.vue';
+import siteLogo from '@/assets/logo_white.svg'; 
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
@@ -274,7 +275,7 @@ const goToPage = async (pageNum) => {
 onMounted(() => {
   pageFlip = new PageFlip(bookRef.value, {
     width: 600,
-    height: 850,
+    height: 800,
     size: 'fixed',
     showCover: true,
     maxShadowOpacity: 0.2,
@@ -571,7 +572,7 @@ img { max-width: 100%; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.
   z-index: 1000 !important;
 }
 
-$high-layer-pages: 4, 6, 8, 12; 
+$high-layer-pages: 4, 5, 8, 12; 
 .book:not(.flipping) {
   @each $index in $high-layer-pages {
     :deep(.stf__item:nth-child(#{$index})) {

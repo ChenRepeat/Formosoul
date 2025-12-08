@@ -163,7 +163,7 @@
       opacity: 1;
     }
     100% {
-      right: 497px;
+      right: 1100px;
     }
   }
 </style>
