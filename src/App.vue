@@ -3,16 +3,18 @@ import { RouterLink, RouterView } from 'vue-router'
 import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
+import siteLogo from '@/assets/logo_white.svg'; 
+
 </script>
 
 <template>
   <div class="wrapper dp-flex-col">
     <TheHeader />
-  <main class="content">
+    <a href="/"><img :src="siteLogo" alt="SiteLogo" class="site-logo"/></a>
+    <main class="content">
     <RouterView />
     <loginpage></loginpage>
-
-  </main>
+    </main>
     <TheFooter />
   </div>
 </template>
@@ -22,6 +24,11 @@ import loginpage from './components/Member/Login/loginpage.vue';
   min-height: 100vh;
   background-color: $color-fsTitle;
   position: relative;
+}
+.site-logo{
+  position: absolute;
+  padding-left: 40px;
+  top: 20px;
 }
 .content {
   display: block;

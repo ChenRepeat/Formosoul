@@ -30,7 +30,7 @@ function handleUserIconClick( e ){
 
 <template>
   <div class="header-outer-case dp-flex">
-    <a href="/"><img :src="siteLogo" alt="SiteLogo" /></a>
+    <!-- <a href="/"><img :src="siteLogo" alt="SiteLogo" /></a> -->
 
     <div class="header-link liquidGlass-wrapper dp-flex-col" :class="{ open: isMenuOpen }">
 
@@ -94,12 +94,12 @@ function handleUserIconClick( e ){
 .header-outer-case {
   padding: 0 40px 0 60px;
   height: 100px;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   position: fixed;
   width: 100%;
   top: 0;
-  left: 0;
+  right:  0;
   z-index: 1000;
 }
 
