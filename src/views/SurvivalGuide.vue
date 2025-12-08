@@ -58,8 +58,8 @@ onUnmounted(() => clearInterval(interval))
 </script>
 
 <template>
-  <!-- <SurvivalTextFrame></SurvivalTextFrame> -->
-  <main class="survival-case">
+  <main class="survival-case"> 
+    <SurvivalTextFrame></SurvivalTextFrame>
     <div class="survial-moveimg">
       <img v-for="( img, index) in moveimg" :key="index" :src="img" :style="{ 
           left: positions[index].x + '%', 
