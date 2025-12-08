@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 
 // 圖片陣列
@@ -56,7 +57,7 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    draw(canvasEl, 240, 70, 32, imageUrl);
+    draw(canvasEl, 230, 70, 32, imageUrl);
   })
 })
 </script>
@@ -73,6 +74,11 @@ onMounted(() => {
         :ref="(el) => canvasRefs[index] = el" 
         class="myCanvas"
       ></canvas>
+
+      <div class="product-icon dp-flex-col">
+        <font-awesome-icon icon="fa-regular fa-heart" />
+        <font-awesome-icon icon="fa-solid fa-cart-shopping" />
+      </div>
       
   
       <h6 class="product-name">Bamboo Helicopter</h6>
@@ -88,24 +94,62 @@ onMounted(() => {
   .product-case {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    // display: flex;
+    // flex-wrap: wrap;
+    // justify-content: center;
     gap: 40px;
+
+    position: relative;
   }
   .product-card{
-    width: 280px;
-    height: 360px;
-    background-color: #ffffff95;
+    width: 270px;
+    height: 370px;
+    // background-color: #ffffff95;
+    background-color: #ffffff80;
     position: relative;
     border-radius: 32px;
     
     justify-content: center;
     align-items: center;
+
+    cursor: pointer;
   }
   .myCanvas{
     transition: all 1s;
   }
-  .product-card:hover .myCanvas{
-    transform: scale(1.1);
+  // .product-card:hover .myCanvas{
+  //   transform: scale(1.1);
+  // }
+
+ .product-card:hover,  .product-card:hover>h6 {
+    background-color: #ffffff00;
+    color: $color-fsWhite;
+ }
+
+ .product-card:hover .fa-cart-shopping{
+  
+ }
+
+  .product-icon{ 
+    width: 205px;
+    height: 200px;
+    justify-content: space-between;
+    position: absolute;
+    top: 50px;
+    right: 25px;
   }
+
+  .product-icon .fa-heart{
+   color: $color-fsRed;
+   font-size: 24px;
+  }
+
+  .product-icon .fa-cart-shopping{
+    font-size: 32px;
+    align-self: flex-end;
+  }
+
 
   .product-name{
     color: $color-fsTitle;
@@ -116,14 +160,15 @@ onMounted(() => {
   .product-content{
     align-items: center;
     justify-content: space-between;
-    width: 240px;
+    width: 230px;
   }
 
   .product-tag{
     color: $color-fsTitle;
-    background-color: $color-fsBlue50;
+    background-color: $color-fsCaption;
     border-radius: 10px;
     padding: 0 8px;
+    font-size: 1.2rem;
 
     // align-self: flex-start;
   }

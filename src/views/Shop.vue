@@ -101,9 +101,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   <!-- 下方頁碼 -->
   <nav class="shop-downlist fw200">
     <font-awesome-icon icon="fa-solid fa-angle-left" />
-    <span>1</span>
-    <span>2</span>
-    <span>3</span>
+    <span class="shop-page click">1</span>
+    <span class="shop-page">2</span>
+    <span class="shop-page">3</span>
     <font-awesome-icon icon="fa-solid fa-angle-right" />
   </nav>
 </main>
@@ -224,7 +224,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 //中間商品列表
 .shop-productList{
-  margin-top: 40px;
+  max-width: 1200px;
+  margin: 60px auto 0;
 }
 
 
@@ -232,19 +233,26 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 .shop-downlist{
   padding: 120px 0 0;
-
+  
   font-size: 16px;
   line-height: 160%;
   margin: 0 auto;
   text-align: center;
 }
 
-.shop-downlist span{
+.shop-page{
   border-radius: 3px;
   border: 1px solid $color-fsWhite;
   display: inline-block;
   width: 25.6px;
   margin: 10px;
+  cursor: pointer;
 }
+
+.shop-page.click, .shop-page:hover{
+  background-color: $color-fsWhite;
+  color: $color-fsTitle;
+}
+
 
 </style>
