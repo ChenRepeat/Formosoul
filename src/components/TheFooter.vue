@@ -53,7 +53,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
                 <a href="/professorsintroduction"><h5>Professors</h5></a>
               </li>
               <li>
-                <a href="/survivalguide"><h5>Rules</h5></a>
+                <a href="/survivalrules"><h5>Rules</h5></a>
               </li>
               <li>
                 <a href="/shop"><h5>Diagon Alley</h5></a>

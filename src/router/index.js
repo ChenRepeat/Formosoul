@@ -7,13 +7,17 @@ import News from '@/views/News.vue'
 import Policy from '@/views/Policy.vue'
 import Classes from '@/views/Classes.vue'
 import AnnualEvent from '@/views/AnnualEvent.vue'
-import SurvivalGuide from '@/views/SurvivalGuide.vue'
 import MemberOrders from '@/components/Member/Orders/MemberOrders.vue'
 import Information from '@/components/Member/information/information.vue'
 import Changepassword from '@/components/Member/changepassword/changepassword.vue'
-import Mycollections from '@/components/Member/mycollections/mycollections.vue' 
+import Mycollections from '@/components/Member/mycollections/mycollections.vue'
 import Coupons from '@/components/Member/coupons/coupons.vue'
 import MemberOrderscontain from '@/components/Member/Orders/MemberOrderscontain.vue'
+import SurvivalRules from "@/views/SurvivalRules.vue";
+import SurvivalGuide from '@/components/SurvivalGuides/SurvivalGuide.vue'
+import NightMarketMap from '@/components/SurvivalGuides/NightMarketMap.vue'
+import ConvenienceStore from '@/components/SurvivalGuides/ConvenienceStore.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,9 +56,26 @@ const router = createRouter({
       component: Shop,
     },
     {
-      path: '/survivalguide',
-      name: 'SurvivalGuide',
-      component: SurvivalGuide,
+      path: '/survivalrules',
+      name: 'SurvivalRules',
+      component: SurvivalRules,
+      children: [
+        {
+          path: '',
+          name: 'SurvivalGuide',
+          component: SurvivalGuide,
+        },
+        {
+          path: "nightmarketmap",
+          name: "NightMarketMap",
+          component: NightMarketMap,
+        },
+        {
+          path: "conveniencestore",
+          name: "ConvenienceStore",
+          component: ConvenienceStore,
+        },
+      ],
     },
     {
       path: '/classes',
@@ -76,14 +97,15 @@ const router = createRouter({
       children: [
         { path: 'information', component: Information },
         { path: 'changepassword', component: Changepassword },
-        { path: 'orderslist', component: MemberOrders,
+        {
+          path: 'orderslist', component: MemberOrders,
           children: [
-            { path: 'orderscontain', component: MemberOrderscontain},
+            { path: 'orderscontain', component: MemberOrderscontain },
           ],
         },
         { path: 'mycollections', component: Mycollections },
         { path: 'coupons', component: Coupons },
-        { path: 'orderscontain', component: MemberOrderscontain}
+        { path: 'orderscontain', component: MemberOrderscontain }
       ],
     },
   ],
