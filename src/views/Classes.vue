@@ -35,7 +35,6 @@
 
       <div class="page">
         <div class="page-content">
-          <MotorRight  @flip="goToPage"/>
         </div>
       </div>
 
@@ -191,7 +190,6 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
-import MotorRight from '@/components/ClassPages/MotorRight.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
