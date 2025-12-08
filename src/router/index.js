@@ -75,6 +75,7 @@ const router = createRouter({
           name: "ConvenienceStore",
           component: ConvenienceStore,
         },
+        { path: '/survivalguide', redirect: '/survivalrules' },
       ],
     },
     {

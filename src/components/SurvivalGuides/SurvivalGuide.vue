@@ -185,7 +185,7 @@ const rightFrame = computed(()=> frames.value[1])
 <style scoped lang="scss">
 
 .survival-case{
-  background-color: #000;
+  background-image: url(/public/Shop/bgi.jpg);
 }
 
 .survival-case-wrapper {
@@ -197,7 +197,7 @@ const rightFrame = computed(()=> frames.value[1])
   display: flex;
   flex-direction: column;
   gap: 50px;
-  padding-top: 60px;
+  padding-top: 130px;
   padding-bottom: 100px;
   position: relative;
 }

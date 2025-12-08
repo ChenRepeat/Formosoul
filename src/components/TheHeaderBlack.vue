@@ -55,7 +55,7 @@ function toggleLang(){
         <li><a href="/news"><h4>News</h4></a></li>
         <li><a href="/annualevent"><h4>Annual Event</h4></a></li>
         <li><a href="/professorsintroduction"><h4>Professor</h4></a></li>
-        <li><a href="/survivalguide"><h4>Survival Guide</h4></a></li>
+        <li><a href="/survivalrules"><h4>Survival Guide</h4></a></li>
         <li><a href="/classes"><h4>Classes</h4></a></li>
         <li><a href="/policy"><h4>Policy</h4></a></li>
       </ul>
