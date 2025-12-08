@@ -41,50 +41,25 @@
 
       <div class="page">
         <div class="page-content">
-          <h3>咒語學：API 召喚術</h3>
-          <div class="code-block">
-            <span class="keyword">await</span> axios.<span class="func">get</span>(<span class="str">'/magic'</span>);
-          </div>
-          <p>揮動你的 Axios 魔杖，從遙遠的伺服器召喚數據精靈。</p>
-          <hr class="divider">
-          <p class="small-text">⚠️ 警告：若魔力不足 (404)，精靈將拒絕回應。</p>
+          <BikeRule @flip="goToPage"/>
         </div>
       </div>
 
       <div class="page">
         <div class="page-content">
-          <h3>奇獸飼育學</h3>
-          <div class="creature-card">
-            <div class="creature-icon">🕷️</div>
-            <h4>名稱：千年 Bug</h4>
-            <p><strong>習性：</strong>總是在 Demo 前一刻出現，喜歡躲在非同步函式中。</p>
-            <p><strong>剋星：</strong>Chrome DevTools 與 console.log 法陣。</p>
-          </div>
+          <!-- <BikeGame /> -->
         </div>
       </div>
 
       <div class="page">
         <div class="page-content">
-          <h3>占卜學：未來之路</h3>
-          <p>透過水晶球窺探畢業後的命運...</p>
-          <ul class="prophecy-list">
-            <li>🔮 <strong>全端大法師</strong> (Full Stack)</li>
-            <li>🎨 <strong>UI 幻術師</strong> (Designer)</li>
-            <li>🛡️ <strong>資安守護者</strong> (Security)</li>
-          </ul>
-          <p>命運掌握在你的 Commit 紀錄中。</p>
+          
         </div>
       </div>
 
       <div class="page">
         <div class="page-content">
-          <h3>禁忌森林入口</h3>
-          <p>前方偵測到強大的魔力波動...</p>
-          <div class="game-portal-icon">🌀</div>
-          <router-link to="/parallax-test" class="magic-btn">
-            進入遊戲測試
-          </router-link>
-          <p class="small-text">點擊按鈕進行空間跳躍</p>
+          
         </div>
       </div>
 
@@ -102,65 +77,11 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <h3>冒險者背包</h3>
-          <div class="inventory-grid">
-            
-            <div class="item-slot" title="新手劍" draggable="true" 
-                 @dragstart="startDrag($event, '🗡️')" 
-                 @mousedown.stop @touchstart.stop>
-              🗡️
-            </div>
-
-            <div class="item-slot" title="回復藥水" draggable="true" 
-                 @dragstart="startDrag($event, '🍷')" 
-                 @mousedown.stop @touchstart.stop>
-              🍷
-            </div>
-
-            <div class="item-slot" title="魔法卷軸" draggable="true" 
-                 @dragstart="startDrag($event, '📜')" 
-                 @mousedown.stop @touchstart.stop>
-              📜
-            </div>
-
-            <div class="item-slot" title="世界地圖" draggable="true" 
-                 @dragstart="startDrag($event, '🗺️')" 
-                 @mousedown.stop @touchstart.stop>
-              🗺️
-            </div>
-
-            <div class="item-slot empty"></div>
-            <div class="item-slot empty"></div>
-          </div>
           
-          <div class="inventory-info">
-             <p>金幣: 💰 1,250 G</p>
-             <p>負重: ⚖️ 4/20</p>
-          </div>
         </div>
       </div>
       <div class="page">
         <div class="page-content">
-          <h3>角色狀態</h3>
-          <div class="profile-box">
-             <div class="avatar">🧙‍♂️</div>
-             <h4>Level 5 見習巫師</h4>
-          </div>
-          
-          <div class="stat-bars">
-            <div class="stat-row">
-              <span>HP</span>
-              <div class="bar-container"><div class="bar red" style="width: 80%"></div></div>
-            </div>
-            <div class="stat-row">
-              <span>MP</span>
-              <div class="bar-container"><div class="bar blue" style="width: 45%"></div></div>
-            </div>
-            <div class="stat-row">
-              <span>EXP</span>
-              <div class="bar-container"><div class="bar green" style="width: 30%"></div></div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="page">
@@ -192,6 +113,9 @@ import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
 import MotorRight from '@/components/ClassPages/MotorRight.vue';
+import BikeRule from '@/components/ClassPages/BikeRule.vue';
+// import BikeGame from '@/components/ClassPages/BikeGame.vue';
+
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
@@ -571,7 +495,7 @@ img { max-width: 100%; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.
   z-index: 1000 !important;
 }
 
-$high-layer-pages: 4, 5, 8, 12; 
+$high-layer-pages: 4, 6, 8, 12; 
 .book:not(.flipping) {
   @each $index in $high-layer-pages {
     :deep(.stf__item:nth-child(#{$index})) {
