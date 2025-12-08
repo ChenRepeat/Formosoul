@@ -1,12 +1,20 @@
 <template>
-  <ul class="class-index-case dp-flex-col">
+  <ul class="history-index-case dp-flex-col">
     <li class="dp-flex">
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(2)"
       >
-        <IconHelmet />Motorcycle
+        New Year
+      </h5>
+    </li>
+    <li class="dp-flex">
+      <h5 class="page-index dp-flex"
+      @mousedown.stop
+      @touchstart.stop
+      @click="goToPage(3)">
+        Mid-Autumn  Festival
       </h5>
     </li>
     <li class="dp-flex">
@@ -14,39 +22,7 @@
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(4)">
-        <IconFoot /> Endemic Species
-      </h5>
-    </li>
-    <li class="dp-flex">
-      <h5 class="page-index dp-flex"
-      @mousedown.stop
-      @touchstart.stop
-      @click="goToPage(5)">
-        <IconHistory /> History of Magic
-      </h5>
-    </li>
-    <li class="dp-flex">
-      <h5 class="page-index dp-flex"
-      @mousedown.stop
-      @touchstart.stop
-      @click="goToPage(6)">
-        <IconCharm size="43"/>Spell & Charms
-      </h5>
-    </li>
-    <li class="dp-flex">
-      <h5 class="page-index dp-flex"
-      @mousedown.stop
-      @touchstart.stop
-      @click="goToPage(7)">
-        <IconPotion />Potions
-      </h5>
-    </li>
-    <li class="dp-flex">
-      <h5 class="page-index dp-flex"
-      @mousedown.stop
-      @touchstart.stop
-      @click="goToPage(8)">
-        <IconBue />Divinations
+        Dragon-boat  Festival
       </h5>
     </li>
   </ul>
@@ -54,12 +30,6 @@
 
 <script setup>
   import { ref ,defineEmits } from 'vue';
-  import IconHelmet from '../icons/SVG/IconHelmet.vue';
-  import IconFoot from '../icons/SVG/IconFoot.vue';
-  import IconHistory from '../icons/SVG/IconHistory.vue';
-  import IconBue from '../icons/SVG/IconBue.vue';
-  import IconPotion from '../icons/SVG/IconPotion.vue';
-  import IconCharm from '../icons/SVG/IconCharm.vue';  
 
   import { usePageNavigation } from './goToPage';
   
@@ -69,7 +39,7 @@
 
 <style lang="scss" scoped>
 
-  .class-index-case{
+  .history-index-case{
     gap: 16px;
   }
   li{
