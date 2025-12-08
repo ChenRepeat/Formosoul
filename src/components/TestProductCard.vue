@@ -4,8 +4,12 @@ import { ref, onMounted } from 'vue'
 
 // 圖片陣列
 const cards = ref([
-  { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-  { id: 2, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' }
+  { id: 1, img: '../../public/Shop/1.png' },
+  { id: 2, img: '../../public/Shop/2.png' },
+  { id: 3, img: '../../public/Shop/3.png' },
+  { id: 4, img: '../../public/Shop/4.png' },
+  { id: 5, img: '../../public/Shop/5.png' },
+  { id: 6, img: '../../public/Shop/6.png' },
 ])
 
 const canvasRefs = ref([])
@@ -52,7 +56,7 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    draw(canvasEl, 280, 70, 32, imageUrl);
+    draw(canvasEl, 240, 70, 32, imageUrl);
   })
 })
 </script>
@@ -62,28 +66,37 @@ onMounted(() => {
     <div 
       v-for="(card, index) in cards" 
       :key="card.id" 
-      class="product-card"
+      class="product-card dp-flex-col"
     >
+     
       <canvas 
         :ref="(el) => canvasRefs[index] = el" 
         class="myCanvas"
       ></canvas>
+      
+  
+      <h6 class="product-name">Bamboo Helicopter</h6>
+      <div class="product-content dp-flex">
+        <p class="product-tag">#Traditional Toys</p>
+        <h6 class="product-price">NT 300</h6>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .product-case {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 40px;
   }
   .product-card{
-    width: 300px;
-    height: 300px;
-    background-color: #ccc;
+    width: 280px;
+    height: 360px;
+    background-color: #ffffff95;
     position: relative;
     border-radius: 32px;
-    display: flex;
+    
     justify-content: center;
     align-items: center;
   }
@@ -93,4 +106,31 @@ onMounted(() => {
   .product-card:hover .myCanvas{
     transform: scale(1.1);
   }
+
+  .product-name{
+    color: $color-fsTitle;
+    align-self: flex-start;
+    padding: 12px 20px;
+  }
+
+  .product-content{
+    align-items: center;
+    justify-content: space-between;
+    width: 240px;
+  }
+
+  .product-tag{
+    color: $color-fsTitle;
+    background-color: $color-fsBlue50;
+    border-radius: 10px;
+    padding: 0 8px;
+
+    // align-self: flex-start;
+  }
+
+  .product-price{
+    color: $color-fsRed;
+  }
+
+
 </style>
