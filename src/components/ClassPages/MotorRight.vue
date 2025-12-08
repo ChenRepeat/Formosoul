@@ -163,14 +163,7 @@
       opacity: 1;
     }
     100% {
-<<<<<<< HEAD
-      right: 1100px;
-    }
-  }
-</style>
-=======
       right: 497px;
     }
   }
 </style>
->>>>>>> parent of c8d0642 (Revert "Merge branch 'HomeTest' into dev")
