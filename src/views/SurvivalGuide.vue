@@ -3,7 +3,7 @@
 import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
 import TheFooter from '@/components/TheFooter.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
 // 定義目前的hover狀態： null 沒動作，'left' = 左邊hover，'right' = 右邊 hover
 const isHover = ref(null)
@@ -55,11 +55,32 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(interval))
 
+
+// 引用 text frames 資料
+const frames = ref([
+  {
+    id: 'night',
+    text: "Taiwan’s night markets are known for food, games. Stinky tofu, braised pork rice,  are must-tries, showing the heart of local Taiwanese culture.",
+    width: "280px",
+    height: "250px",
+    button: "Enter",
+  },
+  {
+    id: 'store',
+    text: "Most convenience stores in Taiwan are open 24/7 and offer food, bill payments, shipping, and more—an essential part of daily life.",
+    width: '280px',
+    height: '250px',
+    button: 'Enter'
+  }
+])
+
+const leftFrame = computed(()=> frames.value[0])
+const rightFrame = computed(()=> frames.value[1])
+
 </script>
 
 <template>
   <main class="survival-case"> 
-    <SurvivalTextFrame></SurvivalTextFrame>
     <div class="survial-moveimg">
       <img v-for="( img, index) in moveimg" :key="index" :src="img" :style="{ 
           left: positions[index].x + '%', 
@@ -93,24 +114,38 @@ onUnmounted(() => clearInterval(interval))
       @mouseenter="isHover = 'left'"
       @mouseleave="isHover = null"
       :class="{
-        'is-active': isHover == 'left',
-        'is-inactive': isHover == 'right'
+        'img-is-active': isHover == 'left',
+        'img-is-inactive': isHover == 'right'
       }">
         <!-- 要用上面變數的圖片，src要加bind: -->
         <img :src="imgLeft" alt="Night Market" />
-        <h2 >Night Market</h2>
+        <h2 :class="{
+            'text-is-active': isHover == 'left',
+        }" >Night Market</h2>
         
+        <SurvivalTextFrame class='text-frame-left' v-show="isHover == 'left'" 
+        :text="leftFrame.text" :width="leftFrame.width" :height="leftFrame.height"
+        :button="leftFrame.button"/>
       </div>
+
+
+
       <div class="survival-heropics-right-case" @mouseenter="isHover = 'right'"
       @mouseleave="isHover = null"
       :class="{
-        'is-active': isHover =='right',
-        'is-inactive': isHover == 'left'
+        'img-is-active': isHover =='right',
+        'img-is-inactive': isHover == 'left'
       }"
       >
         <img :src="imgRight" alt=""
         />
-        <h2>Convenience Store</h2>
+        <img class="bubble-img" src="/SurvivalGuide/bubble_tea.png" alt="">
+        <h2 :class="{
+            'text-is-active': isHover == 'right',
+        }"> Convenience Store </h2>
+        <SurvivalTextFrame class='text-frame-right' v-show="isHover == 'right'" 
+        :text="rightFrame.text" :width="rightFrame.width" :height="rightFrame.height"
+        :button="rightFrame.button"/>
       </div>
     </section>
   </main>
@@ -207,6 +242,7 @@ onUnmounted(() => clearInterval(interval))
   gap: 40px;
   transition: all 1s ease;
   cursor: pointer;
+  position: relative;
 
   img {
    width: 500px;
@@ -214,19 +250,26 @@ onUnmounted(() => clearInterval(interval))
     margin: 0 auto;
     z-index: 20;
   }
+}
 
-  &.is-active {
+.survival-heropics-left-case.img-is-active {
     z-index: 20;
     transform: translateX(200px) scale(1.3);
+    
   }
 
-
-  &.is-inactive {
+.survival-heropics-left-case.img-is-inactive {
     opacity: 0.2;
     filter:blur(2px);
     transform: scale(0.9);
   }
+
+.survival-heropics-left-case h2.text-is-active {
+  text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 30;
+  transform: translate(270px, -400px);
 }
+
 
 // right part area
 .survival-heropics-right-case {
@@ -240,28 +283,81 @@ onUnmounted(() => clearInterval(interval))
   gap: 40px;
   transition: all 1s ease;
   cursor: pointer;
+  position: relative;
 
   img {
     width: 450px;
     margin: 0 auto;
-    z-index: 20
+    z-index: 20;
   }
 
-  &.is-active {
+  &.img-is-active {
     z-index: 20;
     transform: translate(-200px) scale(1.3);
   }
 
-  &.is-inactive {
+  &.img-is-inactive {
     opacity: 0.2;
     filter: blur(2px);
     transform: scale(0.9);
   }
+
+  h2.text-is-active {
+  text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 30;
+  transform: translate(-260px, -410px);
+  } 
 }
 
-// move img 
+.bubble-img {
+  object-fit: contain;
+  height: 140px;
+  position: absolute;
+  right: 0;
+  top: -70px;
+  transform:rotate(-20deg);
+  opacity: 0;
+  transition: all 1.2s ease-in-out;
+}
+
+.survival-heropics-right-case:hover .bubble-img {
+  opacity: 1;
+}
 
 
+// ================ text frame position changed ================ 
+.text-frame-left {
+  right: 0;
+}
+
+
+.text-frame-right {
+  left: 0;
+}
+
+.text-frame-left,
+.text-frame-right {
+  position:absolute;
+  pointer-events: none;
+  bottom: 100px;
+  z-index: 30;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+// display text frame
+.survival-heropics-left-case.img-is-active .text-frame-left {
+  opacity: 1;
+  // transform: translateY(0);
+}
+
+.survival-heropics-right-case.img-is-active .text-frame-right {
+  opacity: 1;
+  // transform: translateY(0);
+}
+
+
+// ================ move img ================ 
 .survial-moveimg {
   position: absolute;
   top: -30px;

@@ -1,6 +1,6 @@
 <!-- 20251202：首次與Michael完成組件，以茲紀念 -->
-
 <script setup>
+
 import { ref } from 'vue'
 
 // 圖片陣列

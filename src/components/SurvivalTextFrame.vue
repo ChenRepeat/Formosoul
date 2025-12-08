@@ -1,29 +1,38 @@
-<script setup></script>
+<script setup>
+// ================ 試試看用 props 寫法 ================
+const props = defineProps({
+  text: { type: String, required: true },
+  width: { type: String, default: '280px'},
+  height: { type: String, default: '250px'},
+  button: { type: String, default: 'Enter'},
+})
+</script>
+
 
 <template>
-<div class="survival-text-frame">
-  <p>Taiwan’s night markets are known for food, games. Sti-<br></br>nky tofu, braised pork rice, <br></br>are must-tries, showing the <br></br>heart of local Taiwanese <br></br>culture.</p>
-  <button>Enter</button>
+<div class="survival-text-frame" :style="{ width: props.width, height: props.height }">
+  <p>{{ props.text }}</p>
+  <button>{{ props.button }}</button>
 </div>
 </template>
 
 
 <style scoped lang="scss">
 .survival-text-frame {
-  width: 280px;
-  height: 250px;
   background-color: $color-fsBlue50 ;
   border-radius: 7px;
   padding: 20px 10px;
 }
 
 .survival-text-frame p {
+  color: #000;
   text-align:left ;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   margin-left: 24px;  // 可能要調整
 }
 
 .survival-text-frame button {
+  color: #000;
   display: block;
   margin: 0 auto;
   background-color: $color-fsGold300 ;
@@ -32,10 +41,6 @@
   border: none;
   border-radius: 7px;
 }
-
-
-
-
 
 </style>
 
