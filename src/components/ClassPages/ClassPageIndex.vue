@@ -4,7 +4,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(3)"
+      @click="goToPage(2)"
       >
         <IconHelmet />Motorcycle
       </h5>
@@ -13,7 +13,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(5)">
+      @click="goToPage(3)">
         <IconFoot /> Endemic Species
       </h5>
     </li>
@@ -21,7 +21,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(7)">
+      @click="goToPage(4)">
         <IconHistory /> History of Magic
       </h5>
     </li>
@@ -29,7 +29,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(9)">
+      @click="goToPage(5)">
         <IconCharm size="43"/>Spell & Charms
       </h5>
     </li>
@@ -37,7 +37,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(11)">
+      @click="goToPage(6)">
         <IconPotion />Potions
       </h5>
     </li>
@@ -45,7 +45,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(13)">
+      @click="goToPage(7)">
         <IconBue />Divinations
       </h5>
     </li>
@@ -61,11 +61,10 @@
   import IconPotion from '../icons/SVG/IconPotion.vue';
   import IconCharm from '../icons/SVG/IconCharm.vue';  
 
+  import { usePageNavigation } from './goToPage';
+  
   const emit = defineEmits(['flip'])
-
-  const goToPage = (pageNumber) => {
-    emit('flip', pageNumber)
-  }
+  const { goToPage } = usePageNavigation(emit)
 </script>
 
 <style lang="scss" scoped>
