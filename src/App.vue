@@ -10,8 +10,8 @@ import siteLogo from '@/assets/logo_white.svg';
 <template>
   <div class="wrapper dp-flex-col">
     <TheHeader />
-    <a href="/"><img :src="siteLogo" alt="SiteLogo" class="site-logo"/></a>
     <main class="content">
+      <a href="/"><img :src="siteLogo" alt="SiteLogo" class="site-logo"/></a>
     <RouterView />
     <loginpage></loginpage>
     </main>
@@ -29,13 +29,16 @@ import siteLogo from '@/assets/logo_white.svg';
   position: absolute;
   padding-left: 40px;
   top: 20px;
+  z-index: 2000;
 }
 .content {
   display: block;
   flex-grow: 1;
   overflow: hidden;
   min-height: 1px;
-  padding-top: 100px;
+  // padding-top: 100px;
+  position: relative;
+
 }
 .part-time{
   gap: 12px;
