@@ -6,7 +6,10 @@
     <div 
       class="book" 
       ref="bookRef"
-      :class="{ 'intro-center-pos': isIntroPosition }"
+     :class="{ 
+    'intro-center-pos': isIntroPosition,
+    'flipping': isFlip  
+    }"
     >
       <div class="page cover">
         <div class="page-content">
@@ -25,23 +28,13 @@
       </div>
 
       <div class="page">
-        <div class="page-content">
-          <h3>魔藥學：Vue Composition</h3>
-          <p>將 `ref` 與 `reactive` 混合攪拌，並加入一點 `computed` 的精華。</p>
-          <div class="potion-image-box">🧪</div>
-          <p class="caption">基礎配方：Setup Sugar</p>
+        <div class="page-content" :class="{'op' :isFlip}">
+          <MotorLeft  @flip="goToPage"/>
         </div>
       </div>
 
       <div class="page">
         <div class="page-content">
-          <h3>學院地圖</h3>
-          <ul class="magic-list">
-            <li>🏰 <strong>前端堡壘</strong> (Main Hall)</li>
-            <li>🌲 <strong>後端黑森林</strong> (Backend API)</li>
-            <li>📚 <strong>資料庫圖書館</strong> (MySQL)</li>
-            <li>⚔️ <strong>Git 競技場</strong> (Version Control)</li>
-          </ul>
         </div>
       </div>
 
@@ -100,13 +93,13 @@
         </div>
       </div>
 
-<div class="page">
+      <div class="page">
         <div class="page-content equipment-page">
            
           
         </div>
       </div>
-<div class="page">
+      <div class="page">
         <div class="page-content">
           <h3>冒險者背包</h3>
           <div class="inventory-grid">
@@ -181,7 +174,7 @@
       </div>
       <div class="page cover">
         <div class="page-content">
-          <img src="../assets/BookCover.png" alt="" class="book-cover">
+          <img src="../assets/BookCover.png" alt="" class="book-cover book-end">
 
           <h3>The End</h3>
           <p>© 2025 Class Project</p>
@@ -196,18 +189,18 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
+import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
-// 🔥 新增：控制書本起始位置 (true = 在中間, false = 回到正常位置)
+const isFlip = ref (false);
 const isIntroPosition = ref(true); 
-// 📊 新增：頁面狀態追蹤
 const currentPage = ref(0);
 const totalPages = ref(0);
 const FLIP_SPEEDS = {
-  intro: 400,        // 開場快速翻頁間隔
-  normal: 800,       // 正常翻頁動畫時長
-  coverClose: 1500,  // 蓋書動畫時長
+  intro: 400,
+  normal: 800,
+  coverClose: 1500,
 };
 
 let pageFlip = null;
@@ -279,7 +272,7 @@ const goToPage = async (pageNum) => {
 onMounted(() => {
   pageFlip = new PageFlip(bookRef.value, {
     width: 600,
-    height: 700,
+    height: 850,
     size: 'fixed',
     showCover: true,
     maxShadowOpacity: 0.2,
@@ -288,14 +281,23 @@ onMounted(() => {
 
   pageFlip.loadFromHTML(bookRef.value.querySelectorAll('.page'));
 
-  // 🔥 監聽翻頁事件 (自動更新頁碼)
-  pageFlip.on('flip', (e) => {
+  pageFlip.on('flip', () => {
     updatePageNumber();
   });
 
+  pageFlip.on('changeState', (e) => {
+    if (e.data === 'read') {
+        isFlip.value = false; 
+        updatePageNumber(); 
+    } else {
+        if (e.data === 'flipping') {
+            isFlip.value = true;
+        }
+    }
+});
   // 初始化頁碼
   totalPages.value = pageFlip.getPageCount();
-  
+
   playIntroAnimation();
 });
 
@@ -306,19 +308,19 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-/* 🔥 關鍵修正：這裡原本是 width: 1; 改成 100% 才能看到 */
+
 .book-section {
   width: 100%; 
-  height: 100vh;
+  height: 950px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: $color-fsTitle;
+  // background-color: $color-fsTitle;
   overflow: hidden; 
   user-select: none; 
 }
 .book {
-  filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5));
+  // filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5)); 書本陰影
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .blocking-overlay {
@@ -338,17 +340,18 @@ onUnmounted(() => {
 .page {
   padding: 20px;
   background-color: #ccc;
-  // border: 1px solid #c2b5a3;
-  overflow: hidden;
+  // 實作超出頁面的圖片
+  // overflow: hidden;
   transition: none; 
   transform-style: preserve-3d;
   border-radius: 0 16px 16px 0;
-  box-shadow:
-   6px 1px 20px $color-fsWhite,
-   6px 1px 20px $color-fsGold300,
-   -6px -3px 20px $color-fsWhite,
-   -6px -3px 6px $color-fsGold300;
-
+  // box-shadow:
+  //  6px 1px 20px $color-fsWhite,
+  //  6px 1px 20px $color-fsGold300,
+  //  12px -3px 20px $color-fsWhite,
+  //  12px -3px 6px $color-fsGold300;
+  // overflow:;
+  opacity: 1;
 }
 
 .page::before {
@@ -362,7 +365,11 @@ onUnmounted(() => {
 
 .book-cover {
   position: absolute;
-  transform: scale(1.2);
+  transform: scale(1.07);
+  box-shadow: unset;
+}
+.book-end{
+  transform: rotate(180deg) scale(1.07);
 }
 .book-logo{
   position: absolute;
@@ -557,6 +564,18 @@ img { max-width: 100%; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.
   opacity: 0.3;
   z-index: -1;
   pointer-events: none;
+}
+:deep(.stf__item.--cursor) {
+  z-index: 1000 !important;
+}
+
+$high-layer-pages: 4, 6, 8, 12; 
+.book:not(.flipping) {
+  @each $index in $high-layer-pages {
+    :deep(.stf__item:nth-child(#{$index})) {
+      z-index: 50 !important;
+    }
+  }
 }
 
 @keyframes popIn {
