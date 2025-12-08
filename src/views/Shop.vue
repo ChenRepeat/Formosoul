@@ -31,31 +31,22 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
   </div>
 
-
   <ul class="shop-category dp-flex">
     <li class="shop-category-group">
-
-      <div class="liquidGlass-wrapper dock">
-        <div class="liquidGlass-effect"></div>
-        <div class="liquidGlass-tint"></div>
-        <div class="liquidGlass-shine"></div>
-        <div class="liquidGlass-text">
-          <font-awesome-icon class="shop-faIcon fw200" icon="fa-solid fa-gamepad" />
+      <div class="shop-dock">
+        <div class="shop-liquidGlass">
+          <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-gamepad" />
         </div>
       </div>
-
       <p> Traditional Toys</p>
 
     </li>
 
     <li class="shop-category-group">
 
-      <div class="liquidGlass-wrapper dock">
-        <div class="liquidGlass-effect"></div>
-        <div class="liquidGlass-tint"></div>
-        <div class="liquidGlass-shine"></div>
-        <div class="liquidGlass-text">
-          <font-awesome-icon class="shop-faIcon fw200" icon="fa-solid fa-box-open" />
+      <div class="shop-dock">
+        <div class="shop-liquidGlass">
+          <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-box-open" />
         </div>
       </div>
 
@@ -64,12 +55,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
     <li class="shop-category-group">
 
-      <div class="liquidGlass-wrapper dock">
-        <div class="liquidGlass-effect"></div>
-        <div class="liquidGlass-tint"></div>
-        <div class="liquidGlass-shine"></div>
-        <div class="liquidGlass-text">
-          <font-awesome-icon class="shop-faIcon fw200" icon="fa-solid fa-ring" />
+      <div class="shop-dock">
+        <div class="shop-liquidGlass">
+          <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-ring" />
         </div>
       </div>
 
@@ -78,12 +66,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
     <li class="shop-category-group">
 
-      <div class="liquidGlass-wrapper dock">
-        <div class="liquidGlass-effect"></div>
-        <div class="liquidGlass-tint"></div>
-        <div class="liquidGlass-shine"></div>
-        <div class="liquidGlass-text">
-          <font-awesome-icon class="shop-faIcon fw200" icon="fa-solid fa-ticket" />
+      <div class="shop-dock">
+        <div class="shop-liquidGlass">
+          <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-ticket" />
         </div>
       </div>
 
@@ -161,10 +146,35 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   font-size: 48px;
 }
 
-.dock {
+.shop-category-group:hover .shop-dock{
+  transform: scale(1.1);
+}
+
+.shop-dock{
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  backdrop-filter: blur(5px);
+  box-shadow: inset 0 0 120px rgba(255, 255, 255, 0.2);
+}
+
+.shop-liquidGlass{
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5) ;
+
+  position: relative;
+}
+
+.shop-liquidGlass>svg{
+  color: $color-fsWhite;
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .shop-category-group p{
@@ -172,62 +182,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   text-align: center;
 }
 
-
-/* LIQUID GLASS STYLES */
-
-.liquidGlass-wrapper {
-  position: relative;
-  display: flex;
-  font-weight: 600;
-  overflow: hidden;
-
-  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
-
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-}
-
-.liquidGlass-effect {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-
-  backdrop-filter: blur(3px);
-  filter: url(#glass-distortion);
-  overflow: hidden;
-}
-
-.liquidGlass-tint {
-  z-index: 1;
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.50);
-}
-
-.liquidGlass-shine {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-
-  overflow: hidden;
-
-  //這邊的inset數值有調整過
-  box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.5),
-              inset -1px -1px 1px 0px rgba(255, 255, 255, 0.5);
-}
-
-.liquidGlass-text {
-  z-index: 3;
-  
-  //這行是自己設定的，讓icon置中
-  margin: auto;
-}
-
 //中間商品列表
 .shop-productList{
   max-width: 1200px;
   margin: 60px auto 0;
 }
-
 
 // 下方頁碼
 
