@@ -4,6 +4,7 @@
   import IconBike from '../icons/SVG/IconBike.vue';
   import IconHelmetColor from '../icons/SVG/IconHelmetColor.vue';
   import IconStop from '../icons/SVG/IconStop.vue';
+  import { usePageNavigation } from './goToPage';
   
 
   const toggle = ref(1);
@@ -21,6 +22,9 @@
   const currentDialog = computed(() => {
     return dialogs[toggle.value];
   });
+  
+  const emit = defineEmits(['flip'])
+  const { goToPage } = usePageNavigation(emit)
 </script>
 
 <template>
@@ -53,7 +57,11 @@
         </div>
       </div>
       <div class="motor-right-icons dp-flex">
-        <BasicButton class="btn-black"><p>Try Now !</p></BasicButton>
+        <BasicButton 
+          class="btn-black"
+          @mousedown.stop
+          @touchstart.stop
+          @click="goToPage(4)"><p>Try Now !</p></BasicButton>
         <div class="bottom-icons">
           <IconBike size= 69 class="icon-bike icon"/>
           <IconHelmetColor size="48" class="icon-helmet icon"/>
