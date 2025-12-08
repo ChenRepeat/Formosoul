@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
+import loginpage from './components/Member/Login/loginpage.vue';
 </script>
 
 <template>
@@ -9,6 +10,8 @@ import TheHeader from './components/TheHeader.vue';
     <TheHeader />
   <main class="content">
     <RouterView />
+    <loginpage></loginpage>
+
   </main>
     <TheFooter />
   </div>

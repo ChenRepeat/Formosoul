@@ -2,6 +2,11 @@
 import { ref } from 'vue';
 import siteLogo from '@/assets/logo_white.svg'; 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/autoStore';
+
+const router = useRouter();
+const authStore =useAuthStore();
 
 const isMenuOpen = ref(false);
 const isEnglish = ref(false)
@@ -11,6 +16,16 @@ function toggleMenu() {
 function toggleLang(){
   isEnglish.value = !isEnglish.value
 }
+
+function handleUserIconClick( e ){
+  e.preventDefault();
+
+  if(authStore.isLoggedIn){
+    router.push('/member');
+  }else{
+    authStore.openLoginModal();  // 調用 store 的方法 不用 inject
+  }
+};
 </script>
 
 <template>
@@ -35,8 +50,10 @@ function toggleLang(){
 
         <div class="header-icons-list dp-flex">
           <a href="/shop"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
-          <a href="/member"><font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/></a>
-          
+          <!-- <a href="/member"></a> -->
+          <button @click="handleUserIconClick">
+            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/>
+          </button>
           <div class="transition hamburger-btn dp-flex-col" 
                @click="toggleMenu"
                :class="{ 'active': isMenuOpen }">
@@ -162,6 +179,11 @@ img { object-fit: none; }
 .liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; }
 
 .header-icons-list { gap: 16px; align-items: center; }
+
+.header-icons-list > button{ 
+  background-color: transparent; 
+  border: 0;
+}
 
 .header-icon { color: $color-fsWhite; font-size: 32px; cursor: pointer; }
 .draggable-icon { cursor: move ; position: relative; z-index: 1001;}
