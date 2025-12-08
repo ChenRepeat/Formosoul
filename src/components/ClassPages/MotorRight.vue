@@ -1,6 +1,67 @@
+<script setup>
+  import BasicButton from '@/components/BasicButton.vue';
+  import { computed, ref, Transition } from 'vue';
+  import IconBike from '../icons/SVG/IconBike.vue';
+  import IconHelmetColor from '../icons/SVG/IconHelmetColor.vue';
+  import IconStop from '../icons/SVG/IconStop.vue';
+  
+
+  const toggle = ref(1);
+  const dialogs = {
+    1: {
+      paragraph: 'Taiwan’s “motorcycle waterfall” appears during rush hours, when thousands of motorcycles flow down ramps in dense waves, creating a striking visual symbol of the island’s busy urban mobility.'
+    },
+    2: {
+        paragraph: 'Motorcycle modification in Taiwan blends creativity and personal style, from custom paint and decals to engine tuning and upgraded lights, reflecting each rider’s identity while shaping a vibrant and expressive street culture across the island.'
+    },
+  };
+  function changeDialog(i){
+    toggle.value = i;
+  }
+  const currentDialog = computed(() => {
+    return dialogs[toggle.value];
+  });
+</script>
+
 <template>
-  <h1>📙 Page Three</h1>
-  <p>也可以放動畫、表單、影片。</p>
+    <div class="motor-right-contain dp-flex-col">
+      <div class="motor-right-title dp-flex-col">
+        <h2 class="title-text">Motorcycle</h2>
+        <p>Taiwan’s motorcycle culture defines daily life, providing fast, affordable mobility and shaping the island’s unique traffic, social habits, and modern transportation trends.</p>
+      </div>
+      <div class="motor-right-content dp-flex">
+        <Transition name="fade" mode="out-in">
+          <p :key="toggle" class="motor-right-dialog">{{currentDialog.paragraph}}</p>
+        </Transition>
+        <div class="motor-right-iamge-case dp-flex-col">
+          <div class="motor-right-iamge"
+          :class="{'toggle': toggle == 1,}"
+          @click="changeDialog(1)"
+          @mousedown.stop
+          @touchstart.stop>
+            <img src="../../../public\Classes\motor-right1.png" alt="">
+            <div class="over-lay"></div>
+          </div>
+          <div class="motor-right-iamge"
+          :class="{'toggle': toggle == 2,}"
+          @click="changeDialog(2)"
+          @mousedown.stop
+          @touchstart.stop>
+            <img src="../../../public\Classes\motor-right2.png" alt="">
+            <div class="over-lay"></div>
+          </div>
+        </div>
+      </div>
+      <div class="motor-right-icons dp-flex">
+        <BasicButton class="btn-black"><p>Try Now !</p></BasicButton>
+        <div class="bottom-icons">
+          <IconBike size= 69 class="icon-bike icon"/>
+          <IconHelmetColor size="48" class="icon-helmet icon"/>
+          <IconStop size="48" class="icon-stop icon"/>
+        </div>
+      </div>
+    </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -102,7 +163,14 @@
       opacity: 1;
     }
     100% {
+<<<<<<< HEAD
       right: 1100px;
     }
   }
 </style>
+=======
+      right: 497px;
+    }
+  }
+</style>
+>>>>>>> parent of c8d0642 (Revert "Merge branch 'HomeTest' into dev")
