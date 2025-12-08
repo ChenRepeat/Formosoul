@@ -15,7 +15,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     // 在你的頁面引用時 應該會是這樣
-    // <Pagelinebar :linebarposition="視當前頁面的標籤數量去決定長度" :activeIndex="activeIndex" />
+    // <Pagelinebar :linebarposition="視當前頁面的標籤數量去決定每次需要移動多少 px 以及 linebar 的長度" :activeIndex="activeIndex" />
     activeIndex: {
         type: Number,
         default: 0
@@ -27,11 +27,11 @@ const props = defineProps({
 });
 
 
-
+// 控制每次 linebar 要移動幾個位置
 const positions = computed(() => {
     return `${props.activeIndex * props.linebarposition}px`;
 });
-
+// 控制 linebar 長度
 const linerbarlength = computed(() => {
     return `${props.linebarposition}px`;
 });
