@@ -8,111 +8,208 @@ import TestProductCard from '@/components/TestProductCard.vue';
 
    <section class="nav-top dp-flex">
         <div class="search">
-            <form class="shop-search-content" action="" method="GET">
-                <input type="search" id="" name="" placeholder="Search">
-                <button type="submit" class="search-submit-btn">
+            <form class="search-content dp-flex" action="" method="GET">
+                <input type="text" class="search-text" placeholder="Search">
+                <button type="submit" class="btn-search-submit">
                     <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 </button>
             </form>
         </div> 
 
-        <nav class="nav-right dp-flex">
-            <h6 class="fw200">New Arrivals</h6>
-            <font-awesome-icon icon="fa-solid fa-angle-down" />
+        <nav class="nav-top-right">
+            <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
+            <select class="nav-list fw200">
+                <option class="list-option" selested>New Arrivals</option>
+                <option class="list-option">Price：Low to High</option>
+                <option class="list-option">Price：High to Low</option>
+            </select>
         </nav>
    </section> 
 
    <section>
-        <ul class="shop-category dp-flex">
-            <li class="shop-category-group">
-                <div class="shop-dock">
-                    <div class="shop-liquidGlass">
-                        <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-gamepad" />
+        <ul class="list-category dp-flex">
+            <li class="list-category-group">
+                <div class="list-dock">
+                    <div class="list-liquidGlass">
+                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-gamepad" />
                     </div>
                 </div>
-                <p> Traditional Toys</p>
+                <p class="list-name"> Traditional Toys</p>
             </li>
 
-            <li class="shop-category-group">
-                <div class="shop-dock">
-                    <div class="shop-liquidGlass">
-                        <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-box-open" />
+            <li class="list-category-group">
+                <div class="list-dock">
+                    <div class="list-liquidGlass">
+                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-box-open" />
                     </div>
                 </div>
-                <p>Custom Product</p>
+                <p class="list-name">Custom Product</p>
             </li>
 
-            <li class="shop-category-group">
-                <div class="shop-dock">
-                    <div class="shop-liquidGlass">
-                        <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-ring" />
+            <li class="list-category-group">
+                <div class="list-dock">
+                    <div class="list-liquidGlass">
+                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-ring" />
                     </div>
                 </div>
-                <p>Accessories</p>
+                <p class="list-name">Accessories</p>
             </li>
 
-            <li class="shop-category-group">
-                <div class="shop-dock">
-                    <div class="shop-liquidGlass">
-                    <font-awesome-icon class="shop-faIcon" icon="fa-solid fa-ticket" />
+            <li class="list-category-group">
+                <div class="list-dock">
+                    <div class="list-liquidGlass">
+                    <font-awesome-icon class="list-faIcon" icon="fa-solid fa-ticket" />
                     </div>
                 </div>
-                <p>Voucher</p>
+                <p class="list-name">Voucher</p>
             </li>
         </ul>
    </section>
 
 <!-- 中間商品列表 -->
-    <section class="shop-productList">
+    <section class="list-all">
         <TestProductCard />
     </section>
 
 <!-- 下方頁碼 -->
-    <nav class="shop-downlist fw200">
-        <font-awesome-icon icon="fa-solid fa-angle-left" />
-        <span class="shop-page click">1</span>
-        <span class="shop-page">2</span>
-        <span class="shop-page">3</span>
-        <font-awesome-icon icon="fa-solid fa-angle-right" />
+    <nav class="nav-down fw200">
+        <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-left" />
+        <span class="list-page click">1</span>
+        <span class="list-page">2</span>
+        <span class="list-page">3</span>
+        <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-right" />
     </nav>
 
 
 </template>
 
 <style scoped lang="scss">
-    
+
 // 上方搜尋框＋選單--------------------------------
 
 .nav-top{
   font-size: 16px;
   justify-content:space-between;
+}
 
+
+// <搜尋框>--------------------------------
+.search{
+    width: 320px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 0 16px;
+
+    background-color: $color-fsWhite;
 }
-.nav-right{
-  align-items: center;
+
+.search:focus-within{
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8) ;
+    
 }
+
+.search-content{
+    justify-content: space-between;
+    height: 100%;
+}
+
+
+.search-text{
+    width: 0;      //因為 input-text 有預設寬度，所以要這樣寫，才能讓 flex-grow 接管寬度
+    flex-grow: 1;
+    font-size: 2rem;
+    color: $color-fsTitle;
+    font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+
+    //取消預設值
+    border: none;  
+    background-color: transparent;
+}
+
+.search-text:focus{
+    outline: 0;    //取消預設值
+}
+
+.btn-search-submit{
+    cursor: pointer;
+    font-size: 2rem;
+    color: $color-fsTitle;
+
+    //取消預設值
+    border: none;  
+    background-color: transparent;
+}
+
+
+// <選單>--------------------------------
+.nav-top-right{
+    // 新增自訂義箭頭
+    position: relative;
+}
+
+.nav-list{
+    color: $color-fsWhite;
+    background-color: transparent;
+    font-size: 20px;
+    font-family: 'Ubuntu','Roboto', 'Noto Sans TC', sans-serif;
+    text-align: center;
+    width: 320px;
+    height: 40px;
+    cursor: pointer;
+
+    border: none;
+    border-bottom: 0.5px solid $color-fsWhite;
+
+    // 移除預設下拉箭頭
+    appearance: none;
+
+    // 讓文字在空白處置中
+    padding-right: 28px;
+}
+
+.nav-list:focus {
+  outline: none;
+  border-bottom: 0.5px solid transparent;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5) ;
+  border-radius: 10px;
+}
+
+.nav-icon{
+    position: absolute;
+    right: 8px;
+    top:0;
+    bottom: 0;
+    margin: auto 0;
+
+    //箭頭會被穿透，不會擋住 select 下拉點擊
+    pointer-events: none;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 // 上方商品分類------------------------------------
 
-.shop-category{
+.list-category{
   justify-content: center;
+  padding: 60px 0;
 } 
 
-.shop-category-group{
+.list-category-group{
   margin: 40px;
   cursor: pointer;
 }
 
-.shop-category-group .shop-faIcon{
-  font-size: 48px;
-}
-
-.shop-category-group:hover .shop-dock{
-  transform: scale(1.1);
-}
-
-.shop-dock{
+.list-dock{
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -120,7 +217,7 @@ import TestProductCard from '@/components/TestProductCard.vue';
   box-shadow: inset 0 0 120px rgba(255, 255, 255, 0.2);
 }
 
-.shop-liquidGlass{
+.list-liquidGlass{
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -130,7 +227,9 @@ import TestProductCard from '@/components/TestProductCard.vue';
   position: relative;
 }
 
-.shop-liquidGlass>svg{
+.list-category-group .list-faIcon{
+  font-size: 48px;
+
   color: $color-fsWhite;
   
   position: absolute;
@@ -139,23 +238,28 @@ import TestProductCard from '@/components/TestProductCard.vue';
   transform: translate(-50%, -50%);
 }
 
-.shop-category-group p{
+.list-name{
   margin-top: 20px;
   text-align: center;
 }
 
+.list-category-group:hover .list-dock{
+  transform: scale(1.1);
+}
+
+
 
 //中間商品列表--------------------------------
 
-.shop-productList{
+.list-all{
   max-width: 1200px;
-  margin: 60px auto 0;
+  margin: 0 auto;
 }
 
 
 // 下方頁碼----------------------------------
 
-.shop-downlist{
+.nav-down {
   padding: 120px 0 0;
   
   font-size: 16px;
@@ -164,7 +268,7 @@ import TestProductCard from '@/components/TestProductCard.vue';
   text-align: center;
 }
 
-.shop-page{
+.list-page{
   border-radius: 3px;
   border: 1px solid $color-fsWhite;
   display: inline-block;
@@ -173,7 +277,11 @@ import TestProductCard from '@/components/TestProductCard.vue';
   cursor: pointer;
 }
 
-.shop-page.click, .shop-page:hover{
+.list-icon{
+   cursor: pointer; 
+}
+
+.list-page.click, .list-page:hover{
   background-color: $color-fsWhite;
   color: $color-fsTitle;
 }

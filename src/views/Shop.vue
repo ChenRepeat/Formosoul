@@ -1,5 +1,4 @@
 <script setup>
-import BasicButton from '@/components/BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ProductList from '@/components/SHOP/ProductList.vue';
 import ProductDetail from '@/components/SHOP/ProductDetail.vue';
@@ -24,12 +23,6 @@ import CartStep3 from '@/components/SHOP/CartStep3.vue';
   <CartStep2 />
   <CartStep3 />
 </main>
-
-
-
-
-<!-- <BasicButton class="btn-yellow-fill"/> -->
-
 
 </template>
 
