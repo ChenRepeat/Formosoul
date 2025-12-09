@@ -21,6 +21,21 @@ const emit = defineEmits(['click'])
 </div>
 </template>
 
+  <!-- 等同於這樣： -->
+<!-- <button @click="() => emit('click')">
+  <slot name="textButton">Enter</slot>
+</button> -->
+
+<!-- 也等同於這樣： -->
+<!-- <button @click="handleClick">
+  <slot name="textButton">Enter</slot>
+</button> -->
+
+<!-- <script setup>
+function handleClick() {
+  emit('click')
+}
+</script> -->
 
 <style scoped lang="scss">
 .survival-text-frame {
