@@ -2,9 +2,6 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ProductList from '@/components/SHOP/ProductList.vue';
 import ProductDetail from '@/components/SHOP/ProductDetail.vue';
-import CartStep1 from '@/components/SHOP/CartStep1.vue';
-import CartStep2 from '@/components/SHOP/CartStep2.vue';
-import CartStep3 from '@/components/SHOP/CartStep3.vue';
 
 
 
@@ -17,11 +14,9 @@ import CartStep3 from '@/components/SHOP/CartStep3.vue';
   <!-- 麵包屑 -->
   <h6>All Product</h6>
 
-  <ProductList />
+  <!-- <ProductList /> -->
   <ProductDetail />
-  <CartStep1 />
-  <CartStep2 />
-  <CartStep3 />
+  
 </main>
 
 </template>

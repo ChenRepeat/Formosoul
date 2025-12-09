@@ -104,8 +104,8 @@ import TestProductCard from '@/components/TestProductCard.vue';
 }
 
 .search:focus-within{
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8) ;
-    
+    //裡面包的input倍focus時，外層可已產生focus的效果
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8) ;   
 }
 
 .search-content{

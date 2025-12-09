@@ -49,7 +49,7 @@ function handleUserIconClick( e ){
         </div>
 
         <div class="header-icons-list dp-flex">
-          <a href="/shop"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
+          <a href="/cart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
           <!-- <a href="/member"></a> -->
           <button @click="handleUserIconClick">
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/>
@@ -73,6 +73,7 @@ function handleUserIconClick( e ){
         <li><a href="/annualevent"><h4>Annual Event</h4></a></li>
         <li><a href="/professorsintroduction"><h4>Professor</h4></a></li>
         <li><a href="/survivalguide"><h4>Survival Guide</h4></a></li>
+        <li><a href="/shop"><h4>Diagon Alley</h4></a></li>
         <li><a href="/classes"><h4>Classes</h4></a></li>
         <li><a href="/policy"><h4>Policy</h4></a></li>
       </ul>
