@@ -51,6 +51,7 @@ watch(
         margin: 0 auto;
         width: 1200px;
         height: 48px;
+        margin-top: 100px;
     }
 
     .page-button{
