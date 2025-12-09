@@ -24,9 +24,9 @@ function goConvenienceStore(){
 // 定義目前的hover狀態： null 沒動作，'left' = 左邊hover，'right' = 右邊 hover
 const isHover = ref(null)
 
-const imgLeft = '/SurvivalGuide/night_market_island_0.png'
+// const imgLeft = '/SurvivalGuide/night_market_island_0.png'
 
-const imgRight ='/SurvivalGuide/Gemini_Generated_Image_gxbta6gxbta6gxbt_noback2.png'
+// const imgRight ='/SurvivalGuide/Gemini_Generated_Image_gxbta6gxbta6gxbt_noback2.png'
 
 
 // 做後面漂浮的圖片
@@ -135,7 +135,10 @@ const rightFrame = computed(()=> frames.value[1])
             'img-is-inactive': isHover == 'right'
           }">
             <!-- 要用上面變數的圖片，src要加bind: -->
-            <img :src="imgLeft" alt="Night Market" />
+          <div class="survival-heropics-left-pics-group-case">
+            <img class="island-base" src="/SurvivalGuide/island-base.png" alt=""/>
+            <img class="vendor" src="/SurvivalGuide/vendor.png" alt=""/>
+          </div>
             <img class="fc-img" src="/SurvivalGuide/friedChicken_br.png" alt="">
             <h2 :class="{
                 'text-is-active': isHover == 'left',
@@ -158,8 +161,10 @@ const rightFrame = computed(()=> frames.value[1])
             'img-is-inactive': isHover == 'left'
           }"
           >
-            <img :src="imgRight" alt=""
-            />
+          <div class="survival-heropics-right-pics-group-case">
+            <img class="island-base" src="/SurvivalGuide/island-base.png" alt=""/>
+            <img class="store-building" src="/SurvivalGuide/store-building.png" alt=""/>
+          </div>
             <img class="bubble-img" src="/SurvivalGuide/bubble_tea.png" alt="">
             <h2 :class="{
                 'text-is-active': isHover == 'right',
@@ -268,14 +273,14 @@ const rightFrame = computed(()=> frames.value[1])
 }
 
 
-// left part area
+// ============================= left part area ============================= 
 .survival-heropics-left-case {
+  padding-top: 60px;
   width: 50%;
   display: flex;
   flex-direction: column;
   color: $color-fsWhite;
   text-align: center;
-  gap: 40px;
   transition: all 1s ease;
   cursor: pointer;
   position: relative;
@@ -324,8 +329,40 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
+.survival-heropics-left-pics-group-case {
+  position: relative;
+  width: 450px;
+  height: auto;
+  margin: 0 auto;
+  z-index: 20;
+}
 
-// right part area
+.survival-heropics-left-pics-group-case .vendor {
+  position: absolute;
+  width: 400px;
+  height: auto;
+  z-index: 2;
+  top: 35px;
+  left: 20px;
+  animation: floatVendor 3s ease-in-out infinite;
+}
+
+@keyframes floatVendor {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); } 
+  100% { transform: translateY(0px); }
+}
+
+.survival-heropics-left-pics-group-case .island-base {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+  z-index: 1;
+}
+
+
+// ============================= right part area ============================= 
 .survival-heropics-right-case {
   width: 50%;
   display: flex;
@@ -334,13 +371,14 @@ const rightFrame = computed(()=> frames.value[1])
   padding-top: 50px;
   color: $color-fsWhite;
   text-align: center;
-  gap: 40px;
   transition: all 1s ease;
   cursor: pointer;
   position: relative;
 
   img {
     width: 450px;
+    height: auto;
+    display: block;
     margin: 0 auto;
     z-index: 20;
   }
@@ -359,11 +397,44 @@ const rightFrame = computed(()=> frames.value[1])
   h2.text-is-active {
   text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 30;
-  transform: translate(-200px, -450px);
+  transform: translate(-200px, -500px);
   } 
 }
 
-.bubble-img {
+.survival-heropics-right-pics-group-case {
+  position: relative;
+  width: 450px;
+  height: auto;
+  margin: 0 auto;
+  z-index: 20;
+}
+
+.survival-heropics-right-pics-group-case .store-building {
+  position: absolute;
+  width: 300px;
+  height: auto;
+  z-index: 2;
+  top: -15px;
+  left: 80px;
+  animation: floatStore 3s ease-in-out infinite;
+}
+
+@keyframes floatStore {
+  0% { transform: translateX(0px); }
+  50% { transform: translateX(15px); } 
+  100% { transform: translateX(0px); }
+}
+
+.survival-heropics-right-pics-group-case .island-base {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+  z-index: 1;
+}
+
+
+.survival-heropics-right-case .bubble-img {
   object-fit: contain;
   height: 140px;
   position: absolute;
