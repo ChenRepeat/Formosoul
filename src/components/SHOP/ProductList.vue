@@ -5,8 +5,16 @@ import TestProductCard from '@/components/TestProductCard.vue';
 </script>
 
 <template>
+    <!-- 麵包屑 -->
+    <h6 class="page-guide">
+        All Product
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+        New Arrivals
+    </h6>
 
-   <section class="nav-top dp-flex">
+
+    <!-- 上方區塊 -->
+    <section class="nav-top dp-flex">
         <div class="search">
             <form class="search-content dp-flex" action="" method="GET">
                 <input type="text" class="search-text" placeholder="Search">
@@ -24,9 +32,9 @@ import TestProductCard from '@/components/TestProductCard.vue';
                 <option class="list-option">Price：High to Low</option>
             </select>
         </nav>
-   </section> 
+    </section> 
 
-   <section>
+    <section>
         <ul class="list-category dp-flex">
             <li class="list-category-group">
                 <div class="list-dock">
@@ -64,7 +72,7 @@ import TestProductCard from '@/components/TestProductCard.vue';
                 <p class="list-name">Voucher</p>
             </li>
         </ul>
-   </section>
+    </section>
 
 <!-- 中間商品列表 -->
     <section class="list-all">
@@ -84,6 +92,12 @@ import TestProductCard from '@/components/TestProductCard.vue';
 </template>
 
 <style scoped lang="scss">
+
+// 麵包屑
+.page-guide{
+  padding-bottom: 60px;
+}
+
 
 // 上方搜尋框＋選單--------------------------------
 
