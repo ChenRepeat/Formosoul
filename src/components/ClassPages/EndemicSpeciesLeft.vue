@@ -38,7 +38,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="../../../public/Classes/FomoBear.png" 
+          src="/Classes/FomoBear.png" 
           alt="" 
           class="animal-photo"
           >
@@ -51,7 +51,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="../../../public/Classes/FomoDear.png" 
+          src="/Classes/FomoDear.png" 
           alt="" 
           class="animal-photo"
           >
@@ -63,7 +63,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="../../../public\Classes\FomoWuKong.png" 
+          src="/Classes/FomoWuKong.png" 
           alt="" 
           class="animal-photo "
          >
