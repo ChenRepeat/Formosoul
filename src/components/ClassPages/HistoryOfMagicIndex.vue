@@ -4,7 +4,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(2)"
+      @click="goToPage(10)"
       >
         New Year
       </h5>
@@ -13,7 +13,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(3)">
+      @click="goToPage(11)">
         Mid-Autumn  Festival
       </h5>
     </li>
@@ -21,7 +21,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(4)">
+      @click="goToPage(12)">
         Dragon-boat  Festival
       </h5>
     </li>
@@ -33,8 +33,8 @@
 
   import { usePageNavigation } from './goToPage';
   
-  const emit = defineEmits(['flip'])
-  const { goToPage } = usePageNavigation(emit)
+  const emit = defineEmits(['flip']);
+  const { goToPage } = usePageNavigation(emit);
 </script>
 
 <style lang="scss" scoped>

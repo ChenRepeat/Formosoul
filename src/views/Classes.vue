@@ -69,7 +69,7 @@
 
       <div class="page">
         <div class="page-content">
-          <HistoryOfMagicIndex />
+          <HistoryOfMagicIndex @flip="goToPage"/>
         </div>
       </div>
 
@@ -126,7 +126,6 @@ import BikeRule from '@/components/ClassPages/BikeRule.vue';
 import HistoryOfMagicIndex from '@/components/ClassPages/HistoryOfMagicIndex.vue';
 import EndemicSpeciesLeft from '@/components/ClassPages/EndemicSpeciesLeft.vue';
 import EndemicSpeciesRight from '@/components/ClassPages/EndemicSpeciesRight.vue';
-import IconFomobear from '@/components/icons/SVG/IconFomobear.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動

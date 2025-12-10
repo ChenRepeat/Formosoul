@@ -44,10 +44,12 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
           class="animal-photo"
           >
           <div class="over-lay"></div>
-          <IconFomobear  
-          class="icon-bear"
-          size="48" 
-          :class="{'op': zi10 !== 1,}"/>
+          <div class="icon-animation-case">
+            <IconFomobear  
+            class="icon-bear"
+            size="48" 
+            :class="{'op': zi10 !== 1,}"/>  
+          </div>
         </div>
       <div 
         class="animal-locate-case left-2"
@@ -133,20 +135,26 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
 
 
   }
-  .icon-bear{
+  .icon-animation-case{
     position: absolute;
+    animation: 10s run 0.5s linear infinite,
+  }
+  .icon-bear{
     animation: 
-     10s run 0.5s linear infinite,
-     1s roll 0.5s linear infinite,
+     0.5s roll 0.5s linear infinite,
      ;}
 
   @keyframes run{
-    0% {top: -48px;left: -48px;}
-    20% {top: -48px;left: 300px;}
-    40% {top: 300px;left: 300px;}
-    60% {top: 300px;left: -48px;}    
-    80% {top: -48px;left: -48px;}
-    100% {top: -48px;left: -48px;}
+    0% {top: -48px;left: -48px;transform: rotate(0);}
+    29%{top: -48px;left: 300px;transform: rotate(0deg);}
+    30% {top: -48px;left: 300px;transform: rotate(90deg);}
+    49% {top: 300px;left: 300px;transform: rotate(90deg);}
+    50% {top: 300px;left: 300px;transform: rotate(180deg);}
+    69% {top: 300px;left: -48px;transform: rotate(180deg);}
+    70% {top: 300px;left: -48px;transform: rotate(270deg);}   
+    89% {top: -48px;left: -48px;transform: rotate(270deg);}   
+    90% {top: -48px;left: -48px;transform: rotate(360deg);}
+    100% {top: -48px;left: -48px;transform: rotate(360deg);}
   }
   @keyframes roll{
     0% {transform: rotate(12deg);}
@@ -207,6 +215,7 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
   p{
     color: $color-fsContent;
     line-height: 2;
+    
   }
 .fade-enter-active,.fade-leave-active {
   transition: opacity 0.2s ease;

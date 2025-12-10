@@ -70,6 +70,8 @@
   p{
     line-height: 2;
     color: $color-fsContent;
+    hyphens:auto;
+    word-break: break-all;
   }
   .animal-topic-title{
     color: $color-fsTitle;
