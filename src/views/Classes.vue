@@ -341,7 +341,7 @@ img { max-width: 100%; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.
   z-index: 1000 !important;
 }
 
-$high-layer-pages: 4, 6, 8, 12; 
+$high-layer-pages: 4, 6, 9, 12; 
 .book:not(.flipping) {
   @each $index in $high-layer-pages {
     :deep(.stf__item:nth-child(#{$index})) {

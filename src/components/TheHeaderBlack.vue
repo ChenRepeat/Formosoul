@@ -78,14 +78,15 @@ function toggleLang(){
   padding: 0 40px 0 60px;
   height: 100px;
   justify-content: space-between;
-  align-items: center;
   position: fixed;
   width: 100%;
-  top: 0;
+  top: 16px;
   left: 0;
   z-index: 1000;
 }
-
+.header-outer-case:has(.open){
+  top: 0;
+}
 img { 
   object-fit: none; 
   // width: 90%;
@@ -134,15 +135,12 @@ img {
   position: absolute;
   flex-direction: column; 
   overflow: hidden;
-  transition: all 1s ease;
-  right: 0;
-  top: 0;
-  transform: translateY(0);
+  transition: 
+    all 1s ease;
 }
 
 .header-link.open {
   height: 100vh; 
-  transform: translateY(45vh);
 }
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */

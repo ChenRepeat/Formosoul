@@ -96,14 +96,20 @@ function handleUserIconClick( e ){
   padding: 0 40px 0 60px;
   height: 100px;
   justify-content: end;
-  align-items: center;
   position: fixed;
   width: 100%;
-  top: 0;
+  // top: 16px;
+  transform: translateY(16px);
   right:  0;
   z-index: 1000;
-}
+  transition: all 0.5s ease;
 
+}
+.header-outer-case:has(.open){
+  // top: 0;
+  transform: translateY(0);
+
+}
 img { object-fit: none; }
 
 .trigger-lang { color: $color-fsWhite; margin: 0; }
@@ -149,15 +155,11 @@ img { object-fit: none; }
   position: absolute;
   flex-direction: column; 
   overflow: hidden;
-  transition: all 1s ease;
-  right: 0;
-  top: 0;
-  transform: translateY(0);
+  transition: all 0.5s ease;
 }
 
 .header-link.open {
   height: 100vh; 
-  transform: translateY(45vh);
 }
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */

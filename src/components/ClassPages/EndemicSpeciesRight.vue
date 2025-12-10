@@ -15,13 +15,13 @@
           <img src="../../../public/Classes/Salamander.png" alt="" class="salamander">
         </div>
         <div class="animal-topic-text dp-flex-col">
-          <P>Formosan Salamander</P>
+          <P class="animal-topic-title">Formosan Salamander</P>
           <p>A rare high-altitude amphibian found in cold mountain streams, sensitive to habitat changes.</p>
         </div>
       </div>
       <div class="animal-bottom-topic dp-flex">
         <div class="animal-topic-text dp-flex-col">
-          <p>Taiwan Blue Magpie</P>
+          <p class="animal-topic-title">Taiwan Blue Magpie</P>
           <p>A striking blue bird with a long tail and cooperative family groups, often called “long-tailed mountain lady.”</p>
         </div>
         <div class="animal-photo-case">
@@ -37,16 +37,26 @@
   .animal-photo-case{
     width: 320px;
     height: 320px;
+    position: relative;
     img{
       width: 100%;
       height: 100%;
       border-radius: 8px;
+      position: absolute;
+      top: 0;left: 0;
     }
   }
   .animal-topic-text{
     text-align: left;
     width: 38%;
     justify-content: end;
+  }
+  p{
+    line-height: 2;
+    color: $color-fsContent;
+  }
+  .animal-topic-title{
+    color: $color-fsTitle;
   }
   @keyframes drive{
     0% {
