@@ -1,6 +1,5 @@
 <script setup>
 import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
-import TheFooter from '@/components/TheFooter.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from "vue-router";
@@ -79,14 +78,14 @@ const frames = ref([
     text: "Taiwan’s night markets are known for food, games. Stinky tofu, braised pork rice,  are must-tries, showing the heart of local Taiwanese culture.",
     width: "280px",
     height: "250px",
-    button: "Enter",
+    align: 'left',
+    tag: 'p',
   },
   {
     id: 'store',
     text: "Most convenience stores in Taiwan are open 24/7 and offer food, bill payments, shipping, and more—an essential part of daily life.",
     width: '280px',
     height: '250px',
-    button: 'Enter'
   }
 ])
 
@@ -140,9 +139,7 @@ const rightFrame = computed(()=> frames.value[1])
             <img class="vendor" src="/SurvivalGuide/vendor.png" alt=""/>
           </div>
             <img class="fc-img" src="/SurvivalGuide/friedChicken_br.png" alt="">
-            <h2 :class="{
-                'text-is-active': isHover == 'left',
-            }" >Night Market</h2>
+            <h2 :class="{'text-is-active': isHover == 'left',}" >Night Market</h2>
             
             <SurvivalTextFrame class='text-frame-left' 
             v-show="isHover == 'left'" 
@@ -185,13 +182,13 @@ const rightFrame = computed(()=> frames.value[1])
         </section>
       </div>
     </main>
-  <footer></footer>
 </template>
 
 <style scoped lang="scss">
 
 .survival-case{
   background-image: url(/public/Shop/bgi.jpg);
+  background-position: right;
 }
 
 .survival-case-wrapper {
