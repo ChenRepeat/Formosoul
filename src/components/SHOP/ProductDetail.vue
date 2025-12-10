@@ -24,10 +24,10 @@ import BasicButton from '../BasicButton.vue';
     
             <div class="detail-pic dp-flex">
                 <ul class="detail-pic-small dp-flex-col">
-                    <li><img src="../../../public/Shop/2.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2-1.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2-2.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2-3.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2-4.png" alt=""></li>
                 </ul>
                 <div class="detail-pic-big">
                     <img src="../../../public/Shop/2.png" alt="">
@@ -134,6 +134,7 @@ import BasicButton from '../BasicButton.vue';
     width: 100%;
     height: 100%;
     border-radius: 10px; 
+    object-fit: cover;
 }
 
 .detail-pic-big{
