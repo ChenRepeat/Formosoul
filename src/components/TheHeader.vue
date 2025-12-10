@@ -211,12 +211,12 @@ img { object-fit: none; }
 
 /* 漢堡按鈕 */
 .bar { background-color: $color-fsWhite; border-radius: 8px; }
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; }
+.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer;}
 .bar1 { width: 16px; height: 2px; }
 .bar2 { width: 12px; height: 1px; }
 .bar3 { width: 24px; height: 3px; }
 .transition { transition: 0.3s ease; }
-.hamburger-btn.active .bar1 { transform: rotate(-45deg) translate(-8px, 5px); width: 24px; height: 3px; }
+.hamburger-btn.active .bar1 { transform: rotate(-45deg) translate(-7px, 7px); width: 32px; height: 4px; }
 .hamburger-btn.active .bar2 { width: 0; height: 0; opacity: 0; }
-.hamburger-btn.active .bar3 { transform: rotate(45deg) translate(-9px, -5px); }
+.hamburger-btn.active .bar3 { transform: rotate(45deg) translate(-7px, -7px); width: 32px;height: 4px;}
 </style>
