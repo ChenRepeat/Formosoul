@@ -129,9 +129,9 @@ import TestProductCard from '@/components/TestProductCard.vue';
 
 
 .search-text{
-    width: 0;      //因為 input-text 有預設寬度，所以要這樣寫，才能讓 flex-grow 接管寬度
+    flex-basis: 0;      //因為 input-text 有預設寬度，所以要這樣寫，才能讓 flex-grow 接管寬度
     flex-grow: 1;
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: $color-fsTitle;
     font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 

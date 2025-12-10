@@ -49,7 +49,7 @@ function handleUserIconClick( e ){
         </div>
 
         <div class="header-icons-list dp-flex">
-          <a href="/cart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
+          <a href="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
           <!-- <a href="/member"></a> -->
           <button @click="handleUserIconClick">
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/>
