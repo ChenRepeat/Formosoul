@@ -213,7 +213,7 @@ onMounted(() => {
     size: 'fixed',
     showCover: true,
     maxShadowOpacity: 0.2,
-    flippingTime: FLIP_SPEEDS.normal, // 使用變數
+    flippingTime: FLIP_SPEEDS.normal,
   });
 
   pageFlip.loadFromHTML(bookRef.value.querySelectorAll('.page'));
@@ -232,7 +232,7 @@ onMounted(() => {
         }
     }
 });
-  // 初始化頁碼
+
   totalPages.value = pageFlip.getPageCount();
 
   playIntroAnimation();

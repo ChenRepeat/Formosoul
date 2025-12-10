@@ -67,15 +67,15 @@ function handleUserIconClick( e ){
       </div>
 
       <ul class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><a href="/"><h4>Home</h4></a></li>
-        <li><a href="/about"><h4>About</h4></a></li>
-        <li><a href="/news"><h4>News</h4></a></li>
-        <li><a href="/annualevent"><h4>Annual Event</h4></a></li>
-        <li><a href="/professorsintroduction"><h4>Professor</h4></a></li>
-        <li><a href="/survivalguide"><h4>Survival Guide</h4></a></li>
-        <li><a href="/shop"><h4>Diagon Alley</h4></a></li>
-        <li><a href="/classes"><h4>Classes</h4></a></li>
-        <li><a href="/policy"><h4>Policy</h4></a></li>
+        <li><a href="/"><h5>Home</h5></a></li>
+        <li><a href="/about"><h5>About</h5></a></li>
+        <li><a href="/news"><h5>News</h5></a></li>
+        <li><a href="/annualevent"><h5>Annual Event</h5></a></li>
+        <li><a href="/professorsintroduction"><h5>Professor</h5></a></li>
+        <li><a href="/survivalguide"><h5>Survival Guide</h5></a></li>
+        <li><a href="/shop"><h5>Diagon Alley</h5></a></li>
+        <li><a href="/classes"><h5>Classes</h5></a></li>
+        <li><a href="/policy"><h5>Policy</h5></a></li>
       </ul>
 
     </div>

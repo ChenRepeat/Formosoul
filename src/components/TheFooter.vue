@@ -216,9 +216,13 @@ ul a {
 .policy-inner-case li {
   width: max-content;
 }
+hr{
+  border: unset;
+  height: 0.5px;
+  background-color: #fff;
+}
 .hr-thick {
   width: 73%;
-  transform: scaleY(0.5);
 }
 
 @media screen and (max-width: 1200px) {
