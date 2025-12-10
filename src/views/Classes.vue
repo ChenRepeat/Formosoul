@@ -99,10 +99,9 @@
         <ClassPageIndex @flip="goToPage"/>
       </div>
       </div>
-            <div class="page">
-      <div class="page-content">
-
-      </div>
+      <div class="page">
+        <div class="page-content">
+        </div>
       </div>
       <div class="page cover">
         <div class="page-content">
@@ -127,6 +126,7 @@ import BikeRule from '@/components/ClassPages/BikeRule.vue';
 import HistoryOfMagicIndex from '@/components/ClassPages/HistoryOfMagicIndex.vue';
 import EndemicSpeciesLeft from '@/components/ClassPages/EndemicSpeciesLeft.vue';
 import EndemicSpeciesRight from '@/components/ClassPages/EndemicSpeciesRight.vue';
+import IconFomobear from '@/components/icons/SVG/IconFomobear.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動

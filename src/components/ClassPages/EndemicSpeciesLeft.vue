@@ -1,5 +1,6 @@
 <script setup>
   import { computed, ref, Transition } from 'vue';
+import IconFomobear from '../icons/SVG/IconFomobear.vue';
 
   const zi10 = ref(1);
   const dialogs = {
@@ -42,8 +43,12 @@
           alt="" 
           class="animal-photo"
           >
-        <div class="over-lay"></div>
-      </div>
+          <div class="over-lay"></div>
+          <IconFomobear  
+          class="icon-bear"
+          size="48" 
+          :class="{'op': zi10 !== 1,}"/>
+        </div>
       <div 
         class="animal-locate-case left-2"
         :class="{'zi10': zi10 == 2,}"
@@ -101,7 +106,7 @@
     transition: opacity 0.3s ease;
     z-index: -10;
   }
-  .op .red{
+  .op{
     opacity: 0;
   }
   .animal-contain{
@@ -118,8 +123,7 @@
     position: absolute;
     transition: transform 0.3s ease, z-index 0.3s, box-shadow 0.3s;
     border-radius: 20px;
-    overflow: hidden;
-
+    border-radius: 16px;
   }
 
   .animal-photo{
@@ -129,7 +133,26 @@
 
 
   }
+  .icon-bear{
+    position: absolute;
+    animation: 
+     10s run 0.5s linear infinite,
+     1s roll 0.5s linear infinite,
+     ;}
 
+  @keyframes run{
+    0% {top: -48px;left: -48px;}
+    20% {top: -48px;left: 300px;}
+    40% {top: 300px;left: 300px;}
+    60% {top: 300px;left: -48px;}    
+    80% {top: -48px;left: -48px;}
+    100% {top: -48px;left: -48px;}
+  }
+  @keyframes roll{
+    0% {transform: rotate(12deg);}
+    50% {transform: rotate(28deg);}
+    100% {transform: rotate(12deg);}
+  }
   .over-lay{
     position: absolute; 
     top: 0;
