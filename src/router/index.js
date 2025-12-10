@@ -3,6 +3,9 @@ import Home from '../views/Home.vue'
 import Member from '@/views/Member.vue'
 import ProfessorIntroduction from '@/views/ProfessorIntroduction.vue'
 import Shop from '@/views/Shop.vue'
+import ShoppingCart from '@/views/ShoppingCart.vue'
+import ShoppingCheck from '@/components/Cart/ShoppingCheck.vue'
+import OrderSuccess from '@/components/Cart/OrderSuccess.vue'
 import News from '@/views/News.vue'
 import Policy from '@/views/Policy.vue'
 import Classes from '@/views/Classes.vue'
@@ -17,6 +20,8 @@ import SurvivalRules from "@/views/SurvivalRules.vue";
 import SurvivalGuide from '@/components/SurvivalGuides/SurvivalGuide.vue'
 import NightMarketMap from '@/components/SurvivalGuides/NightMarketMap.vue'
 import ConvenienceStore from '@/components/SurvivalGuides/ConvenienceStore.vue'
+import ProductDetail from '@/components/SHOP/ProductDetail.vue'
+import ProductList from '@/components/SHOP/ProductList.vue'
 
 
 const router = createRouter({
@@ -54,6 +59,37 @@ const router = createRouter({
       path: '/shop',
       name: 'Diagon Alley',
       component: Shop,
+      // 重新導向 能夠讓點入頁面時導向另一個網址
+      redirect: '/shop/productList',
+      children: [
+        {
+          path: "productlist",
+          name: "ProductList",
+          component: ProductList,
+        },
+        {
+          path: "productdetail",
+          name: "ProductDetail",
+          component: ProductDetail,
+        },
+      ],
+    },
+    {
+      path: '/shoppingcart',
+      name: 'ShoppingCart',
+      component: ShoppingCart,
+      children: [
+        {
+          path: "shoppingcheck",
+          name: "ShoppingCheck",
+          component: ShoppingCheck,
+        },
+        {
+          path: "ordersuccess",
+          name: "OrderSuccess",
+          component: OrderSuccess,
+        },
+      ],
     },
     {
       path: '/survivalrules',
