@@ -189,7 +189,6 @@ onUnmounted(() => {
   position: relative;
   background-color: #0a0a0a;
   color: #ffffff;
-  font-family: "Cinzel", serif;
   overflow-x: hidden;
 }
 
@@ -217,7 +216,6 @@ onUnmounted(() => {
 }
 
 .news-main-text {
-  font-size: 2.8rem;
   line-height: 1.1;
   text-align: center;
   color: #fff;
@@ -274,7 +272,7 @@ onUnmounted(() => {
 .news-quote-content {
   text-align: center;
   color: #e0e0e0;
-  font-size: 2.8rem;
+
   line-height: 2;
   letter-spacing: 1px;
   opacity: 0.9;
@@ -296,9 +294,6 @@ onUnmounted(() => {
 }
 
 .news-updates-title {
-  font-family: "Roboto", sans-serif;
-  font-size: 5.2rem;
-  font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: #fff;
@@ -315,9 +310,6 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .news-updates-grid {
     grid-template-columns: 1fr;
-  }
-  .news-main-text {
-    font-size: 15vw;
   }
   .news-parallax-section {
     height: 450vh;
