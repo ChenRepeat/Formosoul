@@ -11,7 +11,7 @@ import ProductDetail from '@/components/SHOP/ProductDetail.vue';
 <template>
 <main class="shop-main">
 
-  <!-- <ProductList /> -->
+  <ProductList />
   <ProductDetail />
   
 </main>
