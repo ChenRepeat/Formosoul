@@ -2,13 +2,43 @@
     <div 
     class="Loginpage" :class="{ 'active': authStore.isLoginModalOpen}" 
     @click.self="authStore.closeLoginModal()"
-    >
-        <div class="Logincontain">
-            <div class="Enrollment">Enrollment</div>
-            <div class="Login">Login</div>
-        <Logincontain></Logincontain>
+    >   
+        <div class="Loginout">
+            <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px;"/></div>
+            <div class="Logincontain">
+
+                    <div class="pagebutton">
+                        <BasicButton 
+                        :class="{ 'active-tab': currentView == 'enrollment'}"
+                        @click="currentView = 'enrollment'"
+                        class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
+
+                        <BasicButton 
+                        :class="{ 'active-tab': currentView == 'login'}"
+                        @click="currentView = 'login'"
+                        class="btn-blue-fill"><h4>Login</h4></BasicButton>
+                    </div>
+                    <div class="pagecontain">
+                        <!-- <RouterView></RouterView> -->
+                        <Logincontain v-if="currentView == 'login'"></Logincontain>
+
+
+                        <Enrollment v-else-if="currentView == 'enrollment'"></Enrollment>
+                    <div class="otherlogin">
+                        <div class="otherlogin-title">
+                            <hr>
+                            <h6>Other</h6>
+                            <hr>
+                        </div>
+                        <div class="otherlogin-icon">
+                            <img src="../../../../public/member/googleicon.png" alt="1">
+                            <img src="../../../../public/member/lineicon.png" alt="2">
+                        </div>
+                    </div>
+                    </div>
+
+            </div>
         </div>
-        
     </div>
 
 </template>
@@ -17,9 +47,13 @@
 import { ref } from 'vue';
 import Logincontain from './logincontain.vue';
 import { useAuthStore } from '@/stores/autoStore';
+import BasicButton from '@/components/BasicButton.vue';
+import Enrollment from '../Login/Enrollment.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-    const authStore =useAuthStore();
 
+    const authStore = useAuthStore();
+    const currentView = ref('login');
 </script>
 
 <style lang="scss" scoped>
@@ -40,12 +74,27 @@ import { useAuthStore } from '@/stores/autoStore';
             visibility: visible;
         }
     }
+
+    .closebutton{
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+
+    h4{
+        font-family: 'Ubuntu','Roboto', 'Noto Sans TC', sans-serif; 
+    }
     .Logincontain{
-        background-color: $color-fsBlue50;
-        border-radius: 12px;
-        padding: 40px;
+        // display: flex;
+        // background-color: $color-fsBlue50;
+        border: 0;
+        border-radius: 8px;
+        // padding: 40px;
         width: 50%;
-        position: relative;
+        margin: 0 auto;       
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         animation: slideUp 0.3s ease;
 
@@ -60,31 +109,75 @@ import { useAuthStore } from '@/stores/autoStore';
             }
         }
     }
-    .Logincontain > button {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: #666;
-        padding: 0;
-        width: 32px;
-        height: 32px;
+    .pagebutton{
         display: flex;
-        align-items: center;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .pagecontain{
+        background-color: $color-fsBlue50;
+        border-radius: 0 0 8px 8px ;
+
+    }
+    .btn-blue-fill{
+        width: 100%;
+        border: 0;
+        border-radius: 8px 8px 0 0;
+        color: $color-fsPopup;
+    }
+
+    .btn-blue-fill.active-tab{
+        background-color: $color-fsBlue50;
+        color: $color-fsTitle;
+    }
+    .Loginout{
+        width: 90%;
+        height: 90%;
+        // 轉換成RGB 數值 再調 opacity
+        // background-color: rgba(93, 93, 93, 0.5);
+        // 在原本的 6 碼色碼後面直接加上 2 碼來代表透明度（範圍 00 到 FF）
+        background-color: #5D5D5D80;
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        border: 0;
+        border-radius: 8px;
+        position: relative;
+    }
+    .otherlogin-title{
+        display: flex;
         justify-content: center;
-        border-radius: 4px;
-        transition: all 0.2s ease;
-
-
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    .otherlogin-title > hr{
+        color: $color-fsCaption;
+        width: 35%;
+        height: 1px; 
     }
 
-    .Logincontain > button:hover{
-        background-color: #f0f0f0;
-        color: #000; 
+    .otherlogin-title > hr:first-child{
+        margin-right: 16px;
     }
 
+    .otherlogin-title > hr:last-child{
+        margin-left: 16px;
+    }
 
+    .otherlogin-title > h6{
+        color: $color-fsCaption;
+    }
+
+    .otherlogin-icon{
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+
+    }
+    .otherlogin-icon > img{
+        height: 48px;
+        width: 48px;
+        margin-bottom: 16px;
+
+    }
 </style>

@@ -125,11 +125,11 @@ const handleChangePassword  = () => {
 
     // 之後要補對於舊密碼的認證
     if(!oldpassword.value){
-        errors.value.oldpassword = '請輸入舊密碼'
+        errors.value.oldpassword = 'Please enter your old password.'
     }
 
     if(!Newpassword.value){
-        errors.value.Newpassword = '請輸入新密碼';
+        errors.value.Newpassword = 'Please enter your New password.';
     }else{
         const hasUppercase = /[A-Z]/.test(Newpassword.value);
         const hasLowercase = /[a-z]/.test(Newpassword.value);

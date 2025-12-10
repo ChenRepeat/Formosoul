@@ -1,11 +1,12 @@
 <template>
         <div v-for="order in calorderpage" :key="order.id" class="orders-contain">
-            <span>{{ order.number }}</span>
+            <span>{{ order.number }}</span> 
             <span>{{ order.date }}</span>
             <span>{{ order.prices }}</span>
             <span>{{ order.payment }}</span>
             <span>{{ order.status }}</span>
             <span>{{ order.shipping }}</span>
+            <!-- 換成p -->
             <span>
                 <basic-button class="btn-yellow-fill"><router-link to="/policy/orderslist/orderscontain">Check</router-link></basic-button>
             </span>

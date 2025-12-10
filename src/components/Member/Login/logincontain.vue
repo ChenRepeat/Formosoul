@@ -31,6 +31,7 @@
                 >
                 <font-awesome-icon 
                 :icon="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
+                style="font-size: 24px;"
                 />
                     <!-- {{ showPassword ? '隱藏' : '顯示'}} -->
                 </button>
@@ -38,7 +39,7 @@
         </div>
         <div v-if="errorMessage" class="error-message"><h6>{{ errorMessage }}</h6></div>
         <div class="login-bottom">
-            <p>If your memory has been tampered with by a Memory Charm, click here:<a href="/forgot-password" class="bottom-link">ForgetPassword?</a></p>
+            <p>* If your memory has been tampered with by a Memory Charm, click here:<a href="/forgot-password" class="bottom-link">ForgetPassword?</a></p>
         </div>
         <BasicButton
         class="btn-yellow-fill"
@@ -156,8 +157,11 @@ function togglePassword() {
 
 <style lang="scss" scoped>
     .login-form{
-        width: 100%;
+        width: 70%;
         margin: 0 auto;
+        padding: 40px;
+        
+
     }
 
     .form-group{
@@ -165,8 +169,8 @@ function togglePassword() {
         display: flex;
         flex-direction: column;
         width: 100%;
-        gap: 36px;
-        margin-bottom: 36px;
+
+        margin-bottom: 16px;
 
     }
     .password-input{
@@ -177,18 +181,19 @@ function togglePassword() {
         height: 54px;
         width: 100%;
         padding: 8px;
-        border: 2px solid $color-fsContent;
+        border: 2px solid $color-fsCaption;
         border-radius: 4px;
     }
     .form-input::placeholder{
-        font-size: 2.0rem;
-        font-family: 'Ubuntu','Roboto', 'Noto Sans TC', sans-serif; 
+        font-size: 1.6rem;
+        font-family: 'Roboto', 'Noto Sans TC', sans-serif; 
 
     }
     .toggle-password-btn{
         position: absolute;
         right: 8px;
-        top: 20px;
+        top: 50%;
+        transform: translate(0, -50%);  
         background-color: transparent;
         border: 0;
         color: $color-fsContent;
@@ -199,13 +204,13 @@ function togglePassword() {
     }
 
     .btn-yellow-fill{
-        width: 240px;
+        width: 280px;
         display: flex;
         margin: 0 auto;
         padding-top: 16px;
         padding-bottom: 16px;
         justify-content: center;
-        margin-bottom: 36px;
+        // margin-bottom: 24px;
     }
     .login-bottom{
         width: 100%;
@@ -214,10 +219,12 @@ function togglePassword() {
     }
     .login-bottom > p > a{
         text-decoration: none;
+        color: $color-fsBlue900;
 
     }
     .login-bottom > p{
         text-align: start;
+        color: $color-fsCaption;
     }
 
     .error-message > h6{
