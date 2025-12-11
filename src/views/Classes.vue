@@ -86,7 +86,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-
+          <DuanOoLeft @flip="goToPage"/>
         </div>
       </div>
         <div class="page">
@@ -140,6 +140,7 @@ import NewYearLeft from '@/components/ClassPages/NewYearLeft.vue';
 import NewYearRight from '@/components/ClassPages/NewYearRight.vue';
 import MoonFesLeft from '@/components/ClassPages/MoonFesLeft.vue';
 import MoonFesRight from '@/components/ClassPages/MoonFesRight.vue';
+import DuanOoLeft from '@/components/ClassPages/DuanOoLeft.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動

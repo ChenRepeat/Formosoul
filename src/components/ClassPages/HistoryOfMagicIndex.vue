@@ -14,7 +14,7 @@
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(11)">
-        Mid-Autumn  Festival
+        Dragon-boat  Festival
       </h5>
     </li>
     <li class="dp-flex">
@@ -22,9 +22,10 @@
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(12)">
-        Dragon-boat  Festival
+        Mid-Autumn  Festival
       </h5>
     </li>
+
   </ul>
 </template>
 
