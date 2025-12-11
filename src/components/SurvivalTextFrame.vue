@@ -86,6 +86,11 @@ function handleClick() {
   border: 1px solid transparent;
   background-color: $color-fsGold300;
   cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05); 
+  }
 }
 
 </style>
