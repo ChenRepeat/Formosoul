@@ -1,3 +1,18 @@
+<script setup>
+  import { ref ,defineEmits } from 'vue';
+  import IconHelmet from '../icons/SVG/IconHelmet.vue';
+  import IconFoot from '../icons/SVG/IconFoot.vue';
+  import IconHistory from '../icons/SVG/IconHistory.vue';
+  import IconBue from '../icons/SVG/IconBue.vue';
+  import IconPotion from '../icons/SVG/IconPotion.vue';
+  import IconCharm from '../icons/SVG/IconCharm.vue';  
+
+  import { usePageNavigation } from './goToPage';
+  
+  const emit = defineEmits(['flip'])
+  const { goToPage } = usePageNavigation(emit)
+</script>
+
 <template>
   <ul class="class-index-case dp-flex-col">
     <li class="dp-flex">
@@ -51,21 +66,6 @@
     </li>
   </ul>
 </template>
-
-<script setup>
-  import { ref ,defineEmits } from 'vue';
-  import IconHelmet from '../icons/SVG/IconHelmet.vue';
-  import IconFoot from '../icons/SVG/IconFoot.vue';
-  import IconHistory from '../icons/SVG/IconHistory.vue';
-  import IconBue from '../icons/SVG/IconBue.vue';
-  import IconPotion from '../icons/SVG/IconPotion.vue';
-  import IconCharm from '../icons/SVG/IconCharm.vue';  
-
-  import { usePageNavigation } from './goToPage';
-  
-  const emit = defineEmits(['flip'])
-  const { goToPage } = usePageNavigation(emit)
-</script>
 
 <style lang="scss" scoped>
 

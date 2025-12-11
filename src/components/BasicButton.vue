@@ -20,7 +20,7 @@
 </script>
 
 <template>
-  <button><slot></slot></button>
+  <button class="main"><slot></slot></button>
   <!--  
     組件使用方式
     <Button  
@@ -45,73 +45,47 @@
 
 
 /* 填色btn -----------------------------------*/
-
-.btn-yellow-fill{
+.main{
   font-size: 16px;
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-  color: $color-fsTitle;
   padding: 8px 40px;
   border-radius: 10px;
   border: 1px solid transparent;
-  background-color: $color-fsGold300;
   cursor: pointer;
+}
+.btn-yellow-fill{
+  background-color: $color-fsGold300;
+  color: $color-fsTitle;
 }
 
 .btn-gray-fill{
-  font-size: 16px;
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-  color: $color-fsTitle;
-  padding: 8px 40px;
-  border-radius: 10px;
-  border: 1px solid transparent;
   background-color: $color-fsContent;
-  cursor: pointer;
+  color: $color-fsTitle;
 }
 
 .btn-blue-fill{
-  font-size: 16px;
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-  color: $color-fsWhite;
-  padding: 8px 40px;
-  border-radius: 10px;
-  border: 1px solid transparent;
   background-color: $color-fsBlue900;
-  cursor: pointer;
+  color: $color-fsWhite;
 }
 
 
 /* 框線btn -----------------------------------*/
 .btn-black{
-  font-size: 16px;
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
   color: $color-fsTitle;
-  padding: 8px 40px;
-  border-radius: 10px;
-  border: 1px solid $color-fsTitle;
   background-color: transparent;
-  cursor: pointer;
+  border: 1px solid $color-fsTitle;
 }
 
 .btn-white{
-  font-size: 16px;
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
   color: $color-fsWhite;
-  padding: 8px 40px;
-  border-radius: 10px;
   border: 1px solid $color-fsWhite;
   background-color: transparent;
-  cursor: pointer;
 }
 
 .btn-yellow{
-  font-size: 16px;
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
   color: $color-fsTitle;
-  padding: 8px 40px;
-  border-radius: 10px;
   border: 1px solid $color-fsGold300;
   background-color: transparent;
-  cursor: pointer;
 }
 
 /* 桌機手機同寬度請加這個class -----------------------------------*/

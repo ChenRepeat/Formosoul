@@ -86,11 +86,22 @@
       </div>
       <div class="page">
         <div class="page-content">
-          
+
+        </div>
+      </div>
+        <div class="page">
+        <div class="page-content">
+
         </div>
       </div>
       <div class="page">
         <div class="page-content">
+          <MoonFesLeft @flip="goToPage"/>
+        </div>
+      </div>
+      <div class="page">
+        <div class="page-content">
+          <MoonFesRight  @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -127,6 +138,8 @@ import EndemicSpeciesLeft from '@/components/ClassPages/EndemicSpeciesLeft.vue';
 import EndemicSpeciesRight from '@/components/ClassPages/EndemicSpeciesRight.vue';
 import NewYearLeft from '@/components/ClassPages/NewYearLeft.vue';
 import NewYearRight from '@/components/ClassPages/NewYearRight.vue';
+import MoonFesLeft from '@/components/ClassPages/MoonFesLeft.vue';
+import MoonFesRight from '@/components/ClassPages/MoonFesRight.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
