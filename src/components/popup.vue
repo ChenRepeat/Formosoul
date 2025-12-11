@@ -3,12 +3,14 @@
     class="Loginpage" :class="{ 'active': authStore.isLoginModalOpen}" 
     @click.self="authStore.closeLoginModal()"
     >   
-        <loginpage></loginpage>
-    </div>
+    <!-- <forgetpassword></forgetpassword> -->
+    <loginpage></loginpage>
+</div>
 </template>
 
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
+    import Forgetpassword from './Member/Login/forgetpassword.vue';
     import Loginpage from './Member/Login/loginpage.vue';
     const authStore = useAuthStore();
 </script>
