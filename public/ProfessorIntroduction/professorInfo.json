@@ -1,0 +1,130 @@
+[
+  {
+    "name-c": "九天玄女",
+    "name": "Jiǔtiān Xuánnǚ",
+    "job-c": "占卜學",
+    "job": "Professor of Divination",
+    "skill-c": "天機預知、星象解讀",
+    "skill": "Prophecy, astrological reading"
+  },
+  {
+    "name-c": "中壇元帥",
+    "name": "Zhōngtán Yuánshuài",
+    "job-c": "符咒學",
+    "job": "Professor of Spells & Charms",
+    "skill-c": "靈符護身、鎮煞符術爆破",
+    "skill": "Spirit talisman, exorcism charms"
+  },
+  {
+    "name-c": "關聖帝君",
+    "name": "Guān Shèng Dìjūn",
+    "job-c": "學院執法與安全指揮官",
+    "job": "Commander of Collegiate Enforcement",
+    "skill-c": "正義之刃、誠信結界",
+    "skill": "Ethical Mediation & Karmic Tracing Judgement"
+  },
+  {
+    "name-c": "觀音菩薩",
+    "name": "Guānyīn Púsà",
+    "job-c": "首席急難救援顧問",
+    "job": "Chief Emergency Response Counselor",
+    "skill-c": "急難救援與心靈治癒",
+    "skill": "Emergency Rescue & Psycho-Spiritual Healing"
+  },
+  {
+    "name-c": "天上聖母",
+    "name": "Tiānshàng Shèngmǔ",
+    "job-c": "航行庇佑者",
+    "job": "Protector of Sailors",
+    "skill-c": "風暴祝祐術與浮空結界術。",
+    "skill": "Storm Benediction & Aetherial Ward"
+  },
+  {
+    "name-c": "城隍尊神",
+    "name": "Chénghuáng Zūnshén",
+    "job-c": "學院內部事務裁判長",
+    "job": "High Arbiter of Internal Campus Affairs",
+    "skill-c": "城市結界、人間調解",
+    "skill": "City barrier & mortal mediation"
+  },
+  {
+    "name-c": "虎爺將軍",
+    "name": " Hǔyé Jiāngjūn",
+    "job-c": "奇獸飼育學",
+    "job": "Professor of Endemic Species",
+    "skill-c": "靈獸契約締結、驅邪咒",
+    "skill": "Ethereal Beast Pact Sealing & exorcism charm"
+  },
+  {
+    "name-c": "玄天上帝",
+    "name": "Xuántiān Shàngdì",
+    "job-c": "飛行學",
+    "job": "Professor of Flying",
+    "skill-c": "雲騎飛行、天際遁形",
+    "skill": "Cloud riding, celestial flight"
+  },
+  {
+    "name-c": "玄壇真君",
+    "name": "Xuántán Zhēnjūn",
+    "job-c": "魔法資產管理與經濟學",
+    "job": "Magical Asset Management & Economics",
+    "skill-c": "財富魔法、機遇護符",
+    "skill": "Wealth magic, talisman of opportunity"
+  },
+  {
+    "name-c": "法主聖君",
+    "name": "Fǎzhǔ Shèngjūn",
+    "job-c": "魔藥學教授",
+    "job": "Professor of Potions",
+    "skill-c": "生命能量精煉與生化驅邪藥劑學",
+    "skill": "Refinement of Vital Energy & Bio-Exorcism Potionology"
+  },
+  {
+    "name-c": "月老尊神",
+    "name": "Yuèlǎo Zūnshén",
+    "job-c": "魔法契約與情感占卜",
+    "job": "Professor of Magical Bonds and Empathic Divination",
+    "skill-c": "紅線緣法、命運連結",
+    "skill": "Red thread magic, fate connection"
+  },
+  {
+    "name-c": "臨水夫人",
+    "name": "Línshuǐ Fūrén",
+    "job-c": "生命奧秘與超自然防禦學",
+    "job": "Professor of Vital Arcana & Supernatural Defense",
+    "skill-c": "斬妖驅魔與母子守護",
+    "skill": "Exorcism of Abominations & mother and child safeguard"
+  },
+  {
+    "name-c": "保生大帝",
+    "name": "Bǎoshēng Dàdì",
+    "job-c": "首席生命編碼工程師",
+    "job": "Chief Life-Code Engineer",
+    "skill-c": "生機養護與草藥合成        ",
+    "skill": "Vitality nurturing & Arcane Herb Synthesis"
+  },
+  {
+    "name-c": "玉皇大帝",
+    "name": "Yùhuáng Dàdì",
+    "job-c": "校長兼魔法史教授",
+    "job": "Professor of History of Magic",
+    "skill-c": "天界史詮釋、神祇脈絡",
+    "skill": "Celestial history, divine lineage"
+  },
+  {
+    "name-c": "北斗七星",
+    "name": "Běidǒu Qīxīng",
+    "job-c": "命運魔法理論教授",
+    "job": "Professor of Theory of Fate-based Magic",
+    "skill-c": "七星陣法掌握命運",
+    "skill": "Activates the seven-star array to control and reshape the course of fate."
+  },
+  {
+    "name-c": "南斗六星",
+    "name": "Nándǒu Liùxīng",
+    "job-c": "生命魔符學教授",
+    "job": "Professors of Vital Sigilcraft",
+    "skill-c": "星能續命、靈魂庇佑",
+    "skill": "Starlit longevity, soul blessing"
+  }
+]
