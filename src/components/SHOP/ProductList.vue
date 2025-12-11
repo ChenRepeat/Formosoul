@@ -1,6 +1,15 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import TestProductCard from '@/components/TestProductCard.vue';
+import { useRouter } from "vue-router";     //使用路由功能
+
+// 宣告常數來接收 useRouter() ，方便後續使用
+const router = useRouter();
+
+// 設定路由功能
+function goProductDetail(){
+    router.push('/shop/productdetail')
+};
 
 </script>
 
@@ -76,7 +85,8 @@ import TestProductCard from '@/components/TestProductCard.vue';
 
 <!-- 中間商品列表 -->
     <section class="list-all">
-        <TestProductCard />
+        <TestProductCard 
+        @click="goProductDetail()"/>
     </section>
 
 <!-- 下方頁碼 -->

@@ -13,8 +13,8 @@ import Popup from './components/popup.vue';
     <TheHeader />
     <main class="content">
       <a href="/"><img :src="siteLogo" alt="SiteLogo" class="site-logo"/></a>
-    <RouterView />
-    <Popup></Popup>
+      <RouterView />
+      <Popup></Popup>
     </main>
     <TheFooter />
   </div>

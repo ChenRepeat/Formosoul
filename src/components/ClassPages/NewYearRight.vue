@@ -5,16 +5,13 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
   const zi10 = ref(1);
   const dialogs = {
     1: {
-        title: 'Formosan Black Bear',
-        paragraph: 'Taiwan’s iconic bear, known for its crescent chest mark. It lives in high mountains and symbolizes Taiwan’s wildlife.', 
+        paragraph: 'A joyful family gathers for a Lunar feast, where warm smiles and glowing lanterns weave gentle magic through the festive night.', 
       },
     2: {
-        title: 'Formosan Sika Deer',
-        paragraph: 'A small, elegant deer once nearly extinct in Taiwan, now restored through conservation efforts..', 
+        paragraph: 'Friends ignite brilliant fireworks under a moonlit sky, summoning sparks of enchantment that dance like ancient wishes in the winter air.', 
       },
     3: {
-        title: 'Formosan Rock Macaque',
-        paragraph: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
+        paragraph: 'Crimson charms and mystical blessings shimmer on the doorpost, inviting good fortune to swirl in with softly glowing festive magic.', 
       },
   };
   function changeDialog(i){
@@ -26,66 +23,55 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
 </script>
 
 <template>
-  <div class="animal-left-main">
-    <div class="animal-title">
-      <h2>Endemic Species</h2>
-      <p>Taiwan’s unique wildlife—from black bears to blue magpies—shows rich biodiversity and highlights the importance of protecting its endemic species.</p>
-    </div>
-    <div class="animal-contain dp-flex-col">
-      <div class="animal-photo-case">
-      <div class="animal-locate-case left-1"
-       :class="{'zi10': zi10 == 1,}"
-        @click="changeDialog(1)"
-        @mousedown.stop
-        @touchstart.stop>
-        <img 
-          src="/Classes/FomoBear.png" 
-          alt="" 
-          class="animal-photo"
-          >
-          <div class="over-lay"></div>
-          <div class="icon-animation-case">
-            <IconFomobear  
-            class="icon-bear"
-            size="48" 
-            :class="{'op': zi10 !== 1,}"/>  
+  <section class="newyear-right">
+      <div class="animal-contain dp-flex-col">
+        <div class="animal-photo-case">
+        <div class="animal-locate-case left-1"
+         :class="{'zi10': zi10 == 1,}"
+          @click="changeDialog(1)"
+          @mousedown.stop
+          @touchstart.stop>
+          <img 
+            src="/Classes/NewYear3.png" 
+            alt="" 
+            class="animal-photo"
+            >
+            <div class="over-lay"></div>
           </div>
+        <div 
+          class="animal-locate-case left-2"
+          :class="{'zi10': zi10 == 2,}"
+          @click="changeDialog(2)"
+          @mousedown.stop
+          @touchstart.stop>
+          <img 
+            src="/Classes/NewYear4.png" 
+            alt="" 
+            class="animal-photo"
+            >
+          <div class="over-lay"></div>
         </div>
-      <div 
-        class="animal-locate-case left-2"
-        :class="{'zi10': zi10 == 2,}"
-        @click="changeDialog(2)"
-        @mousedown.stop
-        @touchstart.stop>
-        <img 
-          src="/Classes/FomoDear.png" 
-          alt="" 
-          class="animal-photo"
-          >
-        <div class="over-lay"></div>
-      </div>
-      <div class="animal-locate-case left-3"
-        :class="{'zi10': zi10 == 3,}"
-        @click="changeDialog(3)"
-        @mousedown.stop
-        @touchstart.stop>
-        <img 
-          src="/Classes/FomoWuKong.png" 
-          alt="" 
-          class="animal-photo "
-         >
-        <div class="over-lay"></div>
-      </div>
-      </div>
-      <Transition name="fade" mode="out-in">
-        <div class="animal-text dp-flex-col"
-        :key="zi10">
-            <h5>{{currentDialog.title}}</h5>
-            <p>{{ currentDialog.paragraph }}</p>
+        <div class="animal-locate-case left-3"
+          :class="{'zi10': zi10 == 3,}"
+          @click="changeDialog(3)"
+          @mousedown.stop
+          @touchstart.stop>
+          <img 
+            src="/Classes/NewYear5.png" 
+            alt="" 
+            class="animal-photo "
+           >
+          <div class="over-lay"></div>
         </div>
-      </Transition>
-    </div>
-  </div>
+        </div>
+        <Transition name="fade" mode="out-in">
+          <div class="animal-text dp-flex-col"
+          :key="zi10">
+              <p>{{ currentDialog.paragraph }}</p>
+          </div>
+        </Transition>
+      </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
