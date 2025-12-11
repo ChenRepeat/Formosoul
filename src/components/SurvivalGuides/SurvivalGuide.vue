@@ -313,8 +313,8 @@ const rightFrame = computed(()=> frames.value[1])
   width: 300px;
   height: auto;
   position: absolute;
-  left: -80px;
-  top: -60px;
+  left: -10%;
+  top: 0%;
   transform:rotate(30deg);
   opacity: 0;
   transition: all 1.2s ease-in-out;
@@ -435,8 +435,8 @@ const rightFrame = computed(()=> frames.value[1])
   object-fit: contain;
   height: 140px;
   position: absolute;
-  right: -150px;
-  top: -70px;
+  right: -30%;
+  top: 0%;
   transform:rotate(-20deg);
   opacity: 0;
   transition: all 1.2s ease-in-out;
