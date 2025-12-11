@@ -1,9 +1,9 @@
 <template>
     <!-- 處理版面會跑的問題 寫死高
       -->
-        <div class="Loginout">
+        
             <div class="Logincontain">
-        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px;"/></div>
+                    <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px;"/></div>
 
                     <div class="pagebutton">
                         <BasicButton 
@@ -12,7 +12,7 @@
                         class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
 
                         <BasicButton 
-                        :class="{ 'active-tab': currentView == 'login'}"
+                        :class="{ 'active-tab': currentView == 'login' || currentView === 'forgetpassword'}"
                         @click="currentView = 'login'"
                         class="btn-blue-fill"><h4>Login</h4></BasicButton>
                     </div>
@@ -23,32 +23,32 @@
 
                         <Enrollment v-else-if="currentView == 'enrollment'"></Enrollment>
                         <Forgetpassword v-else-if="currentView == 'forgetpassword'"></Forgetpassword>
-                    <div class="otherlogin">
-                        <div class="otherlogin-title">
-                            <hr>
-                            <h6>Other</h6>
-                            <hr>
+                    <template v-if="!isotherlogin">
+                        <div class="otherlogin">
+                            <div class="otherlogin-title">
+                                <hr>
+                                <h6>Other</h6>
+                                <hr>
+                            </div>
+                            <div class="otherlogin-icon">
+                                <img src="../../../../public/member/googleicon.png" alt="1">
+                                <img src="../../../../public/member/lineicon.png" alt="2">
+                            </div>
                         </div>
-                        <div class="otherlogin-icon">
-                            <img src="../../../../public/member/googleicon.png" alt="1">
-                            <img src="../../../../public/member/lineicon.png" alt="2">
-                        </div>
-                    </div>
+                    </template>
                     </div>
             </div>
-        </div>
 
 </template>
 
 <script setup>
-import { provide, ref } from 'vue';
+import { computed, provide, ref } from 'vue';
 import Logincontain from './logincontain.vue';
 import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '@/components/BasicButton.vue';
 import Enrollment from '../Login/Enrollment.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Forgetpassword from './forgetpassword.vue';
-
 
     const authStore = useAuthStore();
     const currentView = ref('login');
@@ -57,12 +57,18 @@ import Forgetpassword from './forgetpassword.vue';
         sharedEmail.value = email;
     }
 
-    provide('setCurrebtView', (viewName) => {
+    provide('setCurrentView', (viewName) => {
         currentView.value = viewName
     });
 
     provide('sharedEmail', sharedEmail);
     provide('setEnrollmentEmail', setEnrollmentEmail);
+
+    const isotherlogin = computed(() => {
+
+            return  currentView.value == 'forgetpassword';
+
+    });
 </script>
 
 <style lang="scss" scoped>
@@ -123,25 +129,8 @@ import Forgetpassword from './forgetpassword.vue';
         background-color: $color-fsBlue50;
         color: $color-fsTitle;
     }
-    .Loginout{
-        width: 90%;
-        height: 90%;
-        // 轉換成RGB 數值 再調 opacity
-        // background-color: rgba(93, 93, 93, 0.5);
-        // 在原本的 6 碼色碼後面直接加上 2 碼來代表透明度（範圍 00 到 FF）
-        background-color: #5D5D5D80;
-        display: flex;
-        justify-content: center; 
-        align-items: center; 
-        border: 0;
-        border-radius: 8px;
-        position: relative;
-    }
 
-    // .otherlogin{
-    //     position: absolute;
-    //     bottom: 0;
-    // }
+
     .otherlogin-title{
         display: flex;
         justify-content: center;

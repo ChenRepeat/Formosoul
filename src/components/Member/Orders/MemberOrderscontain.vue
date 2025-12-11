@@ -37,7 +37,7 @@
         </div>
 
         <div class="back-to-member">
-            <basic-button class="btn-yellow-fill"><router-link to="/policy/orderslist"><h6><font-awesome-icon icon="fa-solid fa-angle-left" /> Back to Query orders</h6></router-link></basic-button>
+            <basic-button class="btn-yellow-fill"><router-link to="/member/orderslist"><h6><font-awesome-icon icon="fa-solid fa-angle-left" /> Back to Query orders</h6></router-link></basic-button>
         </div>
     </div>
 </template>
