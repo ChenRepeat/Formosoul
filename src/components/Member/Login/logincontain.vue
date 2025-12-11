@@ -63,7 +63,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const authStore = useAuthStore();
 const sharedEmail = inject('sharedEmail');
-const currentView = inject('setCurrebtView');
+const currentView = inject('setCurrentView');
 const email = ref(sharedEmail?.value || '');
 const password = ref('');
 const isLoading = ref(false);
@@ -139,7 +139,8 @@ async function handleLogin() {
         // 這邊就保存到 store
         authStore.setToken(response.token)
         authStore.setUser(response.user)
-        authStore.closeLoginModal();
+        // authStore.closeLoginModal();
+        
     } catch (error) {
         errorMessage.value = error.message || 'Login failed,Please tryagain'
     } finally{

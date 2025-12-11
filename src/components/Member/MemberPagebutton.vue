@@ -1,10 +1,10 @@
 <template>
     <div class="member-page-button">
-            <button class="page-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/policy/information">Member information</router-link></button>
-            <button class="page-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/policy/changepassword">Change password</router-link></button>
-            <button class="page-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/policy/orderslist">Query Orders</router-link></button>
-            <button class="page-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/policy/mycollections">My Collections</router-link></button>
-            <button class="page-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/policy/coupons">Coupons</router-link></button>
+            <button class="page-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/member/information">Member information</router-link></button>
+            <button class="page-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/member/changepassword">Change password</router-link></button>
+            <button class="page-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/member/orderslist">Query Orders</router-link></button>
+            <button class="page-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/member/mycollections">My Collections</router-link></button>
+            <button class="page-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/member/coupons">Coupons</router-link></button>
     </div>
     <Pagelinebar :linebarposition="240" :activeIndex="activeIndex" />
       <router-view></router-view>

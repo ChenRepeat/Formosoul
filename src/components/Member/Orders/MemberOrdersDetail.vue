@@ -8,7 +8,7 @@
             <P>{{ order.shipping }}</p>
             <!-- 換成p -->
             <p>
-                <basic-button class="btn-yellow-fill"><router-link to="/policy/orderslist/orderscontain">Check</router-link></basic-button>
+                <basic-button class="btn-yellow-fill"><router-link to="/member/orderslist/orderscontain">Check</router-link></basic-button>
             </p>
         </div>
 
