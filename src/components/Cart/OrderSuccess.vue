@@ -14,7 +14,7 @@ import { RouterLink } from 'vue-router';
 
         <p class="success-text">
             To check your order, please visit the
-            <router-link to="" class="success-orderlist">Member Center</router-link>
+            <router-link to="/member/orderslist/orderscontain" class="success-orderlist">Member Center</router-link>
             .
         </p>
 
