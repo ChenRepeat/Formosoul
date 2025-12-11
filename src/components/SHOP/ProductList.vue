@@ -1,7 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import TestProductCard from '@/components/TestProductCard.vue';
 import { useRouter } from "vue-router";     //使用路由功能
+import TestProductCard from '@/components/TestProductCard.vue';
 
 // 宣告常數來接收 useRouter() ，方便後續使用
 const router = useRouter();

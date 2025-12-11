@@ -61,6 +61,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
               <li>
                 <a href="/about"><h5>About</h5></a>
               </li>
+              <li>
+                <a href="/member"><h5>Member</h5></a>
+              </li>
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
