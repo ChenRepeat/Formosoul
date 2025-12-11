@@ -3,7 +3,6 @@ import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from "vue-router";
 
-
 const isShow = ref(-1);
 const animationWelcome = ref(false)
 
@@ -46,6 +45,9 @@ function closeWelcomeFrame (){
                 tag="h2"
                 align="center"
                 >
+                <template #textButton>
+                    START
+                </template>
                 </SurvivalTextFrame>
             </div>
         </main>
