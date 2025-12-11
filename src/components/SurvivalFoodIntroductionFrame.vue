@@ -9,10 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         title:{type:String, default: ''},
         subTitle:{type:String, default: ''},
         text:{type:String, default: ''},
+        buttonText: {type: String, default: ''}
     })
 
     // 定義一個往外傳送的訊號，叫 'close'
-    const emit = defineEmits(['close'])
+    const emit = defineEmits(['close', 'play'])
 
     // 加入 ESC 關閉 
     function escClose (e){
@@ -47,6 +48,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
                 <h3>{{ props.title }}</h3>
                 <h5>{{ props.subTitle }}</h5>
                 <p>{{ props.text }}</p>
+
+                <button
+                v-if="props.buttonText"
+                class="night-market-button"
+                @click="emit('play')"
+                >
+                <p>{{ props.buttonText }}</p>
+                </button>
+                
             </div>
             <div class="food-introduction-frame-right">
                 <img :src="props.subImg1" alt="sub-img1">
@@ -82,7 +92,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 .food-introduction-text-frame{
     flex: 1;
-    padding: 20px;
+    padding:20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -91,7 +101,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     overflow-y: auto;
     gap: 20px;
 
-    
 }
 .food-introduction-frame-right {
     flex: 1;
@@ -115,10 +124,19 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     right: 12px;
     transition: all 0.5s ease;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // 選取 .close-btn 裡面，第一層的所有東西
+    & > * {
+         /* 加上兩層白色陰影，製造發光效果 */
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+    }
     &:hover {
         color: $color-fsRed;
         transform: rotate(360deg);
-        transition: all 0.5s ease;
+        transition: all .5s ease;
     }
 }
 
@@ -136,5 +154,25 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     justify-content: center;
     align-items: center;
 }
+
+// 玩遊戲的btn
+.night-market-button {
+    color: #000;
+    margin-top: 20px; 
+    padding: 8px 40px;
+    font-size: 16px;
+    background-color: $color-fsGold300; 
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: scale(1.05); 
+        background-color: $color-fsGold300 ;
+    }
+}
+
 
 </style>
