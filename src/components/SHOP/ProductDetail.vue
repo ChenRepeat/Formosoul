@@ -1,7 +1,15 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useRouter } from "vue-router";     //使用路由功能
 import BasicButton from '../BasicButton.vue';
-import { RouterLink } from 'vue-router';
+
+// 宣告常數來接收 useRouter() ，方便後續使用
+const router = useRouter();
+
+// 設定路由功能
+function goProductList(){
+    router.push('/shop/productlist')
+};
 
 </script>
 
@@ -87,7 +95,9 @@ import { RouterLink } from 'vue-router';
         </section>
     </div>
 
-    <BasicButton class="btn-white">    
+    <BasicButton 
+        class="btn-white" 
+        @click="goProductList()">    
         Back to Shop
     </BasicButton>
 
