@@ -136,7 +136,7 @@ const handleChangePassword  = () => {
         const hasNumber = /[0-9]/.test(Newpassword.value);
         
         if(Newpassword.value.length < 8){
-            errors.value.length = '密碼至少需要8個字元';
+            errors.value.length = 'Passwords must be at least 8 characters long';
         }else if(!hasUppercase || !hasLowercase || !hasNumber){
             errors.value.Newpassword = '密碼必須包含大寫、小寫字母和數字';
         }else if(Newpassword.value === oldpassword.value){

@@ -1,11 +1,9 @@
 <template>
-    <div 
-    class="Loginpage" :class="{ 'active': authStore.isLoginModalOpen}" 
-    @click.self="authStore.closeLoginModal()"
-    >   
+    <!-- 處理版面會跑的問題 寫死高
+      -->
         <div class="Loginout">
-            <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px;"/></div>
             <div class="Logincontain">
+        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px;"/></div>
 
                     <div class="pagebutton">
                         <BasicButton 
@@ -36,10 +34,8 @@
                         </div>
                     </div>
                     </div>
-
             </div>
         </div>
-    </div>
 
 </template>
 
@@ -57,23 +53,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 </script>
 
 <style lang="scss" scoped>
-    .Loginpage{
-        position: fixed;
-        inset: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 2000;
-        // 這段可以看 authStore.isLoginModalOpen 的值 去決定是否要顯示
-        &.active {  
-            opacity: 1;
-            visibility: visible;
-        }
-    }
 
     .closebutton{
         width: 36px;
@@ -117,6 +96,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     .pagecontain{
         background-color: $color-fsBlue50;
         border-radius: 0 0 8px 8px ;
+        height: 680px;
 
     }
     .btn-blue-fill{
@@ -144,6 +124,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         border-radius: 8px;
         position: relative;
     }
+
+    // .otherlogin{
+    //     position: absolute;
+    //     bottom: 0;
+    // }
     .otherlogin-title{
         display: flex;
         justify-content: center;

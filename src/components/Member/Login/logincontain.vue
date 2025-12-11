@@ -71,7 +71,7 @@ async function loginAPI(email, password) {
     // 測試 isLoading 的效果
     await new Promise(resolve => setTimeout(resolve, 1500));
     // 暫時模擬登入
-    if (email === 'test@test.com' && password === '123456') {
+    if (email === 'test@test.com' && password === 'As345678') {
         // 回傳 JSON
         return {
             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
@@ -131,15 +131,17 @@ async function handleLogin() {
     errorMessage.value = ''
 
     try {
-        const response = await loginAPI(email.value, password.value)
-    
+        const response = await loginAPI(email.value, password.value);
+        
         // 這邊就保存到 store
         authStore.setToken(response.token)
         authStore.setUser(response.user)
+        authStore.closeLoginModal();
     } catch (error) {
         errorMessage.value = error.message || 'Login failed,Please tryagain'
     } finally{
         isLoading.value = false
+
     }
 }
 
@@ -158,8 +160,12 @@ function togglePassword() {
 <style lang="scss" scoped>
     .login-form{
         width: 70%;
-        margin: 0 auto;
         padding: 40px;
+        height: 544px;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); 
         
 
     }
