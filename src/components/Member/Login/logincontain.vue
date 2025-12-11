@@ -39,7 +39,9 @@
         </div>
         <div v-if="errorMessage" class="error-message"><h6>{{ errorMessage }}</h6></div>
         <div class="login-bottom">
-            <p>* If your memory has been tampered with by a Memory Charm, click here:<a href="/forgot-password" class="bottom-link">ForgetPassword?</a></p>
+            <p>
+                * If your memory has been tampered with by a Memory Charm, click here:<a @click="hanldeForgetpassword" class="bottom-link">ForgetPassword?</a>
+            </p>
         </div>
         <BasicButton
         class="btn-yellow-fill"
@@ -56,12 +58,13 @@
 <script setup >
 import BasicButton from '@/components/BasicButton.vue';
 import { useAuthStore } from '@/stores/autoStore';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const authStore = useAuthStore();
-
-const email = ref('');
+const sharedEmail = inject('sharedEmail');
+const currentView = inject('setCurrebtView');
+const email = ref(sharedEmail?.value || '');
 const password = ref('');
 const isLoading = ref(false);
 const errorMessage = ref('');
@@ -145,6 +148,13 @@ async function handleLogin() {
     }
 }
 
+async function hanldeForgetpassword(){
+    console.log('忘記了');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    currentView('forgetpassword');
+
+};
+
 function handleKeyDown( e ) {
     if (e.key === 'Enter' && !isLoading.value) {
         handleLogin();        
@@ -226,6 +236,7 @@ function togglePassword() {
     .login-bottom > p > a{
         text-decoration: none;
         color: $color-fsBlue900;
+        cursor: pointer;
 
     }
     .login-bottom > p{

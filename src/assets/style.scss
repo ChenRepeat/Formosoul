@@ -20,7 +20,7 @@ html {
 // -----------------------------------
 // 字級
 
-h1,h2,h3,h4,h5,h6,p {line-height: 160%;}
+h1,h2,h3,h4,h5,h6 {line-height: 160%;}
 h1 {font-size: 6.0rem;}
 h2 {font-size: 5.2rem;}
 h3 {font-size: 4.0rem;}
@@ -29,7 +29,8 @@ h5 {font-size: 2.8rem;}
 h6 {font-size: 2.0rem;}
 p {font-size: 1.6rem;
    font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-    text-align: justify; }
+    text-align: justify;
+    line-height: 180%; }
 
 
 //字體粗細，預設 normal 400 ，不用特別設定

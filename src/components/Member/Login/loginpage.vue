@@ -22,6 +22,7 @@
 
 
                         <Enrollment v-else-if="currentView == 'enrollment'"></Enrollment>
+                        <Forgetpassword v-else-if="currentView == 'forgetpassword'"></Forgetpassword>
                     <div class="otherlogin">
                         <div class="otherlogin-title">
                             <hr>
@@ -40,16 +41,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { provide, ref } from 'vue';
 import Logincontain from './logincontain.vue';
 import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '@/components/BasicButton.vue';
 import Enrollment from '../Login/Enrollment.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Forgetpassword from './forgetpassword.vue';
 
 
     const authStore = useAuthStore();
     const currentView = ref('login');
+    const sharedEmail = ref('');
+    const setEnrollmentEmail = (email) => {
+        sharedEmail.value = email;
+    }
+
+    provide('setCurrebtView', (viewName) => {
+        currentView.value = viewName
+    });
+
+    provide('sharedEmail', sharedEmail);
+    provide('setEnrollmentEmail', setEnrollmentEmail);
 </script>
 
 <style lang="scss" scoped>

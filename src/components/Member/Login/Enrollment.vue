@@ -77,9 +77,10 @@
 import BasicButton from '@/components/BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 
-
+const setCurrentView = inject('setCurrebtView');
+const setSharedEmail = inject('setEnrollmentEmail');
 const authStore = useAuthStore();
 
 const email = ref('');
@@ -203,7 +204,8 @@ async function handleEnrollment() {
         authStore.setToken(response.token);
         authStore.setUser(response.user);
         // 這邊寫成跳到登入頁面 成功才會執行
-        authStore.closeLoginModal();
+        setCurrentView('login');
+        setSharedEmail(email.value);
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';
     }finally {
