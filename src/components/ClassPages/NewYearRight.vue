@@ -1,11 +1,10 @@
 <script setup>
   import { computed, ref, Transition } from 'vue';
-import IconFomobear from '../icons/SVG/IconFomobear.vue';
 
   const zi10 = ref(1);
   const dialogs = {
     1: {
-        paragraph: 'A joyful family gathers for a Lunar feast, where warm smiles and glowing lanterns weave gentle magic through the festive night.', 
+        paragraph: 'Today, people enjoy magical fireworks, lantern parades, and family feasts. Red envelopes hold blessing charms, and online spells, music, and games mix ancient magic with modern fun.', 
       },
     2: {
         paragraph: 'Friends ignite brilliant fireworks under a moonlit sky, summoning sparks of enchantment that dance like ancient wishes in the winter air.', 
@@ -24,48 +23,56 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
 
 <template>
   <section class="newyear-right">
-      <div class="animal-contain dp-flex-col">
-        <div class="animal-photo-case">
-        <div class="animal-locate-case left-1"
+      <div class="newyear-right-contain dp-flex-col">
+        <div class="newyear-right-photo-case">
+        <div class="newyear-right-locate-case right-1"
          :class="{'zi10': zi10 == 1,}"
           @click="changeDialog(1)"
           @mousedown.stop
-          @touchstart.stop>
+          @touchstart.stop
+          @mouseover.stop
+          @mouseenter.stop
+          >
           <img 
             src="/Classes/NewYear3.png" 
             alt="" 
-            class="animal-photo"
+            class="newyear-right-photo"
             >
             <div class="over-lay"></div>
           </div>
         <div 
-          class="animal-locate-case left-2"
+          class="newyear-right-locate-case right-2"
           :class="{'zi10': zi10 == 2,}"
           @click="changeDialog(2)"
           @mousedown.stop
-          @touchstart.stop>
+          @mouseenter.stop
+          @touchstart.stop
+          @mouseover.stop>
+          
           <img 
             src="/Classes/NewYear4.png" 
             alt="" 
-            class="animal-photo"
+            class="newyear-right-photo"
             >
           <div class="over-lay"></div>
         </div>
-        <div class="animal-locate-case left-3"
+        <div class="newyear-right-locate-case right-3"
           :class="{'zi10': zi10 == 3,}"
           @click="changeDialog(3)"
           @mousedown.stop
+          @mouseenter.stop
+          @mouseover.stop
           @touchstart.stop>
           <img 
             src="/Classes/NewYear5.png" 
             alt="" 
-            class="animal-photo "
+            class="newyear-right-photo "
            >
           <div class="over-lay"></div>
         </div>
         </div>
         <Transition name="fade" mode="out-in">
-          <div class="animal-text dp-flex-col"
+          <div class="newyear-right-text dp-flex-col"
           :key="zi10">
               <p>{{ currentDialog.paragraph }}</p>
           </div>
@@ -75,77 +82,38 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
 </template>
 
 <style lang="scss" scoped>
-  .animal-left-main{
+  .newyear-right{
     width: 100%;
     height: 100%;
     position: relative;
-    padding: 0 20px;
+    padding-left: 30%;
     text-align: left;
-  }
-  h2{
-    text-align: center;
-  }
-  .red{
-    width: 100px;
-    height: 100px;
-    background-color: #fff;
-    position: absolute;
-    top: -50px;
-    transition: opacity 0.3s ease;
-    z-index: -10;
   }
   .op{
     opacity: 0;
   }
-  .animal-contain{
+  .newyear-right-contain{
     height: 100%;
-    gap: 60px;
+    gap: 15%;
+    padding-top: 10%;
   }
-  .animal-photo-case{
-    height: 50%;
+  .newyear-right-photo-case{
+    height: 40%;
     position: relative;
   }
-  .animal-locate-case{
-    width: 300px;
-    height: 300px;
+  .newyear-right-locate-case{
+    width: 320px;
+    height: 320px;
     position: absolute;
     transition: transform 0.3s ease, z-index 0.3s, box-shadow 0.3s;
-    border-radius: 20px;
-    border-radius: 16px;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
-  .animal-photo{
+  .newyear-right-photo{
     width: 100%;
     height: 100%;
     position: relative;
-
-
-  }
-  .icon-animation-case{
-    position: absolute;
-    animation: 10s run 0.5s linear infinite,
-  }
-  .icon-bear{
-    animation: 
-     0.5s roll 0.5s linear infinite,
-     ;}
-
-  @keyframes run{
-    0% {top: -48px;left: -48px;transform: rotate(0);}
-    24%{top: -48px;left: 300px;transform: rotate(0deg);}
-    25% {top: -48px;left: 300px;transform: rotate(90deg);}
-    49% {top: 300px;left: 300px;transform: rotate(90deg);}
-    50% {top: 300px;left: 300px;transform: rotate(180deg);}
-    74% {top: 300px;left: -48px;transform: rotate(180deg);}
-    75% {top: 300px;left: -48px;transform: rotate(270deg);}   
-    98% {top: -48px;left: -48px;transform: rotate(270deg);}   
-    99% {top: -48px;left: -48px;transform: rotate(360deg);}
-    100% {top: -48px;left: -48px;transform: rotate(360deg);}
-  }
-  @keyframes roll{
-    0% {transform: rotate(12deg);}
-    50% {transform: rotate(28deg);}
-    100% {transform: rotate(12deg);}
   }
   .over-lay{
     position: absolute; 
@@ -153,52 +121,56 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.4); 
+    background-color: rgba(0, 0, 0, 0.4); 
     z-index: 9; 
     opacity: 1; 
     pointer-events: none; 
     transition: opacity 0.3s ease;
   }
 
-  .animal-locate-case.zi10{
+  .newyear-right-locate-case.zi10{
     z-index: 10; 
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
   }
 
-  .animal-locate-case.zi10 .over-lay {
+  .newyear-right-locate-case.zi10 .over-lay {
     opacity: 0; 
   }
-  .left-1{
-    top: 20%;left: 10%;
-    transform: rotate(-15deg);
+  .right-1{
+    top: 15%;left: 0%;
+    transform: rotate(-10deg);
     z-index: 8;
      >.over-lay{
-    background-color: rgba(255, 255, 255, 0.6); 
+    background-color: rgba(0, 0, 0, 0.6); 
   }
   }
-  .left-2{
-    top: 18%;left: 20%;
+  .right-2{
+    top: 10%;left: 20%;
     z-index: 7;
+    transform: rotate(5deg);
+
   }
-  .left-3{
-    top: 16%; left: 30%;
-    transform: rotate(15deg);
+  .right-3{
+    top: 5%; left: 30%;
+    transform: rotate(20deg);
     z-index: 6;
     >.over-lay{
-    background-color: rgba(255, 255, 255, 0.6); 
+    background-color: rgba(0, 0, 0, 0.6); 
     }
   }
 
-  .animal-content{
+  .newyear-right-content{
     width: 100%;
     text-align: left;
     transition: opacity 0.5s ease;
     opacity: 1;
   }
-  .animal-diolog2{
+  .newyear-right-diolog2{
     padding-left: 15%;
   }
   p{
+    padding-left: 10%;
+    padding-right: 5%;
     color: $color-fsContent;
     line-height: 2;
     
