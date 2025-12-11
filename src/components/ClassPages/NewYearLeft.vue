@@ -1,6 +1,7 @@
 <script setup>
   import { computed, ref} from 'vue';
   import { usePageNavigation } from './goToPage';
+import IconFlame from '../icons/SVG/IconFlame.vue';
   
 
 
@@ -13,6 +14,7 @@
     <div class="newyear-top-topic dp-flex-col">
       <h3>New Year</h3>
       <div class="newyear-nian-intro dp-flex">
+        <IconFlame class="flame"/>
         <div class="nian-case">
           <img src="/Classes/Nian.png" alt="">
         </div>
@@ -49,6 +51,13 @@
   .newyear-nian-intro{
     gap: 24px;
     justify-content: space-between;
+    position: relative;
+    .flame{
+      position: absolute;
+      top: 25%;
+      z-index: 10;
+      animation: 2s fire 0.5s linear infinite,
+    }
     .nian-case{
       width: 150px;
       height: 150px;
@@ -99,6 +108,14 @@
       color: $color-fsContent;
       line-height: 2;
       border-radius: 8px;
+    
+  }
+  @keyframes fire{
+    0% {left: 12%;transform: scale(0.1);opacity: 0;}
+    1% {left: 15%;transform: scale(0.1);opacity: 1;}
+    
+    99% {left: 20%;transform: scale(1);opacity: 1;}
+    100% {left: 20%;transform: scale(1);opacity: 0;}
     
   }
 </style>
