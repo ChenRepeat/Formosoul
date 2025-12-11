@@ -1,3 +1,4 @@
+<!-- 螺旋式展開 -->
 <template>
   <div id="home-container" ref="containerRef">
     <canvas id="home-canvas-back" ref="canvasBackRef"></canvas>
@@ -163,6 +164,9 @@ const onLetterClose = () => {
 };
 
 function onDragStart(event) {
+  // ★ 新增：如果點擊的目標不在 home-container 內 (例如點到 Modal 或 Header)，則不處理
+  if (!containerRef.value || !containerRef.value.contains(event.target)) return;
+
   // 如果信件開著，禁止拖曳
   if (showLetter.value) return;
 
@@ -311,6 +315,9 @@ function onDragEnd() {
 }
 
 function onDocumentClick(event) {
+  // ★ 新增：如果點擊的目標不在 home-container 內，則不處理
+  if (!containerRef.value || !containerRef.value.contains(event.target)) return;
+
   if (isDragging || showLetter.value) return;
   const pos = getClientPos(event);
   mouse.x = (pos.x / window.innerWidth) * 2 - 1;
@@ -333,8 +340,14 @@ function onDocumentClick(event) {
     }
   }
 }
-
 function onMouseMoveHover(event) {
+  // ★ 新增：如果滑鼠不在 home-container 內 (例如懸停在 Modal 上)，則不處理
+  if (!containerRef.value || !containerRef.value.contains(event.target)) {
+     // 離開容器範圍時，確保移除 hover class
+     document.body.classList.remove('home-hover-link');
+     return;
+  }
+
   if (isDragging || showLetter.value) return;
   snitches.forEach((s) => {
     const lbl = s.group.getObjectByName('snitchLabel');
@@ -376,12 +389,13 @@ function onWindowResize() {
   rendererFront.setSize(w, h);
 
   const isMob = checkIsMobile();
-  snitches.forEach((s) => {
-    if (isMob && s.radiusBase !== 'large') {
-      s.radius = s.isHero ? 6.8 : 4.5 + Math.random() * 5;
+  snitches.forEach((s, i) => {
+    if (isMob) {
+      s.radius = s.isHero ? 3.0 : 2.8 + (i % 2) * 0.4;
       s.radiusBase = 'large';
-    } else if (!isMob && s.radiusBase !== 'small') {
-      s.radius = s.isHero ? 3.5 : 2.5 + Math.random() * 3;
+    } else {
+      // ▼▼▼ 電腦版縮放後距離 (建議跟下面的設定保持一致) ▼▼▼
+      s.radius = s.isHero ? 1.8 : 1.6 + (i % 2) * 0.4;
       s.radiusBase = 'small';
     }
   });
@@ -390,10 +404,21 @@ function onWindowResize() {
   updateDockedSnitchLock();
 }
 
+// ★★★ 新增：控制軌道傾斜程度的常數 ★★★
+// 數字越大，傾斜越明顯（後方越高，前方越低）。試試看 0.3 到 0.6 之間的值。
+const ORBIT_TILT = 0.3; 
+
 function animate() {
   animationId = requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
-  const u = Math.min(1, t / 1.5);
+
+  // 1. 修改動畫時間：從 1 秒改成 3 秒 (t / 3)，這樣才看得清楚螺旋過程
+  const duration = 1.0; 
+  const u = Math.min(1, t / duration);
+
+  // Easing 函數：控制擴散的加速度
+  // easeOutCubic 會讓它一開始衝很快，後面慢下來。
+  // 如果想要螺旋更均勻，可以改用 easeOutQuad 或甚至 linear ( x => x )
   const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 
   snitches.forEach((s, idx) => {
@@ -408,6 +433,7 @@ function animate() {
       return;
     }
 
+    // 拖曳邏輯
     if (isDragging && draggedSnitchIdx === idx) {
       const dragFlap = Math.sin(t * 37 + s.phase) * 0.84;
       s.wings[0].rotation.z = -0.5 + dragFlap;
@@ -418,24 +444,48 @@ function animate() {
       return;
     }
 
-    const extraAngle = u < 1 ? -2.3 * Math.PI * 2 * (1 - u) : 0;
+    // ★★★ 修改重點 1：螺旋角度計算 ★★★
+    // 原始代碼是 -2.3 * ...，我們改成 -6.0 (代表多轉 6 圈)
+    // 數字越大，螺旋越密；數字越小，越像直接炸開
+    const spiralRotations = 2.0; 
+    const extraAngle = u < 1 ? -spiralRotations * Math.PI * 2 * (1 - easeOutCubic(u)) : 0;
+    
     const baseAngle = t * s.speed + s.phase;
+    
+    // 將螺旋角度疊加到基礎角度上
     const angle = baseAngle + extraAngle;
-    const rNow =
-      s.radius * easeOutCubic(u) + Math.sin(t * 0.3 + idx) * 0.2 * u;
-    const x = rNow * Math.cos(angle) * Math.cos(s.inclination);
-    const z = rNow * Math.sin(angle) * Math.cos(s.inclination);
-    const y =
-      Math.sin(angle * 1.2 + s.phase) * s.yAmp * u +
-      Math.sin(t * 0.5 + idx) * 0.1 * u;
+    
+    // 計算當前半徑 (從 0 到 最終半徑)
+    const rNow = s.radius * easeOutCubic(u);
+    
+    // 1. 計算基礎水平面 (XZ平面) 上的圓周運動座標
+    const xBase = rNow * Math.cos(angle);
+    const zBase = rNow * Math.sin(angle);
+
+    // 2. 根據深度 (Z) 來計算傾斜高度 (Y)
+    // 這是上一版加的傾斜邏輯，螺旋時也會生效，會變成「傾斜的螺旋」
+    const tiltY = -zBase * ORBIT_TILT;
+
+    // 3. 自然波動
+    const naturalWaveY = Math.sin(angle * 1.2 + s.phase) * (s.yAmp * 0.3) * u;
+    const randomFloatY = Math.sin(t * 0.5 + idx) * 0.1 * u;
+
+    // 4. 組合最終座標
+    const x = xBase;
+    const z = zBase;
+    const y = tiltY + naturalWaveY + randomFloatY;
+
     s.group.position.set(x, y, z);
     s.group.lookAt(0, 0, 0);
 
+    // 翅膀拍動動畫
     const flap = Math.sin(t * s.flapSpeed + s.phase) * 0.5;
     s.wings[0].rotation.z = -0.5 + flap * 0.6;
     s.wings[1].rotation.z = 0.5 - flap * 0.6;
     s.wings[0].rotation.x = Math.cos(t * s.flapSpeed) * 0.15;
     s.wings[1].rotation.x = Math.cos(t * s.flapSpeed) * 0.15;
+    
+    // 判斷是否在前景 (Z > 0)
     s.isFront = s.group.position.z > 0;
   });
 
@@ -523,7 +573,7 @@ onUnmounted(() => {
   window.removeEventListener('mousemove', onMouseMoveHover);
 });
 
-// --- Setup Snitches (保持不變) ---
+// --- Setup Snitches (已修改邏輯) ---
 function initSnitches(loader) {
   const ballMaterial = new THREE.MeshStandardMaterial({
     color: 0xffd27f,
@@ -734,6 +784,9 @@ function initSnitches(loader) {
     },
   ];
 
+  // 計算每個金探子之間的間隔角度 (360度 / 數量)
+  const angleStep = (Math.PI * 2) / snitchCount;
+
   for (let i = 0; i < snitchCount; i++) {
     const isHero = i === 0;
     let linkData = null;
@@ -744,21 +797,30 @@ function initSnitches(loader) {
     const snitch = createSnitch(isHero, linkData);
 
     let radius;
-    if (isMobile) radius = isHero ? 6.8 : 4.5 + Math.random() * 5.0;
-    else radius = isHero ? 3.5 : 2.5 + Math.random() * 3.0;
+    if (isMobile) {
+      // 手機版：半徑縮小
+      radius = isHero ? 3.0 : 2.8 + (i % 2) * 0.4;
+    } else {
+      // ▼▼▼ 電腦版：半徑縮小，靠近 Logo (這裡設定初始值) ▼▼▼
+      radius = isHero ? 4 : 3.8 + (i % 2) * 0.4;
+    }
+
+    // 計算均分角度，確保完全分開不重疊
+    const fixedPhase = i * angleStep;
 
     snitches.push({
       group: snitch.group,
       wings: snitch.wings,
       heroLight: snitch.heroLight,
       radius,
-      speed: isHero ? 0.3 : 0.2 + Math.random() * 0.25,
+      // ▼▼▼ 統一速度，避免追撞 (可調整) ▼▼▼
+      speed: 0.3,
       flapSpeed: isHero ? 12 : 10 + Math.random() * 5,
-      inclination: isHero
-        ? 0.12
-        : THREE.MathUtils.degToRad(-30 + Math.random() * 60),
-      phase: isHero ? Math.PI * 1.2 : Math.random() * Math.PI * 2,
-      yAmp: isHero ? 0.64 : 0.4 + Math.random() * 0.6,
+      // 軌道平緩，形成圓環狀
+      inclination: 0.1 + (i % 2) * 0.05,
+      // 使用均分角度
+      phase: fixedPhase,
+      yAmp: 0.2,
       isFront: false,
       isDocked: false,
       lockedPosition: null,
@@ -778,7 +840,6 @@ function initSnitches(loader) {
   position: relative;
   overflow: hidden;
   touch-action: none;
-  margin-top: -100px;
   background: radial-gradient(circle at center, #1b2940 0%, #050810 100%);
 }
 canvas {

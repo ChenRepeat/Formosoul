@@ -119,18 +119,13 @@ const router = createRouter({
       name: 'Classes',
       component: Classes,
     },
+    
     {
       path: '/member',
       name: 'Member',
-      component: Member,
-    },
-
-    {
-      path: '/policy',
-      name: 'Policy',
       // 重新導向 能夠讓點入頁面時導向另一個網址
-      redirect: '/policy/information',
-      component: Policy,
+      redirect: '/member/information',
+      component: Member,
       children: [
         { path: 'information', component: Information },
         { path: 'changepassword', component: Changepassword },
@@ -144,6 +139,12 @@ const router = createRouter({
         { path: 'coupons', component: Coupons },
         { path: 'orderscontain', component: MemberOrderscontain }
       ],
+    },
+    
+    {
+      path: '/policy',
+      name: 'Policy',
+      component: Policy,
     },
   ],
 })

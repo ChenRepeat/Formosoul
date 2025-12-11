@@ -79,7 +79,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { inject, ref } from 'vue';
 
-const setCurrentView = inject('setCurrebtView');
+const setCurrentView = inject('setCurrentView');
 const setSharedEmail = inject('setEnrollmentEmail');
 const authStore = useAuthStore();
 
@@ -160,7 +160,7 @@ async function startCountdown() {
         errorMessage.value = error.message || 'Failed to send OTP';
         otpLoading.value = false;
     }
-    // 要有倒數計時就不能用用統一個finally
+    // 要有倒數計時就不能用用統一個 finally 因為 finally 一定會執行 
     // finally{
     //     otpLoading.value = false;
     // }
