@@ -5,13 +5,13 @@
             </div>
             <div class="orders">
                 <div class="title-orders">
-                    <span>Number</span>
-                    <span>Date</span>
-                    <span>Prices</span>
-                    <span>Payment</span>
-                    <span>Status</span>
-                    <span>Shipping</span>
-                    <span>Detail</span>
+                    <p>Number</p>
+                    <p>Date</p>
+                    <p>Prices</p>
+                    <p>Payment</p>
+                    <p>Status</p>
+                    <p>Shipping</p>
+                    <p>Detail</p>
                 </div>
                 <hr class="title-orders-line">
                 
@@ -100,7 +100,7 @@ const goToPage = (pageNumber) => {
         margin: 0 auto;
         font-weight: bold;
     }
-    .title-orders  > span{
+    .title-orders  > p{
         width: 160px;
         display: flex;
         justify-content: center;

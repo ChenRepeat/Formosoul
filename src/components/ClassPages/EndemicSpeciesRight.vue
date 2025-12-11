@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref, Transition } from 'vue';
+  import { computed, ref} from 'vue';
   import { usePageNavigation } from './goToPage';
   
 
@@ -14,13 +14,13 @@
         <div class="animal-photo-case">
           <img src="../../../public/Classes/Salamander.png" alt="" class="salamander">
         </div>
-        <div class="animal-topic-text dp-flex-col">
+        <div class="animal-topic-text dp-flex-col top">
           <P class="animal-topic-title">Formosan Salamander</P>
           <p>A rare high-altitude amphibian found in cold mountain streams, sensitive to habitat changes.</p>
         </div>
       </div>
       <div class="animal-bottom-topic dp-flex">
-        <div class="animal-topic-text dp-flex-col">
+        <div class="animal-topic-text dp-flex-col buttom">
           <p class="animal-topic-title">Taiwan Blue Magpie</P>
           <p>A striking blue bird with a long tail and cooperative family groups, often called “long-tailed mountain lady.”</p>
         </div>
@@ -43,21 +43,41 @@
       height: 100%;
       border-radius: 8px;
       position: absolute;
-      top: 0;left: 0;
+      box-shadow: 6px 6px 12px $color-fsTitle;
+    }
+    .salamander{
+      top: -25%;
+      left: -10%;
+      transform: rotate(10deg);
+    }
+    .blue-bird{
+      top: 15%;
+      left: 15%;
+      transform: rotate(-15deg);
     }
   }
   .animal-topic-text{
     text-align: left;
     width: 38%;
     justify-content: end;
+    &.buttom{
+      padding-left: 6%;
+    }
+    &animal-topic-text.top{
+      padding-right: 6%;
+    }
   }
   p{
     line-height: 2;
     color: $color-fsContent;
+    hyphens:auto;
+    word-break: break-all;
   }
   .animal-topic-title{
     color: $color-fsTitle;
   }
+  
+ 
   @keyframes drive{
     0% {
       right: -169px;

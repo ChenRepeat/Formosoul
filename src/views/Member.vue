@@ -1,4 +1,14 @@
+<script setup lang="ts">
+import MemberPagebutton from '@/components/Member/MemberPagebutton.vue';
+import { ref } from 'vue';
+
+
+</script>
+
 <template>
+
+    <MemberPagebutton />
+    <!-- <Backgroundaction></Backgroundaction> -->
 
 </template>
 
@@ -10,4 +20,8 @@
     align-items: center;
   }
 }
+
+
+
+
 </style>

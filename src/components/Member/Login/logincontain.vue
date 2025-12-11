@@ -39,7 +39,9 @@
         </div>
         <div v-if="errorMessage" class="error-message"><h6>{{ errorMessage }}</h6></div>
         <div class="login-bottom">
-            <p>* If your memory has been tampered with by a Memory Charm, click here:<a href="/forgot-password" class="bottom-link">ForgetPassword?</a></p>
+            <p>
+                * If your memory has been tampered with by a Memory Charm, click here:<a @click="hanldeForgetpassword" class="bottom-link">ForgetPassword?</a>
+            </p>
         </div>
         <BasicButton
         class="btn-yellow-fill"
@@ -56,12 +58,13 @@
 <script setup >
 import BasicButton from '@/components/BasicButton.vue';
 import { useAuthStore } from '@/stores/autoStore';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const authStore = useAuthStore();
-
-const email = ref('');
+const sharedEmail = inject('sharedEmail');
+const currentView = inject('setCurrebtView');
+const email = ref(sharedEmail?.value || '');
 const password = ref('');
 const isLoading = ref(false);
 const errorMessage = ref('');
@@ -71,7 +74,7 @@ async function loginAPI(email, password) {
     // 測試 isLoading 的效果
     await new Promise(resolve => setTimeout(resolve, 1500));
     // 暫時模擬登入
-    if (email === 'test@test.com' && password === '123456') {
+    if (email === 'test@test.com' && password === 'As345678') {
         // 回傳 JSON
         return {
             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
@@ -131,17 +134,26 @@ async function handleLogin() {
     errorMessage.value = ''
 
     try {
-        const response = await loginAPI(email.value, password.value)
-    
+        const response = await loginAPI(email.value, password.value);
+        
         // 這邊就保存到 store
         authStore.setToken(response.token)
         authStore.setUser(response.user)
+        authStore.closeLoginModal();
     } catch (error) {
         errorMessage.value = error.message || 'Login failed,Please tryagain'
     } finally{
         isLoading.value = false
+
     }
 }
+
+async function hanldeForgetpassword(){
+    console.log('忘記了');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    currentView('forgetpassword');
+
+};
 
 function handleKeyDown( e ) {
     if (e.key === 'Enter' && !isLoading.value) {
@@ -158,8 +170,12 @@ function togglePassword() {
 <style lang="scss" scoped>
     .login-form{
         width: 70%;
-        margin: 0 auto;
         padding: 40px;
+        height: 544px;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); 
         
 
     }
@@ -220,6 +236,7 @@ function togglePassword() {
     .login-bottom > p > a{
         text-decoration: none;
         color: $color-fsBlue900;
+        cursor: pointer;
 
     }
     .login-bottom > p{

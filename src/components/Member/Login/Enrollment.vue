@@ -77,9 +77,10 @@
 import BasicButton from '@/components/BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 
-
+const setCurrentView = inject('setCurrebtView');
+const setSharedEmail = inject('setEnrollmentEmail');
 const authStore = useAuthStore();
 
 const email = ref('');
@@ -117,7 +118,7 @@ async function enrollmentAPI(email, password, otp) {
                 name: '新註冊用戶',
                 email: 'test@test.com'
             },
-            message: '註冊成功'
+            message: '註冊成功',
         }
     }else{
         throw new Error('註冊失敗');
@@ -202,6 +203,9 @@ async function handleEnrollment() {
         const response = await enrollmentAPI(email.value, password.value, otp.value);
         authStore.setToken(response.token);
         authStore.setUser(response.user);
+        // 這邊寫成跳到登入頁面 成功才會執行
+        setCurrentView('login');
+        setSharedEmail(email.value);
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';
     }finally {
@@ -223,8 +227,12 @@ function togglePassword() {
 <style lang="scss" scoped>
     .login-form{
         width: 70%;
-        margin: 0 auto;
         padding: 40px;
+        height: 544px;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); 
     }
 
     .form-group{

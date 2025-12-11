@@ -1,5 +1,6 @@
 <script setup>
   import { computed, ref, Transition } from 'vue';
+import IconFomobear from '../icons/SVG/IconFomobear.vue';
 
   const zi10 = ref(1);
   const dialogs = {
@@ -42,8 +43,14 @@
           alt="" 
           class="animal-photo"
           >
-        <div class="over-lay"></div>
-      </div>
+          <div class="over-lay"></div>
+          <div class="icon-animation-case">
+            <IconFomobear  
+            class="icon-bear"
+            size="48" 
+            :class="{'op': zi10 !== 1,}"/>  
+          </div>
+        </div>
       <div 
         class="animal-locate-case left-2"
         :class="{'zi10': zi10 == 2,}"
@@ -101,7 +108,7 @@
     transition: opacity 0.3s ease;
     z-index: -10;
   }
-  .op .red{
+  .op{
     opacity: 0;
   }
   .animal-contain{
@@ -118,8 +125,7 @@
     position: absolute;
     transition: transform 0.3s ease, z-index 0.3s, box-shadow 0.3s;
     border-radius: 20px;
-    overflow: hidden;
-
+    border-radius: 16px;
   }
 
   .animal-photo{
@@ -129,7 +135,32 @@
 
 
   }
+  .icon-animation-case{
+    position: absolute;
+    animation: 10s run 0.5s linear infinite,
+  }
+  .icon-bear{
+    animation: 
+     0.5s roll 0.5s linear infinite,
+     ;}
 
+  @keyframes run{
+    0% {top: -48px;left: -48px;transform: rotate(0);}
+    24%{top: -48px;left: 300px;transform: rotate(0deg);}
+    25% {top: -48px;left: 300px;transform: rotate(90deg);}
+    49% {top: 300px;left: 300px;transform: rotate(90deg);}
+    50% {top: 300px;left: 300px;transform: rotate(180deg);}
+    74% {top: 300px;left: -48px;transform: rotate(180deg);}
+    75% {top: 300px;left: -48px;transform: rotate(270deg);}   
+    98% {top: -48px;left: -48px;transform: rotate(270deg);}   
+    99% {top: -48px;left: -48px;transform: rotate(360deg);}
+    100% {top: -48px;left: -48px;transform: rotate(360deg);}
+  }
+  @keyframes roll{
+    0% {transform: rotate(12deg);}
+    50% {transform: rotate(28deg);}
+    100% {transform: rotate(12deg);}
+  }
   .over-lay{
     position: absolute; 
     top: 0;
@@ -184,6 +215,7 @@
   p{
     color: $color-fsContent;
     line-height: 2;
+    
   }
 .fade-enter-active,.fade-leave-active {
   transition: opacity 0.2s ease;

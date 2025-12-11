@@ -69,20 +69,19 @@
 
       <div class="page">
         <div class="page-content">
-          <HistoryOfMagicIndex />
+          <HistoryOfMagicIndex @flip="goToPage"/>
         </div>
       </div>
 
       <div class="page">
-        <div class="page-content image-page">
-           <img src="https://picsum.photos/300/400?grayscale" alt="Old Library" />
+        <div class="page-content">
+           <NewYearLeft @flip="goToPage"/>
         </div>
       </div>
 
       <div class="page">
-        <div class="page-content equipment-page">
-           
-          
+        <div class="page-content">
+           <NewYearRight @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -99,10 +98,9 @@
         <ClassPageIndex @flip="goToPage"/>
       </div>
       </div>
-            <div class="page">
-      <div class="page-content">
-
-      </div>
+      <div class="page">
+        <div class="page-content">
+        </div>
       </div>
       <div class="page cover">
         <div class="page-content">
@@ -127,6 +125,8 @@ import BikeRule from '@/components/ClassPages/BikeRule.vue';
 import HistoryOfMagicIndex from '@/components/ClassPages/HistoryOfMagicIndex.vue';
 import EndemicSpeciesLeft from '@/components/ClassPages/EndemicSpeciesLeft.vue';
 import EndemicSpeciesRight from '@/components/ClassPages/EndemicSpeciesRight.vue';
+import NewYearLeft from '@/components/ClassPages/NewYearLeft.vue';
+import NewYearRight from '@/components/ClassPages/NewYearRight.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動

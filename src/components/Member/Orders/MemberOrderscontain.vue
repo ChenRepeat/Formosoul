@@ -5,14 +5,14 @@
             <h3>Orders Information</h3>
         </div>
         <div v-for="order in orders" :key="order.id" class="orders-information">
-            <span>Order Number: {{ order.number }}</span>
-            <span>Order Date: {{ order.date }}</span>
-            <span>Order Status: {{ order.status }}</span>
-            <span>Recipient's Name: {{ order.name }}</span>
-            <span>Delivery method: {{ order.shipping }}</span>
-            <span>pieces: {{ order.pieces }}</span>
-            <span>address: {{ order.address }}</span>
-            <span>Remark: {{ order.remark }}</span>
+            <p>Order Number: {{ order.number }}</p>
+            <p>Order Date: {{ order.date }}</p>
+            <p>Order Status: {{ order.status }}</p>
+            <p>Recipient's Name: {{ order.name }}</p>
+            <p>Delivery method: {{ order.shipping }}</p>
+            <p>pieces: {{ order.pieces }}</p>
+            <p>address: {{ order.address }}</p>
+            <p>Remark: {{ order.remark }}</p>
         </div>
         <div class="detailbar">
             <h3>Payment Information</h3>
@@ -123,9 +123,6 @@ import BasicButton from '@/components/BasicButton.vue';
         
     }
 
-    .orders-information > span{
-        font-size: 16px;
-    }
 
     .orders-product{
         display: flex;
@@ -139,6 +136,7 @@ import BasicButton from '@/components/BasicButton.vue';
         height: 180px;
         object-fit: contain;
     }
+    
     .orders-product > span{
         display: flex;
         justify-content: center;
@@ -173,7 +171,7 @@ import BasicButton from '@/components/BasicButton.vue';
         justify-content: space-between;
     }
 
-    .total > span> h6{
+    .total > span > h6{
         display: flex;
         align-items: center;
         justify-content: center;

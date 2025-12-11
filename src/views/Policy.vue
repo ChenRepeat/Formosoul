@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Backgroundaction from '@/components/backgroundaction.vue';
+
 import MemberPagebutton from '@/components/Member/MemberPagebutton.vue';
-import { ref } from 'vue';
+
 
 
 </script>
@@ -9,7 +9,6 @@ import { ref } from 'vue';
 <template>
 
     <MemberPagebutton />
-    <!-- <Backgroundaction></Backgroundaction> -->
 
 </template>
 

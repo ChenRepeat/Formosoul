@@ -1,9 +1,10 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router';
 import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
 import siteLogo from '@/assets/logo_white.svg'; 
+import Popup from './components/popup.vue';
 
 </script>
 
@@ -12,8 +13,8 @@ import siteLogo from '@/assets/logo_white.svg';
     <TheHeader />
     <main class="content">
       <a href="/"><img :src="siteLogo" alt="SiteLogo" class="site-logo"/></a>
-    <RouterView />
-    <loginpage></loginpage>
+      <RouterView />
+      <Popup></Popup>
     </main>
     <TheFooter />
   </div>

@@ -1,15 +1,15 @@
 <template>
         <div v-for="order in calorderpage" :key="order.id" class="orders-contain">
-            <span>{{ order.number }}</span> 
-            <span>{{ order.date }}</span>
-            <span>{{ order.prices }}</span>
-            <span>{{ order.payment }}</span>
-            <span>{{ order.status }}</span>
-            <span>{{ order.shipping }}</span>
+            <P>{{ order.number }}</p> 
+            <P>{{ order.date }}</p>
+            <P>{{ order.prices }}</p>
+            <P>{{ order.payment }}</p>
+            <P>{{ order.status }}</p>
+            <P>{{ order.shipping }}</p>
             <!-- 換成p -->
-            <span>
+            <p>
                 <basic-button class="btn-yellow-fill"><router-link to="/policy/orderslist/orderscontain">Check</router-link></basic-button>
-            </span>
+            </p>
         </div>
 
 </template>
@@ -154,7 +154,7 @@
         border-bottom: 1px solid #e0e0e0;
         flex-shrink: 1;
     }
-    .orders-contain > span{
+    .orders-contain > p{
         width: 160px;
         display: inline-flex;
         justify-content: center;
