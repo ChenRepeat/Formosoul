@@ -1,7 +1,9 @@
 <script setup>
-    import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
-    import { ref, onMounted, onUnmounted, computed } from 'vue'
-    import { useRouter } from "vue-router";
+import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
+import SurvivalFoodIntroductionFrame from "../SurvivalFoodIntroductionFrame.vue";
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRouter } from "vue-router";
+
 
 // 路由
 const router = useRouter();
@@ -9,7 +11,7 @@ const router = useRouter();
 // 定義 hover 狀態
 const isHover = ref(null)
 
-// 引用 text frames 資料
+// ==================== 引用 text frames 資料 ==================== 
 const nmFrames = ref([
     {
     id:'prok-rice',
@@ -77,6 +79,37 @@ const diceFrame = computed (()=> nmFrames.value[6]);
 const prawningFrame = computed (()=> nmFrames.value[7]);
 const ringFrame = computed (()=> nmFrames.value[8]);
 
+
+// ==================== 引用 food introduction frames 資料 ==================== 
+
+const isShowFoodIntroduction = ref(false);
+
+const nmfFrames = ref([
+    {
+    id:'food-introduction-rice',
+    mainImg: '/SurvivalGuide/rice1.jpg',
+    title: 'Braised pork rice',
+    subTitle: '(Lu Rou Fan)',
+    text:'Lu rou fan, or braised pork rice, is a popular Taiwanese comfort food made from minced or finely chopped pork belly slowly braised in a savory and slightly sweet soy sauce–based gravy with garlic, shallots, five-spice powder, and Shaoxing rice wine. The pork is cooked until tender and flavorful, then served over hot steamed white rice, creating a rich and satisfying meal loved across Taiwan. This dish is simple yet deeply aromatic, with a balance of salty, sweet, and umami flavors that make it a staple in Taiwanese cuisine.',
+    subImg1: '/SurvivalGuide/rice2.jpg',
+    subImg2:'/SurvivalGuide/rice3.jpg',
+    },
+    {
+    id:'food-introduction-rice',
+    mainImg: '/SurvivalGuide/rice1.jpg',
+    title: 'Braised pork rice',
+    subTitle: '(Lu Rou Fan)',
+    text:'Lu rou fan, or braised pork rice, is a popular Taiwanese comfort food made from minced or finely chopped pork belly slowly braised in a savory and slightly sweet soy sauce–based gravy with garlic, shallots, five-spice powder, and Shaoxing rice wine. The pork is cooked until tender and flavorful, then served over hot steamed white rice, creating a rich and satisfying meal loved across Taiwan. This dish is simple yet deeply aromatic, with a balance of salty, sweet, and umami flavors that make it a staple in Taiwanese cuisine.',
+    subImg1: '/SurvivalGuide/rice2.jpg',
+    subImg2:'/SurvivalGuide/rice3.jpg',
+    },
+
+])
+
+const riceIntroductionFrame = computed(()=> nmfFrames.value[0])
+const tofuIntroductionFrame = computed(()=> nmfFrames.value[1])
+
+
 </script>
 
 <template>
@@ -85,6 +118,7 @@ const ringFrame = computed (()=> nmFrames.value[8]);
                 <img class='survival-night-market-case-map' src="/SurvivalGuide/night_market_map_bg-min-no-logo.png" alt="map-base">
 
                 <!-------------------------- 夜市美食區塊 ---------------------------->
+                <!-------------------------- 滷肉飯 ---------------------------->
                 <div class="stall-wrapper-pork-rice" @mouseenter="isHover = 'pork'" @mouseleave="isHover = null" 
                     :class="{'nm-is-active': isHover == 'pork',}">
                     <img class="stall-pork-rice" src="/SurvivalGuide/rice-mask-group.png" alt="braised-pork-stall">
@@ -95,12 +129,28 @@ const ringFrame = computed (()=> nmFrames.value[8]);
                         :height="riceFrame.height"
                         tag="h5"
                         align="center"
-                        @click="goNightMarketMap">
+                        @click="isShowFoodIntroduction =true">
                     <template #textButton>
                         CLICK
                     </template>
                     </SurvivalTextFrame>
                 </div>
+                <!-------------------------- 彈窗 滷肉飯 美食介紹 區塊 (用組件做) ---------------------------->
+                <div>
+                    <SurvivalFoodIntroductionFrame class="food-introduction-frame-rice"
+                    v-if="isShowFoodIntroduction"
+                    @close="isShowFoodIntroduction = false"
+                    :mainImg="riceIntroductionFrame.mainImg"
+                    :title="riceIntroductionFrame.title"
+                    :subTitle="riceIntroductionFrame.subTitle"
+                    :text="riceIntroductionFrame.text"
+                    :subImg1="riceIntroductionFrame.subImg1"
+                    :subImg2="riceIntroductionFrame.subImg2"
+                    ></SurvivalFoodIntroductionFrame>
+                </div>
+                    <!-- :style="{'opacity': 0}", -->
+
+                <!-------------------------- 珍珠奶茶 ---------------------------->
                 <div class="stall-wrapper-bubble-tea" @mouseenter="isHover = 'bubble'" @mouseleave="isHover = null"
                      :class="{'nm-is-active': isHover == 'bubble' }">
                     <img class="stall-bubble-tea" src="/SurvivalGuide/bubble-mask-group.png" alt="bubble-tea">
@@ -240,12 +290,8 @@ const ringFrame = computed (()=> nmFrames.value[8]);
                     </template>
                     </SurvivalTextFrame>  
                 </div> 
-
-
             </div>
-
         </main>
-
 </template>
 
 
@@ -687,8 +733,5 @@ const ringFrame = computed (()=> nmFrames.value[8]);
     pointer-events: auto; 
     transform: translate(-180%, -220%);
 }
-
-
-
 
 </style>
