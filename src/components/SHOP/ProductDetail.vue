@@ -1,6 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '../BasicButton.vue';
+import { RouterLink } from 'vue-router';
 
 </script>
 
@@ -8,7 +9,7 @@ import BasicButton from '../BasicButton.vue';
     <!-- 麵包屑 -->
     
     <h6 class="page-guide">
-        All Product 
+        <RouterLink class="page-guide-text" to="/shop">All Product </RouterLink>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
         Traditional Toys
         <font-awesome-icon icon="fa-solid fa-angle-right" />
@@ -86,6 +87,10 @@ import BasicButton from '../BasicButton.vue';
         </section>
     </div>
 
+    <BasicButton class="btn-white">    
+        Back to Shop
+    </BasicButton>
+
 
 
 </template>
@@ -95,6 +100,12 @@ import BasicButton from '../BasicButton.vue';
 // 麵包屑
 .page-guide{
   padding-bottom: 60px;
+}
+
+.page-guide-text{
+    color: $color-fsWhite;
+    text-decoration: none;
+    border-bottom: 1px solid $color-fsWhite;
 }
 
 .detail-dock{
@@ -247,6 +258,13 @@ import BasicButton from '../BasicButton.vue';
 
 .detail-secondary>p{
     padding-top: 60px;
+}
+
+
+// 回shop btn
+.btn-white{
+    margin: 60px auto 0;
+    display: block;
 }
 
 </style>
