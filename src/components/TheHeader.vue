@@ -14,7 +14,10 @@ function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
 function toggleLang(){
-  isEnglish.value = !isEnglish.value
+  isEnglish.value = !isEnglish.value;
+}
+function closeBurger(){
+  isMenuOpen.value = false;
 }
 
 function handleUserIconClick( e ){
@@ -52,7 +55,7 @@ function handleUserIconClick( e ){
           <a href="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
           <!-- <a href="/member"></a> -->
           <button @click="handleUserIconClick">
-            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon"/>
+            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="closeBurger"/>
           </button>
           <div class="transition hamburger-btn dp-flex-col" 
                @click="toggleMenu"
