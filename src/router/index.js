@@ -126,6 +126,9 @@ const router = createRouter({
       // 重新導向 能夠讓點入頁面時導向另一個網址
       redirect: '/member/information',
       component: Member,
+      meta:{ 
+        logo: '/src/assets/logo_black.svg',
+      },
       children: [
         { path: 'information', component: Information },
         { path: 'changepassword', component: Changepassword },
@@ -145,6 +148,9 @@ const router = createRouter({
       path: '/policy',
       name: 'Policy',
       component: Policy,
+      meta:{ 
+        logo: '/src/assets/logo_black.svg',
+      },
     },
   ],
 })
