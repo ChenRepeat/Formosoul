@@ -157,7 +157,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // 玩遊戲的btn
 .night-market-button {
-    color: #000;
+    color: $color-fsTitle;
     margin-top: 20px; 
     padding: 8px 40px;
     font-size: 16px;
