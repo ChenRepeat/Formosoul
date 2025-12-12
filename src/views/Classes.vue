@@ -106,7 +106,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <ClassPageIndex @flip="goToPage"/>
+          <CharmLeft @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -152,6 +152,7 @@ import MoonFesRight from '@/components/ClassPages/MoonFesRight.vue';
 import DuanOoLeft from '@/components/ClassPages/DuanOoLeft.vue';
 import DuanOoRight from '@/components/ClassPages/DuanOoRight.vue';
 import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
+import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動

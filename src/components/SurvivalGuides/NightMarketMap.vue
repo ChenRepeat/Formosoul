@@ -3,7 +3,8 @@ import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
 import SurvivalFoodIntroductionFrame from "../SurvivalFoodIntroductionFrame.vue";
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from "vue-router";
-
+import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarketData.js";
+import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 
 // 路由
 const router = useRouter();
@@ -11,178 +12,52 @@ const router = useRouter();
 // 定義 hover 狀態
 const isHover = ref(null)
 
-// ==================== 引用 text frames 資料 ==================== 
-const nmFrames = ref([
-    {
-    // index 0
-    id: 'rice',
-    text: 'Food: \n Braised Pork Rice',
-    width: '200px',
-    height: 'auto',
-    },
-    {
-    // index 1
-    id: 'tofu',
-    text: 'Food: \n Sticky tofu',    
-    width: '200px',
-    height: 'auto',  
-    },
-    {
-    // index 2
-    id: 'bubble',
-    text: 'Food: \n Bubble tea',
-    width: '200px',
-    height: 'auto',   
-    },
-    {
-    // index 3
-    id: 'sausage',
-    text: 'Food: \n Taiwanese sausage with sticky rice',    
-    width: '200px',
-    height: 'auto',       
-    },
-    {
-    // index 4
-    id: 'oil',
-    text: 'Food: \n Scallion pancake',
-    width: '200px',
-    height: 'auto',    
-    },
-    {
-    // index 5
-    id: 'fried-chicken',
-    text: 'Food: \n Fried chicken cutlet',    
-    width: '200px',
-    height: 'auto',          
-    },
-    {
-    // index 6
-    id: 'game-dice',
-    text: 'Game: \n Dice',    
-    width: '200px',
-    height: 'auto',          
-    },
-    {
-    // index 7
-    id: 'game-prawning',
-    text: 'Game: \n Prawning',    
-    width: '200px',
-    height: 'auto',          
-    },
-    {
-    // index 8
-    id: 'game-ring-toss',
-    text: 'Game: \n Ring toss',    
-    width: '200px',
-    height: 'auto',          
-    },    
-])
+// ==================== 從js引入 text frames 資料 ==================== 
+const nmFrames = ref(popupFrames);
 
-// ==================== 引用 food introduction frames 資料 ==================== 
+// ==================== 從js引入 food introduction frames 資料 ==================== 
+const nmfFrames = ref(infoFrames);
 
-const currentFoodData = ref(null);
+// ==================== 控制介紹彈窗的資訊，要抓index ====================
+const currentInfoData = ref(null);
 
-const nmfFrames = ref([
-    {
-    id:'food-introduction-rice',
-    mainImg: '/SurvivalGuide/rice1.jpg',
-    title: 'Braised Pork Rice',
-    subTitle: '(Lu Rou Fan)',
-    text:'Lu rou fan, or braised pork rice, is a popular Taiwanese comfort food made from minced or finely chopped pork belly slowly braised in a savory and slightly sweet soy sauce–based gravy with garlic, shallots, five-spice powder, and Shaoxing rice wine. The pork is cooked until tender and flavorful, then served over hot steamed white rice, creating a rich and satisfying meal loved across Taiwan. This dish is simple yet deeply aromatic, with a balance of salty, sweet, and umami flavors that make it a staple in Taiwanese cuisine.',
-    subImg1: '/SurvivalGuide/rice2.jpg',
-    subImg2:'/SurvivalGuide/rice3.jpg',
-    },
-    {
-    id:'food-introduction-tofu',
-    mainImg: '/SurvivalGuide/tofu1.jpg',
-    title: 'Sticky Tofu',
-    subTitle: '(Chou Dou Fu)',
-    text:"Stinky Tofu is one of Taiwan's most iconic and famous street foods, known for its unique characteristic: 'the stronger the smell, the better the taste.' Made from fermented bean curd, it is typically deep-fried until the skin is golden and crispy, while the inside remains soft and juicy. It is best enjoyed with a side of sweet and sour pickled cabbage and a splash of garlic soy sauce. For travelers, trying Stinky Tofu is the ultimate challenge and a true taste of Taiwanese night market culture.",
-    subImg1: '/SurvivalGuide/tofu2.jpg',
-    subImg2:'/SurvivalGuide/tofu3.jpg',
-    },
-    {
-    id:'food-introduction-bubble-tea',
-    mainImg: '/SurvivalGuide/bubble_tea1.png',
-    title: 'Bubble Tea',
-    subTitle: '(Boba Tea)',
-    text:"Bubble Tea, also known as Pearl Milk Tea, is Taiwan's most iconic beverage that has taken the world by storm. It perfectly blends rich, creamy milk tea with chewy tapioca pearls, known locally as 'boba.' The unique combination of the smooth tea and the springy texture of the pearls creates a delightful experience in every sip. Whether served ice-cold or warm, it is the ultimate symbol of Taiwanese innovations in tea culture.",
-    subImg1: '/SurvivalGuide/bubble_tea2.jpg',
-    subImg2:'/SurvivalGuide/bubble_tea3.jpg',
-    },
-    {
-    id:'food-introduction-sausage',
-    mainImg: '/SurvivalGuide/sausage1.jpg',
-    title: 'Taiwanese Sausage With Sticky Rice',
-    subTitle: '(Taiwanese Hot Dog)',
-    text:"Known as the 'Taiwanese Hot Dog,' this snack features a juicy pork sausage wrapped inside a chewy sticky rice 'bun.' Stuffed with garlic, pickled vegetables, and soy paste, it delivers a perfect mix of textures—crispy skin, tender meat, and soft rice—creating a unique savory and sweet flavor.",
-    subImg1: '/SurvivalGuide/sausage2.jpg',
-    subImg2:'/SurvivalGuide/sausage3.jpg',
-    },
-    {
-    id:'food-introduction-oil',
-    mainImg: '/SurvivalGuide/oil1.jpg',
-    title: 'Scallion Pancake',
-    subTitle: '(Green Onion Pancake)',
-    text:"Scallion Pancakes are a beloved Taiwanese street snack known for their crispy, flaky layers. Made from dough folded with oil and fresh green onions, they are pan-fried until golden brown. Whether eaten plain or topped with an egg and soy paste, they offer a savory, aromatic bite with a satisfyingly chewy texture.",
-    subImg1: '/SurvivalGuide/oil2.jpg',
-    subImg2:'/SurvivalGuide/oil3.jpg',
-    },
-    {
-    id:'food-introduction-chicken',
-    mainImg: '/SurvivalGuide/chicken1.jpg',
-    title: 'Fried Chicken Cutlet',
-    subTitle: '(Taiwanese Fried Chicken)',
-    text:"Famous for its massive size—often bigger than a human face—the Taiwanese Fried Chicken Cutlet is the king of night market snacks. The chicken breast is flattened, battered, and deep-fried to golden perfection. Seasoned generously with salt, pepper, and five-spice powder, it creates a crispy outer shell while keeping the meat incredibly juicy and tender inside.",
-    subImg1: '/SurvivalGuide/chicken2.jpg',
-    subImg2:'/SurvivalGuide/chicken3.jpg',
-    },
-    {
-    id:'game-introduction-dice',
-    mainImg: '/SurvivalGuide/dice1.png',
-    title: 'Taiwanese Dice Game',
-    subTitle: '(Si-Ba-La)',
-    text:"Ready to test your luck? 'Si-Ba-La' is the loudest and most exciting game in the night market! The rules are simple: throw three dice into the bowl and try to beat the stall owner's score. If your points are higher, you win a delicious sausage! But watch out—competition is fierce. Are you ready to challenge the boss?",
-    subImg1: '/SurvivalGuide/dice2.png',
-    subImg2:'/SurvivalGuide/dice3.png',
-    buttonText: 'START GAME'
-    },
-    {
-    id:'game-introduction-dice',
-    mainImg: '/SurvivalGuide/prawning1.png',
-    title: 'Prwaning',
-    subTitle: '(Shrimp Fishing)',
-    text:"Looking for a unique late-night challenge? Indoor shrimp fishing is a beloved Taiwanese pastime that tests your patience and skill. You'll sit around a large pool with a small rod, waiting for clever freshwater prawns to take the bait. The reward? In real life, you get to grill your fresh catch right on the spot! Do you have the steady hand and patience to hook a big one right now?",
-    subImg1: '/SurvivalGuide/prawning2.png',
-    subImg2:'/SurvivalGuide/prawning3.jpg',
-    buttonText: 'START GAME'
-    },
-    {
-    id:'game-introduction-ring-toss',
-    mainImg: '/SurvivalGuide/ringtoss1.png',
-    title: 'Ring Toss',
-    subTitle: '(Hoop Toss)',
-    text:"Step right up to the ultimate test of aim and precision! Ring Toss is a legendary night market challenge where things are harder than they look. Your goal? Land a plastic ring around the neck of a bottle or a figurine to win it. It sounds easy, but those rings love to bounce away! Do you have the magic touch to claim the big prize? Line up your shot and let it fly!",
-    subImg1: '/SurvivalGuide/ringtoss2.png',
-    subImg2:'/SurvivalGuide/ringtoss3.jpg',
-    buttonText: 'START GAME'
-    },
-])
 
 // 只要傳入 index (第幾個食物)，它就會自動去抓上面的資料
-// 你給我一個號碼（index），我就去倉庫（nmfFrames）把對應的資料拿出來，放到電視螢幕（currentFoodData）上播放
+// 你給我一個號碼（index），我就去倉庫（nmfFrames）把對應的資料拿出來，放到電視螢幕（currentInfoData）上播放
 const openModal = (index) => {
     if (nmfFrames.value[index]) {
-        currentFoodData.value = nmfFrames.value[index];
+        currentInfoData.value = nmfFrames.value[index];
         // 左邊current這變數是接收到物件
     }
 }
 
-const startGamePlay = () => {
-    console.log("遊戲開始！跳轉頁面或執行邏輯...");
-    // router.push('/game/dice'); // 例如跳轉頁面
-}
+// 控制遊戲視窗的部分，開關
+const isGameModelOpen = ref(false);
+const activeGame = ref('') // 記錄要玩哪個遊戲 ex.'prawning', 'dice'...
 
+const startGamePlay = () => {
+    if(!currentInfoData.value) return;
+    const currentID = currentInfoData.value.id;
+
+    // 判斷 & 切換
+    if(currentID.includes('prawning')) {
+        activeGame.value = 'prawning'; // 設定遊戲為釣蝦
+        isGameModelOpen.value = true; // 打開遊戲視窗
+        currentInfoData.value = null; // 關閉介紹視窗
+    }
+    else if(currentID.includes('dice')) {
+        activeGame.value = 'dice'; 
+        isGameModelOpen.value = true; 
+        currentInfoData.value = null; 
+        console.log('骰子遊戲還沒做好!');
+    }
+    else if(currentID.includes('ring-toss')) {
+        activeGame.value = 'ring-toss';
+        isGameModelOpen.value = true; 
+        currentInfoData.value = null; 
+        console.log('套圈圈遊戲還沒做好!');
+    }
+}
 
 </script>
 
@@ -358,19 +233,29 @@ const startGamePlay = () => {
                     </SurvivalTextFrame>  
                 </div> 
 <!---------------------------------------- 共用部分 -------------------------------------------->
-<!-- currentFoodData 是一整個「背包」，而 .mainImg 是伸手進去拿「背包裡的相機」, .是的或是裡面的意思，拿取 currentFoodData 這個袋子 裡面的 mainImg 那樣東西-->
-                <div v-if="currentFoodData">
+<!-- currentInfoData 是一整個「背包」，而 .mainImg 是伸手進去拿「背包裡的相機」, .是的或是裡面的意思，拿取 currentInfoData 這個袋子 裡面的 mainImg 那樣東西-->
+                <div v-if="currentInfoData">
                     <SurvivalFoodIntroductionFrame 
-                    @close="currentFoodData = null"
+                    @close="currentInfoData = null"
                     @play="startGamePlay"
-                    :mainImg="currentFoodData.mainImg"
-                    :title="currentFoodData.title"
-                    :subTitle="currentFoodData.subTitle"
-                    :text="currentFoodData.text"
-                    :subImg1="currentFoodData.subImg1"
-                    :subImg2="currentFoodData.subImg2"
-                    :buttonText="currentFoodData.buttonText"
+                    :mainImg="currentInfoData.mainImg"
+                    :title="currentInfoData.title"
+                    :subTitle="currentInfoData.subTitle"
+                    :text="currentInfoData.text"
+                    :subImg1="currentInfoData.subImg1"
+                    :subImg2="currentInfoData.subImg2"
+                    :buttonText="currentInfoData.buttonText"
                     ></SurvivalFoodIntroductionFrame>
+                </div>
+            </div>
+<!---------------------------------------- 遊戲 Model 視窗 -------------------------------------------->
+            <div v-if="isGameModelOpen" class="game-modal-overlay">
+                <div class="game-content-modal">
+                    <button class="close-game-btn" @click="isGameModelOpen = false">
+                        EXIT GAME
+                    </button>
+
+                    <GamePrawning v-if="activeGame == 'prawning'"></GamePrawning>
                 </div>
             </div>
         </main>
@@ -815,5 +700,56 @@ const startGamePlay = () => {
     pointer-events: auto; 
     transform: translate(-180%, -220%);
 }
+
+// ===================== 遊戲 Modal 的區塊 =================
+.game-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rbga(0,0,0,0.9); 
+    z-index: 999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game-content-modal {
+    width: 85vw;
+    height: 85vh;
+    max-width: 1200px;
+    background-color: #fff;
+    border: 10px solid $color-fsBlue50;
+    background-repeat: 7px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    border-radius: 7px;
+}
+.close-game-btn{
+position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 24px;
+    background-color: $color-fsGold300;
+    color: $color-fsTitle;
+    font-weight: bold;
+    font-size: 16px;
+    border: 2px solid white;
+    border-radius: 30px;
+    cursor: pointer;
+    z-index: 1000; /* 確保按鈕在最上層 */
+    transition: transform 0.3s;
+
+    &:hover {
+        transform: scale(1.1);
+        background-color: #ff6b81;
+        color: $color-fsWhite;
+    }    
+}
+
+
+
 
 </style>

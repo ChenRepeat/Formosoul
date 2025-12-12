@@ -44,7 +44,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(6)">
+      @click="goToPage(9)">
         <IconCharm size="43"/>Spell & Charms
       </h5>
     </li>
@@ -52,7 +52,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(7)">
+      @click="goToPage(10)">
         <IconPotion />Potions
       </h5>
     </li>
@@ -60,7 +60,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(8)">
+      @click="goToPage(11)">
         <IconBue />Divinations
       </h5>
     </li>

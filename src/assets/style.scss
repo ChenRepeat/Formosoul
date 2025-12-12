@@ -5,13 +5,16 @@
 //基本設定
 
 html {
-  font-family: 'Ubuntu','Roboto', 'Noto Sans TC', sans-serif; 
-  font-size: 62.5%;               /* 預設字級調整為10px */
+  font-family: 'Ubuntu', 'Roboto', 'Noto Sans TC', sans-serif;
+  font-size: 62.5%;
+  /* 預設字級調整為10px */
   letter-spacing: 0.05em;
   height: 100%;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -20,27 +23,59 @@ html {
 // -----------------------------------
 // 字級
 
-h1,h2,h3,h4,h5,h6 {line-height: 160%;}
-h1 {font-size: 6.0rem;}
-h2 {font-size: 5.2rem;}
-h3 {font-size: 4.0rem;}
-h4 {font-size: 3.2rem;}
-h5 {font-size: 2.8rem;}
-h6 {font-size: 2.0rem;}
-p {font-size: 1.6rem;
-   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-    text-align: justify;
-    line-height: 180%; }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 160%;
+}
+
+h1 {
+  font-size: 6.0rem;
+}
+
+h2 {
+  font-size: 5.2rem;
+}
+
+h3 {
+  font-size: 4.0rem;
+}
+
+h4 {
+  font-size: 3.2rem;
+}
+
+h5 {
+  font-size: 2.8rem;
+}
+
+h6 {
+  font-size: 2.0rem;
+}
+
+p {
+  font-size: 1.6rem;
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+  text-align: justify;
+  line-height: 180%;
+}
 
 
 //字體粗細，預設 normal 400 ，不用特別設定
 //其他粗細請直接加下方class
 
 // Light
-.fw200{font-weight: 200;}
+.fw200 {
+  font-weight: 200;
+}
 
 // Medium
-.fw600{font-weight: 600;}
+.fw600 {
+  font-weight: 600;
+}
 
 
 
@@ -49,17 +84,17 @@ p {font-size: 1.6rem;
 // -----------------------------------
 //排版用class
 
-.dp-flex{
+.dp-flex {
   display: flex;
   flex-direction: row;
 }
 
-.dp-flex-col{
+.dp-flex-col {
   display: flex;
   flex-direction: column;
 }
 
-.dp-none{
+.dp-none {
   display: none;
 }
 
@@ -74,6 +109,31 @@ p {font-size: 1.6rem;
       0 0px 10px rgba(0,0,0,0.5);
   backdrop-filter: blur(70px);  
   border-radius: 10px;    
+}
+
+//輸入框 
+.input-text{
+  height: 44px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid $color-fsCaption;
+  padding: 4px 12px;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  color: $color-fsTitle;
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+  line-height: 160%;
+}
+
+.input-text::placeholder{
+  font-size: 1.6rem;
+}
+
+.input-text:focus{
+  //預設的藍色改品牌色
+  outline-color: $color-fsGold;
+  //增加外陰影
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9) ;
 }
 
 

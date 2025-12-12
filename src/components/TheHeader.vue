@@ -14,32 +14,46 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const isMenuOpen = ref(false);
+const isMemberMenuOpen = ref(false);
 const isEnglish = ref(false)
-function toggleMenu() {
-  isMenuOpen.value = !isMenuOpen.value;
-}
 function toggleLang(){
   isEnglish.value = !isEnglish.value;
 }
-function closeBurger(){
-  isMenuOpen.value = false;
-}
 
 function handleUserIconClick( e ){
-  e.preventDefault();
-
-  if(authStore.isLoggedIn){
-    router.push('/member');
-  }else{
-    authStore.openLoginModal();  // 調用 store 的方法 不用 inject
+ e.preventDefault();
+ if(authStore.isLoggedIn){
+  if (isMenuOpen.value) {
+    isMenuOpen.value = false;
+    setTimeout(() => {
+      isMemberMenuOpen.value = true;
+    }, 350);
+  } else {
+      isMemberMenuOpen.value = !isMemberMenuOpen.value;
   }
+}else{
+  isMenuOpen.value = false;
+  authStore.openLoginModal();
+ }
 };
+
+function toggleMenu() {
+  if (!isMenuOpen.value && isMemberMenuOpen.value) {
+    isMemberMenuOpen.value = false;
+      setTimeout(() => {
+        isMenuOpen.value = true;
+      },350);
+    } else {
+      isMenuOpen.value = !isMenuOpen.value;
+      isMemberMenuOpen.value = false;
+  }
+}
 </script>
 
 <template>
   <div class="header-outer-case dp-flex">
 
-    <div class="header-link liquidGlass-wrapper dp-flex-col" :class="{ open: isMenuOpen ,'black': props.isBlackStyle }">
+    <div class="header-link liquidGlass-wrapper dp-flex-col" :class="{ open: isMenuOpen || isMemberMenuOpen ,'black': props.isBlackStyle }">
 
       <!-- 玻璃效果層 -->
       <div class="liquidGlass-effect"></div>
@@ -58,9 +72,9 @@ function handleUserIconClick( e ){
         <div class="header-icons-list dp-flex">
           <a href="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
           <!-- <a href="/member"></a> -->
-          <button @click="handleUserIconClick">
-            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="closeBurger"/>
-          </button>
+         
+            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
+
           <div class="transition hamburger-btn dp-flex-col" 
                @click="toggleMenu"
                :class="{ 'active': isMenuOpen }">
@@ -72,8 +86,10 @@ function handleUserIconClick( e ){
           <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" />
         </div>
       </div>
-
-      <ul class="burger-list" :class="{ 'active': isMenuOpen }">
+      <transition name="slide-fade">
+      <ul 
+      v-if="isMenuOpen"
+      class="burger-list" :class="{ 'active': isMenuOpen }">
         <li><a href="/"><h5>Home</h5></a></li>
         <li><a href="/about"><h5>About</h5></a></li>
         <li><a href="/news"><h5>News</h5></a></li>
@@ -84,7 +100,17 @@ function handleUserIconClick( e ){
         <li><a href="/classes"><h5>Classes</h5></a></li>
         <li><a href="/policy"><h5>Policy</h5></a></li>
       </ul>
+      </transition>
 
+      <transition name="slide-fade">
+      <ul v-if="isMemberMenuOpen && !isMenuOpen"
+      class="burger-list member-list"
+      :class="{ 'active': isMemberMenuOpen }">
+        <li><a href="/"><h5>Home</h5></a></li>
+        <li><a href="/about"><h5>About</h5></a></li>
+        <li><a href="/news"><h5>News</h5></a></li>
+      </ul>
+      </transition>
     </div>
   </div>
 
@@ -168,7 +194,9 @@ img { object-fit: none; }
 .header-link.open {
   height: 100vh; 
 }
-
+.header-link:has(.member-list){
+  max-height: 30vh;
+}
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
 .liquidGlass-wrapper {
   position: relative;
@@ -204,8 +232,6 @@ img { object-fit: none; }
   margin: 0;
   background: transparent;
   border-radius: 12px;
-  opacity: 0;
-  transform: translateY(100%);
   transition: all 0.3s ease;
   width: 100%;
   z-index: -2;
@@ -226,6 +252,19 @@ img { object-fit: none; }
 .hamburger-btn.active .bar1 { transform: rotate(-45deg) translate(-7px, 7px); width: 32px; height: 4px; }
 .hamburger-btn.active .bar2 { width: 0; height: 0; opacity: 0; }
 .hamburger-btn.active .bar3 { transform: rotate(45deg) translate(-7px, -7px); width: 32px;height: 4px;}
+
+
+.menu-slide-enter-active,
+.menu-slide-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.menu-slide-enter-from,
+.menu-slide-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
 .black{
   .trigger-lang { color: $color-fsTitle;}
   .header-lang-trigger {border: 1px solid $color-fsTitle;background-color: unset;}
