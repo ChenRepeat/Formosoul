@@ -48,6 +48,7 @@
 .main{
   font-size: 16px;
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+  letter-spacing: 0.05em;
   padding: 8px 40px;
   border-radius: 10px;
   border: 1px solid transparent;
