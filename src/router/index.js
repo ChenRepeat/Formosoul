@@ -22,6 +22,10 @@ import NightMarketMap from '@/components/SurvivalGuides/NightMarketMap.vue'
 import ConvenienceStore from '@/components/SurvivalGuides/ConvenienceStore.vue'
 import ProductDetail from '@/components/SHOP/ProductDetail.vue'
 import ProductList from '@/components/SHOP/ProductList.vue'
+import Delivery from '@/components/policy/delivery.vue'
+import Returns from '@/components/policy/returns.vue'
+import Privacypolicy from '@/components/policy/privacypolicy.vue'
+import Payment from '@/components/policy/payment.vue'
 
 
 const router = createRouter({
@@ -148,11 +152,18 @@ const router = createRouter({
     {
       path: '/policy',
       name: 'Policy',
+      redirect: '/policy/delivery',
       component: Policy,
       meta:{ 
         logo: '/src/assets/logo_black.svg',
         bgColor:'white',
       },
+      children: [
+        { path: 'delivery', component: Delivery},
+        { path: 'returns', component: Returns},
+        { path: 'privacypolicy', component: Privacypolicy},
+        { path: 'payment', component: Payment},
+      ]
     },
   ],
 })

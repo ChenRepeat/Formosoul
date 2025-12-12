@@ -33,8 +33,10 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 // 確保路徑正確
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
+import { useAuthStore } from '@/stores/autoStore';
 
 // --- Refs ---
+const authStore = useAuthStore();
 const containerRef = ref(null);
 const canvasBackRef = ref(null);
 const canvasFrontRef = ref(null);

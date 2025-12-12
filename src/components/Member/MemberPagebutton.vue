@@ -1,10 +1,10 @@
 <template>
     <div class="member-page-button">
-            <button class="page-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/member/information">Member information</router-link></button>
-            <button class="page-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/member/changepassword">Change password</router-link></button>
-            <button class="page-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/member/orderslist">Query Orders</router-link></button>
-            <button class="page-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/member/mycollections">My Collections</router-link></button>
-            <button class="page-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/member/coupons">Coupons</router-link></button>
+            <button class="memberpage-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/member/information">Member information</router-link></button>
+            <button class="memberpage-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/member/changepassword">Change password</router-link></button>
+            <button class="memberpage-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/member/orderslist">Query Orders</router-link></button>
+            <button class="memberpage-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/member/mycollections">My Collections</router-link></button>
+            <button class="memberpage-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/member/coupons">Coupons</router-link></button>
     </div>
     <Pagelinebar :linebarposition="240" :activeIndex="activeIndex" />
       <router-view></router-view>
@@ -54,7 +54,7 @@ watch(
         margin-top: 100px;
     }
 
-    .page-button{
+    .memberpage-button{
         width: 240px;
         height: 48px;
         border: 0;
@@ -62,7 +62,7 @@ watch(
         cursor: pointer;
         font-size: 16px;
     }
-    .page-button > a{
+    .memberpage-button > a{
         align-items: center;
         justify-content: center;
         display: flex;
@@ -72,7 +72,7 @@ watch(
         text-decoration: none;
     }
 
-    .page-button.active > a{
+    .memberpage-button.active > a{
         color: $color-fsTitle;
     }
 </style>
