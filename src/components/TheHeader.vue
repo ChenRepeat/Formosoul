@@ -19,7 +19,7 @@ const isEnglish = ref(false)
 function toggleLang(){
   isEnglish.value = !isEnglish.value;
 }
-// 【修改後的 handleUserIconClick 函式】
+
 function handleUserIconClick( e ){
  e.preventDefault();
  if(authStore.isLoggedIn){
