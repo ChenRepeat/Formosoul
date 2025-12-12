@@ -127,6 +127,32 @@ import { RouterLink } from 'vue-router';
             <section class="creditcard-info">
                 <h5>Credit Card<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
                 <hr>  
+                <div class="card-dock dp-flex">
+                    <div class="card-left">
+
+                        <p>Card Number</p>
+                        <input class="input-text" type="text">
+                        -<input class="input-text" type="text">
+                        -<input class="input-text" type="text">
+                        -<input class="input-text" type="text">
+
+                        <p>Expiration Date</p>
+                        <input class="input-text" type="text">
+                        /<input class="input-text" type="text">
+                    </div>
+
+
+                    <div class="card-right">
+
+                        <p>Security code</p>
+                        <input class="input-text" type="text">
+
+                        <p>AUTHORIZED SIGNATURE</p>
+                        <input class="input-text" type="text">
+                        
+                    </div>
+
+                </div>
 
             </section>
 
@@ -157,14 +183,17 @@ import { RouterLink } from 'vue-router';
                         <input class="input-text" type="text" required>
                     </div>
 
-                    <div class="input-caption">
-                        <textarea 
-                        class="input-text input-textarea " 
-                        placeholder="Please leave a note here for any special requests regarding your purchase." 
-                        type="textarea"
-                        rows="3"
-                        ></textarea>
-                    </div>
+                    <label class="checkbox-dock dp-flex">
+                        <input class="input-checkbox" type="checkbox" name="" id="">
+                        <span>Remember delivery address.</span>
+                    </label>
+
+                    <textarea 
+                    class="input-text input-textarea " 
+                    placeholder="Please leave a note here for any special requests regarding your purchase." 
+                    type="textarea"
+                    rows="3"
+                    ></textarea>
     
                 </div>
     
@@ -386,6 +415,24 @@ import { RouterLink } from 'vue-router';
         font-size: 1.6rem;
     }
 
+    .card-dock{
+        padding: 20px 20px 0;
+        gap: 20px;
+        flex-shrink: 0;
+        justify-content: space-around;
+    }
+
+    .card-left, .card-right{
+        background-color: $color-fsContent;
+        width: 360px;
+        aspect-ratio: 3/1.8;
+        border-radius: 20px;
+    }
+
+    .card-left>input{
+        width: 75px;
+    }
+
 
     //received
 
@@ -417,30 +464,20 @@ import { RouterLink } from 'vue-router';
         flex-grow: 2;
     }
 
-    .input-caption{
+    .checkbox-dock{
+        align-items: center;
         padding-top: 20px;
     }
-
-    //輸入框
-    // .input-text{
-    //     height: 44px;
-    //     width: 100%;
-    //     border-radius: 10px;
-    //     border: 1px solid $color-fsCaption;
-    //     padding: 4px 12px;
-    //     font-size: 2rem;
-    //     letter-spacing: 0.05em;
-    //     color: $color-fsTitle;
-    // }
+    
+    .input-checkbox{
+        line-height: 160%;
+        font-size: 1.2rem;
+    }
 
     .input-textarea{
         height: auto;
-  
+        margin-top: 40px;
     }
-
-    
-
-
 
 
     //order
