@@ -1,21 +1,27 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
 import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
-import siteLogo from '@/assets/logo_white.svg'; 
 import Popup from './components/popup.vue';
+import { computed } from 'vue';
 
+
+const route = useRoute();
+const currentLogoSrc = computed(() => {
+  return route.meta?.logo || 'src/assets/logo_white.svg';
+});
 </script>
 
 <template>
   <div class="wrapper dp-flex-col">
     <TheHeader />
     <main class="content">
-      <a href="/"><img :src="siteLogo" alt="SiteLogo" class="site-logo"/></a>
+      <a href="/"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo"/></a>
       <RouterView />
       <Popup></Popup>
     </main>
+    <img src="" alt="" srcset="">
     <TheFooter />
   </div>
 </template>
@@ -37,7 +43,7 @@ import Popup from './components/popup.vue';
   flex-grow: 1;
   overflow: hidden;
   min-height: 1px;
-  // padding-top: 100px;
+  padding-top: 100px;
   position: relative;
 
 }

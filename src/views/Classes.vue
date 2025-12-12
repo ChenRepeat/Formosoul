@@ -301,7 +301,7 @@ onUnmounted(() => {
 
 //  書頁樣式
 .page {
-  padding: 20px;
+  padding: 40px;
   background-color: #ccc;
   // 實作超出頁面的圖片
   // overflow: hidden;

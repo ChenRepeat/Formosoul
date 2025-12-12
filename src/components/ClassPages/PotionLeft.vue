@@ -204,13 +204,11 @@
           </div>
         </div>
       </div>
-    <transition name="fade" mode="out-in">
       <div class="intro-case dp-flex"
         v-if="clickPotion!=0"
         @click="changeIntro(0)"
         @mousedown.stop
-        @touchstart.stop
-        :class="{'op1':clickPotion != 0}">
+        @touchstart.stop>
         <img
         :src="currentIntro.imgUrl" 
         :alt="currentIntro.name">
@@ -232,8 +230,6 @@
           <p>{{ currentIntro.intro }}</p>
         </div>
       </div>
-    </transition>
-
     </div>
 
   </section>
@@ -326,12 +322,5 @@
 .show{
     background-color: black;
     opacity: 0.8;
-}
-.fade-enter-active,.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,.fade-leave-to {
-  opacity: 0;
 }
 </style>
