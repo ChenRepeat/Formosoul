@@ -11,10 +11,14 @@ const route = useRoute();
 const currentLogoSrc = computed(() => {
   return route.meta?.logo || 'src/assets/logo_white.svg';
 });
+const currentBgClass = computed(() => {
+  return route.meta?.bgColor || 'bg-default';
+});
 </script>
 
 <template>
-  <div class="wrapper dp-flex-col">
+  <div class="wrapper dp-flex-col"
+  :class="currentBgClass">
     <TheHeader />
     <main class="content">
       <a href="/"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo"/></a>
@@ -31,6 +35,9 @@ const currentLogoSrc = computed(() => {
   min-height: 100vh;
   background-color: $color-fsTitle;
   position: relative;
+}
+.wrapper.white{
+  background-color: #fff;
 }
 .site-logo{
   position: absolute;

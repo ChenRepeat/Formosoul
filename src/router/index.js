@@ -128,6 +128,7 @@ const router = createRouter({
       component: Member,
       meta:{ 
         logo: '/src/assets/logo_black.svg',
+        bgColor:'white',
       },
       children: [
         { path: 'information', component: Information },
@@ -150,6 +151,7 @@ const router = createRouter({
       component: Policy,
       meta:{ 
         logo: '/src/assets/logo_black.svg',
+        bgColor:'white',
       },
     },
   ],
