@@ -1,6 +1,7 @@
 <template>
     <div class="membercard-wrapper">
         <div class="membercard">
+            <!-- 多做hover後可以有資訊讓使用者觀看 -->
                 <div class="helmetcolor" :class="{ active: activeIcons.helmet}" @click="toggleIcon('helmet') ">
                     <IconHelmet size="143" />
                 </div>

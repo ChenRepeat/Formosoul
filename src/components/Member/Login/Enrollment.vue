@@ -145,7 +145,7 @@ async function startCountdown() {
         await sendOTPAPI(email.value);
         otpSent.value = true;
         errorMessage.value = '測試otp 123456';
-        timer.value = 10;
+        timer.value = 60;
 
         intervalId = setInterval(() => {
             timer.value--;
@@ -260,11 +260,6 @@ function togglePassword() {
         border-radius: 4px;
         font-size: 1.6rem;
         font-family: 'Roboto', 'Noto Sans TC', sans-serif; 
-    }
-    .form-input::placeholder{
-        // font-size: 1.6rem;
-        // font-family: 'Roboto', 'Noto Sans TC', sans-serif; 
-
     }
     .toggle-password-btn{
         position: absolute;

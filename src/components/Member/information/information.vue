@@ -1,18 +1,18 @@
 <template>
     <div class="information-wrapper">
         
-        <Cardpage v-if="currentview == 'card'" hasgap haspadding></Cardpage>
-        <Ledgerpage v-else-if="currentview == 'ledger'" withoutbtn hasgap haspadding></Ledgerpage>
+        <Cardpage v-if="currentview == 'membercard'" hasgap haspadding fontscolor></Cardpage>
+        <Ledgerpage v-else-if="currentview == 'ledger'"  hasgap haspadding fontscolor></Ledgerpage>
+        <!-- withoutbtn -->
     </div>
 </template>
 
 <script setup>
     import { inject, provide, ref } from 'vue';
     import Cardpage from '../Login/cardpage.vue';
-    import Membercard from './membercard.vue';
     import Ledgerpage from '../Login/ledgerpage.vue';
 
-    const currentview = ref('card');
+    const currentview = ref('membercard');
 
     const setmemberview = (viewname) => {
         currentview.value = viewname;

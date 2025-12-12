@@ -4,32 +4,35 @@
         <div class="contain">
             <label for="oldpassword"><h5>Current password:</h5></label>
             <input
+            class="form-input"
             v-model="oldpassword"
             type="text" 
             name="oldpassword" 
             id="oldpassword"
             placeholder="請輸入舊密碼"/>
-            <span v-if="errors.oldpassword" class="error-text"><p>{{ errors.oldpassword }}</p></span>
+            
             <label for="Newpassword"><h5>New password:</h5></label>
             <input 
             v-model="Newpassword"
             type="text"
             name="Newpassword" 
-
+            class="form-input"
             id="Newpassword"
             @input="validateNewPassword"
             placeholder="請輸入新密碼"/>
-            <span v-if="errors.Newpassword" class="error-text"><p>{{ errors.Newpassword }}</p></span>
+            
 
             <label for="confirmpassword"><h5>Confirm new password:</h5></label>
             <input 
+            class="form-input"
             v-model="confirmpassword"
             type="text" 
             name="confirmpassword" 
             id="confirmpassword"
             @input="validateConfirmPassword"
             placeholder="請再次輸入新密碼"/>
-            <span v-if="errors.confirmpassword" class="error-text"><p>{{ errors.confirmpassword }}</p></span>
+            
+            <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
 
             <h6>* Password must contain at least 8 characters including uppercase and lowercase English letters and numbers.</h6>
             <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword">Save changes</BasicButton>
@@ -44,24 +47,19 @@ import { computed, ref } from 'vue';
 const oldpassword = ref('');
 const Newpassword = ref('');
 const confirmpassword = ref('');
+const errorMessage = ref('');
 
-const errors = ref({
-    oldpassword: '',
-    Newpassword: '',
-    confirmpassword: '',
-});
 //  驗證新密碼格式
 const validateNewPassword  = () => {
+    errorMessage.value = '';
     const password = Newpassword.value;
-    errors.value.Newpassword = '';
 
     if(!password){
-        errors.value.Newpassword = '';
         return;
     }
 
     if(password.length < 8){
-        errors.value.Newpassword = '密碼至少需要8個字元';
+        errorMessage.value = '密碼至少需要8個字元';
         return;
     }
 
@@ -70,42 +68,42 @@ const validateNewPassword  = () => {
     const hasNumber = /[0-9]/.test(Newpassword.value);
 
     if(!hasUppercase){
-        errors.value.Newpassword = '密碼必須包含大寫字母(A-Z)';
+        errorMessage.value = '密碼必須包含大寫字母(A-Z)';
         return;
     }
     if(!hasLowercase){
-        errors.value.Newpassword = '密碼必須包含大寫字母(a-z)';
+        errorMessage.value = '密碼必須包含小寫字母(a-z)';
         return;
     }
     if(!hasNumber){
-        errors.value.Newpassword = '密碼必須包含大寫字母(0-9)';
+        errorMessage.value = '密碼必須包含數字(0-9)';
         return;
     }
     // 只有當舊密碼有輸入，且新密碼等於舊密碼，才顯示錯誤 避免在用戶還沒輸入舊密碼時就顯示錯誤訊息 因為空字串是false
     if(password === oldpassword.value && oldpassword.value){
-        errors.value.Newpassword = '新密碼不得與舊密碼相同';
+        errorMessage.value = '新密碼不得與舊密碼相同';
         return;
     }
     // 當輸入確認密碼時才檢查
     if(confirmpassword.value && password !== confirmpassword.value){
-        errors.value.confirmpassword = '必須與新密碼相同';
+        errorMessage.value = '必須與新密碼相同';
     }else{
-        errors.value.confirmpassword = '';
+        errorMessage.value = '';
     }
 };
 
 // 驗證確認密碼
 
 const validateConfirmPassword = () => {
-    errors.value.confirmpassword = '';
+    errorMessage.value = '';
 
     if(!confirmpassword.value){
-        errors.value.confirmpassword = '請再輸入一次新密碼';
+        errorMessage.value = '請再輸入一次新密碼';
         return;
     }
 
     if (Newpassword.value !== confirmpassword.value) {
-        errors.value.confirmpassword = '必須與新密碼相同';
+        errorMessage.value = '必須與新密碼相同';
     }
 
 };
@@ -114,50 +112,49 @@ const validateConfirmPassword = () => {
 
 const handleChangePassword  = () => {
     // 重製所有錯誤
-    errors.value= {
-        oldpassword: '',
-        Newpassword: '',
-        confirmpassword:'',
-    };
+    errorMessage.value = '';
 
 
     // 這邊要再重新檢查一遍
 
     // 之後要補對於舊密碼的認證
     if(!oldpassword.value){
-        errors.value.oldpassword = 'Please enter your old password.'
+        errorMessage.value = 'Please enter your old password.'
     }
 
     if(!Newpassword.value){
-        errors.value.Newpassword = 'Please enter your New password.';
+        errorMessage.value = 'Please enter your New password.';
     }else{
         const hasUppercase = /[A-Z]/.test(Newpassword.value);
         const hasLowercase = /[a-z]/.test(Newpassword.value);
         const hasNumber = /[0-9]/.test(Newpassword.value);
         
         if(Newpassword.value.length < 8){
-            errors.value.length = 'Passwords must be at least 8 characters long';
+            errorMessage.value = 'Passwords must be at least 8 characters long';
         }else if(!hasUppercase || !hasLowercase || !hasNumber){
-            errors.value.Newpassword = '密碼必須包含大寫、小寫字母和數字';
+            errorMessage.value = '密碼必須包含大寫、小寫字母和數字';
         }else if(Newpassword.value === oldpassword.value){
-            errors.value.Newpassword = '新密碼不得與舊密碼相同';
+            errorMessage.value = '新密碼不得與舊密碼相同';
 
         }
     }
 
     if(!confirmpassword.value){
-        errors.value.confirmpassword = '請再輸入一次新密碼';
+        errorMessage.value = '請再輸入一次新密碼';
     }else if(Newpassword.value !== confirmpassword.value){
-        errors.value.confirmpassword = '必須與新密碼相同';
+        errorMessage.value = '必須與新密碼相同';
     }
 
-    if(errors.value.oldpassword || errors.value.Newpassword || errors.value.confirmpassword){
+    if(errorMessage.value){
+        errorMessage.value = '請確認所有欄位';
         return;
     }
 
     console.log('驗證通過！');
 
     // 補 AJAX 呼叫後端
+    // TODO: 這裡放 axios / fetch 請求
+    // try { await api.changePassword(...) } catch...
 };
 
 
@@ -186,11 +183,12 @@ const handleChangePassword  = () => {
         padding-bottom: 48px;
     }
 
-    .contain > input{
-        height: 36px;
-        border: 2px solid $color-fsContent;
-        border-radius: 8px;
+    .form-input{
+        height: 54px;
+        width: 100%;
         padding: 8px;
+        border: 2px solid $color-fsCaption;
+        border-radius: 4px;
     }
     h5{
         color: $color-fsTitle;
@@ -206,4 +204,9 @@ const handleChangePassword  = () => {
 
     }
 
+    .error-message > p{
+        color: $color-fsCaption;
+        text-align: center;
+        margin-bottom: 24px;
+    }
 </style>

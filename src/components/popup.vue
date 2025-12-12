@@ -25,6 +25,7 @@
 
     provide('setmemberview', (viewName) => {
         memberview.value = viewName;
+
     });
     function handleKeyDown( e ){
         if(e.key == 'Escape'){

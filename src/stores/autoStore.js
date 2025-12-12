@@ -30,7 +30,6 @@ export const useAuthStore = defineStore('auth', () => {
     const openLoginModal = () => {
         isLoginModalOpen.value = true;
         document.body.style.overflow = 'hidden';  //鎖定背景 - 將網頁最外層設為不可滾動
-
     };
 
     const closeLoginModal = () => {
