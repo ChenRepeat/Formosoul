@@ -47,11 +47,12 @@
     position: relative;
     width: 95%;
     height: 95%;
+    overflow: hidden;
     >img{
       box-shadow: unset;
       position: absolute;
       width: 100%;
-      height: auto;bottom: 0%;left: 0%;
+      height: auto;bottom: -12%;left:0;
 
     }
     p{
