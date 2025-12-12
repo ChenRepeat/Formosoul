@@ -1,5 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { RouterLink } from 'vue-router';
 import OrderSuccess from '@/components/Cart/OrderSuccess.vue';
 import ShoppingCheck from '@/components/Cart/ShoppingCheck.vue';
 import BasicButton from '../components/BasicButton.vue';
@@ -51,14 +52,14 @@ import BasicButton from '../components/BasicButton.vue';
         <hr class="cart-step-bar">
      </section>
     
-     <!-- 內容 -->
-    <section class="cart-step-content my-cart-dock">
+    <!-- 內容 -->
+    <section class="cart-step-content my-cart-dock dp-none">
         <h5>Order Details</h5>
         <div class="orderdetail-head dp-flex fw200">
             <div class="itemhead-image"></div>
             <h6 class="itemhead-name">Product Name</h6>
-            <h6 class="itemhead-price">Price</h6>
             <h6 class="itemhead-qty">Quantity</h6>
+            <h6 class="itemhead-price">Price</h6>
             <div class="itemhead-icon-delete"></div>   
         </div>
         <hr class="item-bar-head">
@@ -68,12 +69,12 @@ import BasicButton from '../components/BasicButton.vue';
                 <img src="../../public/Shop/2.png" alt="">
             </div>
             <h6 class="item-name">Bamboo Helicopter</h6>
-            <h6 class="item-price">NT$ 190</h6>
             <div class="item-qty dp-flex">
                 <font-awesome-icon class="item-qty-icon" icon="fa-regular fa-square-minus" />
                 <h6>1</h6>
                 <font-awesome-icon class="item-qty-icon fw200" icon="fa-regular fa-square-plus" />
             </div>
+            <h6 class="item-price">NT$ 190</h6>
             <font-awesome-icon class="item-icon-delete" icon="fa-regular fa-trash-can" />
             
         </div>
@@ -84,12 +85,12 @@ import BasicButton from '../components/BasicButton.vue';
                 <img src="../../public/Shop/2.png" alt="">
             </div>
             <h6 class="item-name">Bamboo Helicopter</h6>
-            <h6 class="item-price">NT$ 190</h6>
             <div class="item-qty dp-flex">
                 <font-awesome-icon class="item-qty-icon" icon="fa-regular fa-square-minus" />
                 <h6>1</h6>
                 <font-awesome-icon class="item-qty-icon fw200" icon="fa-regular fa-square-plus" />
             </div>
+            <h6 class="item-price">NT$ 190</h6>
             <font-awesome-icon class="item-icon-delete" icon="fa-regular fa-trash-can" />
             
         </div>
@@ -120,7 +121,7 @@ import BasicButton from '../components/BasicButton.vue';
     </section>
 
   
-    <ShoppingCheck class="cart-step-content dp-none"/> 
+    <ShoppingCheck class="cart-step-content"/> 
     <OrderSuccess class="cart-step-content dp-none"/>
    
 
@@ -262,8 +263,6 @@ import BasicButton from '../components/BasicButton.vue';
 }
 
 .item-price{
-    color: $color-fsRed;
-
     flex-basis: 0;
     flex-grow: 2;
 }
