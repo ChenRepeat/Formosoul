@@ -91,7 +91,7 @@
       </div>
         <div class="page">
         <div class="page-content">
-
+          <DuanOoRight @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -105,9 +105,18 @@
         </div>
       </div>
       <div class="page">
-      <div class="page-content">
-        <ClassPageIndex @flip="goToPage"/>
+        <div class="page-content">
+          <ClassPageIndex @flip="goToPage"/>
+        </div>
       </div>
+      <div class="page">
+        <div class="page-content">
+        </div>
+      </div>
+      <div class="page">
+        <div class="page-content">
+          <PotionLeft  @flip="goToPage"/>
+        </div>
       </div>
       <div class="page">
         <div class="page-content">
@@ -141,6 +150,8 @@ import NewYearRight from '@/components/ClassPages/NewYearRight.vue';
 import MoonFesLeft from '@/components/ClassPages/MoonFesLeft.vue';
 import MoonFesRight from '@/components/ClassPages/MoonFesRight.vue';
 import DuanOoLeft from '@/components/ClassPages/DuanOoLeft.vue';
+import DuanOoRight from '@/components/ClassPages/DuanOoRight.vue';
+import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
