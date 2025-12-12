@@ -111,7 +111,7 @@ p {
   border-radius: 10px;    
 }
 
-//輸入框
+//輸入框 
 .input-text{
   height: 44px;
   width: 100%;
@@ -122,6 +122,11 @@ p {
   letter-spacing: 0.05em;
   color: $color-fsTitle;
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+  line-height: 160%;
+}
+
+.input-text::placeholder{
+  font-size: 1.6rem;
 }
 
 .input-text:focus{

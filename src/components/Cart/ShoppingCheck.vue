@@ -158,12 +158,12 @@ import { RouterLink } from 'vue-router';
                     </div>
 
                     <div class="input-caption">
-                        <input 
-                        class="input-text input-textarea" 
+                        <textarea 
+                        class="input-text input-textarea " 
                         placeholder="Please leave a note here for any special requests regarding your purchase." 
                         type="textarea"
                         rows="3"
-                        >
+                        ></textarea>
                     </div>
     
                 </div>
@@ -422,26 +422,20 @@ import { RouterLink } from 'vue-router';
     }
 
     //輸入框
-    .input-text{
-        height: 44px;
-        width: 100%;
-        border-radius: 10px;
-        border: 1px solid $color-fsCaption;
-        padding: 4px 12px;
-        font-size: 2rem;
-        letter-spacing: 0.05em;
-        color: $color-fsTitle;
-    }
+    // .input-text{
+    //     height: 44px;
+    //     width: 100%;
+    //     border-radius: 10px;
+    //     border: 1px solid $color-fsCaption;
+    //     padding: 4px 12px;
+    //     font-size: 2rem;
+    //     letter-spacing: 0.05em;
+    //     color: $color-fsTitle;
+    // }
 
-    .input-text:focus{
-        //預設的藍色改品牌色
-        outline-color: $color-fsGold;
-        //增加外陰影
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.9) ;
-    }
-
-    .input-caption .input-textarea{
-       height: auto; 
+    .input-textarea{
+        height: auto;
+  
     }
 
     
