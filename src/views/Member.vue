@@ -8,7 +8,6 @@ import { ref } from 'vue';
 <template>
 
     <MemberPagebutton />
-    <!-- <Backgroundaction></Backgroundaction> -->
 
 </template>
 

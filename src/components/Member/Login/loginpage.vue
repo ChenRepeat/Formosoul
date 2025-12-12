@@ -3,7 +3,7 @@
       -->
         
             <div class="Logincontain">
-                    <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px;"/></div>
+                    <!-- <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div> -->
 
                     <div class="pagebutton">
                         <BasicButton 
@@ -17,7 +17,6 @@
                         class="btn-blue-fill"><h4>Login</h4></BasicButton>
                     </div>
                     <div class="pagecontain">
-                        <!-- <RouterView></RouterView> -->
                         <Logincontain v-if="currentView == 'login'"></Logincontain>
 
 
@@ -42,13 +41,13 @@
 </template>
 
 <script setup>
-import { computed, provide, ref } from 'vue';
-import Logincontain from './logincontain.vue';
-import { useAuthStore } from '@/stores/autoStore';
-import BasicButton from '@/components/BasicButton.vue';
-import Enrollment from '../Login/Enrollment.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import Forgetpassword from './forgetpassword.vue';
+    import { computed, provide, ref } from 'vue';
+    import Logincontain from './logincontain.vue';
+    import { useAuthStore } from '@/stores/autoStore';
+    import BasicButton from '@/components/BasicButton.vue';
+    import Enrollment from '../Login/Enrollment.vue';
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import Forgetpassword from './forgetpassword.vue';
 
     const authStore = useAuthStore();
     const currentView = ref('login');

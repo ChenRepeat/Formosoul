@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import MemberPagebutton from '@/components/Member/MemberPagebutton.vue';
+
 
 
 
@@ -8,7 +8,7 @@ import MemberPagebutton from '@/components/Member/MemberPagebutton.vue';
 
 <template>
 
-    <MemberPagebutton />
+
 
 </template>
 

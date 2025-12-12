@@ -1,9 +1,9 @@
 <template>
-
+    
     <div class="cardpage-wrapper">
-        <div class="cardcontent" :class="{ 'with-gap': hasgap}">
+        <div class="cardcontent">
             <div class="cardpage-left">
-                <h2>Student Enrollment Card</h2>
+                <h2>Susses</h2>
                 <p>This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.</p>
             </div>
             <div class="cardpage-right">
@@ -11,28 +11,26 @@
                 <h4>Don't leave the Common Room without it!</h4>
             </div>
         </div>
-        <BasicButton class="btn-yellow-fill" @click="gotoledger">Check Your Ledger</BasicButton>
+        <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}">Embark on the Formosoul Adventure</BasicButton>
     </div>
 </template>
 
 <script setup>
 import BasicButton from '@/components/BasicButton.vue';
-import Membercard from '../information/membercard.vue'; 
+import Membercard from '../information/membercard.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
-import { handleError, inject } from 'vue';
     const props = defineProps({
-        hasgap:{
+        withoutbtn:{
             type: Boolean,
             default: false,
         }
     });
-    const setmemberview = inject('setmemberview');
     const authStore = useAuthStore();
 
-    function gotoledger() {
-        setmemberview('ledger');
+    function handleEmbark() {
+        authStore.closeLoginModal()        
     }
-    
 </script>
 
 <style lang="scss" scoped>
@@ -61,23 +59,19 @@ import { handleError, inject } from 'vue';
     .cardcontent{
         display: grid;
         grid-template-columns: 1fr 1fr;
-
-        &.with-gap {
-            gap: 80px;
-        }
     }
 
     h2{
-        color: $color-fsBlue50;
+        color: #F0F7FF;
     }
 
     h4{
-        color: $color-fsBlue50;
+        color: #F0F7FF;
         text-align: center;
     }
 
     p{
-        color: $color-fsBlue50;
+        color: #F0F7FF;
         padding: 60px 60px 60px 0;
     }
 
@@ -89,5 +83,9 @@ import { handleError, inject } from 'vue';
 
     .btn-yellow-fill{
         padding: 16px 40px;
+
+        &.without{
+            display: none;
+        }
     }
 </style>

@@ -5,20 +5,27 @@
     @keydown="handleKeyDown"
     >
         <div class="Loginout">
-        <cardpage></cardpage>  
-        <!-- <loginpage></loginpage> -->
+        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
+        <loginpage v-if="memberview == 'login'"></loginpage>
+        <cardpage v-else-if="memberview == 'membercard'"></cardpage>
+        <ledgerpage v-else-if="memberview== 'ledger'"></ledgerpage>  
         </div>
     </div>
 </template>
 
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
-    import Forgetpassword from './Member/Login/forgetpassword.vue';
     import Loginpage from './Member/Login/loginpage.vue';
-    import { onMounted, onUnmounted } from 'vue';
-import Cardpage from './Member/Login/cardpage.vue';
+    import { onMounted, onUnmounted, provide, ref } from 'vue';
+    import Cardpage from './Member/Login/cardpage.vue';
+    import Ledgerpage from './Member/Login/Ledgerpage.vue';
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     const authStore = useAuthStore();
+    const memberview = ref('login');
 
+    provide('setmemberview', (viewName) => {
+        memberview.value = viewName;
+    });
     function handleKeyDown( e ){
         if(e.key == 'Escape'){
             authStore.closeLoginModal();
@@ -35,6 +42,14 @@ import Cardpage from './Member/Login/cardpage.vue';
 </script>
 
 <style lang="scss" scoped>
+    .closebutton{
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
     .Loginpage{
         position: fixed;
         inset: 0;

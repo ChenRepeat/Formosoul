@@ -29,10 +29,14 @@ export const useAuthStore = defineStore('auth', () => {
     // 彈窗的方式
     const openLoginModal = () => {
         isLoginModalOpen.value = true;
+        document.body.style.overflow = 'hidden';  //鎖定背景 - 將網頁最外層設為不可滾動
+
     };
 
     const closeLoginModal = () => {
         isLoginModalOpen.value = false;
+        document.body.style.overflow = '' ;
+
     };
 
     return{
