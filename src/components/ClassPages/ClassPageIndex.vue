@@ -59,8 +59,7 @@
   import IconHistory from '../icons/SVG/IconHistory.vue';
   import IconBue from '../icons/SVG/IconBue.vue';
   import IconPotion from '../icons/SVG/IconPotion.vue';
-  import IconCharm from '../icons/SVG/IconCharm.vue';  
-
+  import IconCharm from '../icons/SVG/IconCharm.vue';
   import { usePageNavigation } from './goToPage';
   
   const emit = defineEmits(['flip'])
