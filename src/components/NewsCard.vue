@@ -53,6 +53,7 @@ const cards = ref([
 
 .newscard-container-info {
   height: 100%;
+
 }
 
 .newscard-container-pics {
@@ -73,6 +74,7 @@ const cards = ref([
     /* 右側切點 */ calc(100% - 130px) 100%,
     /* 底部切點 */ 0 100% /* 左下 */
   );
+    filter: brightness(0.5)
 }
 
 .newscard-container-text {
@@ -81,10 +83,12 @@ const cards = ref([
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 14px 30px 28px;
-  text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 24px 40px;
+  line-height: 1;
+  text-shadow: 1px 1px 2px #000, 2px 2px 4px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 5;
+  transition: all 0.5s ease;
 }
 
 // 右下白色三角(common statement)
@@ -109,8 +113,13 @@ const cards = ref([
   bottom: 0;
   right: 0;
   border-bottom-right-radius: 7px;
+
 }
 
+
+.newscard-container:hover .newscard-container-text{
+    opacity: 0;
+  }
 .newscard-container:hover .newscard-container-pics {
   filter: brightness(1.1);
 }
