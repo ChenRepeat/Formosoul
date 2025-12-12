@@ -1,6 +1,6 @@
 <template>
 
-    <div class="cardpage-wrapper">
+    <div class="cardpage-wrapper" :class="{ 'with-padding': haspadding}">
         <div class="cardcontent" :class="{ 'with-gap': hasgap}">
             <div class="cardpage-left">
                 <h2>Student Enrollment Card</h2>
@@ -24,7 +24,12 @@ import { handleError, inject } from 'vue';
         hasgap:{
             type: Boolean,
             default: false,
-        }
+        },
+
+        haspadding:{
+            type: Boolean,
+            default: false,
+        },
     });
     const setmemberview = inject('setmemberview');
     const authStore = useAuthStore();
@@ -56,6 +61,10 @@ import { handleError, inject } from 'vue';
         border-radius: 8px;
         position: relative;
         gap: 60px;
+
+        &.with-padding{
+            padding: 8px;
+        }
     }
 
     .cardcontent{
@@ -63,7 +72,7 @@ import { handleError, inject } from 'vue';
         grid-template-columns: 1fr 1fr;
 
         &.with-gap {
-            gap: 80px;
+            gap: 30px;
         }
     }
 
@@ -74,6 +83,7 @@ import { handleError, inject } from 'vue';
     h4{
         color: $color-fsBlue50;
         text-align: center;
+        white-space: nowrap;
     }
 
     p{

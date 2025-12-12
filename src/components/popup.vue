@@ -18,7 +18,7 @@
     import Loginpage from './Member/Login/loginpage.vue';
     import { onMounted, onUnmounted, provide, ref } from 'vue';
     import Cardpage from './Member/Login/cardpage.vue';
-    import Ledgerpage from './Member/Login/Ledgerpage.vue';
+    import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     const authStore = useAuthStore();
     const memberview = ref('login');
