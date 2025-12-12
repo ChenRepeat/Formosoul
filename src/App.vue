@@ -19,7 +19,7 @@ const currentBgClass = computed(() => {
 <template>
   <div class="wrapper dp-flex-col"
   :class="currentBgClass">
-    <TheHeader />
+    <TheHeader :is-black-style="currentBgClass == 'white'"/>
     <main class="content">
       <a href="/"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo"/></a>
       <RouterView />

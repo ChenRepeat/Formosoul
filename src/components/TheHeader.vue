@@ -4,7 +4,12 @@ import siteLogo from '@/assets/logo_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
-
+const props = defineProps({
+  isBlackStyle: {
+    type: Boolean,
+    default: false
+  }
+});
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -33,9 +38,8 @@ function handleUserIconClick( e ){
 
 <template>
   <div class="header-outer-case dp-flex">
-    <!-- <a href="/"><img :src="siteLogo" alt="SiteLogo" /></a> -->
 
-    <div class="header-link liquidGlass-wrapper dp-flex-col" :class="{ open: isMenuOpen }">
+    <div class="header-link liquidGlass-wrapper dp-flex-col" :class="{ open: isMenuOpen ,'black': props.isBlackStyle }">
 
       <!-- 玻璃效果層 -->
       <div class="liquidGlass-effect"></div>
@@ -222,4 +226,18 @@ img { object-fit: none; }
 .hamburger-btn.active .bar1 { transform: rotate(-45deg) translate(-7px, 7px); width: 32px; height: 4px; }
 .hamburger-btn.active .bar2 { width: 0; height: 0; opacity: 0; }
 .hamburger-btn.active .bar3 { transform: rotate(45deg) translate(-7px, -7px); width: 32px;height: 4px;}
+.black{
+  .trigger-lang { color: $color-fsTitle;}
+  .header-lang-trigger {border: 1px solid $color-fsTitle;background-color: unset;}
+  .header-lang-trigger.right{
+    border: 1px solid $color-fsWhite;
+    background-color: $color-fsTitle;
+  }
+  .right .trigger-lang { color: $color-fsWhite;}
+  .header-lang-switcher{background-color: $color-fsTitle;}
+  .header-lang-switcher.right{background-color: $color-fsWhite;}
+  .header-icon { color: $color-fsTitle;}
+  .burger-list li a { color: $color-fsTitle;}
+  .bar { background-color: $color-fsTitle;}
+}
 </style>
