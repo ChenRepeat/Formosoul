@@ -62,6 +62,7 @@
         transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.6s ease;
         z-index: 2000;
         transform: scale(0.3);
+        border-radius: 0;
         // 這段可以看 authStore.isLoginModalOpen 的值 去決定是否要顯示
         &.active {  
             opacity: 1;

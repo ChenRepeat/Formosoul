@@ -840,7 +840,8 @@ function initSnitches(loader) {
   position: relative;
   overflow: hidden;
   touch-action: none;
-  background: radial-gradient(circle at center, #1b2940 0%, #050810 100%);
+  background: $color-fsTitle;
+  margin-top: -100px;
 }
 canvas {
   display: block;
