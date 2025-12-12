@@ -93,33 +93,95 @@ import { RouterLink } from 'vue-router';
                 <h5>Total Details</h5>
                 <hr>
 
-                <BasicButton class="btn-blue-fill btn-fix-width">
+                <div class="check-total-dock">
+                    <div class="check-price dp-flex">
+                        <p>Price：</p>
+                        <p>NT$ 380</p>
+                    </div>
+                    <div class="check-discount dp-flex">
+                        <p>Discount：</p>
+                        <p>－ NT$ 60</p>
+                    </div>
+                    <div class="check-shippingfee dp-flex">
+                        <p>Shipping Fee：</p>
+                        <p>NT$ 80</p>
+                    </div>
+                    <hr>
+                    <div class="check-total-payment dp-flex">
+                        <h5>Total：</h5>
+                        <h5>NT$ 400</h5>
+                    </div>
+                </div>
+                <BasicButton class="btn-blue-fill btn-fix-width btn-coupon">
                     Select COUPON
                 </BasicButton>
+
             </div>
         </section>
-        <!-- 收件資料 -->
-        <section class="creditcard-info">
-            <h5>Credit Card Information <span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
-            <hr>
-            
-            
-        </section>
-          
-        <!-- 收件資料 -->
-        <section class="received-info">
-            <h5>Recipient Information</h5>
-            <hr>
 
+        
+        <!-- 表單 -->
+        <form action="" method="POST">
+            
+            <!-- 信用卡資料 -->
+            <section class="creditcard-info">
+                <h5>Credit Card<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
+                <hr>  
 
-        </section>
+            </section>
+
+            <!-- 收件資料 -->
+            <section class="received-info">
+                <h5>Recipient Information</h5>
+                <hr>
+                <div class="received-info-dock">
+
+                    <div class="received-name-phone dp-flex">
+                        <div class="received-name">
+                            <p>Name</p>
+                            <input class="input-text" type="text" required>
+                        </div>
+                        <div class="received-phone">
+                            <p>Phone Number</p>
+                            <input class="input-text" type="text" required>
+                        </div>
+                    </div>
+                    <div class="received-address dp-flex">
+                        <div>
+                            <p>Address</p>
+                            <input class="input-text" placeholder="Country" type="text" required>
+                        </div>
+                        <div>
+                            <input class="input-text" type="text" placeholder="City" required>
+                        </div>
+                        <input class="input-text" type="text" required>
+                    </div>
+
+                    <div class="input-caption">
+                        <input 
+                        class="input-text input-textarea" 
+                        placeholder="Please leave a note here for any special requests regarding your purchase." 
+                        type="textarea"
+                        rows="3"
+                        >
+                    </div>
     
-        <!-- order -->
-        <div class="btn-order">  
-            <BasicButton class="btn-yellow-fill btn-fix-width">
-                ORDER
-            </BasicButton>
-        </div>
+                </div>
+    
+    
+            </section>
+
+            <!-- order -->
+            <div>  
+                <BasicButton 
+                class="btn-yellow-fill btn-fix-width btn-order" 
+                type="submit"
+                >
+                    ORDER
+                </BasicButton>
+            </div>
+        </form>
+    
     </section>    
     
 </template>
@@ -248,15 +310,12 @@ import { RouterLink } from 'vue-router';
     .check-payment{flex-grow: 2;}
     .check-total{flex-grow: 1;}
 
-    //payment
+
+    // payment 選單--------------------------------
     .check-payment>p{
         padding: 20px 20px 12px;    
     }
-    
 
-
-
-    // payment 選單--------------------------------
     .nav-payment-total{
         // 新增自訂義箭頭
         position: relative;
@@ -279,15 +338,11 @@ import { RouterLink } from 'vue-router';
 
         // 移除預設下拉箭頭
         appearance: none;
-
-        // 讓文字在空白處置中
-        padding-right: 18px;
     }
 
     .nav-list:focus {
         outline: none;
-        border: 0.5px solid $color-fsGold300;
-
+        border: 0.5px solid $color-fsGold;
     }
 
     .nav-icon{
@@ -301,6 +356,29 @@ import { RouterLink } from 'vue-router';
         pointer-events: none;
     }
 
+    //total
+
+    .check-total{
+        position: relative;
+    }
+    .check-price, .check-discount, .check-shippingfee, .check-total-payment{
+        justify-content: space-between;
+        padding: 0 20px;
+        height: 52px;
+        align-items: center;
+    }
+
+    .check-total-payment{
+        color: $color-fsGold;
+    }
+
+    .btn-coupon{
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        right: 0;
+        margin: auto;   
+    }
 
 
     //creditcard
@@ -308,13 +386,73 @@ import { RouterLink } from 'vue-router';
         font-size: 1.6rem;
     }
 
+
     //received
+
+    .received-info-dock{
+        padding: 0 20px;
+    }
+    .received-name-phone{
+        gap: 20px;
+        padding-top: 20px;
+    }
+
+    .received-name, .received-phone{
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .received-address{
+        align-items: end;
+        gap: 20px;
+        padding-top: 20px;
+    }
+
+    .received-address input{
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .received-address>input:last-of-type{
+        flex-grow: 2;
+    }
+
+    .input-caption{
+        padding-top: 20px;
+    }
+
+    //輸入框
+    .input-text{
+        height: 44px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid $color-fsCaption;
+        padding: 4px 12px;
+        font-size: 2rem;
+        letter-spacing: 0.05em;
+        color: $color-fsTitle;
+    }
+
+    .input-text:focus{
+        //預設的藍色改品牌色
+        outline-color: $color-fsGold;
+        //增加外陰影
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.9) ;
+    }
+
+    .input-caption .input-textarea{
+       height: auto; 
+    }
+
+    
+
 
 
 
     //order
     .btn-order{
-        margin-top: 100px;
+        display: block;
+        margin: 100px auto 0;
     }
 
 </style>
