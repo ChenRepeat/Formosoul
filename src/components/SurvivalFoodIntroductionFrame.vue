@@ -141,7 +141,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 
 // 遮罩
-.food-introduction-overlay{
+.food-introduction-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -174,5 +174,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     }
 }
 
+// .bg-frostedGlass {
+//   backdrop-filter: blur(30px);  
+// }
 
 </style>
