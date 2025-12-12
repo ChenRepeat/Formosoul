@@ -50,7 +50,7 @@
                 :disabled="isLoading"                
                 >
                 <font-awesome-icon 
-                :icon="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
+                :icon="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
                 style="font-size: 24px;"
                 />
                     <!-- {{ showPassword ? '隱藏' : '顯示'}} -->
@@ -227,9 +227,8 @@ function togglePassword() {
 <style lang="scss" scoped>
     .login-form{
         width: 70%;
-        padding: 40px;
-        height: 544px;
-        position: relative;
+        height: 50%;
+        position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%); 
@@ -294,8 +293,8 @@ function togglePassword() {
         width: 280px;
         display: flex;
         margin: 0 auto;
-        padding-top: 16px;
-        padding-bottom: 16px;
+        // padding-top: 16px;
+        // padding-bottom: 16px;
         justify-content: center;
         // margin-bottom: 36px;
     }
