@@ -56,115 +56,117 @@
 </template>
 
 <script setup >
-import BasicButton from '@/components/BasicButton.vue';
-import { useAuthStore } from '@/stores/autoStore';
-import { inject, ref } from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import BasicButton from '@/components/BasicButton.vue';
+    import { useAuthStore } from '@/stores/autoStore';
+    import { inject, ref } from 'vue';
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-const authStore = useAuthStore();
-const sharedEmail = inject('sharedEmail');
-const currentView = inject('setCurrentView');
-const email = ref(sharedEmail?.value || '');
-const password = ref('');
-const isLoading = ref(false);
-const errorMessage = ref('');
-const showPassword = ref(false);
+    const authStore = useAuthStore();
+    const sharedEmail = inject('sharedEmail');
+    const currentView = inject('setCurrentView');
+    const setmemberview = inject('setmemberview');
+    const email = ref(sharedEmail?.value || '');
+    const password = ref('');
+    const isLoading = ref(false);
+    const errorMessage = ref('');
+    const showPassword = ref(false);
 
-async function loginAPI(email, password) {
-    // 測試 isLoading 的效果
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    // 暫時模擬登入
-    if (email === 'test@test.com' && password === 'As345678') {
-        // 回傳 JSON
-        return {
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-            user: {
-                id: 1,
-                name: '測試人員',
-                email: 'test@test.com'
-            },
-            message: '登入成功'
-        };
-    } else {
-        throw new Error('帳號或密碼錯誤');
-    }
-    // const response = await fetch('/api/login', {
-    //     method: 'POST',
-    //     headers: {  'Content-Type': 'application/json'},
-    //     body: JSON.stringify({email, password})
-    // });
-    // 防止
-    // const text = await response.text();
-    // console.log('後端回傳的內容', text);
-    
-    // 安全的轉換成JSON
-    // let data = null;
-    // try{
-    //     data = text ? JSON.parse(text) : null;
-    // }catch( e ){
-    //     throw new Error('目前後端尚未回傳 JSON 格式資料');
-    // }
-
-    // if (!response.ok) {
-    //     throw new Error(data?.message || 'Login failed');
-    // }
-
-    // return data;
-    // 如果沒資料會炸開 先不用    
-    // if(!response.ok){
-    //     const errorData = await response.json();
-    //     throw new Error(errorData.message || 'Login failed')
-    // }
-
-    // return response.json();
-};
-
-async function handleLogin() {
-    if(!email.value || !password.value){
-        errorMessage.value = 'Please enter your email or password'
-        return
-    }
-    
-    if (!email.value.includes('@')) {
-        errorMessage.value = 'Please enter a valid email'
-        return        
-    }
-
-    isLoading.value = true
-    errorMessage.value = ''
-
-    try {
-        const response = await loginAPI(email.value, password.value);
+    async function loginAPI(email, password) {
+        // 測試 isLoading 的效果
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        // 暫時模擬登入
+        if (email === 'test@test.com' && password === 'As345678') {
+            // 回傳 JSON
+            return {
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                user: {
+                    id: 1,
+                    name: '測試人員',
+                    email: 'test@test.com'
+                },
+                message: '登入成功'
+            };
+        } else {
+            throw new Error('帳號或密碼錯誤');
+        }
+        // const response = await fetch('/api/login', {
+        //     method: 'POST',
+        //     headers: {  'Content-Type': 'application/json'},
+        //     body: JSON.stringify({email, password})
+        // });
+        // 防止
+        // const text = await response.text();
+        // console.log('後端回傳的內容', text);
         
-        // 這邊就保存到 store
-        authStore.setToken(response.token)
-        authStore.setUser(response.user)
-        // authStore.closeLoginModal();
+        // 安全的轉換成JSON
+        // let data = null;
+        // try{
+        //     data = text ? JSON.parse(text) : null;
+        // }catch( e ){
+        //     throw new Error('目前後端尚未回傳 JSON 格式資料');
+        // }
+
+        // if (!response.ok) {
+        //     throw new Error(data?.message || 'Login failed');
+        // }
+
+        // return data;
+        // 如果沒資料會炸開 先不用    
+        // if(!response.ok){
+        //     const errorData = await response.json();
+        //     throw new Error(errorData.message || 'Login failed')
+        // }
+
+        // return response.json();
+    };
+
+    async function handleLogin() {
+        if(!email.value || !password.value){
+            errorMessage.value = 'Please enter your email or password'
+            return
+        }
         
-    } catch (error) {
-        errorMessage.value = error.message || 'Login failed,Please tryagain'
-    } finally{
-        isLoading.value = false
+        if (!email.value.includes('@')) {
+            errorMessage.value = 'Please enter a valid email'
+            return        
+        }
 
+        isLoading.value = true
+        errorMessage.value = ''
+
+        try {
+            const response = await loginAPI(email.value, password.value);
+            
+            // 這邊就保存到 store
+            authStore.setToken(response.token)
+            authStore.setUser(response.user)
+            // authStore.closeLoginModal();
+            setmemberview('membercard');
+            
+        } catch (error) {
+            errorMessage.value = error.message || 'Login failed,Please tryagain'
+        } finally{
+            isLoading.value = false
+
+        }
     }
-}
 
-async function hanldeForgetpassword(){
-    console.log('忘記了');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    currentView('forgetpassword');
+    async function hanldeForgetpassword(){
+        console.log('忘記了');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        currentView('forgetpassword');
 
-};
+    };
 
-function handleKeyDown( e ) {
-    if (e.key === 'Enter' && !isLoading.value) {
-        handleLogin();        
-    }   
-}
+    function handleKeyDown( e ) {
+        if (e.key === 'Enter' && !isLoading.value) {
+            handleLogin();        
+        }   
+    }
 
-function togglePassword() {
-    showPassword.value = !showPassword.value;
-}
+    function togglePassword() {
+        showPassword.value = !showPassword.value;
+    }
 
 </script>
 

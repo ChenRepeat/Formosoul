@@ -1,11 +1,11 @@
 <template>
         <div v-for="order in calorderpage" :key="order.id" class="orders-contain">
-            <P>{{ order.number }}</p> 
-            <P>{{ order.date }}</p>
-            <P>{{ order.prices }}</p>
-            <P>{{ order.payment }}</p>
-            <P>{{ order.status }}</p>
-            <P>{{ order.shipping }}</p>
+            <p>{{ order.number }}</p> 
+            <p>{{ order.date }}</p>
+            <p>{{ order.prices }}</p>
+            <p>{{ order.payment }}</p>
+            <p>{{ order.status }}</p>
+            <p>{{ order.shipping }}</p>
             <!-- 換成p -->
             <p>
                 <basic-button class="btn-yellow-fill"><router-link to="/member/orderslist/orderscontain">Check</router-link></basic-button>

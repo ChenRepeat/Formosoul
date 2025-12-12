@@ -5,18 +5,19 @@
                 <img :src="img.images" alt="1">
             </div>
             <div v-for="member in members" class="memberinformation">
-                <h6>Name: <button
+                <p>Name: <button
                             class="edit-btn"
+                            :class="{ 'without': withouteditbtn}"
                             >
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
-                        </button></h6> 
-                <p>{{ member.name }}</p>
-                <h6>Wand Core:</h6>
-                <p>{{ member.wandcore }}</p>
-                <h6>Enrollment Number:</h6>
-                <p>{{ member.number }}</p>
-                <h6>Enrollment Since:</h6>
-                <p>{{ member.date }}</p>
+                        </button></p> 
+                <h6>{{ member.name }}</h6>
+                <p>Wand Core:</p>
+                <h6>{{ member.wandcore }}</h6>
+                <p>Enrollment Number:</p>
+                <h6>{{ member.number }}</h6>
+                <p>Enrollment Since:</p>
+                <h6>{{ member.date }}</h6>
             </div>
         </div>
         <img src="../../../../public/member/icon.png" alt="">
@@ -26,6 +27,13 @@
 <script setup>
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+const props = defineProps({
+    withouteditbtn:{
+        type: Boolean,
+        default: false,
+    }
+});
 
 const memberphoto = ref([
     {
@@ -54,6 +62,7 @@ const members = ref([
         border-radius: 8px;
         margin: 0 auto;
         display: flex;
+        padding-top: 32px;
         justify-content: center;
         position: relative;
     }
@@ -66,7 +75,7 @@ const members = ref([
         top: 150px;
     }
     .membercard{
-        align-items: center;
+        align-items: start;
         display: grid;
         grid-template-columns: 0.2fr 1.2fr;
         gap: 36px;
@@ -74,13 +83,15 @@ const members = ref([
 
     .memberphoto{
         width: 140px;
-        height: 160px;
-        margin: 0 auto;
+        height: 180px;
+        display: flex;
         
     }
 
     .memberphoto > img{
         height: 100%;
+        width: 100%;
+
     }
 
     .edit-btn{
@@ -88,5 +99,9 @@ const members = ref([
         border: 0;
         color: $color-fsContent;
         cursor: pointer;
+
+        &.without{
+            display: none;
+        }
     }
 </style>
