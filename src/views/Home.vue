@@ -33,10 +33,8 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 // 確保路徑正確
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
-import { useAuthStore } from '@/stores/autoStore';
 
 // --- Refs ---
-const authStore = useAuthStore();
 const containerRef = ref(null);
 const canvasBackRef = ref(null);
 const canvasFrontRef = ref(null);
@@ -842,7 +840,8 @@ function initSnitches(loader) {
   position: relative;
   overflow: hidden;
   touch-action: none;
-  background: radial-gradient(circle at center, #1b2940 0%, #050810 100%);
+  background: $color-fsTitle;
+  margin-top: -100px;
 }
 canvas {
   display: block;
