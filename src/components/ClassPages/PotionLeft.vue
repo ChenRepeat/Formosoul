@@ -21,6 +21,10 @@
             name:'BlackTea',
             imgUrl:'/Classes/potions/recipeBlackTea.png',
           },
+          4:{
+            name:'BlackTea',
+            imgUrl:'/Classes/potions/recipeBlackTea.png',
+          },
         }
       },
     2: {
@@ -180,13 +184,15 @@
 </script>
 
 <template>
-  <section class="potion-left dp-flex-col">
+  <section class="potion-left dp-flex-col"
+  :class="{'open':clickPotion != 0}">
     <div class="potion-title">
       <h2>Potions</h2>
       <p>Taiwan’s herbal potions refresh, heal, and bring magical energy with natural herbs and soothing flavors.</p>
     </div>
     <div class="potion-intro">
-      <div class="potion-intro-img dp-flex">
+      <div class="potion-intro-img dp-flex"
+        :class="{'open':clickPotion != 0}">
         <div class="shadow-case"
           v-for="(potion, key) in potions" 
           :key="key"
@@ -204,7 +210,7 @@
           </div>
         </div>
       </div>
-      <div class="intro-case dp-flex"
+      <div class="intro-case dp-flex  bg-frostedGlass"
         v-if="clickPotion!=0"
         @click="changeIntro(0)"
         @mousedown.stop
@@ -244,6 +250,10 @@
     width: 100%;
     height: 100%;
     gap: 100px;
+    transition: gap 1s ease;
+    &.open{
+      gap: 0px;
+    }
   }
   .potion-title{
     width: 100%;
@@ -260,6 +270,11 @@
   }
   .potion-intro-img{
     flex-wrap: wrap;
+    row-gap: 0;
+    transition: gap 1s ease;
+    &.open{
+      row-gap: 240px;
+    }
   }
   .intro-case{
     width: 90%;
@@ -267,7 +282,7 @@
     max-height: fit-content;
     position: absolute;
     z-index: 20;
-    background-color: #fff;
+    // background-color: #fff;
     padding: 20px 40px 20px 0;
     border-radius: 8px;
     top: 50%; 

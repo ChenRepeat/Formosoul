@@ -50,7 +50,7 @@ const currentBgClass = computed(() => {
   flex-grow: 1;
   overflow: hidden;
   min-height: 1px;
-  padding-top: 100px;
+  // padding-top: 100px;
   position: relative;
 
 }
