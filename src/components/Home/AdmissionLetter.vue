@@ -7,11 +7,12 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import gsap from "gsap";
 import { useRouter } from "vue-router"; 
+import { useAuthStore } from "@/stores/autoStore";
 
 // 定義 emit 事件，讓組件可以通知父層 
 const emit = defineEmits(['close']);
 const router = useRouter();
-
+const authStore = useAuthStore();
 const canvasContainer = ref(null);
 
 // 用於儲存 Three.js 實例以便清理
@@ -482,7 +483,7 @@ clickHandler = (e) => {
     // 如果是註冊，等待動畫差不多的時候跳轉
     if (hit === 'register') {
       setTimeout(() => {
-        router.push('/login');
+        authStore.openLoginModal();
       }, 2500); // 假設動畫約 3 秒，提早一點點跳轉比較順暢
     }
   }

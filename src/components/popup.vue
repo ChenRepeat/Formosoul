@@ -1,6 +1,6 @@
 <template>
     <div 
-    class="Loginpage" :class="{ 'active': authStore.isLoginModalOpen}" 
+    class="bg-frostedGlass" :class="{ 'active': authStore.isLoginModalOpen}" 
     @click.self="authStore.closeLoginModal()"
     @keydown="handleKeyDown"
     >
@@ -50,7 +50,7 @@
         top: 16px;
         right: 16px;
     }
-    .Loginpage{
+    .bg-frostedGlass{
         position: fixed;
         inset: 0;
         background-color: rgba(0, 0, 0, 0.5);
@@ -59,12 +59,14 @@
         justify-content: center;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.6s ease;
         z-index: 2000;
+        transform: scale(0.3);
         // 這段可以看 authStore.isLoginModalOpen 的值 去決定是否要顯示
         &.active {  
             opacity: 1;
             visibility: visible;
+            transform: scale(1);
         }
     }
 

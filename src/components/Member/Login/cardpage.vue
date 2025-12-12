@@ -98,6 +98,6 @@ import { handleError, inject } from 'vue';
     }
 
     .btn-yellow-fill{
-        padding: 16px 40px;
+        // padding: 16px 40px;
     }
 </style>
