@@ -115,7 +115,7 @@ import Pointcard from '../information/pointcard.vue';
         margin-bottom: 36px;
     }
     .btn-yellow-fill{
-        padding: 16px 40px;
+        // padding: 16px 40px;
 
         &.without{
             display: none;

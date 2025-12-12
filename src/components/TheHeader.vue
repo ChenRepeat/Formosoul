@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
 
 const router = useRouter();
-const authStore =useAuthStore();
+const authStore = useAuthStore();
 
 const isMenuOpen = ref(false);
 const isEnglish = ref(false)

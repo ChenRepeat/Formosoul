@@ -5,10 +5,12 @@
                     <IconHelmet size="143" />
                 </div>
                 <div class="buecolor" :class="{ active: activeIcons.bue}" @click="toggleIcon('bue') ">
-                    <IconBue size="117"/>
+                    <!-- 改用figma -->
+                    <IconBuecard size="137"/>
                 </div>
                 <div class="potioncolor" :class="{ active: activeIcons.potion}" @click="toggleIcon('potion') ">
-                    <IconPotion size="74"/>
+                    <!-- 改用figma -->
+                    <IconButton size="74"/>
                 </div>
                 <div class="dicecolor" :class="{ active: activeIcons.dice}" @click="toggleIcon('dice') ">
                     <IconDice />
@@ -32,6 +34,8 @@ import IconPotion from '@/components/icons/SVG/IconPotion.vue';
 import IconDice from '@/components/icons/SVG/IconDice.vue';
 import IconShrimp from '@/components/icons/SVG/IconShrimp.vue';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
+import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
+import IconButton from '@/components/icons/SVG/IconButton.vue';
 
 
 
@@ -81,7 +85,8 @@ function toggleIcon(key){
         position: absolute;
         top: 12px;
         left: 12px; 
-        transform: rotateY(180deg);                  
+        // transform: rotate(240deg); 
+        transform: scaleX(-1) rotate(-10deg)                 
 
     }
 
@@ -106,7 +111,8 @@ function toggleIcon(key){
         align-items: center;
         position: absolute;
         bottom: 60px; 
-        left: 140px;  
+        left: 140px;               
+
     }
     
     .dicecolor{
