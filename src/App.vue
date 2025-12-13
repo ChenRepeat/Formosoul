@@ -6,7 +6,6 @@ import loginpage from './components/Member/Login/loginpage.vue';
 import Popup from './components/popup.vue';
 import { computed } from 'vue';
 
-
 const route = useRoute();
 const currentLogoSrc = computed(() => {
   return route.meta?.logo || 'src/assets/logo_white.svg';

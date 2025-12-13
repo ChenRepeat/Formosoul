@@ -63,7 +63,6 @@
       </div>
       <div class="page">
         <div class="page-content">
-          Magic
         </div>
       </div>
 
@@ -166,6 +165,7 @@ import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
 import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
+import Curve from '@/components/Wave.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
