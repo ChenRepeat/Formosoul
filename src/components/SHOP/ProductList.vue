@@ -211,16 +211,6 @@ function goProductDetail(){
 
 
 
-
-
-
-
-
-
-
-
-
-
 // 上方商品分類------------------------------------
 
 .list-category{
