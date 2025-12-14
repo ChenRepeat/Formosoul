@@ -166,6 +166,11 @@
 </template>
 
 <style lang="scss" scoped>
+  .charm-title{
+    p{
+      color: $color-fsContent;
+    }
+  }
   .charm-left{
     width: 100%;
     height: 100%;
@@ -205,7 +210,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     align-items: center;
-    gap: 14px;
+    gap: 40px;
     img{
       width: 140px;
       height: 140px;
@@ -220,7 +225,7 @@
     }
   }
   .intro-img-case{
-    gap: 20px;
+    gap: 40px;
     img{
       width: 50px;
       height: 50px;
@@ -228,7 +233,6 @@
     }
   }
   .intro-text{
-    gap: 20px;
     justify-content: center;
     
   }

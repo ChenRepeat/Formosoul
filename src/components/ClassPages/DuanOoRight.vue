@@ -40,6 +40,12 @@ const items = {
   }
   .duan-right-top{
     gap: 34px;
+    justify-content: space-between;
+    p{
+      padding-top: 13%;
+      color: $color-fsContent;
+      width: 45%;
+    }
     img{
       width: 240px;
       height: 240px;

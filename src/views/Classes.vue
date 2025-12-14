@@ -206,8 +206,8 @@ const handleKeydown = (event) => {
 const updatePageNumber = () => {
   if (!pageFlip) return;
   if(window.innerWidth >= 992){
-    currentPage.value = Math.floor(pageFlip.getCurrentPageIndex() / 2);
-    totalPages.value = Math.floor(pageFlip.getPageCount()/2);
+    currentPage.value = Math.ceil(pageFlip.getCurrentPageIndex() / 2);
+    totalPages.value = Math.ceil(pageFlip.getPageCount()/2);
   }else{
     totalPages.value = pageFlip.getPageCount();
     currentPage.value = pageFlip.getCurrentPageIndex();
@@ -260,7 +260,7 @@ const goToPage = async (pageNum) => {
   } else if (pageNum < currentPage.value) {
 
     isAnimating.value = true;
-    const pagesToFlip = currentPage.value/2 - pageNum;
+    const pagesToFlip = currentPage.value - pageNum;
     for (let i = 0; i < pagesToFlip; i++) {
       pageFlip.flipPrev();
       await wait(FLIP_SPEEDS.intro);

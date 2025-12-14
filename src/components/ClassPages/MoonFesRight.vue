@@ -4,7 +4,7 @@ import BasicButton from '../BasicButton.vue';
 import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
 
   const dialogs = {
-    1: 'Today, families enjoy magical mooncakes, lanterns, and storytelling. People cast blessing spells under the full moon, mixing ancient lunar magic with modern celebration and joy.',
+    1: 'Today, families enjoy magical lanterns, mooncakes, and storytelling. People cast blessing spells under the full moon, mixing ancient lunar magic with modern celebration and joy.',
     2: 'Villagers lit glowing lanterns, offered enchanted mooncakes, and gazed at the magical moon to honor Chang’e, Wu Gang, and the Jade Rabbit’s mystical deeds.',
   };
 
@@ -63,26 +63,32 @@ import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
 </template>
 
 <style lang="scss" scoped>
+  p{
+      color:$color-fsContent;
+  }
   .moonfes-right{
     gap: 24px;
     justify-content: start;
-    width: 90%;
+    width: 100%;
     height: 100%;
   }
   .moonfes-contain-case{
     gap: 12px;
     p{
       margin-bottom: 24px;
-      color:$color-fsContent;
     }
+
   }
   .moonfes-contain-left{
     position: relative;
-    width: 50%;
+    width: 68%;
+    p:not(:first-child){
+      width: 84%;  
+    }
   }
   .moonfes-img-case{
       position: absolute;
-      bottom: -45%;
+      bottom: -52%;
       left: -15%;
       img{
       width: 200px;

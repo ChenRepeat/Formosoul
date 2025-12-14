@@ -75,6 +75,9 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
       h5{
         text-align: left;
       }
+      p{
+        color: $color-fsContent;
+      }
     }
   }
   .newyear-intro-pic{
@@ -83,16 +86,17 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
     height: 100px;
     img{
       position: absolute;
+      border-radius: 8px;
     }
     .right{
-      top: -100%;left: 0;
+      top: -70%;left: 0;
       width: 320px;
       height: 320px;
       transform: rotate(15deg);
 
     }
     .left{
-      top: -150%;right: -20%;
+      top: -140%;right: -40%;
       width: 360px;
       height: 360px;
       transform: rotate(-15deg);
@@ -101,13 +105,14 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
   }
   .newyear-left-text{
     
-      width: 150%;
-      margin-left: 50%;
+      width: 100%;
+      // margin-left: 50%;
       padding: 20px;
-      background-color: rgba(246, 246, 246,0.7);
+      background-color: rgba(246, 246, 246,0.9);
       color: $color-fsContent;
       line-height: 2;
       border-radius: 8px;
+      z-index: 10;
     
   }
   @keyframes fire{

@@ -6,7 +6,11 @@
   import IconStop from '../icons/SVG/IconStop.vue';
   import { usePageNavigation } from './goToPage';
   
-
+  const vWidth = window.innerWidth;
+  const toMortorGame = ref(2);
+  if(vWidth < 750){
+    toMortorGame.value = 4;
+  }
   const toggle = ref(1);
   const dialogs = {
     1: {
@@ -61,7 +65,7 @@
           class="btn-black"
           @mousedown.stop
           @touchstart.stop
-          @click="goToPage(4)"><p>Try Now !</p></BasicButton>
+          @click="goToPage(toMortorGame)"><p>Try Now !</p></BasicButton>
         <div class="bottom-icons">
           <IconBike size= 69 class="icon-bike icon"/>
           <IconHelmetColor size="48" class="icon-helmet icon"/>
@@ -77,17 +81,16 @@
     justify-content: space-between;
     gap: 16px;
     height: 100%;
-    padding-top: 60px;
+    padding-top: 30px;
     padding-bottom: 12px;
   }
   .motor-right-title{
     gap: 12px;
-    width: 406px;
+    width: 100%;
     padding-left: 40px;
   }
   p{
     line-height: 2;
-    text-align: left;
     color: $color-fsContent;
   }
   .motor-right-dialog{
@@ -97,7 +100,7 @@
   .motor-right-content{
     align-items: center;
     width: 500px;
-    transform: translateX(60px);
+    transform: translateX(40px);
     justify-content: space-between;
   }
   .motor-right-iamge-case{

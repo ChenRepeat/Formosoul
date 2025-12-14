@@ -45,8 +45,8 @@
 <style lang="scss" scoped>
   .moonfes-left{
     position: relative;
-    width: 95%;
-    height: 95%;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     >img{
       box-shadow: unset;
@@ -63,10 +63,12 @@
     }
   }
   .intro-case{
-    gap: 40px;
+    width: 100%;
+    gap: 48px;
+    align-items: center;
     img{
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
     }
   }

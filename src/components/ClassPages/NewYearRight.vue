@@ -94,7 +94,7 @@
   }
   .newyear-right-contain{
     height: 100%;
-    gap: 15%;
+    gap: 20%;
     padding-top: 10%;
   }
   .newyear-right-photo-case{
@@ -170,7 +170,6 @@
   }
   p{
     padding-left: 10%;
-    padding-right: 5%;
     color: $color-fsContent;
     line-height: 2;
     
