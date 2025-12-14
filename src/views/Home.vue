@@ -758,7 +758,6 @@ function initSnitches(loader) {
   overflow: hidden;
   touch-action: none;
   background: $color-fsTitle;
-  margin-top: -100px;
 }
 canvas {
   display: block;
