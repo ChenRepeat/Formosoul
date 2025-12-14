@@ -4,14 +4,23 @@ import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
 import Popup from './components/popup.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useAuthStore } from './stores/autoStore';
 
 const route = useRoute();
+const authStore = useAuthStore();
+
 const currentLogoSrc = computed(() => {
   return route.meta?.logo || 'src/assets/logo_white.svg';
 });
 const currentBgClass = computed(() => {
   return route.meta?.bgColor || 'bg-default';
+});
+
+onMounted(async () => {
+  if(authStore.token){
+    await authStore.fetchUser();
+  }
 });
 </script>
 
@@ -21,8 +30,14 @@ const currentBgClass = computed(() => {
     <TheHeader :is-black-style="currentBgClass == 'white'"/>
     <main class="content">
       <a href="/"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo"/></a>
-      <RouterView />
-      <Popup></Popup>
+      <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
+      <div v-if="authStore.isLoading" class="loading">
+        載入中...
+      </div>
+      <div v-else>
+        <RouterView />
+        <Popup></Popup>
+      </div>
     </main>
     <img src="" alt="" srcset="">
     <TheFooter />
