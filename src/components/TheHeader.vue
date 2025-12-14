@@ -54,6 +54,7 @@ function toggleMenu() {
 function handlelogout() {
   authStore.logout();
   isMemberMenuOpen.value = false;
+  alert('登出惹');
 
 }
 </script>
