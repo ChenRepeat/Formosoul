@@ -1,4 +1,11 @@
-<template></template>
+<script setup>
+import Wave from '@/components/Wave.vue';
+
+</script>
+
+<template>
+  <Wave />
+</template>
 
 <style>
 @media (min-width: 1024px) {
