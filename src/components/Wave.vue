@@ -15,12 +15,15 @@ const canvasRef = ref(null);
 
 // 新增 line 格式: [baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset, lineWidth]
 const line = [
-  [260, 0.8, 120, 0, '#FF6B6B', '#4ECDC4', 0, 2],
-  [90, 0.6, 170, 0.8, '#A8E6CF', '#FFD93D', 0.2, 1],
-  [130, 0.5, 18, 1.6, '#6C5CE7', '#A29BFE', 0.4, 3],
-  [170, 0.7, 22, 2.4, '#FD79A8', '#FDCB6E', 0.6, 5],
-  [210, 0.55, 16, 3.2, '#00B894', '#00CEC9', 0.8, 0.25],
-  [250, 0.85, 19, 4.0, '#E17055', '#FAB1A0', 1.0, 0.75]
+  [260, 0.8, 50, 0.2, '#FF6B6B', '#4ECDC4', 0.8, 2],
+  [260, 0.8, 80, 1, '#FF6B6B', '#4ECDC4', 0, 1],
+  [260, 0.8, 20, 0.6, '#FF6B6B', '#4ECDC4', 0, 5],
+  [260, 0.8, 110, 0, '#FF6B6B', '#4ECDC4', 0, 0.2],
+  // [90, 0.6, 90, 0.8, '#A8E6CF', '#FFD93D', 0.2, 1],
+  // [130, 0.5, 18, 1.6, '#6C5CE7', '#A29BFE', 0.4, 3],
+  // [170, 0.7, 22, 2.4, '#FD79A8', '#FDCB6E', 0.6, 5],
+  // [210, 0.55, 16, 3.2, '#00B894', '#00CEC9', 0.8, 0.25],
+  // [250, 0.85, 19, 4.0, '#E17055', '#FAB1A0', 1.0, 0.75]
 ];
 
 
@@ -33,7 +36,7 @@ onMounted(() => {
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     //  高度一定要小於起始座標 + 波動幅度，除非想要不完整的波段
-    canvas.height = 600;
+    canvas.height = 800;
   }
   
   resizeCanvas();
@@ -140,8 +143,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 0;left: 0;
+  /* position: absolute; */
+  /* top: 0;left: 0; */
   z-index: 0;
 }
 </style>

@@ -174,55 +174,78 @@ const isIntroPosition = ref(true);
 const currentPage = ref(0);
 const totalPages = ref(0);
 const innerWidth=ref(window.innerWidth)
+let animationTimeoutId = null;
 const FLIP_SPEEDS = {
   intro: 400,
   normal: 800,
-  coverClose: 1500,
+  coverClose: 1000,
 };
 
 let pageFlip = null;
+let isIntroPlaying = ref(false);
 
 // --- 輔助函式 ---
-const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms) => new Promise(resolve => {
+  animationTimeoutId = setTimeout(resolve, ms);
+  setTimeout(resolve, ms)});
+
+const handleKeydown = (event) => {
+    if (event.key === 'Escape' && isIntroPlaying.value) {
+        clearTimeout(animationTimeoutId); 
+        if (pageFlip) {
+            goToPage(currentPage); 
+            isIntroPlaying.value = false;
+            isAnimating.value = false;
+            isIntroPosition.value = false;
+            updatePageNumber(); 
+        }
+        console.log('Intro animation interrupted by Esc key.');
+    }
+};
 
 const updatePageNumber = () => {
   if (!pageFlip) return;
   if(window.innerWidth >= 992){
     currentPage.value = pageFlip.getCurrentPageIndex() / 2;
+    totalPages.value = pageFlip.getPageCount()/2
+
   }else{
+    totalPages.value = pageFlip.getPageCount();
     currentPage.value = pageFlip.getCurrentPageIndex();
   }
-  totalPages.value = pageFlip.getPageCount();
 };
 // --- 開場動畫邏輯 ---
 const playIntroAnimation = async () => {
   if (!pageFlip) return;
-
   await wait(800);
+  isIntroPlaying.value = true;
+  if (!isIntroPlaying.value) return;
   isIntroPosition.value = false;
   await wait(1600);
+  if (!isIntroPlaying.value) return;
 
   // 使用變數控制翻頁速度
 
   for (let i = 0; i < totalPages.value; i++) {
     pageFlip.flipNext();
     await wait(FLIP_SPEEDS.intro);
+    if (!isIntroPlaying.value) return;
   }
 
   await wait(FLIP_SPEEDS.coverClose);
   pageFlip.flip(0);
+  if (!isIntroPlaying.value) return;
   await wait(FLIP_SPEEDS.coverClose);
-
+  if (!isIntroPlaying.value) return;
   pageFlip.flip(1);
   await wait(600);
-  
+  if (!isIntroPlaying.value) return;
   isAnimating.value = false;
   updatePageNumber(); // 動畫結束後更新頁碼
 };
 
 const goToPage = async (pageNum) => {
-  if (!pageFlip || isAnimating.value) return;
-  
+  if (!pageFlip || isAnimating.value || isIntroPlaying.value) return;
   if (pageNum > currentPage.value) {
     isAnimating.value = true;
     const pagesToFlip = pageNum - currentPage.value;
@@ -284,10 +307,13 @@ onMounted(() => {
   totalPages.value = pageFlip.getPageCount();
 
   playIntroAnimation();
+  window.addEventListener('keyup', handleKeydown);
 });
 
 onUnmounted(() => {
   if (pageFlip) pageFlip.destroy();
+  window.removeEventListener('keyup', handleKeydown);
+  clearTimeout(animationTimeoutId);
 })
 
 </script>
