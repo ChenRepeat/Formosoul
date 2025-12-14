@@ -206,9 +206,8 @@ const handleKeydown = (event) => {
 const updatePageNumber = () => {
   if (!pageFlip) return;
   if(window.innerWidth >= 992){
-    currentPage.value = pageFlip.getCurrentPageIndex() / 2;
-    totalPages.value = pageFlip.getPageCount()/2
-
+    currentPage.value = Math.floor(pageFlip.getCurrentPageIndex() / 2);
+    totalPages.value = Math.floor(pageFlip.getPageCount()/2);
   }else{
     totalPages.value = pageFlip.getPageCount();
     currentPage.value = pageFlip.getCurrentPageIndex();
@@ -285,6 +284,7 @@ onMounted(() => {
     showCover: true,
     maxShadowOpacity: 0.2,
     flippingTime: FLIP_SPEEDS.normal,
+    flippingBoundary: 10,
   });
 
   pageFlip.loadFromHTML(bookRef.value.querySelectorAll('.page'));

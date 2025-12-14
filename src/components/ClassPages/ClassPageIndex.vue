@@ -8,9 +8,23 @@
   import IconCharm from '../icons/SVG/IconCharm.vue';  
 
   import { usePageNavigation } from './goToPage';
-  
+  const vWidth = window.innerWidth
   const emit = defineEmits(['flip'])
   const { goToPage } = usePageNavigation(emit)
+  const toMotorPage = ref(1);
+  const toAnimaPage = ref(3);
+  const toHistoryPage = ref(4);
+  const toCharmPage = ref(8);
+  const toPotionPage = ref(9);
+  const toDivitionPage = ref(10);
+  if(vWidth < 750){
+    toMotorPage.value = 2;
+    toAnimaPage.value = 6;
+    toHistoryPage.value = 9;
+    toCharmPage.value = 15;
+    toPotionPage.value = 18;
+    toDivitionPage.value = 20;
+  }
 </script>
 
 <template>
@@ -19,7 +33,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(2)"
+      @click="goToPage(toMotorPage)"
       >
         <IconHelmet />Motorcycle
       </h5>
@@ -28,7 +42,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(4)">
+      @click="goToPage(toAnimaPage)">
         <IconFoot /> Endemic Species
       </h5>
     </li>
@@ -36,7 +50,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(5)">
+      @click="goToPage(toHistoryPage)">
         <IconHistory /> History of Magic
       </h5>
     </li>
@@ -44,7 +58,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(9)">
+      @click="goToPage(toCharmPage)">
         <IconCharm size="43"/>Spell & Charms
       </h5>
     </li>
@@ -52,7 +66,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(10)">
+      @click="goToPage(toPotionPage)">
         <IconPotion />Potions
       </h5>
     </li>
@@ -60,7 +74,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(11)">
+      @click="goToPage(toDivitionPage)">
         <IconBue />Divinations
       </h5>
     </li>
