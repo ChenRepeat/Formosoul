@@ -27,6 +27,7 @@ const doubleAll = ref([])
 const refList = ref(null) // 
 const refCard = ref(null) // li
 const cardWidth = ref(0) 
+let index = 0; // 計數器
 
 const calculateCardWidth = () => {
   // querySelector 只會抓「第一個」符合的元素
@@ -40,7 +41,6 @@ const calculateCardWidth = () => {
     cardWidth.value += cardMargin * 2 // 左右 margin 都要計入
   }
 }
-let index = 0; // 計數器
 const slider = async() => {
   calculateCardWidth()
   if(!refList.value) return 
@@ -89,15 +89,19 @@ const skillDetail = ref(null)
 const refBigPhoto =ref('')
 const clickedPhoto = ref('')
 const isOpen = ref(false);
-(async ()=>{ //讀 json 
+const xStart = ref(0) //起點
+const xNow = ref(0)
+const distance = ref(0)
+;(async ()=>{ //讀 json 
   let jsonFile = await fetch('/public/ProfessorIntroduction/professorInfo.json')
   if(jsonFile){
     info.value = await jsonFile.json()
   }
 })()
 const openInfo = (index) => {
-  if(!info.value[0]){alert(false) ;return}
+  if(!info.value[0]) return
   if(index > all.length - 1 ){ index = index - all.length } // 把複製資料的 index 對應到原始資料的
+  if(distance.value > 5) return
   professsor.value = info.value[index].name
   job.value = info.value[index].job
   skillDetail.value = info.value[index].skill
@@ -115,9 +119,6 @@ const closeInfo = () => {
   isOpen.value = false
 }
 
-const xStart = ref(0) //起點
-const xNow = ref(0)
-const distance = ref(0)
 const isPress =ref(false) 
 let originalShift = 0
 const currentTranslateX = ref(0)
@@ -132,21 +133,21 @@ const onMousemove = (e) => { // mousemove 1px 呼叫一次
   xNow.value = e.clientX // 滑鼠按下&&移動時的當下位置
   distance.value = xNow.value - xStart.value // 距離按下時的總位移
 
-  let newTranslateX = originalShift + distance.value // 計算理論上的新位移
+  let newTranslateX = originalShift + distance.value // 2-1. 計算理論上的新位移
 
   calculateCardWidth()
   const oneSetWidth = cardWidth.value * all.length
 
-  // 2. 左右移動應對
+  // 2-2. 左右移動應對
     // 往右拉過第0張 -> 瞬移
     if(newTranslateX > 0){
       newTranslateX -= oneSetWidth
-      originalShift -= oneSetWidth
+      // originalShift -= oneSetWidth
     } 
     // 往左拉超過原始資料尾 
     else if(newTranslateX < -oneSetWidth  ){
       newTranslateX += oneSetWidth
-      originalShift += oneSetWidth      
+      // originalShift += oneSetWidth      
     }
 
     refList.value.style.transform = `translateX(${newTranslateX}px)`;
@@ -162,14 +163,14 @@ const timerControl=()=>{ // 計時器控制
   }else if(!timer.value)
     timer.value = setInterval(move, 1000) 
 }
-const onPress = e =>{ 
+const onPress = e => { 
   isPress.value = true
   xStart.value = e.clientX // 按下時開始追蹤起點
-  originalShift = currentTranslateX.value// 取得輪播位移變數 作為起始數值
+  originalShift = currentTranslateX.value // 取得輪播位移變數 作為起始數值
   timerControl() // 關閉計時器
   if (refList.value) 
     refList.value.style.transition = '0s'; // 關閉動畫
-  
+  distance.value = 0 // 將移動距離歸零 以便作為click是件事發的判讀條件
 }
 const offPress =()=>{
   isPress.value = false
@@ -224,10 +225,10 @@ onUnmounted(()=>{
           @mouseenter="InOrOut(index, true)" 
           @mouseleave="InOrOut(index, false)"
           @click="openInfo(index)"
-
            >
         </li>
-      </ul>    
+      </ul>   
+
     </div>
 
     <section :class="{'professor-info':true,'bg-frostedGlass':true, 'active':isOpen==true }">
@@ -236,10 +237,15 @@ onUnmounted(()=>{
         ref="refBigPhoto" alt="Professor Photo" > 
       </li>
       <article class="professor-text">
-        <font-awesome-icon icon="fa-solid fa-xmark" class="xmark" @click="closeInfo"/>
+        <font-awesome-icon icon="fa-solid fa-xmark" class="professor-xmark" @click="closeInfo"/>
+        
         <h3 class="professor-name">{{ professsor }}</h3>
         <p class="professor-job">{{ job }}</p>
-        <h5 class="professor-skill">Skills: </h5>
+        <div class="professor-skill-wand">
+          <IconWandCore class="professor-wand"/>
+          <h5 class="professor-skill">Skills: </h5>
+        </div>
+        
         <p class="professor-skill-detail">{{ skillDetail }}</p>
       </article>
     </section>
@@ -272,7 +278,11 @@ onUnmounted(()=>{
     .professor-list{ //ul
       display: flex;
       transition: all 1s ;// linear
-      .professor-photo-wrapper{ // li
+      .professor-photo-wrapper.middle{
+        position: relative;
+        top: 30px;
+      }
+      .professor-photo-wrapper{ // li 第一排
         height: 200px;
         flex-basis: 200px;
         flex-shrink: 0; // 預設是1
@@ -307,7 +317,6 @@ onUnmounted(()=>{
   }
 
 }
-
 // ------------------------大卡片-----------------------------
 .professor-info{
   width: fit-content;
@@ -321,7 +330,7 @@ onUnmounted(()=>{
     z-index: 5;
     height: 600px;
     width:450px;
-    transform: rotate(2deg) ;//
+    transform: rotate(2deg) ;
     border-radius: 12px;
     overflow: hidden;
     .professor-big-photo{
@@ -339,7 +348,7 @@ onUnmounted(()=>{
     position: relative;
     top: 0;bottom: 0;
     margin: auto;
-    .xmark{ 
+    .professor-xmark{ 
       height: 40px;
       width: 40px;
       position:absolute;
@@ -353,11 +362,24 @@ onUnmounted(()=>{
     }
     .professor-job{
       color: $color-fsContent;
-  
     }
-    .professor-skill{
+    .professor-skill-wand{
       color: $color-fsTitle;
+      display: inline-flex;
       margin-top: 20px;
+      padding-left: -8px;
+      position: relative;
+        // bottom: 60px; 
+        left: -8px;
+
+      .professor-wand{
+        height: 4.48rem; // h5 
+        width: 4.48rem; // h5 
+        // line-height: 160%;
+      }
+      .professor-skill{
+        // display: inline-flex;
+      }
     }
     .professor-skill-detail{
       color: $color-fsContent;
