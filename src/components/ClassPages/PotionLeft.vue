@@ -176,7 +176,14 @@
       return {}; 
   };
   function changeIntro(i){
-    clickPotion.value = String(i);
+    if(clickPotion.value != String(i)){
+      clickPotion.value = false;
+      setTimeout(() => {
+        clickPotion.value = String(i);
+      }, 450);
+    }else{
+      clickPotion.value = false;
+    }
   }
   const currentIntro = computed(() => {
     return potions[clickPotion.value];

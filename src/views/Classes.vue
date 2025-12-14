@@ -18,11 +18,12 @@
         </div>
       </div>
       <div class="page">
-        <div class="page-content text-page">
+        <div class="page-content">
+          <ClassPageIndex @flip="goToPage" v-if="innerWidth < 992" />
         </div>
       </div>
-      <div class="page">
-        <div class="page-content text-page">
+      <div class="page" v-if="innerWidth > 992">
+        <div class="page-content" >
           <ClassPageIndex @flip="goToPage"/>
         </div>
       </div>
@@ -165,7 +166,6 @@ import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
 import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
-import Curve from '@/components/Wave.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動
@@ -173,6 +173,7 @@ const isFlip = ref (false);
 const isIntroPosition = ref(true); 
 const currentPage = ref(0);
 const totalPages = ref(0);
+const innerWidth=ref(window.innerWidth)
 const FLIP_SPEEDS = {
   intro: 400,
   normal: 800,
@@ -186,10 +187,13 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const updatePageNumber = () => {
   if (!pageFlip) return;
-  currentPage.value = pageFlip.getCurrentPageIndex();
+  if(window.innerWidth >= 992){
+    currentPage.value = pageFlip.getCurrentPageIndex() / 2;
+  }else{
+    currentPage.value = pageFlip.getCurrentPageIndex();
+  }
   totalPages.value = pageFlip.getPageCount();
 };
-
 // --- 開場動畫邏輯 ---
 const playIntroAnimation = async () => {
   if (!pageFlip) return;
@@ -199,7 +203,8 @@ const playIntroAnimation = async () => {
   await wait(1600);
 
   // 使用變數控制翻頁速度
-  for (let i = 0; i < totalPages.value/2; i++) {
+
+  for (let i = 0; i < totalPages.value; i++) {
     pageFlip.flipNext();
     await wait(FLIP_SPEEDS.intro);
   }
@@ -249,7 +254,11 @@ onMounted(() => {
   pageFlip = new PageFlip(bookRef.value, {
     width: 600,
     height: 800,
-    size: 'fixed',
+    minWidth : 375,
+    maxWidth : 600,
+    minHeight : 500,
+    maxHeight : 800,
+    size: 'stretch',
     showCover: true,
     maxShadowOpacity: 0.2,
     flippingTime: FLIP_SPEEDS.normal,
