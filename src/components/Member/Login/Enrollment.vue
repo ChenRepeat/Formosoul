@@ -229,7 +229,7 @@ function togglePassword() {
         width: 70%;
         height: 50%;
         margin: 0 auto;
-        padding-top: 60px;
+        padding-top: 80px;
         
         // position: absolute;
         // left: 50%;
@@ -309,6 +309,5 @@ function togglePassword() {
 
     .error-message > p{
         color: $color-fsRed;
-        margin-bottom: 24px;
     }
 </style>

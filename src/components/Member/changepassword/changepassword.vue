@@ -1,8 +1,8 @@
 <template>
     <div class="changepassword">
-        <h2>Change password</h2>
+        <h3>Change password</h3>
         <div class="contain">
-            <label for="oldpassword"><h5>Current password：</h5></label>
+            <label for="oldpassword"><h6>Current password：</h6></label>
             <input
             class="input-text"
             v-model="oldpassword"
@@ -11,7 +11,7 @@
             id="oldpassword"
             placeholder="請輸入舊密碼"/>
             
-            <label for="Newpassword"><h5>New password：</h5></label>
+            <label for="Newpassword"><h6>New password：</h6></label>
             <input 
             v-model="Newpassword"
             type="text"
@@ -22,7 +22,7 @@
             placeholder="請輸入新密碼"/>
             
             
-            <label for="confirmpassword"><h5>Confirm new password：</h5></label>
+            <label for="confirmpassword"><h6>Confirm new password：</h6></label>
             <input 
             class="input-text"
             v-model="confirmpassword"
@@ -169,7 +169,7 @@ const handleChangePassword  = () => {
         margin: 0 auto;
     }
 
-    h2{
+    h3{
         text-align: center;
         margin: 100px 0 100px 0;
         color: $color-fsTitle;
@@ -186,7 +186,7 @@ const handleChangePassword  = () => {
     .input-text{
         margin-bottom: 24px;
     }
-    h5{
+    h6{
         color: $color-fsTitle;
     }
 
