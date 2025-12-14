@@ -228,10 +228,13 @@ function togglePassword() {
     .login-form{
         width: 70%;
         height: 50%;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%); 
+        margin: 0 auto;
+        padding-top: 60px;
+        
+        // position: absolute;
+        // left: 50%;
+        // top: 50%;
+        // transform: translate(-50%, -50%); 
     }
 
     .form-group{
@@ -252,8 +255,7 @@ function togglePassword() {
 
     .otp-input{
         position: relative;
-        display: grid;
-        grid-template-columns: 0.65fr 0.3fr;
+
     }
 
     .toggle-password-btn{
@@ -269,12 +271,15 @@ function togglePassword() {
 
     .btn-blue-fill{
         position: absolute;
-        right: 0;
+        right: 8px;
         top: 50%;
         transform: translate(0, -50%);
         padding: 4px 8px;
     }
 
+    .btn-blue-fill > p{
+        font-size: 14px;
+    }
     h5{
         color: $color-fsTitle;
     }

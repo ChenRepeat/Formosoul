@@ -3,7 +3,7 @@
         <div class="chinesedelivery">
             <p>▌ 查詢線上購物之相關問題</p>
             <p>- 請利用客服信箱：service@formosoul.com 與我們聯繫</p>
-            <hr>
+            <hr class="big">
             
             <p>▌ 商品之退、換貨 並提醒您注意，商品退換貨時必須恢復原狀，也就是您收到商品時的全新狀態，包括 : 吊牌未剪，商品、內外包裝、文件、贈品皆須為全新未使用的狀態，若有污損、破損、氣味殘留或包裝不完整等狀況則無法受理退換貨，且退換貨以一次為限</p>
             <hr>
@@ -18,7 +18,7 @@
 
             <p>|海外地區|</p>
             <p>- 為提供海外消費者一致的使用體驗，Formosoul 同樣提供自商品送達翌日起七天內申請退貨之服務；惟因國際物流成本較高，海外訂單原則上僅提供退貨，不提供換貨服務，敬請見諒。</p>
-            <hr>
+            <hr class="big">
             <p>▌申請退換貨流程 若商品有瑕疵或與訂購不符商品之退換貨，請務必於商品送達後七日內來信與我們聯絡，否則無法提供退換貨服務。超過七日恕不受理退換貨申請，敬請見諒。 寄出退換貨申請信件後，客服將在三日內（不含週末假日）回覆，還請耐心等候。</p>
 
             <p>|台灣地區| 請於退換貨申請信件中務必告知以下資訊：</p>
@@ -36,7 +36,7 @@
             <p>- E-MAIL</p>
             <p>- 商品名/數量/金額</p>
             <p>- 退換貨原因</p>
-            <hr>
+            <hr class="big">
             <p>▌ 欲退貨之商品實品與外箱包裝照片（請務必附上） 待客服確認符合退貨條件後，將提供指定退貨地址與寄回方式。請勿自行將商品寄回，若自行寄回請自行負擔寄回運費，以免影響權益。</p>
             <hr>
             <p>|刷卡退款說明|</p>
@@ -54,7 +54,7 @@
             <p>- 除商品本身瑕疵或寄錯商品外，海外訂單退貨之國際運費及可能產生之關稅、通關手續費需由消費者自行負擔，原始配送運費不予退還。</p>
             <p>- 若因收件人資料填寫錯誤、拒收包裹或未於當地物流保管期限內領取，導致包裹遭退回，退款金額將自訂單實付金額中扣除實際產生的來回運費及相關稅費後，再退回剩餘金額，恕不再另行補寄。</p>
             <p>- 海外退貨以一次為限，請於申請前務必確認欲退貨之商品與數量，避免不必要的國際運費支出。</p>
-            <hr>
+            <hr class="big">
             <p>▌ 如有以下情況恕不受理退換貨，並將商品寄回給您，敬請見諒。</p>
             <p>|台灣地區|</p>
             <p>- 未妥善包裝導致商品有髒汙、破損之虞。</p>
@@ -78,7 +78,7 @@
         <div class="engdelivery">
             <p>▌ Inquiries Regarding Online Shopping</p>
             <p>- Please contact us via our customer service email: service@formosoul.com</p>
-            <hr>
+            <hr class="big">
             
             <p>▌ Product Returns & Exchanges</p>
             <p>Please note that when returning or exchanging an item, it must be restored to its original condition. This means the item must be in the brand-new state in which you received it, including: tags attached, and all product/inner/outer packaging, documents, and gifts must be new and unused. We cannot accept returns or exchanges if the item is stained, damaged, retains odors, or has incomplete packaging. Returns/Exchanges are limited to one time per order.</p>
@@ -94,7 +94,7 @@
 
             <p>|International Regions|</p>
             <p>- To provide a consistent experience for international consumers, Formosoul also offers a return application period of 7 days starting from the day after delivery. However, due to high international logistics costs, international orders are eligible for returns only; exchanges are not available. We appreciate your understanding.</p>
-            <hr>
+            <hr class="big">
             <p>▌Return & Exchange Application Process</p>
             <p>- If you receive a defective item or an item that does not match your order, please strictly contact us within 7 days of delivery. We cannot provide return/exchange services after this period. Customer service will reply to your application email within 3 business days (excluding weekends and holidays).</p>
 
@@ -129,7 +129,7 @@
             <p>Except for defective items or shipping errors, the consumer is responsible for international return shipping costs and any potential customs duties or handling fees. Original shipping fees are non-refundable.</p>
             <p>If a package is returned due to incorrect address information, refusal to accept, or failure to pick up within the local holding period, the refund will be the order amount minus actual round-trip shipping costs and related taxes. No re-shipment will be offered.</p>
             <p>International returns are limited to one time; please confirm the items and quantity before applying to avoid unnecessary international shipping costs.  </p>
-            <hr>
+            <hr class="big">
             <p>▌ Returns and exchanges will NOT be accepted under the following circumstances</p>
             <hr>
             <p>|Taiwan Region|</p>
@@ -163,8 +163,7 @@
     .wrapper{
         max-width: 1200px;
         margin: 0 auto;
-        padding-top: 60px;
-        padding-bottom: 60px;
+        padding: 60px 40px 100px 40px;
     }
     .chinesedelivery{
         padding-bottom: 60px;
@@ -172,7 +171,10 @@
     .chinesedelivery > hr,
     .engdelivery > hr{
         border-color: transparent;
-        // border: 0;
+
+    }
+    .big{
         margin: 24px;
     }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper dp-flex-col">
         <div class="chinesedelivery">
             <p>隱私權政策</p>
             <p>本隱私權政策旨在說明我們如何蒐集、使用、保護及處理您在使用本服務時所提供的個人資料。請您務必詳細閱讀，當您使用本服務即表示您同意本政策內容。</p>
@@ -115,8 +115,7 @@
     .wrapper{
         max-width: 1200px;
         margin: 0 auto;
-        padding-top: 60px;
-        padding-bottom: 60px;
+        padding: 60px 40px 100px 40px;
     }
     .chinesedelivery{
         padding-bottom: 60px;
@@ -124,7 +123,11 @@
     .chinesedelivery > hr,
     .engdelivery > hr{
         border-color: transparent;
-        // border: 0;
+        display: flex;
+        margin: 24px;
+    }
+
+    .big{
         margin: 24px;
     }
 </style>
