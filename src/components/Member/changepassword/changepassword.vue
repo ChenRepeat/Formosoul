@@ -2,29 +2,29 @@
     <div class="changepassword">
         <h2>Change password</h2>
         <div class="contain">
-            <label for="oldpassword"><h5>Current password:</h5></label>
+            <label for="oldpassword"><h5>Current password：</h5></label>
             <input
-            class="form-input"
+            class="input-text"
             v-model="oldpassword"
             type="text" 
             name="oldpassword" 
             id="oldpassword"
             placeholder="請輸入舊密碼"/>
             
-            <label for="Newpassword"><h5>New password:</h5></label>
+            <label for="Newpassword"><h5>New password：</h5></label>
             <input 
             v-model="Newpassword"
             type="text"
             name="Newpassword" 
-            class="form-input"
+            class="input-text"
             id="Newpassword"
             @input="validateNewPassword"
             placeholder="請輸入新密碼"/>
             
-
-            <label for="confirmpassword"><h5>Confirm new password:</h5></label>
+            
+            <label for="confirmpassword"><h5>Confirm new password：</h5></label>
             <input 
-            class="form-input"
+            class="input-text"
             v-model="confirmpassword"
             type="text" 
             name="confirmpassword" 
@@ -33,8 +33,8 @@
             placeholder="請再次輸入新密碼"/>
             
             <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
+            <p class="text">* Password must contain at least 8 characters including uppercase and lowercase English letters and numbers.</p>
 
-            <h6>* Password must contain at least 8 characters including uppercase and lowercase English letters and numbers.</h6>
             <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword">Save changes</BasicButton>
         </div>  
     </div>
@@ -178,35 +178,29 @@ const handleChangePassword  = () => {
         width: 50%;
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        // gap: 12px;
         margin: 0 auto;
-        padding-bottom: 48px;
+        padding-bottom: 100px;
     }
 
-    .form-input{
-        height: 54px;
-        width: 100%;
-        padding: 8px;
-        border: 2px solid $color-fsCaption;
-        border-radius: 4px;
+    .input-text{
+        margin-bottom: 24px;
     }
     h5{
         color: $color-fsTitle;
     }
 
-    h6{
+    .text{
         color: $color-fsCaption;
-        text-align: center;
-    }
+        margin-bottom: 40px;
 
-    p{
-        color: $color-fsCaption;
 
     }
+
 
     .error-message > p{
-        color: $color-fsCaption;
-        text-align: center;
-        margin-bottom: 24px;
+        color: $color-fsRed;
+
+        
     }
 </style>

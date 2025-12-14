@@ -90,8 +90,7 @@ const goToPage = (pageNumber) => {
     .orders{
         margin: 0 auto;
         width: 1200px;
-        padding-top: 16px;
-        padding-bottom: 16px; 
+
     }
     .title-orders{
         width: 100%;
@@ -110,7 +109,8 @@ const goToPage = (pageNumber) => {
         background-color: $color-fsTitle;
     }
     .orderspage-btn{
-        padding-top: 16px;
+        margin-top: 100px;
+        margin-bottom: 100px;
         display: flex;
         justify-content: center;
         gap: 16px;

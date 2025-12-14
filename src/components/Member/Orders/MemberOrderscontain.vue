@@ -189,8 +189,4 @@ import BasicButton from '@/components/BasicButton.vue';
         text-decoration: none;
     }
 
-    .btn-yellow-fill{
-        padding-top: 16px;
-        padding-bottom: 16px;
-    }
 </style>

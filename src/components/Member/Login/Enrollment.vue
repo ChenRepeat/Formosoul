@@ -5,7 +5,7 @@
             id="email"
             type="email"
             v-model="email"
-            class="form-input"
+            class="input-text"
             placeholder="E-mail"
             :disabled="isLoading"
             @keydown="handleKeyDown"
@@ -17,7 +17,7 @@
                 id="otp"
                 type="text"
                 v-model="otp"
-                class="form-input"
+                class="input-text"
                 placeholder="One-Time Password (OTP)"
                 :disabled="!otpSent"
                 @keydown="handleKeyDown"
@@ -38,7 +38,7 @@
                 id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
-                class="form-input"
+                class="input-text"
                 placeholder="Password"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
@@ -243,24 +243,19 @@ function togglePassword() {
         margin-bottom: 16px;
 
     }
-    
+    // .otp-input >.input-text{
+    //     width: 70%;
+    // }
     .password-input{
         position: relative;
     }
 
     .otp-input{
         position: relative;
+        display: grid;
+        grid-template-columns: 0.65fr 0.3fr;
     }
 
-    .form-input{
-        height: 54px;
-        width: 100%;
-        padding: 8px;
-        border: 2px solid $color-fsCaption;
-        border-radius: 4px;
-        font-size: 1.6rem;
-        font-family: 'Roboto', 'Noto Sans TC', sans-serif; 
-    }
     .toggle-password-btn{
         position: absolute;
         right: 8px;
@@ -274,7 +269,7 @@ function togglePassword() {
 
     .btn-blue-fill{
         position: absolute;
-        right: 8px;
+        right: 0;
         top: 50%;
         transform: translate(0, -50%);
         padding: 4px 8px;
@@ -308,8 +303,7 @@ function togglePassword() {
     }
 
     .error-message > p{
-        color: $color-fsCaption;
-        text-align: center;
+        color: $color-fsRed;
         margin-bottom: 24px;
     }
 </style>

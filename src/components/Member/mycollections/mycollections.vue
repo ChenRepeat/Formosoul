@@ -116,6 +116,9 @@ import { computed, ref } from 'vue';
         justify-content: center;
         padding: 32px 0 32px 0;
         gap: 16px;
+       margin-top: 100px;
+        margin-bottom: 100px;
+
 
     }
     .btn-yellow-fill{

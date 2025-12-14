@@ -11,13 +11,13 @@
                             >
                             <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
                         </button></p> 
-                <h6>{{ member.name }}</h6>
+                <h6 class="fw200">{{ member.name }}</h6>
                 <p>Wand Core:</p>
-                <h6>{{ member.wandcore }}</h6>
+                <h6 class="fw200">{{ member.wandcore }}</h6>
                 <p>Enrollment Number:</p>
-                <h6>{{ member.number }}</h6>
+                <h6 class="fw200">{{ member.number }}</h6>
                 <p>Enrollment Since:</p>
-                <h6>{{ member.date }}</h6>
+                <h6 class="fw200">{{ member.date }}</h6>
             </div>
         </div>
         <img src="../../../../public/member/icon.png" alt="">
@@ -103,5 +103,9 @@ const members = ref([
         &.without{
             display: none;
         }
+    }
+
+    h6{
+
     }
 </style>

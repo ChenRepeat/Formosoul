@@ -92,6 +92,7 @@
         border-radius: 8px;
         // padding: 40px;
         width: 50%;
+        height: 80vh;
         margin: 0 auto;       
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         animation: slideUp 0.3s ease;
@@ -116,7 +117,7 @@
     .pagecontain{
         background-color: $color-fsBlue50;
         border-radius: 0 0 8px 8px ;
-        height: 680px;
+        height: 90%;
 
     }
     .btn-blue-fill{
@@ -135,13 +136,13 @@
         width: 100%;
         height: 112px;
         position: absolute;
-        bottom: 0;
+        bottom: 40px;
     }
     .otherlogin-title{
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 24px;
     }
     .otherlogin-title > hr{
         color: $color-fsCaption;
@@ -164,13 +165,14 @@
     .otherlogin-icon{
         display: flex;
         justify-content: center;
-        gap: 16px;
+        gap: 40px;
 
     }
     .otherlogin-icon > img{
         height: 48px;
         width: 48px;
         margin-bottom: 16px;
+        cursor: pointer;
 
     }
 </style>

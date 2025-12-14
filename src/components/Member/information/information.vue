@@ -28,6 +28,6 @@
     .information-wrapper{
         width: 1200px;
         margin: 0 auto;
-        padding: 48px 16px 16px 16px;
+        padding: 48px 8px 16px 8px;
     }
 </style>

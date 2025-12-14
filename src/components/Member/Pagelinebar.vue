@@ -43,15 +43,15 @@ const linerbarlength = computed(() => {
         width: 1200px;
         height: 8px;
         border: 0;
-        border-radius: 999px;
+        /* border-radius: 999px; */
         background-color: #f0f7ff;
         position: relative;
     }
     .line-bar{
 
-        height: 8px;
+        height: 4px;
         border: 0;
-        border-radius: 999px;
+        /* border-radius: 999px; */
         background-color: #0D3B66;
         position: absolute;
         transition: left 0.3s ease;

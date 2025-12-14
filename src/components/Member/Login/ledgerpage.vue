@@ -3,7 +3,7 @@
     <div class="cardpage-wrapper" :class="{ 'with-padding': haspadding}">
         <div class="cardcontent" :class="{ 'with-gap': hasgap}">
             <div class="cardpage-left">
-                <h2 :class="{ 'fontcolor' : fontscolor}">House Point Ledger</h2>
+                <h3 :class="{ 'fontcolor' : fontscolor}">House Point Ledger</h3>
                 <div class="pcontenttop">
                     <p :class="{ 'fontcolor' : fontscolor}">How to Earn Points:</p>
                     <p :class="{ 'fontcolor' : fontscolor}">Points are awarded for completing magical experiences and passing challenges (quizzes, mini-games, and tests) across the site.</p>
@@ -15,11 +15,11 @@
             </div>
             <div class="cardpage-right">
                 <Pointcard></Pointcard>
-                <h4 :class="{ 'fontcolor' : fontscolor}">Every action counts toward the House Cup!</h4>
+                <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">Every action counts toward the House Cup!</h5>
             </div>
         </div>
         <div class="buttonarea">
-        <BasicButton class="btn-gray-fill" @click="goback"><h6>Go Back Student Card</h6></BasicButton>
+        <BasicButton class="btn-gray-fill" @click="goback"><h6>Back To Student Card</h6></BasicButton>
         <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}"><h6>Embark on the Formosoul Adventure</h6></BasicButton>
         </div>
     </div>
@@ -84,10 +84,10 @@ import router from '@/router';
         border: 0;
         border-radius: 8px;
         position: relative;
-        gap: 60px;
+        gap: 100px;
 
         &.with-padding{
-            padding: 8px;
+            padding: 100px 0px 100px 0px;
         }
     }
 
@@ -100,14 +100,16 @@ import router from '@/router';
         }
     }
 
-    h2{
+    h3{
         color: #F0F7FF;
+        margin-right: auto;
+        margin-bottom: 20px;
         &.fontcolor{
         color: $color-fsTitle;
         }
     }
 
-    h4{
+    h5{
         color: #F0F7FF;
         text-align: center;
         white-space: nowrap;
@@ -127,15 +129,15 @@ import router from '@/router';
     .cardpage-right{
         display: flex;
         flex-direction: column;
-        gap: 32px;
+        gap: 60px;
     }
     .cardpage-left{
         display: flex;
         flex-direction: column;
-        gap: 36px;
+        gap: 20px;
     }
     .pcontenttop{
-        margin-bottom: 36px;
+        // margin-bottom: 36px;
     }
     .btn-yellow-fill{
         // padding: 16px 40px;

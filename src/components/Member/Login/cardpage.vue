@@ -3,12 +3,12 @@
     <div class="cardpage-wrapper" :class="{ 'with-padding': haspadding}">
         <div class="cardcontent" :class="{ 'with-gap': hasgap}">
             <div class="cardpage-left">
-                <h2 :class="{ 'fontcolor' : fontscolor}">Student Enrollment Card</h2>
+                <h3 :class="{ 'fontcolor' : fontscolor}">Student Enrollment Card</h3>
                 <p :class="{ 'fontcolor' : fontscolor}">This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.</p>
             </div>
             <div class="cardpage-right">
                 <Membercard></Membercard>
-                <h4 :class="{ 'fontcolor' : fontscolor}">Don't leave the Common Room without it!</h4>
+                <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">Don't leave the Common Room without it!</h5>
             </div>
         </div>
         <BasicButton class="btn-yellow-fill" @click="gotoledger"><h6>Check Your Ledger</h6></BasicButton>
@@ -64,10 +64,10 @@ import { handleError, inject } from 'vue';
         border: 0;
         border-radius: 8px;
         position: relative;
-        gap: 60px;
+        gap: 100px;
 
         &.with-padding{
-            padding: 8px;
+            padding: 100px 0px 100px 0px;
         }
     }
 
@@ -76,22 +76,24 @@ import { handleError, inject } from 'vue';
         grid-template-columns: 1fr 1fr;
 
         &.with-gap {
-            gap: 30px;
+            gap: 0px;
         }
     }
 
-    h2{
+    h3{
+        // text-wrap: nowrap;
         color: $color-fsBlue50;
-
+        // margin-right: auto;
         &.fontcolor{
         color: $color-fsTitle;
         }
     }
 
-    h4{
+    h5{
         color: $color-fsBlue50;
         text-align: center;
-        white-space: nowrap;
+        text-wrap: nowrap;
+        
         &.fontcolor{
         color: $color-fsTitle;
         }
@@ -99,7 +101,7 @@ import { handleError, inject } from 'vue';
 
     p{
         color: $color-fsBlue50;
-        padding: 60px 60px 60px 0;
+        padding: 40px 16px 60px 0;
         &.fontcolor{
         color: $color-fsTitle;
         }
@@ -108,7 +110,7 @@ import { handleError, inject } from 'vue';
     .cardpage-right{
         display: flex;
         flex-direction: column;
-        gap: 32px;
+        gap: 60px;
     }
 
     .btn-yellow-fill{
