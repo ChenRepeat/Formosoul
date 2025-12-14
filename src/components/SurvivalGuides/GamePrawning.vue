@@ -300,7 +300,7 @@ onUnmounted (()=> {
 <template>
     <div class="game-prawning-container" 
     ref="gameArea" @click="shoot">
-        <div class="ui-score">Score: {{ score }}</div>
+        <div class="ui-score" :class="{ 'score-up': score >= 500 }">Score: {{ score }}</div>
 
         <div class="ui-timer" :class="{ 'urgent': timeLeft <= 10 }">
             Time: {{ timeLeft }}s
@@ -328,7 +328,12 @@ onUnmounted (()=> {
         <div v-if="isGameOver" class="game-over-text">
             TIME'S UP!
             <h4>Your score is:  {{  score }}</h4>
+            <div v-if="score >= 500" class="result-msg win"><h1>CONGRATS!</h1></div>
+            <div v-else class="result-msg lose">
+                <h1>TRY AGAIN!</h1>
+            </div>
         </div>
+
     </div>
 </template>
 
@@ -356,6 +361,11 @@ onUnmounted (()=> {
     font-weight: bold;
     z-index: 10;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.score-up {
+    color: $color-fsRed;
+    transform: scale(1.1);
 }
 
 // Timer
@@ -396,13 +406,35 @@ onUnmounted (()=> {
 }
 
 .game-over-text h4 {
+    margin-top: 10px;
     text-align: center;
+}
+
+.result-msg h1{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.win {
+    color: $color-fsGold300; /* 金色 */
+    text-shadow: 0 0 20px rgba(255, 204, 70, 0.8);
+    animation: bounce 1s infinite;
+}
+
+.lose {
+    color: #a4b0be; /* 灰色 */
+    font-size: 36px;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 
 .hook-wrapper {
     position: absolute;
-    top: 150px; /* 旋轉點藏在上面一點 */
+    top: 150px; 
     left: 51%;
     width: 0;
     height: 0;
