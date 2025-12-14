@@ -130,25 +130,40 @@ import { RouterLink } from 'vue-router';
                 <div class="card-dock dp-flex">
                     <div class="card-left">
 
-                        <p>Card Number</p>
-                        <input class="input-text" type="text">
-                        -<input class="input-text" type="text">
-                        -<input class="input-text" type="text">
-                        -<input class="input-text" type="text">
+                        <div class="card-num">
+                            <p>Card Number</p>
+                            <input class="input-text" type="text">
+                            －<input class="input-text" type="text">
+                            －<input class="input-text" type="text">
+                            －<input class="input-text" type="text">
+                        </div>
 
-                        <p>Expiration Date</p>
-                        <input class="input-text" type="text">
-                        /<input class="input-text" type="text">
+                        <div class="card-date-type dp-flex">
+                            <div class="card-date">
+                                <p>Expiration Date</p>
+                                <input class="input-text" type="text" placeholder="mm">
+                                ／<input class="input-text" type="text" placeholder="yy">
+                            </div>
+    
+                            <div class="card-type">
+                                <font-awesome-icon class="icon-card" icon="fa-brands fa-cc-visa" />
+                                <font-awesome-icon class="icon-card" icon="fa-brands fa-cc-mastercard" />
+                                <font-awesome-icon class="icon-card" icon="fa-brands fa-cc-jcb" />
+                            </div>
+                        </div>
                     </div>
-
-
+                    
+                    
                     <div class="card-right">
+                        <div class="card-code dp-flex">
+                            <p>Security code</p>
+                            <input class="input-text" type="text">
+                        </div>
+                        <div class="card-name">
+                            <p>AUTHORIZED SIGNATURE</p>
+                            <input class="input-text" type="text">
+                        </div>
 
-                        <p>Security code</p>
-                        <input class="input-text" type="text">
-
-                        <p>AUTHORIZED SIGNATURE</p>
-                        <input class="input-text" type="text">
                         
                     </div>
 
@@ -385,8 +400,8 @@ import { RouterLink } from 'vue-router';
         pointer-events: none;
     }
 
-    //total
 
+    //total
     .check-total{
         position: relative;
     }
@@ -427,10 +442,52 @@ import { RouterLink } from 'vue-router';
         width: 360px;
         aspect-ratio: 3/1.8;
         border-radius: 20px;
+        padding: 20px;   
     }
 
-    .card-left>input{
-        width: 75px;
+    .card-left input, .card-right input{
+        width: 60px;
+        padding: 4px 4px;
+        text-align: center;
+        height: 32px;
+        font-size: 1.6rem;
+        background-color: transparent;
+        border: none;
+    }
+
+    .card-num{
+        border-bottom: 0.5px solid $color-fsWhite;
+        margin: 8px 0 16px;
+        text-align: center;
+    }
+
+    .card-date-type{
+        justify-content: space-between;
+        align-items: end;
+        margin: 8px 0;
+    }
+
+    .icon-card{
+        font-size: 2.8rem;
+    }
+
+    .card-date, .card-name{
+        border-bottom: 0.5px solid $color-fsWhite;
+    }
+    
+    .card-code{
+        justify-content: space-between;
+        margin: 36px 0 16px;
+    }
+
+    .card-code input{
+        background-color: $color-fsWhite;
+        border: 1px solid $color-fsCaption;
+        width: 150px;
+    }
+    
+    .card-name input{
+        width: 100%;
     }
 
 
@@ -455,13 +512,8 @@ import { RouterLink } from 'vue-router';
         padding-top: 20px;
     }
 
-    .received-address input{
-        flex-basis: 0;
-        flex-grow: 1;
-    }
-
     .received-address>input:last-of-type{
-        flex-grow: 2;
+        flex-grow: 1;
     }
 
     .checkbox-dock{

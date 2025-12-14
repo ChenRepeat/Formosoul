@@ -63,7 +63,6 @@
       </div>
       <div class="page">
         <div class="page-content">
-          Magic
         </div>
       </div>
 
@@ -120,6 +119,17 @@
       </div>
       <div class="page">
         <div class="page-content">
+          Potion game
+        </div>
+      </div>
+      <div class="page">
+        <div class="page-content">
+          <DivinationLeft />
+        </div>
+      </div>
+      <div class="page">
+        <div class="page-content">
+          <DivinationRight />
         </div>
       </div>
       <div class="page cover">
@@ -153,6 +163,9 @@ import DuanOoLeft from '@/components/ClassPages/DuanOoLeft.vue';
 import DuanOoRight from '@/components/ClassPages/DuanOoRight.vue';
 import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
 import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
+import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
+import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
+import Curve from '@/components/Wave.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true); // 鎖定互動

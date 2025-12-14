@@ -162,25 +162,25 @@
       },
   };
     const getMaskStyle = (key) => {
-    if (key !== clickPotion.value) { 
+      if (key !== clickPotion.value) { 
         const potion = potions[key];
-        if (potion && potion.imgUrl) {
-          return {
-            'mask-image': `url('${potion.imgUrl}')`,
-            '-webkit-mask-image': `url('${potion.imgUrl}')`,
-             'background-color': 'black',
-             'opacity': '0.8',
-          };
-        }
-      }
+      if (potion && potion.imgUrl) {
+      return {
+        'mask-image': `url('${potion.imgUrl}')`,
+        '-webkit-mask-image': `url('${potion.imgUrl}')`,
+        'background-color': 'black',
+        'opacity': '0.8',
+      };
+    }
+  }
       return {}; 
-  };
-  function changeIntro(i){
-      clickPotion.value = String(i);
-  }
-  const currentIntro = computed(() => {
-    return potions[clickPotion.value];
-  });
+  };
+  function changeIntro(i){
+    clickPotion.value = String(i);
+  }
+  const currentIntro = computed(() => {
+    return potions[clickPotion.value];
+  });
 </script>
 
 <template>

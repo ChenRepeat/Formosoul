@@ -1,5 +1,5 @@
 <script setup>
-import siteLogo from '@/assets/logo_white_L.png'
+import siteLogo from '@/assets/LOGO_white_footer.svg'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 </script>
 
