@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { prawningData } from "./gamePrawningData";
 
 
+
+
 // 遊戲狀態 
 /*
 會擺盪：鉤子左右搖。
@@ -31,16 +33,16 @@ const startSwing = ()=> {
     isShooting = false;
 
     // 使用 GSAP 讓鉤子左右搖擺
-    swingBetween = gsap.to(gameHook.value, {
-        rotate: 60,
-        duration: 1.5,
+    swingBetween = gsap.fromTo(gameHook.value, 
+        { rotation: -60},
+        {
+        rotation: 60,
+        duration: 2.5,
         ease: 'sine.inOut', //鐘擺自然晃動
         yoyo: true,
         repeat: -1, // infinite
         transformOrigin: "top center"
-    })
-    // 設定初始角度 -60 度開始
-    gsap.get(gameHook.value, {rotation: -60 });
+    });
 }
 // 2 發射鉤子
 const shoot = () => {
@@ -55,7 +57,7 @@ const shoot = () => {
         duration: 1,
         ease: 'none',  // 等速
         onUpdate: checkHit, // 每一瞬間都檢查 有沒有撞到
-        onComplete: () => comBack(null) // 伸到底都沒抓到，就撤回
+        onComplete: () => comeBack(null) // 伸到底都沒抓到，就撤回
     });
 }
 
@@ -111,7 +113,7 @@ const checkHit = () => {
 
         // 如果這距離 <50, 代表抓到了
         if (distance < 50 ) {
-            shootBetween.Kill(), // 停止 伸長
+            shootBetween.kill(), // 停止 伸長
             item.caught = true,
             comeBack(item);
             return; // 結束檢查
@@ -128,7 +130,7 @@ const updateItemPosition = (item) => {
 }
 
 // 6 鍵盤控制 (空白鍵發射)
-const handleKey = (e) => { if (e.code ==='space') shoot();};
+const handleKey = (e) => { if (e.code ==='Space') shoot();};
 
 // 生命週期 , 開始 modal 鎖住scroll
 onMounted (()=>{
@@ -152,7 +154,7 @@ onUnmounted (()=> {
     <div class="game-prawning-container" 
     ref="gameArea" @click="shoot">
         <div class="ui-score">Score: {{ score }}</div>
-        <div class="hook=wrapper" ref="gameHook"> 
+        <div class="hook-wrapper" ref="gameHook"> 
             <div class="line" ref="gameLine"></div>
             <div class="claw" ref="gameClaw">⚓</div>
         </div>
@@ -162,7 +164,7 @@ onUnmounted (()=> {
         class="item"
         :style="{
             left: item.x + 'px',
-            top: item.top + 'px',
+            top: item.y + 'px',
             width: item.width + 'px',
             height: item.height + 'px',
         }">
@@ -201,8 +203,8 @@ onUnmounted (()=> {
 
 .hook-wrapper {
     position: absolute;
-    top: -20px; /* 旋轉點藏在上面一點 */
-    left: 50%;
+    top: 150px; /* 旋轉點藏在上面一點 */
+    left: 51%;
     width: 0;
     height: 0;
     z-index: 5;

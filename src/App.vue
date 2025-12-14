@@ -6,12 +6,13 @@ import loginpage from './components/Member/Login/loginpage.vue';
 import Popup from './components/popup.vue';
 import { computed, onMounted } from 'vue';
 import { useAuthStore } from './stores/autoStore';
+import DefaultLogo from '@/assets/logo_white.svg';
 
 const route = useRoute();
 const authStore = useAuthStore();
 
 const currentLogoSrc = computed(() => {
-  return route.meta?.logo || 'src/assets/logo_white.svg';
+  return route.meta?.logo || DefaultLogo;
 });
 const currentBgClass = computed(() => {
   return route.meta?.bgColor || 'bg-default';
