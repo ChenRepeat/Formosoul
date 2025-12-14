@@ -57,14 +57,15 @@
     }
 
     provide('setCurrentView', (viewName) => {
-        currentView.value = viewName
+            currentView.value = viewName;
     });
 
     provide('sharedEmail', sharedEmail);
     provide('setEnrollmentEmail', setEnrollmentEmail);
 
-    const isotherlogin = computed(() => {
 
+
+    const isotherlogin = computed(() => {
             return  currentView.value == 'forgetpassword';
 
     });

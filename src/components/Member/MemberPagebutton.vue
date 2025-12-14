@@ -1,5 +1,5 @@
 <template>
-    <div class="member-page-button">
+    <div class="members-page-button">
             <button class="memberpage-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/member/information">Member information</router-link></button>
             <button class="memberpage-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/member/changepassword">Change password</router-link></button>
             <button class="memberpage-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/member/orderslist">Query Orders</router-link></button>
@@ -47,7 +47,7 @@ watch(
 </script>
 
 <style lang="scss" coped>
-    .member-page-button{
+    .members-page-button{
         margin: 0 auto;
         width: 1200px;
         height: 48px;

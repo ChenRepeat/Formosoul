@@ -16,7 +16,7 @@
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
     import Loginpage from './Member/Login/loginpage.vue';
-    import { onMounted, onUnmounted, provide, ref } from 'vue';
+    import { onMounted, onUnmounted, provide, ref, watch } from 'vue';
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -26,10 +26,19 @@
     provide('setmemberview', (viewName) => {
         memberview.value = viewName;
     });
+    watch(
+        () => authStore.token, 
+        (newToken) => {
+            if (!newToken) {
+                memberview.value = 'login';
+            }
+        }
+    );
     function handleKeyDown( e ){
         if(e.key == 'Escape'){
             authStore.closeLoginModal();
         }
+        
     };
 
     onMounted(() => {

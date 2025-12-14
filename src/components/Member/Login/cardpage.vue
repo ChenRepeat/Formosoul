@@ -3,15 +3,15 @@
     <div class="cardpage-wrapper" :class="{ 'with-padding': haspadding}">
         <div class="cardcontent" :class="{ 'with-gap': hasgap}">
             <div class="cardpage-left">
-                <h2>Student Enrollment Card</h2>
-                <p>This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.</p>
+                <h2 :class="{ 'fontcolor' : fontscolor}">Student Enrollment Card</h2>
+                <p :class="{ 'fontcolor' : fontscolor}">This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.</p>
             </div>
             <div class="cardpage-right">
                 <Membercard></Membercard>
-                <h4>Don't leave the Common Room without it!</h4>
+                <h4 :class="{ 'fontcolor' : fontscolor}">Don't leave the Common Room without it!</h4>
             </div>
         </div>
-        <BasicButton class="btn-yellow-fill" @click="gotoledger">Check Your Ledger</BasicButton>
+        <BasicButton class="btn-yellow-fill" @click="gotoledger"><h6>Check Your Ledger</h6></BasicButton>
     </div>
 </template>
 
@@ -27,6 +27,10 @@ import { handleError, inject } from 'vue';
         },
 
         haspadding:{
+            type: Boolean,
+            default: false,
+        },
+        fontscolor:{
             type: Boolean,
             default: false,
         },
@@ -78,17 +82,27 @@ import { handleError, inject } from 'vue';
 
     h2{
         color: $color-fsBlue50;
+
+        &.fontcolor{
+        color: $color-fsTitle;
+        }
     }
 
     h4{
         color: $color-fsBlue50;
         text-align: center;
         white-space: nowrap;
+        &.fontcolor{
+        color: $color-fsTitle;
+        }
     }
 
     p{
         color: $color-fsBlue50;
         padding: 60px 60px 60px 0;
+        &.fontcolor{
+        color: $color-fsTitle;
+        }
     }
 
     .cardpage-right{
