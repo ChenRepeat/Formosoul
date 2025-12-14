@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export const useAuthStore = defineStore('auth', () => {
     // 認證狀態
     const user = ref(null);
     const token = ref(localStorage.getItem('token') || null);
+
     // 彈窗狀態
     const isLoginModalOpen = ref(false);
     // 計算屬性 雙重否定會讓兩個value值 除了字串外都會是false
@@ -35,7 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
     const closeLoginModal = () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
-
+        
     };
 
     return{
@@ -45,6 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn,
         setUser,
         setToken,
+        logout,
         isLoginModalOpen,
         openLoginModal,
         closeLoginModal,

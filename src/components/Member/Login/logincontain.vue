@@ -142,9 +142,8 @@
             authStore.setUser(response.user)
             // authStore.closeLoginModal();
             setmemberview('membercard');
-            
         } catch (error) {
-            errorMessage.value = error.message || 'Login failed,Please tryagain'
+            errorMessage.value = error.message || 'Login failed,Please tryagain';
         } finally{
             isLoading.value = false
 

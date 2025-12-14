@@ -4,6 +4,7 @@ import siteLogo from '@/assets/logo_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
+import BasicButton from './BasicButton.vue';
 const props = defineProps({
   isBlackStyle: {
     type: Boolean,
@@ -12,6 +13,7 @@ const props = defineProps({
 });
 const router = useRouter();
 const authStore = useAuthStore();
+
 
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
@@ -47,6 +49,12 @@ function toggleMenu() {
       isMenuOpen.value = !isMenuOpen.value;
       isMemberMenuOpen.value = false;
   }
+};
+
+function handlelogout() {
+  authStore.logout();
+  isMemberMenuOpen.value = false;
+
 }
 </script>
 
@@ -106,9 +114,9 @@ function toggleMenu() {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li><a href="/"><h5>Home</h5></a></li>
-        <li><a href="/about"><h5>About</h5></a></li>
-        <li><a href="/news"><h5>News</h5></a></li>
+        <li><a href="/member"><h5>member</h5></a></li>
+        <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
+        <!-- <li><a href="/news"><h5>News</h5></a></li> -->
       </ul>
       </transition>
     </div>
@@ -279,4 +287,9 @@ img { object-fit: none; }
   .burger-list li a { color: $color-fsTitle;}
   .bar { background-color: $color-fsTitle;}
 }
+
+.btn-gray-fill > h5{
+  color: $color-fsWhite;
+}
+
 </style>
