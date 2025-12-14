@@ -5,6 +5,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from "vue-router";
 import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarketData.js";
 import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
+import GameDice from "./GameDice.vue";
 
 // 路由
 const router = useRouter();
@@ -57,7 +58,7 @@ const startGamePlay = () => {
         currentInfoData.value = null; 
         console.log('套圈圈遊戲還沒做好!');
     }
-}
+};
 
 </script>
 
@@ -256,6 +257,7 @@ const startGamePlay = () => {
                     </button>
 
                     <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false"></GamePrawning>
+                    <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
                 </div>
             </div>
         </main>
