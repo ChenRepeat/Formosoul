@@ -51,7 +51,7 @@ watch(
         margin: 0 auto;
         width: 1200px;
         height: 48px;
-        margin-top: 100px;
+        margin-top: 180px;
     }
 
     .memberpage-button{

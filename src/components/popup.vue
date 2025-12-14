@@ -5,7 +5,7 @@
     @keydown="handleKeyDown"
     >
         <div class="Loginout">
-        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
+            <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
         <loginpage v-if="memberview == 'login'"></loginpage>
         <cardpage v-else-if="memberview == 'membercard'"></cardpage>
         <ledgerpage v-else-if="memberview== 'ledger'"></ledgerpage>  
@@ -60,9 +60,10 @@
         right: 16px;
     }
     .bg-frostedGlass{
+        
         position: fixed;
         inset: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        // background-color: rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -81,12 +82,14 @@
     }
 
     .Loginout{
-        width: 90%;
-        height: 90%;
+        width: 90vw;
+        height: 90vh;
         // 轉換成RGB 數值 再調 opacity
         // background-color: rgba(93, 93, 93, 0.5);
         // 在原本的 6 碼色碼後面直接加上 2 碼來代表透明度（範圍 00 到 FF）
         background-color: #5D5D5D80;
+        // background-color: $color-fsBlue50;
+
         display: flex;
         justify-content: center; 
         align-items: center; 

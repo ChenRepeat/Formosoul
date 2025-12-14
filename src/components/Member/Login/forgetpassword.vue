@@ -17,7 +17,7 @@
             id="email"
             type="email"
             v-model="email"
-            class="form-input"
+            class="input-text"
             placeholder="Enter Your Enrollment Email"
             :disabled="isLoading"
             @keydown="handleKeyDown"
@@ -102,12 +102,11 @@
 <style lang="scss" scoped>
     .login-form{
         width: 70%;
-        padding: 40px;
-        height: 544px;
-        position: relative;
+        height: 50%;
+        position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);   
 
     }
 
@@ -120,38 +119,29 @@
         margin-bottom: 16px;
 
     }
-
+    .input-text{
+        margin-bottom: 36px;
+    }
     .btn-yellow-fill{
         width: 280px;
         display: flex;
         margin: 0 auto;
-        padding-top: 16px;
-        padding-bottom: 16px;
         justify-content: center;
-        // margin-bottom: 36px;
+        text-wrap: nowrap;
     }
 
-    .form-input{
-        height: 54px;
-        width: 100%;
-        padding: 8px;
-        border: 2px solid $color-fsCaption;
-        border-radius: 4px;
-        font-size: 1.6rem;
-        font-family: 'Roboto', 'Noto Sans TC', sans-serif; 
-        margin-bottom: 36px;
-
-    }
 
     .otherlogin-title{
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 40px;
+        text-wrap: nowrap;
+
     }
     .otherlogin-title > hr{
         color: $color-fsCaption;
-        width: 30%;
+        width: 40%;
         height: 1px; 
     }
 

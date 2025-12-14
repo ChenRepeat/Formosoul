@@ -30,8 +30,6 @@
 import { ref } from 'vue';
 
 import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
-import IconBue from '@/components/icons/SVG/IconBue.vue';
-import IconPotion from '@/components/icons/SVG/IconPotion.vue';
 import IconDice from '@/components/icons/SVG/IconDice.vue';
 import IconShrimp from '@/components/icons/SVG/IconShrimp.vue';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';

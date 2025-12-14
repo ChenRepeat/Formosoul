@@ -6,7 +6,7 @@
             id="email"
             type="email"
             v-model="email"
-            class="form-input"
+            class="input-text"
             placeholder="E-mail"
             :disabled="isLoading"
             @keydown="handleKeyDown"
@@ -18,7 +18,7 @@
                 id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
-                class="form-input"
+                class="input-text"
                 placeholder="Password"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
@@ -40,7 +40,7 @@
         <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
         <div class="login-bottom">
             <p>
-                * If your memory has been tampered with by a Memory Charm, click here:<a @click="hanldeForgetpassword" class="bottom-link">ForgetPassword?</a>
+                * If your memory has been tampered with by a Memory Charm, click here：<a @click="hanldeForgetpassword" class="bottom-link">ForgetPassword</a>
             </p>
         </div>
         <BasicButton
@@ -177,6 +177,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%); 
+        
     
     }
 
@@ -191,18 +192,6 @@
     }
     .password-input{
         position: relative;
-
-    }
-    .form-input{
-        height: 54px;
-        width: 100%;
-        padding: 8px;
-        border: 2px solid $color-fsCaption;
-        border-radius: 4px;
-    }
-    .form-input::placeholder{
-        font-size: 1.6rem;
-        font-family: 'Roboto', 'Noto Sans TC', sans-serif; 
 
     }
     .toggle-password-btn{
@@ -240,13 +229,13 @@
 
     }
     .login-bottom > p{
-        text-align: start;
+        // text-align: start;
         color: $color-fsCaption;
+
     }
 
     .error-message > p{
-        color: $color-fsCaption;
-        text-align: center;
+        color: $color-fsRed;
         margin-bottom: 24px;
     }
 </style>
