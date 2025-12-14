@@ -1,15 +1,14 @@
 <template>
-
   <div class="book-section">
     <div v-if="isAnimating" class="blocking-overlay"></div>
 
     <div 
       class="book" 
       ref="bookRef"
-     :class="{ 
-    'intro-center-pos': isIntroPosition,
-    'flipping': isFlip  
-    }"
+      :class="{ 
+        'intro-center-pos': isIntroPosition,
+        'flipping': isFlip  
+      }"
     >
       <div class="page cover">
         <div class="page-content">
@@ -29,14 +28,14 @@
       </div>
 
       <div class="page">
-        <div class="page-content" :class="{'op' :isFlip}">
-          <MotorLeft  @flip="goToPage"/>
+        <div class="page-content" :class="{'op': isFlip}">
+          <MotorLeft @flip="goToPage"/>
         </div>
       </div>
 
       <div class="page">
         <div class="page-content">
-          <MotorRight  @flip="goToPage"/>
+          <MotorRight @flip="goToPage"/>
         </div>
       </div>
 
@@ -59,7 +58,6 @@
       <div class="page">
         <div class="page-content">
           <EndemicSpeciesRight @flip="goToPage"/>
-
         </div>
       </div>
       <div class="page">
@@ -89,7 +87,7 @@
           <DuanOoLeft @flip="goToPage"/>
         </div>
       </div>
-        <div class="page">
+      <div class="page">
         <div class="page-content">
           <DuanOoRight @flip="goToPage"/>
         </div>
@@ -101,7 +99,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <MoonFesRight  @flip="goToPage"/>
+          <MoonFesRight @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -115,7 +113,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <PotionLeft  @flip="goToPage"/>
+          <PotionLeft @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -136,18 +134,16 @@
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover book-end">
-
           <h3>The End</h3>
           <p>© 2025 Class Project</p>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
 import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
@@ -168,118 +164,243 @@ import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
 
 const bookRef = ref(null);
-const isAnimating = ref(true); // 鎖定互動
-const isFlip = ref (false);
+const isAnimating = ref(true);
+const isFlip = ref(false);
 const isIntroPosition = ref(true); 
 const currentPage = ref(0);
 const totalPages = ref(0);
-const innerWidth=ref(window.innerWidth)
+const innerWidth = ref(window.innerWidth);
+const isIntroPlaying = ref(false);
+
 let animationTimeoutId = null;
+let resizeTimeoutId = null;
+let pageFlip = null;
+
 const FLIP_SPEEDS = {
   intro: 400,
   normal: 800,
   coverClose: 1000,
 };
 
-let pageFlip = null;
-let isIntroPlaying = ref(false);
+const RESIZE_DEBOUNCE_DELAY = 300;
+
+// 判斷是否為雙頁模式
+const isDoublePage = computed(() => innerWidth.value >= 992);
+
+// --- 邏輯頁碼與物理索引的轉換 ---
+const getLogicalPage = (physicalIndex) => {
+  return isDoublePage.value 
+    ? Math.floor(physicalIndex / 2) 
+    : physicalIndex;
+};
+
+const getPhysicalIndex = (logicalPage) => {
+  return isDoublePage.value 
+    ? logicalPage * 2 
+    : logicalPage;
+};
+
+// 計算實際頁碼範圍
+const pageRange = computed(() => {
+  const maxLogicalPage = getLogicalPage(totalPages.value - 1);
+  return {
+    min: 0,
+    max: maxLogicalPage
+  };
+});
 
 // --- 輔助函式 ---
 const wait = (ms) => new Promise(resolve => {
   animationTimeoutId = setTimeout(resolve, ms);
-  setTimeout(resolve, ms)});
+});
+
+// 清理動畫狀態
+const cleanupAnimation = () => {
+  if (animationTimeoutId) {
+    clearTimeout(animationTimeoutId);
+    animationTimeoutId = null;
+  }
+  isIntroPlaying.value = false;
+  isAnimating.value = false;
+};
+
+// 清理 resize timeout
+const cleanupResize = () => {
+  if (resizeTimeoutId) {
+    clearTimeout(resizeTimeoutId);
+    resizeTimeoutId = null;
+  }
+};
 
 const handleKeydown = (event) => {
-    if (event.key === 'Escape' && isIntroPlaying.value) {
-        clearTimeout(animationTimeoutId); 
-        if (pageFlip) {
-            goToPage(currentPage); 
-            isIntroPlaying.value = false;
-            isAnimating.value = false;
-            isIntroPosition.value = false;
-            updatePageNumber(); 
-        }
-        console.log('Intro animation interrupted by Esc key.');
+  if (event.key === 'Escape' && isIntroPlaying.value) {
+    console.log('Intro animation interrupted by Esc key.');
+    cleanupAnimation();
+    
+    if (pageFlip) {
+      const actualPage = pageFlip.getCurrentPageIndex();
+      pageFlip.flip(actualPage);
+      isIntroPosition.value = false;
+      updatePageNumber();
     }
+  }
 };
 
 const updatePageNumber = () => {
   if (!pageFlip) return;
-  if(window.innerWidth >= 992){
-    currentPage.value = Math.ceil(pageFlip.getCurrentPageIndex() / 2);
-    totalPages.value = Math.ceil(pageFlip.getPageCount()/2);
-  }else{
-    totalPages.value = pageFlip.getPageCount();
-    currentPage.value = pageFlip.getCurrentPageIndex();
-  }
+  
+  currentPage.value = getLogicalPage(pageFlip.getCurrentPageIndex());
+  totalPages.value = pageFlip.getPageCount();
 };
+
+// --- Resize 處理 ---
+const handleResize = () => {
+  cleanupResize();
+  
+  resizeTimeoutId = setTimeout(() => {
+    const newWidth = window.innerWidth;
+    const oldIsDoublePage = isDoublePage.value;
+    
+    innerWidth.value = newWidth;
+    const newIsDoublePage = newWidth >= 992;
+    
+    // 只在模式切換時需要特殊處理
+    if (oldIsDoublePage !== newIsDoublePage && pageFlip) {
+      handleModeSwitch(oldIsDoublePage, newIsDoublePage);
+    } else if (pageFlip) {
+      // 同模式下只需更新頁碼顯示
+      updatePageNumber();
+    }
+  }, RESIZE_DEBOUNCE_DELAY);
+};
+
+// 處理單雙頁模式切換
+const handleModeSwitch = (wasDoublePage, isNowDoublePage) => {
+  if (!pageFlip) return;
+  
+  const currentPhysicalIndex = pageFlip.getCurrentPageIndex();
+  let targetLogicalPage;
+  
+  if (wasDoublePage && !isNowDoublePage) {
+    // 雙頁 → 單頁：保持在左頁
+    targetLogicalPage = Math.floor(currentPhysicalIndex / 2) * 2;
+  } else {
+    // 單頁 → 雙頁：保持當前邏輯頁
+    targetLogicalPage = Math.floor(currentPhysicalIndex / 2);
+  }
+  
+  // 重新定位到正確的頁面
+  const targetPhysicalIndex = isNowDoublePage 
+    ? targetLogicalPage * 2 
+    : targetLogicalPage * 2;
+  
+  pageFlip.flip(targetPhysicalIndex);
+  updatePageNumber();
+  
+  console.log(`Mode switched: ${wasDoublePage ? 'Double' : 'Single'} → ${isNowDoublePage ? 'Double' : 'Single'}, Page: ${targetLogicalPage}`);
+};
+
 // --- 開場動畫邏輯 ---
 const playIntroAnimation = async () => {
   if (!pageFlip) return;
-  await wait(800);
-  isIntroPlaying.value = true;
-  if (!isIntroPlaying.value) return;
-  isIntroPosition.value = false;
-  await wait(1600);
-  if (!isIntroPlaying.value) return;
-
-  // 使用變數控制翻頁速度
-
-  for (let i = 0; i < totalPages.value; i++) {
-    pageFlip.flipNext();
-    await wait(FLIP_SPEEDS.intro);
+  
+  try {
+    await wait(800);
     if (!isIntroPlaying.value) return;
-  }
+    
+    isIntroPosition.value = false;
+    await wait(1600);
+    if (!isIntroPlaying.value) return;
 
-  await wait(FLIP_SPEEDS.coverClose);
-  pageFlip.flip(0);
-  if (!isIntroPlaying.value) return;
-  await wait(FLIP_SPEEDS.coverClose);
-  if (!isIntroPlaying.value) return;
-  pageFlip.flip(1);
-  await wait(600);
-  if (!isIntroPlaying.value) return;
-  isAnimating.value = false;
-  updatePageNumber(); // 動畫結束後更新頁碼
-};
-
-const goToPage = async (pageNum) => {
-  if (!pageFlip || isAnimating.value || isIntroPlaying.value) return;
-  if (pageNum > currentPage.value) {
-    isAnimating.value = true;
-    const pagesToFlip = pageNum - currentPage.value;
-
-    for (let i = 0; i < pagesToFlip; i++) {
+    // 快速翻頁展示
+    const physicalTotalPages = pageFlip.getPageCount();
+    for (let i = 0; i < physicalTotalPages; i++) {
+      if (!isIntroPlaying.value) return;
       pageFlip.flipNext();
       await wait(FLIP_SPEEDS.intro);
     }
 
-    updatePageNumber();
+    if (!isIntroPlaying.value) return;
+    await wait(FLIP_SPEEDS.coverClose);
+    
+    // 返回封面
+    if (!isIntroPlaying.value) return;
+    pageFlip.flip(0);
+    await wait(FLIP_SPEEDS.coverClose);
+    
+    // 翻到第一頁
+    if (!isIntroPlaying.value) return;
+    pageFlip.flip(1);
+    await wait(600);
+    
+    if (!isIntroPlaying.value) return;
     isAnimating.value = false;
+    updatePageNumber();
+  } catch (error) {
+    console.error('Intro animation error:', error);
+    cleanupAnimation();
+  }
+};
 
-  } else if (pageNum < currentPage.value) {
+// --- 改進的 goToPage 邏輯 ---
+const goToPage = async (targetLogicalPage) => {
+  // 驗證輸入
+  if (!pageFlip || isAnimating.value || isIntroPlaying.value) {
+    console.warn('Cannot flip: animation in progress or pageFlip not ready');
+    return;
+  }
 
+  // 邊界檢查
+  const { min, max } = pageRange.value;
+  if (targetLogicalPage < min || targetLogicalPage > max) {
+    console.warn(`Target page ${targetLogicalPage} out of range [${min}, ${max}]`);
+    return;
+  }
+
+  // 已經在目標頁
+  if (targetLogicalPage === currentPage.value) {
+    return;
+  }
+
+  try {
     isAnimating.value = true;
-    const pagesToFlip = currentPage.value - pageNum;
+    const pagesToFlip = Math.abs(targetLogicalPage - currentPage.value);
+    const isForward = targetLogicalPage > currentPage.value;
+
+    // 逐頁翻轉動畫
     for (let i = 0; i < pagesToFlip; i++) {
-      pageFlip.flipPrev();
+      if (isForward) {
+        pageFlip.flipNext();
+      } else {
+        pageFlip.flipPrev();
+      }
       await wait(FLIP_SPEEDS.intro);
     }
-    updatePageNumber();
-    isAnimating.value = false;
 
+    updatePageNumber();
+    
+    // 驗證是否到達目標頁
+    if (currentPage.value !== targetLogicalPage) {
+      console.warn(`Failed to reach target page. Current: ${currentPage.value}, Target: ${targetLogicalPage}`);
+    }
+  } catch (error) {
+    console.error('Error in goToPage:', error);
+  } finally {
+    isAnimating.value = false;
   }
 };
 
 
-onMounted(() => {
+const initPageFlip = () => {
+  if (!bookRef.value) return;
+  
   pageFlip = new PageFlip(bookRef.value, {
     width: 600,
     height: 800,
-    minWidth : 375,
-    maxWidth : 600,
-    minHeight : 500,
-    maxHeight : 800,
+    minWidth: 375,
+    maxWidth: 600,
+    minHeight: 500,
+    maxHeight: 800,
     size: 'stretch',
     showCover: true,
     maxShadowOpacity: 0.2,
@@ -295,31 +416,46 @@ onMounted(() => {
 
   pageFlip.on('changeState', (e) => {
     if (e.data === 'read') {
-        isFlip.value = false; 
-        updatePageNumber(); 
-    } else {
-        if (e.data === 'flipping') {
-            isFlip.value = true;
-        }
+      isFlip.value = false; 
+      updatePageNumber(); 
+    } else if (e.data === 'flipping') {
+      isFlip.value = true;
     }
-});
+  });
 
   totalPages.value = pageFlip.getPageCount();
+};
 
+watch(isDoublePage, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    console.log(`Display mode changed to: ${newVal ? 'Double Page' : 'Single Page'}`);
+  }
+});
+
+onMounted(() => {
+  initPageFlip();
+  
+  isIntroPlaying.value = true;
   playIntroAnimation();
-  window.addEventListener('keyup', handleKeydown);
+  window.addEventListener('keydown', handleKeydown);
+  window.addEventListener('resize', handleResize);
 });
 
 onUnmounted(() => {
-  if (pageFlip) pageFlip.destroy();
-  window.removeEventListener('keyup', handleKeydown);
-  clearTimeout(animationTimeoutId);
-})
-
+  cleanupAnimation();
+  cleanupResize();
+  
+  if (pageFlip) {
+    pageFlip.destroy();
+    pageFlip = null;
+  }
+  
+  window.removeEventListener('keydown', handleKeydown);
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style lang="scss" scoped>
-
 .book-section {
   width: 100%; 
   height: 950px;
@@ -330,10 +466,12 @@ onUnmounted(() => {
   overflow: hidden; 
   user-select: none; 
 }
+
 .book {
   // filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5)); 書本陰影
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+
 .blocking-overlay {
   position: absolute;
   top: 0;
@@ -344,11 +482,12 @@ onUnmounted(() => {
   cursor: wait; 
   background: rgba(0,0,0,0);
 }
+
 .intro-center-pos {
   transform: translateX(-25%) scale(0.9); 
 }
 
-//  書頁樣式
+// 書頁樣式
 .page {
   padding: 40px;
   background-color: #ccc;
@@ -362,14 +501,16 @@ onUnmounted(() => {
   //  6px 1px 20px $color-fsGold300,
   //  12px -3px 20px $color-fsWhite,
   //  12px -3px 6px $color-fsGold300;
-  // overflow:;
   opacity: 1;
 }
 
 .page::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
   // background-image: url('https://www.transparenttextures.com/patterns/paper.png');
   opacity: 0.4;
   pointer-events: none;
@@ -380,14 +521,16 @@ onUnmounted(() => {
   transform: scaleX(1.05);
   box-shadow: unset;
 }
-.book-end{
+
+.book-end {
   transform: rotate(180deg) scaleX(1.05);
 }
-.book-logo{
+
+.book-logo {
   position: absolute;
   transform: scale(1.2);
-
 }
+
 .page-content {
   height: 100%;
   display: flex;
@@ -402,14 +545,21 @@ h1, h3, h4 {
   margin-bottom: 10px;
   color: #4a3b2a;
 }
-.cover h1, .cover h3 { color: #e0d5c1; }
-.--left{
+
+.cover h1, .cover h3 { 
+  color: #e0d5c1; 
+}
+
+.--left {
   border-radius: 16px 0 0 16px;
   border-right: 2px solid $color-fsTitle;
 }
-img { max-width: 100%; border-radius: 4px; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
 
-
+img { 
+  max-width: 100%; 
+  border-radius: 4px; 
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+}
 
 :deep(.stf__item.--cursor) {
   z-index: 1000 !important;

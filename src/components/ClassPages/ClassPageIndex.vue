@@ -12,7 +12,7 @@
   const { goToPage } = usePageNavigation(emit);
   
   const vWidth = window.innerWidth;
-  const toMotorPage = ref(2);
+  const toMotorPage = ref(1);
   const toAnimaPage = ref(3);
   const toHistoryPage = ref(4);
   const toCharmPage = ref(8);
