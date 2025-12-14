@@ -1,3 +1,22 @@
+<script setup>
+  import { ref ,defineEmits } from 'vue';
+
+  import { usePageNavigation } from './goToPage';
+  
+  const emit = defineEmits(['flip']);
+  const { goToPage } = usePageNavigation(emit);
+
+  const vWidth = window.innerWidth;
+  const toMoonPage = ref(10);
+  const toNianPage = ref(11);
+  const toDuanOoPage = ref(12);
+  if(vWidth < 750){
+    toMoonPage.value = 12;
+    toNianPage.value = 15;
+    toDuanOoPage.value = 17;
+  }
+</script>
+
 <template>
   <ul class="history-index-case dp-flex-col">
     <li class="dp-flex">
@@ -28,15 +47,6 @@
 
   </ul>
 </template>
-
-<script setup>
-  import { ref ,defineEmits } from 'vue';
-
-  import { usePageNavigation } from './goToPage';
-  
-  const emit = defineEmits(['flip']);
-  const { goToPage } = usePageNavigation(emit);
-</script>
 
 <style lang="scss" scoped>
 

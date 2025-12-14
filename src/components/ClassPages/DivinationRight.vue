@@ -33,10 +33,14 @@ import { ref } from 'vue';
   }
   function chouqian(){
     const num = Math.random()
-    stickResult.value = 0;
-    setTimeout(() => {
-        stickResult.value = Math.floor(num * 6) + 1;
-      },800);
+    if(stickResult.value){
+      stickResult.value = 0;
+      setTimeout(() => {
+          stickResult.value = Math.floor(num * 6) + 1;
+        },800);
+    }else{
+      stickResult.value = Math.floor(num * 6) + 1;
+    }
   }
   function closeResult(){
     stickResult.value = 0;
@@ -103,6 +107,9 @@ import { ref } from 'vue';
   
 <style lang="scss" scoped>
   .divination-right{width: 100%;height: 100%;gap: 30px;}
+   p{
+      color: $color-fsContent;
+    }
   .stick-top{
     gap: 44px;
     h5{
@@ -126,8 +133,8 @@ import { ref } from 'vue';
       right: 0;
       width: 0;
       height: auto;
-      padding: 20px 60px 20px 10px; 
-      gap: 16px;
+      padding: 20px 60px 20px 40px; 
+      gap: 32px;
       align-items: center;
       transition:all 1s ease-in;
       opacity: 0;
@@ -162,7 +169,6 @@ import { ref } from 'vue';
     img{
       position: absolute;
       border-radius: 8px;
-      border: 1px solid $color-fsTitle;
       box-shadow: 1px 1px 3px $color-fsTitle;
     }
     .picLeft{

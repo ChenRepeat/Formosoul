@@ -93,7 +93,6 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
     width: 100%;
     height: 100%;
     position: relative;
-    padding: 0 20px;
     text-align: left;
   }
   h2{

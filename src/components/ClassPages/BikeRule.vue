@@ -51,7 +51,7 @@ onMounted(() => {
 p {
   line-height: 2;
   text-align: left;
-  margin-top: 20px;
+  margin-top: 10px;
   color: $color-fsContent;
   opacity: 0;
   transform: translateY(10px);
@@ -65,7 +65,6 @@ p {
 }
 
 .rule-title {
-  padding: 0 30px;
   color: $color-fsTitle;
 }
 

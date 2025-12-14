@@ -95,8 +95,6 @@
     width: 100%;
     height: 100%;
     position: relative;
-    background-image: url('https://www.transparenttextures.com/patterns/paper.png') ;
-    padding: 0 20px;
   }
   .red{
     width: 100px;
@@ -177,8 +175,11 @@
     transition: opacity 0.5s ease;
     opacity: 1;
   }
+  .motor-diolog1{
+    padding-right: 15%;
+  }
   .motor-diolog2{
-    padding-left: 15%;
+    padding-left: 20%;
   }
   p{
     color: $color-fsContent;

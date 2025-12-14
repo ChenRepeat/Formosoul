@@ -6,7 +6,7 @@ import Wave from '@/components/Wave.vue';
 
 
 <template>
-<Wave />
+  <Wave />
 
 </template>
 

@@ -249,6 +249,9 @@
 </template>
 
 <style lang="scss" scoped>
+   p{
+      color: $color-fsContent;
+    }
   .potion-intro{
     width: 100%;
     position: relative;
@@ -300,9 +303,6 @@
     img{
       width: 140px;
       height: 140px;
-    }
-    p{
-      color: $color-fsContent;
     }
     .close{
       position: absolute;
