@@ -62,7 +62,8 @@ import { ref } from 'vue';
       </div>
       <div class="right" 
         @mousedown.stop
-        @touchstart.stop>
+        @touchstart.stop
+        @mouseover.stop>
         <img 
         @click="chouqian"
         src="/Classes/charms/charm1.png" alt=""
@@ -73,6 +74,7 @@ import { ref } from 'vue';
           @click="closeResult"
           @mousedown.stop
           @touchstart.stop
+          @mouseover.stop
           :class="{'show': stickResult != 0}" 
           >
           <h2 >{{ chouqianResult[stickResult]?.name }}</h2>

@@ -3,16 +3,11 @@ import Wave from '@/components/Wave.vue';
 
 </script>
 
-<<<<<<< HEAD
 
 
 <template>
 <Wave />
 
-=======
-<template>
-  <Wave />
->>>>>>> repeat-test
 </template>
 
 <style>
