@@ -1,10 +1,7 @@
 <script setup>    
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted , defineEmits} from "vue";
 import gsap from "gsap";
-import { prawningData } from "./gamePrawningData";
-
-
-
+// import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
 // 遊戲狀態 
 /*
@@ -13,21 +10,161 @@ import { prawningData } from "./gamePrawningData";
 會抓東西：碰到蝦子會抓回來加分。
 */
 
+const emit = defineEmits(['close-game']);
+
 const score = ref(0);
 const gameArea = ref(null);
 const gameHook = ref(null); // 鉤子
 const gameLine = ref(null); // 繩子;魚線
 const gameClaw = ref(null); // 鉤子頭
 
+// 加入時間，倒數計時
+const timeLeft = ref(30);
+// 加入 遊戲結束
+const isGameOver = ref(false);
+
+
 // 物品 & 資料
-const items = ref(prawningData)
+// const items = ref(prawningData) // 物品是寫死的寫法 - 連到 JS
+const items = ref([]);
+
+// 隨機生成物品種類
+const generateRandomItems = (count) => {
+    const newItems = [];
+
+
+    const imageLibrary = {
+        shrimp: ['shrimp1.png', 'shrimp2.png', 'shrimp3.png'],
+        trash:  ['bag.png', 'shoes.png', 'tire.png', 'can.png'],
+        treasure: ['treasure.png', 'treasure2.png'] 
+    };
+
+    // 建立暫存清單
+    let pendingList = [];
+
+    // 先把每一張圖都加進去一次
+    // 遍歷 imageLibrary 裡所有的種類和檔案
+    for (const type in imageLibrary) {
+        imageLibrary[type].forEach(filename => {
+            pendingList.push({ type, filename });
+        });
+    }
+
+    while (pendingList.length < count) {
+
+        // 決定種類
+        let type = 'shrimp';
+        const rand = Math.random();
+        if (rand > 0.6) type = 'trash';    // 40% 機率 is trash
+        if (rand > 0.95) type = 'treasure'; // 5% 機率 is treasure
+
+        const list = imageLibrary[type];
+        const filename = list[Math.floor(Math.random() * list.length)];
+
+        pendingList.push({ type, filename });
+    }
+
+    // 步驟 4: ★ 關鍵！把清單打亂 (洗牌) ★
+    // 如果不洗牌，前 9 個永遠是按照順序排列的 (蝦1, 蝦2... 鞋子, 輪胎...)
+    pendingList.sort(() => Math.random() - 0.5);
+
+    // 步驟 5: 賦予座標、分數、ID，生成最終資料
+    pendingList.forEach((item, index) => {
+        let { type, filename } = item;
+        let itemScore = 0; 
+        let width = 80;
+        let height = 80;
+
+        // 設定分數跟大小
+        if(type == 'shrimp') {
+            itemScore = 100;
+        } else if (type === 'trash') {
+            itemScore = -50;
+            
+            if (filename === 'shoes.png') { width = 60; height = 60; itemScore = -500; }
+            if (filename === 'tire.png') { width = 100; height = 100; itemScore = -300; }
+
+        } else { // treasure
+            itemScore = 300; // 普通寶箱
+            width = 60; height = 60;
+    
+            if (filename === 'treasure2.png') { width = 40; height = 40; itemScore = 500;}
+        }
+
+        let x = 0;
+        let y = 0;
+        let isOverlapping = true;
+        let attempts = 0;
+
+        // 嘗試找位置，最多試 50 次，找不到就硬塞 (避免當機)
+        while (isOverlapping && attempts < 50) {
+            attempts++;
+            isOverlapping = false; // 先假設沒重疊
+
+            // 隨機座標
+            x = Math.floor(Math.random() * 950) + 50; 
+            y = Math.floor(Math.random() * 250) + 400;
+
+            // 檢查跟「已經生成好」的物品有沒有太近
+            for (const existingItem of newItems) {
+                const dx = x - existingItem.x;
+                const dy = y - existingItem.y;
+                const distance = Math.sqrt(dx*dx + dy*dy);
+                
+                if (distance < 80) { // 如果距離小於 80px
+                    isOverlapping = true; // 發生重疊了！
+                    break; // 重骰，不用再檢查了
+                }
+            }
+        }
+
+        const fullSrc = `/SurvivalGuide/GamePrawning_remove_background/${filename}`;
+        
+        newItems.push({
+            id: index + 1,
+            type,
+            x, y,
+            width, height,
+            score: itemScore,
+            caught: false,
+            src: fullSrc
+        });
+    });
+
+    return newItems;
+}
+
 
 // 動畫控制的變數
 let swingBetween = null;
 let shootBetween = null;
 let isShooting = false;
 
+// 新增 計時器的 variable
+let timerInterval = null;
+
 // 遊戲 logic 
+
+// Timer
+const startTimer = () => {
+    timerInterval = setInterval(()=>{
+        if(timeLeft.value > 0) {
+            timeLeft.value--;
+        } else {
+            gameOver();
+        }
+    }, 1000);
+}
+
+const gameOver = () => {
+    isGameOver.value = true;
+    clearInterval(timerInterval); // stop 計時
+
+    // 停止擺盪
+    if(swingBetween) swingBetween.pause();
+}
+
+
 // 1 擺盪
 const startSwing = ()=> {
     isShooting = false;
@@ -46,9 +183,8 @@ const startSwing = ()=> {
 }
 // 2 發射鉤子
 const shoot = () => {
-    if(isShooting) return; // 如果已經正在發射，就不能按
+    if(isShooting || isGameOver.value) return; // 如果已經正在發射，就不能按
     isShooting = true;
-
     swingBetween.pause(); // 暫停搖擺
 
     // 接下來讓繩子變長
@@ -86,8 +222,10 @@ const comeBack = (caughtItem) => {
                     }
                 }
             }
-            swingBetween.resume(); // 繼續擺盪
-            isShooting = false; // 解除鎖定
+            if (!isGameOver.value) {
+                swingBetween.resume(); // 繼續擺盪
+                isShooting = false; // 解除鎖定
+            }
         }
     })
 }
@@ -114,7 +252,7 @@ const checkHit = () => {
         // 如果這距離 <50, 代表抓到了
         if (distance < 50 ) {
             shootBetween.kill(), // 停止 伸長
-            item.caught = true,
+            item.caught = true;
             comeBack(item);
             return; // 結束檢查
         }
@@ -130,19 +268,28 @@ const updateItemPosition = (item) => {
 }
 
 // 6 鍵盤控制 (空白鍵發射)
-const handleKey = (e) => { if (e.code ==='Space') shoot();};
+const handleKey = (e) => { if (e.code ==='Space') shoot();
+    if (e.code === 'Escape') emit('close-game');
+};
 
 // 生命週期 , 開始 modal 鎖住scroll
 onMounted (()=>{
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    items.value = generateRandomItems(20);
     startSwing();
+    startTimer();
     window.addEventListener('keydown', handleKey);
 });
 
 onUnmounted (()=> {
     document.body.style.overflow = '';
-    if(swingBetween) swingBetween.Kill();
-    if(shootBetween) shootBetween.Kill();
+    document.documentElement.style.overflow = '';
+
+    clearInterval(timerInterval);
+    if(swingBetween) swingBetween.kill();
+    if(shootBetween) shootBetween.kill();
     window.addEventListener('keydown', handleKey);
 });
 
@@ -154,9 +301,15 @@ onUnmounted (()=> {
     <div class="game-prawning-container" 
     ref="gameArea" @click="shoot">
         <div class="ui-score">Score: {{ score }}</div>
+
+        <div class="ui-timer" :class="{ 'urgent': timeLeft <= 10 }">
+            Time: {{ timeLeft }}s
+        </div>
+
         <div class="hook-wrapper" ref="gameHook"> 
-            <div class="line" ref="gameLine"></div>
-            <div class="claw" ref="gameClaw">⚓</div>
+            <div class="line" ref="gameLine">
+                <div class="claw" ref="gameClaw">⚓</div>
+            </div>
         </div>
 
         <div v-for="item in items"
@@ -172,6 +325,10 @@ onUnmounted (()=> {
         <img :src="item.src" class="item-img" />
         </div>
 
+        <div v-if="isGameOver" class="game-over-text">
+            TIME'S UP!
+            <h4>Your score is:  {{  score }}</h4>
+        </div>
     </div>
 </template>
 
@@ -201,6 +358,48 @@ onUnmounted (()=> {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
+// Timer
+.ui-timer {
+    position: absolute;
+    top: 20px;
+    right: 200px; 
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    z-index: 10;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    
+    /* 倒數 10 秒變紅色跳動 */
+    &.urgent {
+        color: $color-fsRed;
+        animation: pulse 0.5s infinite alternate;
+    }
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+// Finish: Time's up
+.game-over-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    color: white;
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    pointer-events: none;
+    z-index: 20;
+}
+
+.game-over-text h4 {
+    text-align: center;
+}
+
+
 .hook-wrapper {
     position: absolute;
     top: 150px; /* 旋轉點藏在上面一點 */
@@ -224,11 +423,12 @@ onUnmounted (()=> {
 /* 鉤子頭 */
 .claw {
     position: absolute;
-    top: 100%; /* 永遠黏在繩子尾巴 */
+    top: 95%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 35px;
     line-height: 1;
+    z-index: 2;
 }
 
 /* 物品 */

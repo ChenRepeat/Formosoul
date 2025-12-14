@@ -32,7 +32,7 @@ const openModal = (index) => {
 }
 
 // 控制遊戲視窗的部分，開關
-const isGameModelOpen = ref(false);
+const isGameModalOpen = ref(false);
 const activeGame = ref('') // 記錄要玩哪個遊戲 ex.'prawning', 'dice'...
 
 const startGamePlay = () => {
@@ -42,18 +42,18 @@ const startGamePlay = () => {
     // 判斷 & 切換
     if(currentID.includes('prawning')) {
         activeGame.value = 'prawning'; // 設定遊戲為釣蝦
-        isGameModelOpen.value = true; // 打開遊戲視窗
+        isGameModalOpen.value = true; // 打開遊戲視窗
         currentInfoData.value = null; // 關閉介紹視窗
     }
     else if(currentID.includes('dice')) {
         activeGame.value = 'dice'; 
-        isGameModelOpen.value = true; 
+        isGameModalOpen.value = true; 
         currentInfoData.value = null; 
         console.log('骰子遊戲還沒做好!');
     }
     else if(currentID.includes('ring-toss')) {
         activeGame.value = 'ring-toss';
-        isGameModelOpen.value = true; 
+        isGameModalOpen.value = true; 
         currentInfoData.value = null; 
         console.log('套圈圈遊戲還沒做好!');
     }
@@ -249,13 +249,13 @@ const startGamePlay = () => {
                 </div>
             </div>
 <!---------------------------------------- 遊戲 Model 視窗 -------------------------------------------->
-            <div v-if="isGameModelOpen" class="game-modal-overlay">
+            <div v-if="isGameModalOpen" class="game-modal-overlay">
                 <div class="game-content-modal">
-                    <button class="close-game-btn" @click="isGameModelOpen = false">
+                    <button class="close-game-btn" @click="isGameModalOpen = false">
                         EXIT GAME
                     </button>
 
-                    <GamePrawning v-if="activeGame == 'prawning'"></GamePrawning>
+                    <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false"></GamePrawning>
                 </div>
             </div>
         </main>
@@ -708,7 +708,7 @@ const startGamePlay = () => {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rbga(0,0,0,0.9); 
+    background-color: rgba(0,0,0,0.9); 
     z-index: 999;
 
     display: flex;
@@ -728,8 +728,8 @@ const startGamePlay = () => {
     border-radius: 7px;
 }
 .close-game-btn{
-position: absolute;
-    top: 20px;
+    position: absolute;
+    top: 15px;
     right: 20px;
     padding: 10px 24px;
     background-color: $color-fsGold300;
