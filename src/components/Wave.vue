@@ -11,17 +11,18 @@ const canvasRef = ref(null);
 
 // baseY: 起始座標    speed: 速度   curveIntensity: 波動幅度    offset: 波動的相位偏移
 
-// colorStart: 漸層起始顏色   colorEnd: 漸層結束顏色    gradientOffset: 漸層偏移
+// colorStart: 漸層起始   colorEnd: 漸層結束    gradientOffset: 漸層偏移    lineWidth: 線的粗細
 
-// 新增 line 格式: [baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset]
+// 新增 line 格式: [baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset, lineWidth]
 const line = [
-  [260, 0.8, 26, 0, '#FF6B6B', '#4ECDC4', 0],
-  [90, 0.6, 20, 0.8, '#A8E6CF', '#FFD93D', 0.2],
-  [130, 0.5, 18, 1.6, '#6C5CE7', '#A29BFE', 0.4],
-  [170, 0.7, 22, 2.4, '#FD79A8', '#FDCB6E', 0.6],
-  [210, 0.55, 16, 3.2, '#00B894', '#00CEC9', 0.8],
-  [250, 0.85, 19, 4.0, '#E17055', '#FAB1A0', 1.0]
+  [260, 0.8, 120, 0, '#FF6B6B', '#4ECDC4', 0, 2],
+  [90, 0.6, 170, 0.8, '#A8E6CF', '#FFD93D', 0.2, 1],
+  [130, 0.5, 18, 1.6, '#6C5CE7', '#A29BFE', 0.4, 3],
+  [170, 0.7, 22, 2.4, '#FD79A8', '#FDCB6E', 0.6, 5],
+  [210, 0.55, 16, 3.2, '#00B894', '#00CEC9', 0.8, 0.25],
+  [250, 0.85, 19, 4.0, '#E17055', '#FAB1A0', 1.0, 0.75]
 ];
+
 
 const gradientSpeed = 0.0005;
 
@@ -31,14 +32,15 @@ onMounted(() => {
   
   function resizeCanvas() {
     canvas.width = window.innerWidth;
-    canvas.height = window.innerWidth > 768 ? 300 : 200;
+    //  高度一定要小於起始座標 + 波動幅度，除非想要不完整的波段
+    canvas.height = 600;
   }
   
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
   class FlowingLine {
-    constructor(baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset) {
+    constructor(baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset, lineWidth) {
       this.baseY = baseY;
       this.speed = speed;
       this.curveIntensity = curveIntensity;
@@ -48,6 +50,7 @@ onMounted(() => {
       this.colorEnd = colorEnd;
       this.gradientOffset = gradientOffset;
       this.gradientProgress = 0;
+      this.lineWidth = lineWidth;
     }
 
     update(deltaTime) {
@@ -89,7 +92,7 @@ onMounted(() => {
       }
       
       context.strokeStyle = gradient;
-      context.lineWidth = 2.5;
+      context.lineWidth = this.lineWidth;
       context.lineCap = 'round';
       context.lineJoin = 'round';
       context.stroke();
@@ -99,7 +102,7 @@ onMounted(() => {
   const lines = [];
   for (let i = 0; i < line.length; i++) {
     lines.push(new FlowingLine(
-      line[i][0],line[i][1],line[i][2],line[i][3],line[i][4],line[i][5],line[i][6]
+      line[i][0],line[i][1],line[i][2],line[i][3],line[i][4],line[i][5],line[i][6],line[i][7],
     ));
   }
 
@@ -137,5 +140,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 0;left: 0;
+  z-index: 0;
 }
 </style>
