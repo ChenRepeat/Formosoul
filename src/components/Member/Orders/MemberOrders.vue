@@ -1,7 +1,7 @@
 <template>
     <template v-if="!hasChildRoute">
             <div class="member-orders">
-                <h2>Query Orders</h2>
+                <h3>Query Orders</h3>
             </div>
             <div class="orders">
                 <div class="title-orders">
@@ -18,16 +18,16 @@
                 <MemberOrdersDetail ref="detailComponent" :currentPage="currentPage" />
                 <div class="orderspage-btn">
                     
-                    <basic-button class="btn-yellow-fill" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></basic-button>
-                    <basic-button class="btn-yellow-fill"
+                    <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>
+                    <span class="list-page"
                         v-for="page in totalPages"
                         :key="page"
                         @click="goToPage(page)"
                         :class="{ active: currentPage == page}"
                     >
                         {{ page }}
-                    </basic-button>
-                    <basic-button class="btn-yellow-fill" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></basic-button>
+                    </span>
+                    <span class="list-page noborder" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></span>
                 </div>
             </div>
     </template>
@@ -81,7 +81,7 @@ const goToPage = (pageNumber) => {
         margin: 0 auto;
         width: 1200px;
     }
-    h2{
+    h3{
         text-align: center;
         color: $color-fsTitle;
         margin: 100px 0 100px 0;
@@ -111,25 +111,33 @@ const goToPage = (pageNumber) => {
     .orderspage-btn{
         margin-top: 100px;
         margin-bottom: 100px;
+        font-size: 16px;
+        line-height: 160%;
+        text-align: center;
         display: flex;
         justify-content: center;
-        gap: 16px;
-    }
-    .orderspage-btn > button{
-        background-color: transparent;
-        transition:  0.2s ease;
 
     }
+    .list-page{
+        border-radius: 3px;
+        border: 1px solid $color-fsTitle;
+        display: inline-block;
+        width: 24px;
+        margin: 10px;
+        cursor: pointer;
+        text-align: center;
+    }
 
-    .orderspage-btn > button{
-        color: $color-fsTitle;
+    .list-icon{
+        cursor: pointer; 
     }
-    .orderspage-btn > button:hover{
-        background-color: $color-fsBlue900;
-        color: white; 
+
+    .list-page.click, .list-page:hover{
+        background-color: $color-fsTitle;
+        color: $color-fsWhite;
     }
-    .orderspage-btn > button.active {
-        background-color: $color-fsBlue900;
-        color: white;
+
+    .noborder{
+        border: 0;
     }
 </style>

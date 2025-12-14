@@ -1,18 +1,18 @@
 <template>
     <div class="collections">
-        <h2>My collections</h2>
+        <h3>My collections</h3>
         <ProductCard :images="calcollectionspage" :currentPage="currentPage"></ProductCard>
         <div class="pagebtn">
-            <basic-button class="btn-yellow-fill" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></basic-button>
-            <basic-button class="btn-yellow-fill"
+            <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>
+            <span class="list-page"
                 v-for="page in totalPages"
                 :key="page"
                 @click="goToPage(page)"
                 :class="{ active: currentPage == page}"
             >
                 {{ page }}
-            </basic-button>
-            <basic-button class="btn-yellow-fill" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></basic-button>
+            </span>
+            <span class="list-page noborder" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></span>
         </div>
         
     </div>
@@ -98,7 +98,7 @@ import { computed, ref } from 'vue';
         margin: 0 auto;
     }
 
-    h2{
+    h3{
         text-align: center;
         margin: 100px 0 100px 0;
     }
@@ -112,29 +112,36 @@ import { computed, ref } from 'vue';
     }
 
     .pagebtn{
+        margin-top: 100px;
+        margin-bottom: 100px;
+        font-size: 16px;
+        line-height: 160%;
+        text-align: center;
         display: flex;
         justify-content: center;
-        padding: 32px 0 32px 0;
-        gap: 16px;
-       margin-top: 100px;
-        margin-bottom: 100px;
-
 
     }
-    .btn-yellow-fill{
-        background-color: transparent;
-        transition:  0.2s ease;
-        
-
-    }
-    .btn-yellow-fill:hover{
-        background-color: $color-fsBlue900;
-        color: white; 
-    }
-    .btn-yellow-fill.active {
-        background-color: $color-fsBlue900;
-        color: white;
+    .list-page{
+        border-radius: 3px;
+        border: 1px solid $color-fsTitle;
+        display: inline-block;
+        width: 24px;
+        margin: 10px;
+        cursor: pointer;
+        text-align: center;
     }
 
+    .list-icon{
+        cursor: pointer; 
+    }
+
+    .list-page.click, .list-page:hover{
+        background-color: $color-fsTitle;
+        color: $color-fsWhite;
+    }
+
+    .noborder{
+        border: 0;
+    }
 
 </style>

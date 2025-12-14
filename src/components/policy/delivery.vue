@@ -46,8 +46,7 @@
     .wrapper{
         max-width: 1200px;
         margin: 0 auto;
-        padding-top: 60px;
-        padding-bottom: 60px;
+        padding: 60px 40px 100px 40px;
     }
     .chinesedelivery{
         padding-bottom: 60px;
@@ -55,7 +54,9 @@
     .chinesedelivery > hr,
     .engdelivery > hr{
         border-color: transparent;
-        // border: 0;
+    }
+
+    .big{
         margin: 24px;
     }
 </style>

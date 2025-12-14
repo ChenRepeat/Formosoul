@@ -136,7 +136,7 @@
         width: 100%;
         height: 112px;
         position: absolute;
-        bottom: 40px;
+        bottom: 20px;
     }
     .otherlogin-title{
         display: flex;
