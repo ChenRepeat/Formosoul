@@ -63,16 +63,11 @@
 /* 骰子大小 */
 .scene {
   --size: 60px;
-  position: absolute;
-          left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%); 
-  /* 上面統一大小比較好調整 */
+
   width: var(--size);
   height: var(--size);
-  margin: 50px auto;
+  margin: 0 auto;
   perspective: calc(var(--size) * 4); 
-  z-index: 100;
 }
 
 .cube{
@@ -82,10 +77,10 @@
   transform-style: preserve-3d;
     /* 轉視角 */
   transform: rotateX(150deg) rotateY(225deg);
-  background-color: #f0f0f0; 
+  background-color: #f5f5dc; 
   transform-origin: center center;
   scale: 0.99;
-
+  transition: transform 2s cubic-bezier(0.1, 0.7, 0.1, 1);
 //  &.rotatetox{
 //       transform: rotateX(150deg);
 //   } 
@@ -95,8 +90,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #f0f0f0;
-  border: 2px solid #f0f0f0; 
+  background: #f5f5dc;
+  border: 2px solid #f5f5dc; 
   border-radius: 10%;     
   box-sizing: border-box;
 }
