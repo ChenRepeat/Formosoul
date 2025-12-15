@@ -9,6 +9,7 @@
         <loginpage v-if="memberview == 'login'"></loginpage>
         <cardpage v-else-if="memberview == 'membercard'"></cardpage>
         <ledgerpage v-else-if="memberview== 'ledger'"></ledgerpage>  
+        <TheCoreSelection v-if="memberview == 'coreintro'"></TheCoreSelection>
         </div>
     </div>
 </template>
@@ -20,6 +21,7 @@
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import TheCoreSelection from './Home/TheCoreSelection.vue';
     const authStore = useAuthStore();
     const memberview = ref('login');
 
