@@ -63,12 +63,11 @@ const generateRandomItems = (count) => {
 
         pendingList.push({ type, filename });
     }
-
-    // 步驟 4: ★ 關鍵！把清單打亂 (洗牌) ★
-    // 如果不洗牌，前 9 個永遠是按照順序排列的 (蝦1, 蝦2... 鞋子, 輪胎...)
+ 
+    // 洗牌
     pendingList.sort(() => Math.random() - 0.5);
 
-    // 步驟 5: 賦予座標、分數、ID，生成最終資料
+    // 給座標、分數、ID，生成最終資料
     pendingList.forEach((item, index) => {
         let { type, filename } = item;
         let itemScore = 0; 
@@ -274,9 +273,18 @@ const handleKey = (e) => { if (e.code ==='Space') shoot();
 
 
 // Try again 遊戲重置
-// const initGame = () => {
+const initGame = () => {
+    // 1. 重置數據
+    score.value = 0;
+    timeLeft.value = 30;
+    isGameOver.value = false;
 
-// }
+    clearInterval(timerInterval);
+
+    items.value = generateRandomItems(20);
+    startSwing();
+    startTimer();
+}
 
 
 
@@ -284,11 +292,9 @@ const handleKey = (e) => { if (e.code ==='Space') shoot();
 onMounted (()=>{
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
-
-    items.value = generateRandomItems(20);
-    startSwing();
-    startTimer();
     window.addEventListener('keydown', handleKey);
+
+    initGame();
 });
 
 onUnmounted (()=> {
@@ -337,7 +343,7 @@ onUnmounted (()=> {
             TIME'S UP!
             <h4>Your score is:  {{  score }}</h4>
             <div v-if="score >= 500" class="result-msg win"><h1>CONGRATS!</h1></div>
-            <div v-else class="result-msg lose">
+            <div v-else class="result-msg lose clickable" @click="initGame">
                 <h1>TRY AGAIN!</h1>
             </div>
         </div>
@@ -432,6 +438,20 @@ onUnmounted (()=> {
 .lose {
     color: #a4b0be; /* 灰色 */
     font-size: 36px;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: transform 0.2s;
+    
+    &:hover {
+        transform: scale(1.1);
+        color: #fff; /* 滑鼠移過去變亮白 */
+    }
+    
+    &:active {
+        transform: scale(0.95); /* 按下去縮一下 */
+    }
 }
 
 @keyframes bounce {

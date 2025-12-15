@@ -249,7 +249,7 @@ const startGamePlay = () => {
                     ></SurvivalFoodIntroductionFrame>
                 </div>
             </div>
-<!---------------------------------------- 遊戲 Model 視窗 -------------------------------------------->
+<!---------------------------------------- 遊戲 Modal 視窗 -------------------------------------------->
             <div v-if="isGameModalOpen" class="game-modal-overlay">
                 <div class="game-content-modal">
                     <button class="close-game-btn" @click="isGameModalOpen = false">
