@@ -1,10 +1,9 @@
 <script setup>
-import { ref,computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
-import Lenis from "lenis";
+import { computed, nextTick, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
-const lenis = ref(null)
+const router = useRouter()
 
 
 const allNewsData = [
@@ -150,57 +149,51 @@ const allNewsData = [
   },
 ]
 
-// 3. 找出目前要顯示的那一篇
 const currentArticle = computed(() => {
   return allNewsData.find(item => item.id == route.params.id)
 })
 
-// 修改後的 scrollToTop
-const scrollToTop = (isSmooth = false) => {
-  if (isSmooth && lenis.value) {
-    // ★ 模式 A：滑順滾動 (點擊選單時用)
-    // duration: 2 代表花 2 秒鐘滑上去 (你可以自己改數字，越小越快)
-    // lock: true 代表滾動過程中鎖住滑鼠，避免使用者亂動打斷動畫
-    lenis.value.scrollTo(0, { duration: 1, lock: false }); 
-  } else {
-    // ★ 模式 B：瞬間移動 (剛進來或重整時用)
-    window.scrollTo(0, 0); // 原生歸零
-    if (lenis.value) {
-      lenis.value.scrollTo(0, { immediate: true }); // Lenis 歸零
+
+// ★★★ 新增：自訂時間的平滑滾動函式 ★★★
+// duration = 毫秒 (例如 1000 = 1秒)
+const scrollToTop = (duration = 800) => {
+  const start = window.scrollY; // 起點
+  const startTime = performance.now();
+
+  const animate = (currentTime) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    // Easing 函數 (讓滾動有「快 -> 慢」的煞車感，比較自然)
+    // 這裡用的是 easeOutCubic
+    const ease = 1 - Math.pow(1 - progress, 3);
+    
+    window.scrollTo(0, start * (1 - ease));
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
     }
+  };
+
+  requestAnimationFrame(animate);
+};
+
+const goBack = () => {
+  if (window.history.state.back) {
+    router.back(); // 有上一頁 -> 回上一頁 (保留捲動位置)
+  } else {
+    router.push('/news'); // 沒上一頁 -> 回列表
   }
 }
 
-// 當 route.params.id 改變時 (從新聞A -> 新聞B)，強制執行歸零
 watch(
   () => route.params.id,
   () => {
     nextTick(() => {
-      // 傳入 true，開啟滑順模式
-      scrollToTop(true);
+      scrollToTop(1000);
     });
   }
 );
-
-onMounted(() => {
-  // 1. 初始化 Lenis
-  lenis.value = new Lenis({
-    duration: 1.5,
-    smooth: true,
-  });
-
-  // 2. 啟動 RAF
-  function raf(time) {
-    lenis.value?.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-  scrollToTop(false);
-});
-
-onUnmounted(() => {
-  if(lenis.value) lenis.value.destroy();
-})
 </script>
 
 <template>
@@ -214,7 +207,7 @@ onUnmounted(() => {
       <aside>
         <ul>
           <li v-for="item in allNewsData" :key="item.id">
-            <router-link :to="`/news/${item.id}`">
+            <router-link :to="`/news/${item.id}`" replace>
               <div>
                 <h5>{{ item.title }}</h5>
                 <p>{{ item.date }}</p>
@@ -224,7 +217,6 @@ onUnmounted(() => {
           </li>
         </ul>
       </aside>
-
       <main>
         <Transition name="fade" mode="out-in">
           
@@ -240,6 +232,12 @@ onUnmounted(() => {
         </Transition>
       </main>
     </div>
+    <div class="btn-back-layout">
+          <a href="#" class="back-to-news" @click.prevent="goBack">
+          <font-awesome-icon :icon="['fas', 'arrow-left']" class="back-icon" />
+          <p>Back to previous page</p> 
+      </a>
+    </div>
   </div>
 </template>
 
@@ -250,6 +248,7 @@ onUnmounted(() => {
     width: 100%;
     margin: 100px auto 0;
     min-height: 100vh;
+    position: relative;
   }
   .bread-crumb{
     display: flex;
@@ -263,6 +262,9 @@ onUnmounted(() => {
     cursor: pointer;
     position: relative;
     z-index: 9999;
+  }
+  .bread-crumb a:hover{
+    color: blue;
   }
   .content-container{
     display: flex;
@@ -353,5 +355,44 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateY(10px);
   }
-  
+  .back-to-news{
+    display: inline-flex;
+    padding: 8px 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    border-radius: 7px;
+    background: var(--Blue900, #0A3D70);
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    margin-top: 140px;
+    margin-right: -60px;
+    transition: all 0.3s ease;
+  }
+
+  /* ★ Hover 效果 ★ */
+.back-to-news:hover {
+  background-color: #164e8a; /* 1. 背景變亮一點的藍色，增加互動感 */
+  transform: translateY(-3px); /* 2. 按鈕整體稍微往上浮起 */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 3. 加一點陰影，更有立體感 */
+}
+
+/* 當滑鼠指到按鈕時，讓裡面的 icon 往左動 */
+.back-to-news:hover .back-icon {
+  transform: translateX(-5px); /* 4. 關鍵！箭頭往左跑，暗示「回去」 */
+}
+
+  .back-to-news p{
+    letter-spacing: 0.8px;
+  }
+  .back-icon{
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+  }
+  .btn-back-layout{
+    display: flex;
+    justify-content: flex-end;
+  }
 </style>
