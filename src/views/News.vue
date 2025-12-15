@@ -228,6 +228,17 @@ onMounted(() => {
     smooth: true,
   });
 
+  const navEntry = performance.getEntriesByType("navigation")[0];
+  
+  if (navEntry && navEntry.type === 'reload') {
+    // 如果是按 F5 重新整理，強制滾回頂部
+    window.scrollTo(0, 0);
+    lenis.value.scrollTo(0, { immediate: true });
+  } 
+  // 如果是 'navigate' (點連結) -> Router 會處理歸零
+  // 如果是 'back_forward' (按上一頁) -> Router 會處理回到舊位置
+  // 所以其他情況我們都不用管，只要抓 'reload' 就好！
+
   function raf(time) {
     lenis.value.raf(time);
     requestAnimationFrame(raf);
@@ -258,6 +269,8 @@ onMounted(() => {
       });
     });
   }, mainSection.value);
+  // behavior: 'auto' 代表瞬間跳轉，不要滑動 (重新整理通常不需要滑動特效)
+  window.scrollTo({ top: 0, behavior: 'auto' });
 });
 
 
@@ -421,7 +434,7 @@ onUnmounted(() => {
   margin: 0 auto;
   background-color: #0a0a0a;
   position: relative;
-  z-index: 9999;
+  z-index: 99;
   margin-bottom: 120px;
 }
 
