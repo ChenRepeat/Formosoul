@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref } from 'vue';
   const bue = ref(1);
   const stickResult = ref(0);
-  const chouqianFes= ref(3);
+  const chouqianFes= ref(0);
   const pics = {
     picLeft: {
       imgUrl:'/Classes/bue1.jpg',
@@ -82,7 +82,7 @@ import { ref } from 'vue';
             'fesResult': chouqianFes == 3,
         }">
         <div id="qian1">
-          <h6>{{ chouqianResult[stickResult]?.name }}</h6>
+          <p>{{ chouqianResult[stickResult]?.name }}</p>
           <img src="/Classes/qian.png">
         </div>
         <div id="qian2">
@@ -163,8 +163,8 @@ import { ref } from 'vue';
         height: 50%;
         position: absolute;
         transition: scale 1s ease, translate 1s ease;
-        img{height: 100%;position: absolute;left: 0;top: 0;}
-        h6{width: 40%;position: absolute;left: 12px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;}
+        img{height: 100%;position: absolute;left: 0;top: 0;transform: scaleX(0.5);}
+        p{width: 40%;position: absolute;left: 16px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;font-size: 12px;}
       }
       #qianCase{
         height: 85%;
@@ -178,24 +178,27 @@ import { ref } from 'vue';
       #qian4{top: 0;left: 50%;transform: rotate(-2deg);}
       #qian5{top: -3%;left: 59%;transform: rotate(12deg);}
       #qian6{top: 3%;left: 63%;transform: rotate(12deg);}
+      #qian2,#qian3,#qian4,#qian5,#qian6{transition: opacity 0.5s ease;}
       &.fesShake{
         transform: rotate(15deg);
         #qianCase{
         height: 100%;left: 22%;top: 15%;}
         #qian1{top: 2%;left: 29%;transform: rotate(-10deg);
-        animation: 3s qianPull 0.5s linear 1 forwards;
+        animation: 1.5s qianPull 0.5s linear 1 forwards;
         }
-        #qian2{top: 0%;left: 33%;}
-        #qian3{top: 4%;left: 40%;transform: rotate(2deg);}
-        #qian4{top: 0;left: 50%;transform: rotate(-2deg);}
-        #qian5{top: -3%;left: 59%;transform: rotate(12deg);}
-        #qian6{top: 3%;left: 68%;transform: rotate(12deg);}
-        animation: 1s shake 0.5s linear 3 forwards;
+        #qian2{top: 0%;left: 33%;opacity: 1;}
+        #qian3{top: 4%;left: 40%;transform: rotate(2deg);opacity: 1;}
+        #qian4{top: 0;left: 50%;transform: rotate(-2deg);opacity: 1;}
+        #qian5{top: -3%;left: 59%;transform: rotate(12deg);opacity: 1;}
+        #qian6{top: 3%;left: 68%;transform: rotate(12deg);opacity: 1;}
+        animation: 0.3s shake 0.5s linear 6 forwards;
       }
       &.fesCheck{
         transform: rotate(0deg) scale(2) translate(20% 50%);
         #qian2,#qian3,#qian4,#qian5,#qian6{opacity: 0;}
         #qian1{
+        transform: rotate(0deg);
+        top: -15%;
         animation: 1s qianScale 0.5s linear 1 forwards;
         }
         #qianCase{
@@ -211,7 +214,7 @@ import { ref } from 'vue';
         #qianCase{
         display: none;
       }
-      h6{opacity: 1;}
+      p{opacity: 1;}
 
       }
     }
@@ -321,11 +324,11 @@ import { ref } from 'vue';
 @keyframes qianPull{
   0%{top: 2%;left: 29%;transform: rotate(-10deg);}
   1%{top: 0%;left: 29%;transform: rotate(-10deg);}
-  20%{top: -2%;left: 29%;transform: rotate(-10deg);}
-  40%{top: -2%;left: 29%;transform: rotate(-10deg);}
-  60%{top: -4%;left: 29%;transform: rotate(-10deg);}
-  80%{top: -4%;left: 29%;transform: rotate(-10deg);}
-  100%{top: -6%;left: 29%;transform: rotate(-10deg);}
+  20%{top: -6%;left: 29%;transform: rotate(-10deg);}
+  40%{top: -6%;left: 29%;transform: rotate(-10deg);}
+  60%{top: -10%;left: 29%;transform: rotate(-10deg);}
+  80%{top: -10%;left: 29%;transform: rotate(-10deg);}
+  100%{top: -15%;left: 29%;transform: rotate(-10deg);}
 }
 @keyframes casePull{
   0%{bottom: 0%;left: 0%;opacity: 1;}
@@ -333,7 +336,7 @@ import { ref } from 'vue';
   100%{bottom: -80%;opacity: 0;}
 }
 @keyframes qianScale{
-  0%{transform: rotate(0deg);}
-  100%{transform: rotate(0deg) scale(2) translateY(30%);}
+  0%{transform: rotate(0deg);top: -15%;}
+  100%{transform: rotate(0deg) scale(2) translateY(30%);top: 0;}
 }
 </style>
