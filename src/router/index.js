@@ -172,13 +172,25 @@ const router = createRouter({
       ]
     },
   ],
+scrollBehavior(to, from, savedPosition) {
+    return new Promise((resolve) => {
+
+        if (savedPosition) {
+          resolve(savedPosition)
+        } 
+        // 2. 如果是去新頁面 (按連結進去的)
+        else {
+          resolve({ top: 0 })
+        }
+
+    })
+  }
 })
-// 2. ★★★ 強制關閉瀏覽器的「自動記憶位置」功能 ★★★
-// 加在 createRouter 之後
 router.beforeEach((to, from, next) => {
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual'; 
   }
   next();
 });
+
 export default router
