@@ -145,6 +145,7 @@ function handlelogout() {
   right:  0;
   z-index: 1000;
   transition: all 0.5s ease;
+  pointer-events: none;
 
 }
 .header-outer-case:has(.open){
@@ -198,6 +199,7 @@ img { object-fit: none; }
   flex-direction: column; 
   overflow: hidden;
   transition: all 0.5s ease;
+  pointer-events: all;
 }
 
 .header-link.open {

@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from "vue-router";
 
+// 增加： 進入鎖住，不要直接hover到：
+const isMapReady = ref(false);
 
 // 連結至其他頁面
 const router = useRouter();
@@ -66,6 +68,12 @@ onMounted(() => {
       }
     })
   }, 70)
+
+  // 設定 X 秒後解鎖，讓滑鼠可以互動
+  setTimeout(() => {
+    isMapReady.value = true;
+  }, 2000);
+
 })
 
 onUnmounted(() => clearInterval(interval))
@@ -96,7 +104,7 @@ const rightFrame = computed(()=> frames.value[1])
 
 <template>
     <main class="survival-case"> 
-      <div class="survival-case-wrapper">
+      <div class="survival-case-wrapper" :class="{ 'locked': !isMapReady }">
         <div class="survial-moveimg">
           <img v-for="( img, index) in moveimg" :key="index" :src="img" :style="{ 
               left: positions[index].x + '%', 
@@ -498,6 +506,11 @@ const rightFrame = computed(()=> frames.value[1])
   position: absolute;
   transform: translate(-50%, -50%);
   transition: box-shadow 0.3s ease-in-out;
+}
+
+// 新增：鎖住時的樣式
+.locked {
+  pointer-events: none;
 }
 
 

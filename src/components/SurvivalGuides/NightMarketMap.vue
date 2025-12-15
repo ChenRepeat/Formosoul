@@ -7,6 +7,9 @@ import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarket
 import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
 
+//
+const isMapReady = ref(false);
+
 // 路由
 const router = useRouter();
 
@@ -60,11 +63,17 @@ const startGamePlay = () => {
     }
 };
 
+onMounted (()=>{
+    setTimeout(() => {
+        isMapReady.value = true;
+    }, 2000);
+})
+
 </script>
 
 <template>
         <main class="survival-night-market-case">
-            <div class="survival-night-market-case-wrapper">
+            <div class="survival-night-market-case-wrapper" :class="{ 'locked': !isMapReady }" >
                 <img class='survival-night-market-case-map' src="/SurvivalGuide/night_market_map_bg-min-no-logo.png" alt="map-base">
 
 <!-------------------------------------- 夜市美食區塊 -------------------------------------------->
@@ -74,7 +83,7 @@ const startGamePlay = () => {
                     <img class="stall-pork-rice" src="/SurvivalGuide/rice-mask-group.png" alt="braised-pork-stall">
                     
                     <!-- [] 是指從陣列裡面拿東西 ， ()是指執行，傳遞參數 -->
-                    <SurvivalTextFrame class='text-frame-rice' 
+                    <SurvivalTextFrame class='text-frame-rice text-frame' 
                         :text="nmFrames[0].text"  
                         :width="nmFrames[0].width" 
                         :height="nmFrames[0].height"
@@ -91,7 +100,7 @@ const startGamePlay = () => {
                      :class="{'nm-is-active': isHover == 'tofu'}">
                     <img class="stall-sticky-tofu" src="/SurvivalGuide/tofu-mask-group.png" alt="sticky-tofu">
 
-                    <SurvivalTextFrame class="text-frame-tofu"
+                    <SurvivalTextFrame class="text-frame text-frame-tofu"
                     :text="nmFrames[1].text"
                     :width="nmFrames[1].width"
                     :height="nmFrames[1].height"
@@ -109,7 +118,7 @@ const startGamePlay = () => {
                      :class="{'nm-is-active': isHover == 'bubble' }">
                     <img class="stall-bubble-tea" src="/SurvivalGuide/bubble-mask-group.png" alt="bubble-tea">
 
-                    <SurvivalTextFrame class="text-frame-bubble"
+                    <SurvivalTextFrame class="text-frame text-frame-bubble "
                         :text="nmFrames[2].text"
                         :width="nmFrames[2].width"
                         :height="nmFrames[2].height"
@@ -126,7 +135,7 @@ const startGamePlay = () => {
                     :class="{'nm-is-active':ishover == 'sausage'}">
                     <img class="stall-sausage" src="/SurvivalGuide/sausage-mask-group.png" alt="sausage">
                 
-                    <SurvivalTextFrame class="text-frame-sausage"
+                    <SurvivalTextFrame class="text-frame text-frame-sausage"
                     :text="nmFrames[3].text"
                     :width="nmFrames[3].width"
                     :height="nmFrames[3].height"
@@ -144,7 +153,7 @@ const startGamePlay = () => {
                     :class="{'nm-is-active': isHover =='oil'}", >
                     <img class="stall-oil" src="/SurvivalGuide/oil-mask-group.png" alt="oil">
 
-                    <SurvivalTextFrame class="text-frame-oil"
+                    <SurvivalTextFrame class="text-frame text-frame-oil"
                     :text="nmFrames[4].text"
                     :width="nmFrames[4].width"
                     :height="nmFrames[4].height"
@@ -161,7 +170,7 @@ const startGamePlay = () => {
                      :class="{'nm-is-active': isHover == 'chicken'}">    
                     <img class="stall-chicken" src="/SurvivalGuide/chicken-mask-group.png" alt="fried-chicken">
 
-                    <SurvivalTextFrame class="text-frame-chicken"
+                    <SurvivalTextFrame class="text-frame text-frame-chicken"
                     :text="nmFrames[5].text"
                     :width="nmFrames[5].width"
                     :height="nmFrames[5].height"
@@ -186,7 +195,7 @@ const startGamePlay = () => {
                 <div class="game-wrapper-dice" @mouseenter="isHover='game-dice'" @mouseleave="isHover= null"
                      :class="{'nm-is-active': isHover =='game-dice'}", >
                      <img class="game-dice" src="/SurvivalGuide/dice-mask-group.png" alt="game-dice">
-                     <SurvivalTextFrame class="text-frame-game-dice"
+                     <SurvivalTextFrame class="text-frame text-frame-game-dice"
                     :text="nmFrames[6].text"
                     :width="nmFrames[6].width"
                     :height="nmFrames[6].height"
@@ -204,7 +213,7 @@ const startGamePlay = () => {
                      :class="{'nm-is-active': isHover =='game-prawning'}", >
                      <img class="game-prawning" src="/SurvivalGuide/prawning-mask-group.png" alt="game-prawning">
 
-                    <SurvivalTextFrame class="text-frame-game-prawning"
+                    <SurvivalTextFrame class="text-frame text-frame-game-prawning"
                     :text="nmFrames[7].text"
                     :width="nmFrames[7].width"
                     :height="nmFrames[7].height"
@@ -221,7 +230,7 @@ const startGamePlay = () => {
                      :class="{'nm-is-active': isHover =='game-ring-toss'}", >
                      <img class="game-ring-toss" src="/SurvivalGuide/ring-toss-mask-group.png" alt="game-ring-toss">
 
-                    <SurvivalTextFrame class="text-frame-game-ring-toss"
+                    <SurvivalTextFrame class="text-frame text-frame-game-ring-toss"
                     :text="nmFrames[8].text"
                     :width="nmFrames[8].width"
                     :height="nmFrames[8].height"
@@ -301,12 +310,12 @@ const startGamePlay = () => {
     top: 14.1%;
     right: 24.6%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
     &:hover {
 
-        z-index: 200; 
+        // z-index: 200; 
 
         .stall-pork-rice {
             transform: scale(1.025);
@@ -342,12 +351,12 @@ const startGamePlay = () => {
     top: 6.1%;
     left: 40.25%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
     &:hover {
 
-        z-index: 200; 
+        // z-index: 200; 
 
         .stall-bubble-tea {
             transform: scale(1.025);
@@ -382,12 +391,12 @@ const startGamePlay = () => {
     top: 19%;
     left: 21.2%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
     &:hover {
 
-        z-index: 200; 
+        // z-index: 200; 
 
         .stall-sticky-tofu {
             transform: scale(1.025);
@@ -423,13 +432,13 @@ const startGamePlay = () => {
     top: 27.4%;
     left: 12.8%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
 
     &:hover {
 
-        z-index: 200; 
+        // z-index: 200; 
 
         .stall-chicken {
             transform: scale(1.025);
@@ -466,13 +475,13 @@ const startGamePlay = () => {
     top: 9%;
     right: 34%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
 
     &:hover {
 
-        z-index: 200; 
+        // z-index: 200; 
 
         .stall-sausage {
             transform: scale(1.025);
@@ -508,13 +517,13 @@ const startGamePlay = () => {
     top: 22.2%;
     right: 14.7%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
 
     &:hover {
 
-        z-index: 200; 
+        // z-index: 200; 
 
         .stall-oil {
             transform: scale(1.025);
@@ -590,7 +599,7 @@ const startGamePlay = () => {
 
     &:hover {
 
-        z-index: 200;
+        // z-index: 200;
 
         .game-dice {
             
@@ -600,6 +609,13 @@ const startGamePlay = () => {
         }
     }   
 } 
+
+
+// .text-frame{
+
+//     &.text-frame-game-dice{}
+
+// }
 .text-frame-game-dice {
     opacity: 0;
     position: absolute;
@@ -626,13 +642,13 @@ const startGamePlay = () => {
     bottom: 11%;
     left: 13.3%;
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
 
     &:hover {
 
-        z-index: 200;
+        // z-index: 200;
 
         .game-prawning {
             
@@ -668,13 +684,13 @@ const startGamePlay = () => {
     bottom: 23.1%;
     left: 45.6%;    
 
-    z-index: 100;  
+    // z-index: 100;  
     cursor: pointer;
 
 
     &:hover {
 
-        z-index: 200;
+        // z-index: 200;
 
         .game-ring-toss {
             
@@ -751,6 +767,9 @@ const startGamePlay = () => {
     }    
 }
 
+.locked {
+    pointer-events: none;
+}
 
 
 
