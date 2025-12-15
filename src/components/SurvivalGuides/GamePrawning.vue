@@ -274,9 +274,9 @@ const handleKey = (e) => { if (e.code ==='Space') shoot();
 
 
 // Try again 遊戲重置
-const initGame = () => {
-    
-}
+// const initGame = () => {
+
+// }
 
 
 
