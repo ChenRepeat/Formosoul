@@ -1,54 +1,42 @@
 <!-- 20251202：首次與Michael完成組件，以茲紀念 -->
 <script setup>
-
-import { ref } from 'vue'
-
-// 圖片陣列
-const cards = ref([
-  {
-    id: 1,
-    img: 'https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH',
-    event: 'Taiwan’s AI-driven',
-    date: '2025.2.5',
+defineProps({
+  data: {
+    type: Object,
+    required: true
   },
-  {
-    id: 2,
-    img: 'https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg',
-    event: 'Taiwan’s AI-driven',
-    date: '2025.6.20',
-  },
-  {
-    id: 3,
-    img: 'https://www.travel.taipei/image/90806/?r=1515479579958',
-    event: 'Taiwan’s Flowers-driven',
-    date: '2025.7.18',
-  },
-])
+  link: {
+    type: String,
+    required: true
+  }
+})
 </script>
 
 <template>
-  <div v-for="card in cards" :key="card.id" class="newscard-container">
-    <div class="newscard-container-info">
-      <img class="newscard-container-pics" :src="card.img" alt="" />
-      <div class="newscard-container-text">
-        <h4>{{ card.event }}</h4>
-        <h5>{{ card.date }}</h5>
+  <router-link :to="link" class="newscard-container">
+      <div class="newscard-container-info">
+        <img class="newscard-container-pics" :src="data.image" alt="" />
+        <div class="newscard-container-text">
+          <h4>{{ data.title }}</h4>
+          <h5>{{ data.date }}</h5>
+        </div>
       </div>
-    </div>
-
-    <div class="triangle-black-large">
-      <div class="triangle-white-small"></div>
-    </div>
-  </div>
+  
+      <div class="triangle-black-large">
+        <div class="triangle-white-small"></div>
+      </div>
+  </router-link>
 </template>
 
 <style scoped lang="scss">
 .newscard-container {
-  width: 380px;
-  height: 380px;
+  width: 360px;
+  height: 360px;
   border-radius: 7px;
   position: relative;
   overflow: hidden;
+  display: block;
+  text-decoration: none;
 }
 
 .newscard-container-info {

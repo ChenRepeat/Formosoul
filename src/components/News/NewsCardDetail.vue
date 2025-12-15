@@ -1,85 +1,13 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { ref,computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 import Lenis from "lenis";
-import NewsCard from "@/components/News/NewsCard.vue";
-// 1. 記得引入 onBeforeRouteLeave
-import { onBeforeRouteLeave } from 'vue-router'
 
-// 註冊 GSAP Plugin
-gsap.registerPlugin(ScrollTrigger);
+const route = useRoute()
+const lenis = ref(null)
 
-const mainSection = ref(null);
-const ctx = ref(null); // 用來清理 GSAP 動畫
-const lenis = ref(null); // Lenis 實例
 
-// 1. 視差漂浮卡片資料 (Parallax Items)
-const cards = ref([
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600",
-    style: { top: "25%", left: "5%" },
-    speed: -100,
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?w=600",
-    style: { top: "32%", right: "8%" },
-    speed: 50,
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
-    style: { top: "42%", left: "15%" },
-    speed: -50,
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600",
-    style: { top: "48%", right: "25%" },
-    speed: 120,
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600",
-    style: { top: "55%", left: "8%" },
-    speed: -80,
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600",
-    style: { top: "62%", right: "5%" },
-    speed: 80,
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=600",
-    style: { top: "68%", left: "35%" },
-    speed: -150,
-  },
-  {
-    id: 8,
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600",
-    style: { top: "75%", right: "15%" },
-    speed: 40,
-  },
-  {
-    id: 9,
-    src: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=600",
-    style: { top: "82%", left: "10%" },
-    speed: 150,
-  },
-  {
-    id: 10,
-    src: "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600",
-    style: { top: "85%", right: "30%" },
-    speed: -60,
-  },
-]);
-
-// 2. 最新消息資料
-const allNewsData = ref([
+const allNewsData = [
  {
     id: 1,
     title: "ABia Zhenlan",
@@ -220,249 +148,210 @@ const allNewsData = ref([
     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
     `
   },
-]);
+]
+
+// 3. 找出目前要顯示的那一篇
+const currentArticle = computed(() => {
+  return allNewsData.find(item => item.id == route.params.id)
+})
+
+// 修改後的 scrollToTop
+const scrollToTop = (isSmooth = false) => {
+  if (isSmooth && lenis.value) {
+    // ★ 模式 A：滑順滾動 (點擊選單時用)
+    // duration: 2 代表花 2 秒鐘滑上去 (你可以自己改數字，越小越快)
+    // lock: true 代表滾動過程中鎖住滑鼠，避免使用者亂動打斷動畫
+    lenis.value.scrollTo(0, { duration: 1, lock: false }); 
+  } else {
+    // ★ 模式 B：瞬間移動 (剛進來或重整時用)
+    window.scrollTo(0, 0); // 原生歸零
+    if (lenis.value) {
+      lenis.value.scrollTo(0, { immediate: true }); // Lenis 歸零
+    }
+  }
+}
+
+// 當 route.params.id 改變時 (從新聞A -> 新聞B)，強制執行歸零
+watch(
+  () => route.params.id,
+  () => {
+    nextTick(() => {
+      // 傳入 true，開啟滑順模式
+      scrollToTop(true);
+    });
+  }
+);
 
 onMounted(() => {
+  // 1. 初始化 Lenis
   lenis.value = new Lenis({
     duration: 1.5,
     smooth: true,
   });
 
+  // 2. 啟動 RAF
   function raf(time) {
-    lenis.value.raf(time);
+    lenis.value?.raf(time);
     requestAnimationFrame(raf);
   }
   requestAnimationFrame(raf);
-
-  ctx.value = gsap.context(() => {
-    ScrollTrigger.create({
-      trigger: mainSection.value,
-      start: "top top",
-      end: "bottom bottom",
-      pin: ".news-pin-target",
-      pinSpacing: false,
-    });
-
-    const parallaxCards = document.querySelectorAll(".news-parallax-card");
-    parallaxCards.forEach((el) => {
-      const speed = el.getAttribute("data-speed");
-      gsap.to(el, {
-        y: speed,
-        ease: "none",
-        scrollTrigger: {
-          trigger: mainSection.value,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0,
-        },
-      });
-    });
-  }, mainSection.value);
-});
-
-
-// 2. ★★★ 加入這段安全煞車 ★★★
-// 這會在「按下連結，但還沒換頁」的那一瞬間執行
-onBeforeRouteLeave((to, from, next) => {
-  // 立即殺死 Lenis，防止它在換頁過程中干擾卷軸位置
-  if (lenis.value) {
-    lenis.value.destroy(); 
-    lenis.value = null;
-  }
-  next();
+  scrollToTop(false);
 });
 
 onUnmounted(() => {
-  if (ctx.value) ctx.value.revert();
-  if (lenis.value) lenis.value.destroy();
-});
+  if(lenis.value) lenis.value.destroy();
+})
 </script>
 
 <template>
-  <div class="news-page-container">
-    <section ref="mainSection" class="news-parallax-section">
-      <div class="news-sticky-title-wrapper news-pin-target">
-        <h5 class="news-main-text">I solemnly swear that I am up to no good.</h5>
-      </div>
+  <div class="detail-page">
+    <div class="bread-crumb">
+      <router-link to="/news">News</router-link>
+      <span> > </span>
+      <span>{{ currentArticle?.title }}</span>
+    </div>
+    <div class="content-container">
+      <aside>
+        <ul>
+          <li v-for="item in allNewsData" :key="item.id">
+            <router-link :to="`/news/${item.id}`">
+              <div>
+                <h5>{{ item.title }}</h5>
+                <p>{{ item.date }}</p>
+              </div>
+              <span><font-awesome-icon :icon="['fas', 'caret-down']" size="3x" class="arrow-icon"/></span>
+            </router-link>
+          </li>
+        </ul>
+      </aside>
 
-      <div class="news-cards-container">
-        <div
-          v-for="card in cards"
-          :key="card.id"
-          class="news-parallax-card"
-          :style="card.style"
-          :data-speed="card.speed"
-        >
-          <div class="news-card-inner">
-            <img :src="card.src" alt="Magic Item" />
+      <main>
+        <Transition name="fade" mode="out-in">
+          
+          <div v-if="currentArticle" :key="currentArticle.id">
+            <img :src="currentArticle.image" alt="#">
+            <div class="text-area">
+              <h3>{{ currentArticle.title }}</h3>
+              <h5>{{ currentArticle.date }}</h5>
+              <p>{{ currentArticle.content }}</p>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="news-quote-section">
-      <div class="news-quote-content">
-        <h5>Curiosity, friction, iteration:</h5>
-        <h5>The machinery of my design</h5>
-      </div>
-    </section>
-
-    <section class="news-updates-section">
-      <div class="news-updates-header">
-        <h2 class="news-updates-title">UPDATES</h2>
-      </div>
-
-      <div class="news-updates-grid">
-        <NewsCard v-for="item in allNewsData" :key="item.id" :data="item" :link="`/news/${item.id}`"/>
-      </div>
-    </section>
+        </Transition>
+      </main>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.news-page-container {
-  width: 100%;
-  position: relative;
-  background-color: #0a0a0a;
-  color: #ffffff;
-  overflow-x: hidden;
+  .detail-page{
+    color: white;
+    max-width: 1200px;
+    width: 100%;
+    margin: 100px auto 0;
+    min-height: 100vh;
+  }
+  .bread-crumb{
+    display: flex;
+    gap: 20px;
+    margin: 0 0 100px 80px;
+  }
+  .bread-crumb a{
+    display: block;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    z-index: 9999;
+  }
+  .content-container{
+    display: flex;
+    margin-left: 120px;
+  }
+  .content-container aside{
+    width: 315px;
+    flex-shrink: 0;
+    margin-right: 64px;
+    z-index: 9999;
+  }
+  .content-container ul{
+    background-color: #fff;
+    border-radius: 5px
+  }
+  .content-container ul a{
+    display: flex;
+    border: 1px solid red;
+    text-decoration: none;
+    color: #000;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+
+/*【關鍵步驟】處理文字包覆層 (a 裡面的那個 div) */
+/* 必須設定 min-width: 0，Flex 子元素才會縮小，否則會無限撐開 */
+.content-container ul a > div {
+  flex: 1;        /* 讓這個 div 佔據所有剩餘寬度 */
+  min-width: 0;   /* ★超級關鍵：沒有這行，省略號永遠出不來 */
+  margin-right: 15px; /* 避免文字跟右邊的箭頭 icon 撞在一起 */
 }
 
-/* --- 視差區塊樣式 --- */
-.news-parallax-section {
-  position: relative;
-  width: 100%;
-  height: 550vh;
+.content-container ul a h5 {
+  margin: 0;
+  /* --- 省略號 --- */
+  white-space: nowrap;
   overflow: hidden;
-  background-color: #0a0a0a;
+  text-overflow: ellipsis;
 }
 
-.news-sticky-title-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  pointer-events: none;
-}
+  .content-container img{
+    width: 100%;
+    max-width: 820px;
+    height: auto; 
+    display: block; 
+    margin-bottom: 60px; 
+  }
+  .article-container{
+    width: 100%;
+    max-width: 800px;
+    height: auto; 
+    display: block; 
+    margin-bottom: 20px; 
+  }
+  .text-area{
+    background-color: #fff;
+    color: #000;
+    white-space: pre-wrap;
+    padding: 40px;
+  }
+  .text-area h3{
+    margin-bottom: 20px;
+  }
+   .text-area h5{
+    margin-bottom: 20px;
+  }
+  .icon-item{
+    color: #000;
+    z-index: 99999;
+  }
+  .arrow-icon{
+    transition: all 1s ease;
+  }
+  .router-link-active .arrow-icon {
+    transform: rotate( -90deg);
+  }
 
-.news-main-text {
-  line-height: 1.1;
-  text-align: center;
-  color: #fff;
-  mix-blend-mode: exclusion;
-}
+  /* 進場與離場的過程：設定時間與曲線 */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
 
-/* 卡片容器 */
-.news-cards-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.news-parallax-card {
-  position: absolute;
-  width: 270px;
-  height: 290px;
-  will-change: transform;
-  pointer-events:none;
-}
-
-.news-card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-}
-
-.news-card-inner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: sepia(20%) contrast(110%);
-}
-
-
-/* --- 引言區塊 --- */
-.news-quote-section {
-  width: 100%;
-  height: 100vh;
-  background-color: #0a0a0a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 30;
-}
-
-.news-quote-content {
-  text-align: center;
-  color: #e0e0e0;
-
-  line-height: 2;
-  letter-spacing: 1px;
-  opacity: 0.9;
-}
-
-/*Updates 區*/
-.news-updates-section {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #0a0a0a;
-  position: relative;
-  z-index: 9999;
-  margin-bottom: 120px;
-}
-
-.news-updates-header {
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  max-width: 1200px;
+  /* 進場前 (還透明) & 離場後 (變透明) */
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
   
-}
-
-.news-updates-title {
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 60px;
-}
-
-/* 網格系統 */
-.news-updates-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
-  max-width: 1176px;
-  margin: 0 auto;
-}
-
-/* 響應式 */
-@media (max-width: 768px) {
-  .news-updates-grid {
-    grid-template-columns: 1fr;
-  }
-  .news-parallax-section {
-    height: 450vh;
-  }
-  .news-parallax-card {
-    width: 160px;
-    height: 180px;
-  }
-}
-
-
 </style>
