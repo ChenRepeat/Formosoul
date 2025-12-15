@@ -162,18 +162,17 @@
       },
   };
     const getMaskStyle = (key) => {
-      if (key !== clickPotion.value) { 
-        const potion = potions[key];
-
-        if (potion && potion.imgUrl) {
-        return {
-          'mask-image': `url('${potion.imgUrl}')`,
-          '-webkit-mask-image': `url('${potion.imgUrl}')`,
-        };
+  if (key !== clickPotion.value) { 
+    const potion = potions[key];
+    if (potion && potion.imgUrl) {
+      return {
+        'mask-image': `url('${potion.imgUrl}')`,
+        '-webkit-mask-image': `url('${potion.imgUrl}')`,
+      };
     }
   }
-      return {}; 
-  };
+  return { 'display': 'none' };
+};
   function changeIntro(i){
     if(clickPotion.value != String(i)){
       clickPotion.value = false;
@@ -323,29 +322,26 @@
     justify-content: center;
     
   }
-  .over-lay{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black; 
-    opacity: 0.8; 
-    z-index: 10;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    mask-mode: alpha;
-    -webkit-mask-mode: alpha;
-    &:hover{
-    opacity: 0;
-    transition: opacity 0.5s ease;
+  .over-lay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black; 
+  z-index: 10;
+  opacity: 0.8; 
+  transition: opacity 0.5s ease;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
 
-}
-    
+  &:hover {
+    opacity: 0;
+  }
 }
 
 </style>

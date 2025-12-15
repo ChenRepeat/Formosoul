@@ -202,7 +202,9 @@ const getPhysicalIndex = (logicalPage) => {
 
 // 計算實際頁碼範圍
 const pageRange = computed(() => {
-  const maxLogicalPage = getLogicalPage(totalPages.value - 1);
+  const maxLogicalPage = isDoublePage.value 
+  ? Math.floor((totalPages.value - 1) / 2)  // 雙頁模式
+  : totalPages.value - 1;                    // 單頁模式
   return {
     min: 0,
     max: maxLogicalPage
@@ -292,7 +294,7 @@ const handleModeSwitch = (wasDoublePage, isNowDoublePage) => {
   // 重新定位到正確的頁面
   const targetPhysicalIndex = isNowDoublePage 
     ? targetLogicalPage * 2 
-    : targetLogicalPage * 2;
+    : targetLogicalPage;
   
   pageFlip.flip(targetPhysicalIndex);
   updatePageNumber();
@@ -314,7 +316,10 @@ const playIntroAnimation = async () => {
 
     // 快速翻頁展示
     const physicalTotalPages = pageFlip.getPageCount();
-    for (let i = 0; i < physicalTotalPages; i++) {
+     const logicalTotalPages = isDoublePage.value 
+     ? Math.ceil(physicalTotalPages / 2)  // 雙頁模式
+     : physicalTotalPages;                 // 單頁模式
+    for (let i = 0; i < logicalTotalPages; i++) {
       if (!isIntroPlaying.value) return;
       pageFlip.flipNext();
       await wait(FLIP_SPEEDS.intro);
@@ -344,6 +349,12 @@ const playIntroAnimation = async () => {
 
 // --- 改進的 goToPage 邏輯 ---
 const goToPage = async (targetLogicalPage) => {
+  // 新增: 邏輯頁碼轉物理索引
+const targetPhysicalIndex = getPhysicalIndex(targetLogicalPage);
+const currentPhysicalIndex = pageFlip.getCurrentPageIndex();
+
+// 使用物理距離計算翻頁次數
+const physicalDistance = Math.abs(targetPhysicalIndex - currentPhysicalIndex);
   // 驗證輸入
   if (!pageFlip || isAnimating.value || isIntroPlaying.value) {
     console.warn('Cannot flip: animation in progress or pageFlip not ready');

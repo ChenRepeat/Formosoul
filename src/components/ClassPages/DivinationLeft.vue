@@ -90,11 +90,11 @@ p{color: $color-fsContent;}
     position: relative;
     width: 90px;
     height: 90px;
-    filter: drop-shadow(100px 100px 100px rgba(0, 0, 0, 1));
+    // filter: drop-shadow(100px 100px 100px rgba(0, 0, 0, 1));
 
   }
   .img-locate:not(.shadow){
-    filter: drop-shadow(100px 100px 100px rgba(0, 0, 0, 1));
+    // filter: drop-shadow(100px 100px 100px rgba(0, 0, 0, 1));
     
   }
   img{
