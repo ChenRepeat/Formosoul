@@ -9,6 +9,9 @@
         <loginpage v-if="memberview == 'login'"></loginpage>
         <cardpage v-else-if="memberview == 'membercard'"></cardpage>
         <ledgerpage v-else-if="memberview== 'ledger'"></ledgerpage>  
+        <TheCoreSelection v-if="memberview == 'coreintro'"></TheCoreSelection>
+        <GameHistory v-if="memberview == 'history'"></GameHistory>
+        <CoreGame v-if="memberview == 'coregame'"></CoreGame>
         </div>
     </div>
 </template>
@@ -20,8 +23,11 @@
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import TheCoreSelection from './Home/TheCoreSelection.vue';
+    import GameHistory from './Home/GameHistory.vue';
+    import CoreGame from './Home/CoreGame.vue';
     const authStore = useAuthStore();
-    const memberview = ref('login');
+    const memberview = ref('coreintro');
 
     provide('setmemberview', (viewName) => {
         memberview.value = viewName;
