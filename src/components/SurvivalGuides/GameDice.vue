@@ -1,111 +1,65 @@
 <template>
-  <div class="scene">
-    <div class="cube">
-        <div class="face face-top">
-            <div class="pip pip-red center"></div>
+    <Dice Xdeg="currentX" Ydeg="currentY"></Dice>
+    <div class="playerbox">
+        <h3>Player</h3>
+        <div class="scroebox">
+            <h3>Score：</h3>
+            <h3>3</h3>
         </div>
-        <div class="face face-left">
-            <div class="pip pip-black top-left"></div>
-            <div class="pip pip-black bottom-right"></div>
-        </div>
-        <div class="face face-right">
-            <div class="pip pip-red  top-left"></div>
-            <div class="pip pip-red  top-right"></div>
-            <div class="pip pip-red  bottom-left"></div>
-            <div class="pip pip-red  bottom-right"></div>
-        </div>
-        <div class="face face-front">
-        <!-- 3 -->
-        <div class="pip pip-black top-left"></div>
-        <div class="pip pip-black bottom-right"></div>
-        <div class="pip pip-black  center"></div>
-
-        </div>
-        <div class="face face-back">
-            <div class="pip pip-black  top-left"></div>
-            <div class="pip pip-black  top-right"></div>
-            <div class="pip pip-black center"></div>
-            <div class="pip pip-black  bottom-left"></div>
-            <div class="pip pip-black  bottom-right"></div>
-        </div>
-      <!-- 5 -->
-        <div class="face face-bottom">
-            <div class="pip pip-black  top-left"></div>
-            <div class="pip pip-black  top-center"></div>
-            <div class="pip pip-black  top-right"></div>
-            <div class="pip pip-black  bottom-left"></div>
-            <div class="pip pip-black  bottom-center"></div>
-            <div class="pip pip-black  bottom-right"></div>
-        </div>
-      <!-- 6 -->
     </div>
-  </div>
+    <div class="bowlbox">
+        <Bowl></Bowl>
+    </div>
+    <div class="bankerbox">
+        <h3>banker</h3>
+        <div class="scroebox">
+            <h3>Score：</h3>
+            <h3>3</h3>
+        </div>
+    </div>
 </template>
 
 <script setup>
+import Bowl from './bowl.vue';
+import Dice from './Dice.vue';
+
 
 </script>
 
 <style scoped>
-/* 骰子大小 */
-.scene {
-  --size: 100px; 
-  /* 上面統一大小比較好調整 */
-  width: var(--size);
-  height: var(--size);
-  margin: 50px auto;
-  perspective: calc(var(--size) * 4); 
-}
+    .bowlbox{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); 
+    }
 
-.cube {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-    /* 轉視角 */
-  transform: rotateX(150deg) rotateY(225deg);
-  background-color: #f0f0f0; 
-  transform-origin: center center;
-  scale: 0.99;
-}
+    .bankerbox,
+    .playerbox{
+        width: 200px;
+        height: 200px;
+    }
 
-.face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #f0f0f0;
-  border: 2px solid #f0f0f0; 
-  border-radius: 10%;     
-  box-sizing: border-box;
-}
+    .bankerbox{
+        position: absolute;
+        margin-left: auto;
+        top: 50%;
+        right: 0;
+        transform: translate(0, -50%); 
+    }
+    .playerbox{
+        position: absolute;
+        margin-left: auto;
+        top: 50%;
+        left: 0;
+        transform: translate(0, -50%); 
 
+    }
 
-.face-top    { transform: rotateX(90deg) translateZ(calc(var(--size) / 2)); }
-.face-left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
-.face-right  { transform: rotateY(90deg) translateZ(calc(var(--size) / 2)); }
-.face-front  { transform: rotateY(0deg) translateZ(calc(var(--size) / 2)); }
-.face-back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
-.face-bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
-
-.pip {
-  position: absolute;
-  width: 20%;  
-  height: 20%;
-  border-radius: 50%;
-}
-
-.pip-red { background-color: #d92b2b; }
-.pip-black { background-color: #222; }
-
-
-.center {
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-.top-left { top: 12.5%; left: 12.5%; }       
-.top-right { top: 12.5%; right: 12.5%; }
-.bottom-left { bottom: 12.5%; left: 12.5%; }
-.bottom-right { bottom: 12.5%; right: 12.5%; }
-.top-center{ bottom: 38.5%; right: 12.5%; }
-.bottom-center{ top: 38.5%; left: 12.5%;}
+    .scroebox > h3:last-child{
+        text-align: center;
+    }
+    .scroebox{
+        background-color: #EEEEEE;
+    }
 </style>
