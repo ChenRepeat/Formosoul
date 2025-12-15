@@ -22,6 +22,7 @@ const updateMouse = (e) => {
 
 
 
+
 // ================ 抓取與丟骰子 area ================ 
 const isGrabbing = ref(false); // 是否正在按住
 // 骰子狀態
