@@ -104,7 +104,8 @@
           :key="key"
           @click="changeIntro(key)"
           @mousedown.stop
-          @touchstart.stop>
+          @touchstart.stop
+          >
           <img 
               :src="charm.imgUrl" 
               :alt="charm.name"
@@ -112,7 +113,8 @@
               @mousedown.stop
               @touchstart.stop>
           <div class="over-lay"
-          :class="{ 'show': clickCharm != key }"></div>
+          :class="{ 'show': clickCharm != key }"
+          :key="key"></div>
         </div>
       </div>
       <div class="charm-bottom-row dp-flex">
@@ -249,6 +251,9 @@
     opacity: 0; 
     z-index: 10;
     transition: all 0.5s ease;
+    &:hover{
+      opacity: 0;
+    }
 }
 .show{
     opacity: 0.8;

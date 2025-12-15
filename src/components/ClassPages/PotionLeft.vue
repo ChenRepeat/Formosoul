@@ -164,13 +164,12 @@
     const getMaskStyle = (key) => {
       if (key !== clickPotion.value) { 
         const potion = potions[key];
-      if (potion && potion.imgUrl) {
-      return {
-        'mask-image': `url('${potion.imgUrl}')`,
-        '-webkit-mask-image': `url('${potion.imgUrl}')`,
-        'background-color': 'black',
-        'opacity': '0.8',
-      };
+
+        if (potion && potion.imgUrl) {
+        return {
+          'mask-image': `url('${potion.imgUrl}')`,
+          '-webkit-mask-image': `url('${potion.imgUrl}')`,
+        };
     }
   }
       return {}; 
@@ -213,12 +212,13 @@
               @mousedown.stop
               @touchstart.stop>
           <div class="over-lay"
-              :style="getMaskStyle(key)">
+              :style="getMaskStyle(key)"
+              >
           </div>
         </div>
       </div>
       <div class="intro-case dp-flex  bg-frostedGlass"
-        v-if="clickPotion!=0"
+        v-if="clickPotion != 0"
         @click="changeIntro(0)"
         @mousedown.stop
         @touchstart.stop>
@@ -330,7 +330,7 @@
     width: 100%;
     height: 100%;
     background-color: black; 
-    opacity: 0; 
+    opacity: 0.8; 
     z-index: 10;
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -340,9 +340,12 @@
     -webkit-mask-position: center;
     mask-mode: alpha;
     -webkit-mask-mode: alpha;
+    &:hover{
+    opacity: 0;
+    transition: opacity 0.5s ease;
+
 }
-.show{
-    background-color: black;
-    opacity: 0.8;
+    
 }
+
 </style>
