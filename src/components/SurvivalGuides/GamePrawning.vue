@@ -22,7 +22,8 @@ const gameClaw = ref(null); // 鉤子頭
 const timeLeft = ref(30);
 // 加入 遊戲結束
 const isGameOver = ref(false);
-
+// 加入 遊戲準備畫面
+const isGameReady = ref(true); 
 
 // 物品 & 資料
 // const items = ref(prawningData) // 物品是寫死的寫法 - 連到 JS
@@ -96,7 +97,7 @@ const generateRandomItems = (count) => {
         let attempts = 0;
 
         // 嘗試找位置，最多試 50 次，找不到就硬塞 (避免當機)
-        while (isOverlapping && attempts < 50) {
+        while (isOverlapping && attempts < 100) {
             attempts++;
             isOverlapping = false; // 先假設沒重疊
 
@@ -138,11 +139,38 @@ const generateRandomItems = (count) => {
 let swingBetween = null;
 let shootBetween = null;
 let isShooting = false;
-
 // 新增 計時器的 variable
 let timerInterval = null;
 
-// 遊戲 logic 
+// 遊戲流程控制
+//  初始化/重置
+const initGame = () => {
+    // 重置資料數據
+    score.value = 0;
+    timeLeft.value = 30;
+    isGameOver.value = false;
+    isGameReady.value = true;
+
+    // 清除舊狀態
+    clearInterval(timerInterval);
+    if(swingBetween) swingBetween.kill();
+    if(shootBetween) shootBetween.kill();
+    isShooting = false;
+
+    items.value = generateRandomItems(20);
+    
+    gsap.set(gameHook.value, {rotation: 0});
+    gsap.set(gameLine.value, {height: '50px'});
+}
+
+// 真正開始
+const startGameAction = () => {
+    if(!isGameReady.value) return;
+
+    isGameReady.value = false;
+    startSwing();
+    startTimer();
+}
 
 // Timer
 const startTimer = () => {
@@ -266,35 +294,41 @@ const updateItemPosition = (item) => {
     item.y = clawRect.top - gameRect.top;
 }
 
-// 6 鍵盤控制 (空白鍵發射)
-const handleKey = (e) => { if (e.code ==='Space') shoot();
-    if (e.code === 'Escape') emit('close-game');
-};
 
-
-// Try again 遊戲重置
-const initGame = () => {
-    // 1. 重置數據
-    score.value = 0;
-    timeLeft.value = 30;
-    isGameOver.value = false;
-
-    clearInterval(timerInterval);
-
-    items.value = generateRandomItems(20);
-    startSwing();
-    startTimer();
+// 新增：點擊畫面處理開始
+const handleAreaClick = () => {
+    if(isGameReady.value) {
+        startGameAction(); // 如果是準備中，點擊開始
+    } else {
+        shoot(); // 如果是遊戲中，點擊發射
+    }
 }
 
+
+// 6 鍵盤控制 (空白鍵發射)
+const handleKey = (e) => { 
+    if (e.code === 'Escape') {
+        emit('close-game');
+        return;
+    }
+
+    if (e.code === 'Space') {
+        if (isGameReady.value) {
+            startGameAction(); // 空白鍵也可以開始
+        } else {
+            shoot();
+        }
+    }
+};
 
 
 // 生命週期 , 開始 modal 鎖住scroll
 onMounted (()=>{
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleKey);
 
     initGame();
+    window.addEventListener('keydown', handleKey);
 });
 
 onUnmounted (()=> {
@@ -312,8 +346,8 @@ onUnmounted (()=> {
 
 
 <template>
-    <div class="game-prawning-container" 
-    ref="gameArea" @click="shoot">
+    <div class="game-prawning-container " 
+    ref="gameArea" @click="handleAreaClick">
         <div class="ui-score" :class="{ 'score-up': score >= 500 }">Score: {{ score }}</div>
 
         <div class="ui-timer" :class="{ 'urgent': timeLeft <= 10 }">
@@ -339,12 +373,29 @@ onUnmounted (()=> {
         <img :src="item.src" class="item-img" />
         </div>
 
+        <div v-if="isGameReady" class="start-screen-overlay">
+            <div class="start-text">
+                <h1>READY?</h1>
+                <p>Click or Press Space to Start</p>
+            </div>
+        </div>
+
         <div v-if="isGameOver" class="game-over-text">
-            TIME'S UP!
-            <h4>Your score is:  {{  score }}</h4>
+            <div class="result-title">TIME'S UP!</div>
+            <h3>Your score is:  {{  score }}</h3>
             <div v-if="score >= 500" class="result-msg win"><h1>CONGRATS!</h1></div>
-            <div v-else class="result-msg lose clickable" @click="initGame">
+            <div v-else class="result-msg lose">
                 <h1>TRY AGAIN!</h1>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-action btn-restart" @click.stop="initGame">
+                    PLAY AGAIN ⟳
+                </button>
+
+                <button class="btn-action btn-exit" @click.stop="emit('close-game')">
+                    EXIT
+                </button>
             </div>
         </div>
 
@@ -366,11 +417,35 @@ onUnmounted (()=> {
     overflow: hidden;
     cursor: crosshair; // 鼠標變成 十字準心
 }
+
+// 準備畫面
+.start-screen-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6); /* 半透明黑底 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    cursor: pointer;
+}
+
+.start-text {
+    text-align: center;
+    color: $color-fsWhite;
+    animation: pulse 1s infinite alternate;
+    font-weight: bold;
+
+}
+
+
+// 分數
 .ui-score {
  position: absolute;
     top: 20px;
     left: 20px;
-    color: white;
+    color: $color-fsWhite;
     font-size: 28px;
     font-weight: bold;
     z-index: 10;
@@ -387,7 +462,7 @@ onUnmounted (()=> {
     position: absolute;
     top: 20px;
     right: 200px; 
-    color: white;
+    color: $color-fsWhite;
     font-size: 28px;
     font-weight: bold;
     z-index: 10;
@@ -408,50 +483,97 @@ onUnmounted (()=> {
 // Finish: Time's up
 .game-over-text {
     position: absolute;
-    top: 50%;
+    top: 53%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 80px;
-    color: white;
-    font-weight: 900;
-    text-shadow: 0 0 20px rgba(0,0,0,0.8);
-    pointer-events: none;
+
+    width: 100%;
+    text-align: center;
+
+    pointer-events: auto;
     z-index: 20;
 }
 
-.game-over-text h4 {
+.result-title {
+    font-size: 80px;
+    color: $color-fsWhite;
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    margin-bottom: 0px;    
+}
+
+.game-over-text h3 {
+    color: $color-fsWhite;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    font-weight: bold;
+}
+
+.result-msg h1{
     margin-top: 10px;
     text-align: center;
 }
 
-.result-msg h1{
-    margin-top: 20px;
-    text-align: center;
-}
-
 .win {
-    color: $color-fsGold300; /* 金色 */
-    text-shadow: 0 0 20px rgba(255, 204, 70, 0.8);
+    color: $color-fsGold300;
+    text-shadow: 0 0 10px rgba(255, 204, 70, 0.8);
     animation: bounce 1s infinite;
+    font-weight: bold;
+
 }
 
 .lose {
-    color: #a4b0be; /* 灰色 */
-    font-size: 36px;
+    color: $color-fsWhite; 
+    font-weight: bold;
+
+    animation: heartbeat 2.5s infinite ease-in-out;
+}
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    10% { transform: scale(1.1); } /* 第一跳 */
+    20% { transform: scale(1); }
+    30% { transform: scale(1.1); } /* 第二跳 (心跳通常是兩下) */
+    40% { transform: scale(1); }
+    100% { transform: scale(1); }  /* 休息 */
 }
 
-.clickable {
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* 按鈕之間的距離 */
+    margin-top: 20px;
+}
+
+.btn-action {
+    padding: 12px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
     cursor: pointer;
-    transition: transform 0.2s;
-    
+    transition: all 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
     &:hover {
         transform: scale(1.1);
-        color: #fff; /* 滑鼠移過去變亮白 */
     }
     
     &:active {
-        transform: scale(0.95); /* 按下去縮一下 */
+        transform: scale(0.95);
     }
+}
+
+.btn-restart {
+    background-color: $color-fsGreen; 
+    color: $color-fsWhite;
+    border: 3px solid $color-fsWhite;
+}
+
+.btn-exit {
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    border: 3px solid $color-fsWhite;
 }
 
 @keyframes bounce {
@@ -472,8 +594,8 @@ onUnmounted (()=> {
 /* 繩子 */
 .line {
     width: 4px;
-    height: 50px; /* 初始長度 */
-    background: #fff;
+    height: 50px;
+    background: $color-fsWhite;
     margin: 0 auto;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     position: relative;
@@ -503,7 +625,7 @@ onUnmounted (()=> {
 .item-img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 保持圖片比例 */
+    object-fit: contain;
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
 }
 
