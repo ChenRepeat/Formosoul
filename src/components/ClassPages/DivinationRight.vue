@@ -1,7 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref } from 'vue';
-  const bue = ref(1);
+
   const stickResult = ref(0);
   const chouqianFes= ref(0);
   const pics = {
@@ -23,15 +23,7 @@ import { ref } from 'vue';
     5: {name:'末吉',textEn:'Though your invisibility cloak has a small tear, it will still offer minimal protection from detection.',textCn:'雖然您的隱形斗篷有個小破洞，但它仍能提供免於偵測的最低限度保護。'},
     6: {name:'衰',textEn:'A dark hex has been cast upon your prized broomstick; expect serious turbulence during the next flight.',textCn:'一個黑暗的詛咒已施加在您心愛的飛天掃帚上；下次飛行時請預期會有嚴重的亂流。'},
   }
-  const bueGameResult={
-    1: {name:'Mo-Bue',imgUrl:'/Classes/MoonFes3.png',},
-    2: {name:'Chio-Bue',imgUrl:'/Classes/MoonFes3.png',},
-    3: {name:'Xin-Bue',imgUrl:'/Classes/MoonFes3.png',},
-  }
-  function buaBue(){
-    const num = Math.random();
-    bue.value = Math.floor(num * 3) + 1;
-  }
+
   function chouqian(){
     chouqianFes.value = 0;
     stickResult.value = 0;
@@ -50,6 +42,49 @@ import { ref } from 'vue';
     stickResult.value = 0;
     chouqianFes.value = 0;
   }
+
+const isFlipping = ref(false);
+const bue1Transform = ref('rotate(90deg) rotateY(0deg)');
+const bue2Transform = ref('rotate(-90deg) rotateY(0deg)');
+const bue1Result = ref(0);
+const bue2Result = ref(0);
+const finalResult = ref('');
+
+const buaBue = () => {
+  if (isFlipping.value) return;
+  
+  isFlipping.value = true;
+  bue1Result.value = 0;
+  bue2Result.value = 0;
+  finalResult.value = '';
+
+  bue1Transform.value = 'rotate(90deg) rotateY(0deg)';
+  bue2Transform.value = 'rotate(-90deg) rotateY(0deg)';
+  
+  setTimeout(() => {
+    const isBue1Yin = Math.random() < 0.5;
+    const isBue2Yin = Math.random() < 0.5;
+
+    setTimeout(() => {
+      isFlipping.value = false;
+      
+      bue1Transform.value = isBue1Yin ? 'rotate(90deg) rotateY(0deg)' : 'rotate(90deg) rotateY(180deg)';
+      bue2Transform.value = isBue2Yin ? 'rotate(-90deg) rotateY(0deg)' : 'rotate(-90deg) rotateY(180deg)';
+
+      bue1Result.value = isBue1Yin ? 1 : 0;
+      bue2Result.value = isBue2Yin ? 1 : 0;
+
+      if (isBue1Yin && isBue2Yin) {
+        finalResult.value = 'Mo-Bue';
+      } else if (!isBue1Yin && !isBue2Yin) {
+        finalResult.value = 'Chio-Bue'; 
+      } else {
+        finalResult.value = 'Xin-Bue'; 
+      }
+      
+    }, 1500);
+  }, 50);
+};
 </script>
 
 <template>
@@ -127,9 +162,16 @@ import { ref } from 'vue';
     @click="buaBue"
     @mousedown.stop
     @touchstart.stop>
-      <img :src="bueGameResult[bue].imgUrl" alt="">
+    <div class="bue-case bue-l" :class="{ flipping: isFlipping }" :style="{ transform: bue1Transform }">
+      <img src="/Classes/bue-ying.png" alt="陰面">
+      <img src="/Classes/bue-yang.png" alt="陽面">
+    </div>
+    <div class="bue-case bue-r" :class="{ flipping: isFlipping }" :style="{ transform: bue2Transform }">
+      <img src="/Classes/bue-ying.png" alt="陰面">
+      <img src="/Classes/bue-yang.png" alt="陽面">
+    </div>
       <transition name="fade" mode="out-in">
-        <h3 :key="bue">{{ bueGameResult[bue].name }}</h3>
+        <h3 :key="bue">{{ finalResult}}</h3>
       </transition>
     </div>
   </section>
@@ -290,20 +332,90 @@ import { ref } from 'vue';
     width: 100%;
     height: 100%;
     position: relative;
-    img{
-      width: 250px;
-      height: 250px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      cursor: pointer;
-    }
+    
     h3{
       position: absolute;
       bottom: 10%;right: 10%;
     }
   }
+  .bue-case {
+      width: 250px;
+      height: 250px;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 0.1s;
+  }
+  .bue-l {
+    top: 10%;
+    left: 15%;
+    perspective: 1000px;
+  }
+
+  .bue-r {
+    top: 0%;
+    right: 15%;
+    perspective: 1000px;
+  }
+
+  .bue-case img:nth-child(1) {
+    transform: rotateY(0deg);  // 陰面
+  }
+
+  .bue-case img:nth-child(2) {
+    transform: rotateY(180deg);  // 陽面
+  }
+
+  .bue-l.flipping {
+      animation: flipL 1.5s ease-in-out;
+  }
+  .bue-r.flipping {
+      animation: flipR 1.5s ease-in-out;
+  }
+
+    .bue-case img {
+      top: 0;left: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      object-fit: cover;
+    }
+
+
+@keyframes flipL {
+  0% {
+    transform: rotate(90deg) rotateY(0deg) rotateX(0deg);
+  }
+  25% {
+    transform: rotate(90deg) rotateY(900deg) rotateX(900deg);
+  }
+  50% {
+    transform: rotate(90deg) rotateY(1800deg) rotateX(1800deg);
+  }
+  75% {
+    transform: rotate(90deg) rotateY(2700deg) rotateX(2700deg);
+  }
+  100% {
+    transform: rotate(90deg) rotateY(3600deg) rotateX(3600deg);
+  }
+}
+@keyframes flipR {
+  0% {
+    transform: rotate(-90deg) rotateY(0deg) rotateX(0deg);
+  }
+  25% {
+    transform: rotate(-90deg) rotateY(900deg) rotateX(900deg);
+  }
+  50% {
+    transform: rotate(-90deg) rotateY(1800deg) rotateX(1800deg);
+  }
+  75% {
+    transform: rotate(-90deg) rotateY(2700deg) rotateX(2700deg);
+  }
+  100% {
+    transform: rotate(-90deg) rotateY(3600deg) rotateX(3600deg);
+  }
+}
 .fade-enter-active,.fade-leave-active {
   transition: all 0.2s ease;
 }
