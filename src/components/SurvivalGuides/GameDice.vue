@@ -6,8 +6,7 @@
     import HandBack from './HandBack.vue';
     import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
     
-    
-    
+
 // ================ 鍵盤esc關閉 ================ 
 const emit = defineEmits(['close-game']);
 const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
@@ -66,12 +65,6 @@ const isGrabbing = ref(false); // 是否正在按住
 // const diceDropX = ref(0);
 const diceOpacity = ref(1); // 透明度
 
-// 骰子掉落與出現的樣式 (統一管理三顆骰子的掉落動畫)
-// const diceAnimStyle = computed (()=> ({
-//   transform: `translate(${diceDropX.value}px, ${diceDropY.value}px)`,
-//   opacity: diceOpacity.value,
-//   transition: 'transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s'
-// }));
 
 // 按下 握拳 (準備丟)
 const handleMouseDown = () => {
@@ -165,10 +158,12 @@ function getSingleDiceScore(rawX, rawY){
         if(y === 180) return 3;
         if(y === 270) return 2;
     }
+    
     if(x === 90) return 6;
+
     if(x === 270) return 1;
 
-    return '?';
+    return '_';
 };
 
 function randomRoll(){
@@ -189,8 +184,8 @@ function randomRoll(){
         const randomFaceX = Math.floor(Math.random() * 4) * 90;
         const randomFaceY = Math.floor(Math.random() * 4) * 90;
         
-        dice.x += (baseSpins + randomFaceX);
-        dice.y += (baseSpins + randomFaceY);
+        dice.x = (baseSpins + randomFaceX);
+        dice.y = (baseSpins + randomFaceY);
     });
     
     console.log(mouseX.value);
@@ -297,7 +292,7 @@ onUnmounted (() => {
 
 <template>
     <div class="playerbox">
-        <h3>Player</h3>
+        <h3>Player {{ result }}</h3>
         <div class="scorebox">
             <h3>Score：</h3>
             <h3>{{ totalscore }}</h3>
