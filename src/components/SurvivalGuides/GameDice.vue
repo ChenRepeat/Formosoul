@@ -9,9 +9,41 @@
     
     
 // ================ 鍵盤esc關閉 ================ 
-const emit = defineEmits(['close-game'])
+const emit = defineEmits(['close-game']);
 const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
 };
+
+// ================ 新增：遊戲管理狀態 ================
+// IDLE(閒置/抓骰子) -> ROLLING(玩家轉) -> CHOOSING(選大小) -> BANKER_ROLLING(莊家轉) -> RESULT(結算)
+const gameState = ref('IDLE');
+const playerChoice = ref(''); // 玩家選 'BIG' 或是 'SAMLL'
+const finalMessage = ref(''); // 顯示贏或輸
+ 
+// ================ 新增： 莊家 ================
+const bankerDicelist = ref(Array.from({length: dice_count}, () => ({
+    x: 0,
+    y: 0,
+    score: '_',
+    translateX: 0,
+    translateY: 0,
+})));
+
+// 莊家的分數計算
+const bankerTotalScore = computed (()=> {
+
+    if (gameState.value === 'IDLE' || gameState.value === 'ROLLING' || gameState.value === 'CHOOSING') {
+        return '-';
+    }
+
+    let total = 0;
+    for(let i = 0; i < bankerDicelist.value.length; i++){
+        const currentscore = bankerDicelist.value[i].score;
+        if(typeof currentscore !== 'number') return '-';
+        total += currentscore;
+    }
+    return total;
+})
+
 
 // ================ 滑鼠 area ================ 
 const mouseX = ref(0);
@@ -44,6 +76,9 @@ const diceOpacity = ref(1); // 透明度
 // 按下 握拳 (準備丟)
 const handleMouseDown = () => {
     // if (isRolling.value) return;
+    // 只有在閒置狀態下才能抓骰子
+    if(gameState.value !== 'IDLE') return;
+
     isGrabbing.value = true;
     // 1. 骰子隱藏並回到空中
     diceOpacity.value = 0;
@@ -99,7 +134,7 @@ const totalscore = computed(() => {
     let total = 0;
     for(let i = 0; i < dicelist.value.length; i++){
         const currentscore = dicelist.value[i].score;
-        if(typeof currentscore !== 'number') return '?';
+        if(typeof currentscore !== 'number') return '-';
         total += currentscore;
     }
     return total;
@@ -140,6 +175,9 @@ function randomRoll(){
     if(isRolling.value) return;
     isRolling.value = true;
 
+    // 新增： 設定狀態為： 玩家轉動中
+    gameState.value = 'ROLLING';
+
     dicelist.value.forEach(die => die.score = '_');
     
     // 這裡原本有 setTimeout 3000ms 才會顯示分數
@@ -162,8 +200,82 @@ function randomRoll(){
             dice.score = getSingleDiceScore(dice.x, dice.y);
         });
         isRolling.value = false;
+
+        // 新增： 轉完後，不要結束，要進入「選擇模式」
+        gameState.value = 'CHOOSING';
     }, 3000); 
 };
+
+// =============== 新增：Banker 回合 ===============
+// 玩家選擇：比大或比小
+const chooseSide = (choice) => {
+  playerChoice.value = choice;
+  startBankerTurn();
+}
+
+// 莊家丟骰子 (自動)
+function startBankerTurn (){
+  gameState.value = 'BANKER_ROLLING';
+
+  // 重置莊家分數
+  bankerDicelist.value.forEach(die => die.score = '_');
+
+  // 莊家骰子動畫 similar to player's animation , 用 setTimeout 延遲 100毫秒再開始轉, 這樣瀏覽器才有時間先把骰子「畫」在 0度的位置
+  setTimeout(()=>{
+      bankerDicelist.value.forEach((dice) => {
+        const circle = Math.floor(Math.random() * 10) + 2;
+        const baseSpins = 360 * circle;
+        const randomFaceX = Math.floor(Math.random() * 4) * 90;
+        const randomFaceY = Math.floor(Math.random() * 4) * 90;
+        
+        dice.x += (baseSpins + randomFaceX);
+        dice.y += (baseSpins + randomFaceY);
+    });
+  }, 100);
+    
+  // 結算，時間要稍微往後推一點點，配合上面的延遲
+    setTimeout(() => {
+        bankerDicelist.value.forEach((dice) => {
+            dice.score = getSingleDiceScore(dice.x, dice.y);
+        });
+        
+        checkWinner(); // 比輸贏
+        gameState.value = 'RESULT'; // 進入結算畫面
+    }, 3100); 
+};
+
+// 判斷輸贏
+
+const checkWinner = () => {
+  const pScore = totalscore.value;
+  const bScore = bankerTotalScore.value;
+  let isWin = false;
+
+  // 平手
+  if (pScore == bScore) {
+    finalMessage.value = 'DRAW';
+    return;
+  }
+
+  // 判斷輸贏
+  if (playerChoice.value == 'BIG') {
+    isWin = pScore > bScore;
+  } else {
+    isWin = pScore < bScore;
+  }
+
+  finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
+}
+
+//  重置遊戲 init , play again
+const resetGame = () => {
+  gameState.value = "IDLE";
+  playerChoice.value = '';
+
+  // 分數顯示先歸零
+  dicelist.value.forEach(d => d.score = '_');
+  bankerDicelist.value.forEach(d => d.score = '_');
+}
 
 
 // ================ 生命週期 ================ 
@@ -207,16 +319,35 @@ onUnmounted (() => {
     </div>
 
     <div class="dice-container">
-        <div class="dicebox" 
+        <div class="dicebox"
+             v-show="gameState === 'IDLE' || gameState === 'ROLLING' || gameState === 'CHOOSING'" 
              v-for="(dice, index) in dicelist" 
-             :key="index"
+             :key="'player-'+index"
              :style="{
+                left: (diceOrigins[index].left * 100) + '%',
+                top: (diceOrigins[index].top * 100) + '%',
+                
                 transform: `translate(${dice.translateX}px, ${dice.translateY}px)`,
                 opacity: diceOpacity,
                 transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s'
              }"
         >
-            <Dice :Xdeg="dice.x" :Ydeg="dice.y"></Dice>
+            <Dice :Xdeg="dice.x" :Ydeg="dice.y"></Dice>       
+        </div>
+        <div class="dicebox banker-dice" 
+             v-if="gameState === 'BANKER_ROLLING' || gameState === 'RESULT'"
+             v-for="(dice, index) in bankerDicelist" 
+             :key="'banker-'+index"
+             :style="{ 
+                left: (diceOrigins[index].left * 100) + '%',
+                top: (diceOrigins[index].top * 100) + '%',
+
+                transform: `translate(${dice.translateX}px, ${dice.translateY}px)`,
+                opacity: diceOpacity,
+                transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s'              
+             }"
+        >
+            <Dice :Xdeg="dice.x" :Ydeg="dice.y" style="filter: hue-rotate(180deg) brightness(0.9);"></Dice>
         </div>
     </div>
 
@@ -224,9 +355,32 @@ onUnmounted (() => {
         <h3>banker</h3>
         <div class="scorebox">
             <h3>Score：</h3>
-            <h3>3</h3>
+            <h3>{{  bankerTotalScore }}</h3>
         </div>
     </div>
+
+    <div v-if="gameState === 'CHOOSING'" class="overlay-modal">
+        <div class="modal-content">
+            <h2>Make a Choice!</h2>
+            <p>Your Score: {{ totalscore }}</p>
+            <div class="btn-group">
+                <button class="btn-big" @click="chooseSide('BIG')">BIG</button>
+                <button class="btn-small" @click="chooseSide('SMALL')">SMALL</button>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="gameState === 'RESULT'" class="overlay-modal">
+        <div class="modal-content">
+            <h1>{{ finalMessage }}</h1>
+            <p>You chose: <strong>{{ playerChoice }}</strong></p>
+            <div class="result-details">
+                <span>Player: {{ totalscore }}</span> vs <span>Banker: {{ bankerTotalScore }}</span>
+            </div>
+            <button class="btn-retry" @click="resetGame">PLAY AGAIN</button>
+        </div>
+    </div>
+
 </template>
 
 
@@ -269,20 +423,14 @@ onUnmounted (() => {
     }
 
 
-    .dicebox:nth-child(1) {
-        left: 80%;
-        top: 40%;
+    // .dicebox:nth-child(1) { left: 80%; top: 40%;}
+    // .dicebox:nth-child(2) { left: 10%; top: 20%;}
+    // .dicebox:nth-child(3) { left: 10%; top: 75%;}
+
+    .banker-dice {
+      z-index: 600;
     }
 
-    .dicebox:nth-child(2) {
-        left: 10%;
-        top: 20%;
-    }
-
-    .dicebox:nth-child(3) {
-        left: 10%;
-        top: 75%;
-    }
 
     .bankerbox,
     .playerbox{
@@ -309,7 +457,7 @@ onUnmounted (() => {
         text-align: center;
     }
     .scorebox{
-        background-color: #EEEEEE;
+        background-color: $color-fsWhite;
     }
 
     .rollHand {
@@ -318,5 +466,62 @@ onUnmounted (() => {
             pointer-events: none;
             transform: translate(-50%, -50%);
             width: 280px;
+    }
+
+    .overlay-modal {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.7); 
+        z-index: 2000; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 30px 50px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border: 5px solid $color-fsGold;
+        min-width: 300px;
+        animation: popIn 0.3s ease-out;
+    }
+
+    @keyframes popIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    button {
+        padding: 12px 30px;
+        font-size: 20px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+        color: $color-fsWhite;
+        transition: transform 0.2s;
+        &:hover { transform: scale(1.1); }
+    }
+
+    .btn-big { background-color: $color-fsRed; box-shadow: 0 4px 0 $color-fsRed}
+    .btn-small { background-color: $color-fsGreen; box-shadow: 0 4px 0 $color-fsGreen; }
+    .btn-retry { background-color: $color-fsBlue; margin-top: 20px; box-shadow: 0 4px 0 $color-fsBlue; }
+
+    .result-details {
+        font-size: 24px;
+        margin: 15px 0;
+        font-weight: bold;
+        color: $color-fsTitle;
     }
 </style>
