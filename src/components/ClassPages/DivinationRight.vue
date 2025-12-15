@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref } from 'vue';
   const bue = ref(1);
   const stickResult = ref(0);
+  const chouqianFes= ref(3);
   const pics = {
     picLeft: {
       imgUrl:'/Classes/bue1.jpg',
@@ -32,18 +33,22 @@ import { ref } from 'vue';
     bue.value = Math.floor(num * 3) + 1;
   }
   function chouqian(){
-    const num = Math.random()
-    if(stickResult.value){
-      stickResult.value = 0;
+    chouqianFes.value = 0;
+    stickResult.value = 0;
+    setTimeout(() => {
+      chouqianFes.value = 1;
+    }, 500);
+    setTimeout(() => {
+      stickResult.value = Math.floor(Math.random() * 6) + 1;
+      chouqianFes.value = 2;
       setTimeout(() => {
-          stickResult.value = Math.floor(num * 6) + 1;
-        },800);
-    }else{
-      stickResult.value = Math.floor(num * 6) + 1;
-    }
+        chouqianFes.value = 3;
+      }, 3000);
+    }, 4500);
   }
   function closeResult(){
     stickResult.value = 0;
+    chouqianFes.value = 0;
   }
 </script>
 
@@ -68,10 +73,35 @@ import { ref } from 'vue';
         @mousedown.stop
         @touchstart.stop
         @mouseover.stop>
-        <img 
-        @click="chouqian"
-        src="/Classes/charms/charm1.png" alt=""
-        >
+        <div 
+          @click="chouqian"
+          :class="{
+            'fesStart': chouqianFes == 0,
+            'fesShake': chouqianFes == 1,
+            'fesCheck': chouqianFes == 2,
+            'fesResult': chouqianFes == 3,
+        }">
+        <div id="qian1">
+          <h6>{{ chouqianResult[stickResult]?.name }}</h6>
+          <img src="/Classes/qian.png">
+        </div>
+        <div id="qian2">
+          <img src="/Classes/qian.png">
+        </div>
+        <div id="qian3">
+          <img src="/Classes/qian.png">
+        </div>
+        <div id="qian4">
+          <img src="/Classes/qian.png">
+        </div>
+        <div id="qian5">
+          <img src="/Classes/qian.png">
+        </div>
+        <div id="qian6">
+          <img src="/Classes/qian.png">
+        </div>
+          <img src="/Classes/qianCase.png" id="qianCase">
+        </div>
         <Transition name="fade" mode="out-in">
           <div 
           class="intro-text dp-flex"
@@ -79,9 +109,9 @@ import { ref } from 'vue';
           @mousedown.stop
           @touchstart.stop
           @mouseover.stop
-          :class="{'show': stickResult != 0}" 
+          :class="{'show': chouqianFes == 3}" 
           >
-          <h2 >{{ chouqianResult[stickResult]?.name }}</h2>
+          <h2>{{ chouqianResult[stickResult]?.name }}</h2>
           <p>
             <!-- {{ chouqianResult.stickResult.textCn }}<br><br> -->
             {{ chouqianResult[stickResult]?.textEn }}
@@ -121,11 +151,69 @@ import { ref } from 'vue';
   }
   .right{
     position: relative;
-    img{
+    >div{
       width: 150px;
-      height: 281px;
+      height: 200px;
       z-index: 100;
       cursor: pointer;
+      img{
+        transition: opacity 1s ease;
+      }
+      >div{
+        height: 50%;
+        position: absolute;
+        transition: scale 1s ease, translate 1s ease;
+        img{height: 100%;position: absolute;left: 0;top: 0;}
+        h6{width: 40%;position: absolute;left: 12px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;}
+      }
+      #qianCase{
+        height: 85%;
+        position: absolute;
+        bottom: 0;left: 0%;
+        transition: opacity 0.5s ease;
+      }
+      #qian1{top: 0;left: 12%;transform: rotate(-10deg);}
+      #qian2{top: -4%;left: 20%;}
+      #qian3{top: 2%;left: 36%;transform: rotate(2deg);}
+      #qian4{top: 0;left: 50%;transform: rotate(-2deg);}
+      #qian5{top: -3%;left: 59%;transform: rotate(12deg);}
+      #qian6{top: 3%;left: 63%;transform: rotate(12deg);}
+      &.fesShake{
+        transform: rotate(15deg);
+        #qianCase{
+        height: 100%;left: 22%;top: 15%;}
+        #qian1{top: 2%;left: 29%;transform: rotate(-10deg);
+        animation: 3s qianPull 0.5s linear 1 forwards;
+        }
+        #qian2{top: 0%;left: 33%;}
+        #qian3{top: 4%;left: 40%;transform: rotate(2deg);}
+        #qian4{top: 0;left: 50%;transform: rotate(-2deg);}
+        #qian5{top: -3%;left: 59%;transform: rotate(12deg);}
+        #qian6{top: 3%;left: 68%;transform: rotate(12deg);}
+        animation: 1s shake 0.5s linear 3 forwards;
+      }
+      &.fesCheck{
+        transform: rotate(0deg) scale(2) translate(20% 50%);
+        #qian2,#qian3,#qian4,#qian5,#qian6{opacity: 0;}
+        #qian1{
+        animation: 1s qianScale 0.5s linear 1 forwards;
+        }
+        #qianCase{
+        height: 85%;        
+        animation: 3s casePull 0.5s linear 1 forwards;
+      }
+      }
+      &.fesResult{
+        #qian1{
+          transform: rotate(0deg) scale(2) translateY(30%);          
+        }
+        #qian2,#qian3,#qian4,#qian5,#qian6{opacity: 0;}
+        #qianCase{
+        display: none;
+      }
+      h6{opacity: 1;}
+
+      }
     }
     .intro-text{
       position: absolute;
@@ -136,7 +224,7 @@ import { ref } from 'vue';
       padding: 20px 60px 20px 40px; 
       gap: 32px;
       align-items: center;
-      transition:all 1s ease-in;
+      transition: transform 0.5s ease, opacity 0.3s ease 0.3s;
       opacity: 0;
       z-index: -10;
       border-radius: 16px;
@@ -218,5 +306,34 @@ import { ref } from 'vue';
 }
 .fade-enter-from,.fade-leave-to {
   opacity: 0;
+}
+@keyframes shake{
+  0% {
+    transform: rotate(15deg) translateX(0);
+  }
+  50% {
+    transform: rotate(-30deg) translateX(-100%);
+  }
+  100%{
+    transform: rotate(15deg) translateX(0);
+  }
+}
+@keyframes qianPull{
+  0%{top: 2%;left: 29%;transform: rotate(-10deg);}
+  1%{top: 0%;left: 29%;transform: rotate(-10deg);}
+  20%{top: -2%;left: 29%;transform: rotate(-10deg);}
+  40%{top: -2%;left: 29%;transform: rotate(-10deg);}
+  60%{top: -4%;left: 29%;transform: rotate(-10deg);}
+  80%{top: -4%;left: 29%;transform: rotate(-10deg);}
+  100%{top: -6%;left: 29%;transform: rotate(-10deg);}
+}
+@keyframes casePull{
+  0%{bottom: 0%;left: 0%;opacity: 1;}
+  20%{opacity: 0;}
+  100%{bottom: -80%;opacity: 0;}
+}
+@keyframes qianScale{
+  0%{transform: rotate(0deg);}
+  100%{transform: rotate(0deg) scale(2) translateY(30%);}
 }
 </style>
