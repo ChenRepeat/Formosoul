@@ -358,11 +358,13 @@ const buaBue = () => {
   }
 
   .bue-case img:nth-child(1) {
-    transform: rotateY(0deg);  // 陰面
+    transform: rotateY(0deg);
+    filter: drop-shadow(4px -4px 4px $color-fsTitle);
+
   }
 
   .bue-case img:nth-child(2) {
-    transform: rotateY(180deg);  // 陽面
+    transform: rotateY(180deg);
   }
 
   .bue-l.flipping {

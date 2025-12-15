@@ -109,6 +109,7 @@
       </div>
       <div class="page">
         <div class="page-content">
+          <CharmRight  @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -162,6 +163,7 @@ import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
 import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
+import CharmRight from '@/components/ClassPages/CharmRight.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true);

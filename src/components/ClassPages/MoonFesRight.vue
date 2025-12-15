@@ -35,19 +35,6 @@ import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
       >{{ text }}</p>
       <div class="moonfes-img-case">
         <img src="/Classes/MoonFes4.png" alt="">
-        <IconQuadStar 
-        :size=60 
-        :linearStart="'red'"
-        :linearEnd="'green'"
-        class="star star-1"/>
-         <IconQuadStar 
-        :size=80 
-        :linearStart="'#666'"
-        class="star star-2"/>
-         <IconQuadStar 
-        :size=70 
-
-        class="star star-3"/>
       </div>
     </div>
     <div class="moonfes-right-photo">
@@ -107,7 +94,7 @@ import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
     width: 280px;
     height: 280px;
     position: absolute;
-    top: 0;left: 10%;
+    top: 0;left: 5%;
     transform: rotate(9deg);
     border-radius: 8px;
     box-shadow: 3px 3px 6px #000;
@@ -116,7 +103,7 @@ import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
     width: 240px;
     height: 240px;
     position: absolute;
-    left: 10%;bottom: -30%;
+    left: 0%;bottom: -40%;
     transform: rotate(-9deg);
     border-radius: 8px;
     box-shadow: 3px 3px 6px #000;

@@ -5,9 +5,82 @@
   const clickPotion = ref('0');
   const potions = {
     1: {
-        name: '1',
-        intro: 'Taiwan’s iconic bear, known for its crescent chest mark. It lives in high mountains and symbolizes Taiwan’s wildlife.', 
-        imgUrl:'/Classes/potions/potion1.png',
+        name: 'Boba Milk Tea',
+        intro: 'A creamy blend of black tea and milk, featuring the signature, chewy tapioca.', 
+        imgUrl:'/Classes/potions/potion7.png',
+        recipe:{
+          1:{
+            name:'milk',
+            imgUrl:'/Classes/potions/recipeMilk.png',
+          },
+          2:{
+            name:'BlackTea',
+            imgUrl:'/Classes/potions/recipeBlackTea.png',
+          },
+          3:{
+            name:'Topioca',
+            imgUrl:'/Classes/potions/recipeTopioca.png',
+          },
+        }
+      },
+    2: {
+        name: 'Aiyu Lemon Jelly Drink',
+        intro: 'Zesty lemon drink featuring slippery, natural aiyu (fig) jelly—a perfect summer cooler.', 
+        imgUrl:'/Classes/potions/potion2.png',
+        recipe:{
+          1:{
+            name:'Aiyu',
+            imgUrl:'/Classes/potions/recipeAiyu.png',
+          },
+          2:{
+            name:'Lemon',
+            imgUrl:'/Classes/potions/recipeLemon.png',
+          },
+          
+        }
+      },
+    3: {
+        name: 'No.1',
+        intro: 'Lightly oxidized oolong tea customized with three chewy toppings: boba, pearls, and nata de coco.', 
+        imgUrl:'/Classes/potions/potion11.png',
+        recipe:{
+          1:{
+            name:'Greentea',
+            imgUrl:'/Classes/potions/recipeGreentea.png',
+          },
+          2:{
+            name:'Coconut',
+            imgUrl:'/Classes/potions/recipeCoconut.png',
+          },
+          3:{
+            name:'Aiyu',
+            imgUrl:'/Classes/potions/recipeAiyu.png',
+          },
+          4:{
+            name:'Topioca',
+            imgUrl:'/Classes/potions/recipeTopioca.png',
+          },
+        }
+      },
+      4: {
+        name: 'Winter Melon Lemonade',
+        intro: 'A perfectly balanced drink: sweet winter melon combined with the refreshing tartness of lemon.', 
+        imgUrl:'/Classes/potions/potion3.png',
+        recipe:{
+          1:{
+            name:'Winter Melon',
+            imgUrl:'/Classes/potions/recipeEastMelon.png',
+          },
+          2:{
+            name:'Lemon',
+            imgUrl:'/Classes/potions/recipeLemon.png',
+          },
+        }
+      },
+      5: {
+        name: 'Brown Sugar Boba',
+        intro: 'Warm, chewy pearls simmered in rich brown sugar syrup mixed with fresh milk.', 
+        imgUrl:'/Classes/potions/potion6.png',
         recipe:{
           1:{
             name:'milk',
@@ -22,110 +95,34 @@
             imgUrl:'/Classes/potions/recipeBlackTea.png',
           },
           4:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
-          },
-        }
-      },
-    2: {
-        name: '2',
-        intro: 'A small, elegant deer once nearly extinct in Taiwan, now restored through conservation efforts..', 
-        imgUrl:'/Classes/potions/potion2.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'/Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'suger',
-            imgUrl:'/Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
-          },
-        }
-      },
-    3: {
-        name: '3',
-        intro: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
-        imgUrl:'/Classes/potions/potion3.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'/Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'suger',
-            imgUrl:'/Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
-          },
-        }
-      },
-      4: {
-        name: '3',
-        intro: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
-        imgUrl:'/Classes/potions/potion3.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'/Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'suger',
-            imgUrl:'/Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
-          },
-        }
-      },
-      5: {
-        name: '3',
-        intro: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
-        imgUrl:'/Classes/potions/potion3.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'/Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'suger',
-            imgUrl:'/Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
+            name:'Topioca',
+            imgUrl:'/Classes/potions/recipeTopioca.png',
           },
         }
       },
       6: {
-        name: '3',
-        intro: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
-        imgUrl:'/Classes/potions/potion3.png',
+        name: 'Winter Melon Drink with Grass Jelly',
+        intro: 'Sweet winter melon juice perfectly paired with smooth, cooling herbal grass jelly cubes.', 
+        imgUrl:'/Classes/potions/potion5.png',
         recipe:{
           1:{
-            name:'milk',
-            imgUrl:'/Classes/potions/recipeMilk.png',
+            name:'Winter Melon',
+            imgUrl:'/Classes/potions/recipeEastMelon.png',
           },
           2:{
-            name:'suger',
-            imgUrl:'/Classes/potions/recipeSuger.png',
+            name:'Lemon',
+            imgUrl:'/Classes/potions/recipeLemon.png',
           },
           3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
+            name:'Xian Tsou',
+            imgUrl:'/Classes/potions/recipeXianTsou.png',
           },
         }
       },
       7: {
-        name: '3',
-        intro: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
-        imgUrl:'/Classes/potions/potion3.png',
+        name: 'Cheese Foam Green Tea',
+        intro: 'Refreshing green tea topped with a thick, savory, and lightly salted cream foam.', 
+        imgUrl:'/Classes/potions/potion1.png',
         recipe:{
           1:{
             name:'milk',
@@ -136,27 +133,23 @@
             imgUrl:'/Classes/potions/recipeSuger.png',
           },
           3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
+            name:'Greentea',
+            imgUrl:'/Classes/potions/recipeGreentea.png',
           },
         }
       },
       8: {
-        name: '3',
-        intro: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
-        imgUrl:'/Classes/potions/potion3.png',
+        name: 'Winter Melon Drink with Nata de Coco',
+        intro: 'Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).', 
+        imgUrl:'/Classes/potions/potion9.png',
         recipe:{
           1:{
-            name:'milk',
-            imgUrl:'/Classes/potions/recipeMilk.png',
+            name:'Winter Melon',
+            imgUrl:'/Classes/potions/recipeEastMelon.png',
           },
           2:{
-            name:'suger',
-            imgUrl:'/Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'BlackTea',
-            imgUrl:'/Classes/potions/recipeBlackTea.png',
+            name:'Coconut',
+            imgUrl:'/Classes/potions/recipeCoconut.png',
           },
         }
       },
