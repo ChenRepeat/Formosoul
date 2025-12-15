@@ -1,4 +1,5 @@
 <script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, onMounted, watch } from 'vue'
 
 
@@ -21,16 +22,12 @@ watch(() => props.images, (newImages) => {
     canvasRefs.value.forEach((canvasEl, index) => {
       if(newImages[index]){
         const imageUrl = newImages[index].img;
-        draw(canvasEl, 280, 70, 32, imageUrl);
+        draw(canvasEl, 230, 70, 32, imageUrl);
       }
     })
   }, 0);
 }, { deep: true });
 
-// const cards = ref([
-//   { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-//   { id: 2, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' }
-// ])
 
 
 const pi = x => x * Math.PI / 180
@@ -76,7 +73,7 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    draw(canvasEl, 280, 70, 32, imageUrl);
+    draw(canvasEl, 230, 70, 32, imageUrl);
   })
 });
 </script>
@@ -86,35 +83,116 @@ onMounted(() => {
     <div 
       v-for="(card, index) in cards" 
       :key="card.id" 
-      class="product-card"
+      class="product-card dp-flex-col"
     >
+     
       <canvas 
         :ref="(el) => canvasRefs[index] = el" 
         class="myCanvas"
       ></canvas>
+
+      <div class="product-icon dp-flex-col">
+        <font-awesome-icon icon="fa-solid fa-heart" />
+        <font-awesome-icon icon="fa-solid fa-cart-shopping" />
+      </div>
+      
+  
+      <h6 class="product-name">Bamboo Helicopter</h6>
+      <div class="product-content dp-flex">
+        <p class="product-tag">#Traditional Toys</p>
+        <h6 class="product-price">NT 300</h6>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
   .product-case {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    // display: flex;
+    // flex-wrap: wrap;
+    // justify-content: center;
+    gap: 40px;
+
+    position: relative;
   }
   .product-card{
-    width: 300px;
-    height: 300px;
-    background-color: #ccc;
+    width: 270px;
+    height: 370px;
+
+    backdrop-filter: blur(5px);
     position: relative;
     border-radius: 32px;
-    display: flex;
+    
     justify-content: center;
     align-items: center;
+
+    cursor: pointer;
   }
-  .myCanvas{
-    transition: all 1s;
+
+ .product-card:hover{
+  box-shadow: 0 0 20px $color-fsBlue900;
+ }
+
+ .product-card:hover .fa-cart-shopping{
+  animation: shake 1s ease-in-out infinite;
+ }
+
+ @keyframes shake{
+  0%, 100% {
+    transform: rotate(0) scale(1);
   }
-  .product-card:hover .myCanvas{
-    transform: scale(1.1);
+  10%, 30%, 50%, 70%, 90% {
+    transform: rotate(5deg) scale(1.1);
+  }
+  20%, 40%, 60%, 80% {
+    transform: rotate(-5deg) scale(1.1);
+  }
+ }
+
+  .product-icon{ 
+    width: 205px;
+    height: 200px;
+    justify-content: space-between;
+    position: absolute;
+    top: 50px;
+    right: 25px;
+  }
+
+  .product-icon .fa-heart{
+   color: $color-fsRed;
+   font-size: 24px;
+  }
+
+  .product-icon .fa-cart-shopping{
+    font-size: 32px;
+    align-self: flex-end;
+  }
+
+
+  .product-name{
+    color: $color-fsWhite;
+    align-self: flex-start;
+    padding: 12px 20px;
+  }
+
+  .product-content{
+    align-items: center;
+    justify-content: space-between;
+    width: 230px;
+  }
+
+  .product-tag{
+    color: $color-fsTitle;
+    background-color: $color-fsCaption;
+    border-radius: 10px;
+    padding: 0 8px;
+    font-size: 1.2rem;
+  }
+
+  .product-price{
+    color: $color-fsRed;
   }
 </style>

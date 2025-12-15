@@ -135,10 +135,13 @@ const totalscore = computed(() => {
 
 // 正則化角度
 function normalizeAngle(angle){
-    const mod = Math.round(((angle % 360)+ 360) % 360);
-    if(mod >= 315 || mod < 45) return 0;
-    if(mod >= 45 && mod <135) return 90;
-    if(mod >= 135 && mod < 225) return 180;
+
+    let normalized = angle % 360;
+    if (normalized < 0) normalized += 360;
+    
+    if(normalized >= 315 || normalized < 45) return 0;
+    if(normalized >= 45 && normalized < 135) return 90;
+    if(normalized >= 135 && normalized < 225) return 180;
     return 270;
 };
 
