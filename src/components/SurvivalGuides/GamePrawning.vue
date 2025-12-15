@@ -272,6 +272,14 @@ const handleKey = (e) => { if (e.code ==='Space') shoot();
     if (e.code === 'Escape') emit('close-game');
 };
 
+
+// Try again 遊戲重置
+const initGame = () => {
+    
+}
+
+
+
 // 生命週期 , 開始 modal 鎖住scroll
 onMounted (()=>{
     document.body.style.overflow = 'hidden';
