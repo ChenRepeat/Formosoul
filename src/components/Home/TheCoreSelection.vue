@@ -1,35 +1,38 @@
 <script setup>
 import BasicButton from '../BasicButton.vue';
+import CoreGame from './CoreGame.vue';
+import CoreShow from './CoreShow.vue';
+import GameHistory from './GameHistory.vue';
 
 
 </script>
 
 <template>
     <div class="coregame-wrapper">
+        <div class="coregame-intro dp-none">
 
-        <main class="coregame-dock dp-flex">
-            <div class="coregame-left">
-                <h3>The Core Selection</h3>
-                <!-- <p>Welcome to the Formosoul Institute!<br>
-                    Please heed our ancient credo: <br><span>「The Wand Chooses the Wizard.」</span><br>
-                    When your Soul achieves perfect balance with the material’s Essence, that spirit will reach out to you in response.<br>
-                    It will answer with a surge of warmth, a subtle tremor, or a sudden flash of light. Once this resonance occurs, that core shall forever become the soul of your wand, accompanying you throughout your magical journey.
-                </p> -->
+            <main class="coregame-dock dp-flex">
+                <div class="coregame-left">
+                    <h3>The Core Selection</h3>
+                    <p>Welcome to Formosoul Institute!<br>
+                        <span class="fw200">「 The Wand Chooses the Wizard. 」</span> <br>
+                        When your Soul achieves perfect balance with the material’s Essence, the spirit will reach out—signaled by warmth, tremor, or light. <br>
+                        This core will then become the soul of your wand, accompanying your magical journey.</p>
+        
+                </div>
+                <div class="coregame-right dp-flex">
+                    <img src="../../../public/Home/game/poking lottery.png" alt="">
+                </div>
+            </main>
+            <nav class="dp-flex">
+                <BasicButton class="btn-gray-fill">Uncover the Ritual's Origin</BasicButton>
+                <BasicButton class="btn-yellow-fill">Begin the Core Sensing</BasicButton>
+            </nav>
+        </div>
 
-                <p>Welcome to Formosoul Institute!<br>
-                    <span class="fw200">「 The Wand Chooses the Wizard. 」</span> <br>
-                    When your Soul achieves perfect balance with the material’s Essence, the spirit will reach out—signaled by warmth, tremor, or light. <br>
-                    This core will then become the soul of your wand, accompanying your magical journey.</p>
-    
-            </div>
-            <div class="coregame-right dp-flex">
-                <img src="../../../public/Home/game/poking lottery.png" alt="">
-            </div>
-        </main>
-        <nav class="dp-flex">
-            <BasicButton class="btn-gray-fill">Uncover the Ritual's Origin</BasicButton>
-            <BasicButton class="btn-yellow-fill">Begin the Core Sensing</BasicButton>
-        </nav>
+        <GameHistory class="dp-none"/>
+        <CoreGame class="dp-none"/>
+        <CoreShow class=""/>
 
     </div>
 
@@ -76,7 +79,7 @@ import BasicButton from '../BasicButton.vue';
         object-fit: contain;
         object-position: bottom right;
         filter: drop-shadow(0 0 20px $color-fsWhite);   //因為要沿著櫃子加陰影，不能用box-shadow
-        animation: blink 1.3s infinite;
+        animation: blink 1.3s ease-in-out infinite;
     }
 
     @keyframes blink{
