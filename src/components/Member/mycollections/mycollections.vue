@@ -1,7 +1,9 @@
 <template>
     <div class="collections">
         <h3>My collections</h3>
-        <ProductCard :images="calcollectionspage" :currentPage="currentPage"></ProductCard>
+        <section class="list-all">
+            <ProductCard :images="calcollectionspage" :currentPage="currentPage"></ProductCard>
+        </section>
         <div class="pagebtn">
             <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>
             <span class="list-page"
@@ -25,36 +27,30 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { computed, ref } from 'vue';
 
     const myimg = ref([
-        { id: 1, img: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 2, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 3, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 4, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 5, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 6, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 7, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 8, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 9, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 10, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 11, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 12, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 13, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 14, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 15, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 16, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 17, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 18, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 19, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 20, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 21, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 22, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 23, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 24, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 25, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 26, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 27, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 28, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 29, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-        { id: 30, img: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
+        { id: 1, img: '../../public/Shop/1.png' },
+        { id: 2, img: '../../public/Shop/2.png' },
+        { id: 3, img: '../../public/Shop/3.png' },
+        { id: 4, img: '../../public/Shop/4.png' },
+        { id: 5, img: '../../public/Shop/5.png' },
+        { id: 6, img: '../../public/Shop/6.png' },
+        { id: 7, img: '../../public/Shop/1.png' },
+        { id: 8, img: '../../public/Shop/2.png' },
+        { id: 9, img: '../../public/Shop/3.png' },
+        { id: 10, img: '../../public/Shop/4.png' },
+        { id: 11, img: '../../public/Shop/5.png' },
+        { id: 12, img: '../../public/Shop/6.png' },
+        { id: 13, img: '../../public/Shop/1.png' },
+        { id: 14, img: '../../public/Shop/2.png' },
+        { id: 15, img: '../../public/Shop/3.png' },
+        { id: 16, img: '../../public/Shop/4.png' },
+        { id: 17, img: '../../public/Shop/5.png' },
+        { id: 18, img: '../../public/Shop/6.png' },
+        { id: 19, img: '../../public/Shop/1.png' },
+        { id: 20, img: '../../public/Shop/2.png' },
+        { id: 21, img: '../../public/Shop/3.png' },
+        { id: 22, img: '../../public/Shop/4.png' },
+        { id: 23, img: '../../public/Shop/5.png' },
+        { id: 24, img: '../../public/Shop/6.png' },
     ]);
 
     // 設定現在在一頁(預設是第一頁)
@@ -143,5 +139,8 @@ import { computed, ref } from 'vue';
     .noborder{
         border: 0;
     }
-
+    .list-all{
+  max-width: 1200px;
+  margin: 0 auto;
+}
 </style>
