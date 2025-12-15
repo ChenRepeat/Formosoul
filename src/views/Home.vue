@@ -701,7 +701,7 @@ function initSnitches(loader) {
     { name: 'About', img: '/Home/home-about-badge.png', url: '/about' },
     { name: 'Survival Guide', img: '/Home/home-survival-compass.png', url: '/survivalguide' },
     { name: 'Policy', img: '/Home/home-policy-scroll.png', url: '/policy' },
-    { name: 'Admin', img: '/Home/home-admin-tools.png', url: '/' },
+    { name: 'Admin', img: '/Home/home-admin-tools.png', url: '/admin' },
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;

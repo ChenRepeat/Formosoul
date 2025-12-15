@@ -171,6 +171,48 @@ const router = createRouter({
         { path: 'payment', component: Payment},
       ]
     },
+    //後台
+    {
+      path: "/admin",
+      component: () => import ('@/views/Admin/AdminDashboard.vue'),
+      meta: { layout: 'admin' },
+      children: [
+        {
+          path: '', 
+          redirect: { name: 'MemberManagement' }
+        },
+        {
+          path: "member-management",
+          name: "MemberManagement",
+          component: () => import ('@/components/Admin/MemberManagement.vue')
+        },
+        {
+          path: "product-management",
+          name: "ProductManagement",
+          component: () => import ('@/components/Admin/ProductManagement.vue')
+        },
+        {
+          path: "order-management",
+          name: "OrderManagement",
+          component: () => import ('@/components/Admin/OrderManagement.vue')
+        },
+                {
+          path: "coupon-management",
+          name: "CouponManagement",
+          component: () => import ('@/components/Admin/CouponManagement.vue')
+        },
+                {
+          path: "news-management",
+          name: "NewsManagement",
+          component: () => import ('@/components/Admin/NewsManagement.vue')
+        },
+                {
+          path: "annual-event-management",
+          name: "AnnualEventManagement",
+          component: () => import ('@/components/Admin/AnnualEventManagement.vue')
+        },
+      ],
+    },
   ],
 scrollBehavior(to, from, savedPosition) {
     return new Promise((resolve) => {
