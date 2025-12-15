@@ -1,7 +1,6 @@
 <template>
-    <div class="coupon-list ">
-
-        
+    <h3>Coupons</h3>
+    <div class="coupon-list ">  
         <div class="coupon dp-flex ">
             <div class="coupon-left coupon-click left-used">
                 <p class="fw600">MAGIC FUN</p>
@@ -60,8 +59,13 @@
 </script>
 
 <style scoped lang="scss">
+
+    h3{
+        margin-top: 100px;
+        text-align: center;
+    }
     .coupon-list{
-        padding: 80px 120px;
+        padding: 100px 120px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         row-gap: 32px;

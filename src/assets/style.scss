@@ -59,8 +59,14 @@ h6 {
 p {
   font-size: 1.6rem;
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-  text-align: justify;
+  text-align: left;
   line-height: 180%;
+}
+
+//中文版的<p>需加這個class
+
+.ta-justify{
+  text-align: justify;
 }
 
 
