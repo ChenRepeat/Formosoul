@@ -26,7 +26,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="wrapper dp-flex-col"
+  <div v-if="route.meta.layout === 'admin'">
+    <RouterView />
+  </div>
+  <div v-else class="wrapper dp-flex-col"
   :class="currentBgClass">
     <TheHeader :is-black-style="currentBgClass == 'white'"/>
     <main class="content">
