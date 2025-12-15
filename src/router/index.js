@@ -42,6 +42,12 @@ const router = createRouter({
       component: News,
     },
     {
+    // :id 是動態參數
+    path: '/news/:id', 
+    name: 'NewsCardDetail',
+    component: () => import('../components/News/NewsCardDetail.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -167,5 +173,12 @@ const router = createRouter({
     },
   ],
 })
-
+// 2. ★★★ 強制關閉瀏覽器的「自動記憶位置」功能 ★★★
+// 加在 createRouter 之後
+router.beforeEach((to, from, next) => {
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual'; 
+  }
+  next();
+});
 export default router
