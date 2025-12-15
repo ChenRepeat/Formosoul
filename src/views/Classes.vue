@@ -536,7 +536,11 @@ onUnmounted(() => {
 .book-end {
   transform: rotate(180deg) scaleX(1.05);
 }
-
+@media (max-width: 749px) {
+  .book-end {
+    transform: rotate(0deg) scaleX(1.05);
+  }
+}
 .book-logo {
   position: absolute;
   transform: scale(1.2);
