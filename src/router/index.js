@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '@/views/Home.vue'
 import Member from '@/views/Member.vue'
 import ProfessorIntroduction from '@/views/ProfessorIntroduction.vue'
 import Shop from '@/views/Shop.vue'
@@ -35,6 +35,9 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Home,
+      meta:{ 
+        display: 'none',
+      },
     },
     {
       path: '/news',

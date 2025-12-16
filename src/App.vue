@@ -17,6 +17,9 @@ const currentLogoSrc = computed(() => {
 const currentBgClass = computed(() => {
   return route.meta?.bgColor || 'bg-default';
 });
+const currentLogoDP = computed(() => {
+  return route.meta?.display || 'block';
+});
 
 onMounted(async () => {
   if(authStore.token){
@@ -30,10 +33,11 @@ onMounted(async () => {
     <RouterView />
   </div>
   <div v-else class="wrapper dp-flex-col"
-  :class="currentBgClass">
+  :class="currentBgClass"
+  >
     <TheHeader :is-black-style="currentBgClass == 'white'"/>
     <main class="content">
-      <a href="/"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo"/></a>
+      <a href="/" :style="{'display':currentLogoDP}"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></a>
       <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
       <div v-if="authStore.isLoading" class="loading">
         載入中...
