@@ -140,27 +140,30 @@ hr {
   height: auto;
   justify-content: center;
   gap: 60px;
+  width: 40%;
 }
 .logo-style {
   align-self: center;
 }
 .footer-link-corner {
-  gap: 60px;
+  gap: 120px;
+  width: 60%;
 }
 .footer-case {
   background-color: #041426;
-  width: 100%;
+  width: 1200px;
   padding-top: 60px;
   padding-bottom: 16px;
   height: 100%;
+  margin: 0 auto;
 }
 .footer-outer-case {
-  gap: 60px;
+  gap: 100px;
   justify-content: center;
 }
 .footer-inner-case {
   justify-content: start;
-  gap: 60px;
+  gap: 120px;
 }
 .footer-social-link {
   text-align: center;
