@@ -10,6 +10,16 @@ import gsap from "gsap";
 會抓東西：碰到蝦子會抓回來加分。
 */
 
+// music 
+const bgmAudio = ref(null);
+const isMuted = ref(false);
+const toggleMute = () => { // 切換靜音
+    isMuted.value = !isMuted.value
+    if(bgmAudio.value) {
+        bgmAudio.value.muted = isMuted.value;
+    }
+}
+
 const emit = defineEmits(['close-game']);
 
 const score = ref(0);
@@ -168,6 +178,14 @@ const startGameAction = () => {
     if(!isGameReady.value) return;
 
     isGameReady.value = false;
+
+    // 加入聲音控制
+    if(bgmAudio.value) {
+        bgmAudio.value.volume = 0.3; // 建議音量調小一點，不要嚇到人 (0.0 ~ 1.0)
+        bgmAudio.value.currentTime = 0; // 重頭開始
+        bgmAudio.value.play().catch(e => console.log("播放失敗", e));
+    }
+
     startSwing();
     startTimer();
 }
@@ -189,6 +207,9 @@ const gameOver = () => {
 
     // 停止擺盪
     if(swingBetween) swingBetween.pause();
+    if(bgmAudio.value) {
+        bgmAudio.value.pause();
+    }
 }
 
 
@@ -339,6 +360,9 @@ onUnmounted (()=> {
     if(swingBetween) swingBetween.kill();
     if(shootBetween) shootBetween.kill();
     window.addEventListener('keydown', handleKey);
+    if(bgmAudio.value) {
+        bgmAudio.value.pause();
+    }
 });
 
 </script>
@@ -348,6 +372,13 @@ onUnmounted (()=> {
 <template>
     <div class="game-prawning-container " 
     ref="gameArea" @click="handleAreaClick">
+        <audio ref="bgmAudio" src="/SurvivalGuide/prawning_bgm.mp3" loop></audio>
+
+        <div class="ui-mute" @click.stop="toggleMute">
+            <span v-if="!isMuted">🔊</span> 
+            <span v-else>🔇</span>
+        </div>
+
         <div class="ui-score" :class="{ 'score-up': score >= 500 }">Score: {{ score }}</div>
 
         <div class="ui-timer" :class="{ 'urgent': timeLeft <= 10 }">
@@ -423,7 +454,7 @@ onUnmounted (()=> {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.6); /* 半透明黑底 */
+    background-color: rgba(0,0,0,0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -436,7 +467,6 @@ onUnmounted (()=> {
     color: $color-fsWhite;
     animation: pulse 1s infinite alternate;
     font-weight: bold;
-
 }
 
 
@@ -444,7 +474,7 @@ onUnmounted (()=> {
 .ui-score {
  position: absolute;
     top: 20px;
-    left: 20px;
+    left: 2%;
     color: $color-fsWhite;
     font-size: 28px;
     font-weight: bold;
@@ -457,16 +487,38 @@ onUnmounted (()=> {
     transform: scale(1.1);
 }
 
+// volume
+.ui-mute {
+    position: absolute;
+    top: 20px;
+    left: 16%;
+    right:auto;
+    
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 60; 
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: scale(1.2);
+    }
+}
+
 // Timer
 .ui-timer {
     position: absolute;
     top: 20px;
-    right: 200px; 
+    right: 16%;
+    left: auto;
+
     color: $color-fsWhite;
     font-size: 28px;
     font-weight: bold;
     z-index: 10;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+
+    transform-origin: right center;
     
     /* 倒數 10 秒變紅色跳動 */
     &.urgent {
@@ -476,8 +528,12 @@ onUnmounted (()=> {
 }
 
 @keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+    from { 
+        transform: scale(1); 
+    }
+    to { 
+        transform: scale(1.1); 
+    }       
 }
 
 // Finish: Time's up
