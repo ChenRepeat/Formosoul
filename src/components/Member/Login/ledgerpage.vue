@@ -27,13 +27,10 @@
 
 <script setup>
 import BasicButton from '@/components/BasicButton.vue';
-import Membercard from '../information/membercard.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 import { useAuthStore } from '@/stores/autoStore';
 import Pointcard from '../information/pointcard.vue';
-import { faLeaf } from '@fortawesome/free-solid-svg-icons';
-import { inject } from 'vue';
-import router from '@/router';
+
     const props = defineProps({
         withoutbtn:{
             type: Boolean,
@@ -53,13 +50,12 @@ import router from '@/router';
         },
     });
     const authStore = useAuthStore();
-    const setmemberview = inject('setmemberview');
     function handleEmbark() {
         authStore.closeLoginModal();    
     };
 
     function goback(){
-        setmemberview('membercard');
+        authStore.setmemberView('membercard');
     };
 </script>
 

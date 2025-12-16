@@ -35,11 +35,11 @@ import { handleError, inject } from 'vue';
             default: false,
         },
     });
-    const setmemberview = inject('setmemberview');
+
     const authStore = useAuthStore();
 
     function gotoledger() {
-        setmemberview('ledger');
+        authStore.setmemberView('ledger');
     }
     
 </script>

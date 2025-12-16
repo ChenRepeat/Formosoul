@@ -46,7 +46,6 @@
     import { useAuthStore } from '@/stores/autoStore';
     import BasicButton from '@/components/BasicButton.vue';
     import Enrollment from '../Login/Enrollment.vue';
-    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import Forgetpassword from './forgetpassword.vue';
 
     const authStore = useAuthStore();

@@ -64,7 +64,6 @@
     const authStore = useAuthStore();
     const sharedEmail = inject('sharedEmail');
     const currentView = inject('setCurrentView');
-    const setmemberview = inject('setmemberview');
     const email = ref(sharedEmail?.value || '');
     const password = ref('');
     const isLoading = ref(false);
@@ -141,7 +140,7 @@
             authStore.setToken(response.token)
             authStore.setUser(response.user)
             // authStore.closeLoginModal();
-            setmemberview('membercard');
+            authStore.setmemberView('membercard');
         } catch (error) {
             errorMessage.value = error.message || 'Login failed,Please tryagain';
         } finally{
