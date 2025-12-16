@@ -1,30 +1,36 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, effect } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
+import Swiper from 'swiper';
+// import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay, FreeMode,EffectCoverflow  } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+
 
 // photo
-const all = [  '/ProfessorIntroduction/Jiǔtiān Xuánnǚ.png',
-'/public/ProfessorIntroduction/Zhōngtán Yuánshuài.jpg',
-'/ProfessorIntroduction/Guān Shèng Dìjūn.png',
-'/ProfessorIntroduction/Guānyīn Púsà.png',
-'/ProfessorIntroduction/Tiānshàng Shèngmǔ.png',
-'/ProfessorIntroduction/Chénghuáng Zūnshén.png',
-'/ProfessorIntroduction/Hǔyé Jiāngjūn.png',
-'/ProfessorIntroduction/XuanTian.png',
-'/ProfessorIntroduction/Xuántán Zhēnjūn.png',
-'/public/ProfessorIntroduction/Fǎzhǔ Shèngjūn.png',
-//   '/ProfessorIntroduction/YueLao.png',
-//   '/ProfessorIntroduction/Línshuǐ Fūrén.png',
-//   '/ProfessorIntroduction/Bǎoshēng Dàdì.png',
-//   '/ProfessorIntroduction/Yùhuáng Dàdì.png',
-//   '/ProfessorIntroduction/BeiDou.png',
-//   '/ProfessorIntroduction/Nándǒu Liùxīng.png',
+const all = [  'ProfessorIntroduction/JiutianXuannu.png',
+'ProfessorIntroduction/ZhongtanYuanshuai.jpg',
+'ProfessorIntroduction/GuanShengDijun.png',
+'ProfessorIntroduction/GuanyinPusa.png',
+'ProfessorIntroduction/TianshangShengmu.png',
+'ProfessorIntroduction/ChenghuangZunshen.png',
+'ProfessorIntroduction/HuyeJiangjun.png',
+'ProfessorIntroduction/XuantianShangdi.png',
+'ProfessorIntroduction/XuantanZhenjun.png',
+'ProfessorIntroduction/FazhuShengjun.png',
+'ProfessorIntroduction/YuelaoZunshen.png',
+'ProfessorIntroduction/LinshuiFuren.png',
+'ProfessorIntroduction/BaoshengDadi.png',
+'ProfessorIntroduction/YuhuangDadi.png',
+'ProfessorIntroduction/BeidouQixing.png',
+'ProfessorIntroduction/NandouLiuxing.png',
   ]
 
 //----------------ref----------------------------------
 const doubleAll = ref([]) 
-const refList = ref(null) // 
+const refLists = ref([]) // ul s
 const refCard = ref(null) // li
 const cardWidth = ref(0) 
 let index = 0; // 計數器
@@ -41,45 +47,58 @@ const calculateCardWidth = () => {
     cardWidth.value += cardMargin * 2 // 左右 margin 都要計入
   }
 }
+const setAllStyle = (callback) => { 
+  refLists.value.forEach((ul, i) => {
+    // 把這個 ul 的 style 物件傳給 callback 函式
+    if (ul) callback(ul.style, i) 
+  })
+}
 const slider = async() => {
   calculateCardWidth()
-  if(!refList.value) return 
-  currentTranslateX.value = -index * cardWidth.value // 
-  refList.value.style.transition = 'all 1s';
-  refList.value.style.transform = `translateX(${currentTranslateX.value}px)`; // 左移一張
-  await nextTick() // 等一個動畫移動完成
-  setTimeout(slideChanged,5)
+  if(!refLists.value.length) return 
+  currentTranslateX.value = -index * cardWidth.value 
+  setAllStyle((style, i) =>{ // 
+    style.transition = `all .5s linear`;
+    style.transform = `translateX(${currentTranslateX.value}px)`;
+    // if(i == 1) style.transform = `translateX(${-currentTranslateX.value}px)`; // 右移
+  })
+  await nextTick() // 保證指令寫入DOM 動畫還未完成
   if( index == all.length ){ // 走到複製第一張 
-    setTimeout(()=>{
-      refList.value.style.transition = '0s';
+    setTimeout(() => {
+      setAllStyle(style => {
+        style.transition = '0s';
+        void document.body.offsetHeight; // 強迫瀏覽器現在就把高度算出來 (會阻止瀏覽器把兩個指令合併 導致動畫殘留)
+        style.transform = 'translateX(0)';
+      })
       index = 0 // 回到原始資料開頭
       currentTranslateX.value = 0
-      refList.value.style.transform = 'translateX(0)';
-    }, 900)
-    setTimeout(slideChanged,5)
+    }, 500)
   }
   else if( index > all.length ){ 
     setTimeout(()=>{
-      refList.value.style.transition = '0s ';
+      setAllStyle(style => {
+        style.transition = '0s';
+        void document.body.offsetHeight; 
+        style.transform = `translateX(${currentTranslateX.value}px)`;
+      })
       index = index % all.length 
       currentTranslateX.value = -index * cardWidth.value // 
-      refList.value.style.transform = `translateX(${currentTranslateX.value}px)`; 
-    }, 900)
-    setTimeout(slideChanged,5)
+    }, 500)
   }
+  // setTimeout(slideChanged,5)
 } 
 const move = () => {
   index ++
   slider()
 }
-let timer = ref(null)
+// let timer = ref(null)
 for(let i=0; i< all.length * 2; i++){
   let src = all[i % all.length]
   doubleAll.value.push(src); 
 } 
-const isIn = ref(Array(doubleAll.value.length).fill(false))
-const InOrOut= (index, status)=>{ // 更新 mouseenter 的狀態
-  isIn.value[index]=status
+const isIn = ref(Array(doubleAll.value.length*3).fill(false))
+const InOrOut= (targetIndex, status)=>{ // 更新 mouseenter 的狀態
+  isIn.value[targetIndex]=status // 
 }
 const mouseAt = ref({x:0, y:0}) // 紀錄滑鼠位置
 const info = ref([]) // 未來讀 json
@@ -92,8 +111,9 @@ const isOpen = ref(false);
 const xStart = ref(0) //起點
 const xNow = ref(0)
 const distance = ref(0)
+
 ;(async ()=>{ //讀 json 
-  let jsonFile = await fetch('/public/ProfessorIntroduction/professorInfo.json')
+  let jsonFile = await fetch('ProfessorIntroduction/professorInfo.json')
   if(jsonFile){
     info.value = await jsonFile.json()
   }
@@ -129,7 +149,8 @@ const onMousemove = (e) => { // mousemove 1px 呼叫一次
   mouseAt.value.y = e.clientY // 以viewport左上角為原點的座標位置
   // 2. 如果滑鼠有按下，偵測移動距離讓user拉動卡片
   if(!isPress.value)return
-  if (!refList.value) return;
+  if (!refLists.value.length) return;
+  
   xNow.value = e.clientX // 滑鼠按下&&移動時的當下位置
   distance.value = xNow.value - xStart.value // 距離按下時的總位移
 
@@ -149,87 +170,191 @@ const onMousemove = (e) => { // mousemove 1px 呼叫一次
       newTranslateX += oneSetWidth
       // originalShift += oneSetWidth      
     }
-
-    refList.value.style.transform = `translateX(${newTranslateX}px)`;
-     // 移動一次
+    setAllStyle((style)=>{
+      style.transform = `translateX(${newTranslateX}px)`;
+    }) // 移動一次
+    
     currentTranslateX.value = newTranslateX // newTranslateX 是區域變數 寫到 currentTranslateX 才可以在另一個函數用這個值
 }
-const timerControl=()=>{ // 計時器控制
-  if(isPress.value){ // 滑鼠按下則停止
-    if(timer.value){
-      clearInterval(timer.value)
-      timer.value = null
-    }
-  }else if(!timer.value)
-    timer.value = setInterval(move, 1000) 
-}
-const onPress = e => { 
-  isPress.value = true
-  xStart.value = e.clientX // 按下時開始追蹤起點
-  originalShift = currentTranslateX.value // 取得輪播位移變數 作為起始數值
-  timerControl() // 關閉計時器
-  if (refList.value) 
-    refList.value.style.transition = '0s'; // 關閉動畫
-  distance.value = 0 // 將移動距離歸零 以便作為click是件事發的判讀條件
-}
+// const timerControl=()=>{ // 計時器控制
+//   if(isPress.value){ // 滑鼠按下則停止
+//     if(timer.value){
+//       clearInterval(timer.value)
+//       timer.value = null
+//     }
+//   }else if(!timer.value)
+//     timer.value = setInterval(move, 500) 
+// }
+// const onPress = e => { 
+//   isPress.value = true
+//   xStart.value = e.clientX // 按下時開始追蹤起點
+//   originalShift = currentTranslateX.value // 取得輪播位移變數 作為起始數值
+//   timerControl() // 關閉計時器
+//   if (refLists.value.length) 
+//   setAllStyle(style =>{
+//     style.transition = '0s'; // 關閉動畫
+//   })
+//   distance.value = 0 // 將移動距離歸零 以便作為click是件事發的判讀條件
+// }
 const offPress =()=>{
   isPress.value = false
   index = Math.round(Math.abs(currentTranslateX.value) / cardWidth.value) // 更新index 對應到最近的卡片
-  // 要在這個步驟修復如果直接拉近複製資料 將會錯過 slider() 自動回到第一張的機制
+  
   slider() // 讓新的index 跑動畫 
-  timerControl() // 恢復自動輪播 
-  if (refList.value) 
-    refList.value.style.transition = 'all 1s'; // 關閉動畫
+  // timerControl() // 恢復自動輪播 
+  if (refLists.value.length) 
+  setAllStyle((style, i)=>{
+    style.transition = `all .5s linear`; // 重啟動畫
+  }) 
   
 }
-const slideChanged =  () => { 
-  const topmostElement = document.elementFromPoint(mouseAt.value.x, mouseAt.value.y) // 離滑鼠最上層的元素(先收到滑鼠事件的) // mouseenter 卡片會回傳 <img>
-  // console.log(topmostElement)
-  if(!topmostElement){ return}
-  const closestLi = topmostElement.closest('li[id^="photo"]') // 找離最上層元素最近的(父層)li
-  if(!closestLi){ // 附近沒有 li
-    isIn.value=isIn.value.fill(false)
-    return
-  }
-  const indexStr = closestLi.id.replace('photo','') 
-  const indexNum = Number(indexStr)
-  isIn.value = isIn.value.map((_, i)=> i === indexNum ) // i === indexNum? true: false
-}
+// const slideChanged =  () => { 
+//   const topmostElement = document.elementFromPoint(mouseAt.value.x, mouseAt.value.y) // 離滑鼠最上層的元素 // mouseenter 卡片<li> 會回傳 <img>
+//     if(!topmostElement) return
+//     const closestLi = topmostElement.closest('.professor-photo-wrapper') // 找離最上層元素最近的(父層)li 
+//     // 改抓 class
+//     if(closestLi){ // 附近沒有 li
+//     const indexNum = Number(closestLi.dataset.index)
+//     isIn.value.fill(false)
+//     InOrOut(indexNum, true)
+//   }
+// }
 onMounted(() => { // DOM 生成後
-  setTimeout(slideChanged,5)
+    // ------------------------------------swiper 屬性---------------------------------------------
 
-  timer.value = setInterval(move, 1000) 
+let Carousel = new Swiper(".professor-carousel-container", {
+  modules:[Autoplay, FreeMode, EffectCoverflow],
+  freemode:true,
+  autoplay: {
+    delay: 0,
+    pauseOnMouseEnter: false,
+  },
+  centeredSlides: true,
+  effect : 'coverflow',
+  coverflowEffect: {
+    rotate: 2,
+    depth: 8,
+    modifier: 1.5,
+    slideShadows : true
+  },
+  slidesPerView: 'auto',
+  speed: 1500, // FOR MARQUEE SPEED
+  loop: true,
+  spaceBetween: 12,
+  resistance: true,
+  resistanceRatio: 0,
+  allowTouchMove: true,
+  grabCursor: true,
+});
+
+// REVERSE MARQUEE
+  // DATA SPEED
+let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container", {
+  modules:[Autoplay, FreeMode, EffectCoverflow],
+  freemode:true,
+
+  autoplay: {
+    delay: 0,
+    pauseOnMouseEnter: false,
+    reverseDirection: true, // FOR REVERSE
+  },
+  centeredSlides: true,
+  effect : 'coverflow',
+  coverflowEffect: {
+    rotate: 5,
+    depth: 10,
+    modifier: 1.5,
+    slideShadows : true
+  },
+  slidesPerView: 'auto',
+  speed: 1250, // FOR MARQUEE SPEED
+  loop: true,
+  spaceBetween: 12,
+  resistance: true,
+  resistanceRatio: 0,
+  allowTouchMove: true,
+});
+
+  // setTimeout(slideChanged,5)
+
+  // timer.value = setInterval(move, 500) 
 
   document.addEventListener('mousemove', onMousemove)
-  document.addEventListener('mouseup', offPress)
+  document.addEventListener('mouseup', offPress)  
+  document.addEventListener('touchstart', onMousemove)
+  document.addEventListener('touchend', offPress)
 })
 
 onUnmounted(()=>{
   document.removeEventListener('mousemove', onMousemove)
   document.removeEventListener('mouseup', offPress)
+  document.removeEventListener('touchstart', onMousemove)
+  document.removeEventListener('touchend', offPress)
   if(timer.value) clearInterval(timer.value)
 })
 
 </script>
-<template> <!--全域事件綁定(未做): 'touchstart'.,'touchend'-->
-  <section class="professor-page-wrapper ">
+<template> 
+  <section class="professor-page-wrapper "> 
+    <!-- class 對應 變更嘗試  -->
     <h2 class="professor-title">Professor</h2>
-    <div class="professor-carousel-container" >
-      <ul class="professor-list " ref="refList"  @mousedown.prevent="onPress" ><!--(未做):'touchmove'-->
-        <li ref='refCard' 
-        :class="{'professor-photo-wrapper':true, 'mouse-enter':isIn[index]==true}" 
-        v-for="(photo, index) in doubleAll" :key="index" 
-        :id="'photo'+index" ><!-- key 用來寫成三條的時候抓-->
-          <img :src='photo' 
-          :class="{'professor-photo':true, 'mouse-enter':isIn[index]==true}" 
-          @mouseenter="InOrOut(index, true)" 
-          @mouseleave="InOrOut(index, false)"
-          @click="openInfo(index)"
-           >
-        </li>
-      </ul>   
 
-    </div>
+    <!-- swiper testing -->
+    <div class="carousel-field">
+
+  
+  <div class="professor-carousel-container upper" > <!-- class 對應 -->
+    <ul class="professor-list swiper-wrapper " :ref='(ul)=>{if(ul) refLists[0]=ul}'
+      @mousedown.prevent="onPress" >
+      <li ref='refCard' class="professor-photo-wrapper swiper-slide upper"
+      :class="{'mouse-enter':isIn[index]==true}" 
+      v-for="(photo, index) in doubleAll" 
+      :data-index="index" 
+      :id="'photo'+index"           
+      @mouseenter="InOrOut(index, true)" 
+      @mouseleave="InOrOut(index, false)">
+      <img :src='photo' class="professor-photo "
+      :class="{'mouse-enter':isIn[index]==true}" 
+      @click="openInfo(index)"
+      >
+    </li>
+  </ul>   
+  </div>
+  <div class="professor-carousel-container lower" > 
+  <ul class="professor-list swiper-wrapper"  :ref='(ul)=>{if(ul) refLists[2]=ul}'  @mousedown.prevent="onPress" >
+    <li ref='refCard' class="professor-photo-wrapper lower swiper-slide"
+    :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
+    v-for="(photo, index) in doubleAll" 
+    :data-index="index+ doubleAll.length *2" 
+    :id="'photo-lower'+index"           
+    @mouseenter="InOrOut(index+ doubleAll.length *2, true)" 
+    @mouseleave="InOrOut(index+ doubleAll.length *2, false)">
+    <img :src='photo' class="professor-photo"
+    :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
+    @click="openInfo(index)"
+    >
+    </li>
+  </ul>
+  </div>
+
+  <div class="professor-reverse-carousel-container middle">
+    <ul class="professor-list swiper-wrapper" :ref='(ul)=>{if(ul) refLists[1]=ul}'  @mousedown.prevent="onPress" >
+      <li ref='refCard' class="professor-photo-wrapper middle swiper-slide"
+      :class="{'mouse-enter':isIn[index+ doubleAll.length]==true}" 
+      v-for="(photo, index) in doubleAll" 
+      :data-index="index+ doubleAll.length" 
+      :id="'photo-middle'+index" 
+      @mouseenter="InOrOut(index+ doubleAll.length, true)" 
+      @mouseleave="InOrOut(index+ doubleAll.length, false)">
+      <img :src='photo' class="professor-photo"
+      :class="{'mouse-enter':isIn[index+ doubleAll.length]==true}" 
+      @click="openInfo(index)"
+      >
+    </li>
+  </ul>
+  </div>
+</div>
+
 
     <section :class="{'professor-info':true,'bg-frostedGlass':true, 'active':isOpen==true }">
       <li class="professor-big-photo-frame">
@@ -260,64 +385,15 @@ onUnmounted(()=>{
     align-items: center;
   }
 }
-.professor-page-wrapper{
-  background-color: $color-fsTitle;
-  padding-top: 80px;
-  height: 100vh; 
-  // position: relative;
-  .professor-title{
-  color: $color-fsWhite; 
-  width: fit-content;
-  margin: 0 auto;
-  position: relative;
-  z-index: 100;
-  }
-  .professor-carousel-container{
-    width: 100%; 
-    transform: rotate(-2deg) translateY(-30px); 
-    .professor-list{ //ul
-      display: flex;
-      transition: all 1s ;// linear
-      .professor-photo-wrapper.middle{
-        position: relative;
-        top: 30px;
-      }
-      .professor-photo-wrapper{ // li 第一排
-        height: 200px;
-        flex-basis: 200px;
-        flex-shrink: 0; // 預設是1
-        margin: 0 3px;
-        overflow: hidden;
-        border-radius: 4px;
-        position: relative;
-        .professor-photo{
-          width: 100%;
-          filter: brightness(.7);
-          transition: filter .2s;
-          position:absolute;
-          top: -28px;
-          
-          #photo13, #photo14{
-            top: -36px;
-          }
-          #photo8, #photo10, #photo11, #photo12, #photo15{
-          top: -50px;
-          }
-        }
-      }
-      .professor-photo-wrapper.mouse-enter {
-        transform: rotate(2deg) scale(1.1); 
-        z-index: 20;
-        cursor: pointer;
-        .professor-photo.mouse-enter {
-          filter: brightness(.9); 
-        }
-      }
-    }
-  }
-
+.professor-title{
+color: $color-fsWhite; 
+width: fit-content;
+margin: 0 auto;
+position: relative;
+z-index: 80;
 }
-// ------------------------大卡片-----------------------------
+
+ // ------------------------大卡片-----------------------------
 .professor-info{
   width: fit-content;
   height: fit-content;
@@ -326,8 +402,9 @@ onUnmounted(()=>{
   margin: auto;
   padding: 80px 60px;
   display: none;
+  z-index: 100;
   .professor-big-photo-frame{
-    z-index: 5;
+    z-index: 105;
     height: 600px;
     width:450px;
     transform: rotate(2deg) ;
@@ -369,17 +446,12 @@ onUnmounted(()=>{
       margin-top: 20px;
       padding-left: -8px;
       position: relative;
-        // bottom: 60px; 
-        left: -8px;
-
+      left: -8px;
       .professor-wand{
         height: 4.48rem; // h5 
         width: 4.48rem; // h5 
-        // line-height: 160%;
       }
-      .professor-skill{
-        // display: inline-flex;
-      }
+
     }
     .professor-skill-detail{
       color: $color-fsContent;
@@ -389,4 +461,71 @@ onUnmounted(()=>{
 .professor-info.active{
   display: flex;
 }
+ // ------------------------大卡片-----------------------------
+
+.professor-page-wrapper{
+  background-color: $color-fsTitle;
+  padding-top: 80px;
+}
+// non-CAROUSEL styles↑-------------
+
+/* CAROUSEL */
+
+.carousel-field {
+  width: 100%;
+  height: 100vh;
+  .professor-reverse-carousel-container,
+  .professor-carousel-container,
+  .marquee-carousel {
+    width: 100%;
+    transform: rotate(-2deg) translateY(-30px); 
+    position: relative;
+    
+
+    &.middle{ //li
+      // display: none;
+      top: -170px;
+    }      
+    &.lower{
+      top: 260px;
+    }
+    .swiper-wrapper { // ul
+      display: flex;
+
+      -webkit-transition-timing-function: linear !important;
+      transition-timing-function: linear !important;
+      .swiper-slide { // li
+        height: 200px;
+        width: 200px;
+        flex-shrink: 0;
+        overflow: hidden;
+        border-radius: 8px;
+        
+        .professor-photo { 
+          width: 100%;
+          filter: brightness(.7);
+          position:absolute;
+          transition: filter .2s;
+          top: -28px; 
+          #photo13, #photo14{
+            top: -36px;
+          }
+          #photo8, #photo10, #photo11, #photo12, #photo15{
+          top: -50px;
+          }
+        }
+      }
+      .professor-photo-wrapper.mouse-enter {
+        transform: rotate(2deg) scale(1.1); 
+        z-index: 20;
+        cursor: pointer;
+        .professor-photo.mouse-enter {
+          filter: brightness(.9); 
+        }
+      }  
+    }
+  }
+}
 </style>
+
+

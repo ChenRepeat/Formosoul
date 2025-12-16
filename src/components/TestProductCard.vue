@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // 圖片陣列
 const cards = ref([
-  { id: 1, img: '../../public/Shop/1.png' },
-  { id: 2, img: '../../public/Shop/2.png' },
-  { id: 3, img: '../../public/Shop/3.png' },
-  { id: 4, img: '../../public/Shop/4.png' },
-  { id: 5, img: '../../public/Shop/5.png' },
-  { id: 6, img: '../../public/Shop/6.png' },
+  { id: 1, img: 'Shop/1.png' },
+  { id: 2, img: 'Shop/2.png' },
+  { id: 3, img: 'Shop/3.png' },
+  { id: 4, img: 'Shop/4.png' },
+  { id: 5, img: 'Shop/5.png' },
+  { id: 6, img: 'Shop/6.png' },
 ])
 
 const canvasRefs = ref([])
@@ -57,7 +57,8 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    draw(canvasEl, 230, 70, 32, imageUrl);
+    const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
+    draw(canvasEl, 230, 70, 32, finalImageUrl);
   })
 })
 </script>

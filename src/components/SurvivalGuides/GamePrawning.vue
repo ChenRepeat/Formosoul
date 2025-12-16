@@ -1,5 +1,5 @@
 <script setup>    
-import { ref, onMounted, onUnmounted , defineEmits} from "vue";
+import { ref, onMounted, onUnmounted , defineEmits, computed} from "vue";
 import gsap from "gsap";
 // import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
@@ -9,6 +9,15 @@ import gsap from "gsap";
 會發射：按空白鍵或點擊，鉤子射出去。
 會抓東西：碰到蝦子會抓回來加分。
 */
+
+// 圖片路徑打包
+const publicPath = import.meta.env.BASE_URL;
+const getImgUrl = (path) => {
+    if (path.startsWith('/')) {
+        path = path.substring(1); // 變成 'SurvivalGuide/...'
+    }
+    return `${publicPath}${path}`;
+}
 
 // music 
 const bgmAudio = ref(null);
@@ -371,8 +380,10 @@ onUnmounted (()=> {
 
 <template>
     <div class="game-prawning-container " 
-    ref="gameArea" @click="handleAreaClick">
-        <audio ref="bgmAudio" src="/SurvivalGuide/prawning_bgm.mp3" loop></audio>
+    ref="gameArea" @click="handleAreaClick"
+    :style="{ backgroundImage: `url(${getImgUrl('/SurvivalGuide/prawning_background.png')})` }"
+    >
+        <audio ref="bgmAudio" :src="getImgUrl('/SurvivalGuide/prawning_bgm.mp3')" loop></audio>
 
         <div class="ui-mute" @click.stop="toggleMute">
             <span v-if="!isMuted">🔊</span> 
@@ -401,7 +412,7 @@ onUnmounted (()=> {
             height: item.height + 'px',
         }">
         <!-- 「去讀取上面 const items 資料裡面的 src 屬性，當作圖片的路徑」。 -->
-        <img :src="item.src" class="item-img" />
+        <img :src="getImgUrl(item.src)" class="item-img" />
         </div>
 
         <div v-if="isGameReady" class="start-screen-overlay">
@@ -439,7 +450,7 @@ onUnmounted (()=> {
     height: 100%;
 
     background-color: #000;
-    background-image: url(/SurvivalGuide/prawning_background.png);
+    // background-image: url(/SurvivalGuide/prawning_background.png);
     background-size: cover;
     background-repeat: no-repeat;
 
