@@ -23,8 +23,6 @@
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import TheCoreSelection from './Home/TheCoreSelection.vue';
     const authStore = useAuthStore();
-    const memberview = ref('coreintro');
-
 
     function handleKeyDown( e ){
         if(e.key == 'Escape'){
