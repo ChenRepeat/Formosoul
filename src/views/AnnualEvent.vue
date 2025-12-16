@@ -10,7 +10,7 @@ const items = ref([
     slug: "yanshui-beehive-fireworks-festival",
     titleLines: ["Yanshui", "Beehive", "Fireworks", "Festival"],
     date: "2026.03.03",
-    image: "festivals/TaiwanLanternFestival.png",
+    image: "festivals/Taiwan Lantern Festival.png",
     youtube: "https://www.youtube.com/watch?v=3sV3BTumzDg",
   },
   {
@@ -26,7 +26,7 @@ const items = ref([
     slug: "taiwan-lantern-festival",
     titleLines: ["Taiwan", "Lantern", "Festival"],
     date: "2026.02",
-    image: "festivals/TouchengPole-ClimbingGhostFestival.png",
+    image: "festivals/Toucheng Pole-Climbing Ghost Festival.png",
     youtube: "https://www.youtube.com/watch?v=zbiP-ndTUW0",
   },
   {
