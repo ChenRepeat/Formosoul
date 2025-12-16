@@ -6,13 +6,13 @@ import { ref } from 'vue';
   const chouqianFes= ref(0);
   const pics = {
     picLeft: {
-      imgUrl:'/Classes/bue1.jpg',
+      imgUrl:'Classes/bue1.jpg',
     },
     picMid: {
-      imgUrl:'/Classes/bue3.jpg',
+      imgUrl:'Classes/bue3.jpg',
     },
     picRight: {
-      imgUrl:'/Classes/bue2.jpg',
+      imgUrl:'Classes/bue2.jpg',
     },
   };
   const chouqianResult={

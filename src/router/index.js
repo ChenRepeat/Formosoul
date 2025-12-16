@@ -146,7 +146,7 @@ const router = createRouter({
       redirect: '/member/information',
       component: Member,
       meta:{ 
-        logo: '/src/assets/logo_black.svg',
+        logo: `${import.meta.env.BASE_URL}logo_black.svg`,
         bgColor:'white',
       },
       children: [
@@ -170,7 +170,7 @@ const router = createRouter({
       redirect: '/policy/delivery',
       component: Policy,
       meta:{ 
-        logo: '/src/assets/logo_black.svg',
+        logo: `${import.meta.env.BASE_URL}logo_black.svg`,
         bgColor:'white',
       },
       children: [

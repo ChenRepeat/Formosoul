@@ -3,17 +3,17 @@
     1: {
         name: 'CHANG-E',
         intro: 'Moon goddess with magical powers, living in a glowing palace, admired each Mid-Autumn Festival.',
-        imgSrc: '/Classes/change.png'
+        imgSrc: 'Classes/change.png'
     },
     2: {
         name: 'YU-TOO',
         intro: 'Mystical rabbit brews elixirs on the moon, spreading blessings and inspiring lunar legends.',
-        imgSrc: '/Classes/yutoo.png'
+        imgSrc: 'Classes/yutoo.png'
     },
     3: {
         name: 'WU-GANG',
         intro: 'Immortal chopping a magical tree endlessly on the moon, symbolizing patience and perseverance.',
-        imgSrc: '/Classes/woogang.png'
+        imgSrc: 'Classes/woogang.png'
     },
 };
 

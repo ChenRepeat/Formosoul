@@ -7,7 +7,7 @@
   <section class="duan-left dp-flex-col">
     <div class="duan-title dp-flex-col">
       <h3>Dragon-boat  Festival</h3>
-      <p>Honoring Qu Yuan with magical dragon boats, enchanted rice dumplings, charms, and spells for courage, luck, and family joy.</p>
+      <p>A Tale of Magic, Souls, and Alignment,📜 The Origin of the Legend: A Hero's Sacrifice and the Dragon Soul's Protection</p>
     </div>
     <div class="duan-mid-text">
       <p>Villagers used magical dragon boats, colorful charms, and protective spells to save Qu Yuan’s spirit. They tossed enchanted rice dumplings into the river for blessings and luck.</p>
