@@ -201,10 +201,8 @@ function goProductList(){
 }
 
 .detail-text p:nth-of-type(2){
-    text-align: justify;
     padding: 40px 0;
 }
-
 
 .share-icon{
     font-size: 2.8rem;
