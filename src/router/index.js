@@ -8,6 +8,7 @@ import Policy from '@/views/Policy.vue'
 import Classes from '@/views/Classes.vue'
 import AnnualEvent from '@/views/AnnualEvent.vue'
 import SurvivalGuide from '@/views/SurvivalGuide.vue'
+import FestivalDetail from '@/views/FestivalDetail.vue' 
 import MemberOrders from '@/components/Member/Orders/MemberOrders.vue'
 import Information from '@/components/Member/information/information.vue'
 import Changepassword from '@/components/Member/changepassword/changepassword.vue'
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/annualevent',
       name: 'AnnualEvent',
       component: AnnualEvent,
+    },
+    {
+      path: '/annualevent/:slug',          
+      name: 'FestivalDetail',              
+      component: FestivalDetail,
     },
     {
       path: '/professorsintroduction',
