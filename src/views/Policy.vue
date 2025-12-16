@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Backgroundaction from '@/components/backgroundaction.vue';
 import Policybutton from '@/components/policy/policybutton.vue';
 
 
@@ -10,6 +11,7 @@ import Policybutton from '@/components/policy/policybutton.vue';
 
 <template>
 <Policybutton></Policybutton>
+<Backgroundaction></Backgroundaction>
 
 
 </template>

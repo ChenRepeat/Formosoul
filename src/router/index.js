@@ -74,6 +74,9 @@ const router = createRouter({
       component: Shop,
       // 重新導向 能夠讓點入頁面時導向另一個網址
       redirect: '/shop/productList',
+      meta:{ 
+        bgColor:'transparent',
+      },
       children: [
         {
           path: "productlist",
@@ -91,6 +94,9 @@ const router = createRouter({
       path: '/shoppingcart',
       name: 'ShoppingCart',
       component: ShoppingCart,
+      meta:{ 
+        bgColor:'transparent',
+      },
       children: [
         {
           path: "shoppingcheck",
