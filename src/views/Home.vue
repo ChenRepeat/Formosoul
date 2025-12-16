@@ -698,15 +698,15 @@ function initSnitches(loader) {
   let menuIdx = 0;
   
   const menuItemsData = [
-    { name: 'Classes', img: `${baseURL}Home/home-class-book.png`, url: '/classes' },
-    { name: 'Professors', img: `${baseURL}Home/home-professor-people.png`, url: '/professorsintroduction' },
-    { name: 'News', img: `${baseURL}Home/home-news-owl.png`, url: '/news' },
-    { name: 'Shop', img: `${baseURL}Home/home-shopping-money.png`, url: '/shop' },
-    { name: 'Annual Event', img: `${baseURL}Home/home-annual-lantern.png`, url: '/annualevent' },
-    { name: 'About', img: `${baseURL}Home/home-about-badge.png`, url: '/about' },
-    { name: 'Survival Guide', img: `${baseURL}Home/home-survival-compass.png`, url: '/survivalguide' },
-    { name: 'Policy', img: `${baseURL}Home/home-policy-scroll.png`, url: '/policy' },
-    { name: 'Admin', img: `${baseURL}Home/home-admin-tools.png`, url: '/admin' },
+    { name: 'Classes', img: `Home/home-class-book.png`, url: '/classes' },
+    { name: 'Professors', img: `Home/home-professor-people.png`, url: '/professorsintroduction' },
+    { name: 'News', img: `Home/home-news-owl.png`, url: '/news' },
+    { name: 'Shop', img: `Home/home-shopping-money.png`, url: '/shop' },
+    { name: 'Annual Event', img: `Home/home-annual-lantern.png`, url: '/annualevent' },
+    { name: 'About', img: `Home/home-about-badge.png`, url: '/about' },
+    { name: 'Survival Guide', img: `Home/home-survival-compass.png`, url: '/survivalguide' },
+    { name: 'Policy', img: `Home/home-policy-scroll.png`, url: '/policy' },
+    { name: 'Admin', img: `Home/home-admin-tools.png`, url: '/admin' },
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;
