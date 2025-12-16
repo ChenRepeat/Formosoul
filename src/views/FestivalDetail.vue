@@ -12,7 +12,7 @@ const items = [
     slug: "yanshui-beehive-fireworks-festival",
     title: "Yanshui Beehive Fireworks Festival",
     date: "2026.03.03",
-    image: "/tjd103/festivals/Taiwan Lantern Festival.png",
+    image: "/tjd103/festivals/TaiwanLanternFestival.png",
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const items = [
     slug: "taiwan-lantern-festival",
     title: "Taiwan Lantern Festival",
     date: "2026.02",
-    image: "/tjd103/festivals/Toucheng Pole-Climbing Ghost Festival.png",
+    image: "/tjd103/festivals/TouchengPole-ClimbingGhostFestival.png",
   },
   {
     id: 4,
