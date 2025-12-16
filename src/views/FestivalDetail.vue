@@ -12,28 +12,28 @@ const items = [
     slug: "yanshui-beehive-fireworks-festival",
     title: "Yanshui Beehive Fireworks Festival",
     date: "2026.03.03",
-    image: "/festivals/Taiwan Lantern Festival.png",
+    image: "festivals/TaiwanLanternFestival.png",
   },
   {
     id: 2,
     slug: "dajia-matsu-pilgrimage-departure",
     title: "Dajia Matsu Pilgrimage Departure",
     date: "2026.04.10",
-    image: "/festivals/DajiaMatsuPilgrimageDeparture.png",
+    image: "festivals/DajiaMatsuPilgrimageDeparture.png",
   },
   {
     id: 3,
     slug: "taiwan-lantern-festival",
     title: "Taiwan Lantern Festival",
     date: "2026.02",
-    image: "/festivals/Toucheng Pole-Climbing Ghost Festival.png",
+    image: "festivals/TouchengPole-ClimbingGhostFestival.png",
   },
   {
     id: 4,
     slug: "dragon-boat-festival-races",
     title: "Dragon Boat Festival Races",
     date: "2026.06.19",
-    image: "/festivals/DragonBoatFestivalRaces.png",
+    image: "festivals/DragonBoatFestivalRaces.png",
   },
 ];
 
