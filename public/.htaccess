@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 因為你的網址是 /tjd103/，這裡要設定 Base
+  RewriteBase /tjd103/
+
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # 找不到檔案時，導回 /tjd103/index.html
+  RewriteRule . /tjd103/index.html [L]
+</IfModule>

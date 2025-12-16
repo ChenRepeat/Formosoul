@@ -41,33 +41,33 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
           <div class="footer-inner-case dp-flex">
             <ul class="footer-page-link dp-flex-col">
               <li>
-                <a href="/"><h5>Home</h5></a>
+                <router-link to="/"><h5>Home</h5></router-link>
               </li>
               <li>
-                <a href="/news"><h5>News</h5></a>
+                <router-link to="/news"><h5>News</h5></router-link>
               </li>
               <li>
-                <a href="/annualevent"><h5>Annual Event</h5></a>
+                <router-link to="/annualevent"><h5>Annual Event</h5></router-link>
               </li>
               <li>
-                <a href="/professorsintroduction"><h5>Professors</h5></a>
+                <router-link to="/professorsintroduction"><h5>Professors</h5></router-link>
               </li>
               <li>
-                <a href="/survivalrules"><h5>Rules</h5></a>
+                <router-link to="/survivalrules"><h5>Rules</h5></router-link>
               </li>
               <li>
-                <a href="/shop"><h5>Diagon Alley</h5></a>
+                <router-link to="/shop"><h5>Diagon Alley</h5></router-link>
               </li>
               <li>
-                <a href="/about"><h5>About</h5></a>
+                <router-link to="/about"><h5>About</h5></router-link>
               </li>
               <li>
-                <a href="/member"><h5>Member</h5></a>
+                <router-link to="/member"><h5>Member</h5></router-link>
               </li>
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
-                <a href="/classes"><h5>Classes</h5></a>
+                <router-link to="/classes"><h5>Classes</h5></router-link>
               </li>
               <li>
                 <a href=""><p>Motorcycle</p></a>
@@ -98,7 +98,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
           </div>
           <ul class="policy-inner-case dp-flex-col">
             <li>
-              <a href="/policy"><h5>Policy</h5></a>
+              <router-link to="/policy"><h5>Policy</h5></router-link>
             </li>
             <li>
               <a href=""><p>Payment</p></a>
