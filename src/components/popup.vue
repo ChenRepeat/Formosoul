@@ -6,10 +6,10 @@
     >
         <div class="Loginout">
         <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
-        <loginpage v-if="memberview == 'login'"></loginpage>
-        <cardpage v-else-if="memberview == 'membercard'"></cardpage>
-        <ledgerpage v-else-if="memberview== 'ledger'"></ledgerpage>  
-        <TheCoreSelection v-if="memberview == 'coreintro'"></TheCoreSelection>
+        <TheCoreSelection v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
+        <loginpage v-else-if="authStore.memberView == 'login'"></loginpage>
+        <cardpage v-else-if="authStore.memberView == 'membercard'"></cardpage>
+        <ledgerpage v-else-if="authStore.memberView== 'ledger'"></ledgerpage>
         </div>
     </div>
 </template>
@@ -17,18 +17,14 @@
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
     import Loginpage from './Member/Login/loginpage.vue';
-    import { onMounted, onUnmounted, provide, ref } from 'vue';
+    import { onMounted, onUnmounted } from 'vue';
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import TheCoreSelection from './Home/TheCoreSelection.vue';
     const authStore = useAuthStore();
-    const memberview = ref('login');
 
-    provide('setmemberview', (viewName) => {
-        memberview.value = viewName;
 
-    });
     function handleKeyDown( e ){
         if(e.key == 'Escape'){
             authStore.closeLoginModal();

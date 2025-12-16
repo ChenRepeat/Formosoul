@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     const isLoading = ref(false);
     // 彈窗狀態
     const isLoginModalOpen = ref(false);
+    const memberView = ref('coreselection');
     // 計算屬性 雙重否定會讓兩個value值 除了字串外都會是false
     const isLoggedIn = computed(() => !!token.value && !!user.value);
 
@@ -28,7 +29,9 @@ export const useAuthStore = defineStore('auth', () => {
         token.value = null;
         localStorage.removeItem('token');
     };
-
+    const setmemberView = (viewName) => {
+        memberView.value = viewName;
+    };
     const fetchUser = async () => {
         if(!token.value) return;
 
@@ -79,5 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
         isLoginModalOpen,
         openLoginModal,
         closeLoginModal,
+        memberView,
+        setmemberView,
     }
 });

@@ -29,6 +29,7 @@ function handleUserIconClick( e ){
     isMenuOpen.value = false;
     setTimeout(() => {
       isMemberMenuOpen.value = true;
+      
     }, 350);
   } else {
       isMemberMenuOpen.value = !isMemberMenuOpen.value;
@@ -36,6 +37,7 @@ function handleUserIconClick( e ){
 }else{
   isMenuOpen.value = false;
   authStore.openLoginModal();
+  authStore.setmemberView('login');
  }
 };
 
