@@ -1,11 +1,21 @@
 <script setup>
     import BasicButton from '../BasicButton.vue';
+    import { ref } from 'vue';
+    import CoreGame from './CoreGame.vue';
+
+    const currentView = ref('history')
+
+    function showGame(){
+    currentView.value = 'game';
+}
 
 </script>
 
 <template>
 
-    <main class="coregame-dock">
+    <main 
+    v-if="currentView === 'history'" 
+    class="coregame-dock">
         <div class="coregame-top dp-flex">
             <img src="../../../public/Home/game/poking_real.png" alt="">
         </div>
@@ -15,8 +25,9 @@
             <p>This is a classic Taiwanese childhood game where players pay a small fee to punch a hole through one of many covered squares on a board, winning the surprise prize hidden inside. It's all about luck and a little fun poke!</p>
 
         </div>
-        <BasicButton class="btn-yellow-fill">Begin the Core Sensing</BasicButton>
+        <BasicButton class="btn-yellow-fill" @click="showGame">Begin the Core Sensing</BasicButton>
     </main>
+    <CoreGame v-if="currentView === 'game'" class=""/>
 
 </template>
 

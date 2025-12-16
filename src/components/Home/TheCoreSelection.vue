@@ -1,16 +1,32 @@
 <script setup>
 import BasicButton from '../BasicButton.vue';
 import CoreGame from './CoreGame.vue';
-import CoreShow from './CoreShow.vue';
 import GameHistory from './GameHistory.vue';
+import { ref } from 'vue';
 
+const currentView = ref('intro')
+
+
+//注意函數不要跟自訂的標籤名稱相同
+function showHistory(){
+    currentView.value = 'history';
+}
+
+function showGame(){
+    currentView.value = 'game';
+}
+
+function showCore(){
+    currentView.value = 'core';
+}
 
 </script>
 
 <template>
     <div class="coregame-wrapper">
-        <div class="coregame-intro dp-none">
-
+        <div v-if="currentView === 'intro'" class="coregame-intro">   
+            <!-- 在標籤中，currentView 不用再寫.value，因為 vue 會自動解開 ref
+                 function 需要是因為那是 js -->
             <main class="coregame-dock dp-flex">
                 <div class="coregame-left">
                     <h3>The Core Selection</h3>
@@ -25,14 +41,14 @@ import GameHistory from './GameHistory.vue';
                 </div>
             </main>
             <nav class="dp-flex">
-                <BasicButton class="btn-gray-fill">Uncover the Ritual's Origin</BasicButton>
-                <BasicButton class="btn-yellow-fill">Begin the Core Sensing</BasicButton>
+                <BasicButton class="btn-gray-fill" @click="showHistory">Uncover the Ritual's Origin</BasicButton>
+                <BasicButton class="btn-yellow-fill" @click="showGame">Begin the Core Sensing</BasicButton>
             </nav>
         </div>
 
-        <GameHistory class="dp-none"/>
-        <CoreGame class="dp-none"/>
-        <CoreShow class=""/>
+        <GameHistory v-if="currentView === 'history'" class=""/>
+        <CoreGame v-if="currentView === 'game'" class=""/>
+        
 
     </div>
 
@@ -40,6 +56,10 @@ import GameHistory from './GameHistory.vue';
 </template>
 
 <style scoped lang="scss">
+
+
+
+//網頁
     .coregame-wrapper{
     color: $color-fsWhite;
         padding: 40px 60px;

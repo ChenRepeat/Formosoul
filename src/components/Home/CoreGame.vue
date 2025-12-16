@@ -1,12 +1,25 @@
 <script setup>
+    import { ref } from 'vue';
+    import CoreShow from './CoreShow.vue';
+
+    const currentView = ref('game')
+
+    function showCore(){
+    currentView.value = 'core';
+    }
 
 </script>
 
 <template>
 
-    <main class="coregame-dock dp-flex">
+    <main 
+    v-if="currentView === 'game'"
+    class="coregame-dock dp-flex">
         <div class="coregame-left dp-flex">
-            <img src="../../../public/Home/game/poking lottery.png" alt="">
+            <img   
+            src="../../../public/Home/game/poking lottery.png"
+            alt="感應杖心"
+            @click="showCore">
         </div>
 
         <div class="coregame-right">
@@ -23,6 +36,7 @@
             
         </div>
     </main>
+    <CoreShow v-if="currentView === 'core'" class=""/>
     
 
 </template>

@@ -23,7 +23,7 @@
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import TheCoreSelection from './Home/TheCoreSelection.vue';
     const authStore = useAuthStore();
-    const memberview = ref('login');
+    const memberview = ref('coreintro');
 
     provide('setmemberview', (viewName) => {
         memberview.value = viewName;
