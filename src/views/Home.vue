@@ -3,7 +3,7 @@
     <canvas id="home-canvas-back" ref="canvasBackRef"></canvas>
     
     <div id="home-logo-wrapper" ref="logoWrapperRef">
-      <img id="home-logo-img" src="/Home/home-logo.svg" alt="Formosoul Logo" />
+      <img id="home-logo-img" :src="baseURL + 'Home/home-logo.svg'" alt="Formosoul Logo" />
       <div id="home-socket-visual" ref="socketVisualRef"></div>
     </div>
 
@@ -31,7 +31,10 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter();
 // --- Refs ---
 const containerRef = ref(null);
 const canvasBackRef = ref(null);
@@ -52,6 +55,8 @@ let draggedSnitchIdx = -1;
 let raycaster, mouse, dragPlane, dragOffset;
 let clock;
 
+
+const baseURL = import.meta.env.BASE_URL;
 // 記錄點擊起始位置
 let clickStartPos = { x: 0, y: 0 };
 
@@ -342,7 +347,7 @@ function onDocumentClick(event) {
       document.body.style.cursor = 'wait';
       setTimeout(() => {
         document.body.style.cursor = 'default';
-        window.location.href = obj.userData.url;
+        router.push(obj.userData.url);
       }, 100);
       return;
     }
@@ -693,15 +698,15 @@ function initSnitches(loader) {
   let menuIdx = 0;
   
   const menuItemsData = [
-    { name: 'Classes', img: '/Home/home-class-book.png', url: '/classes' },
-    { name: 'Professors', img: '/Home/home-professor-people.png', url: '/professorsintroduction' },
-    { name: 'News', img: '/Home/home-news-owl.png', url: '/news' },
-    { name: 'Shop', img: '/Home/home-shopping-money.png', url: '/shop' },
-    { name: 'Annual Event', img: '/Home/home-annual-lantern.png', url: '/annualevent' },
-    { name: 'About', img: '/Home/home-about-badge.png', url: '/about' },
-    { name: 'Survival Guide', img: '/Home/home-survival-compass.png', url: '/survivalguide' },
-    { name: 'Policy', img: '/Home/home-policy-scroll.png', url: '/policy' },
-    { name: 'Admin', img: '/Home/home-admin-tools.png', url: '/admin' },
+    { name: 'Classes', img: `${baseURL}Home/home-class-book.png`, url: '/classes' },
+    { name: 'Professors', img: `${baseURL}Home/home-professor-people.png`, url: '/professorsintroduction' },
+    { name: 'News', img: `${baseURL}Home/home-news-owl.png`, url: '/news' },
+    { name: 'Shop', img: `${baseURL}Home/home-shopping-money.png`, url: '/shop' },
+    { name: 'Annual Event', img: `${baseURL}Home/home-annual-lantern.png`, url: '/annualevent' },
+    { name: 'About', img: `${baseURL}Home/home-about-badge.png`, url: '/about' },
+    { name: 'Survival Guide', img: `${baseURL}Home/home-survival-compass.png`, url: '/survivalguide' },
+    { name: 'Policy', img: `${baseURL}Home/home-policy-scroll.png`, url: '/policy' },
+    { name: 'Admin', img: `${baseURL}Home/home-admin-tools.png`, url: '/admin' },
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;

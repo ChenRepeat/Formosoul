@@ -79,7 +79,7 @@ function handlelogout() {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <a href="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></a>
+          <router-link to="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></router-link>
           <!-- <a href="/member"></a> -->
          
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
@@ -99,15 +99,15 @@ function handlelogout() {
       <ul 
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><a href="/"><h5>Home</h5></a></li>
-        <li><a href="/about"><h5>About</h5></a></li>
-        <li><a href="/news"><h5>News</h5></a></li>
-        <li><a href="/annualevent"><h5>Annual Event</h5></a></li>
-        <li><a href="/professorsintroduction"><h5>Professor</h5></a></li>
-        <li><a href="/survivalguide"><h5>Survival Guide</h5></a></li>
-        <li><a href="/shop"><h5>Diagon Alley</h5></a></li>
-        <li><a href="/classes"><h5>Classes</h5></a></li>
-        <li><a href="/policy"><h5>Policy</h5></a></li>
+        <li><router-link to="/"><h5>Home</h5></router-link></li>
+        <li><router-link to="/about"><h5>About</h5></router-link></li>
+        <li><router-link to="/news"><h5>News</h5></router-link></li>
+        <li><router-link to="/annualevent"><h5>Annual Event</h5></router-link></li>
+        <li><router-link to="/professorsintroduction"><h5>Professor</h5></router-link></li>
+        <li><router-link to="/survivalguide"><h5>Survival Guide</h5></router-link></li>
+        <li><router-link to="/shop"><h5>Diagon Alley</h5></router-link></li>
+        <li><router-link to="/classes"><h5>Classes</h5></router-link></li>
+        <li><router-link to="/policy"><h5>Policy</h5></router-link></li>
       </ul>
       </transition>
 
@@ -115,7 +115,7 @@ function handlelogout() {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li><a href="/member"><h5>member</h5></a></li>
+        <li><router-link to="/member"><h5>member</h5></router-link></li>
         <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
         <!-- <li><a href="/news"><h5>News</h5></a></li> -->
       </ul>

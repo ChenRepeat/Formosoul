@@ -13,6 +13,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/tjd103/',
   plugins: [
     vue(),
     vueDevTools(),
