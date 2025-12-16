@@ -7,13 +7,13 @@
   const { goToPage } = usePageNavigation(emit);
 
   const vWidth = window.innerWidth;
-  const toMoonPage = ref(10);
-  const toNianPage = ref(11);
-  const toDuanOoPage = ref(12);
+  const toNianPage = ref(5);
+  const toDuanOoPage = ref(6);
+  const toMoonPage = ref(7);
   if(vWidth < 750){
-    toMoonPage.value = 12;
-    toNianPage.value = 15;
-    toDuanOoPage.value = 17;
+    toNianPage.value = 10;
+    toDuanOoPage.value = 12;
+    toMoonPage.value = 14;
   }
 </script>
 
@@ -23,7 +23,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(10)"
+      @click="goToPage(toNianPage)"
       >
         New Year
       </h5>
@@ -32,7 +32,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(11)">
+      @click="goToPage(toDuanOoPage)">
         Dragon-boat  Festival
       </h5>
     </li>
@@ -40,7 +40,7 @@
       <h5 class="page-index dp-flex"
       @mousedown.stop
       @touchstart.stop
-      @click="goToPage(12)">
+      @click="goToPage(toMoonPage)">
         Mid-Autumn  Festival
       </h5>
     </li>

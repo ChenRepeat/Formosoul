@@ -7,16 +7,16 @@
   <section class="duan-left dp-flex-col">
     <div class="duan-title dp-flex-col">
       <h3>Dragon-boat  Festival</h3>
-      <p>A Tale of Magic, Souls, and Alignment,The Origin of the Legend: A Hero's Sacrifice and the Dragon Soul's Protection</p>
+      <p>The Legend: Protecting the Dragon Soul When the magical scholar Qu Yuan cast himself into the river, his spirit transformed into a powerful Dragon Soul.</p>
     </div>
     <div class="duan-mid-text">
-      <p>Villagers believed that Qu Yuan’s integrity and powerful magic, upon his descent, transformed into a Dragon Soul that still needed to be protected and honored. Therefore, they held ancient rites to rescue and safeguard his spirit:
+      <p>To safeguard him, villagers established three ancient rites: <br>
 
-They raced Dragon Boats across the waters, simulating battles against malevolent aquatic spirits, hoping to retrieve Qu Yuan's Dragon Soul.
+Dragon Boat Racing: Mystical battles on water to rescue his soul from malevolent spirits.<br>
 
-They tossed specially-prepared 'Enchanted Rice Dumplings' into the river—not as sustenance, but as a ritualistic offering of blessings and fortune spells for the Dragon Soul.
+Enchanted Dumplings: Ritual offerings infused with fortune spells to nourish his essence.<br>
 
-They hung calamus and mugwort within their homes, combining them with various talismans and protective charms, hoping to forge a magical defense for Qu Yuan's spirit.</p>
+Magical Defense: Hanging calamus and mugwort as talismans to forge a protective barrier.</p>
     </div>
     <div class="duan-qu-yuan dp-flex">
       <div class="intro dp-flex-col">
