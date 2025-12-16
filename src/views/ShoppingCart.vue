@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router';
 import OrderSuccess from '@/components/Cart/OrderSuccess.vue';
 import ShoppingCheck from '@/components/Cart/ShoppingCheck.vue';
 import BasicButton from '../components/BasicButton.vue';
+import Backgroundaction from '@/components/backgroundaction.vue';
 
 
 
@@ -123,7 +124,7 @@ import BasicButton from '../components/BasicButton.vue';
   
     <ShoppingCheck class="cart-step-content"/> 
     <OrderSuccess class="cart-step-content dp-none"/>
-   
+    <Backgroundaction></Backgroundaction>
 
 </main>
 
@@ -136,7 +137,7 @@ import BasicButton from '../components/BasicButton.vue';
         color: $color-fsWhite;
         
         //暫時背景
-        background-image: url(../../public/Shop/bgi.jpg);
+        // background-image: url(../../public/Shop/bgi.jpg);
         background-size: cover;
         background-position: right; 
     }

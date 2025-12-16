@@ -35,7 +35,7 @@ onMounted(async () => {
   <div v-else class="wrapper dp-flex-col"
   :class="currentBgClass"
   >
-    <TheHeader :is-black-style="currentBgClass == 'white'"/>
+    <TheHeader :is-black-style="currentBgClass == 'white' || currentBgClass == 'transparent'"/>
     <main class="content">
       <a href="/" :style="{'display':currentLogoDP}"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></a>
       <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
@@ -60,6 +60,9 @@ onMounted(async () => {
 }
 .wrapper.white{
   background-color: #fff;
+}
+.wrapper.transparent{
+  background-color: transparent;
 }
 .site-logo{
   position: absolute;
