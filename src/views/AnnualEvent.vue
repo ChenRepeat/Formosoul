@@ -10,7 +10,7 @@ const items = ref([
     slug: "yanshui-beehive-fireworks-festival",
     titleLines: ["Yanshui", "Beehive", "Fireworks", "Festival"],
     date: "2026.03.03",
-    image: "/festivals/Taiwan Lantern Festival.png",
+    image: "festivals/Taiwan Lantern Festival.png",
     youtube: "https://www.youtube.com/watch?v=3sV3BTumzDg",
   },
   {
@@ -18,7 +18,7 @@ const items = ref([
     slug: "dajia-matsu-pilgrimage-departure",
     titleLines: ["Dajia", "Matsu", "Pilgrimage", "Departure"],
     date: "2026.04.10",
-    image: "/festivals/DajiaMatsuPilgrimageDeparture.png",
+    image: "festivals/DajiaMatsuPilgrimageDeparture.png",
     youtube: "https://www.youtube.com/watch?v=nAAapURnWjw",
   },
   {
@@ -26,7 +26,7 @@ const items = ref([
     slug: "taiwan-lantern-festival",
     titleLines: ["Taiwan", "Lantern", "Festival"],
     date: "2026.02",
-    image: "/festivals/Toucheng Pole-Climbing Ghost Festival.png",
+    image: "festivals/Toucheng Pole-Climbing Ghost Festival.png",
     youtube: "https://www.youtube.com/watch?v=zbiP-ndTUW0",
   },
   {
@@ -34,7 +34,7 @@ const items = ref([
     slug: "dragon-boat-festival-races",
     titleLines: ["Dragon", "Boat", "Festival", "Races"],
     date: "2026.06.19",
-    image: "/festivals/DragonBoatFestivalRaces.png",
+    image: "festivals/DragonBoatFestivalRaces.png",
     youtube: "https://www.youtube.com/watch?v=ucIr3GvImE4",
   },
     {
@@ -42,7 +42,7 @@ const items = ref([
     slug: "Yanshui Beehive Fireworks Festival",
     titleLines: ["Yanshui", "Beehive", "Fireworks", "Festival"],
     date: "2026.06.19",
-    image: "/festivals/YanshuiBeehiveFireworksFestival.png",
+    image: "festivals/YanshuiBeehiveFireworksFestival.png",
     youtube: "https://www.youtube.com/watch?v=LXCtJDd-qpw",
   },
 ]);
