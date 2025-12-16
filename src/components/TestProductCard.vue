@@ -57,7 +57,8 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    draw(canvasEl, 230, 70, 32, imageUrl);
+    const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
+    draw(canvasEl, 230, 70, 32, finalImageUrl);
   })
 })
 </script>
