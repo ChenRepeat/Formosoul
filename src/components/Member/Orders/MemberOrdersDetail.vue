@@ -8,7 +8,7 @@
             <p>{{ order.shipping }}</p>
             <!-- 換成p -->
             <p>
-                <basic-button class="btn-yellow-fill"><router-link to="/member/orderslist/orderscontain">Check</router-link></basic-button>
+                <router-link to="/member/orderslist/orderscontain"><basic-button class="btn-yellow-fill"><p>Check</p></basic-button></router-link>
             </p>
         </div>
 
@@ -163,8 +163,15 @@
     }
     
     .btn-yellow-fill > a{
+        display: flex;
+        width: 100%;
+        height: 100%;
         color: $color-fsTitle;
         text-decoration: none;
+    }
+    .btn-yellow-fill > p{
+        // width: 100%;
+        // height: 100%;
     }
 
 </style>

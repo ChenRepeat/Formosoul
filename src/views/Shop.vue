@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ProductList from '@/components/SHOP/ProductList.vue';
 import ProductDetail from '@/components/SHOP/ProductDetail.vue';
+import Backgroundaction from '@/components/backgroundaction.vue';
 
 
 
@@ -14,6 +15,8 @@ import ProductDetail from '@/components/SHOP/ProductDetail.vue';
   <!-- <ProductList />
   <ProductDetail /> -->
   <router-view></router-view>
+  <backgroundaction></backgroundaction>
+  
 </main>
 
 </template>
@@ -25,7 +28,7 @@ import ProductDetail from '@/components/SHOP/ProductDetail.vue';
   color: $color-fsWhite;
 
   //暫時背景
-  background-image: url(../../public/Shop/bgi.jpg);
+  // background-image: url(../../public/Shop/bgi.jpg);
   background-size: cover;
   background-position: right; 
 }
