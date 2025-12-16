@@ -1,10 +1,14 @@
 <script setup>
 import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from "vue-router";
+// import  { convenienceStoreData } from "@components/convenienceStoreData.js";
 
 const isShow = ref(-1);
 const animationWelcome = ref(false)
+
+const isHover = ref(null);
+
 
 const csFrame = ref([
     {
@@ -35,7 +39,11 @@ function closeWelcomeFrame (){
         <!-- z-index= 數字  這邊寫成動態style是用物件方法寫 isShow其實是值，一開始就是-1 -->
         <main class="survival-convenience-store-case">
             <div class="survival-convenience-store-case-wrapper" @click="closeWelcomeFrame">
-                <img class='survival-convenience-store-case-bg' src="/SurvivalGuide/convenience_Store-min.png" alt="">
+                <img class='survival-convenience-store-case-bg' src="/SurvivalGuide/ConvenienceStore/convenienceStore-bg-min.png" alt="cs-base">
+                
+                <!-- <div class=""></div> -->
+
+
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
@@ -81,6 +89,7 @@ function closeWelcomeFrame (){
     height: 100%;
     display: block;
     object-fit: cover;
+    object-position: top center;
     z-index: 0;
 }
 

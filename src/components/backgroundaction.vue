@@ -1,12 +1,15 @@
-<script setup lang="ts">
+<script setup >
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const images = [
-  '../../public/testball/1.png',
-  '../../public/testball/2.png',
-  '../../public/testball/3.png',
-  '../../public/testball/4.png',
-  '../../public/testball/5.png',
+  '../../public/Home/home-about-badge.png',
+  '../../public/Home/home-annual-lantern.png',
+  '../../public/Home/home-class-book.png',
+  '../../public/Home/home-news-owl.png',
+  '../../public/Home/home-policy-scroll.png',
+  '../../public/Home/home-professor-people.png',
+  '../../public/Home/home-shopping-money.png',
+  '../../public/Home/home-survival-compass.png',
 ];
 
 const positions = ref(
@@ -39,10 +42,10 @@ onMounted(() => {
         zindex: pos.zindex
       }
     })
-  }, 50)
+  }, 150)
 })
 
-onUnmounted(() => clearInterval(interval))
+onUnmounted(() => clearInterval(interval));
 </script>
 
 <template>
@@ -83,15 +86,15 @@ onUnmounted(() => clearInterval(interval))
   left: -30px;
   right: -30px;
   bottom: -30px;
-  background-color: #00529F;
+  background-color: black;
   filter: blur(20px);
   z-index: -1; 
 }
 
 .backgroundball > img{
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   transform: translate(-50%, -50%);
   transition: box-shadow 0.3s ease-in-out;

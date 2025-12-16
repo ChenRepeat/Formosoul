@@ -1,6 +1,6 @@
 <script setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  import { computed, ref } from 'vue';
+  import { computed , ref , Transition } from 'vue';
 
   const clickCharm = ref('0');
   const charmsRow1 = {
@@ -97,7 +97,8 @@
       <h2>Spells & Charms</h2>
       <p>Taiwanese charms and talismans use magic symbols to protect, bring luck, and ward off evil in daily life and festivals.</p>
     </div>
-    <div class="intro-locate dp-flex-col">
+    <div class="intro-locate dp-flex-col"
+    >
       <div class="charm-top-row dp-flex">
         <div class="shadow-case"
           v-for="(charm, key) in charmsRow1" 
@@ -134,6 +135,8 @@
         :class="{ 'show': clickCharm != key }"></div>
       </div>
       </div>
+      <Transition name="fade" mode="out-in">
+
       <div class="intro-case dp-flex"
           v-if="clickCharm!=0"
           @click="changeIntro(0)"
@@ -160,7 +163,7 @@
           <p>{{ currentIntro.intro }}</p>
           </div>
       </div>
-      
+      </Transition>
   </div>
     
 
@@ -257,5 +260,12 @@
 }
 .show{
     opacity: 0.8;
+}
+.fade-enter-active,.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,.fade-leave-to {
+  opacity: 0;
 }
 </style>
