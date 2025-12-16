@@ -39,7 +39,6 @@
     import { useAuthStore } from '@/stores/autoStore';
     import { inject, ref } from 'vue';
 
-    const setCurrentView = inject('setCurrentView');
     const authStore = useAuthStore();
 
     const email = ref('');
@@ -83,7 +82,7 @@
             const response = await forgetpasswordAPI(email.value);
             authStore.setToken(response.token);
             authStore.setUser(response.user);
-            setCurrentView('login');
+            authStore.setloginView('loginpage');
         }catch(error){
             errorMessage.value = error.message || 'Please enter a  email';
         }finally{

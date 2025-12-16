@@ -63,7 +63,6 @@
 
     const authStore = useAuthStore();
     const sharedEmail = inject('sharedEmail');
-    const currentView = inject('setCurrentView');
     const email = ref(sharedEmail?.value || '');
     const password = ref('');
     const isLoading = ref(false);
@@ -152,7 +151,7 @@
     async function hanldeForgetpassword(){
         console.log('忘記了');
         await new Promise(resolve => setTimeout(resolve, 1000));
-        currentView('forgetpassword');
+        authStore.setloginView('forgetpassword');
 
     };
 

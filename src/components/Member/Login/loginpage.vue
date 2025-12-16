@@ -7,21 +7,21 @@
 
                     <div class="pagebutton">
                         <BasicButton 
-                        :class="{ 'active-tab': currentView == 'enrollment'}"
-                        @click="currentView = 'enrollment'"
+                        :class="{ 'active-tab': authStore.loginView == 'enrollment'}"
+                        @click="authStore.loginView = 'enrollment'"
                         class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
 
                         <BasicButton 
-                        :class="{ 'active-tab': currentView == 'login' || currentView === 'forgetpassword'}"
-                        @click="currentView = 'login'"
+                        :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword'}"
+                        @click="authStore.loginView = 'loginpage'"
                         class="btn-blue-fill"><h4>Login</h4></BasicButton>
                     </div>
                     <div class="pagecontain">
-                        <Logincontain v-if="currentView == 'login'"></Logincontain>
+                        <Logincontain v-if="authStore.loginView == 'loginpage'"></Logincontain>
 
 
-                        <Enrollment v-else-if="currentView == 'enrollment'"></Enrollment>
-                        <Forgetpassword v-else-if="currentView == 'forgetpassword'"></Forgetpassword>
+                        <Enrollment v-else-if="authStore.loginView == 'enrollment'"></Enrollment>
+                        <Forgetpassword v-else-if="authStore.loginView == 'forgetpassword'"></Forgetpassword>
                     <template v-if="!isotherlogin">
                         <div class="otherlogin">
                             <div class="otherlogin-title">
@@ -49,15 +49,11 @@
     import Forgetpassword from './forgetpassword.vue';
 
     const authStore = useAuthStore();
-    const currentView = ref('login');
     const sharedEmail = ref('');
     const setEnrollmentEmail = (email) => {
         sharedEmail.value = email;
     }
 
-    provide('setCurrentView', (viewName) => {
-            currentView.value = viewName;
-    });
 
     provide('sharedEmail', sharedEmail);
     provide('setEnrollmentEmail', setEnrollmentEmail);
@@ -65,8 +61,7 @@
 
 
     const isotherlogin = computed(() => {
-            return  currentView.value == 'forgetpassword';
-
+            return  authStore.loginView == 'forgetpassword';
     });
 </script>
 
