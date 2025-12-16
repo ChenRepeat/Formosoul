@@ -99,15 +99,15 @@ function handlelogout() {
       <ul 
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><router-link to="/"><h5>Home</h5></router-link></li>
-        <li><router-link to="/about"><h5>About</h5></router-link></li>
-        <li><router-link to="/news"><h5>News</h5></router-link></li>
-        <li><router-link to="/annualevent"><h5>Annual Event</h5></router-link></li>
-        <li><router-link to="/professorsintroduction"><h5>Professor</h5></router-link></li>
-        <li><router-link to="/survivalguide"><h5>Survival Guide</h5></router-link></li>
-        <li><router-link to="/shop"><h5>Diagon Alley</h5></router-link></li>
-        <li><router-link to="/classes"><h5>Classes</h5></router-link></li>
-        <li><router-link to="/policy"><h5>Policy</h5></router-link></li>
+        <li><router-link to="/"  @click="toggleMenu"><h5>Home</h5></router-link></li>
+        <li><router-link to="/about"  @click="toggleMenu"><h5>About</h5></router-link></li>
+        <li><router-link to="/news"  @click="toggleMenu"><h5>News</h5></router-link></li>
+        <li><router-link to="/annualevent"  @click="toggleMenu"><h5>Annual Event</h5></router-link></li>
+        <li><router-link to="/professorsintroduction"  @click="toggleMenu"><h5>Professor</h5></router-link></li>
+        <li><router-link to="/survivalguide"  @click="toggleMenu"><h5>Survival Guide</h5></router-link></li>
+        <li><router-link to="/shop"  @click="toggleMenu"><h5>Diagon Alley</h5></router-link></li>
+        <li><router-link to="/classes"  @click="toggleMenu"><h5>Classes</h5></router-link></li>
+        <li><router-link to="/policy"  @click="toggleMenu"><h5>Policy</h5></router-link></li>
       </ul>
       </transition>
 
