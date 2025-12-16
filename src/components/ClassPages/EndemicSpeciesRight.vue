@@ -12,7 +12,7 @@
     <div class="animal-right-contain dp-flex-col">
       <div class="animal-top-topic dp-flex">
         <div class="animal-photo-case">
-          <img src="../../../public/Classes/Salamander.png" alt="" class="salamander">
+          <img src="/Classes/Salamander.png" alt="" class="salamander">
         </div>
         <div class="animal-topic-text dp-flex-col top">
           <h5 class="animal-topic-title">Formosa Salamander</h5>
@@ -25,7 +25,7 @@
           <p>A striking blue bird with a long tail and cooperative family groups, often called “long-tailed mountain lady.”</p>
         </div>
         <div class="animal-photo-case">
-          <img src="../../../public/Classes/BlueBird.png" alt="" class="blue-bird">
+          <img src="/Classes/BlueBird.png" alt="" class="blue-bird">
         </div>
       </div>
     </div>

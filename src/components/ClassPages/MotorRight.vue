@@ -47,7 +47,7 @@
           @click="changeDialog(1)"
           @mousedown.stop
           @touchstart.stop>
-            <img src="../../../public\Classes\motor-right1.png" alt="">
+            <img src="/Classes/motor-right1.png" alt="">
             <div class="over-lay"></div>
           </div>
           <div class="motor-right-iamge"
@@ -55,7 +55,7 @@
           @click="changeDialog(2)"
           @mousedown.stop
           @touchstart.stop>
-            <img src="../../../public\Classes\motor-right2.png" alt="">
+            <img src="/Classes/motor-right2.png" alt="">
             <div class="over-lay"></div>
           </div>
         </div>

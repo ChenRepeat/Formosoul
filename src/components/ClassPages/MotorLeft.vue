@@ -41,7 +41,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="../../../public/Classes/motor-left1.png" 
+          src="/public/Classes/motor-left1.png" 
           alt="" 
           class="motor-photo"
           >
@@ -54,7 +54,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="../../../public/Classes/motor-left2.png" 
+          src="/Classes/motor-left2.png" 
           alt="" 
           class="motor-photo"
           >
@@ -66,7 +66,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="../../../public/Classes/motor-left3.png" 
+          src="/Classes/motor-left3.png" 
           alt="" 
           class="motor-photo "
          >

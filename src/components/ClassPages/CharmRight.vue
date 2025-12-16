@@ -63,8 +63,14 @@ const clearCanvas = () => {
         <input type="range" min="1" max="20" v-model="brushSize" />
       </div>
       <div class="dp-flex btn-case">
-        <BasicButton  @click="clearCanvas">Clear</BasicButton>
-        <BasicButton  @click="">Save</BasicButton>
+        <BasicButton
+          @click="clearCanvas"
+          class="btn-black"
+        >Clear</BasicButton>
+        <BasicButton  
+          @click=""
+          class="btn-black"
+        >Save</BasicButton>
       </div>
     </div>
   </div>
