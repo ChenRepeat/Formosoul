@@ -1,5 +1,14 @@
 <script setup>
+import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '../BasicButton.vue';
+
+const authStore = useAuthStore();
+
+function goToEnroll(){
+    authStore.setmemberView('login');
+    authStore.setloginView('enrollment');
+
+};
 
 </script>
 <template>
@@ -29,7 +38,7 @@ import BasicButton from '../BasicButton.vue';
                     The core is already etched onto your Student Card.
                     Finalize enrollment now, before the energy dissipates.
                 </p>
-                <BasicButton class="btn-yellow-fill">Enroll ＆ Claim Student Card!</BasicButton>
+                <BasicButton class="btn-yellow-fill" @click="goToEnroll">Enroll ＆ Claim Student Card!</BasicButton>
             </div>
         </div>
     </main>

@@ -62,7 +62,7 @@ import BasicButton from '@/components/BasicButton.vue';
 
     const products = ref([
         {
-            images: '../../public/product/PelletDrum.jpg',
+            images: 'product/PelletDrum.jpg',
             name: 'PelletDrum',
             spec: 'large',
             pieces: '1',
@@ -70,7 +70,7 @@ import BasicButton from '@/components/BasicButton.vue';
 
         },
         {
-            images: '../../public/product/PelletDrum.jpg',
+            images: 'product/PelletDrum.jpg',
             name: 'PelletDrum',
             spec: 'large',
             pieces: '1',

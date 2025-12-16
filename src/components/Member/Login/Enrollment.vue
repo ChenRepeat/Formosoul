@@ -79,7 +79,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { inject, ref } from 'vue';
 
-const setCurrentView = inject('setCurrentView');
 const setSharedEmail = inject('setEnrollmentEmail');
 const authStore = useAuthStore();
 
@@ -204,7 +203,7 @@ async function handleEnrollment() {
         authStore.setToken(response.token);
         authStore.setUser(response.user);
         // 這邊寫成跳到登入頁面 成功才會執行
-        setCurrentView('login');
+        authStore.setloginView('loginpage');
         setSharedEmail(email.value);
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';
