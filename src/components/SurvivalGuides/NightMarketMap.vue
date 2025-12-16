@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarketData.js";
 import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
+// import Button from './Button.vue'
 
 //
 const isMapReady = ref(false);
@@ -269,6 +270,14 @@ onMounted (()=>{
                     <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
                 </div>
             </div>
+<!---------------------------------------- back btn -------------------------------------------->            
+            <!-- <div>
+                <button class="main">
+                     <slot>
+                        back to previous page
+                    </slot>
+                </button>
+            </div> -->
         </main>
 </template>
 
