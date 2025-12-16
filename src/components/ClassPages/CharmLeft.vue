@@ -7,73 +7,73 @@
     1: {
         name: 'Talisman of Celestial Banishing',
         intro: 'Wards off misfortune and bad luck influences represented by the "Broom Star."', 
-        imgUrl:'/Classes/charms/charm1.png',
+        imgUrl:'Classes/charms/charm1.png',
     },
     2: {
         name: 'Talisman of Conjugal Concord',
         intro: 'Soothes marital strife; fosters mutual affection and respect between partners.', 
-        imgUrl:'/Classes/charms/charm2.png',
+        imgUrl:'Classes/charms/charm2.png',
     },
     3: {
         name: 'Talisman of Night Terror Repulsion',
         intro: 'Dispels ominous visions; ensures restful sleep free from evil premonitions.', 
-        imgUrl:'/Classes/charms/charm3.png',
+        imgUrl:'Classes/charms/charm3.png',
     },
     4: {
         name: 'Talisman of Feline & Canine Restraint',
         intro: 'A minor ward to prevent pets from pilfering or consuming forbidden victuals.', 
-        imgUrl:'/Classes/charms/charm4.png',
+        imgUrl:'Classes/charms/charm4.png',
     },
     5: {
         name: 'Talisman of Discord Mending',
         intro: 'Mends broken bonds; restores harmony and affectionate understanding between people.', 
-        imgUrl:'/Classes/charms/charm5.png',
+        imgUrl:'Classes/charms/charm5.png',
     },
     6: {
         name: 'Talisman of Hearth & Home Sanctity',
         intro: 'Binds and fortifies the dwelling; grants lasting peace and stability to inhabitants.', 
-        imgUrl:'/Classes/charms/charm6.png',
+        imgUrl:'Classes/charms/charm6.png',
     },
     7: {
         name: `Talisman for Infant's Nocturnal Silence`,
         intro: 'Soothes restless children; ensures infants remain quiet and sleep through the night.', 
-        imgUrl:'/Classes/charms/charm7.png',
+        imgUrl:'Classes/charms/charm7.png',
     }}
   const charmsRow2 = {
     8: {
         name: 'Talisman of Persistent Intruder Removal',
         intro: 'Drives away chronic thievery; secures the premises against repeated burglaries.', 
-        imgUrl:'/Classes/charms/charm8.png',
+        imgUrl:'Classes/charms/charm8.png',
     },
     9: {
         name: 'Talisman Against Travel Adversity',
         intro: 'Guards against perils of transport; ensures a smooth and safe journey by land or water.', 
-        imgUrl:'/Classes/charms/charm9.png',
+        imgUrl:'Classes/charms/charm9.png',
     },
     10: {
         name: 'Talisman of Dawn Awakening',
         intro: 'Instills diligence; compels the user to rise promptly at the break of dawn.', 
-        imgUrl:'/Classes/charms/charm10.png',
+        imgUrl:'Classes/charms/charm10.png',
     },
     11: {
         name: 'Talisman of Fortuitous Chance',
         intro: 'Influences probability, subtly guiding the fall of dice for favorable outcomes.', 
-        imgUrl:'/Classes/charms/charm11.png',
+        imgUrl:'Classes/charms/charm11.png',
     },
     12: {
         name: `Zhuge's Veil of Invisibility`,
         intro: 'A protective charm providing minor camouflage and preventing others from noticing you.', 
-        imgUrl:'/Classes/charms/charm12.png',
+        imgUrl:'Classes/charms/charm12.png',
     },
     13: {
         name: 'Your Own',
         intro: 'A magic charm by you own power and what you thought.', 
-        imgUrl:'/Classes/charms/charm13.png',
+        imgUrl:'Classes/charms/charm13.png',
     },
     14: {
         name: 'Talisman of Oneiric Rendezvous',
         intro: 'Facilitates connection; allows two individuals to meet and communicate within a dream state.', 
-        imgUrl:'/Classes/charms/charm14.png',
+        imgUrl:'Classes/charms/charm14.png',
     },
   };
 

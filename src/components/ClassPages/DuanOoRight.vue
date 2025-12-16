@@ -2,11 +2,11 @@
 const items = {
     1: {
         name: 'JumpRiver',
-        imgSrc: '/Classes/DuanOo3.png'
+        imgSrc: 'Classes/DuanOo3.png'
     },
     2: {
         name: 'StandTheEgg',
-        imgSrc: '/Classes/DuanOo2.png'
+        imgSrc: 'Classes/DuanOo2.png'
     },
 };
 

@@ -6,19 +6,19 @@ import { computed, ref } from 'vue';
       name:'Mo-Bue',
       introEn:'Flat signs fall silent, magic fades, the spirits choose not to answer.',
       introCn:'平符靜落，魔力消散，靈界選擇沉默不語。',
-      imgUrl:'/Classes/MoonFes3.png',
+      imgUrl:'Classes/MoonFes3.png',
     },
     2: {
       name:'Chio-Bue',
       introEn:'Twin curves shimmer with mirth, spirits laugh and deny the caster’s wish.',
       introCn:'雙弧閃爍笑意，靈體戲笑，否定施術者的請求。',
-      imgUrl:'/Classes/MoonFes3.png',
+      imgUrl:'Classes/MoonFes3.png',
     },
     3: {
       name:'Xin-Bue',
       introEn:'One light, one shadow align, magic confirms the spell and grants approval.',
       introCn:'一光一影相合，魔法確認儀式，賜予肯定回應。',
-      imgUrl:'/Classes/MoonFes3.png',
+      imgUrl:'Classes/MoonFes3.png',
     },
   };
     function changeDialog(i){

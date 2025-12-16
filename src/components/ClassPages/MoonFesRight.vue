@@ -1,7 +1,4 @@
 <script setup>
-  import { SizeType } from 'page-flip';
-import BasicButton from '../BasicButton.vue';
-import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
 
   const dialogs = {
     1: 'Today, families enjoy magical lanterns, mooncakes, and storytelling. People cast blessing spells under the full moon, mixing ancient lunar magic with modern celebration and joy.',
@@ -10,11 +7,11 @@ import IconQuadStar from '../icons/SVG/IconQuadStar.vue';
 
   const moonFesPhoto={
     topPhoto:{
-      url:'/Classes/MoonFes3.png',
+      url:'Classes/MoonFes3.png',
       size:'280px'
     },
     bottomPhoto:{
-      url:'/Classes/MoonFes2.png',
+      url:'Classes/MoonFes2.png',
       size:'240px'
     }
   }
