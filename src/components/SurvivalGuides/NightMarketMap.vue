@@ -9,7 +9,9 @@ import GameDice from "./GameDice.vue";
 import BasicButton from "../BasicButton.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-
+const isShow = ref(-1);
+const animationWelcome = ref(false)
+const isGameLocked = ref(true);
 //
 const isMapReady = ref(false);
 
@@ -66,11 +68,33 @@ const startGamePlay = () => {
     }
 };
 
+const csFrame = ref([
+    {
+    id:'welcome',
+    text:'Welcome! \n Feel free to look around—there are different surprises waiting to be discovered.',
+    width:'400px',
+    height:'auto',
+    },
+])
+const welcomeFrame = computed(()=> csFrame.value[0])
+
 onMounted (()=>{
+    isShow.value = 1001;
+
     setTimeout(() => {
         isMapReady.value = true;
-    }, 1500);
+    }, 500);
+
+    setTimeout(()=>{
+        animationWelcome.value=true;
+    },50)
 })
+
+function closeWelcomeFrame (){
+    isShow.value = -1
+    isGameLocked.value = false;
+    animationWelcome.value = false;
+}
 
 </script>
 
@@ -78,6 +102,30 @@ onMounted (()=>{
         <main class="survival-night-market-case">
             <div class="survival-night-market-case-wrapper" :class="{ 'locked': !isMapReady }" >
                 <img class='survival-night-market-case-map' src="/SurvivalGuide/night_market_map_bg-min-no-logo.png" alt="map-base">
+
+<!------------------- 點入的歡迎頁面 ------------------->
+                <div v-if="isGameLocked" class="start-overlay"></div>
+
+                <SurvivalTextFrame class="welcome-text-frame"
+                :style="{ zIndex: isShow}"  
+                :class="{ 'is-visible': animationWelcome }" 
+                :text="welcomeFrame.text"
+                :width="welcomeFrame.width"
+                :height="welcomeFrame.height"
+                tag="h4"
+                align="center"
+                @click="closeWelcomeFrame"
+                >
+                <span>
+                    {{ welcomeFrame.text }}
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                </span>
+                <template #textButton>
+                    START
+                </template>
+                </SurvivalTextFrame>
+
 
 <!-------------------------------------- 夜市美食區塊 -------------------------------------------->
 <!---------------------------------------- 滷肉飯-------------------------------------------->
@@ -257,6 +305,8 @@ onMounted (()=>{
                     :text="currentInfoData.text"
                     :subImg1="currentInfoData.subImg1"
                     :subImg2="currentInfoData.subImg2"
+                    :subImg3="currentInfoData.subImg3"
+                    :subImg4="currentInfoData.subImg4"
                     :buttonText="currentInfoData.buttonText"
                     ></SurvivalFoodIntroductionFrame>
                 </div>
@@ -286,6 +336,41 @@ onMounted (()=>{
 
 <style scoped lang="scss">
 
+// 遮罩
+.start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    background-color: rgba(0, 0, 0, 0.7); 
+    
+    z-index: 1000; 
+    
+    pointer-events: auto; 
+    cursor: default;
+    transition: opacity 0.5s;
+}
+
+// 
+.welcome-text-frame {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, calc(-50% + 20px)); 
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
+
+    transition: opacity 1s ease-out, transform 1s ease-out; 
+    
+    opacity: 0; // 完全透明
+} 
+.welcome-text-frame.is-visible {
+    opacity: 1; 
+    transform: translate(-50%, -50%);;
+}
+
 // 新增回到前頁按鈕
 .btn-blue-fill{
   background-color: $color-fsBlue900;
@@ -301,6 +386,12 @@ onMounted (()=>{
   
   box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4); 
   border: 2px solid white;
+  z-index: 1001;
+  transition: all 0.3s ease-in-out;
+
+  &.btn-blue-fill:hover {
+    transform: scale(1.025);
+  }
 }
 
 // map 的區塊設定

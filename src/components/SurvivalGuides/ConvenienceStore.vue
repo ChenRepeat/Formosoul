@@ -70,8 +70,8 @@ const activeItemData = computed(()=>{
 const csFrame = ref([
     {
     id:'welcome',
-    text:'Welcome!',
-    width:'200px',
+    text:'Welcome! \n Feel free to look around—there are different surprises waiting to be discovered.',
+    width:'400px',
     height:'auto',
     },
 ])
@@ -102,7 +102,7 @@ function closeWelcomeFrame (){
 
                 <div v-if="isGameLocked" class="start-overlay"></div>
 
-
+        <!------------------- 點入的歡迎頁面 ------------------->
                 <img v-show="showFaceOverlay" 
                  :src="currentFace"
                  :class="['face-overlay', currentFaceClass]">
@@ -121,6 +121,11 @@ function closeWelcomeFrame (){
                 align="center"
                 @click="closeWelcomeFrame"
                 >
+                <span>
+                    {{ welcomeFrame.text }}
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                </span>
                 <template #textButton>
                     START
                 </template>
@@ -390,20 +395,12 @@ function closeWelcomeFrame (){
     width: 100%;
     height: 100%;
     
-    // 半透明黑色，營造聚光燈效果
     background-color: rgba(0, 0, 0, 0.7); 
     
-    // 層級設定：
-    // 商品通常是 1~100
-    // 遮罩設 1000 -> 蓋住所有商品
-    // Welcome Frame 設 1001 (在 HTML style 裡設了) -> 浮在遮罩上面
     z-index: 1000; 
     
-    // 禁止滑鼠穿透 (確保下面東西點不到)
     pointer-events: auto; 
     cursor: default;
-    
-    // 加個淡出動畫比較有質感
     transition: opacity 0.5s;
 }
 
@@ -420,12 +417,12 @@ function closeWelcomeFrame (){
         left: 45.1%;
     }
     &.face-left {
-        width: 9.3%;
+        width: 9.1%;
         top: 23.6%;    
-        left: 45.3%;
+        left: 45.5%;
     }
     &.face-right {
-        width: 9.5%;
+        width: 9.2%;
         top: 23.5%;    
         left: 45.2%;
     }
@@ -460,6 +457,13 @@ function closeWelcomeFrame (){
 
   box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4); 
   border: 2px solid white;
+  z-index: 1001;
+
+  transition: all 0.3s ease-in-out;
+
+  &.btn-blue-fill:hover {
+    transform: scale(1.025);
+  }
 }
 
 // map 區塊設定
@@ -497,22 +501,16 @@ function closeWelcomeFrame (){
     outline: 1px solid $color-fsTitle;
     outline-offset: -10px;
 
-    // 1. 設置過渡效果 (Transition)
-    // 讓 opacity 和 transform 屬性的變化有 1 秒的動畫時間
-    // transition 可以用來簡寫多個過渡效果 = 過程，決定了元素從一個狀態（例如 A）到另一個狀態（例如 B）的改變如何發生（花費多少時間、速度曲線
-    // transform 屬性改變時（即位置或大小的變化） = 結果，外觀或位置如何改變
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
-    // 2. 初始隱藏狀態 (元件渲染時的狀態)
     opacity: 0; // 完全透明
-    transform: translateY(20px); // 初始位置在下方 20px
+    transform: translateY(20px); 
 } 
-
-// 3. 最終顯示狀態 (當 animateState 為 true 時)
 .welcome-text-frame.is-visible {
-    opacity: 1; // 完全不透明
-    transform: translateY(0); // 浮到原本的位置
+    opacity: 1; 
+    transform: translateY(0);
 }
+
 
 .cs-img {
     position: absolute;
