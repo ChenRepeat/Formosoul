@@ -398,7 +398,7 @@ function closeWelcomeFrame (){
 .survival-night-market-case {
     background-color: #000;
     width: 100%; 
-    height: 100vh;
+    height: auto;
     position: relative;
     overflow: hidden;
     
@@ -407,7 +407,7 @@ function closeWelcomeFrame (){
 .survival-night-market-case-wrapper {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: auto;
     margin: 0;    
     padding: 0;
     overflow: hidden;
@@ -417,8 +417,7 @@ function closeWelcomeFrame (){
 .survival-night-market-case-map {
     position: relative;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
 
     display: block;
     // z-index: 0;
