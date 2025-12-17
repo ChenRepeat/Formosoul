@@ -240,6 +240,7 @@ onMounted(() => {
   // 所以其他情況我們都不用管，只要抓 'reload' 就好！
 
   function raf(time) {
+    if (!lenis.value) return;
     lenis.value.raf(time);
     requestAnimationFrame(raf);
   }
