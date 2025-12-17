@@ -298,97 +298,97 @@ onUnmounted (() => {
 </script>
 
 <template>
-    <div class="playerbox">
-        <h4>Player {{ result }}</h4>
-        <div class="scorebox">
-            <h3>Score：</h3>
-            <h2 class="scores">{{ totalscore }}</h2>
-        </div>
-    </div>
-
-    <div class="rollHand" 
-    :style="{
-      top: mouseY + 'px',
-      left: mouseX + 'px',
-    }"
-    >
-      <HandBack v-if="isGrabbing"></HandBack>
-      <hand v-else></hand>
-    </div>
-
-    <div class="bowlbox" >
-        <Bowl></Bowl>
-    </div>
-
-    <div class="dice-container">
-        <div class="dicebox"
-             v-show="gameState === 'IDLE' || gameState === 'ROLLING' || gameState === 'CHOOSING'" 
-             v-for="(dice, index) in dicelist" 
-             :key="'player-'+index"
-             :style="{
-                left: (diceOrigins[index].left * 100) + '%',
-                top: (diceOrigins[index].top * 100) + '%',
-                
-                transform: `translate(${dice.translateX}px, ${dice.translateY}px)`,
-                opacity: diceOpacity,
-                transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s'
-             }"
-        >
-            <Dice :Xdeg="dice.x" :Ydeg="dice.y"></Dice>       
-        </div>
-        <div class="dicebox banker-dice" 
-             v-if="gameState === 'BANKER_ROLLING' || gameState === 'RESULT'"
-             v-for="(dice, index) in bankerDicelist" 
-             :key="'banker-'+index"
-             :style="{ 
-                left: (diceOrigins[index].left * 100) + '%',
-                top: (diceOrigins[index].top * 100) + '%',
-
-                transform: `translate(${dice.translateX}px, ${dice.translateY}px)`,
-                opacity: diceOpacity,
-                transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s'              
-             }"
-        >
-            <Dice :Xdeg="dice.x" :Ydeg="dice.y" style="filter: hue-rotate(180deg) brightness(0.9);"></Dice>
-        </div>
-    </div>
-
-    <div class="bankerbox">
-        <h4>banker</h4>
-        <div class="scorebox">
-            <h3>Score：</h3>
-            <h2 class="scores">{{  bankerTotalScore }}</h2>
-        </div>
-    </div>
-
-    <div v-if="gameState === 'CHOOSING'" class="overlay-modal">
-        <div class="modal-content">
-            <h2>Make a Choice!</h2>
-            <p>Your Score: {{ totalscore }}</p>
-            <div class="btn-group">
-                <button class="btn-big" @click="chooseSide('BIG')">BIG</button>
-                <button class="btn-small" @click="chooseSide('SMALL')">SMALL</button>
+        <div class="playerbox">
+            <h4>Player {{ result }}</h4>
+            <div class="scorebox">
+                <h3>Score</h3>
+                <h2 class="scores" :class="{ 'score-up': totalscore >= 10 }">{{ totalscore }}</h2>
             </div>
         </div>
-    </div>
 
-    <div v-if="gameState === 'RESULT'" class="overlay-modal">
-        <div class="modal-content">
-            <h1>{{ finalMessage }}</h1>
-            <p>You chose: <strong>{{ playerChoice }}</strong></p>
-            <div class="result-details">
-                <span>Player: {{ totalscore }}</span> vs <span>Banker: {{ bankerTotalScore }}</span>
-            </div>
-            <button class="btn-retry" @click="resetGame">PLAY AGAIN</button>
+        <div class="rollHand" 
+        :style="{
+        top: mouseY + 'px',
+        left: mouseX + 'px',
+        }"
+        >
+        <HandBack v-if="isGrabbing"></HandBack>
+        <hand v-else></hand>
         </div>
-    </div>
 
+        <div class="bowlbox" >
+            <Bowl></Bowl>
+        </div>
+
+        <div class="dice-container">
+            <div class="dicebox"
+                v-show="gameState === 'IDLE' || gameState === 'ROLLING' || gameState === 'CHOOSING'" 
+                v-for="(dice, index) in dicelist" 
+                :key="'player-'+index"
+                :style="{
+                    left: (diceOrigins[index].left * 100) + '%',
+                    top: (diceOrigins[index].top * 100) + '%',
+                    
+                    transform: `translate(${dice.translateX}px, ${dice.translateY}px)`,
+                    opacity: diceOpacity,
+                    transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s'
+                }"
+            >
+                <Dice :Xdeg="dice.x" :Ydeg="dice.y"></Dice>       
+            </div>
+            <div class="dicebox banker-dice" 
+                v-if="gameState === 'BANKER_ROLLING' || gameState === 'RESULT'"
+                v-for="(dice, index) in bankerDicelist" 
+                :key="'banker-'+index"
+                :style="{ 
+                    left: (diceOrigins[index].left * 100) + '%',
+                    top: (diceOrigins[index].top * 100) + '%',
+
+                    transform: `translate(${dice.translateX}px, ${dice.translateY}px)`,
+                    opacity: diceOpacity,
+                    transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s'              
+                }"
+            >
+                <Dice :Xdeg="dice.x" :Ydeg="dice.y" style="filter: hue-rotate(180deg) brightness(0.9);"></Dice>
+            </div>
+        </div>
+
+        <div class="bankerbox">
+            <h4>banker</h4>
+            <div class="scorebox">
+                <h3>Score</h3>
+                <h2 class="scores" :class="{ 'score-up': bankerTotalScore >= 10 }">{{  bankerTotalScore }}</h2>
+            </div>
+        </div>
+
+        <div v-if="gameState === 'CHOOSING'" class="overlay-modal">
+            <div class="modal-content">
+                <h2>Make a Choice!</h2>
+                <p>Your Score: {{ totalscore }}</p>
+                <div class="btn-group">
+                    <button class="btn-big" @click="chooseSide('BIG')">BIG</button>
+                    <button class="btn-small" @click="chooseSide('SMALL')">SMALL</button>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="gameState === 'RESULT'" class="overlay-modal">
+            <div class="modal-content">
+                <h1>{{ finalMessage }}</h1>
+                <p>You chose: <strong>{{ playerChoice }}</strong></p>
+                <div class="result-details">
+                    <span>Player: {{ totalscore }}</span> vs <span>Banker: {{ bankerTotalScore }}</span>
+                </div>
+                <button class="btn-retry" @click="resetGame">PLAY AGAIN</button>
+            </div>
+        </div>
 </template>
 
 
 <style lang="scss" scoped>
 
     /* 移除了 .drop-wrapper 樣式 */
+
 
     .bowlbox{
         position: absolute;
@@ -439,30 +439,46 @@ onUnmounted (() => {
     .bankerbox,
     .playerbox{
         width: 200px;
-        height: 200px;
+        height: auto;
         text-align: center;
         border: 5px solid $color-fsGold;
         border-radius: 7px;
-        box-sizing: border-box;
         padding-bottom: 20px;
+        background-color: $color-fsBlue;
+    }
+
+    .bankerbox h4,
+    .playerbox h4 {
+        color: $color-fsWhite;
+        font-weight: bold;
+    }
+
+    .bankerbox h3,
+    .playerbox h3 {
+        font-weight: bold;
     }
 
     .scores {
         font-weight: bold;
     }
 
+    .score-up {
+        color: $color-fsRed;
+        transform: scale(1.1);
+    }
+
     .bankerbox{
         position: absolute;
         margin-left: auto;
         top: 50%;
-        right: 0;
+        right: 3%;
         transform: translate(0, -50%); 
     }
     .playerbox{
         position: absolute;
         margin-left: auto;
         top: 50%;
-        left: 0;
+        left: 3%;
         transform: translate(0, -50%); 
     }
 
