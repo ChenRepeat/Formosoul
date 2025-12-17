@@ -16,9 +16,9 @@ const canvasRef = ref(null);
 // 新增 line 格式: [baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset, lineWidth]
 const line = [
   [260, 0.8, 50, 0.2, '#F0F7FF', '#041426', 0.8, 2],
-  [260, 0.8, 80, 1, '#F0F7FF', '#041426', 0, 1],
-  [260, 0.8, 20, 0.6, '#F0F7FF', '#041426', 0, 3.5],
-  [260, 0.8, 110, 0, '#F0F7FF', '#041426', 0, 0.2],
+  [260, 0.8, 80, 1, '#F0F7FF', '#041426', 3, 1],
+  [260, 0.8, 20, 0.6, '#F0F7FF', '#041426', 5, 3.5],
+  [260, 0.8, 110, 0, '#F0F7FF', '#041426', 10, 0.2],
 ];
 
 
@@ -65,7 +65,7 @@ onMounted(() => {
     draw() {
       const w = canvas.width;
       const segments = 100;
-      const segmentWidth = w / segments;
+      // const segmentWidth = w / segments;
 
       const gradient = context.createLinearGradient(0, 0, w, 0);
       
