@@ -323,7 +323,7 @@ function closeWelcomeFrame (){
                 </div>
             </div>
 <!---------------------------------------- back btn -------------------------------------------->            
-            <div>
+            <div v-show="!isGameModalOpen">
                 <RouterLink :to="{
                     name:'SurvivalGuide'
                 }">
@@ -398,15 +398,16 @@ function closeWelcomeFrame (){
 .survival-night-market-case {
     background-color: #000;
     width: 100%; 
-    height: auto;
+    height: 100vh;
     position: relative;
     overflow: hidden;
+    
 }
 
 .survival-night-market-case-wrapper {
     position: relative;
     width: 100%;
-    height: auto;
+    height: 100%;
     margin: 0;    
     padding: 0;
     overflow: hidden;
@@ -416,7 +417,8 @@ function closeWelcomeFrame (){
 .survival-night-market-case-map {
     position: relative;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 
     display: block;
     // z-index: 0;
