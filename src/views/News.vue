@@ -257,7 +257,7 @@ onMounted(() => {
 
     const parallaxCards = document.querySelectorAll(".news-parallax-card");
     parallaxCards.forEach((el) => {
-      const speed = el.getAttribute("data-speed");
+      const speed = parseFloat(el.getAttribute("data-speed"));;
       gsap.to(el, {
         y: speed,
         ease: "none",
@@ -314,13 +314,6 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <section class="news-quote-section">
-      <div class="news-quote-content">
-        <h5>Curiosity, friction, iteration:</h5>
-        <h5>The machinery of my design</h5>
-      </div>
-    </section>
-
     <section class="news-updates-section">
       <div class="news-updates-header">
         <h2 class="news-updates-title">UPDATES</h2>
@@ -346,7 +339,7 @@ onUnmounted(() => {
 .news-parallax-section {
   position: relative;
   width: 100%;
-  height: 550vh;
+  height: 950vh;
   overflow: hidden;
   background-color: #0a0a0a;
 }
@@ -379,7 +372,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 99;
 }
 
 .news-parallax-card {
@@ -388,6 +381,7 @@ onUnmounted(() => {
   height: 290px;
   will-change: transform;
   pointer-events:none;
+  z-index: 999;
 }
 
 .news-card-inner {
@@ -404,28 +398,6 @@ onUnmounted(() => {
   height: 100%;
   object-fit: cover;
   filter: sepia(20%) contrast(110%);
-}
-
-
-/* --- 引言區塊 --- */
-.news-quote-section {
-  width: 100%;
-  height: 100vh;
-  background-color: #0a0a0a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 30;
-}
-
-.news-quote-content {
-  text-align: center;
-  color: #e0e0e0;
-
-  line-height: 2;
-  letter-spacing: 1px;
-  opacity: 0.9;
 }
 
 /*Updates 區*/

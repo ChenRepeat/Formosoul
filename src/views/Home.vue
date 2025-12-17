@@ -33,7 +33,6 @@ import gsap from 'gsap';
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
 import { useRouter } from 'vue-router';
 
-
 const router = useRouter();
 // --- Refs ---
 const containerRef = ref(null);
@@ -54,7 +53,6 @@ let isDragging = false;
 let draggedSnitchIdx = -1;
 let raycaster, mouse, dragPlane, dragOffset;
 let clock;
-
 
 const baseURL = import.meta.env.BASE_URL;
 // 記錄點擊起始位置
@@ -111,21 +109,17 @@ function updateDockedSnitchLock() {
   hero.group.position.copy(newPos);
 }
 
-// ★★★ 修正 1：統一數學邏輯並加入 idx 參數 ★★★
 // 取得目前的理論軌道位置 (不包含 Offset)
 function getOrbitPosition(s, t, idx) {
-  const zNarrowFactor = 0.6; // 用於縮放 z 軸，讓它變成橢圓，避免飛出螢幕
-
+  const zNarrowFactor = 0.6; // 用於縮放 z 軸
   const currentAngle = t * s.speed + s.phase;
   const rNow = s.radius; 
   
-  // 計算橢圓軌道 (縮放 z，與 animate 邏輯一致)
   const xBase = rNow * Math.cos(currentAngle);
-  const zBase = rNow * Math.sin(currentAngle)* zNarrowFactor;
+  const zBase = rNow * Math.sin(currentAngle) * zNarrowFactor;
   
   // Y 軸波動
   const waveY = Math.sin(currentAngle * s.yFreq + s.phase) * s.yAmp;
-  // 使用 idx 確保浮動計算與 animate 迴圈一致
   const floatY = Math.sin(t * 1.5 + idx) * 0.15; 
   const yTotal = waveY + floatY;
 
@@ -162,7 +156,6 @@ const onLetterClose = () => {
   if (hero) {
     hero.isDocked = true; 
     hero.isFront = true; 
-    if (hero.heroLight) hero.heroLight.intensity = 4.6; 
   }
   if (socketVisualRef.value) socketVisualRef.value.classList.add('home-docked');
 };
@@ -175,7 +168,7 @@ function onDragStart(event) {
   clickStartPos = { x: pos.x, y: pos.y };
 
   if (snitches[0] && snitches[0].isDocked) {
-      // 允許點擊選單，不 return
+      // 允許點擊選單
   }
 
   const intersects = getIntersects(event);
@@ -260,7 +253,6 @@ function onDragEnd() {
       const hero = snitches[0];
       const dist = getScreenDistanceToHole(hero.group.position);
       
-      // 判定範圍維持 80 (或你設定的 50)
       if (dist < 80) {
         const targetPos = getHoleWorldPos();
         hero.isDocked = true;
@@ -270,7 +262,6 @@ function onDragEnd() {
         hero.group.lookAt(0, 0, 0);
         hero.isFront = true;
 
-        if (hero.heroLight) hero.heroLight.intensity = 4.6;
         if (socketVisualRef.value) socketVisualRef.value.classList.add('home-docked');
 
         letterOverlayRef.value.style.display = 'flex';
@@ -304,11 +295,9 @@ function onDragEnd() {
       if (socketVisualRef.value) socketVisualRef.value.classList.remove('home-active');
     }
 
-    // --- 平滑回歸邏輯 ---
     const s = snitches[draggedSnitchIdx];
     const t = clock.getElapsedTime();
     
-    // ★★★ 修正 2：傳入 draggedSnitchIdx 以確保計算正確 ★★★
     const targetOrbitPos = getOrbitPosition(s, t, draggedSnitchIdx);
     
     s.returningOffset.copy(s.group.position).sub(targetOrbitPos);
@@ -419,21 +408,44 @@ function onWindowResize() {
   updateDockedSnitchLock();
 }
 
-// ★★★ 修正 3：Animate 函式完全平滑化 (Unified Math) ★★★
 function animate() {
   animationId = requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
   const duration = 3.0; 
-  const u = Math.min(1, t / duration); // u 從 0 跑到 1
+  const u = Math.min(1, t / duration); 
   const easeOutCubic = (x) => 1 - Math.pow(1 - x, 5);
 
+  const breatheSpeed = 3.0;
+  const breatheFactor = (Math.sin(t * breatheSpeed) + 1) / 2;
+
   snitches.forEach((s, idx) => {
+    
+    // 視覺更新
+    if (s.isHero) {
+      let targetLightIntensity = 2.0; 
+      let targetEmissive = 0.4;
+
+      if (s.isDocked) {
+        targetLightIntensity = 4.7;
+        targetEmissive = 1.2;
+      } else if (isDragging && draggedSnitchIdx === idx) {
+        targetLightIntensity = 4.0;
+        targetEmissive = 1.0;
+      } else {
+        targetLightIntensity = 2.0 + breatheFactor * 1.5; 
+        targetEmissive = 0.6 + breatheFactor * 0.6;
+      }
+
+      if (s.heroLight) s.heroLight.intensity = targetLightIntensity;
+      if (s.mainMaterial) s.mainMaterial.emissiveIntensity = targetEmissive;
+    }
+
+    // 物理與位置邏輯
     if (s.isHero && s.isDocked) {
       if (s.lockedPosition) s.group.position.copy(s.lockedPosition);
       s.group.lookAt(0, 0, 0);
-      if (s.heroLight) s.heroLight.intensity = 4.7;
       s.isFront = true;
-      return;
+      return; 
     }
 
     if (isDragging && draggedSnitchIdx === idx) {
@@ -443,40 +455,25 @@ function animate() {
       s.wings[0].rotation.x = Math.cos(t * 37) * 0.25;
       s.wings[1].rotation.x = Math.cos(t * 37) * 0.25;
       s.isFront = s.group.position.z > 0;
-      return;
+      return; 
     }
 
-    // --- 統一飛行邏輯 (解決卡頓問題) ---
-    
-    // 1. 計算螺旋角度 (當 u=1 時，extraAngle 平滑變為 0)
     const spiralRotations = 3.0;
     const extraAngle = u < 1 ? -spiralRotations * Math.PI * 2 * (1 - easeOutCubic(u)) : 0;
-    
-    // 2. 基礎角度
     const currentAngle = t * s.speed + s.phase + extraAngle;
-    
-    // 3. 半徑展開 (隨著 u 變大，rNow 逐漸變成完整的 s.radius)
     const rNow = s.radius * easeOutCubic(u);
     
-    // 4. 位置計算 (使用相同的縮放係數)
     const zNarrowFactor = 0.65; 
     const xBase = rNow * Math.cos(currentAngle)
     const zBase = rNow * Math.sin(currentAngle) * zNarrowFactor;
     
-    // 5. Y 軸波動 + 展開
     const waveY = Math.sin(currentAngle * s.yFreq + s.phase) * s.yAmp;
-    // 加入 idx 以確保數學運算一致
     const floatY = Math.sin(t * 1.5 + idx) * 0.15; 
-    
-    // Y 軸高度也隨著開場展開
     const yTotal = (waveY + floatY) * easeOutCubic(u);
 
-    // 6. 最終賦值：數學軌道 + 回歸偏移量
     s.group.position.set(xBase, yTotal, zBase).add(s.returningOffset);
-    
     s.group.lookAt(0, 0, 0);
 
-    // 翅膀動畫
     const flap = Math.sin(t * s.flapSpeed + s.phase) * 0.5;
     s.wings[0].rotation.z = -0.5 + flap * 0.6;
     s.wings[1].rotation.z = 0.5 - flap * 0.6;
@@ -618,6 +615,7 @@ function initSnitches(loader) {
   const createSnitch = (isHero, linkData) => {
     const group = new THREE.Group();
     let bodyMesh;
+    let mainMaterial = null;
 
     if (isHero) {
       bodyMesh = new THREE.Mesh(ballGeometry, heroBallMaterial);
@@ -625,8 +623,9 @@ function initSnitches(loader) {
       bodyMesh.receiveShadow = true;
       bodyMesh.raycast = () => {}; 
       group.add(bodyMesh);
+      mainMaterial = heroBallMaterial;
 
-      const heroLight = new THREE.PointLight(0xffe400, 2.8, 2.3);
+      const heroLight = new THREE.PointLight(0xffe400, 2.5, 2.3);
       group.add(heroLight);
       group.scale.set(1.6, 1.6, 1.6);
 
@@ -691,7 +690,7 @@ function initSnitches(loader) {
     group.add(rPivot);
 
     const heroLight = isHero ? group.children.find(c => c.isPointLight) : null;
-    return { group, wings: [lPivot, rPivot], heroLight };
+    return { group, wings: [lPivot, rPivot], heroLight, mainMaterial };
   };
 
   const isMobile = checkIsMobile();
@@ -733,6 +732,7 @@ function initSnitches(loader) {
       group: snitch.group,
       wings: snitch.wings,
       heroLight: snitch.heroLight,
+      mainMaterial: snitch.mainMaterial,
       radius,
       randR,
       yAmp,
@@ -752,6 +752,28 @@ function initSnitches(loader) {
 </script>
 
 <style lang="scss" scoped>
+// 將 Keyframes 放在最上面確保優先權
+@keyframes home-socket-pulse {
+  0% {
+    // 初始狀態
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 10px rgba(255, 236, 126, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    // 呼吸變強 & 微微放大
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 35px #ffcc46;
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    // 回到初始
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 10px rgba(255, 236, 126, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
 :global(body.home-hover-link) {
   cursor: pointer !important;
 }
@@ -803,12 +825,6 @@ canvas {
     transform: translate(-50%, -50%) scale(0.05);
     filter: blur(10px) brightness(2);
   }
-  // 40% {
-  //   opacity: 1;
-  // }
-  // 60% {
-  //  opacity: 1;
-  // }
   100% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -831,16 +847,24 @@ canvas {
   );
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.4s ease-out;
   z-index: 5;
   pointer-events: none;
+
+  // ★★★ 重要：套用動畫並移除通用的 transition: all 以免衝突 ★★★
+  animation: home-socket-pulse 3s infinite ease-in-out;
+  // 針對背景色變化時才做 transition，不要 transition box-shadow
+  transition: background 0.4s ease-out; 
 }
+
 @media (max-width: 768px) {
   #home-socket-visual {
     width: 12%;
   }
 }
+
+// 拖曳時：關閉動畫，轉為恆亮
 #home-socket-visual.home-active {
+  animation: none; 
   background: radial-gradient(
     circle,
     rgba(255, 255, 255, 1) 10%,
@@ -855,7 +879,11 @@ canvas {
     0 0 40px rgba(255, 215, 0, 0.6),
     0 0 80px rgba(255, 100, 0, 0.4),
     0 0 120px rgba(255, 255, 255, 0.2);
+  
+  // 這裡需要重新加回 transition 以處理變大變亮的效果
+  transition: all 0.4s ease-out; 
 }
+
 #home-socket-visual::after {
   content: '';
   position: absolute;
@@ -875,10 +903,12 @@ canvas {
   transition: opacity 0.3s;
   z-index: -1;
 }
+
 #home-socket-visual.home-active::after {
   opacity: 1;
   animation: home-glowBreathe 2s ease-in-out infinite alternate;
 }
+
 @keyframes home-glowBreathe {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -889,7 +919,10 @@ canvas {
     opacity: 0.8;
   }
 }
+
+// 停泊後：關閉動畫，保持恆亮
 #home-socket-visual.home-docked {
+  animation: none;
   background: #fff;
   border-color: #fff;
   transform: translate(-50%, -50%) scale(0.8);
