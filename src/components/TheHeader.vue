@@ -131,7 +131,6 @@ function handlelogout() {
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
         <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
-<<<<<<< HEAD
         <li><router-link to="/member/information" @click="closeMenu"><h5>information</h5></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h5>changepassword</h5></router-link></li>
         <li><router-link to="/member/orderslist" @click="closeMenu"><h5>orderslist</h5></router-link></li>
@@ -140,10 +139,6 @@ function handlelogout() {
         <hr class="memberhr">
         <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
         <li @click="handlelogout" class="logout"><h5>logout</h5></li>
-=======
-        <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
-
->>>>>>> Repeat
       </ul>
       </transition>
     </div>
@@ -231,6 +226,12 @@ img { object-fit: none; }
 .header-link.open {
   height: 100vh; 
 }
+<<<<<<< HEAD
+=======
+.header-link.open:has(.member-list){
+  height: 280px;
+}
+>>>>>>> 5ec69655f0b7087ae81fa3501254a3d0f6e8bf97
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
 .liquidGlass-wrapper {
