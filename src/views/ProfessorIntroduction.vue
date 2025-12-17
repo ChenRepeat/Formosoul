@@ -464,7 +464,7 @@ z-index: 80;
  // ------------------------大卡片-----------------------------
 
 .professor-page-wrapper{
-  background-color: $color-fsTitle;
+  // background-color: #000;
   padding-top: 80px;
 }
 // non-CAROUSEL styles↑-------------
