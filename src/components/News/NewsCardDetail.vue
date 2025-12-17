@@ -261,7 +261,7 @@ watch(
     color: white;
     cursor: pointer;
     position: relative;
-    z-index: 9999;
+    z-index: 99;
   }
   .bread-crumb a:hover{
     color: blue;
@@ -274,7 +274,7 @@ watch(
     width: 315px;
     flex-shrink: 0;
     margin-right: 64px;
-    z-index: 9999;
+    z-index: 99;
   }
   .content-container ul{
     background-color: #fff;
