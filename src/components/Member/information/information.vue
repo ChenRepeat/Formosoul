@@ -1,17 +1,16 @@
 <template>
     <div class="information-wrapper">
-        
-        <Cardpage v-if="authStore.memberView == 'membercard'" hasgap haspadding fontscolor></Cardpage>
-        <Ledgerpage v-else-if="authStore.memberView == 'ledger'"  hasgap haspadding fontscolor></Ledgerpage>
+        <!-- <Cardpage></Cardpage>         -->
+        <Cardpage v-if="authStore.informationView == 'membercard'" hasgap haspadding fontscolor ></Cardpage>
+        <Ledgerpage v-else-if="authStore.informationView == 'ledger'"  hasgap haspadding fontscolor withoutbtn hascenter></Ledgerpage>
         <!-- withoutbtn -->
     </div>
 </template>
 
 <script setup>
-    import { inject, provide, ref } from 'vue';
     import Cardpage from '../Login/cardpage.vue';
     import Ledgerpage from '../Login/ledgerpage.vue';
-import { useAuthStore } from '@/stores/autoStore';
+    import { useAuthStore } from '@/stores/autoStore';
 
     
     const authStore = useAuthStore();

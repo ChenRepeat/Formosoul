@@ -120,6 +120,9 @@ const router = createRouter({
       path: '/survivalrules',
       name: 'SurvivalRules',
       component: SurvivalRules,
+      meta:{ 
+        bgColor:'transparent',
+      },
       children: [
         {
           path: '',

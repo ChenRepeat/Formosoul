@@ -18,9 +18,9 @@
                 <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">Every action counts toward the House Cup!</h5>
             </div>
         </div>
-        <div class="buttonarea">
-        <BasicButton class="btn-gray-fill" @click="goback"><h6>Back To Student Card</h6></BasicButton>
-        <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}"><h6>Embark on the Formosoul Adventure</h6></BasicButton>
+        <div class="buttonarea" :class="{ 'hascenter': hascenter}">
+            <BasicButton class="btn-gray-fill" @click="goback" ><h6>Back To Student Card</h6></BasicButton>
+            <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}"><h6>Embark on the Formosoul Adventure</h6></BasicButton>
         </div>
     </div>
 </template>
@@ -48,6 +48,10 @@ import Pointcard from '../information/pointcard.vue';
             type:Boolean,
             default:false,
         },
+        hascenter:{
+            type:Boolean,
+            default:false,
+        }
     });
     const authStore = useAuthStore();
     function handleEmbark() {
@@ -56,6 +60,7 @@ import Pointcard from '../information/pointcard.vue';
 
     function goback(){
         authStore.setmemberView('membercard');
+        authStore.setinformationView('membercard');
     };
 </script>
 
@@ -145,5 +150,9 @@ import Pointcard from '../information/pointcard.vue';
         width: 100%;
         display: flex;
         justify-content: space-between;
+        &.hascenter{
+            justify-content: center;    
+        }
     }
+
 </style>
