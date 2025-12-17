@@ -1,5 +1,10 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
+
+  const currentPage = ref(1)
+  const pageSize = ref(10)
+  const total = ref(50)
+
   const memberSearch = ref('')
   const memberData = ref([
       {
@@ -92,7 +97,317 @@
         isAdmin: 0,
         memberStatus: 1,
       },
+            {
+        id: 'M2025110001',
+        name: 'Wang Xiaoming',
+        email: 'user123@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-01-10',
+        isAdmin: 1,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110002',
+        name: 'Chen Yijun',
+        email: 'user11155@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-02-22',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110003',
+        name: 'Lin Zhihao',
+        email: 'user222222@gmail.com',
+        pointsCard: '4/7',
+        registerDate: '2025-03-02',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110004',
+        name: 'Wu Peiling',
+        email: 'user3332334@gmail.com',
+        pointsCard: '6/7',
+        registerDate: '2025-04-10',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110005',
+        name: 'Huang Jianwei',
+        email: 'user444@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-05-12',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110006',
+        name: 'Liu Xiuying',
+        email: 'user555@gmail.com',
+        pointsCard: '3/7',
+        registerDate: '2025-06-15',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110007',
+        name: 'Zheng Minghui',
+        email: 'user666@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-03-01',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110008',
+        name: 'Xu Zihao',
+        email: 'user777@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-03-19',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110009',
+        name: 'Cai Yuting',
+        email: 'user8842328@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-11-22',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110010',
+        name: 'Zhang Jiaying',
+        email: 'user93232394449@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-10-20',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110001',
+        name: 'Wang Xiaoming',
+        email: 'user123@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-01-10',
+        isAdmin: 1,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110002',
+        name: 'Chen Yijun',
+        email: 'user11155@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-02-22',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110003',
+        name: 'Lin Zhihao',
+        email: 'user222222@gmail.com',
+        pointsCard: '4/7',
+        registerDate: '2025-03-02',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110004',
+        name: 'Wu Peiling',
+        email: 'user3332334@gmail.com',
+        pointsCard: '6/7',
+        registerDate: '2025-04-10',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110005',
+        name: 'Huang Jianwei',
+        email: 'user444@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-05-12',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110006',
+        name: 'Liu Xiuying',
+        email: 'user555@gmail.com',
+        pointsCard: '3/7',
+        registerDate: '2025-06-15',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110007',
+        name: 'Zheng Minghui',
+        email: 'user666@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-03-01',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110008',
+        name: 'Xu Zihao',
+        email: 'user777@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-03-19',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110009',
+        name: 'Cai Yuting',
+        email: 'user8842328@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-11-22',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110010',
+        name: 'Zhang Jiaying',
+        email: 'user93232394449@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-10-20',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110001',
+        name: 'Wang Xiaoming',
+        email: 'user123@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-01-10',
+        isAdmin: 1,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110002',
+        name: 'Chen Yijun',
+        email: 'user11155@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-02-22',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110003',
+        name: 'Lin Zhihao',
+        email: 'user222222@gmail.com',
+        pointsCard: '4/7',
+        registerDate: '2025-03-02',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110004',
+        name: 'Wu Peiling',
+        email: 'user3332334@gmail.com',
+        pointsCard: '6/7',
+        registerDate: '2025-04-10',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110005',
+        name: 'Huang Jianwei',
+        email: 'user444@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-05-12',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110006',
+        name: 'Liu Xiuying',
+        email: 'user555@gmail.com',
+        pointsCard: '3/7',
+        registerDate: '2025-06-15',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110007',
+        name: 'Zheng Minghui',
+        email: 'user666@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-03-01',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110008',
+        name: 'Xu Zihao',
+        email: 'user777@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-03-19',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110009',
+        name: 'Cai Yuting',
+        email: 'user8842328@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-11-22',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110010',
+        name: 'Zhang Jiaying',
+        email: 'user93232394449@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-10-20',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110001',
+        name: 'Wang Xiaoming',
+        email: 'user123@gmail.com',
+        pointsCard: '2/7',
+        registerDate: '2025-01-10',
+        isAdmin: 1,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110002',
+        name: 'Chen Yijun',
+        email: 'user11155@gmail.com',
+        pointsCard: '5/7',
+        registerDate: '2025-02-22',
+        isAdmin: 0,
+        memberStatus: 0,
+      },
+            {
+        id: 'M2025110003',
+        name: 'Lin Zhihao',
+        email: 'user222222@gmail.com',
+        pointsCard: '4/7',
+        registerDate: '2025-03-02',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
+            {
+        id: 'M2025110004',
+        name: 'Wu Peiling',
+        email: 'user3332334@gmail.com',
+        pointsCard: '6/7',
+        registerDate: '2025-04-10',
+        isAdmin: 0,
+        memberStatus: 1,
+      },
   ])
+
+  const pagedData = computed( () => {
+    return memberData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  })
 
 </script>
 <template>
@@ -103,7 +418,7 @@
       <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input>
       <el-button class="add-btn" round>新增會員</el-button>
     </div>
-    <el-table :data="memberData" stripe>
+    <el-table :data="pagedData" stripe>
       <el-table-column label="會員編號" prop="id"  width="125px"></el-table-column>
       <el-table-column label="姓名" prop="name" width="160px"></el-table-column>
       <el-table-column label="Email" prop="email"></el-table-column>
@@ -133,6 +448,12 @@
         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
       </el-table-column>
     </el-table>
+    <el-pagination 
+      v-model:current-page="currentPage"
+      :total="total"
+      layout="total, prev, pager, next, jumper"
+      background
+    />
   </div>
 </template>
 <style lang="scss" scoped>
@@ -165,4 +486,5 @@
 :deep(.el-table .el-table__cell) {
   padding: 4px 0;
 }
+
 </style>

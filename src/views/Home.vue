@@ -557,7 +557,7 @@ onUnmounted(() => {
 
 function initSnitches(loader) {
   const heroBallMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffec7e, metalness: 1, roughness: 0.07, emissive: 0xffe400, emissiveIntensity: 0.62,
+    color: 0xffec7e, metalness: 1, roughness: 0.2, emissive: 0xffe400, emissiveIntensity: 0.62,
   });
   const ballGeometry = new THREE.SphereGeometry(0.12, 32, 32);
 

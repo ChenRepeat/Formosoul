@@ -368,8 +368,7 @@ watch(
     color: #fff;
     text-decoration: none;
     position: relative;
-    margin-top: 140px;
-    margin-right: -60px;
+    margin: 140px -60px 100px 0;
     transition: all 0.3s ease;
   }
 

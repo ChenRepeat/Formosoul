@@ -309,7 +309,7 @@ onUnmounted(() => {
   }
 
   /* 2. 圖標內的光暈 */
-  .svg-inline--fa {
+  :deep(.svg-inline--fa) {
     animation: glow-breath 2s infinite ease-in-out;
   }
 

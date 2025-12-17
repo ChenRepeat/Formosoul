@@ -1,17 +1,30 @@
 <script setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { computed } from "vue";
+import AdminHeader from "@/components/Admin/AdminHeader.vue";
 
 const router = useRouter();
+const route = useRoute();
+
+const activeMenu = computed(() => {
+  if(route.path === '/tjd103/admin'){
+    return '/tjd103/admin/member-management'
+  }
+  return route.path;
+})
+
 </script>
 
 <template>
-      <el-header>Header</el-header>
+  <el-header>
+    <AdminHeader />
+  </el-header>
   <el-container class="layout-container">
 
     <el-container>
       <el-aside width="200px" class="aside-container">
         <div><h6>後台管理系統</h6></div>
-        <el-menu router>
+        <el-menu router :default-active="activeMenu">
           <el-menu-item index="/admin/member-management">會員管理</el-menu-item>
           <el-menu-item index="/admin/product-management">商品管理</el-menu-item>
           <el-menu-item index="/admin/order-management">訂單管理</el-menu-item>
@@ -42,6 +55,7 @@ const router = useRouter();
   text-align: center;
   line-height: 60px;
   width: 100vw;
+  padding: 0;
 }
 .el-aside {
   background-color: #FFF;
