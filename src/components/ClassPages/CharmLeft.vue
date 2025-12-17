@@ -1,7 +1,7 @@
 <script setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { computed , ref , Transition } from 'vue';
-
+  const rightArrow = ref(null);
   const clickCharm = ref('0');
   const charmsRow1 = {
     1: {
@@ -124,7 +124,8 @@
         :key="key"
         @click="changeIntro(key)"
         @mousedown.stop
-        @touchstart.stop>
+        @touchstart.stop
+        :class="{userDrowed:key==13}">
         <img 
             :src="charm.imgUrl" 
             :alt="charm.name"
@@ -161,6 +162,9 @@
             :alt="item.name">
           </div>
           <p>{{ currentIntro.intro }}</p>
+          <p v-if="clickCharm==13" class="userDraw">Draw Your Own 
+            <font-awesome-icon icon="fa-solid fa-circle-right" class="rightArrow"/>
+          </p>
           </div>
       </div>
       </Transition>
@@ -260,6 +264,26 @@
 }
 .show{
     opacity: 0.8;
+}
+.userDraw{
+  margin-top: 5%;
+  text-align: right;
+}
+.userDrowed{
+  animation: changeShadow 1s ease infinite;
+}
+.rightArrow{
+  animation: changeColor 0.5s ease infinite;
+}
+@keyframes changeColor {
+  0%{color:$color-fsGold}
+  50%{color: $color-fsTitle;}
+  100%{color:$color-fsGold}
+}
+@keyframes changeShadow {
+  0%{box-shadow: 0px 0px 12px $color-fsGold;}
+  50%{box-shadow: 0px 0px 6px $color-fsGold;}
+  100%{box-shadow: 0px 0px 12px $color-fsGold;}
 }
 .fade-enter-active,.fade-leave-active {
   transition: opacity 0.5s ease;

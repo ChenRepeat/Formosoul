@@ -20,6 +20,8 @@
         <img src="/Classes/QiYuan.png" alt="">
         <h5>Qu Yuan</h5>
       </div>
+      <p>Modern Magic & Energy Alignment The ancient magic persists today through rituals of balance and blessing:
+        <br> The Noon Alignment: At midday, when world magic reaches equilibrium, the "Egg Balancing" ritual is performed. Success signifies personal alignment and a year of good fortune.</p>
     </div>
   </section>
 </template>

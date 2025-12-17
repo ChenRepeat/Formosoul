@@ -92,7 +92,8 @@ function handlelogout() {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <router-link to="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></router-link>
+          <router-link to="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"
+             @click="closeMenu"/></router-link>
           <!-- <a href="/member"></a> -->
          
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
@@ -130,6 +131,7 @@ function handlelogout() {
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
         <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
+<<<<<<< HEAD
         <li><router-link to="/member/information" @click="closeMenu"><h5>information</h5></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h5>changepassword</h5></router-link></li>
         <li><router-link to="/member/orderslist" @click="closeMenu"><h5>orderslist</h5></router-link></li>
@@ -138,6 +140,10 @@ function handlelogout() {
         <hr class="memberhr">
         <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
         <li @click="handlelogout" class="logout"><h5>logout</h5></li>
+=======
+        <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
+
+>>>>>>> Repeat
       </ul>
       </transition>
     </div>
@@ -225,9 +231,15 @@ img { object-fit: none; }
 .header-link.open {
   height: 100vh; 
 }
+<<<<<<< HEAD
 .header-link:has(.member-list){
   max-height: 70vh;
+=======
+.header-link.open:has(.member-list){
+  height: 280px;
+>>>>>>> Repeat
 }
+
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
 .liquidGlass-wrapper {
   position: relative;
@@ -334,6 +346,23 @@ img { object-fit: none; }
 .memberhr{
   border: none; 
   border-top: 1px solid $color-fsCaption;
+}
+@media screen and (max-width: 1200px) {
+  .header-link{
+    padding: 6px 20px;
+    align-items: center;
+    height: 50px;
+
+  }
+  .header-icons-list{
+    gap: 8px;
+  }
+  .header-icon{
+    font-size: 22px;
+  }
+  .hamburger-btn{
+    transform: scale(0.8);
+  }
 }
 
 </style>

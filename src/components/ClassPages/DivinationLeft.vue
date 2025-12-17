@@ -4,21 +4,21 @@ import { computed, ref } from 'vue';
   const dialogs = {
     1: {
       name:'Mo-Bue',
-      introEn:'Flat signs fall silent, magic fades, the spirits choose not to answer.',
-      introCn:'平符靜落，魔力消散，靈界選擇沉默不語。',
-      imgUrl:'Classes/MoonFes3.png',
+      introEn:'The curved backs turn upward, shielding secrets within. A dark omen bars your path; the ancient forces deny your request. Do not push further.',
+      introCn:'隆起的背部向上翻轉，將秘密緊鎖其中。這是一個拒絕的暗影徵兆，遠古力量否決了你的請求，不可強行推進。',
+      imgUrl:'Classes/moBue.png',
     },
     2: {
       name:'Chio-Bue',
-      introEn:'Twin curves shimmer with mirth, spirits laugh and deny the caster’s wish.',
-      introCn:'雙弧閃爍笑意，靈體戲笑，否定施術者的請求。',
-      imgUrl:'Classes/MoonFes3.png',
+      introEn:'Two open faces stare back, mocking your hesitation. The ether finds your query clouded; clear your mind and cast the runes once more for truth.',
+      introCn:'兩個張開的平面凝視著你，嘲弄你的遲疑。乙太界認為你的提問過於模糊，請清空思緒再次施放符文。',
+      imgUrl:'Classes/chiobue.png',
     },
     3: {
       name:'Xin-Bue',
-      introEn:'One light, one shadow align, magic confirms the spell and grants approval.',
-      introCn:'一光一影相合，魔法確認儀式，賜予肯定回應。',
-      imgUrl:'Classes/MoonFes3.png',
+      introEn:'A perfect harmony of light and shadow lies before you. The cosmos whispers consent, allowing your magic to flow freely into the woven reality.',
+      introCn:'光與影達成完美的和諧，宇宙對你低聲許諾，准許你的魔力在交織的現實中自由流動。',
+      imgUrl:'Classes/xinbue.png',
     },
   };
     function changeDialog(i){
@@ -88,8 +88,8 @@ p{color: $color-fsContent;}
 
   .img-locate{
     position: relative;
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
   }
 
   img{

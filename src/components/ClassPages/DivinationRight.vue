@@ -44,18 +44,18 @@ import { ref } from 'vue';
   }
 
 const isFlipping = ref(false);
-const bue1Transform = ref('rotate(90deg) rotateY(0deg)');
+const bue1Transform = ref('rotate(90deg) rotateY(180deg)');
 const bue2Transform = ref('rotate(-90deg) rotateY(0deg)');
-const bue1Result = ref(0);
-const bue2Result = ref(0);
+const bue1Result = ref(1);
+const bue2Result = ref(1);
 const finalResult = ref('');
 
 const buaBue = () => {
   if (isFlipping.value) return;
   
   isFlipping.value = true;
-  bue1Result.value = 0;
-  bue2Result.value = 0;
+  bue1Result.value = 1;
+  bue2Result.value = 1;
   finalResult.value = '';
 
   bue1Transform.value = 'rotate(90deg) rotateY(0deg)';
@@ -75,9 +75,9 @@ const buaBue = () => {
       bue2Result.value = isBue2Yin ? 1 : 0;
 
       if (isBue1Yin && isBue2Yin) {
-        finalResult.value = 'Mo-Bue';
+        finalResult.value = 'Chio-Bue';
       } else if (!isBue1Yin && !isBue2Yin) {
-        finalResult.value = 'Chio-Bue'; 
+        finalResult.value = 'Mo-Bue'; 
       } else {
         finalResult.value = 'Xin-Bue'; 
       }
@@ -162,6 +162,7 @@ const buaBue = () => {
     @click="buaBue"
     @mousedown.stop
     @touchstart.stop>
+    <h6 :class={dispear:isFlipping} class="clickMe">click ! <font-awesome-icon icon="fa-solid fa-turn-down" /></h6>
     <div class="bue-case bue-l" :class="{ flipping: isFlipping }" :style="{ transform: bue1Transform }">
       <img src="/Classes/bue-ying.png" alt="陰面">
       <img src="/Classes/bue-yang.png" alt="陽面">
@@ -195,7 +196,7 @@ const buaBue = () => {
     position: relative;
     >div{
       width: 150px;
-      height: 200px;
+      height: 300px;
       z-index: 100;
       cursor: pointer;
       img{
@@ -214,13 +215,17 @@ const buaBue = () => {
         bottom: 0;left: 0%;
         transition: opacity 0.5s ease;
       }
+
       #qian1{top: 0;left: 12%;transform: rotate(-10deg);}
       #qian2{top: -4%;left: 20%;}
       #qian3{top: 2%;left: 36%;transform: rotate(2deg);}
-      #qian4{top: 0;left: 50%;transform: rotate(-2deg);}
-      #qian5{top: -3%;left: 59%;transform: rotate(12deg);}
-      #qian6{top: 3%;left: 63%;transform: rotate(12deg);}
+      #qian4{top: 0;left: 43%;transform: rotate(-2deg);}
+      #qian5{top: -3%;left: 45%;transform: rotate(12deg);}
+      #qian6{top: 3%;left: 52%;transform: rotate(12deg);}
       #qian2,#qian3,#qian4,#qian5,#qian6{transition: opacity 0.5s ease;}
+      &.fesStart{
+        animation: 3s shufle 0.5s linear infinite forwards;
+      }
       &.fesShake{
         transform: rotate(15deg);
         #qianCase{
@@ -435,6 +440,23 @@ const buaBue = () => {
     transform: rotate(15deg) translateX(0);
   }
 }
+@keyframes shufle{
+  0% {transform: rotate(0deg);}
+  5% {transform: rotate(-30deg);}
+  10%{transform: rotate(0deg);}
+  15% {transform: rotate(-30deg);}
+  20%{transform: rotate(0deg);}
+  100%{transform: rotate(0deg);}
+}
+@keyframes clickMe{
+  0% {transform: rotate(0deg);color: $color-fsTitle;}
+  5% {transform: rotate(-10deg);color: $color-fsGold;}
+  10%{transform: rotate(10deg);color: $color-fsGold300;}
+  15% {transform: rotate(-10deg);color: $color-fsGold;}
+  20%{transform: rotate(10deg);color: $color-fsGold300;}
+  25%{transform: rotate(0deg);color: $color-fsTitle;}
+  100%{transform: rotate(0deg);color: $color-fsTitle;}
+}
 @keyframes qianPull{
   0%{top: 2%;left: 29%;transform: rotate(-10deg);}
   1%{top: 0%;left: 29%;transform: rotate(-10deg);}
@@ -452,5 +474,11 @@ const buaBue = () => {
 @keyframes qianScale{
   0%{transform: rotate(0deg);top: -15%;}
   100%{transform: rotate(0deg) scale(2) translateY(30%);top: 0;}
+}
+.dispear{
+  display: none;
+}
+.clickMe{
+  animation: 4s clickMe 5s linear infinite forwards;
 }
 </style>

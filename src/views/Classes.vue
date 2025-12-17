@@ -416,7 +416,7 @@ const initPageFlip = () => {
     maxWidth: 600,
     minHeight: 500,
     maxHeight: 800,
-    // size: 'fixed',
+    size: 'fixed',
     showCover: true,
     maxShadowOpacity: 0.2,
     flippingTime: FLIP_SPEEDS.normal,
@@ -510,7 +510,7 @@ onUnmounted(() => {
   // overflow: hidden;
   transition: none; 
   transform-style: preserve-3d;
-  // border-radius: 0 16px 16px 0;
+  border-radius: 0 16px 16px 0;
   // box-shadow:
   //  6px 1px 20px $color-fsWhite,
   //  6px 1px 20px $color-fsGold300,
