@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
     const isLoginModalOpen = ref(false);
     const memberView = ref('coreselection');
     const loginView = ref('loginpage');
-    const informationView = ref('membercard');
+    const informationView = ref('informationmembercard');
     // 計算屬性 雙重否定會讓兩個value值 除了字串外都會是false
     const isLoggedIn = computed(() => !!token.value && !!user.value);
 

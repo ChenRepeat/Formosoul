@@ -130,8 +130,14 @@ function handlelogout() {
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
         <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
-        <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
-        <!-- <li><a href="/news"><h5>News</h5></a></li> -->
+        <li><router-link to="/member/information" @click="closeMenu"><h5>information</h5></router-link></li>
+        <li><router-link to="/member/changepassword" @click="closeMenu"><h5>changepassword</h5></router-link></li>
+        <li><router-link to="/member/orderslist" @click="closeMenu"><h5>orderslist</h5></router-link></li>
+        <li><router-link to="/member/mycollections" @click="closeMenu"><h5>mycollections</h5></router-link></li>
+        <li><router-link to="/member/coupons" @click="closeMenu"><h5>coupons</h5></router-link></li>
+        <hr class="memberhr">
+        <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
+        <li @click="handlelogout" class="logout"><h5>logout</h5></li>
       </ul>
       </transition>
     </div>
@@ -220,7 +226,7 @@ img { object-fit: none; }
   height: 100vh; 
 }
 .header-link:has(.member-list){
-  max-height: 30vh;
+  max-height: 70vh;
 }
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
 .liquidGlass-wrapper {
@@ -302,11 +308,32 @@ img { object-fit: none; }
   .header-lang-switcher.right{background-color: $color-fsWhite;}
   .header-icon { color: $color-fsTitle;}
   .burger-list li a { color: $color-fsTitle;}
+  .logout > h5 { color: $color-fsTitle;}
   .bar { background-color: $color-fsTitle;}
 }
 
-.btn-gray-fill > h5{
+
+.logout{
+    padding: 8px 12px;
+    display: block;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.logout > h5{
   color: $color-fsWhite;
+}
+
+.logout:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logout.active { opacity: 1; transform: translateY(0); z-index: 11;}
+
+.memberhr{
+  border: none; 
+  border-top: 1px solid $color-fsCaption;
 }
 
 </style>
