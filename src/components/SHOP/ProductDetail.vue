@@ -29,6 +29,20 @@ function likeHeart(){
     isLike.value = !isLike.value;
 }
 
+//數量切換
+const productQty =ref(1);
+
+function qtyAdd(){
+    if( productQty.value < 27 ){      //之後庫存數量要從資料庫查詢
+        productQty.value++;
+    }
+}
+
+function qtyMinus(){
+    if( productQty.value > 1 ){
+        productQty.value--;
+    }
+}
 
 
 </script>
@@ -78,9 +92,9 @@ function likeHeart(){
                     <font-awesome-icon icon="fa-brands fa-instagram" />
                 </div>
                 <div class="qty dp-flex">
-                    <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" />
-                    <h6>1</h6>
-                    <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" />
+                    <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
+                    <h6>{{ productQty }}</h6>
+                    <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
                 </div>
 
                 <div class="btn-shopping dp-flex-col">
