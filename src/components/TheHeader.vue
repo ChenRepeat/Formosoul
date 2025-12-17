@@ -62,9 +62,13 @@ function closeMenu(){
 
 }
 function handlelogout() {
-  authStore.logout();
-  isMemberMenuOpen.value = false;
-  alert('登出惹');
+  if(!confirm(`${authStore.user.name}確定要登出嗎?`)){
+    return;
+  }else{
+    authStore.logout();
+    isMemberMenuOpen.value = false;
+    alert('登出惹');
+  }
 }
 </script>
 

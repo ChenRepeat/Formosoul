@@ -6,6 +6,7 @@ import Lenis from "lenis";
 import NewsCard from "@/components/News/NewsCard.vue";
 // 1. 記得引入 onBeforeRouteLeave
 import { onBeforeRouteLeave } from 'vue-router'
+import Backgroundaction from "@/components/backgroundaction.vue";
 
 // 註冊 GSAP Plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -294,6 +295,7 @@ onUnmounted(() => {
 
 <template>
   <div class="news-page-container">
+
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
         <h5 class="news-main-text">I solemnly swear that I am up to no good.</h5>
@@ -322,6 +324,7 @@ onUnmounted(() => {
     </section>
 
     <section class="news-updates-section">
+      
       <div class="news-updates-header">
         <h2 class="news-updates-title">UPDATES</h2>
       </div>
@@ -337,7 +340,7 @@ onUnmounted(() => {
 .news-page-container {
   width: 100%;
   position: relative;
-  background-color: #0a0a0a;
+  // background-color: #0a0a0a;
   color: #ffffff;
   overflow-x: hidden;
 }
@@ -348,7 +351,7 @@ onUnmounted(() => {
   width: 100%;
   height: 550vh;
   overflow: hidden;
-  background-color: #0a0a0a;
+  // background-color: #0a0a0a;
 }
 
 .news-sticky-title-wrapper {
@@ -411,7 +414,7 @@ onUnmounted(() => {
 .news-quote-section {
   width: 100%;
   height: 100vh;
-  background-color: #0a0a0a;
+  // background-color: #0a0a0a; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -433,7 +436,7 @@ onUnmounted(() => {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #0a0a0a;
+  // background-color: #0a0a0a;
   position: relative;
   z-index: 99;
   margin-bottom: 120px;
