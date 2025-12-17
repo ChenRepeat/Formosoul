@@ -19,7 +19,8 @@
             </div>
         </div>
         <div class="buttonarea">
-        <BasicButton class="btn-gray-fill" @click="goback" :class="{ 'hascenter': hascenter}"><h6>Back To Student Card</h6></BasicButton>
+            <!-- :class="{ 'hascenter': hascenter}" -->
+        <BasicButton class="btn-gray-fill" @click="goback" ><h6>Back To Student Card</h6></BasicButton>
         <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}"><h6>Embark on the Formosoul Adventure</h6></BasicButton>
         </div>
     </div>
@@ -48,10 +49,10 @@ import Pointcard from '../information/pointcard.vue';
             type:Boolean,
             default:false,
         },
-        hascenter:{
-            type:Boolean,
-            default:false,
-        }
+        // hascenter:{
+        //     type:Boolean,
+        //     default:false,
+        // }
     });
     const authStore = useAuthStore();
     function handleEmbark() {
