@@ -4,7 +4,8 @@ import Member from '@/views/Member.vue'
 import ProfessorIntroduction from '@/views/ProfessorIntroduction.vue'
 import Shop from '@/views/Shop.vue'
 import ShoppingCart from '@/views/ShoppingCart.vue'
-import ShoppingCheck from '@/components/Cart/ShoppingCheck.vue'
+import MyCart from '@/components/Cart/MyCart.vue'
+import CheckOut from '@/components/Cart/CheckOut.vue'
 import OrderSuccess from '@/components/Cart/OrderSuccess.vue'
 import News from '@/views/News.vue'
 import Policy from '@/views/Policy.vue'
@@ -108,9 +109,14 @@ const router = createRouter({
       },
       children: [
         {
-          path: "shoppingcheck",
-          name: "ShoppingCheck",
-          component: ShoppingCheck,
+          path: "",     // 預設顯示，網址不改變
+          name: "MyCart",
+          component: MyCart,
+        },
+        {
+          path: "checkout",
+          name: "CheckOut",
+          component: CheckOut,
         },
         {
           path: "ordersuccess",

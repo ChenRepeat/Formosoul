@@ -1,7 +1,14 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '../../components/BasicButton.vue';
-import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+function goOrder(){
+    router.push('/shoppingcart/ordersuccess');
+}
+
 
 </script>
 
@@ -121,7 +128,8 @@ import { RouterLink } from 'vue-router';
 
         
         <!-- 表單 -->
-        <form action="" method="POST">
+        <form action="" method="POST" @submit.prevent="goOrder">
+            // @submit.prevent="goOrder" 阻止預設行為並且執行goOrder
             
             <!-- 信用卡資料 -->
             <section class="creditcard-info">
@@ -132,17 +140,17 @@ import { RouterLink } from 'vue-router';
 
                         <div class="card-num">
                             <p>Card Number</p>
-                            <input class="input-text" type="text">
-                            －<input class="input-text" type="text">
-                            －<input class="input-text" type="text">
-                            －<input class="input-text" type="text">
+                            <input class="input-text" type="text" required>
+                            －<input class="input-text" type="text" required>
+                            －<input class="input-text" type="text" required>
+                            －<input class="input-text" type="text" required>
                         </div>
 
                         <div class="card-date-type dp-flex">
                             <div class="card-date">
                                 <p>Expiration Date</p>
-                                <input class="input-text" type="text" placeholder="mm">
-                                ／<input class="input-text" type="text" placeholder="yy">
+                                <input class="input-text" type="text" placeholder="mm" required>
+                                ／<input class="input-text" type="text" placeholder="yy" required>
                             </div>
     
                             <div class="card-type">
@@ -157,11 +165,11 @@ import { RouterLink } from 'vue-router';
                     <div class="card-right">
                         <div class="card-code dp-flex">
                             <p>Security code</p>
-                            <input class="input-text" type="text">
+                            <input class="input-text" type="text" required>
                         </div>
                         <div class="card-name">
                             <p>AUTHORIZED SIGNATURE</p>
-                            <input class="input-text" type="text">
+                            <input class="input-text" type="text" required>
                         </div>
 
                         
@@ -216,11 +224,8 @@ import { RouterLink } from 'vue-router';
             </section>
 
             <!-- order -->
-            <div>  
-                <BasicButton 
-                class="btn-yellow-fill btn-fix-width btn-order" 
-                type="submit"
-                >
+            <div>  <!-- 這邊用@click的話，會直接執行，表單的sumbit的檢查必填功能會被跳過，所以要改寫在表單的submit功能的預設事件後執行想執行的動作 -->
+                <BasicButton class="btn-yellow-fill btn-fix-width btn-order" type="submit">
                     ORDER
                 </BasicButton>
             </div>
