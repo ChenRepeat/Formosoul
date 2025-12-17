@@ -3,6 +3,7 @@ import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from "vue-router";
+import Backgroundaction from "../backgroundaction.vue";
 
 // 增加： 進入鎖住，不要直接hover到：
 const isMapReady = ref(false);
@@ -103,6 +104,7 @@ const rightFrame = computed(()=> frames.value[1])
 </script>
 
 <template>
+    <Backgroundaction></Backgroundaction>
     <main class="survival-case"> 
       <div class="survival-case-wrapper" :class="{ 'locked': !isMapReady }">
         <div class="survial-moveimg">
@@ -195,7 +197,7 @@ const rightFrame = computed(()=> frames.value[1])
 <style scoped lang="scss">
 
 .survival-case{
-  background-image: url(/public/Shop/bgi.jpg);
+  // background-image: url(/public/Shop/bgi.jpg);
   background-position: right;
 }
 
