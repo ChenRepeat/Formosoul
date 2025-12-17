@@ -226,12 +226,6 @@ img { object-fit: none; }
 .header-link.open {
   height: 100vh; 
 }
-<<<<<<< HEAD
-=======
-.header-link.open:has(.member-list){
-  height: 280px;
-}
->>>>>>> 5ec69655f0b7087ae81fa3501254a3d0f6e8bf97
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
 .liquidGlass-wrapper {
