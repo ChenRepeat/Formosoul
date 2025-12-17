@@ -17,7 +17,7 @@ const authStore = useAuthStore();
 
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
-const isEnglish = ref(false)
+const isEnglish = ref(true)
 function toggleLang(){
   isEnglish.value = !isEnglish.value;
 }

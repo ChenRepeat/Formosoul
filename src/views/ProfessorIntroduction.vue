@@ -113,7 +113,7 @@ const xNow = ref(0)
 const distance = ref(0)
 
 ;(async ()=>{ //讀 json 
-  let jsonFile = await fetch('/public/ProfessorIntroduction/professorInfo.json')
+  let jsonFile = await fetch('ProfessorIntroduction/professorInfo.json')
   if(jsonFile){
     info.value = await jsonFile.json()
   }
@@ -258,7 +258,7 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
     pauseOnMouseEnter: false,
     reverseDirection: true, // FOR REVERSE
   },
-  // centeredSlides: true,
+  centeredSlides: true,
   effect : 'coverflow',
   coverflowEffect: {
     rotate: 5,
@@ -297,7 +297,7 @@ onUnmounted(()=>{
 <template> 
   <section class="professor-page-wrapper "> 
     <!-- class 對應 變更嘗試  -->
-    <h2 class="professor-title">Professorss</h2>
+    <h2 class="professor-title">Professor</h2>
 
     <!-- swiper testing -->
     <div class="carousel-field">
@@ -331,13 +331,12 @@ onUnmounted(()=>{
     @mouseleave="InOrOut(index+ doubleAll.length *2, false)">
     <img :src='photo' class="professor-photo"
     :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
-    
     @click="openInfo(index)"
     >
     </li>
   </ul>
   </div>
-<!-- 記得補 professor-reverse-carousel-container 的屬性 -->
+
   <div class="professor-reverse-carousel-container middle">
     <ul class="professor-list swiper-wrapper" :ref='(ul)=>{if(ul) refLists[1]=ul}'  @mousedown.prevent="onPress" >
       <li ref='refCard' class="professor-photo-wrapper middle swiper-slide"
@@ -452,8 +451,7 @@ z-index: 80;
         height: 4.48rem; // h5 
         width: 4.48rem; // h5 
       }
-      .professor-skill{
-      }
+
     }
     .professor-skill-detail{
       color: $color-fsContent;
@@ -515,7 +513,6 @@ z-index: 80;
           #photo8, #photo10, #photo11, #photo12, #photo15{
           top: -50px;
           }
-
         }
       }
       .professor-photo-wrapper.mouse-enter {

@@ -101,16 +101,17 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
               <router-link to="/policy"><h5>Policy</h5></router-link>
             </li>
             <li>
-              <a href=""><p>Payment</p></a>
+              <router-link to="/policy/payment"><p>Payment</p></router-link>
             </li>
             <li>
-              <a href=""><p>Delivery</p></a>
+              <router-link to="/policy/delivery"><p>Delivery</p></router-link>
+
             </li>
             <li>
-              <a href=""><p>Returns</p></a>
+              <router-link to="/policy/returns"><p>Returns</p></router-link>
             </li>
             <li>
-              <a href=""><p>Privacy Policy</p></a>
+              <router-link to="/policy/privacypolicy"><p>Privacy Policy</p></router-link>
             </li>
           </ul>
         </div>
@@ -140,27 +141,31 @@ hr {
   height: auto;
   justify-content: center;
   gap: 60px;
+  width: 40%;
 }
 .logo-style {
   align-self: center;
 }
 .footer-link-corner {
-  gap: 60px;
+  gap: 120px;
+  width: 60%;
 }
 .footer-case {
   background-color: #041426;
-  width: 100%;
   padding-top: 60px;
   padding-bottom: 16px;
   height: 100%;
+  width: 100%;
 }
 .footer-outer-case {
-  gap: 60px;
+  margin: 0 auto;
+  width: 1200px;
+  gap: 100px;
   justify-content: center;
 }
 .footer-inner-case {
   justify-content: start;
-  gap: 60px;
+  gap: 120px;
 }
 .footer-social-link {
   text-align: center;

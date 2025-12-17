@@ -18,10 +18,10 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <ClassPageIndex @flip="goToPage" v-if="innerWidth < 992" />
+          <!-- <ClassPageIndex @flip="goToPage" /> -->
         </div>
       </div>
-      <div class="page" v-if="innerWidth > 992">
+      <div class="page">
         <div class="page-content" >
           <ClassPageIndex @flip="goToPage"/>
         </div>
@@ -343,6 +343,8 @@ const playIntroAnimation = async () => {
     if (!isIntroPlaying.value) return;
     isAnimating.value = false;
     updatePageNumber();
+    cleanupAnimation();
+
   } catch (error) {
     console.error('Intro animation error:', error);
     cleanupAnimation();
@@ -414,7 +416,7 @@ const initPageFlip = () => {
     maxWidth: 600,
     minHeight: 500,
     maxHeight: 800,
-    size: 'stretch',
+    // size: 'fixed',
     showCover: true,
     maxShadowOpacity: 0.2,
     flippingTime: FLIP_SPEEDS.normal,
@@ -508,7 +510,7 @@ onUnmounted(() => {
   // overflow: hidden;
   transition: none; 
   transform-style: preserve-3d;
-  border-radius: 0 16px 16px 0;
+  // border-radius: 0 16px 16px 0;
   // box-shadow:
   //  6px 1px 20px $color-fsWhite,
   //  6px 1px 20px $color-fsGold300,
@@ -595,4 +597,5 @@ $high-layer-pages: 4, 6, 9, 12;
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
+
 </style>

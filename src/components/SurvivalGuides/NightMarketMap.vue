@@ -2,10 +2,13 @@
 import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
 import SurvivalFoodIntroductionFrame from "../SurvivalFoodIntroductionFrame.vue";
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarketData.js";
 import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
+import BasicButton from "../BasicButton.vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 
 //
 const isMapReady = ref(false);
@@ -269,11 +272,36 @@ onMounted (()=>{
                     <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
                 </div>
             </div>
+<!---------------------------------------- back btn -------------------------------------------->            
+            <div>
+                <RouterLink :to="{
+                    name:'SurvivalGuide'
+                }">
+                    <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />BACK</BasicButton>
+                </RouterLink>
+            </div>
         </main>
 </template>
 
 
 <style scoped lang="scss">
+
+// 新增回到前頁按鈕
+.btn-blue-fill{
+  background-color: $color-fsBlue900;
+  color: $color-fsWhite;
+  position: absolute;
+  bottom: 8%;
+  left: 3%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4); 
+  border: 2px solid white;
+}
 
 // map 的區塊設定
 .survival-night-market-case {
