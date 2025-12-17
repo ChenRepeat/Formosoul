@@ -3,7 +3,6 @@ import { ref, onMounted, onUnmounted, nextTick, effect } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
 import Swiper from 'swiper';
-// import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, FreeMode,EffectCoverflow  } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -290,7 +289,7 @@ onUnmounted(()=>{
   document.removeEventListener('mouseup', offPress)
   document.removeEventListener('touchstart', onMousemove)
   document.removeEventListener('touchend', offPress)
-  if(timer.value) clearInterval(timer.value)
+
 })
 
 </script>
@@ -320,23 +319,7 @@ onUnmounted(()=>{
     </li>
   </ul>   
   </div>
-  <div class="professor-carousel-container lower" > 
-  <ul class="professor-list swiper-wrapper"  :ref='(ul)=>{if(ul) refLists[2]=ul}'  @mousedown.prevent="onPress" >
-    <li ref='refCard' class="professor-photo-wrapper lower swiper-slide"
-    :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
-    v-for="(photo, index) in doubleAll" 
-    :data-index="index+ doubleAll.length *2" 
-    :id="'photo-lower'+index"           
-    @mouseenter="InOrOut(index+ doubleAll.length *2, true)" 
-    @mouseleave="InOrOut(index+ doubleAll.length *2, false)">
-    <img :src='photo' class="professor-photo"
-    :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
-    @click="openInfo(index)"
-    >
-    </li>
-  </ul>
-  </div>
-
+  
   <div class="professor-reverse-carousel-container middle">
     <ul class="professor-list swiper-wrapper" :ref='(ul)=>{if(ul) refLists[1]=ul}'  @mousedown.prevent="onPress" >
       <li ref='refCard' class="professor-photo-wrapper middle swiper-slide"
@@ -352,7 +335,25 @@ onUnmounted(()=>{
       >
     </li>
   </ul>
-  </div>
+</div>
+
+<div class="professor-carousel-container lower" > 
+  <ul class="professor-list swiper-wrapper"  :ref='(ul)=>{if(ul) refLists[2]=ul}'  @mousedown.prevent="onPress" >
+    <li ref='refCard' class="professor-photo-wrapper lower swiper-slide"
+    :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
+    v-for="(photo, index) in doubleAll" 
+    :data-index="index+ doubleAll.length *2" 
+    :id="'photo-lower'+index"           
+    @mouseenter="InOrOut(index+ doubleAll.length *2, true)" 
+    @mouseleave="InOrOut(index+ doubleAll.length *2, false)">
+    <img :src='photo' class="professor-photo"
+    :class="{'mouse-enter':isIn[index+ doubleAll.length *2]==true}" 
+    @click="openInfo(index)"
+    >
+    </li>
+  </ul>
+</div>
+
 </div>
 
 
@@ -484,10 +485,10 @@ z-index: 80;
 
     &.middle{ //li
       // display: none;
-      top: -170px;
+      top: 30px;
     }      
     &.lower{
-      top: 260px;
+      top: 60px;
     }
     .swiper-wrapper { // ul
       display: flex;
@@ -501,6 +502,11 @@ z-index: 80;
         overflow: hidden;
         border-radius: 8px;
         
+        &.mouse-enter ,&:hover{
+        transform: rotate(2deg) scale(1.1); 
+        z-index: 20;
+        cursor: pointer;
+       }  
         .professor-photo { 
           width: 100%;
           filter: brightness(.7);
@@ -513,16 +519,13 @@ z-index: 80;
           #photo8, #photo10, #photo11, #photo12, #photo15{
           top: -50px;
           }
-        }
-      }
-      .professor-photo-wrapper.mouse-enter {
-        transform: rotate(2deg) scale(1.1); 
-        z-index: 20;
-        cursor: pointer;
-        .professor-photo.mouse-enter {
+          &.mouse-enter {
           filter: brightness(.9); 
         }
-      }  
+        }
+
+      }
+
     }
   }
 }
