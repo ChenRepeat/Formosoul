@@ -39,7 +39,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { computed, ref } from 'vue';
 import MemberOrdersDetail from './MemberOrdersDetail.vue';
 import { useRoute } from 'vue-router';
-import BasicButton from '@/components/BasicButton.vue';
 const currentPage = ref(1);
 // 獲得每頁幾筆的資訊
 const itemsPerPage = 5;

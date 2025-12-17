@@ -132,11 +132,9 @@ import Pointcard from '../information/pointcard.vue';
         flex-direction: column;
         gap: 20px;
     }
-    .pcontenttop{
-        // margin-bottom: 36px;
-    }
+    
     .btn-yellow-fill{
-        // padding: 16px 40px;
+
 
         &.without{
             display: none;
