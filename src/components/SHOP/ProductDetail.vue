@@ -2,14 +2,29 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from "vue-router";     //使用路由功能
 import BasicButton from '../BasicButton.vue';
+import { ref } from 'vue';
 
+
+// 按鈕
 // 宣告常數來接收 useRouter() ，方便後續使用
 const router = useRouter();
 
 // 設定路由功能
+function goCart(){
+    router.push('/shoppingcart')
+};
 function goProductList(){
     router.push('/shop/productlist')
 };
+
+
+// Tab 開關
+const isShow = ref(true);
+
+function goInfo(){
+    
+}
+
 
 </script>
 
@@ -60,7 +75,9 @@ function goProductList(){
                 </div>
 
                 <div class="btn-shopping dp-flex-col">
-                    <BasicButton class="btn-yellow-fill btn-fix-width">    
+                    <BasicButton 
+                    class="btn-yellow-fill btn-fix-width"
+                    @click="goCart()">    
                         Buy Now
                         <font-awesome-icon icon="fa-solid fa-bag-shopping" />
                     </BasicButton>
@@ -78,10 +95,10 @@ function goProductList(){
     
         <section class="detail-secondary">
             <ul class="detail-tab dp-flex">
-                <li class="">Story</li>
-                <li class="">How to Play / Use</li>
-                <li class="click">Shipping</li>
-                <li class="">Payment</li>
+                <li :class="{show: isShow}" @click="goInfo">Story</li>
+                <li :class="{show: !isShow}" @click="goInfo">How to Play / Use</li>
+                <li :class="{show: !isShow}" @click="goInfo">Shipping</li>
+                <li :class="{show: !isShow}" @click="goInfo">Payment</li>
             </ul>
     
             <hr>
@@ -254,7 +271,7 @@ function goProductList(){
 .detail-tab>li:hover{
     border-bottom: 2px solid $color-fsWhite;
 }
-.detail-tab>li.click{
+.detail-tab>li.show{
     border-bottom: 2px solid $color-fsWhite;
 }
 
