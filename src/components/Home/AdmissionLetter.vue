@@ -9,20 +9,200 @@ import gsap from "gsap";
 import { useRouter } from "vue-router"; 
 import { useAuthStore } from "@/stores/autoStore";
 
-// 定義 emit 事件，讓組件可以通知父層 
+// 定義 emit 事件
 const emit = defineEmits(['close']);
 const router = useRouter();
 const authStore = useAuthStore();
 const canvasContainer = ref(null);
 
-// 用於儲存 Three.js 實例以便清理
+// 全域變數宣告
 let scene, camera, renderer, animationId;
 let letterMesh, ashSystem;
 let material, particleMat;
 let resizeHandler, clickHandler, mouseMoveHandler;
 
-onMounted(() => {
-  // --- 1. 場景初始化 ---
+// --------------------------------------------------------
+// 建立信紙貼圖的函式 (包含圓角按鈕繪製)
+// --------------------------------------------------------
+function createPaperTexture() {
+  const cvs = document.createElement("canvas");
+  cvs.width = 1400;
+  cvs.height = 1050;
+  const ctx = cvs.getContext("2d");
+
+  // 背景
+  ctx.fillStyle = "#F4E4BC";
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+  // 漸層
+  const gradient = ctx.createRadialGradient(
+    cvs.width / 2, cvs.height / 2, 400,
+    cvs.width / 2, cvs.height / 2, 800
+  );
+  gradient.addColorStop(0, "rgba(139, 69, 19, 0)");
+  gradient.addColorStop(1, "rgba(139, 69, 19, 0.1)");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+  // 雜訊
+  for (let i = 0; i < 40000; i++) {
+    ctx.fillStyle = Math.random() > 0.5 ? "rgba(139, 69, 19, 0.05)" : "rgba(255,255,255,0.1)";
+    ctx.fillRect(Math.random() * cvs.width, Math.random() * cvs.height, 2, 2);
+  }
+
+  // --- 排版參數 ---
+  const paddingX = 80;
+  const startX = paddingX;
+  const contentWidth = cvs.width - paddingX * 2;
+  let currentY = 100;
+
+  // 自動換行函式
+  function wrapText(context, text, x, y, maxWidth, lineHeight, marginBottom) {
+    const words = text.split(" ");
+    let line = "";
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + " ";
+      const metrics = context.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        context.fillText(line, x, y);
+        line = words[n] + " ";
+        y += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    context.fillText(line, x, y);
+    return y + lineHeight + marginBottom;
+  }
+
+  // 按鈕區域物件 (回傳用)
+  const zones = {};
+
+  // [按鈕 1] 關閉 (X)
+  zones.close = { x: cvs.width - 80, y: 20, w: 60, h: 60 };
+
+  ctx.textAlign = "right";
+  ctx.font = "bold 50px Arial, sans-serif";
+  ctx.fillStyle = "#5a3a22";
+  ctx.globalAlpha = 0.6;
+  ctx.fillText("×", cvs.width - 40, 70);
+  ctx.globalAlpha = 1.0;
+
+  ctx.textAlign = "left";
+  ctx.font = "56px 'Roboto' , 'Noto Sans TC', sans-serif";
+  ctx.fillStyle = "#3e2723";
+  ctx.fillText("Formosoul Institute of Magic", startX, currentY);
+  currentY += 60;
+
+  ctx.font = "56px 'Roboto', 'Noto Sans TC', sans-serif";
+  ctx.fillStyle = "#5d4037";
+  ctx.fillText("Admission Notice", startX, currentY);
+  currentY += 35;
+
+  // 分隔線
+  ctx.beginPath();
+  ctx.moveTo(startX, currentY);
+  ctx.lineTo(startX + contentWidth, currentY);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(90, 58, 34, 0.3)";
+  ctx.stroke();
+  currentY += 50;
+
+  // Body
+  ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
+  ctx.fillStyle = "#3e2723";
+  const lineHeight = 40;
+  const paraMargin = 25;
+
+  const paragraphs = [
+    "Dear Prospective International Student,",
+    'You are about to step into this magical academy, hidden within the alleys of Taiwan, as an "Auditing Student" or "International Student." From this moment on, you will explore the daily life and magical wonders of Taiwan from the perspective of a visiting student.',
+    "The Academy has prepared six special courses and six interactive mini-games, guiding you to discover temples, night markets, local cuisine, and folk culture.",
+    "These games are scattered throughout different corners of the campus, waiting for you to find them. Successfully complete all the interactive games to graduate and receive a discount coupon from the Taiwan Magical Marketplace.",
+    "You may first explore the campus as an auditing student; after completing the games, if you wish to accumulate credits and save your progress, you can register at any time to receive your magical student ID.",
+  ];
+
+  paragraphs.forEach((text) => {
+    currentY = wrapText(ctx, text, startX, currentY, contentWidth, lineHeight, paraMargin);
+  });
+
+  // Footer
+  const footerY = currentY + 30;
+  ctx.font = "italic 24px 'Roboto', 'Noto Sans TC', sans-serif";
+  ctx.fillStyle = "#3e2723";
+  ctx.textAlign = "left";
+
+  let sigY = footerY;
+  ctx.fillText("Sincerely,", startX, sigY);
+  sigY += 35;
+  ctx.fillText("Formosoul Institute of Magic", startX, sigY);
+  sigY += 35;
+  ctx.fillText("Office of Academic Affairs.", startX, sigY);
+
+  // Buttons Layout
+  const btnHeight = 64;
+  const btnWidthReg = 240;
+  const btnWidthAudit = 280;
+  const btnGap = 30;
+  const btnY = footerY + 20;
+  const rightEdge = cvs.width - paddingX;
+  const regBtnX = rightEdge - btnWidthReg;
+  const auditBtnX = regBtnX - btnGap - btnWidthAudit;
+
+  // [按鈕點擊區域 2 & 3]
+  zones.audit = { x: auditBtnX, y: btnY, w: btnWidthAudit, h: btnHeight };
+  zones.register = { x: regBtnX, y: btnY, w: btnWidthReg, h: btnHeight };
+
+  // --- 繪製圓角按鈕 ---
+  const radius = 15; // 圓角半徑
+
+  // 1. Audit Button (空心圓角)
+  ctx.strokeStyle = "#5a3a22";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.roundRect(auditBtnX, btnY, btnWidthAudit, btnHeight, radius);
+  ctx.stroke();
+
+  ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
+  ctx.fillStyle = "#5a3a22";
+  ctx.textAlign = "center";
+  ctx.fillText("Audit the Academy", auditBtnX + btnWidthAudit / 2, btnY + 40);
+
+  // 2. Register Button (實心圓角)
+  ctx.beginPath();
+  ctx.roundRect(regBtnX, btnY, btnWidthReg, btnHeight, radius);
+  
+  ctx.fillStyle = "#FFCC46"; // 填色
+  ctx.fill();
+  
+  ctx.strokeStyle = "#b4941f"; // 邊框
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
+  ctx.fillStyle = "#2c1e14"; // 文字
+  ctx.fillText("Entrance Ceremony", regBtnX + btnWidthReg / 2, btnY + 40);
+
+  return { texture: new THREE.CanvasTexture(cvs), zones };
+}
+
+// --------------------------------------------------------
+// OnMounted: 初始化與邏輯
+// --------------------------------------------------------
+onMounted(async () => {
+  // 1. 等待 Roboto 字型載入 (關鍵修正)
+  try {
+    // 這裡的字串必須跟 ctx.font = "64px 'Roboto'" 完全一致
+    await document.fonts.load('64px "Roboto"');
+    console.log("Roboto font loaded successfully.");
+  } catch (err) {
+    console.warn("Font load failed, falling back.", err);
+  }
+
+  // 2. 字型準備好後，才產生貼圖
+  const { texture: paperTex, zones: buttonZones } = createPaperTexture();
+
+  // 3. 場景初始化
   const width = window.innerWidth;
   const height = window.innerHeight;
 
@@ -30,210 +210,15 @@ onMounted(() => {
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
   camera.position.z = 4.8;
 
-  renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    alpha: true,
-  });
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  
+
   if (canvasContainer.value) {
     canvasContainer.value.appendChild(renderer.domElement);
   }
 
-  // --- 按鈕區域座標儲存 (Raycaster 用) ---
-  let buttonZones = {};
-
-  // --- 2. 信紙貼圖生成 (Canvas Texture) ---
-  function createPaperTexture() {
-    const cvs = document.createElement("canvas");
-    cvs.width = 1400;
-    cvs.height = 1050;
-    const ctx = cvs.getContext("2d");
-
-    // 背景
-    ctx.fillStyle = "#F4E4BC";
-    ctx.fillRect(0, 0, cvs.width, cvs.height);
-
-    const gradient = ctx.createRadialGradient(
-      cvs.width / 2,
-      cvs.height / 2,
-      400,
-      cvs.width / 2,
-      cvs.height / 2,
-      800
-    );
-    gradient.addColorStop(0, "rgba(139, 69, 19, 0)");
-    gradient.addColorStop(1, "rgba(139, 69, 19, 0.1)");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, cvs.width, cvs.height);
-
-    // 雜訊
-    for (let i = 0; i < 40000; i++) {
-      ctx.fillStyle =
-        Math.random() > 0.5
-          ? "rgba(139, 69, 19, 0.05)"
-          : "rgba(255,255,255,0.1)";
-      ctx.fillRect(
-        Math.random() * cvs.width,
-        Math.random() * cvs.height,
-        2,
-        2
-      );
-    }
-
-    // --- 排版 ---
-    const paddingX = 80;
-    const startX = paddingX;
-    const contentWidth = cvs.width - paddingX * 2;
-    let currentY = 100;
-
-    function wrapText(context, text, x, y, maxWidth, lineHeight, marginBottom) {
-      const words = text.split(" ");
-      let line = "";
-      for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + " ";
-        const metrics = context.measureText(testLine);
-        if (metrics.width > maxWidth && n > 0) {
-          context.fillText(line, x, y);
-          line = words[n] + " ";
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
-      }
-      context.fillText(line, x, y);
-      return y + lineHeight + marginBottom;
-    }
-
-    // [按鈕區塊 1] 右上角關閉 (X)
-    buttonZones.close = {
-      x: cvs.width - 80,
-      y: 20,
-      w: 60,
-      h: 60,
-    };
-
-    ctx.textAlign = "right";
-    ctx.font = "bold 50px Arial, sans-serif";
-    ctx.fillStyle = "#5a3a22";
-    ctx.globalAlpha = 0.6;
-    ctx.fillText("×", cvs.width - 40, 70);
-    ctx.globalAlpha = 1.0;
-
-    // Header
-    ctx.textAlign = "left";
-    ctx.font = "bold 58px Georgia, serif";
-    ctx.fillStyle = "#3e2723";
-    ctx.fillText("Formosoul Institute of Magic", startX, currentY);
-    currentY += 60;
-
-    ctx.font = "normal 36px Georgia, serif";
-    ctx.fillStyle = "#5d4037";
-    ctx.fillText("Admission Notice", startX, currentY);
-    currentY += 35;
-
-    ctx.beginPath();
-    ctx.moveTo(startX, currentY);
-    ctx.lineTo(startX + contentWidth, currentY);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "rgba(90, 58, 34, 0.3)";
-    ctx.stroke();
-    currentY += 50;
-
-    // Body
-    ctx.font = "24px Georgia, serif";
-    ctx.fillStyle = "#3e2723";
-    const lineHeight = 40;
-    const paraMargin = 25;
-
-    const paragraphs = [
-      "Dear Prospective International Student,",
-      'You are about to step into this magical academy, hidden within the alleys of Taiwan, as an "Auditing Student" or "International Student." From this moment on, you will explore the daily life and magical wonders of Taiwan from the perspective of a visiting student.',
-      "The Academy has prepared six special courses and six interactive mini-games, guiding you to discover temples, night markets, local cuisine, and folk culture.",
-      "These games are scattered throughout different corners of the campus, waiting for you to find them. Successfully complete all the interactive games to graduate and receive a discount coupon from the Taiwan Magical Marketplace.",
-      "You may first explore the campus as an auditing student; after completing the games, if you wish to accumulate credits and save your progress, you can register at any time to receive your magical student ID.",
-    ];
-
-    paragraphs.forEach((text) => {
-      currentY = wrapText(
-        ctx,
-        text,
-        startX,
-        currentY,
-        contentWidth,
-        lineHeight,
-        paraMargin
-      );
-    });
-
-    // Footer
-    const footerY = currentY + 30;
-
-    ctx.font = "italic 24px Georgia, serif";
-    ctx.fillStyle = "#3e2723";
-    ctx.textAlign = "left";
-
-    let sigY = footerY;
-    ctx.fillText("Sincerely,", startX, sigY);
-    sigY += 35;
-    ctx.fillText("Formosoul Institute of Magic", startX, sigY);
-    sigY += 35;
-    ctx.fillText("Office of Academic Affairs.", startX, sigY);
-
-    // Buttons
-    const btnHeight = 64;
-    const btnWidthReg = 240;
-    const btnWidthAudit = 280;
-    const btnGap = 30;
-    const btnY = footerY + 20;
-    const rightEdge = cvs.width - paddingX;
-
-    const regBtnX = rightEdge - btnWidthReg;
-    const auditBtnX = regBtnX - btnGap - btnWidthAudit;
-
-    // [按鈕區塊 2 & 3]
-    buttonZones.audit = {
-      x: auditBtnX,
-      y: btnY,
-      w: btnWidthAudit,
-      h: btnHeight,
-    };
-    buttonZones.register = {
-      x: regBtnX,
-      y: btnY,
-      w: btnWidthReg,
-      h: btnHeight,
-    };
-
-    // 繪製 Audit Button
-    ctx.strokeStyle = "#5a3a22";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(auditBtnX, btnY, btnWidthAudit, btnHeight);
-    ctx.font = "bold 24px Georgia, serif";
-    ctx.fillStyle = "#5a3a22";
-    ctx.textAlign = "center";
-    ctx.fillText(
-      "Audit the Academy",
-      auditBtnX + btnWidthAudit / 2,
-      btnY + 40
-    );
-
-    // 繪製 Register Button
-    ctx.fillStyle = "#FFCC46";
-    ctx.fillRect(regBtnX, btnY, btnWidthReg, btnHeight);
-    ctx.strokeStyle = "#b4941f";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(regBtnX, btnY, btnWidthReg, btnHeight);
-    ctx.fillStyle = "#2c1e14";
-    ctx.fillText("Register Now", regBtnX + btnWidthReg / 2, btnY + 40);
-
-    return new THREE.CanvasTexture(cvs);
-  }
-
-  const paperTex = createPaperTexture();
-
-  // --- 3. Shader ---
+  // --- Shader ---
   const vertexShader = `
     varying vec2 vUv;
     void main() {
@@ -293,10 +278,11 @@ onMounted(() => {
     }
   `;
 
+  // 確保使用剛產生的 paperTex
   const uniforms = {
     uTime: { value: 0 },
     uProgress: { value: 0 },
-    uTexture: { value: paperTex },
+    uTexture: { value: paperTex }, 
   };
 
   material = new THREE.ShaderMaterial({
@@ -311,7 +297,7 @@ onMounted(() => {
   letterMesh = new THREE.Mesh(geometry, material);
   scene.add(letterMesh);
 
-  // --- 4. 灰燼粒子系統 ---
+  // --- 灰燼粒子系統 ---
   const particleCount = 2000;
   const posArray = new Float32Array(particleCount * 3);
   const randomArray = new Float32Array(particleCount);
@@ -327,18 +313,9 @@ onMounted(() => {
   }
 
   const particlesGeo = new THREE.BufferGeometry();
-  particlesGeo.setAttribute(
-    "position",
-    new THREE.BufferAttribute(posArray, 3)
-  );
-  particlesGeo.setAttribute(
-    "aRandom",
-    new THREE.BufferAttribute(randomArray, 1)
-  );
-  particlesGeo.setAttribute(
-    "aSize",
-    new THREE.BufferAttribute(sizeArray, 1)
-  );
+  particlesGeo.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
+  particlesGeo.setAttribute("aRandom", new THREE.BufferAttribute(randomArray, 1));
+  particlesGeo.setAttribute("aSize", new THREE.BufferAttribute(sizeArray, 1));
 
   particleMat = new THREE.ShaderMaterial({
     vertexShader: `
@@ -391,29 +368,21 @@ onMounted(() => {
   ashSystem = new THREE.Points(particlesGeo, particleMat);
   scene.add(ashSystem);
 
-  // --- 5. 互動邏輯 (Raycaster) ---
+  // --- 互動邏輯 ---
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   let isBurned = false;
 
   function checkIntersection(clientX, clientY) {
-  if (isBurned) return null;
+    if (isBurned) return null;
 
-  // --- ★ 修改開始 ★ ---
-  // 取得 canvas 元素在畫面上的實際位置和大小
-  const rect = renderer.domElement.getBoundingClientRect();
+    const rect = renderer.domElement.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    mouse.x = (x / rect.width) * 2 - 1;
+    mouse.y = -(y / rect.height) * 2 + 1;
 
-  // 計算滑鼠相對於 canvas 左上角的座標
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-
-  // 將座標轉換為 WebGL 需要的 -1 到 +1 的範圍
-  // 使用 rect.width 和 rect.height 而不是 window.innerWidth
-  mouse.x = (x / rect.width) * 2 - 1;
-  mouse.y = -(y / rect.height) * 2 + 1;
-  // --- ★ 修改結束 ★ ---
-
-  raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(letterMesh);
 
     if (intersects.length > 0) {
@@ -443,11 +412,8 @@ onMounted(() => {
     uniforms.uProgress.value = 0;
     particleMat.uniforms.uBurnProgress.value = 0;
 
-    // --- ★ 修改點 2：在 GSAP 中加入 onComplete 以觸發 emit ---
     const tl = gsap.timeline({
       onComplete: () => {
-        // 動畫結束，通知父組件
-        console.log('Burning complete, emitting close event');
         emit('close');
       }
     });
@@ -460,34 +426,33 @@ onMounted(() => {
         particleMat.uniforms.uBurnProgress.value = uniforms.uProgress.value;
       },
     });
-    tl.to(
-      letterMesh.position,
-      {
+    tl.to(letterMesh.position, {
         y: 0.3,
         z: -0.5,
         duration: 2.5,
         ease: "power1.out",
-      },
-      "<"
-    );
+    }, "<");
   }
 
-  // --- Event Listeners ---
-clickHandler = (e) => {
-  const hit = checkIntersection(e.clientX, e.clientY);
-  
-  if (hit) {
-    // 啟動燒信動畫
-    triggerBurn(); 
-
-    // 如果是註冊，等待動畫差不多的時候跳轉
-    if (hit === 'register') {
-      setTimeout(() => {
-        authStore.openLoginModal();
-      }, 2500); // 假設動畫約 3 秒，提早一點點跳轉比較順暢
+  clickHandler = (e) => {
+    const hit = checkIntersection(e.clientX, e.clientY);
+    
+    // 如果點擊了 "close" (右上角 X)
+    if (hit === 'close') {
+        emit('close');
+        return;
     }
-  }
-};
+
+    // 如果點擊了註冊或旁聽，觸發燃燒
+    if (hit) {
+      triggerBurn();
+      if (hit === 'register') {
+        setTimeout(() => {
+          authStore.openLoginModal();
+        }, 2500);
+      }
+    }
+  };
 
   mouseMoveHandler = (e) => {
     if (isBurned) {
@@ -495,11 +460,7 @@ clickHandler = (e) => {
       return;
     }
     const hit = checkIntersection(e.clientX, e.clientY);
-    if (hit) {
-      document.body.style.cursor = "pointer";
-    } else {
-      document.body.style.cursor = "default";
-    }
+    document.body.style.cursor = hit ? "pointer" : "default";
   };
   
   resizeHandler = () => {
@@ -516,9 +477,7 @@ clickHandler = (e) => {
   window.addEventListener("mousemove", mouseMoveHandler);
   window.addEventListener("resize", resizeHandler);
 
-  // --- 6. 動畫迴圈 ---
   const clock = new THREE.Clock();
-
   function animate() {
     animationId = requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
@@ -537,43 +496,34 @@ clickHandler = (e) => {
 });
 
 onBeforeUnmount(() => {
-  // 清除事件監聽
   window.removeEventListener("click", clickHandler);
   window.removeEventListener("mousemove", mouseMoveHandler);
   window.removeEventListener("resize", resizeHandler);
-
-  // 停止動畫循環
   if (animationId) cancelAnimationFrame(animationId);
-
-  // 釋放 Three.js 資源
+  
   if (scene) {
     scene.traverse((object) => {
       if (object.geometry) object.geometry.dispose();
       if (object.material) {
-        if (Array.isArray(object.material)) {
-          object.material.forEach((mat) => mat.dispose());
-        } else {
-          object.material.dispose();
-        }
+        if (Array.isArray(object.material)) object.material.forEach((m) => m.dispose());
+        else object.material.dispose();
       }
     });
   }
-  
-  if (renderer) {
-    renderer.dispose();
-  }
+  if (renderer) renderer.dispose();
 });
 </script>
 
 <style scoped>
-/* Class 已更名: .home-canvas-container */
+/* 1. 關鍵：引入 Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 .home-canvas-container {
   position: relative;
   width: 100vw;
   height: 100vh;
   display: block;
   overflow: hidden;
-  background-color: #050505;
   margin: 0;
   padding: 0;
   z-index: 1000; 

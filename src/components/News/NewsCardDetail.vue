@@ -198,11 +198,12 @@ watch(
 
 <template>
   <div class="detail-page">
-    <div class="bread-crumb">
-      <router-link to="/news">News</router-link>
-      <span> > </span>
-      <span>{{ currentArticle?.title }}</span>
-    </div>
+        <!-- 麵包屑 -->
+    <h6 class="page-guide">
+        <router-link to="/news">News</router-link>
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+        {{ currentArticle?.title }}
+    </h6>
     <div class="content-container">
       <aside>
         <ul>
@@ -282,7 +283,7 @@ watch(
   }
   .content-container ul a{
     display: flex;
-    border: 1px solid red;
+    border-bottom: 1px solid #000;
     text-decoration: none;
     color: #000;
     justify-content: space-between;
@@ -312,19 +313,21 @@ watch(
     height: auto; 
     display: block; 
     margin-bottom: 60px; 
+    border-radius: 7px;
   }
   .article-container{
     width: 100%;
     max-width: 800px;
     height: auto; 
     display: block; 
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
   }
   .text-area{
     background-color: #fff;
     color: #000;
     white-space: pre-wrap;
     padding: 40px;
+    border-radius: 7px;
   }
   .text-area h3{
     margin-bottom: 20px;
@@ -360,7 +363,6 @@ watch(
     padding: 8px 40px;
     justify-content: center;
     align-items: center;
-    gap: 30px;
     border-radius: 7px;
     background: var(--Blue900, #0A3D70);
     color: #fff;
@@ -395,4 +397,15 @@ watch(
     display: flex;
     justify-content: flex-end;
   }
+  .page-guide{
+  padding-bottom: 60px;
+}
+.page-guide a{
+  text-decoration: none;
+  color: #fff;
+}
+.page-guide a:hover{
+  color: $color-fsBlue;
+}
+
 </style>

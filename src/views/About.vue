@@ -3,6 +3,13 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import gsap from 'gsap'; 
 import Wave from '@/components/Wave.vue';
 
+// 1. 綁定地圖的 DOM
+const mapSectionRef = ref(null);
+// 2. 控制動畫開關的變數
+const isMapVisible = ref(false);
+let observer;
+
+
 const airports = ref([
   { id: 1, name: 'Taipei Songshan Airport', code: 'TSA', top: 75, left: 93 }, 
   { id: 2, name: 'Taiwan Taoyuan Int. Airport', code: 'TPE', top: 53, left: 85 },
@@ -69,7 +76,7 @@ let floatCtx; // 存放 GSAP context
 onMounted(() => {
   floatCtx = gsap.context(() => {
     
-    // 動畫一：垂直漂浮 (模擬波浪起伏)
+    // 垂直漂浮
     gsap.to(islandRef.value, {
       y: 100,           // 向下位移
       duration: 4,      // 持續時間
@@ -77,21 +84,22 @@ onMounted(() => {
       yoyo: true,      // 反向
       ease: "sine.inOut" // 正弦曲線搭波浪
     });
-    gsap.fromTo(islandRef.value, 
-      { 
-        rotation: -1.5 // 起始
-      },
-      {
-        rotation: 1.5, // 結束
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        transformOrigin: "50% 70%" // 設定重心
-      }
-    );
-
   });
+
+  // --- 建立滾動偵測 ---
+  observer = new IntersectionObserver(([entry]) => {
+    // 當地圖進入畫面 30% 時觸發
+    if (entry.isIntersecting) {
+      isMapVisible.value = true;
+      // 觸發後就不需要再觀察了 (避免效能浪費)
+      observer.unobserve(entry.target);
+    }
+  }, { threshold: 0.9 });
+
+  if (mapSectionRef.value) {
+    observer.observe(mapSectionRef.value);
+  }
+
 });
 
 onUnmounted(() => {
@@ -100,15 +108,20 @@ onUnmounted(() => {
 </script>
 
 <template>
+      <Wave/>
   <div class="about-container">
 
     <div class="island-text">
-      <h2>About</h2>
+      <h3>About</h3>
       <h1>Formosoul</h1>
-      <p class="lore-text">— A magical nexus weaving through diverse civilizations.Hidden within the clouds ten thousand feet above Taiwan, the Academy is a modern floating island suspended in the heavens. Guarded by powerful illusions and invisible to the naked eye, only the chosen ones holding an "Enrolment Letter" may pierce the veil of mist to enter this sanctuary of magic.We are dedicated to exploring the ultimate equilibrium of magic: intertwining the ancient, natural spiritual energies preserved within the island of Taiwan with the precise and rigorous spellcasting techniques of the West. At Formosoul, we do not merely teach magic; within the intertwining and resonance of diverse systems, we manifest the most balanced and formidable magical framework of the modern era.
-      </p>
+      <h6 class="fw200">— A magical nexus weaving through diverse civilizations.</h6>
+        <br>
+        <p class="lore-text">
+          Hidden within the clouds ten thousand feet above Taiwan, the Academy is a modern floating island suspended in the heavens. Guarded by powerful illusions and invisible to the naked eye, only the chosen ones holding an "Enrolment Letter" may pierce the veil of mist to enter this sanctuary of magic.
+          <br>
+          We are dedicated to exploring the ultimate equilibrium of magic: intertwining the ancient, natural spiritual energies preserved within the island of Taiwan with the precise and rigorous spellcasting techniques of the West. At Formosoul, we do not merely teach magic; within the intertwining and resonance of diverse systems, we manifest the most balanced and formidable magical framework of the modern era.
+        </p>
     </div>
-    
     <img 
       ref="islandRef" 
       src="/public/About/about-island.png" 
@@ -116,8 +129,7 @@ onUnmounted(() => {
       alt="#"
     >
     
-    <Wave class="wave-container"/>
-    <div class="location-container">
+    <div class="location-container" ref="mapSectionRef" :class="{ 'active': isMapVisible }">
       <h2>Location</h2>
       <div class="map-container">
         <img src="/public/About/world-map.png" alt="#">
@@ -229,15 +241,13 @@ onUnmounted(() => {
 
   .island-img {
     display: block;      
-    margin: 0 auto;
+    margin: 140px auto 315px;
     width: 50%;          
     height: auto;
     position: relative;  
     z-index: 10;
   }
-  .wave-container{
-    margin-top: -200px;
-  }
+
   .location-container{
     width: 100%;
     margin: 0 auto;
@@ -256,15 +266,73 @@ onUnmounted(() => {
   .map-container{
     position: relative;
   }
-  .pin-point{
+  .pin-point {
+  position: absolute;
+  top: 59%;    
+  left: 56.5%;   
+  transform: translate(-50%, -100%) scale(0); /* 預設 scale(0) 隱藏起來 */
+  opacity: 0; /* 預設透明 */
+  color: #FF9010;
+  font-size: 40px;
+  z-index: 20;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 呼吸燈效果 (波紋) */
+  &::after {
+    content: '';
     position: absolute;
-    top: 59%;    
-    left: 56.5%;   
-    transform: translate(-50%, -100%); 
-    color: #FF9010;
-    font-size: 40px;
-    z-index: 20;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 144, 16, 0.6);
+    border-radius: 50%;
+    z-index: -1;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0; /* 預設沒有波紋 */
   }
+}
+
+/* --- 當父層有 .active 時 (滾動到了!) --- */
+.location-container.active {
+  
+  /* 1. 本體：先彈跳出現，然後接著做持續的呼吸 */
+  .pin-point {
+    /* pop-in 是進場動畫, 0.6s 播完 */
+    /* glow-float 是持續懸浮呼吸, infinite */
+    animation: 
+      pop-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+      glow-float 3s ease-in-out infinite 0.6s; /* 延遲 0.6s 等進場完再開始 */
+  }
+
+  /* 2. 圖標內的光暈 */
+  .svg-inline--fa {
+    animation: glow-breath 2s infinite ease-in-out;
+  }
+
+  /* 3. 波紋：開始發射訊號 */
+  .pin-point::after {
+    animation: radar-wave 2s infinite cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* --- Keyframes 動畫定義 --- */
+
+/* A. 進場：從 0 彈出來 */
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0);
+  }
+  100% {
+    opacity: 1;
+    /* 回到正常大小 */
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
   .travel-modes{
     width: 635px;
     margin: 240px auto 0;
