@@ -1,8 +1,8 @@
 <template>
     <div class="information-wrapper">
         
-        <Cardpage v-if="currentview == 'membercard'" hasgap haspadding fontscolor></Cardpage>
-        <Ledgerpage v-else-if="currentview == 'ledger'"  hasgap haspadding fontscolor></Ledgerpage>
+        <Cardpage v-if="authStore.memberView == 'membercard'" hasgap haspadding fontscolor></Cardpage>
+        <Ledgerpage v-else-if="authStore.memberView == 'ledger'"  hasgap haspadding fontscolor></Ledgerpage>
         <!-- withoutbtn -->
     </div>
 </template>
@@ -11,14 +11,12 @@
     import { inject, provide, ref } from 'vue';
     import Cardpage from '../Login/cardpage.vue';
     import Ledgerpage from '../Login/ledgerpage.vue';
+import { useAuthStore } from '@/stores/autoStore';
 
-    const currentview = ref('membercard');
+    
+    const authStore = useAuthStore();
 
-    const setmemberview = (viewname) => {
-        currentview.value = viewname;
-    };
 
-    provide('setmemberview', setmemberview);
 
 
 
