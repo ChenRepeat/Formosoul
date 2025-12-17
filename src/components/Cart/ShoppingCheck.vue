@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '../../components/BasicButton.vue';
 import { RouterLink } from 'vue-router';
 
+
 </script>
 
 <template>

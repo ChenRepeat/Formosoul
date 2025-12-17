@@ -5,6 +5,25 @@ import OrderSuccess from '@/components/Cart/OrderSuccess.vue';
 import ShoppingCheck from '@/components/Cart/ShoppingCheck.vue';
 import BasicButton from '../components/BasicButton.vue';
 import Backgroundaction from '@/components/backgroundaction.vue';
+import { useRouter } from "vue-router";     //使用路由功能
+import { ref } from 'vue';
+
+// 宣告常數來接收 useRouter() ，方便後續使用
+const router = useRouter();
+
+// 設定路由功能
+function goShopping(){
+    router.push('/shop/productList')
+}
+
+
+// 步驟切換
+// 1: cart  2: payment  3: ordersuccess
+const currentStep = ref(1)
+
+function goPayment(){
+    currentStep.value = 2;
+}
 
 
 
@@ -18,17 +37,17 @@ import Backgroundaction from '@/components/backgroundaction.vue';
         Shopping Cart   
     </h6>
 
-    <h6 class="page-guide-step">
+    <h6 v-if="currentStep === 1" class="page-guide-step">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
         STEP 1. MY CART
     </h6>
 
-    <h6 class="page-guide-step dp-none">
+    <h6 v-else-if="currentStep === 2" class="page-guide-step">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
         STEP 2. PAYMENT & SHIPPING
     </h6>
     
-    <h6 class="page-guide-step dp-none">
+    <h6 v-else class="page-guide-step">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
         STEP 3. COMPLETED
     </h6>
@@ -37,24 +56,30 @@ import Backgroundaction from '@/components/backgroundaction.vue';
     <!-- 進度 -->
      <section>
         <ul class="dp-flex cart-dock">
-            <li class="cart-dock-block nowblock">
-                <h1 class="cart-step fw200 nowstep">1</h1>
-                <h6 class="cart-step-text nowtext">MY CART</h6>
+            <li 
+            class="cart-dock-block"
+            :class="{nowblock: currentStep === 1}">
+                <h1 class="cart-step fw200" :class="{nowstep: currentStep === 1}">1</h1>
+                <h6 class="cart-step-text" :class="{nowtext: currentStep === 1}">MY CART</h6>
             </li>
-            <li class="cart-dock-block">
-                <h1 class="cart-step fw200">2</h1>
-                <h6 class="cart-step-text">PAYMENT & SHIPPING</h6>
+            <li 
+            class="cart-dock-block"
+            :class="{nowblock: currentStep === 2}">
+                <h1 class="cart-step fw200" :class="{nowstep: currentStep === 2}">2</h1>
+                <h6 class="cart-step-text" :class="{nowtext: currentStep === 2}">PAYMENT & SHIPPING</h6>
             </li>
-            <li class="cart-dock-block">
-                <h1 class="cart-step fw200">3</h1>
-                <h6 class="cart-step-text">COMPLETED</h6>
+            <li 
+            class="cart-dock-block"
+            :class="{nowblock: currentStep === 3}">
+                <h1 class="cart-step fw200" :class="{nowstep: currentStep === 3}">3</h1>
+                <h6 class="cart-step-text" :class="{nowtext: currentStep === 3}">COMPLETED</h6>
             </li>
         </ul>
         <hr class="cart-step-bar">
      </section>
     
     <!-- 內容 -->
-    <section class="cart-step-content my-cart-dock dp-none">
+    <section v-if="currentStep === 1" class="cart-step-content my-cart-dock">
         <h5>Order Details</h5>
         <div class="orderdetail-head dp-flex fw200">
             <div class="itemhead-image"></div>
@@ -106,11 +131,17 @@ import Backgroundaction from '@/components/backgroundaction.vue';
         </div>
 
         <div class="btn-step dp-flex">
-            <BasicButton class="btn-gray-fill btn-fix-width">    
+            <BasicButton 
+            class="btn-gray-fill btn-fix-width"
+            @click="goShopping"
+            >    
                 <font-awesome-icon icon="fa-solid fa-angle-left" />
                 Back to Shopping
             </BasicButton>
-            <BasicButton class="btn-yellow-fill btn-fix-width">
+            <BasicButton 
+            class="btn-yellow-fill btn-fix-width"
+            @click="goPayment"
+            >
                 NEXT
                 <font-awesome-icon icon="fa-solid fa-angle-right" />
             </BasicButton>
@@ -122,7 +153,7 @@ import Backgroundaction from '@/components/backgroundaction.vue';
     </section>
 
   
-    <ShoppingCheck class="cart-step-content"/> 
+    <ShoppingCheck v-if="currentStep === 2" class="cart-step-content"/> 
     <OrderSuccess class="cart-step-content dp-none"/>
     <Backgroundaction></Backgroundaction>
 
@@ -167,6 +198,15 @@ import Backgroundaction from '@/components/backgroundaction.vue';
 .nowblock{
     border-bottom: 2.5px solid $color-fsWhite;
     color: $color-fsWhite;
+
+    & .nowstep{
+        color: $color-fsWhite;
+        border: 1.5px solid $color-fsWhite;
+    }
+
+    & .nowtext{
+        color: $color-fsWhite;
+    }
 }
 
 .cart-step{
@@ -178,10 +218,10 @@ import Backgroundaction from '@/components/backgroundaction.vue';
     margin: 0 auto 20px;  
 }
 
-.nowstep{
-    color: $color-fsWhite;
-    border: 1.5px solid $color-fsWhite;
-}
+// .nowstep{
+//     color: $color-fsWhite;
+//     border: 1.5px solid $color-fsWhite;
+// }
 
 .cart-step-text{
     text-align: center;
@@ -189,9 +229,9 @@ import Backgroundaction from '@/components/backgroundaction.vue';
     line-height: 300%;
 }
 
-.nowtext{
-    color: $color-fsWhite;
-}
+// .nowtext{
+//     color: $color-fsWhite;
+// }
 
 .cart-step-bar{
     border: none;
