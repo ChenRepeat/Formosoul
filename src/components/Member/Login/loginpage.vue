@@ -106,10 +106,13 @@
     .pagebutton{
         display: flex;
         border-radius: 8px 8px 0 0;
+        border: 0;
+
     }
 
     .pagecontain{
         background-color: $color-fsBlue50;
+        border: 0;
         border-radius: 0 0 8px 8px ;
         height: 90%;
 

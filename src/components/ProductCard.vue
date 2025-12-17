@@ -8,6 +8,10 @@ const props = defineProps({
   images: {
     type: Array,
     required: true
+  },
+  withwhite:{
+    type:Boolean,
+    default: false
   }
 });
 
@@ -22,7 +26,8 @@ watch(() => props.images, (newImages) => {
     canvasRefs.value.forEach((canvasEl, index) => {
       if(newImages[index]){
         const imageUrl = newImages[index].img;
-        draw(canvasEl, 230, 70, 32, imageUrl);
+        const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`;
+        draw(canvasEl, 230, 70, 32, finalImageUrl);
       }
     })
   }, 0);
@@ -73,7 +78,7 @@ onMounted(() => {
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
     const imageUrl = cards.value[index].img;
-    const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
+    const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`;
     draw(canvasEl, 230, 70, 32, finalImageUrl);
   })
 });
@@ -100,7 +105,7 @@ onMounted(() => {
   
       <h6 class="product-name">Bamboo Helicopter</h6>
       <div class="product-content dp-flex">
-        <p class="product-tag">#Traditional Toys</p>
+        <p class="product-tag" :class="{ 'withwhite': withwhite}">#Traditional Toys</p>
         <h6 class="product-price">NT 300</h6>
       </div>
     </div>
@@ -191,6 +196,10 @@ onMounted(() => {
     border-radius: 10px;
     padding: 0 8px;
     font-size: 1.2rem;
+
+    &.withwhite{
+      color: $color-fsWhite;
+    }
   }
 
   .product-price{

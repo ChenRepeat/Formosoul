@@ -1,8 +1,8 @@
 <template>
     <div class="information-wrapper">
-        <Cardpage></Cardpage>        
-        <!-- <Cardpage v-if="authStore.memberView == 'membercard'" hasgap haspadding fontscolor></Cardpage>
-        <Ledgerpage v-else-if="authStore.memberView == 'ledger'"  hasgap haspadding fontscolor withoutbtn></Ledgerpage> -->
+        <!-- <Cardpage></Cardpage>         -->
+        <Cardpage v-if="authStore.informationView == 'membercard'" hasgap haspadding fontscolor ></Cardpage>
+        <Ledgerpage v-else-if="authStore.informationView == 'ledger'"  hasgap haspadding fontscolor withoutbtn hascenter></Ledgerpage>
         <!-- withoutbtn -->
     </div>
 </template>
