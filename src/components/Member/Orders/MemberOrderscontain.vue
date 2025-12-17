@@ -1,39 +1,41 @@
 <template>
     <div class="detail" @click="activeIndex = 2">
-        <h2>Orders Detail</h2>
+        <h3>Orders Detail</h3>
         <div class="detailbar">
-            <h3>Orders Information</h3>
+            <p>Orders Information</p>
         </div>
-        <div v-for="order in orders" :key="order.id" class="orders-information">
-            <p>Order Number: {{ order.number }}</p>
-            <p>Order Date: {{ order.date }}</p>
-            <p>Order Status: {{ order.status }}</p>
-            <p>Recipient's Name: {{ order.name }}</p>
-            <p>Delivery method: {{ order.shipping }}</p>
-            <p>pieces: {{ order.pieces }}</p>
-            <p>address: {{ order.address }}</p>
-            <p>Remark: {{ order.remark }}</p>
+        <div v-for="order in orders" :key="order.id" class="orders-information notice">
+            <p>Order Number： <span>{{ order.number }}</span></p>
+            <p>Order Date： {{ order.date }}</p>
+            <p>Order Status： {{ order.status }}</p>
+            <p>Recipient's Name： {{ order.name }}</p>
+            <p>Delivery method： {{ order.shipping }}</p>
+            <p>pieces： {{ order.pieces }}</p>
+            <p>address： {{ order.address }}</p>
+            <p>Remark： {{ order.remark }}</p>
+            <p>* Notice *<br> {{ order.notice }}</p>
+
         </div>
         <div class="detailbar">
-            <h3>Payment Information</h3>
+            <p>Payment Information</p>
         </div>
         <div class="orders-information">
-            <h3>Credit Card Number : VISA/ MASTER/ JCB</h3>
+            <p>Payment Method： Credit Card (Pay in Full)－VISA/ MASTER/ JCB</p>
         </div>
         <div class="detailbar">
-            <h3>Orders</h3>
+            <p>Products Information</p>
         </div>
         <div v-for="product in products" class="orders-product">
             <img :src="product.images" :alt="1">
-            <span><h4>{{ product.name }}</h4><h4>{{ product.spec }}</h4></span>
-            <span><h4> Quantity : {{ product.pieces }} 件</h4></span>
-            <span><h4>NT$ {{ product.price }}</h4></span>
+            <span><p>{{ product.name }}</p><!--<p>{{ product.spec }}</p>--></span>
+            <span><p> {{ product.pieces }} item(s)</p></span>
+            <span><p>NT$ {{ product.price }}</p></span>
         </div>
         <div v-for="total in totals" class="total">
-            <span><h3>Subtotal:</h3><h6>NT$ {{ total.subtotal }}</h6></span>
-            <span><h3>Discount:</h3><h6>NT$ -{{ total.discount }}</h6></span>
-            <span><h3>Shipping Fee:</h3><h6>NT$ {{ total.fee }}</h6></span>
-            <span><h3>Total:</h3><h6>NT$ {{ total.total }}</h6></span>
+            <span><p>Subtotal：</p><p>NT$ {{ total.subtotal }}</p></span>
+            <span><p>Discount：</p><p>NT$ -{{ total.discount }}</p></span>
+            <span><p>Shipping Fee：</p><p>NT$ {{ total.fee }}</p></span>
+            <span><p>Total：</p><p>NT$ {{ total.total }}</p></span>
         </div>
 
         <div class="back-to-member">
@@ -54,9 +56,10 @@ import BasicButton from '@/components/BasicButton.vue';
             status: 'Deliverd',
             name: 'Irene',
             shipping: 'Home delivery',
-            pieces: 'one',
+            pieces: 'two',
             address: '238 No. 31, Lane 45, Section 2, Baoan Street, Shulin District, New Taipei City',
-            remark: 'Leave a message for us',
+            remark: 'Please leave it with the security guard / front desk.',
+            notice: 'To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.',
         },
     ]);
 
@@ -66,7 +69,7 @@ import BasicButton from '@/components/BasicButton.vue';
             name: 'PelletDrum',
             spec: 'large',
             pieces: '1',
-            price: '999',
+            price: '200',
 
         },
         {
@@ -74,7 +77,7 @@ import BasicButton from '@/components/BasicButton.vue';
             name: 'PelletDrum',
             spec: 'large',
             pieces: '1',
-            price: '999',
+            price: '99',
 
         },
 
@@ -85,7 +88,7 @@ import BasicButton from '@/components/BasicButton.vue';
             subtotal: '299',
             discount: '9',
             fee: '80',
-            total: '300',
+            total: '370',
         }
     ]);
 </script>
@@ -93,48 +96,66 @@ import BasicButton from '@/components/BasicButton.vue';
 <style lang="scss" scoped>
     .detail{
         margin: 0 auto;
-        max-width: 1200px;
+        max-width: 1000px;
+
+        & >h3{
+            text-align: center;
+            margin: 100px 0 100px 0;
+        }
+
+        & .notice{
+            & span{
+                color: $color-fsRed;
+                font-weight: 600;
+            }
+
+            & p:last-of-type{
+                color: $color-fsBlue;
+            }
+        }
     }
 
-    h2{
-        text-align: center;
-        margin: 100px 0 100px 0;
-    }
-
-    h3{
-        text-align: center;
-    }
-
-    .orders-information > h3{
-        text-align: start;
-    }
+    .orders-information{
+        & >p{
+            text-align: start;
+        }
+    } 
 
     .detailbar{
-        border: 0;
         border-radius: 8px;
-        background-color: #f0f7ff;
-        margin-bottom: 16px;
+        background-color: $color-fsBlue50;
+        height: 40px;    
+        margin: 16px 0 16px;
+        padding: 0 20px;
+        & p{
+            line-height: 40px;
+            font-weight: 600;
+        }
     }
+
     .orders-information{
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 8px;
         margin-bottom: 16px;
-        
+        padding: 0 32px;    
     }
 
 
     .orders-product{
         display: flex;
         justify-content: space-between;
-        padding: 16px;
-        border-bottom: 1px solid #ddd;
+        margin: 0 32px;
+        padding: 32px;
+        border-bottom: 1px solid $color-fsCaption;
     }
 
     .orders-product > img{
-        width: 180px;   
-        height: 180px;
-        object-fit: contain;
+        width: 100px;   
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid $color-fsCaption;
     }
     
     .orders-product > span{
@@ -143,46 +164,47 @@ import BasicButton from '@/components/BasicButton.vue';
         align-items: center;
         flex-direction: column;
         gap: 16px;
+        color: $color-fsTitle;   
     }
 
-    .orders-product > span{
-        color: $color-fsTitle;
-        
-    }
-    .orders-product > span:nth-child(3){
-        color: $color-fsCaption;
-    }
-
-    .orders-product > span:nth-child(4){
-        color: $color-fsRed;
-    }
 
     .total{
-        width: 50%;
+        width: 30%;
         display: flex;
         flex-direction: column;
-        margin-left: auto;
-        margin-top: 16px;
+        margin: 20px 32px 20px auto;
         gap: 16px;
+
+        & span{
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+
+            & p:last-of-type{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        & span:last-of-type{
+
+            & p{
+                font-size: 2.8rem;
+            }
+            & p:last-of-type{
+                color: $color-fsRed;
+            }
+        }
     }
 
-    .total > span{
-        display: flex;
-        justify-content: space-between;
-    }
 
-    .total > span > h6{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $color-fsRed;
-    }
+    
 
     .back-to-member{
-        margin-top: 32px;
+        margin: 100px 32px;
         display: flex;
         justify-content: center;
-        padding: 32px;
     }
     .back-to-member > .btn-yellow-fill > a{
         color: $color-fsTitle;
