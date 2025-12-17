@@ -20,14 +20,14 @@
                 <h6 class="fw200">{{ member.date }}</h6>
             </div>
         </div>
-        <img src="../../../../public/member/icon.png" alt="">
+        <img :src="`${publicPath}member/icon.png`" alt="">
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
+const publicPath = import.meta.env.BASE_URL;
 const props = defineProps({
     withouteditbtn:{
         type: Boolean,
@@ -37,7 +37,7 @@ const props = defineProps({
 
 const memberphoto = ref([
     {
-        images: '../../../../public/member/photo.png',
+        images: `${import.meta.env.BASE_URL}member/photo.png`,
     },
 ]);
 

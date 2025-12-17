@@ -245,9 +245,7 @@ function togglePassword() {
         margin-bottom: 16px;
 
     }
-    // .otp-input >.input-text{
-    //     width: 70%;
-    // }
+    
     .password-input{
         position: relative;
     }

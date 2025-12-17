@@ -19,7 +19,6 @@
 import BasicButton from '@/components/BasicButton.vue';
 import Membercard from '../information/membercard.vue'; 
 import { useAuthStore } from '@/stores/autoStore';
-import { handleError, inject } from 'vue';
     const props = defineProps({
         hasgap:{
             type: Boolean,

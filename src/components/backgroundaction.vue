@@ -2,14 +2,14 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const images = [
-  '../../public/Home/home-about-badge.png',
-  '../../public/Home/home-annual-lantern.png',
-  '../../public/Home/home-class-book.png',
-  '../../public/Home/home-news-owl.png',
-  '../../public/Home/home-policy-scroll.png',
-  '../../public/Home/home-professor-people.png',
-  '../../public/Home/home-shopping-money.png',
-  '../../public/Home/home-survival-compass.png',
+  'Home/home-about-badge.png',
+  'Home/home-annual-lantern.png',
+  'Home/home-class-book.png',
+  'Home/home-news-owl.png',
+  'Home/home-policy-scroll.png',
+  'Home/home-professor-people.png',
+  'Home/home-shopping-money.png',
+  'Home/home-survival-compass.png',
 ];
 
 const positions = ref(
