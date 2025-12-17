@@ -19,11 +19,16 @@ function goProductList(){
 
 
 // Tab 開關
-const isShow = ref(true);
+//const tabInfo = ref(story);  story 對程式來說是變數，所以需要宣告程式才會認識
+const tabInfo = ref('story');
 
-function goInfo(){
-    
+// like 切換
+const isLike = ref(true);
+function likeHeart(){
+    //isLike = !isLike;   因為是const，所以這樣寫無法改變值
+    isLike.value = !isLike.value;
 }
+
 
 
 </script>
@@ -48,14 +53,18 @@ function goInfo(){
     
             <div class="detail-pic dp-flex">
                 <ul class="detail-pic-small dp-flex-col">
-                    <li><img src="../../../public/Shop/2-1.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2.png" alt=""></li>
                     <li><img src="../../../public/Shop/2-2.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2-1.png" alt=""></li>
                     <li><img src="../../../public/Shop/2-3.png" alt=""></li>
                     <li><img src="../../../public/Shop/2-4.png" alt=""></li>
                 </ul>
                 <div class="detail-pic-big">
                     <img src="../../../public/Shop/2.png" alt="">
-                    <font-awesome-icon class="detail-pic-icon" icon="fa-regular fa-heart" />
+                    <div class="detail-pic-icon-dock" @click="likeHeart">
+                        <font-awesome-icon v-if="isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
+                        <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart"/>
+                    </div>
                 </div>
             </div> 
     
@@ -95,18 +104,45 @@ function goInfo(){
     
         <section class="detail-secondary">
             <ul class="detail-tab dp-flex">
-                <li :class="{show: isShow}" @click="goInfo">Story</li>
-                <li :class="{show: !isShow}" @click="goInfo">How to Play / Use</li>
-                <li :class="{show: !isShow}" @click="goInfo">Shipping</li>
-                <li :class="{show: !isShow}" @click="goInfo">Payment</li>
+                <li :class="{show: tabInfo === 'story'}" @click="tabInfo = 'story'">Story</li>
+                <li :class="{show: tabInfo === 'howtoplay'}" @click="tabInfo = 'howtoplay'">How to Play / Use</li>
+                <li :class="{show: tabInfo === 'shipping'}" @click="tabInfo = 'shipping'">Shipping</li>
+                <li :class="{show: tabInfo === 'payment'}" @click="tabInfo = 'payment'">Payment</li>
             </ul>
     
             <hr>
-    
-            <p class="fw200">
+
+            <p v-if="tabInfo === 'story'" class="fw200 story">
+                The bamboo helicopter originated in ancient Asia and was a favorite among children, 
+                who would compete to see whose toy flew higher or farther. 
+                It’s a symbol of handmade ingenuity—a classic memory of childhood in rural Taiwan, 
+                blending natural materials with simple physical science.
+            </p>
+
+            <p v-if="tabInfo === 'howtoplay'" class="fw200 howtoplay">
+                Hold the stick between your fingers, twist rapidly upward, 
+                and release—the bamboo helicopter will spin and fly into the air. 
+                The traditional way to play is to compete for the highest or farthest flight.
+            </p>
+
+            <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
                 International Home Delivery <br>
                 <br>
-                We offer international shipping, delivering products to your specified address anywhere in the world. Once dispatched, you’ll receive global tracking information, allowing you to follow your package every step of the way.
+                We offer international shipping, delivering products to your specified address anywhere in the world. 
+                Once dispatched, you’ll receive global tracking information, allowing you to follow your package every step of the way.
+            </p>
+    
+            <p v-if="tabInfo === 'payment'" class="fw200 payment">
+                Credit Card Instant Online Payment <br>
+                <br>
+                A convenient payment option. 
+                When you choose online card payment, 
+                the process is secured with SSL encryption to protect your personal and private data. <br>
+                <br>
+                Apple Pay Mobile Payment <br>
+                <br>
+                With Apple Pay, simply hold your iPhone or Apple Watch near the reader to securely and quickly complete your payment—no physical cards needed. 
+                The payment process is protected by Apple’s encryption technology, ensuring your transaction and personal information are safe.
             </p>
     
         </section>
@@ -188,12 +224,16 @@ function goInfo(){
     border-radius: 10px; 
 }
 
-.detail-pic-icon{
-    font-size: 2rem;
-    color: $color-fsRed;
+.detail-pic-icon-dock{
     position: absolute;
     top: 20px;
     right: 20px;
+    cursor: pointer;
+}
+
+.detail-pic-icon{
+    font-size: 2rem;
+    color: $color-fsRed;
 }
 
 
@@ -258,32 +298,43 @@ function goInfo(){
 
 //商品說明
 
-.detail-tab>li{
-    font-size: 1.6rem;
-    line-height: 200%;
-    flex-basis: 0;
-    flex-grow: 1;
-    text-align: center;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
+.detail-tab{
+    & li{
+        font-size: 1.6rem;
+        line-height: 200%;
+        flex-basis: 0;
+        flex-grow: 1;
+        text-align: center;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+
+        &:hover{
+            border-bottom: 2px solid $color-fsWhite;
+        }
+
+        //tab bar 切換
+        &.show{
+            border-bottom: 2px solid $color-fsWhite;
+        }
+    }
+
+    
 }
 
-.detail-tab>li:hover{
-    border-bottom: 2px solid $color-fsWhite;
-}
-.detail-tab>li.show{
-    border-bottom: 2px solid $color-fsWhite;
+
+.detail-secondary{
+    & hr{
+        height: 0.5px;
+        background-color: $color-fsWhite;
+        border: none; 
+    }
+
+    & p{
+        padding-top: 60px;
+    }
 }
 
-.detail-secondary>hr{
-    height: 0.5px;
-    background-color: $color-fsWhite;
-    border: none; 
-}
 
-.detail-secondary>p{
-    padding-top: 60px;
-}
 
 
 // 回shop btn
