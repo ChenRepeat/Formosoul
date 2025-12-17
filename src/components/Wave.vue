@@ -89,8 +89,8 @@ onMounted(() => {
         context.lineTo(x, y);
       }
       
-      context.strokeStyle = gradient;
       context.lineWidth = this.lineWidth;
+      context.strokeStyle = gradient;
       context.lineCap = 'round';
       context.lineJoin = 'round';
       context.stroke();
