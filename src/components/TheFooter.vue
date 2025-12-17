@@ -101,16 +101,17 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
               <router-link to="/policy"><h5>Policy</h5></router-link>
             </li>
             <li>
-              <a href=""><p>Payment</p></a>
+              <router-link to="/policy/payment"><p>Payment</p></router-link>
             </li>
             <li>
-              <a href=""><p>Delivery</p></a>
+              <router-link to="/policy/delivery"><p>Delivery</p></router-link>
+
             </li>
             <li>
-              <a href=""><p>Returns</p></a>
+              <router-link to="/policy/returns"><p>Returns</p></router-link>
             </li>
             <li>
-              <a href=""><p>Privacy Policy</p></a>
+              <router-link to="/policy/privacypolicy"><p>Privacy Policy</p></router-link>
             </li>
           </ul>
         </div>
@@ -151,13 +152,14 @@ hr {
 }
 .footer-case {
   background-color: #041426;
-  width: 1200px;
   padding-top: 60px;
   padding-bottom: 16px;
   height: 100%;
-  margin: 0 auto;
+  width: 100%;
 }
 .footer-outer-case {
+  margin: 0 auto;
+  width: 1200px;
   gap: 100px;
   justify-content: center;
 }

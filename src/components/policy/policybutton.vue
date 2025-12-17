@@ -26,9 +26,9 @@ const route = useRoute();
 
 
 const getcurrentpage = (path) => {
-  if (path.includes('delivery')) return 0;
-  if (path.includes('returns')) return 1;
-  if (path.includes('orderslist')) return 2;
+  if (path.includes('payment')) return 0;
+  if (path.includes('delivery')) return 1;
+  if (path.includes('returns')) return 2;
   if (path.includes('privacypolicy')) return 3;
   return 0;
 }
