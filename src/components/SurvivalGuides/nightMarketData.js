@@ -74,6 +74,9 @@ export const infoFrames = [
         text: 'Lu rou fan, or braised pork rice, is a popular Taiwanese comfort food made from minced or finely chopped pork belly slowly braised in a savory and slightly sweet soy sauce–based gravy with garlic, shallots, five-spice powder, and Shaoxing rice wine. The pork is cooked until tender and flavorful, then served over hot steamed white rice, creating a rich and satisfying meal loved across Taiwan. This dish is simple yet deeply aromatic, with a balance of salty, sweet, and umami flavors that make it a staple in Taiwanese cuisine.',
         subImg1: '/tjd103/SurvivalGuide/rice2.jpg',
         subImg2: '/tjd103/SurvivalGuide/rice3.jpg',
+        subImg3: '/tjd103/SurvivalGuide/rice4.jpg',
+        subImg4: '/tjd103/SurvivalGuide/rice5.jpg',
+
     },
     {
         id: 'food-introduction-tofu',
@@ -83,6 +86,8 @@ export const infoFrames = [
         text: "Stinky Tofu is one of Taiwan's most iconic and famous street foods, known for its unique characteristic: 'the stronger the smell, the better the taste.' Made from fermented bean curd, it is typically deep-fried until the skin is golden and crispy, while the inside remains soft and juicy. It is best enjoyed with a side of sweet and sour pickled cabbage and a splash of garlic soy sauce. For travelers, trying Stinky Tofu is the ultimate challenge and a true taste of Taiwanese night market culture.",
         subImg1: '/tjd103/SurvivalGuide/tofu2.jpg',
         subImg2: '/tjd103/SurvivalGuide/tofu3.jpg',
+        subImg3: '/tjd103/SurvivalGuide/tofu4.jpg',
+        subImg4: '/tjd103/SurvivalGuide/tofu5.jpg',
     },
     {
         id: 'food-introduction-bubble-tea',
@@ -92,6 +97,8 @@ export const infoFrames = [
         text: "Bubble Tea, also known as Pearl Milk Tea, is Taiwan's most iconic beverage that has taken the world by storm. It perfectly blends rich, creamy milk tea with chewy tapioca pearls, known locally as 'boba.' The unique combination of the smooth tea and the springy texture of the pearls creates a delightful experience in every sip. Whether served ice-cold or warm, it is the ultimate symbol of Taiwanese innovations in tea culture.",
         subImg1: '/tjd103/SurvivalGuide/bubble_tea2.jpg',
         subImg2: '/tjd103/SurvivalGuide/bubble_tea3.jpg',
+        subImg3: '/tjd103/SurvivalGuide/bubble_tea4.jpg',
+        subImg4: '/tjd103/SurvivalGuide/bubble_tea5.jpg',
     },
     {
         id: 'food-introduction-sausage',
@@ -101,6 +108,8 @@ export const infoFrames = [
         text: "Known as the 'Taiwanese Hot Dog,' this snack features a juicy pork sausage wrapped inside a chewy sticky rice 'bun.' Stuffed with garlic, pickled vegetables, and soy paste, it delivers a perfect mix of textures—crispy skin, tender meat, and soft rice—creating a unique savory and sweet flavor.",
         subImg1: '/tjd103/SurvivalGuide/sausage2.jpg',
         subImg2: '/tjd103/SurvivalGuide/sausage3.jpg',
+        subImg3: '/tjd103/SurvivalGuide/sausage4.jpg',
+        subImg4: '/tjd103/SurvivalGuide/sausage5.jpg',
     },
     {
         id: 'food-introduction-oil',
@@ -110,6 +119,8 @@ export const infoFrames = [
         text: "Scallion Pancakes are a beloved Taiwanese street snack known for their crispy, flaky layers. Made from dough folded with oil and fresh green onions, they are pan-fried until golden brown. Whether eaten plain or topped with an egg and soy paste, they offer a savory, aromatic bite with a satisfyingly chewy texture.",
         subImg1: '/tjd103/SurvivalGuide/oil2.jpg',
         subImg2: '/tjd103/SurvivalGuide/oil3.jpg',
+        subImg3: '/tjd103/SurvivalGuide/oil4.jpg',
+        subImg4: '/tjd103/SurvivalGuide/oil5.jpg',
     },
     {
         id: 'food-introduction-chicken',
@@ -119,6 +130,8 @@ export const infoFrames = [
         text: "Famous for its massive size—often bigger than a human face—the Taiwanese Fried Chicken Cutlet is the king of night market snacks. The chicken breast is flattened, battered, and deep-fried to golden perfection. Seasoned generously with salt, pepper, and five-spice powder, it creates a crispy outer shell while keeping the meat incredibly juicy and tender inside.",
         subImg1: '/tjd103/SurvivalGuide/chicken2.jpg',
         subImg2: '/tjd103/SurvivalGuide/chicken3.jpg',
+        subImg3: '/tjd103/SurvivalGuide/chicken4.jpg',
+        subImg4: '/tjd103/SurvivalGuide/chicken5.jpg',
     },
     {
         id: 'game-introduction-dice',
