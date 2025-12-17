@@ -1,9 +1,11 @@
 <script setup>
 // import BasicButton from './BasicButton.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 
 // ================ 試試看用 props 寫法 ================
 const props = defineProps({
-  text: { type: String, required: true },
+  text: { type: String, default:'' },
   width: { type: String, default: '280px'},
   height: { type: String, default: '250px'},
   align: {type: String, default: 'left'},
@@ -21,7 +23,10 @@ const emit = defineEmits(['click'])
     class="text-content"
     :style="{ textAlign: props.align }" 
   >
+  <slot>
     {{ props.text }}
+
+  </slot>
   </component>
 
   <!-- 用slot的話 預設是 Enter，但可以被其他想要使用的父層覆蓋 -->
