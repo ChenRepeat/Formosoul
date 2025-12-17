@@ -98,7 +98,6 @@ onUnmounted(() => clearInterval(interval));
   right: -30px;
   bottom: -30px;
   background-color: black;
-  filter: blur(25px);
   z-index: -1; 
 }
 

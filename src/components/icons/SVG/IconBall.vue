@@ -43,6 +43,7 @@
 <style scoped>
   svg {
     transition: transform 0.2s ease-in-out;
+    filter: blur(25px);
   }
   /* 滑鼠移過去可以有放大效果 */
   /* svg:hover {
