@@ -179,7 +179,7 @@ const buaBue = () => {
 </template>
   
 <style lang="scss" scoped>
-  .divination-right{width: 100%;height: 100%;gap: 30px;}
+  .divination-right{width: 100%;height: 100%;gap: 60px;}
    p{
       color: $color-fsContent;
     }
@@ -340,7 +340,7 @@ const buaBue = () => {
     
     h3{
       position: absolute;
-      bottom: 10%;right: 10%;
+      bottom: -10%;right: 10%;
     }
   }
   .bue-case {
@@ -449,13 +449,13 @@ const buaBue = () => {
   100%{transform: rotate(0deg);}
 }
 @keyframes clickMe{
-  0% {transform: rotate(0deg);color: $color-fsTitle;}
-  5% {transform: rotate(-10deg);color: $color-fsGold;}
-  10%{transform: rotate(10deg);color: $color-fsGold300;}
-  15% {transform: rotate(-10deg);color: $color-fsGold;}
-  20%{transform: rotate(10deg);color: $color-fsGold300;}
-  25%{transform: rotate(0deg);color: $color-fsTitle;}
-  100%{transform: rotate(0deg);color: $color-fsTitle;}
+  0% {transform: rotate(-35deg);color: $color-fsTitle;}
+  5% {transform: rotate(-45deg);color: $color-fsGold;}
+  10%{transform: rotate(-25deg);color: $color-fsGold300;}
+  15% {transform: rotate(-45deg);color: $color-fsGold;}
+  20%{transform: rotate(-25deg);color: $color-fsGold300;}
+  25%{transform: rotate(-35deg);color: $color-fsTitle;}
+  100%{transform: rotate(-35deg);color: $color-fsTitle;}
 }
 @keyframes qianPull{
   0%{top: 2%;left: 29%;transform: rotate(-10deg);}
@@ -479,6 +479,10 @@ const buaBue = () => {
   display: none;
 }
 .clickMe{
+  display: inline-block;
   animation: 4s clickMe 5s linear infinite forwards;
+  position: absolute;
+  top: 10%;
+  left: 15%;
 }
 </style>

@@ -72,7 +72,7 @@
   }
   .moonfes-img-case{
       position: absolute;
-      bottom: -52%;
+      bottom: -60%;
       left: -15%;
       img{
       width: 200px;

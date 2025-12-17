@@ -62,6 +62,7 @@
       </div>
       <div class="page">
         <div class="page-content">
+          <Maho />
         </div>
       </div>
 
@@ -104,12 +105,12 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <CharmLeft @flip="goToPage"/>
+          <CharmLeft @flip="goToPage" :shared-image="sharedImage"/>
         </div>
       </div>
       <div class="page">
         <div class="page-content">
-          <CharmRight  @flip="goToPage"/>
+          <CharmRight  @flip="goToPage" @save-image="handleReceiveFromA"/>
         </div>
       </div>
       <div class="page">
@@ -164,6 +165,7 @@ import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
 import CharmRight from '@/components/ClassPages/CharmRight.vue';
+import Maho from '@/components/ClassPages/Maho.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true);
@@ -468,6 +470,11 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown);
   window.removeEventListener('resize', handleResize);
 });
+const sharedImage = ref('');
+
+const handleReceiveFromA = (url) => {
+  sharedImage.value = url;
+};
 </script>
 
 <style lang="scss" scoped>

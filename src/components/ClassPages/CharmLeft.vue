@@ -1,9 +1,10 @@
 <script setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  import { computed , ref , Transition } from 'vue';
+  import { computed , ref , Transition, watch } from 'vue';
   const rightArrow = ref(null);
   const clickCharm = ref('0');
-  const charmsRow1 = {
+  const props = defineProps(['sharedImage']);
+  const charmsRow1 = ref({
     1: {
         name: 'Talisman of Celestial Banishing',
         intro: 'Wards off misfortune and bad luck influences represented by the "Broom Star."', 
@@ -38,8 +39,8 @@
         name: `Talisman for Infant's Nocturnal Silence`,
         intro: 'Soothes restless children; ensures infants remain quiet and sleep through the night.', 
         imgUrl:'Classes/charms/charm7.png',
-    }}
-  const charmsRow2 = {
+    }})
+  const charmsRow2 = ref({
     8: {
         name: 'Talisman of Persistent Intruder Removal',
         intro: 'Drives away chronic thievery; secures the premises against repeated burglaries.', 
@@ -75,19 +76,31 @@
         intro: 'Facilitates connection; allows two individuals to meet and communicate within a dream state.', 
         imgUrl:'Classes/charms/charm14.png',
     },
-  };
+  });
 
   function changeIntro(i){
     clickCharm.value = String(i);
   }
  const currentIntro = computed(() => {
     const selectedId = clickCharm.value;
-    if (charmsRow1[selectedId]) {
-      return charmsRow1[selectedId];
+    if (charmsRow1.value[selectedId]) {
+      return charmsRow1.value[selectedId];
     }
-    if (charmsRow2[selectedId]) {
-      return charmsRow2[selectedId];
+    if (charmsRow2.value[selectedId]) {
+      return charmsRow2.value[selectedId];
     }
+});
+watch(() => props.sharedImage, (newVal) => {
+  if (newVal) {
+    charmsRow2.value[13].imgUrl = newVal;
+  }
+});
+const buyWord = computed(() => {
+  if (charmsRow2.value[13].imgUrl == 'Classes/charms/charm13.png') {
+    return 'Draw Your Own !';
+  } else {
+    return 'Make Your Product!';
+  }
 });
 </script>
 
@@ -155,14 +168,8 @@
             @mousedown.stop
             @touchstart.stop/>
           </h6>
-          <div class="intro-img-case dp-flex">
-            <img 
-            v-for="(item, key) in currentIntro.recipe" :key="key"
-            :src="item.imgUrl"
-            :alt="item.name">
-          </div>
           <p>{{ currentIntro.intro }}</p>
-          <p v-if="clickCharm==13" class="userDraw">Draw Your Own 
+          <p v-if="clickCharm==13" class="userDraw">{{buyWord}}
             <font-awesome-icon icon="fa-solid fa-circle-right" class="rightArrow"/>
           </p>
           </div>
@@ -270,7 +277,7 @@
   text-align: right;
 }
 .userDrowed{
-  animation: changeShadow 1s ease infinite;
+  animation: changeShadow 5s ease infinite;
 }
 .rightArrow{
   animation: changeColor 0.5s ease infinite;

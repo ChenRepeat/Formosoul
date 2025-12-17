@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import BasicButton from '../BasicButton.vue';
 
+
 const canvasRef = ref(null);
 const context = ref(null);
 const isDrawing = ref(false);
@@ -15,6 +16,9 @@ onMounted(() => {
   canvas.height = 540;
   context.value.lineCap = 'round';
   context.value.lineJoin = 'round';
+  context.value.fillStyle = "#FFFCC2";
+  context.value.fillRect(0,0,canvasRef.value.width, canvasRef.value.height);
+  
 });
 
 const startDrawing = (e) => {
@@ -32,16 +36,28 @@ const draw = (e) => {
   context.value.strokeStyle = brushColor.value;
   context.value.lineTo(offsetX, offsetY);
   context.value.stroke();
+  const dataUrl = canvasRef.value.toDataURL();
+  emit('save-image', dataUrl);
 };
-
+const emit = defineEmits(['save-image']);
 const stopDrawing = () => {
   isDrawing.value = false;
   context.value.closePath();
+
 };
 
 const clearCanvas = () => {
   context.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
+  context.value.fillStyle = "#FFFCC2";
+  context.value.fillRect(0,0,canvasRef.value.width, canvasRef.value.height);
+  emit('save-image', 'Classes/charms/charm13.png');
 };
+
+
+const save = () => {
+  const finalData = canvasRef.value.toDataURL();
+};
+
 </script>
 
 <template>
@@ -69,7 +85,7 @@ const clearCanvas = () => {
           class="btn-black"
         >Clear</BasicButton>
         <BasicButton  
-          @click=""
+          @click="save"
           class="btn-black"
         >Save</BasicButton>
       </div>
@@ -85,7 +101,8 @@ const clearCanvas = () => {
 }
 canvas {
   cursor: crosshair;
-  border: 2px double $color-fsTitle;
+  outline: 5px solid $color-fsTitle;
+  outline-offset: -10px;
 }
 .toolbar {
   gap: 10px;
