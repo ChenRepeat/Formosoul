@@ -69,7 +69,7 @@ const startGamePlay = () => {
 onMounted (()=>{
     setTimeout(() => {
         isMapReady.value = true;
-    }, 2000);
+    }, 1500);
 })
 
 </script>
@@ -369,6 +369,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 60%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== 珍珠奶茶 攤位的區塊 ===================== 
@@ -410,6 +412,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-40%, 60%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 // ===================== 臭豆腐 攤位的區塊 ===================== 
 
@@ -450,6 +454,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-30%, 50%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== 雞排 攤位的區塊 ===================== 
@@ -492,6 +498,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-30%, 60%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 
@@ -535,6 +543,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 70%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== 蔥油餅 攤位的區塊 ===================== 
@@ -577,6 +587,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 60%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== 共同 的區塊 ===================== 
@@ -661,6 +673,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(100%, -160%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== prawing 遊戲的區塊 ===================
@@ -703,6 +717,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(120%, -80%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== ring-toss 遊戲的區塊 =================
@@ -745,6 +761,8 @@ onMounted (()=>{
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-180%, -220%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 }
 
 // ===================== 遊戲 Modal 的區塊 =================
