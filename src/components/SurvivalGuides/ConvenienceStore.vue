@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from 'vue'
 import SurvivalTextFrame  from "@/components/SurvivalTextFrame.vue";
 import SurvivalCSIntroductionFrame from "@/components/SurvivalCSIntroductionFrame.vue";
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import  { csIntroFrame  } from "@/components/SurvivalGuides/convenienceStoreData.js";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+import BasicButton from "../BasicButton.vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 
 const isShow = ref(-1);
