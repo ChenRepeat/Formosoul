@@ -1,10 +1,5 @@
 <script setup>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import ProductList from '@/components/SHOP/ProductList.vue';
-import ProductDetail from '@/components/SHOP/ProductDetail.vue';
 import Backgroundaction from '@/components/backgroundaction.vue';
-
-
 
 </script>
 
