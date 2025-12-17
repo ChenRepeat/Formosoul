@@ -125,7 +125,7 @@ We are dedicated to exploring the ultimate equilibrium of magic: intertwining th
       <div class="list-category-group">
         <div class="list-dock">
           <div class="list-liquidGlass">
-            <font-awesome-icon class="list-faIcon" icon="fa-solid fa-plane" />
+            <font-awesome-icon class="list-faIcon" icon="fa-solid fa-anchor" />
           </div>
         </div>
       </div>
@@ -146,7 +146,8 @@ We are dedicated to exploring the ultimate equilibrium of magic: intertwining th
   .about-container {
     position: relative; 
     overflow: hidden;
-    color: #fff;   
+    color: #fff;
+    background-color: #000;   
   }
 
   .island-text {
@@ -401,10 +402,9 @@ We are dedicated to exploring the ultimate equilibrium of magic: intertwining th
 
   //港口
   .by-sea{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+display: flex;
     border: 1px solid red;
     width: 560px;
+    margin: 0 auto;
   }
 </style>
