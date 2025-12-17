@@ -316,6 +316,7 @@ onUnmounted(() => {
       </div>
     </section>
 
+    <Backgroundaction></Backgroundaction>
     <section class="news-updates-section">
       
       <div class="news-updates-header">

@@ -43,6 +43,9 @@ const router = createRouter({
     {
       path: '/news',
       name: 'News',
+      meta:{ 
+        bgColor:'transparent',
+      },
       component: News,
     },
     {
