@@ -235,10 +235,14 @@ hr{
 
 @media screen and (max-width: 1200px) {
   .footer-outer-case {
+    width: 95%;
     display: flex;
     flex-direction: column-reverse;
     gap: 32px;
     align-items: center;
+  }
+  .footer-inner-case{
+    gap: 30px;
   }
   .footer-link-corner {
     flex-direction: column;

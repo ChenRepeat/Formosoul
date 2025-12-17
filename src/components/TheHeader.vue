@@ -92,7 +92,8 @@ function handlelogout() {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <router-link to="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"/></router-link>
+          <router-link to="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"
+             @click="closeMenu"/></router-link>
           <!-- <a href="/member"></a> -->
          
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
@@ -131,7 +132,7 @@ function handlelogout() {
       :class="{ 'active': isMemberMenuOpen }">
         <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
         <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
-        <!-- <li><a href="/news"><h5>News</h5></a></li> -->
+
       </ul>
       </transition>
     </div>
@@ -219,9 +220,10 @@ img { object-fit: none; }
 .header-link.open {
   height: 100vh; 
 }
-.header-link:has(.member-list){
-  max-height: 30vh;
+.header-link.open:has(.member-list){
+  height: 280px;
 }
+
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
 .liquidGlass-wrapper {
   position: relative;
@@ -307,6 +309,24 @@ img { object-fit: none; }
 
 .btn-gray-fill > h5{
   color: $color-fsWhite;
+}
+
+@media screen and (max-width: 1200px) {
+  .header-link{
+    padding: 6px 20px;
+    align-items: center;
+    height: 50px;
+
+  }
+  .header-icons-list{
+    gap: 8px;
+  }
+  .header-icon{
+    font-size: 22px;
+  }
+  .hamburger-btn{
+    transform: scale(0.8);
+  }
 }
 
 </style>

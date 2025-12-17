@@ -290,7 +290,7 @@ onUnmounted(()=>{
   document.removeEventListener('mouseup', offPress)
   document.removeEventListener('touchstart', onMousemove)
   document.removeEventListener('touchend', offPress)
-  if(timer.value) clearInterval(timer.value)
+  // if(timer.value) clearInterval(timer.value)
 })
 
 </script>

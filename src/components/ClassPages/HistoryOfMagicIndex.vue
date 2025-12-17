@@ -63,6 +63,7 @@
     text-align-last: left;
     align-items: center;
     gap: 24px;
+    cursor: pointer;
   }
 
   .page-index::after{

@@ -39,6 +39,8 @@ css: {
         // 直接使用相对于项目根目录的路径。
         // Vite/Sass 的解析器通常能更好地处理这种相对路径。
         additionalData: `@import "/src/assets/_variables.scss";`,
+        quietDeps: true,  // 關閉第三方依賴的警告
+        silenceDeprecations: ['import']  // 關閉 @import 特定警告
       }
     }
   },
