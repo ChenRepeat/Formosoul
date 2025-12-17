@@ -73,7 +73,6 @@ const handleMouseDown = () => {
     if(gameState.value !== 'IDLE') return;
 
     isGrabbing.value = true;
-    // 1. 骰子隱藏並回到空中
     diceOpacity.value = 0;
     const containerwidth = 500;
     const containerheight = 500;
@@ -93,7 +92,6 @@ const handleMouseDown = () => {
 
 // 放開 丟骰子
 const handleMouseUp = () => {
-  // 防止重複觸發
   if(!isGrabbing.value) return; 
   isGrabbing.value = false;
   throwDice();
@@ -107,7 +105,6 @@ const throwDice = () => {
       dice.translateX = 0;
       dice.translateY = 0;
   });
-  // 2. 讓骰子開始旋轉 (數據與內部動畫)
   randomRoll();
 }
 

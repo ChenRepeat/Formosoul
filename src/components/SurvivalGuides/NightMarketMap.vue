@@ -364,7 +364,7 @@ function closeWelcomeFrame (){
 
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
-    opacity: 0; // 完全透明
+    opacity: 0; 
 } 
 .welcome-text-frame.is-visible {
     opacity: 1; 

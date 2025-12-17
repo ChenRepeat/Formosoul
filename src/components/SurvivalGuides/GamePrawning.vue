@@ -115,7 +115,7 @@ const generateRandomItems = (count) => {
         let isOverlapping = true;
         let attempts = 0;
 
-        // 嘗試找位置，最多試 50 次，找不到就硬塞 (避免當機)
+        // 嘗試找位置，最多試 50 次，找不到就直接開始
         while (isOverlapping && attempts < 100) {
             attempts++;
             isOverlapping = false; // 先假設沒重疊
@@ -131,8 +131,8 @@ const generateRandomItems = (count) => {
                 const distance = Math.sqrt(dx*dx + dy*dy);
                 
                 if (distance < 80) { // 如果距離小於 80px
-                    isOverlapping = true; // 發生重疊了！
-                    break; // 重骰，不用再檢查了
+                    isOverlapping = true; // 發生重疊
+                    break; 
                 }
             }
         }
@@ -190,8 +190,8 @@ const startGameAction = () => {
 
     // 加入聲音控制
     if(bgmAudio.value) {
-        bgmAudio.value.volume = 0.3; // 建議音量調小一點，不要嚇到人 (0.0 ~ 1.0)
-        bgmAudio.value.currentTime = 0; // 重頭開始
+        bgmAudio.value.volume = 0.3;
+        bgmAudio.value.currentTime = 0; 
         bgmAudio.value.play().catch(e => console.log("播放失敗", e));
     }
 
@@ -411,7 +411,7 @@ onUnmounted (()=> {
             width: item.width + 'px',
             height: item.height + 'px',
         }">
-        <!-- 「去讀取上面 const items 資料裡面的 src 屬性，當作圖片的路徑」。 -->
+        <!-- 讀取上面 const items 資料裡面的 src 屬性，當作圖片的路徑 -->
         <img :src="getImgUrl(item.src)" class="item-img" />
         </div>
 
@@ -597,11 +597,11 @@ onUnmounted (()=> {
 }
 @keyframes heartbeat {
     0% { transform: scale(1); }
-    10% { transform: scale(1.1); } /* 第一跳 */
+    10% { transform: scale(1.1); } 
     20% { transform: scale(1); }
-    30% { transform: scale(1.1); } /* 第二跳 (心跳通常是兩下) */
+    30% { transform: scale(1.1); }
     40% { transform: scale(1); }
-    100% { transform: scale(1); }  /* 休息 */
+    100% { transform: scale(1); } 
 }
 
 
@@ -658,7 +658,6 @@ onUnmounted (()=> {
     z-index: 5;
 }
 
-/* 繩子 */
 .line {
     width: 4px;
     height: 50px;
@@ -668,8 +667,6 @@ onUnmounted (()=> {
     position: relative;
 }
 
-
-/* 鉤子頭 */
 .claw {
     position: absolute;
     top: 95%;
@@ -686,7 +683,7 @@ onUnmounted (()=> {
     display: flex;
     justify-content: center;
     align-items: center;
-    user-select: none; // 讓使用者無法用滑鼠拖拉選取元素內的文字，防止意外複製。
+    user-select: none; // 讓別人無法用滑鼠拖拉選取元素內的文字，預防意外複製。
 }
 
 .item-img {
