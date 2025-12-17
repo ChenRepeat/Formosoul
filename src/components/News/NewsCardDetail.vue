@@ -247,26 +247,26 @@ watch(
     color: white;
     max-width: 1200px;
     width: 100%;
-    margin: 100px auto 0;
+    margin: 100px auto ;
     min-height: 100vh;
     position: relative;
   }
-  .bread-crumb{
-    display: flex;
-    gap: 20px;
-    margin: 0 0 100px 80px;
-  }
-  .bread-crumb a{
-    display: block;
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-    position: relative;
-    z-index: 99;
-  }
-  .bread-crumb a:hover{
-    color: blue;
-  }
+  // .bread-crumb{
+  //   display: flex;
+  //   gap: 20px;
+  //   margin: 0 0 100px 80px;
+  // }
+  // .bread-crumb a{
+  //   display: block;
+  //   text-decoration: none;
+  //   color: white;
+  //   cursor: pointer;
+  //   position: relative;
+  //   z-index: 99;
+  // }
+  // .bread-crumb a:hover{
+  //   color: blue;
+  // }
   .content-container{
     display: flex;
     margin-left: 120px;
@@ -385,20 +385,20 @@ watch(
   transform: translateX(-5px); /* 4. 關鍵！箭頭往左跑，暗示「回去」 */
 }
 
-  .back-to-news p{
-    letter-spacing: 0.8px;
-  }
-  .back-icon{
-    width: 24px;
-    height: 24px;
-    transition: all 0.3s ease;
-  }
-  .btn-back-layout{
-    display: flex;
-    justify-content: flex-end;
-  }
-  .page-guide{
-  padding-bottom: 60px;
+.back-to-news p{
+  letter-spacing: 0.8px;
+}
+.back-icon{
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s ease;
+}
+.btn-back-layout{
+  display: flex;
+  justify-content: flex-end;
+}
+.page-guide{
+padding-bottom: 60px;
 }
 .page-guide a{
   text-decoration: none;
