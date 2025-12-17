@@ -55,7 +55,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .wrapper {
   min-height: 100vh;
-  background-color: $color-fsTitle;
+  background-color: #000;
   position: relative;
 }
 .wrapper.white{
