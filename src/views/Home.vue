@@ -762,7 +762,7 @@ function initSnitches(loader) {
   position: relative;
   overflow: hidden;
   touch-action: none;
-  background: $color-fsTitle;
+  background: #000;
 }
 canvas {
   display: block;

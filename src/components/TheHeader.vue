@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from './BasicButton.vue';
+import { gsap } from 'gsap';
+import { Draggable } from 'gsap/Draggable';
+
 const props = defineProps({
   isBlackStyle: {
     type: Boolean,
@@ -14,14 +17,15 @@ const props = defineProps({
 const router = useRouter();
 const authStore = useAuthStore();
 
-
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
 const isEnglish = ref(true)
+
+gsap.registerPlugin(Draggable);
+
 function toggleLang(){
   isEnglish.value = !isEnglish.value;
 }
-
 function handleUserIconClick( e ){
  e.preventDefault();
  if(authStore.isLoggedIn){
@@ -52,12 +56,19 @@ function toggleMenu() {
       isMemberMenuOpen.value = false;
   }
 };
-
-function handlelogout() {
-  authStore.logout();
+function closeMenu(){
   isMemberMenuOpen.value = false;
-  alert('登出惹');
+  isMenuOpen.value = false;
 
+}
+function handlelogout() {
+  if(!confirm(`${authStore.user.name}確定要登出嗎?`)){
+    return;
+  }else{
+    authStore.logout();
+    isMemberMenuOpen.value = false;
+    alert('登出惹');
+  }
 }
 </script>
 
@@ -94,22 +105,23 @@ function handlelogout() {
             <div class="bar bar3 transition"></div>
           </div>
 
-          <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" />
+          <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" 
+          @mosueDown="drag"/>
         </div>
       </div>
       <transition name="slide-fade">
       <ul 
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><router-link to="/"  @click="toggleMenu"><h5>Home</h5></router-link></li>
-        <li><router-link to="/about"  @click="toggleMenu"><h5>About</h5></router-link></li>
-        <li><router-link to="/news"  @click="toggleMenu"><h5>News</h5></router-link></li>
-        <li><router-link to="/annualevent"  @click="toggleMenu"><h5>Annual Event</h5></router-link></li>
-        <li><router-link to="/professorsintroduction"  @click="toggleMenu"><h5>Professor</h5></router-link></li>
-        <li><router-link to="/survivalguide"  @click="toggleMenu"><h5>Survival Guide</h5></router-link></li>
-        <li><router-link to="/shop"  @click="toggleMenu"><h5>Diagon Alley</h5></router-link></li>
-        <li><router-link to="/classes"  @click="toggleMenu"><h5>Classes</h5></router-link></li>
-        <li><router-link to="/policy"  @click="toggleMenu"><h5>Policy</h5></router-link></li>
+        <li><router-link to="/"  @click="closeMenu"><h5>Home</h5></router-link></li>
+        <li><router-link to="/about"  @click="closeMenu"><h5>About</h5></router-link></li>
+        <li><router-link to="/news"  @click="closeMenu"><h5>News</h5></router-link></li>
+        <li><router-link to="/annualevent"  @click="closeMenu"><h5>Annual Event</h5></router-link></li>
+        <li><router-link to="/professorsintroduction"  @click="closeMenu"><h5>Professor</h5></router-link></li>
+        <li><router-link to="/survivalguide"  @click="closeMenu"><h5>Survival Guide</h5></router-link></li>
+        <li><router-link to="/shop"  @click="closeMenu"><h5>Diagon Alley</h5></router-link></li>
+        <li><router-link to="/classes"  @click="closeMenu"><h5>Classes</h5></router-link></li>
+        <li><router-link to="/policy"  @click="closeMenu"><h5>Policy</h5></router-link></li>
       </ul>
       </transition>
 
@@ -117,7 +129,7 @@ function handlelogout() {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li><router-link to="/member"><h5>member</h5></router-link></li>
+        <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
         <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li>
         <!-- <li><a href="/news"><h5>News</h5></a></li> -->
       </ul>
