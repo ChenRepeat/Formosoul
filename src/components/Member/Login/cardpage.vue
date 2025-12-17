@@ -39,7 +39,9 @@ import { useAuthStore } from '@/stores/autoStore';
 
     function gotoledger() {
         authStore.setmemberView('ledger');
-        authStore.setinformationView('ledger');
+        if(!authStore.isLoginModalOpen){
+            authStore.setinformationView('informationledger');
+        }
     }
     
 </script>

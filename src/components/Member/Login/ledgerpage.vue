@@ -60,7 +60,9 @@ import Pointcard from '../information/pointcard.vue';
 
     function goback(){
         authStore.setmemberView('membercard');
-        authStore.setinformationView('membercard');
+        if(!authStore.isLoginModalOpen){
+            authStore.setinformationView('informationmembercard');
+        }
     };
 </script>
 
