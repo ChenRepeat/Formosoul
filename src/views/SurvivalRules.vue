@@ -9,6 +9,6 @@
 <style scoped lang="scss" >
 .survival-wrapper {
   width: 100%;
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 </style>

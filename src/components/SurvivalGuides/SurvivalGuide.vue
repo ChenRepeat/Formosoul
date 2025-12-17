@@ -241,6 +241,10 @@ const rightFrame = computed(()=> frames.value[1])
   font-weight: bold;
 }
 
+.survival-headline-case p {
+  text-align: center;
+}
+
 .survival-heropics-case {
   display: flex;
   justify-content: center;

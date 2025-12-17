@@ -278,6 +278,8 @@ const resetGame = () => {
 
 // ================ 生命週期 ================ 
 onMounted(()=>{
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
   window.addEventListener('mousemove', updateMouse)
   window.addEventListener('mousedown', handleMouseDown)
   window.addEventListener('mouseup', handleMouseUp)
@@ -285,6 +287,8 @@ onMounted(()=>{
 })
 
 onUnmounted (() => {
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
   window.removeEventListener('mousemove', updateMouse)
   window.removeEventListener('mousedown', handleMouseDown)
   window.removeEventListener('mouseup', handleMouseUp)
@@ -295,10 +299,10 @@ onUnmounted (() => {
 
 <template>
     <div class="playerbox">
-        <h3>Player {{ result }}</h3>
+        <h4>Player {{ result }}</h4>
         <div class="scorebox">
             <h3>Score：</h3>
-            <h3>{{ totalscore }}</h3>
+            <h2 class="scores">{{ totalscore }}</h2>
         </div>
     </div>
 
@@ -350,10 +354,10 @@ onUnmounted (() => {
     </div>
 
     <div class="bankerbox">
-        <h3>banker</h3>
+        <h4>banker</h4>
         <div class="scorebox">
             <h3>Score：</h3>
-            <h3>{{  bankerTotalScore }}</h3>
+            <h2 class="scores">{{  bankerTotalScore }}</h2>
         </div>
     </div>
 
@@ -391,6 +395,7 @@ onUnmounted (() => {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+
     }
     
     .dice-container {
@@ -402,6 +407,7 @@ onUnmounted (() => {
         transform: translate(-50%, -50%);    
         /* 讓容器本身不擋住滑鼠事件，確保可以點擊背景或其他操作 */
         pointer-events: none; 
+        
     }
 
     .dicebox {
@@ -434,6 +440,15 @@ onUnmounted (() => {
     .playerbox{
         width: 200px;
         height: 200px;
+        text-align: center;
+        border: 5px solid $color-fsGold;
+        border-radius: 7px;
+        box-sizing: border-box;
+        padding-bottom: 20px;
+    }
+
+    .scores {
+        font-weight: bold;
     }
 
     .bankerbox{
