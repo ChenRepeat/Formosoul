@@ -489,7 +489,7 @@ function closeWelcomeFrame (){
 
 .survival-convenience-store-case-bg {
     width: 100%;
-    height: auto; // 【關鍵】把 100% 改成 auto
+    height: auto;
     display: block;
 }
 
@@ -503,7 +503,7 @@ function closeWelcomeFrame (){
 
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
-    opacity: 0; // 完全透明
+    opacity: 0; 
     transform: translateY(20px); 
 } 
 .welcome-text-frame.is-visible {

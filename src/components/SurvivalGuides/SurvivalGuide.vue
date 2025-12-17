@@ -203,9 +203,9 @@ const rightFrame = computed(()=> frames.value[1])
 
 .survival-case-wrapper {
   max-width: 1200px;
-  margin: 0 auto;  // 設定黑色背景
-  min-height: 100vh;       // 強制撐滿整個視窗高度
-  width: 100%;             // 確保寬度佔滿
+  margin: 0 auto; 
+  min-height: 100vh;     
+  width: 100%;            
 
   display: flex;
   flex-direction: column;
@@ -267,11 +267,10 @@ const rightFrame = computed(()=> frames.value[1])
   gap: 20px;
   padding-left: 24px;
   padding-bottom: 80px;
-  // 動畫過渡
+
   transition: opacity 0.4 ease, transform 0.4s ease;
   opacity: 1;
 
-  // disappear (vue控制這個class)
   &.fade-out{
     opacity: 0;
     transform: translate(-50%, -70%);
@@ -487,13 +486,11 @@ const rightFrame = computed(()=> frames.value[1])
 .survival-heropics-left-case.img-is-active .text-frame-left {
   opacity: 1;
   pointer-events: auto;
-  // transform: translateY(0);
 }
 
 .survival-heropics-right-case.img-is-active .text-frame-right {
   opacity: 1;
   pointer-events: auto;
-  // transform: translateY(0);
 }
 
 
