@@ -7,11 +7,26 @@ import { RouterLink, useRouter } from "vue-router";
 import BasicButton from "../BasicButton.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-
 const isShow = ref(-1);
 const animationWelcome = ref(false)
 
 const isHover = ref(null);
+
+const isGameLocked = ref(true);
+
+// 換臉
+const faces = {
+    shock: '/tjd103/SurvivalGuide/ConvenienceStore/shock2.png',
+    left:  '/tjd103/SurvivalGuide/ConvenienceStore/left3.png',
+    right: '/tjd103/SurvivalGuide/ConvenienceStore/right2.png',
+}
+
+const currentFace = ref('');
+const showFaceOverlay = ref(false); 
+const currentFaceClass = ref('');
+
+const leftItems = ['maitea', 'jinjin', 'threeone', 'twbeer', 'twchips','twegg'];
+const rightItems = ['manhan', 'kuaikuai', 'puffs', 'twnoodle', 'twpie']
 
 // 處理點擊功能：
 const activeItemId = ref(null);
@@ -19,10 +34,32 @@ const activeItemId = ref(null);
 const itemClick = (id) => {
     if (activeItemId.value === id) {
         activeItemId.value = null;
-    } else {
-        activeItemId.value = id;
+
+        showFaceOverlay.value = false; 
+        currentFaceClass.value = '';
+        return;
+    } 
+    activeItemId.value = id;
+    if(id === 'shopkeeper'){
+        currentFace.value = faces.shock;
+        showFaceOverlay.value = true;
+        currentFaceClass.value = 'face-shock';
+    }
+    else if (leftItems.includes(id)) {
+        currentFace.value = faces.left;
+        showFaceOverlay.value = true;
+        currentFaceClass.value = 'face-left'; 
+    } 
+    else if (rightItems.includes(id)) {
+        currentFace.value = faces.right;
+        showFaceOverlay.value = true; 
+        currentFaceClass.value = 'face-right'; 
+    } 
+    else {
+        showFaceOverlay.value = false;
     }
 }
+
 
 const activeItemData = computed(()=>{
     if (!activeItemId.value) return null;
@@ -41,7 +78,7 @@ const csFrame = ref([
 const welcomeFrame = computed(()=> csFrame.value[0])
 
 onMounted(()=>{
-    isShow.value = 10;
+    isShow.value = 1001;
 
     setTimeout(()=>{
         animationWelcome.value=true;
@@ -50,6 +87,8 @@ onMounted(()=>{
 
 function closeWelcomeFrame (){
     isShow.value = -1
+    isGameLocked.value = false;
+    animationWelcome.value = false;
 }
 
 
@@ -58,8 +97,19 @@ function closeWelcomeFrame (){
 <template>
         <!-- z-index= 數字  這邊寫成動態style是用物件方法寫 isShow其實是值，一開始就是-1 -->
         <main class="survival-convenience-store-case">
-            <div class="survival-convenience-store-case-wrapper" @click="closeWelcomeFrame">
+            <div class="survival-convenience-store-case-wrapper">
                 <img class='survival-convenience-store-case-bg' src="/SurvivalGuide/ConvenienceStore/convenienceStore-bg-min.png" alt="cs-base">
+
+                <div v-if="isGameLocked" class="start-overlay"></div>
+
+
+                <img v-show="showFaceOverlay" 
+                 :src="currentFace"
+                 :class="['face-overlay', currentFaceClass]">
+
+                <div class="shopkeeper-click-area" 
+                    @click.stop="itemClick('shopkeeper')">
+                </div>
 
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
@@ -69,6 +119,7 @@ function closeWelcomeFrame (){
                 :height="welcomeFrame.height"
                 tag="h4"
                 align="center"
+                @click="closeWelcomeFrame"
                 >
                 <template #textButton>
                     START
@@ -331,6 +382,69 @@ function closeWelcomeFrame (){
 
 
 <style scoped lang="scss">
+// 遮罩
+.start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    // 半透明黑色，營造聚光燈效果
+    background-color: rgba(0, 0, 0, 0.7); 
+    
+    // 層級設定：
+    // 商品通常是 1~100
+    // 遮罩設 1000 -> 蓋住所有商品
+    // Welcome Frame 設 1001 (在 HTML style 裡設了) -> 浮在遮罩上面
+    z-index: 1000; 
+    
+    // 禁止滑鼠穿透 (確保下面東西點不到)
+    pointer-events: auto; 
+    cursor: default;
+    
+    // 加個淡出動畫比較有質感
+    transition: opacity 0.5s;
+}
+
+// 換臉
+.face-overlay {
+    position: absolute;
+    z-index: 50;
+    pointer-events: none;
+    display: block;
+
+    &.face-shock {
+        width: 9.4%;
+        top: 22.7%;    
+        left: 45.1%;
+    }
+    &.face-left {
+        width: 9.3%;
+        top: 23.6%;    
+        left: 45.3%;
+    }
+    &.face-right {
+        width: 9.5%;
+        top: 23.5%;    
+        left: 45.2%;
+    }
+}
+
+.shopkeeper-click-area {
+    position: absolute;
+    z-index: 60;
+    cursor: pointer;
+    
+    width: 22%;  
+    height: 55%; 
+    top: 24%;    
+    left: 39%;
+    
+    // background-color: rgba(255, 0, 0, 0.5);
+    background-color: transparent;
+}
+
 
 .btn-blue-fill{
   background-color: $color-fsBlue900;
@@ -378,8 +492,10 @@ function closeWelcomeFrame (){
 // 
 .welcome-text-frame {
     position: absolute;
-    left: 29%;
-    top: 33%;
+    left: 57%;
+    top: 28%;
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
 
     // 1. 設置過渡效果 (Transition)
     // 讓 opacity 和 transform 屬性的變化有 1 秒的動畫時間
