@@ -2,7 +2,7 @@
     <div class="information-wrapper">
         
         <Cardpage v-if="authStore.memberView == 'membercard'" hasgap haspadding fontscolor></Cardpage>
-        <Ledgerpage v-else-if="authStore.memberView == 'ledger'"  hasgap haspadding fontscolor></Ledgerpage>
+        <Ledgerpage v-else-if="authStore.memberView == 'ledger'"  hasgap haspadding fontscolor withoutbtn></Ledgerpage>
         <!-- withoutbtn -->
     </div>
 </template>
