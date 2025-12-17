@@ -199,10 +199,7 @@ watch(
 
 <template>
   <div class="detail-page">
-    <div class="bg-wrapper">
-
-      <Backgroundaction></Backgroundaction>
-    </div>
+    <Backgroundaction class="bg-wrapper"></Backgroundaction>
         <!-- 麵包屑 -->
     <h6 class="page-guide">
         <router-link to="/news">News</router-link>
@@ -252,43 +249,34 @@ watch(
     color: white;
     max-width: 1200px;
     width: 100%;
-    margin: 100px auto 0;
     min-height: 100vh;
     position: relative;
+    margin: 180px auto 0; /* 確保父容器本身在頁面置中 */
   }
-  .bread-crumb{
-    display: flex;
-    gap: 20px;
-    margin: 0 0 100px 80px;
-  }
-  .bread-crumb a{
-    display: block;
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-    position: relative;
-    z-index: 99;
-  }
-  .bread-crumb a:hover{
-    color: blue;
-  }
+
   .bg-wrapper {
   position: fixed; // 或是 absolute
-  top: 0;
+  top:0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;     // 確保在底層
   pointer-events: none; // 讓滑鼠事件穿透到下層按鈕
 }
-
+.page-guide{
+    padding-bottom: 100px;
+      margin-left: -40px;
+}
 .content-container, .page-guide {
   position: relative;
-  z-index: 1; // 確保內容在背景之上
+  z-index: 10; // 確保內容在背景之上
 }
   .content-container{
     display: flex;
-    margin-left: 120px;
+    width: 100%;           /* 寬度設為 100% */
+  max-width: 1200px;     /* 限制最大寬度 */
+  margin: 0 auto;
+
   }
   .content-container aside{
     width: 315px;
@@ -308,7 +296,9 @@ watch(
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-  }
+    opacity: 0.5; 
+    transition: opacity 0.3s ease;
+    }
 
 /*【關鍵步驟】處理文字包覆層 (a 裡面的那個 div) */
 /* 必須設定 min-width: 0，Flex 子元素才會縮小，否則會無限撐開 */
@@ -364,6 +354,13 @@ watch(
   .router-link-active .arrow-icon {
     transform: rotate( -90deg);
   }
+  .content-container ul a:hover {
+    opacity: 1;
+  }
+
+  .content-container ul li a.router-link-active {
+    opacity: 1;
+  }
 
   /* 進場與離場的過程：設定時間與曲線 */
   .fade-enter-active,
@@ -415,9 +412,7 @@ watch(
     display: flex;
     justify-content: flex-end;
   }
-  .page-guide{
-  padding-bottom: 60px;
-}
+
 .page-guide a{
   text-decoration: none;
   color: #fff;
