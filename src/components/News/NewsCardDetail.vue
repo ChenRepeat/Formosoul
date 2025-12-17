@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Backgroundaction from "@/components/backgroundaction.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -198,6 +199,10 @@ watch(
 
 <template>
   <div class="detail-page">
+    <div class="bg-wrapper">
+
+      <Backgroundaction></Backgroundaction>
+    </div>
         <!-- 麵包屑 -->
     <h6 class="page-guide">
         <router-link to="/news">News</router-link>
@@ -267,6 +272,20 @@ watch(
   .bread-crumb a:hover{
     color: blue;
   }
+  .bg-wrapper {
+  position: fixed; // 或是 absolute
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;     // 確保在底層
+  pointer-events: none; // 讓滑鼠事件穿透到下層按鈕
+}
+
+.content-container, .page-guide {
+  position: relative;
+  z-index: 1; // 確保內容在背景之上
+}
   .content-container{
     display: flex;
     margin-left: 120px;

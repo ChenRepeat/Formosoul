@@ -262,7 +262,7 @@ onBeforeUnmount(() => {
 
 .annual-event-page {
   position: relative;
-  padding: 60px 0 80px;
+  padding: 130px 0 80px;
   display: flex;
   justify-content: center;
 }

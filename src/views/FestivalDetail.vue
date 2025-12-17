@@ -126,9 +126,10 @@ function scrollToTop() {
 @import "/src/assets/_variables.scss";
 
 .festival-detail-page {
-  padding: 60px 0 80px;
+  padding: 100px 0 80px;
   background-color: $color-fsTitle;
   position: relative;
+  background-color: #000;
 }
 
 .detail-container {
