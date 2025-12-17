@@ -2,7 +2,7 @@
     <div class="collections">
         <h3>My collections</h3>
         <section class="list-all">
-            <ProductCard :images="calcollectionspage" :currentPage="currentPage"></ProductCard>
+            <ProductCard :images="calcollectionspage" :currentPage="currentPage" withwhite></ProductCard>
         </section>
         <div class="pagebtn">
             <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>
@@ -139,8 +139,9 @@ import { computed, ref } from 'vue';
     .noborder{
         border: 0;
     }
+
     .list-all{
-  max-width: 1200px;
-  margin: 0 auto;
-}
+    max-width: 1200px;
+    margin: 0 auto;
+    }
 </style>
