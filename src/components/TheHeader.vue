@@ -70,6 +70,37 @@ function handlelogout() {
     alert('登出惹');
   }
 }
+function onEnter(el, done) {
+  // 先把透明度設為 0，高度設為 0
+  gsap.set(el, { height: 0, opacity: 0, overflow: 'hidden' });
+  
+  gsap.to(el, {
+    height: "auto", // GSAP 支持直接寫 auto
+    opacity: 1,
+    duration: 0.5,
+    ease: "power2.out",
+    onComplete: done // 動畫結束後通知 Vue
+  });
+
+  // 進階：讓內部的 li 一個個跳出來
+  gsap.from(el.querySelectorAll('li'), {
+    x: -20,
+    opacity: 0,
+    stagger: 0.05,
+    delay: 0.1
+  });
+}
+
+// 離開動畫
+function onLeave(el, done) {
+  gsap.to(el, {
+    height: 0,
+    opacity: 0,
+    duration: 0.4,
+    ease: "power2.in",
+    onComplete: done
+  });
+}
 </script>
 
 <template>
@@ -110,7 +141,11 @@ function handlelogout() {
           @mosueDown="drag"/>
         </div>
       </div>
-      <transition name="slide-fade">
+      <transition
+        @enter="onEnter"
+        @leave="onLeave"
+        :css="false"
+      >
       <ul 
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
@@ -126,7 +161,11 @@ function handlelogout() {
       </ul>
       </transition>
 
-      <transition name="slide-fade">
+      <transition
+        @enter="onEnter"
+        @leave="onLeave"
+        :css="false"
+      >
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
@@ -157,17 +196,18 @@ function handlelogout() {
 <style scoped lang="scss">
 .header-outer-case {
   padding: 0 40px 0 60px;
-  height: 100px;
   justify-content: end;
   position: fixed;
+  height: auto;
   width: 100%;
-  // top: 16px;
   transform: translateY(16px);
   right:  0;
   z-index: 1000;
   transition: all 0.5s ease;
   pointer-events: none;
-  
+}
+.header-outer-case:has(.open){
+  transform: translateY(0);
 }
 .member-list{
   h5{
@@ -178,11 +218,7 @@ function handlelogout() {
     text-indent: 1em;
   }
 }
-.header-outer-case:has(.open){
-  // top: 0;
-  transform: translateY(0);
 
-}
 img { object-fit: none; }
 
 .trigger-lang { color: $color-fsWhite; margin: 0; }
@@ -222,18 +258,15 @@ img { object-fit: none; }
 }
 .header-link {
   border-radius: 36px;
-  padding: 12px 40px;
-  height: 64px;
+  padding: 12px 45px;
+  height: auto;
+  min-height: 50px;
   gap: 16px;
   position: absolute;
   flex-direction: column; 
   overflow: hidden;
-  transition: all 0.5s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: all;
-}
-
-.header-link.open {
-  height: 100vh; 
 }
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
@@ -271,7 +304,6 @@ img { object-fit: none; }
   margin: 0;
   background: transparent;
   border-radius: 12px;
-  transition: all 0.3s ease;
   width: 100%;
   z-index: -2;
 }
@@ -279,7 +311,7 @@ img { object-fit: none; }
 .burger-list li { margin: 10px 0; }
 .burger-list li a { color: $color-fsWhite; text-decoration: none; padding: 8px 12px; display: block; border-radius: 4px; transition: background-color 0.3s; }
 .burger-list li a:hover { background-color: rgba(255, 255, 255, 0.1); }
-.burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;}
+.burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
 
 /* 漢堡按鈕 */
 .bar { background-color: $color-fsWhite; border-radius: 8px; }
@@ -296,12 +328,16 @@ img { object-fit: none; }
 .menu-slide-enter-active,
 .menu-slide-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;
+  height: auto;
+
 }
 
 .menu-slide-enter-from,
 .menu-slide-leave-to {
   opacity: 0;
   transform: translateY(100%);
+  height: 0;
+
 }
 
 .black{
@@ -348,7 +384,6 @@ img { object-fit: none; }
     padding: 6px 20px;
     align-items: center;
     height: 50px;
-
   }
   .header-icons-list{
     gap: 8px;
