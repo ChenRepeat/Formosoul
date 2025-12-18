@@ -8,7 +8,7 @@ onMounted(()=>{
   canvas.width = 520;
   canvas.height = 800;
   const pi = x => {return x * Math.PI/180};
-  const angle = 8;
+  const angle = 10;
   const deg = 360 / angle;
 
   let timer = 0

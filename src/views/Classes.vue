@@ -13,7 +13,7 @@
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover">
-          <img src="../assets/logo_white.svg" alt="" class="book-logo">
+          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo">
         </div>
       </div>
       <div class="page">
