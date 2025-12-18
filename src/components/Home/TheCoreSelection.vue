@@ -1,11 +1,22 @@
 <script setup>
+import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '../BasicButton.vue';
 import CoreGame from './CoreGame.vue';
 import GameHistory from './GameHistory.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const currentView = ref('intro')
 
+const authStore = useAuthStore();
+
+watch(
+    () => authStore.isLoginModalOpen,
+    (newVal) => {
+        if (newVal === false) {
+            currentView.value = 'intro';
+        }
+    }
+);
 
 //注意函數不要跟自訂的標籤名稱相同
 function showHistory(){
@@ -46,8 +57,8 @@ function showCore(){
             </nav>
         </div>
 
-        <GameHistory v-if="currentView === 'history'" class=""/>
-        <CoreGame v-if="currentView === 'game'" class=""/>
+        <GameHistory v-else-if="currentView === 'history'" class=""/>
+        <CoreGame v-else-if="currentView === 'game'" class=""/>
         
 
     </div>

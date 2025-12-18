@@ -2,16 +2,15 @@
     import { ref } from 'vue';
     import CoreShow from './CoreShow.vue';
 
-    const currentView = ref('game')
 
+    const currentView = ref('game');
     function showCore(){
-    currentView.value = 'core';
+        currentView.value = 'core';
     }
 
 </script>
 
 <template>
-
     <main 
     v-if="currentView === 'game'"
     class="coregame-dock dp-flex">
