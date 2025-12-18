@@ -57,6 +57,7 @@ const clearCanvas = () => {
 const save = () => {
   const finalData = canvasRef.value.toDataURL();
 };
+// 可以用 context.drawImage(Image, dX, dY, dWidth, dHeight); 把base64寫回canvas
 
 </script>
 
