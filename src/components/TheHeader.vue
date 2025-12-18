@@ -115,13 +115,13 @@ function handlelogout() {
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
         <li><router-link to="/"  @click="closeMenu"><h5>Home</h5></router-link></li>
-        <li><router-link to="/about"  @click="closeMenu"><h5>About</h5></router-link></li>
         <li><router-link to="/news"  @click="closeMenu"><h5>News</h5></router-link></li>
         <li><router-link to="/annualevent"  @click="closeMenu"><h5>Annual Event</h5></router-link></li>
+        <li><router-link to="/classes"  @click="closeMenu"><h5>Classes</h5></router-link></li>
         <li><router-link to="/professorsintroduction"  @click="closeMenu"><h5>Professor</h5></router-link></li>
         <li><router-link to="/survivalguide"  @click="closeMenu"><h5>Survival Guide</h5></router-link></li>
         <li><router-link to="/shop"  @click="closeMenu"><h5>Diagon Alley</h5></router-link></li>
-        <li><router-link to="/classes"  @click="closeMenu"><h5>Classes</h5></router-link></li>
+        <li><router-link to="/about"  @click="closeMenu"><h5>About</h5></router-link></li>
         <li><router-link to="/policy"  @click="closeMenu"><h5>Policy</h5></router-link></li>
       </ul>
       </transition>
@@ -131,11 +131,11 @@ function handlelogout() {
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
         <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
-        <li><router-link to="/member/information" @click="closeMenu"><h5>information</h5></router-link></li>
-        <li><router-link to="/member/changepassword" @click="closeMenu"><h5>changepassword</h5></router-link></li>
-        <li><router-link to="/member/orderslist" @click="closeMenu"><h5>orderslist</h5></router-link></li>
-        <li><router-link to="/member/mycollections" @click="closeMenu"><h5>mycollections</h5></router-link></li>
-        <li><router-link to="/member/coupons" @click="closeMenu"><h5>coupons</h5></router-link></li>
+        <li><router-link to="/member/information" @click="closeMenu"><h6>information</h6></router-link></li>
+        <li><router-link to="/member/changepassword" @click="closeMenu"><h6>changepassword</h6></router-link></li>
+        <li><router-link to="/member/orderslist" @click="closeMenu"><h6>orderslist</h6></router-link></li>
+        <li><router-link to="/member/mycollections" @click="closeMenu"><h6>mycollections</h6></router-link></li>
+        <li><router-link to="/member/coupons" @click="closeMenu"><h6>coupons</h6></router-link></li>
         <hr class="memberhr">
         <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
         <li @click="handlelogout" class="logout"><h5>logout</h5></li>
@@ -167,7 +167,16 @@ function handlelogout() {
   z-index: 1000;
   transition: all 0.5s ease;
   pointer-events: none;
-
+  
+}
+.member-list{
+  h5{
+    text-transform: capitalize;
+  }
+  h6{
+    text-transform: capitalize;
+    text-indent: 1em;
+  }
 }
 .header-outer-case:has(.open){
   // top: 0;
