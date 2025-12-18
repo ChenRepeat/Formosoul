@@ -138,7 +138,7 @@ onMounted(() => {
   pointer-events: none;
   bottom: 0;
   left: 0;
-  z-index: 99;
+  z-index: 1;
 }
 /*避免 canvas 底部有預設的 4px 間隙 */
 canvas {

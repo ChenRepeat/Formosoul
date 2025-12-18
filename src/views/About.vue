@@ -200,7 +200,7 @@ onUnmounted(() => {
     margin: 180px auto 140px; 
     color: white;
     position: relative; 
-    z-index: 10;
+    z-index: 15;
     & h1{
       margin: 12px 0;
     }
@@ -210,6 +210,8 @@ onUnmounted(() => {
     hyphens: auto;
     -webkit-hyphens: auto;
     margin-top: 20px;
+    position: relative; 
+    z-index: 15;
   }
 
   .island-img {
@@ -226,6 +228,7 @@ onUnmounted(() => {
     margin: 0 auto;
     text-align: center;
     position: relative;
+    z-index: 5;
   }
   .location-container h2{ margin-bottom: 110px; }
   .location-container img{ display: block; width: 50%; height: auto; margin: 0 auto; }
@@ -283,7 +286,12 @@ onUnmounted(() => {
     100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
   }
 
-  .travel-modes{ width: 635px; margin: 240px auto 0; }
+  .travel-modes{ 
+    width: 635px; 
+    margin: 240px auto 0; 
+    position: relative;
+    z-index: 15;
+  }
   .travel-modes h2{ margin-bottom: 40px; }
 
   /* --- Icons --- */
@@ -307,16 +315,21 @@ onUnmounted(() => {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   }
   .list-category-group:hover .list-dock{ transform: scale(1.1); }
-  .by-air{ display: flex; align-items: center; justify-content: center; margin: 215px 0; }
+  .by-air{ display: flex; align-items: center; justify-content: center; margin: 215px 0;    position: relative;
+    z-index: 15; }
 
   /* --- Taiwan Map Section --- */
   .air-map-section {
     width: 100%; display: flex; justify-content: center;
     padding: 50px 0 0; margin-bottom: 372px;
+        position: relative;
+    z-index: 15;
   }
   .taiwan-map-container {
     position: relative; width: 60%; max-width: 800px;
     .taiwan-map { width: 100%; display: block; height: auto; }
+        position: relative;
+    z-index: 15;
   }
   .map-point {
     position: absolute; width: 20px; height: 20px;
@@ -378,6 +391,8 @@ onUnmounted(() => {
     position: relative; width: 100%; max-width: 1200px;
     margin: 0 auto 220px; min-height: 900px;
     display: flex; align-items: center;
+        position: relative;
+    z-index: 15;
   }
 
   .ship-location-card {

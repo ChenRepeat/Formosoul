@@ -156,7 +156,7 @@ hr {
   padding-bottom: 16px;
   height: 100%;
   width: 100%;
-  z-index: 0;
+  z-index: 2;
   position: relative;
 }
 .footer-outer-case {
