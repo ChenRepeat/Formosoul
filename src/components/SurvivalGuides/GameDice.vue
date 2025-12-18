@@ -27,6 +27,7 @@ const bankerDicelist = ref(Array.from({length: dice_count}, () => ({
     translateY: 0,
 })));
 
+
 // 莊家的分數計算
 const bankerTotalScore = computed (()=> {
 
@@ -295,6 +296,7 @@ onUnmounted (() => {
 </script>
 
 <template>
+    <img src="../../../public/SurvivalGuide/Group 604.svg" alt="">
         <div class="playerbox">
             <h4>Player {{ result }}</h4>
             <div class="scorebox">

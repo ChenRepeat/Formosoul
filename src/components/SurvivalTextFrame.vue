@@ -64,6 +64,8 @@ function handleClick() {
   justify-content: center;  
   align-items: center;
   padding: 20px 15px;
+  outline: 1px solid $color-fsTitle;
+  outline-offset: -10px;
 }
 
 .survival-text-frame .text-content {

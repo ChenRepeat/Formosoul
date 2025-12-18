@@ -58,7 +58,6 @@ const startGamePlay = () => {
         activeGame.value = 'dice'; 
         isGameModalOpen.value = true; 
         currentInfoData.value = null; 
-        console.log('骰子遊戲還沒做好!');
     }
     else if(currentID.includes('ring-toss')) {
         activeGame.value = 'ring-toss';
@@ -365,6 +364,7 @@ function closeWelcomeFrame (){
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
     opacity: 0; 
+    z-index: 1001;
 } 
 .welcome-text-frame.is-visible {
     opacity: 1; 
