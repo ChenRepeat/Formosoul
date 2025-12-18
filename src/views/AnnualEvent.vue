@@ -488,6 +488,10 @@ onBeforeUnmount(() => {
     border-radius: 12px;
   }
 
+  .swiper-pagination {
+    display: none ;
+  }
+
   .nav-btn {
     display: flex;
     width: 32px;
