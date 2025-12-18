@@ -381,7 +381,10 @@ img { object-fit: none; }
   .header-link{
     padding: 6px 20px;
     align-items: center;
-    height: 50px;
+    height: auto; 
+    min-height: 50px; 
+    max-height: 90vh; 
+    overflow-y: auto;  
   }
   .header-icons-list{
     gap: 8px;
@@ -392,6 +395,7 @@ img { object-fit: none; }
   .hamburger-btn{
     transform: scale(0.8);
   }
+  
 }
 
 </style>
