@@ -124,7 +124,7 @@ const openInfo = (index) => {
   professsor.value = info.value[index].name
   job.value = info.value[index].job
   skillDetail.value = info.value[index].skill
-  if (index == 0) {
+  if (index == 0 || index == 16) {
     refBigPhoto.value.style.width =`auto`
     refBigPhoto.value.style.height =`100%`
   }else{
@@ -394,15 +394,19 @@ z-index: 80;
 }
 
  // ------------------------大卡片-----------------------------
-.professor-info{
+
+
+ .professor-info{
   width: fit-content;
   height: fit-content;
   position: fixed;
-  top: 0;bottom: 0;left: 0;right: 0;
+  top: 0;bottom: 0;
+  left: 0;right: 0;
   margin: auto;
   padding: 80px 60px;
   display: none;
   z-index: 100;
+  align-items: center;
   .professor-big-photo-frame{
     z-index: 105;
     height: 600px;
@@ -437,7 +441,7 @@ z-index: 80;
       color: $color-fsTitle;
       margin-top: 40px;
     }
-    .professor-job{
+    .professor-job, .professor-skill-detail{
       color: $color-fsContent;
     }
     .professor-skill-wand{
@@ -451,17 +455,47 @@ z-index: 80;
         height: 4.48rem; // h5 
         width: 4.48rem; // h5 
       }
+    }
 
-    }
-    .professor-skill-detail{
-      color: $color-fsContent;
-    }
   }
 }
 .professor-info.active{
   display: flex;
 }
- // ------------------------大卡片-----------------------------
+@media (max-width: 992px){
+  .professor-title{
+  }
+  .professor-info{
+    max-width: 100vw;
+    height: max-content;
+    padding: 2%;
+    padding-top: 100px;
+    position: absolute;
+    .professor-big-photo-frame{
+      height: calc(90vw * 4 / 3);
+      width: 90vw;
+        /* max-height: 90vh; */
+        /* max-width: 90vw;*/
+    }
+    &.active{
+      flex-direction: column;
+    }
+    .professor-text{
+      width: 95vw;
+      padding: 8%;
+      .professor-name{
+
+      }
+      .professor-skill-wand{
+        .professor-wand{
+
+        }
+      }
+    }
+  }
+
+}
+ // ------------------------大卡片↑-----------------------------
 
 .professor-page-wrapper{
   // background-color: #000;
