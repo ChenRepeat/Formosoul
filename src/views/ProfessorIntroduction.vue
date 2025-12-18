@@ -467,15 +467,15 @@ z-index: 80;
   }
   .professor-info{
     max-width: 100vw;
-    height: max-content;
+    // height: 100vh;
     padding: 2%;
     padding-top: 100px;
     position: absolute;
     .professor-big-photo-frame{
-      height: calc(90vw * 4 / 3);
-      width: 90vw;
-        /* max-height: 90vh; */
-        /* max-width: 90vw;*/
+      max-height: calc(90vw * 4 / 3);
+      max-width: 90vw;
+      // max-height: 50vh; 
+      // width: calc(50vh * 3 / 4);
     }
     &.active{
       flex-direction: column;
