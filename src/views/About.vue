@@ -82,11 +82,11 @@ onUnmounted(() => {
   <div class="about-container">
 
     <div class="island-text">
-      <h3>About</h3>
+      <h4>About</h4>
       <h1>Formosoul</h1>
       <h6 class="fw200">— A magical nexus weaving through diverse civilizations.</h6>
       <br>
-      <p class="lore-text">
+      <p class="lore-text fw200">
         Hidden within the clouds ten thousand feet above Taiwan, the Academy is a modern floating island suspended in the heavens. Guarded by powerful illusions and invisible to the naked eye, only the chosen ones holding an "Enrolment Letter" may pierce the veil of mist to enter this sanctuary of magic.
         <br>
         We are dedicated to exploring the ultimate equilibrium of magic: intertwining the ancient, natural spiritual energies preserved within the island of Taiwan with the precise and rigorous spellcasting techniques of the West. At Formosoul, we do not merely teach magic; within the intertwining and resonance of diverse systems, we manifest the most balanced and formidable magical framework of the modern era.
@@ -112,7 +112,7 @@ onUnmounted(() => {
 
     <div class="travel-modes">
       <h2>Modes of Travel</h2>
-      <p>Please ensure you have all necessary travel permits from the Ministry of Magic. For Muggle visitors, we recommend the 'By Air' option.</p>
+      <p class="fw200">Please ensure you have all necessary travel permits from the Ministry of Magic. For Muggle visitors, we recommend the 'By Air' option.</p>
     </div>
 
     <div class="by-air">
@@ -123,7 +123,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-      <h5>By Air<br>(For everyone)</h5>
+      <h5>By Air<br><span class="fw200">(For everyone)</span></h5>
     </div>
 
     <div class="air-map-section" ref="airMapRef">
@@ -141,7 +141,7 @@ onUnmounted(() => {
           }"
         >
           <div class="icon-wrapper">
-            <font-awesome-icon :icon="['fas', 'plane']" class="airport-icon" />
+            <!-- <font-awesome-icon :icon="['fas', 'plane']" class="airport-icon" /> -->
           </div>
           <div class="dot"></div>
           
@@ -178,8 +178,8 @@ onUnmounted(() => {
           </div>
         </div>
         <div>
-          <h5>Portkey<br>(For magical partners)</h5>
-          <p>Ensure your target coordinates are precise to prevent accidental misdirection.</p>
+          <h5>Portkey<br><span class="fw200">(For magical partners)</span></h5>
+          <p class="fw200">Ensure your target coordinates are precise to prevent accidental misdirection.</p>
         </div>
       </div>
     </div>
@@ -197,15 +197,19 @@ onUnmounted(() => {
 
   .island-text {
     max-width: 760px;
-    margin: 120px auto 140px; 
+    margin: 180px auto 140px; 
     color: white;
     position: relative; 
     z-index: 10;
+    & h1{
+      margin: 12px 0;
+    }
   }
   .lore-text {
     text-align: justify;
     hyphens: auto;
     -webkit-hyphens: auto;
+    margin-top: 20px;
   }
 
   .island-img {
@@ -284,7 +288,7 @@ onUnmounted(() => {
 
   /* --- Icons --- */
   .list-category{ justify-content: center; } 
-  .list-category-group{ margin-right: 50px; cursor: pointer; }
+  .list-category-group{ margin-right: 50px; }
   .list-dock{
     width: 120px; height: 120px;
     border-radius: 50%;
@@ -326,10 +330,17 @@ onUnmounted(() => {
     opacity: 0;
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) calc(var(--delay) + 0.1s); 
     pointer-events: none; z-index: 3;
-    .airport-icon { font-size: 30px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+    
+    //.airport-icon { font-size: 30px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+    // 改成圓點
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 5px #fff;
   }
   .popup-content {
-    position: absolute; bottom: 10px; left: 50%;
+    position: absolute; bottom: 20px; left: 50%;
     transform: translateX(-50%);
     display: flex; flex-direction: column-reverse; 
     align-items: center; width: 200px; pointer-events: none; 
@@ -345,6 +356,7 @@ onUnmounted(() => {
     opacity: 0; transform: translateY(10px);
     transition: all 0.5s ease calc(var(--delay) + 0.4s);
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    white-space: nowrap;
     .code { font-size: 12px; color: #ccc; }
   }
 
@@ -356,7 +368,12 @@ onUnmounted(() => {
   }
 
   /* --- Portkey Section --- */
-  .by-sea{ display: flex; width: 560px; margin: 0 auto; }
+  .by-sea{ 
+    display: flex; width: 560px; margin: 0 auto; 
+    & h5{
+      margin-bottom: 20px;
+    }
+  }
   .portkey-section {
     position: relative; width: 100%; max-width: 1200px;
     margin: 0 auto 220px; min-height: 900px;
