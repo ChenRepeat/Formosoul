@@ -26,49 +26,45 @@ function goConvenienceStore(){
 // 定義目前的hover狀態： null 沒動作，'left' = 左邊hover，'right' = 右邊 hover
 const isHover = ref(null)
 
-// const imgLeft = '/SurvivalGuide/night_market_island_0.png'
+// =========================== 漂浮區塊 ===========================
+// 圖片
+// const moveimg = [
+//   'SurvivalGuide/lantern_image.png',
+//   'SurvivalGuide/taiwan_image.png',
+//   'SurvivalGuide/tofu_image.png',
+// ]
 
-// const imgRight ='/SurvivalGuide/Gemini_Generated_Image_gxbta6gxbta6gxbt_noback2.png'
+// const positions = ref(
+//   moveimg.map(() => ({
+//     x: Math.random() * 80,
+//     y: Math.random() * 80,
+//     vx: (Math.random() - 0.5) * 2,
+//     vy: (Math.random() - 0.5) * 2,
+//     zindex: Math.floor(Math.random() * 5)
+//   }))
+// )
 
-
-// 做後面漂浮的圖片
-const moveimg = [
-  'SurvivalGuide/lantern_image.png',
-  'SurvivalGuide/taiwan_image.png',
-  'SurvivalGuide/tofu_image.png',
-]
-
-const positions = ref(
-  moveimg.map(() => ({
-    x: Math.random() * 80,
-    y: Math.random() * 80,
-    vx: (Math.random() - 0.5) * 2,
-    vy: (Math.random() - 0.5) * 2,
-    zindex: Math.floor(Math.random() * 5)
-  }))
-)
-
-let interval
+// let interval
 onMounted(() => {
-  interval = setInterval(() => {
-    positions.value = positions.value.map(pos => {
-      let newX = pos.x + pos.vx
-      let newY = pos.y + pos.vy
-      let newVx = pos.vx
-      let newVy = pos.vy
+  // interval = setInterval(() => {
+  //   positions.value = positions.value.map(pos => {
+  //     let newX = pos.x + pos.vx
+  //     let newY = pos.y + pos.vy
+  //     let newVx = pos.vx
+  //     let newVy = pos.vy
 
-      if (newX < 0 || newX > 90) newVx = -newVx
-      if (newY < 0 || newY > 90) newVy = -newVy
+  //     if (newX < 0 || newX > 90) newVx = -newVx
+  //     if (newY < 0 || newY > 90) newVy = -newVy
 
-      return {
-        x: Math.max(0, Math.min(90, newX)),
-        y: Math.max(0, Math.min(90, newY)),
-        vx: newVx,
-        vy: newVy,
-        zindex: pos.zindex
-      }
-    })
-  }, 70)
+  //     return {
+  //       x: Math.max(0, Math.min(90, newX)),
+  //       y: Math.max(0, Math.min(90, newY)),
+  //       vx: newVx,
+  //       vy: newVy,
+  //       zindex: pos.zindex
+  //     }
+  //   })
+  // }, 70)
 
   // 設定 X 秒後解鎖，讓滑鼠可以互動
   setTimeout(() => {
@@ -77,7 +73,7 @@ onMounted(() => {
 
 })
 
-onUnmounted(() => clearInterval(interval))
+// onUnmounted(() => clearInterval(interval))
 
 
 // 引用 text frames 資料
@@ -107,13 +103,13 @@ const rightFrame = computed(()=> frames.value[1])
     <Backgroundaction></Backgroundaction>
     <main class="survival-case"> 
       <div class="survival-case-wrapper" :class="{ 'locked': !isMapReady }">
-        <div class="survial-moveimg">
+        <!-- <div class="survial-moveimg">
           <img v-for="( img, index) in moveimg" :key="index" :src="img" :style="{ 
               left: positions[index].x + '%', 
               top: positions[index].y + '%',
               zindex: positions[index].z-index
             }" />
-        </div>
+        </div> -->
 
         <header class="survival-headline-case" :class="{ 'fade-out': isHover !== null }">
           <h5 class="survival-headline-inner1-case">Welcome to survival guide！</h5>
@@ -121,6 +117,7 @@ const rightFrame = computed(()=> frames.value[1])
             Here, we'll introduce Taiwan's famous night market culture and
             convenience store culture.
           </p>
+          <img class='taiwan-pic' src="/SurvivalGuide/taiwan_image.png" alt="taiwan_pic">
         </header>
 
         <section class="survival-heropics-case">
@@ -150,6 +147,7 @@ const rightFrame = computed(()=> frames.value[1])
           </div>
             <img class="fc-img" src="/SurvivalGuide/friedChicken_br.png" alt="">
             <h2 :class="{'text-is-active': isHover == 'left',}" >Night Market</h2>
+            <img class="tofu-img" src="/SurvivalGuide/tofu_image.png" alt="">
             
             <SurvivalTextFrame class='text-frame-left' 
             v-show="isHover == 'left'" 
@@ -176,6 +174,8 @@ const rightFrame = computed(()=> frames.value[1])
             <h2 :class="{
                 'text-is-active': isHover == 'right',
             }"> Convenience Store </h2>
+            <img class="lantern-img" src="/SurvivalGuide/lantern_image.png" alt="">
+
             <SurvivalTextFrame class='text-frame-right' 
             v-show="isHover == 'right'" 
             :text="rightFrame.text" 
@@ -339,6 +339,22 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
+.survival-heropics-left-case .tofu-img {
+  object-fit: contain;
+  width: 80px;
+  height: auto;
+  position: absolute;
+  left: 5%;
+  top: 65%;
+  opacity: 0;
+  transition: all 1.2s ease-in-out;
+}
+
+.survival-heropics-left-case:hover .tofu-img {
+  opacity: 1;
+  display: block;
+}
+
 .survival-heropics-left-pics-group-case {
   position: relative;
   width: 450px;
@@ -461,6 +477,21 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
+.survival-heropics-right-case .lantern-img {
+  object-fit: contain;
+  width: 80px;
+  position: absolute;
+  right: 0%;
+  top: 65%;
+  opacity: 0;
+  transition: all 1.2s ease-in-out;
+  display: block;
+}
+
+.survival-heropics-right-case:hover .lantern-img {
+  opacity: 1;
+  display: block;
+}
 
 // ================ text frame position changed ================ 
 .text-frame-left {
@@ -493,28 +524,32 @@ const rightFrame = computed(()=> frames.value[1])
   pointer-events: auto;
 }
 
-
-// ================ move img ================ 
-.survial-moveimg {
-  position: absolute;
-  top: -30px;
-  left: -30px;
-  right: -30px;
-  bottom: -30px;
-  // filter: blur(0px);
-  z-index: 15; 
-}
-.survial-moveimg img {
-  width: 100px;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  transition: box-shadow 0.3s ease-in-out;
-}
-
 // 新增：鎖住時的樣式
 .locked {
   pointer-events: none;
 }
+
+.taiwan-pic {
+  width: 60px;
+}
+
+// ================ move img ================ 
+// .survial-moveimg {
+//   position: absolute;
+//   top: -30px;
+//   left: -30px;
+//   right: -30px;
+//   bottom: -30px;
+//   // filter: blur(0px);
+//   z-index: 15; 
+// }
+// .survial-moveimg img {
+//   width: 100px;
+//   position: absolute;
+//   transform: translate(-50%, -50%);
+//   transition: box-shadow 0.3s ease-in-out;
+// }
+
 
 
 // hover 效果 切換左右頁
