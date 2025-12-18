@@ -42,6 +42,7 @@ function handleUserIconClick( e ){
   isMenuOpen.value = false;
   authStore.openLoginModal();
   authStore.setmemberView('login');
+  authStore.setloginView('loginpage');
  }
 };
 

@@ -339,6 +339,8 @@ function onDocumentClick(event) {
     if (obj && obj.userData.isLink) {
       if (obj.userData.action === 'login') {
           authStore.openLoginModal(); // 呼叫你的 store 方法
+          authStore.setmemberView('coreselection');
+          authStore.setloginView('enrollment');
           return; // 阻止後面的 router.push
       }
 
