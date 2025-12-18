@@ -27,7 +27,7 @@
         </div>
         <div v-for="product in products" class="orders-product">
             <img :src="product.images" :alt="1">
-            <span><p>{{ product.name }}</p><!--<p>{{ product.spec }}</p>--></span>
+            <span><p>{{ product.name }}</p></span>
             <span><p> {{ product.pieces }} item(s)</p></span>
             <span><p>NT$ {{ product.price }}</p></span>
         </div>

@@ -493,6 +493,7 @@ onMounted(async () => {
       triggerBurn();
       if (hit === 'register') {
         setTimeout(() => {
+          authStore.setmemberView('coreselection');
           authStore.openLoginModal();
         }, 2500);
       }
