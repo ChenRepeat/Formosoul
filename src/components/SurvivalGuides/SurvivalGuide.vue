@@ -184,9 +184,9 @@ const rightFrame = computed(()=> frames.value[1])
             @click="goConvenienceStore"
             > <!-- 等同於 element.addEventListener('click', goConvenienceStore) , 不需要傳參數 → 不加 () // 需要傳參數 → 要加 () ex. <div @click="goToPage('home')"></div>
 <div @click="addItem(item.id)"></div>-->
-              <template v-slot:textButton>
+              <!-- <template v-slot:textButton>
                 Click
-              </template>
+              </template> -->
             </SurvivalTextFrame>
           </div>
         </section>
