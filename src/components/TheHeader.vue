@@ -135,8 +135,7 @@ function onLeave(el, done) {
             <div class="bar bar3 transition"></div>
           </div>
 
-          <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" 
-          @mosueDown="drag"/>
+          <!-- <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" @mosueDown="drag"/> -->
         </div>
       </div>
       <transition
@@ -204,9 +203,7 @@ function onLeave(el, done) {
   transition: all 0.5s ease;
   pointer-events: none;
 }
-.header-outer-case:has(.open){
-  // transform: translateY(0);
-}
+
 .member-list{
   h5{
     text-transform: capitalize;
@@ -286,19 +283,20 @@ img { object-fit: none; }
 
 .liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; }
 
-.header-icons-list { gap: 16px; align-items: center; }
-
-.header-icons-list > button{ 
+.header-icons-list { gap: 20px; align-items: center; 
+  > button{ 
   background-color: transparent; 
   border: 0;
+  }
 }
 
 .header-icon { color: $color-fsWhite; font-size: 32px; cursor: pointer; }
 .draggable-icon { cursor: move ; position: relative; z-index: 1001;}
 
 .burger-list {
+  font-weight: 200;
   list-style: none;
-  padding: 20px;
+  padding: 10px 20px;
   margin: 0;
   background: transparent;
   border-radius: 12px;
@@ -306,7 +304,6 @@ img { object-fit: none; }
   z-index: -2;
 }
 
-.burger-list li { margin: 10px 0; }
 .burger-list li a { color: $color-fsWhite; text-decoration: none; padding: 8px 12px; display: block; border-radius: 4px; transition: background-color 0.3s; }
 .burger-list li a:hover { background-color: rgba(255, 255, 255, 0.1); }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
