@@ -22,7 +22,7 @@ let material, particleMat;
 let resizeHandler, clickHandler, mouseMoveHandler;
 
 // --------------------------------------------------------
-// 建立信紙貼圖的函式 (包含圓角按鈕繪製)
+// 建立信紙貼圖的函式 (包含圓角按鈕繪製 + 仙女棒)
 // --------------------------------------------------------
 function createPaperTexture() {
   const cvs = document.createElement("canvas");
@@ -168,7 +168,7 @@ function createPaperTexture() {
   ctx.textAlign = "center";
   ctx.fillText("Audit the Academy", auditBtnX + btnWidthAudit / 2, btnY + 40);
 
-  // 2. Register Button (實心圓角)
+  // 2. Register Button (實心圓角 - 黃色按鈕)
   ctx.beginPath();
   ctx.roundRect(regBtnX, btnY, btnWidthReg, btnHeight, radius);
   
@@ -182,6 +182,51 @@ function createPaperTexture() {
   ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
   ctx.fillStyle = "#2c1e14"; // 文字
   ctx.fillText("Entrance Ceremony", regBtnX + btnWidthReg / 2, btnY + 40);
+
+  // --------------------------------------------------------
+  // [新增] 仙女棒繪製 (最右下角黃色按鈕右邊)
+  // --------------------------------------------------------
+  ctx.save();
+  
+  // 計算位置：黃色按鈕右邊界 + 35px 偏移量，高度稍微對齊按鈕中心偏上
+  const sparklerX = regBtnX + btnWidthReg + 35; 
+  const sparklerY = btnY + 25; 
+
+  ctx.translate(sparklerX, sparklerY);
+  
+  // 縮放與旋轉 (縮小為 0.5 倍，逆時針旋轉 8 度)
+  ctx.scale(0.5, 0.5); 
+  ctx.rotate(-8 * Math.PI / 180);
+
+  // 設定仙女棒樣式
+  ctx.strokeStyle = '#0a1a33'; // 深藍色
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+
+  // 繪製棒身 (相對於新的原點)
+  ctx.beginPath();
+  ctx.moveTo(0, 0); 
+  ctx.lineTo(30, 173); // 棒身向下延伸
+  ctx.stroke();
+
+  // 繪製光芒 (相對於原點 0,0)
+  const drawLine = (x1, y1, x2, y2) => {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  };
+
+  drawLine(0, -22, 0, -67);    // 上
+  drawLine(-16, -16, -44, -44); // 左上
+  drawLine(-22, 0, -60, 0);     // 左
+  drawLine(-18, 16, -40, 36);   // 左下
+  drawLine(16, -16, 44, -44);   // 右上
+  drawLine(22, 0, 60, 0);       // 右
+  drawLine(17, 14, 40, 34);     // 右下
+
+  ctx.restore();
+  // --------------------------------------------------------
 
   return { texture: new THREE.CanvasTexture(cvs), zones };
 }
