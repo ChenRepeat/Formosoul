@@ -17,24 +17,26 @@
                         class="btn-blue-fill"><h4>Login</h4></BasicButton>
                     </div>
                     <div class="pagecontain">
-                        <Logincontain v-if="authStore.loginView == 'loginpage'"></Logincontain>
+                        <div class="pagetop">
+                            <Logincontain v-if="authStore.loginView == 'loginpage'"></Logincontain>
 
 
-                        <Enrollment v-else-if="authStore.loginView == 'enrollment'"></Enrollment>
-                        <Forgetpassword v-else-if="authStore.loginView == 'forgetpassword'"></Forgetpassword>
-                    <template v-if="!isotherlogin">
-                        <div class="otherlogin">
-                            <div class="otherlogin-title">
-                                <hr>
-                                <h6>Other</h6>
-                                <hr>
-                            </div>
-                            <div class="otherlogin-icon">
-                                <img :src="`${publicPath}member/googleicon.png`" alt="1">
-                                <img :src="`${publicPath}member/lineicon.png`" alt="2">
-                            </div>
+                            <Enrollment v-else-if="authStore.loginView == 'enrollment'"></Enrollment>
+                            <Forgetpassword v-else-if="authStore.loginView == 'forgetpassword'"></Forgetpassword>
                         </div>
-                    </template>
+                        <template v-if="!isotherlogin">
+                            <div class="otherlogin">
+                                <div class="otherlogin-title">
+                                    <hr>
+                                    <h6>Other</h6>
+                                    <hr>
+                                </div>
+                                <div class="otherlogin-icon">
+                                    <img :src="`${publicPath}member/googleicon.png`" alt="1">
+                                    <img :src="`${publicPath}member/lineicon.png`" alt="2">
+                                </div>
+                            </div>
+                        </template>
                     </div>
             </div>
 
@@ -113,8 +115,11 @@
     .pagecontain{
         background-color: $color-fsBlue50;
         border: 0;
-        border-radius: 0 0 8px 8px ;
+        border-radius: 0 0 8px 8px;
         height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
     }
     .btn-blue-fill{
@@ -132,8 +137,9 @@
     .otherlogin{
         width: 100%;
         height: 112px;
-        position: absolute;
-        bottom: 20px;
+        // position: absolute;
+        // bottom: 20px;
+        margin-bottom: 20px;
     }
     .otherlogin-title{
         display: flex;
