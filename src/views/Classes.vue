@@ -1,6 +1,6 @@
 <template>
   <div class="book-section">
-    <div v-if="isAnimating" class="blocking-overlay"></div>
+    <div v-if="isAnimating" class="blocking-overlay"><h4>Press Esc To Skip and Stop</h4></div>
 
     <div 
       class="book" 
@@ -503,6 +503,14 @@ const handleReceiveFromA = (url) => {
   z-index: 9999;
   cursor: wait; 
   background: rgba(0,0,0,0);
+  h4{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    bottom: 10%;
+    color: white;
+    opacity: 0.3;
+  }
 }
 
 .intro-center-pos {
