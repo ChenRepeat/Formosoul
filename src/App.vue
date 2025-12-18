@@ -37,7 +37,7 @@ onMounted(async () => {
   >
     <TheHeader :is-black-style="currentBgClass == 'white' || currentBgClass == 'transparent'"/>
     <main class="content">
-      <a href="/" :style="{'display':currentLogoDP}"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></a>
+      <RouterLink href="/" :style="{'display':currentLogoDP}"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></RouterLink>
       <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
       <div v-if="authStore.isLoading" class="loading">
         載入中...
