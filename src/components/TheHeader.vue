@@ -71,18 +71,17 @@ function handlelogout() {
   }
 }
 function onEnter(el, done) {
-  // 先把透明度設為 0，高度設為 0
+
   gsap.set(el, { height: 0, opacity: 0, overflow: 'hidden' });
   
   gsap.to(el, {
-    height: "auto", // GSAP 支持直接寫 auto
+    height: "auto",
     opacity: 1,
     duration: 0.5,
     ease: "power2.out",
-    onComplete: done // 動畫結束後通知 Vue
+    onComplete: done
   });
 
-  // 進階：讓內部的 li 一個個跳出來
   gsap.from(el.querySelectorAll('li'), {
     x: -20,
     opacity: 0,
@@ -91,7 +90,6 @@ function onEnter(el, done) {
   });
 }
 
-// 離開動畫
 function onLeave(el, done) {
   gsap.to(el, {
     height: 0,
@@ -207,7 +205,7 @@ function onLeave(el, done) {
   pointer-events: none;
 }
 .header-outer-case:has(.open){
-  transform: translateY(0);
+  // transform: translateY(0);
 }
 .member-list{
   h5{
@@ -315,7 +313,7 @@ img { object-fit: none; }
 
 /* 漢堡按鈕 */
 .bar { background-color: $color-fsWhite; border-radius: 8px; }
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer;}
+.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; width: 24px;}
 .bar1 { width: 16px; height: 2px; }
 .bar2 { width: 12px; height: 1px; }
 .bar3 { width: 24px; height: 3px; }

@@ -28,6 +28,7 @@ import Delivery from '@/components/policy/delivery.vue'
 import Returns from '@/components/policy/returns.vue'
 import Privacypolicy from '@/components/policy/privacypolicy.vue'
 import Payment from '@/components/policy/payment.vue'
+import BlackLogo from '@/assets/LOGO_black.svg';
 
 
 const router = createRouter({
@@ -164,7 +165,7 @@ const router = createRouter({
       redirect: '/member/information',
       component: Member,
       meta:{ 
-        logo: `${import.meta.env.BASE_URL}logo_black.svg`,
+        logo: BlackLogo,
         bgColor:'white',
       },
       children: [
@@ -188,7 +189,7 @@ const router = createRouter({
       redirect: '/policy/delivery',
       component: Policy,
       meta:{ 
-        logo: `${import.meta.env.BASE_URL}logo_black.svg`,
+        logo: BlackLogo,
         bgColor:'white',
       },
       children: [

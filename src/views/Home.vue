@@ -32,6 +32,10 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from "@/stores/autoStore";
+
+
+const authStore = useAuthStore()
 
 const router = useRouter();
 // --- Refs ---
@@ -59,7 +63,7 @@ const baseURL = import.meta.env.BASE_URL;
 let clickStartPos = { x: 0, y: 0 };
 
 const snitches = [];
-const snitchCount = 10;
+const snitchCount = 11;
 
 // --- Helper ---
 const checkIsMobile = () => window.innerWidth < 768;
@@ -333,6 +337,11 @@ function onDocumentClick(event) {
       obj = obj.parent;
     }
     if (obj && obj.userData.isLink) {
+      if (obj.userData.action === 'login') {
+          authStore.openLoginModal(); // 呼叫你的 store 方法
+          return; // 阻止後面的 router.push
+      }
+
       document.body.style.cursor = 'wait';
       setTimeout(() => {
         document.body.style.cursor = 'default';
@@ -649,7 +658,7 @@ function initSnitches(loader) {
         const hitGeo = new THREE.SphereGeometry(0.35, 16, 16);
         const hitMat = new THREE.MeshBasicMaterial({ visible: false }); 
         const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-        hitMesh.userData = { url: linkData.url, isLink: true };
+        hitMesh.userData = { url: linkData.url, isLink: true, action: linkData.action };
         group.add(hitMesh);
 
         if (linkData.name) {
@@ -706,8 +715,7 @@ function initSnitches(loader) {
     { name: 'Survival Guide', img: `Home/home-survival-compass.png`, url: '/survivalguide' },
     { name: 'Policy', img: `Home/home-policy-scroll.png`, url: '/policy' },
     { name: 'Admin', img: `Home/home-admin-tools.png`, url: '/admin' },
-    // { name: 'TheCoreSelection', img: `Home/home-admin-tools.png`, url: '/admin' },
-    
+    { name: 'TheCoreSelection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;
@@ -754,25 +762,31 @@ function initSnitches(loader) {
 </script>
 
 <style lang="scss" scoped>
-// 將 Keyframes 放在最上面確保優先權
-@keyframes home-socket-pulse {
+// 1. 修改 Keyframes：改為金色光芒的呼吸效果
+@keyframes home-socket-auto-pulse {
   0% {
-    // 初始狀態
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 0 10px rgba(255, 236, 126, 0.3);
-    border-color: rgba(255, 255, 255, 0.2);
+    // 暗：稍微縮小，透明度降低，光暈變弱
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.6;
+    box-shadow: 
+      0 0 15px rgba(255, 215, 0, 0.3),
+      0 0 30px rgba(255, 100, 0, 0.1);
   }
   50% {
-    // 呼吸變強 & 微微放大
-    transform: translate(-50%, -50%) scale(1.05);
-    box-shadow: 0 0 35px #ffcc46;
-    border-color: rgba(255, 255, 255, 0.8);
+    // 亮：放大，不透明，強烈光暈
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+    box-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.8),
+      0 0 60px rgba(255, 100, 0, 0.5);
   }
   100% {
-    // 回到初始
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 0 10px rgba(255, 236, 126, 0.3);
-    border-color: rgba(255, 255, 255, 0.2);
+    // 回到暗
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.6;
+    box-shadow: 
+      0 0 15px rgba(255, 215, 0, 0.3),
+      0 0 30px rgba(255, 100, 0, 0.1);
   }
 }
 
@@ -834,6 +848,7 @@ canvas {
   }
 }
 
+// 2. 修改本體：直接應用金色漸層背景，並執行上面的動畫
 #home-socket-visual {
   position: absolute;
   left: 73%;
@@ -842,20 +857,23 @@ canvas {
   width: 5%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
+  
+  // ★ 修改：預設直接使用金色漸層 (原本是黑色)
   background: radial-gradient(
     circle,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(255, 255, 255, 1) 10%,
+    rgba(255, 230, 100, 0.9) 30%,
+    rgba(255, 200, 0, 0.4) 50%,
+    rgba(255, 200, 0, 0) 70%
   );
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  
+  border: 1px solid rgba(255, 255, 255, 0.4);
   z-index: 5;
   pointer-events: none;
 
-  // ★★★ 重要：套用動畫並移除通用的 transition: all 以免衝突 ★★★
-  animation: home-socket-pulse 3s infinite ease-in-out;
-  // 針對背景色變化時才做 transition，不要 transition box-shadow
-  transition: background 0.4s ease-out; 
+  // ★ 修改：套用新的自動呼吸動畫
+  animation: home-socket-auto-pulse 2.5s infinite ease-in-out;
+  transition: all 0.3s ease-out;
 }
 
 @media (max-width: 768px) {
@@ -864,28 +882,25 @@ canvas {
   }
 }
 
-// 拖曳時：關閉動畫，轉為恆亮
+// 3. 拖曳時 (.home-active)：鎖定在最亮狀態
 #home-socket-visual.home-active {
+  // ★ 關鍵：停止呼吸動畫，強制鎖定樣式
   animation: none; 
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 1) 10%,
-    rgba(255, 230, 100, 0.9) 30%,
-    rgba(255, 200, 0, 0.4) 50%,
-    rgba(255, 200, 0, 0) 70%
-  );
-  border-color: rgba(255, 255, 255, 0.9);
-  transform: translate(-50%, -50%) scale(1.3);
-  box-shadow:
-    0 0 20px rgba(255, 255, 255, 0.8),
-    0 0 40px rgba(255, 215, 0, 0.6),
-    0 0 80px rgba(255, 100, 0, 0.4),
-    0 0 120px rgba(255, 255, 255, 0.2);
   
-  // 這裡需要重新加回 transition 以處理變大變亮的效果
-  transition: all 0.4s ease-out; 
+  // 強制設定為最亮、最大
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.3);
+  border-color: rgba(255, 255, 255, 1);
+  
+  // 更強烈的擴散光暈
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.9),
+    0 0 50px rgba(255, 215, 0, 0.8),
+    0 0 90px rgba(255, 100, 0, 0.6),
+    0 0 140px rgba(255, 255, 255, 0.3);
 }
 
+// 4. 外圈光暈：跟隨本體一起呼吸
 #home-socket-visual::after {
   content: '';
   position: absolute;
@@ -897,18 +912,19 @@ canvas {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 220, 100, 0.3),
+    rgba(255, 220, 100, 0.4),
     transparent 70%
   );
-  opacity: 0;
+  // 跟隨父元素一起透明度變化
+  opacity: 1; 
   pointer-events: none;
-  transition: opacity 0.3s;
   z-index: -1;
 }
 
+// 拖曳時外圈也稍微變大
 #home-socket-visual.home-active::after {
+  transform: translate(-50%, -50%) scale(1.2);
   opacity: 1;
-  animation: home-glowBreathe 2s ease-in-out infinite alternate;
 }
 
 @keyframes home-glowBreathe {
