@@ -129,7 +129,7 @@ function goOrder(){
         
         <!-- 表單 -->
         <form action="" method="POST" @submit.prevent="goOrder">
-            // @submit.prevent="goOrder" 阻止預設行為並且執行goOrder
+            <!-- @submit.prevent="goOrder" 阻止預設行為並且執行goOrder -->
             
             <!-- 信用卡資料 -->
             <section class="creditcard-info">
