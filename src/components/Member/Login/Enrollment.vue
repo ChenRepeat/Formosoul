@@ -22,7 +22,7 @@
                 :disabled="!otpSent"
                 @keydown="handleKeyDown"
                 />
-                <BasicButton @click="startCountdown" :disabled="otpLoading" class="btn-blue-fill">
+                <BasicButton @click="startCountdown" :class="btngray ? 'btn-gray-fill' : 'btn-blue-fill'"   :disabled="otpLoading">
                 <p v-if="otpLoading">
                         {{ timer > 0 ? `Resend in ${timer} seconds` : 'Sending...' }}
                 </p>
@@ -91,6 +91,7 @@ const errorMessage = ref('');
 const showPassword = ref(false);
 const otpSent = ref(false);
 const timer = ref(60);
+const btngray = ref(false);
 let intervalId = null;
 
 
@@ -139,6 +140,7 @@ async function startCountdown() {
 
     otpLoading.value = true;
     errorMessage.value = '';
+    btngray.value = true;
 
     try{
         await sendOTPAPI(email.value);
@@ -148,11 +150,11 @@ async function startCountdown() {
 
         intervalId = setInterval(() => {
             timer.value--;
-
             if(timer.value <= 0){
                 clearInterval(intervalId); // 清除計時器
                 otpLoading.value = false; // 解除按鈕
                 timer.value = 0;
+                btngray.value = false;
             }
         }, 1000)
     }catch(error){
@@ -220,7 +222,7 @@ function handleKeyDown(e) {
 
 function togglePassword() {
     showPassword.value = !showPassword.value;
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -289,6 +291,17 @@ function togglePassword() {
         // padding-bottom: 16px;
         justify-content: center;
         // margin-bottom: 36px;
+    }
+    .btn-gray-fill{
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translate(0, -50%);
+        padding: 4px 8px;
+        cursor: not-allowed;
+    }
+    .btn-gray-fill > p{
+        font-size: 14px;
     }
     .login-bottom{
         width: 100%;
