@@ -56,7 +56,7 @@ const updateMouse = (e) => {
 const diceOrigins = [
     {left: 0.8, top: 0.4},
     {left: 0.1, top: 0.2},
-    {left: 0.1, top: 0.75},
+    {left: 0.15, top: 0.75},
 
 ]
 
