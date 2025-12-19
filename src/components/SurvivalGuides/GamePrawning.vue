@@ -115,7 +115,7 @@ const generateRandomItems = (count) => {
         let isOverlapping = true;
         let attempts = 0;
 
-        // 嘗試找位置，最多試 50 次，找不到就直接開始
+        // 嘗試找位置，最多試 100 次，找不到就直接開始
         while (isOverlapping && attempts < 100) {
             attempts++;
             isOverlapping = false; // 先假設沒重疊
