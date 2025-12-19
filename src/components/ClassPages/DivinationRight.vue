@@ -35,7 +35,7 @@ import { ref } from 'vue';
       chouqianFes.value = 2;
       setTimeout(() => {
         chouqianFes.value = 3;
-      }, 3000);
+      }, 2000);
     }, 4500);
   }
   function closeResult(){

@@ -41,7 +41,7 @@
         @mousedown.stop
         @touchstart.stop>
         <img 
-          src="/public/Classes/motor-left1.png" 
+          src="/Classes/motor-left1.png" 
           alt="" 
           class="motor-photo"
           >

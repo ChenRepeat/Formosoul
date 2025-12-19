@@ -41,33 +41,33 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
           <div class="footer-inner-case dp-flex">
             <ul class="footer-page-link dp-flex-col">
               <li>
-                <router-link to="/"><h5>Home</h5></router-link>
+                <router-link to="/"><h5>{{$t('nav.home')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/news"><h5>News</h5></router-link>
+                <router-link to="/news"><h5>{{$t('nav.news')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/annualevent"><h5>Annual Event</h5></router-link>
+                <router-link to="/annualevent"><h5>{{$t('nav.annualEvent')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/professorsintroduction"><h5>Professors</h5></router-link>
+                <router-link to="/professorsintroduction"><h5>{{$t('nav.professor')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/survivalrules"><h5>Rules</h5></router-link>
+                <router-link to="/survivalrules"><h5>{{$t('nav.survivalGuide')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/shop"><h5>Diagon Alley</h5></router-link>
+                <router-link to="/shop"><h5>{{$t('nav.diagonAlley')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/about"><h5>About</h5></router-link>
+                <router-link to="/about"><h5>{{$t('nav.about')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/member"><h5>Member</h5></router-link>
+                <router-link to="/member"><h5>{{$t('nav.member')}}</h5></router-link>
               </li>
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
-                <router-link to="/classes"><h5>Classes</h5></router-link>
+                <router-link to="/classes"><h5>{{$t('nav.classes')}}</h5></router-link>
               </li>
               <li>
                 <a href=""><p>Motorcycle</p></a>
@@ -98,7 +98,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
           </div>
           <ul class="policy-inner-case dp-flex-col">
             <li>
-              <router-link to="/policy"><h5>Policy</h5></router-link>
+              <router-link to="/policy"><h5>{{$t('nav.policy')}}</h5></router-link>
             </li>
             <li>
               <router-link to="/policy/payment"><p>Payment</p></router-link>
@@ -118,7 +118,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
       </div>
     </section>
     <div class="tibame-policy">
-      本網站為緯育TibaMe_前端工程師班第98期學員專題成果作品，本平台僅供學習、展示之用。<br />若有抵觸有關著作權，或有第三人主張侵害智慧財產權等情事，均由學員負法律上責任，緯育公司概不負責。若有侵權疑慮，您可以私訊「<a
+      本網站為緯育TibaMe_前端工程師班第97期學員專題成果作品，本平台僅供學習、展示之用。<br />若有抵觸有關著作權，或有第三人主張侵害智慧財產權等情事，均由學員負法律上責任，緯育公司概不負責。若有侵權疑慮，您可以私訊「<a
         href=""
         >緯育TibaMe</a
       >」，後續會由專人協助處理。
@@ -181,6 +181,7 @@ hr {
 }
 
 .footer-page-link {
+  min-width: 185px;
   gap: 14px;
   padding: 0;
 }
@@ -202,6 +203,7 @@ hr {
 }
 .footer-policy-case ul {
   padding: 0;
+  max-width: 106px;
 }
 .tibame-policy {
   text-align: center;

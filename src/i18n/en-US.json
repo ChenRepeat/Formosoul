@@ -1,20 +1,24 @@
 {
-  "header": {
+  "nav": {
     "home": "home",
     "news": "news",
     "annualEvent":"Annual Event",
     "classes":"classes",
     "professor":"professor",
-    "survivalGuide":"survivalGuide",
-    "diagonAlley":"diagonAlley",
+    "survivalGuide":"survival Guide",
+    "diagonAlley":"diagon Alley",
     "about":"about",
     "policy":"policy",
     "member":"member",
     "information":"information",
-    "changepassword":"changepassword",
-    "orderslist":"orderslist",
-    "mycollections":"mycollections",
+    "changepassword":"change password",
+    "orderslist":"orders list",
+    "mycollections":"my collections",
     "coupons":"coupons",
-    "logout":"logout"
+    "logout":"logout",
+    "Payment":"Payment",
+    "Delivery":"Delivery",
+    "Returns":"Returns",
+    "privacyPolicy":"privacy Policy"
   }
 }

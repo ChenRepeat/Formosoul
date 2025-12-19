@@ -1,5 +1,5 @@
 <script setup>
-import { ref , computed} from 'vue';
+import { ref , computed, onMounted, onUnmounted} from 'vue';
 import siteLogo from '@/assets/logo_white.svg'; 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
@@ -120,12 +120,32 @@ function onLeave(el, done) {
     onComplete: done
   });
 }
+const headerRef = ref(null);
+
+const handleClickOutside = (e) => {
+  if (headerRef.value && !headerRef.value.contains(e.target)) {
+    if (isMenuOpen.value || isMemberMenuOpen.value) {
+      closeMenu();
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
   <div class="header-outer-case dp-flex">
 
-    <div class="header-link liquidGlass-wrapper dp-flex-col" :class="{ open: isMenuOpen || isMemberMenuOpen ,'black': props.isBlackStyle }">
+    <div 
+    ref="headerRef"
+    class="header-link liquidGlass-wrapper dp-flex-col" 
+    :class="{ open: isMenuOpen || isMemberMenuOpen ,'black': props.isBlackStyle }">
 
       <!-- 玻璃效果層 -->
       <div class="liquidGlass-effect"></div>
@@ -167,15 +187,15 @@ function onLeave(el, done) {
       <ul 
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><router-link to="/"  @click="closeMenu"><h5>{{$t('header.home')}}</h5></router-link></li>
-        <li><router-link to="/news"  @click="closeMenu"><h5>{{$t('header.news')}}</h5></router-link></li>
-        <li><router-link to="/annualevent"  @click="closeMenu"><h5>{{$t('header.annualEvent')}}</h5></router-link></li>
-        <li><router-link to="/classes"  @click="closeMenu"><h5>{{$t('header.classes')}}</h5></router-link></li>
-        <li><router-link to="/professorsintroduction"  @click="closeMenu"><h5>{{$t('header.professor')}}</h5></router-link></li>
-        <li><router-link to="/survivalguide"  @click="closeMenu"><h5>{{$t('header.survivalGuide')}}</h5></router-link></li>
-        <li><router-link to="/shop"  @click="closeMenu"><h5>{{$t('header.diagonAlley')}}</h5></router-link></li>
-        <li><router-link to="/about"  @click="closeMenu"><h5>{{$t('header.about')}}</h5></router-link></li>
-        <li><router-link to="/policy"  @click="closeMenu"><h5>{{$t('header.policy')}}</h5></router-link></li>
+        <li><router-link to="/"  @click="closeMenu"><h5>{{$t('nav.home')}}</h5></router-link></li>
+        <li><router-link to="/news"  @click="closeMenu"><h5>{{$t('nav.news')}}</h5></router-link></li>
+        <li><router-link to="/annualevent"  @click="closeMenu"><h5>{{$t('nav.annualEvent')}}</h5></router-link></li>
+        <li><router-link to="/classes"  @click="closeMenu"><h5>{{$t('nav.classes')}}</h5></router-link></li>
+        <li><router-link to="/professorsintroduction"  @click="closeMenu"><h5>{{$t('nav.professor')}}</h5></router-link></li>
+        <li><router-link to="/survivalguide"  @click="closeMenu"><h5>{{$t('nav.survivalGuide')}}</h5></router-link></li>
+        <li><router-link to="/shop"  @click="closeMenu"><h5>{{$t('nav.diagonAlley')}}</h5></router-link></li>
+        <li><router-link to="/about"  @click="closeMenu"><h5>{{$t('nav.about')}}</h5></router-link></li>
+        <li><router-link to="/policy"  @click="closeMenu"><h5>{{$t('nav.policy')}}</h5></router-link></li>
       </ul>
       </transition>
 
@@ -187,15 +207,15 @@ function onLeave(el, done) {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li><router-link to="/member" @click="closeMenu"><h5>{{$t('header.member')}}</h5></router-link></li>
-        <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('header.information')}}</h6></router-link></li>
-        <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('header.changepassword')}}</h6></router-link></li>
-        <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('header.orderslist')}}</h6></router-link></li>
-        <li><router-link to="/member/mycollections" @click="closeMenu"><h6>{{$t('header.mycollections')}}</h6></router-link></li>
-        <li><router-link to="/member/coupons" @click="closeMenu"><h6>{{$t('header.coupons')}}</h6></router-link></li>
+        <li><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li>
+        <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('nav.information')}}</h6></router-link></li>
+        <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('nav.changepassword')}}</h6></router-link></li>
+        <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('nav.orderslist')}}</h6></router-link></li>
+        <li><router-link to="/member/mycollections" @click="closeMenu"><h6>{{$t('nav.mycollections')}}</h6></router-link></li>
+        <li><router-link to="/member/coupons" @click="closeMenu"><h6>{{$t('nav.coupons')}}</h6></router-link></li>
         <hr class="memberhr">
         <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
-        <li @click="handlelogout" class="logout"><h5>{{$t('header.logout')}}</h5></li>
+        <li @click="handlelogout" class="logout"><h5>{{$t('nav.logout')}}</h5></li>
       </ul>
       </transition>
     </div>
