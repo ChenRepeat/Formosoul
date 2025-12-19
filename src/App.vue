@@ -4,7 +4,7 @@ import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
 import Popup from './components/popup.vue';
-import { computed, onMounted } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { useAuthStore } from './stores/autoStore';
 import DefaultLogo from '@/assets/logo_white.svg';
 
@@ -82,7 +82,6 @@ onMounted(async () => {
 .part-time{
   gap: 12px;
 }
-
 
 @media (min-width: 1024px) {
 }

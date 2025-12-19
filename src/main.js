@@ -19,6 +19,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 
+import i18n from './i18n'; // 引用i18N 切換語系
+
 /* 4. 將圖示加入 Library */
 library.add(fas,fab,far)
 
@@ -26,7 +28,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-
+app.use(i18n)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 

@@ -1,12 +1,16 @@
 <script setup>
-import { ref } from 'vue';
+import { ref , computed} from 'vue';
 import siteLogo from '@/assets/logo_white.svg'; 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
-import BasicButton from './BasicButton.vue';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
+import { useI18n } from 'vue-i18n';
+import { useLangStore } from '@/stores/lang';
+
+
+const { t, locale } = useI18n();
 
 const props = defineProps({
   isBlackStyle: {
@@ -19,13 +23,29 @@ const authStore = useAuthStore();
 
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
-const isEnglish = ref(true)
 
 gsap.registerPlugin(Draggable);
 
-function toggleLang(){
-  isEnglish.value = !isEnglish.value;
+const langStore = useLangStore();
+// 原本的寫法
+// const isEnglish = ref(true)
+// function toggleLang(){
+//   isEnglish.value = !isEnglish.value;
+//   if(isEnglish.value){
+//     langStore.setLanguage('en-US');
+//   }else{
+//     langStore.setLanguage('zh-TW');
+//   }
+// }
+const isEnglish = computed({
+  get: () => langStore.locale === 'en-US', // 永遠跟著 Pinia 走
+  set: (val) => langStore.setLanguage(val ? 'en-US' : 'zh-TW')
+});
+function toggleLang() {
+  isEnglish.value = !isEnglish.value; // 觸發 setter，進而更新 Pinia
 }
+
+
 function handleUserIconClick( e ){
  e.preventDefault();
  if(authStore.isLoggedIn){
@@ -118,7 +138,7 @@ function onLeave(el, done) {
         <div class="header-lang-trigger dp-flex"  @click="toggleLang" :class="{ right: isEnglish }">
           <div class="header-lang-switcher" :class="{ right: isEnglish }"></div>
           <h6 class="trigger-lang">EN</h6>
-          <h6 class="trigger-lang">CN</h6>
+          <h6 class="trigger-lang">ZH</h6>
         </div>
 
         <div class="header-icons-list dp-flex">
@@ -147,15 +167,15 @@ function onLeave(el, done) {
       <ul 
       v-if="isMenuOpen"
       class="burger-list" :class="{ 'active': isMenuOpen }">
-        <li><router-link to="/"  @click="closeMenu"><h5>Home</h5></router-link></li>
-        <li><router-link to="/news"  @click="closeMenu"><h5>News</h5></router-link></li>
-        <li><router-link to="/annualevent"  @click="closeMenu"><h5>Annual Event</h5></router-link></li>
-        <li><router-link to="/classes"  @click="closeMenu"><h5>Classes</h5></router-link></li>
-        <li><router-link to="/professorsintroduction"  @click="closeMenu"><h5>Professor</h5></router-link></li>
-        <li><router-link to="/survivalguide"  @click="closeMenu"><h5>Survival Guide</h5></router-link></li>
-        <li><router-link to="/shop"  @click="closeMenu"><h5>Diagon Alley</h5></router-link></li>
-        <li><router-link to="/about"  @click="closeMenu"><h5>About</h5></router-link></li>
-        <li><router-link to="/policy"  @click="closeMenu"><h5>Policy</h5></router-link></li>
+        <li><router-link to="/"  @click="closeMenu"><h5>{{$t('header.home')}}</h5></router-link></li>
+        <li><router-link to="/news"  @click="closeMenu"><h5>{{$t('header.news')}}</h5></router-link></li>
+        <li><router-link to="/annualevent"  @click="closeMenu"><h5>{{$t('header.annualEvent')}}</h5></router-link></li>
+        <li><router-link to="/classes"  @click="closeMenu"><h5>{{$t('header.classes')}}</h5></router-link></li>
+        <li><router-link to="/professorsintroduction"  @click="closeMenu"><h5>{{$t('header.professor')}}</h5></router-link></li>
+        <li><router-link to="/survivalguide"  @click="closeMenu"><h5>{{$t('header.survivalGuide')}}</h5></router-link></li>
+        <li><router-link to="/shop"  @click="closeMenu"><h5>{{$t('header.diagonAlley')}}</h5></router-link></li>
+        <li><router-link to="/about"  @click="closeMenu"><h5>{{$t('header.about')}}</h5></router-link></li>
+        <li><router-link to="/policy"  @click="closeMenu"><h5>{{$t('header.policy')}}</h5></router-link></li>
       </ul>
       </transition>
 
@@ -167,15 +187,15 @@ function onLeave(el, done) {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li><router-link to="/member" @click="closeMenu"><h5>member</h5></router-link></li>
-        <li><router-link to="/member/information" @click="closeMenu"><h6>information</h6></router-link></li>
-        <li><router-link to="/member/changepassword" @click="closeMenu"><h6>changepassword</h6></router-link></li>
-        <li><router-link to="/member/orderslist" @click="closeMenu"><h6>orderslist</h6></router-link></li>
-        <li><router-link to="/member/mycollections" @click="closeMenu"><h6>mycollections</h6></router-link></li>
-        <li><router-link to="/member/coupons" @click="closeMenu"><h6>coupons</h6></router-link></li>
+        <li><router-link to="/member" @click="closeMenu"><h5>{{$t('header.member')}}</h5></router-link></li>
+        <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('header.information')}}</h6></router-link></li>
+        <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('header.changepassword')}}</h6></router-link></li>
+        <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('header.orderslist')}}</h6></router-link></li>
+        <li><router-link to="/member/mycollections" @click="closeMenu"><h6>{{$t('header.mycollections')}}</h6></router-link></li>
+        <li><router-link to="/member/coupons" @click="closeMenu"><h6>{{$t('header.coupons')}}</h6></router-link></li>
         <hr class="memberhr">
         <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
-        <li @click="handlelogout" class="logout"><h5>logout</h5></li>
+        <li @click="handlelogout" class="logout"><h5>{{$t('header.logout')}}</h5></li>
       </ul>
       </transition>
     </div>
@@ -205,15 +225,7 @@ function onLeave(el, done) {
   pointer-events: none;
 }
 
-.member-list{
-  h5{
-    text-transform: capitalize;
-  }
-  h6{
-    text-transform: capitalize;
-    text-indent: 1em;
-  }
-}
+
 
 img { object-fit: none; }
 
@@ -244,11 +256,11 @@ img { object-fit: none; }
   z-index: 1001;
   border-radius: 50%;
   top: 4px;
-  left: 9px;
+  left: 10px;
   transition: all 1s ease;
 }
 .header-lang-switcher.right{
-  left: 44px;
+  left: 43px;
   background-color: $color-fsWhite;
 
 }
@@ -295,7 +307,7 @@ img { object-fit: none; }
 .draggable-icon { cursor: move ; position: relative; z-index: 1001;}
 
 .burger-list {
-  font-weight: 200;
+  // font-weight: 200;
   list-style: none;
   padding: 10px 20px;
   margin: 0;
@@ -303,6 +315,13 @@ img { object-fit: none; }
   border-radius: 12px;
   width: 100%;
   z-index: -2;
+  h5{
+    text-transform: capitalize;
+  }
+  h6{
+    text-transform: capitalize;
+    text-indent: 1em;
+  }
 }
 
 .burger-list li a { color: $color-fsWhite; text-decoration: none; padding: 8px 12px; display: block; border-radius: 4px; transition: background-color 0.3s; }

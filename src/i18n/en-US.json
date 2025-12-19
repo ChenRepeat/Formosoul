@@ -1,0 +1,20 @@
+{
+  "header": {
+    "home": "home",
+    "news": "news",
+    "annualEvent":"Annual Event",
+    "classes":"classes",
+    "professor":"professor",
+    "survivalGuide":"survivalGuide",
+    "diagonAlley":"diagonAlley",
+    "about":"about",
+    "policy":"policy",
+    "member":"member",
+    "information":"information",
+    "changepassword":"changepassword",
+    "orderslist":"orderslist",
+    "mycollections":"mycollections",
+    "coupons":"coupons",
+    "logout":"logout"
+  }
+}
