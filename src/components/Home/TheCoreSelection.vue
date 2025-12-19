@@ -11,10 +11,8 @@ const authStore = useAuthStore();
 
 watch(
     () => authStore.isLoginModalOpen,
-    (newVal) => {
-        if (newVal === false) {
-            currentView.value = 'intro';
-        }
+    () => {
+           currentView.value = 'intro';
     }
 );
 
