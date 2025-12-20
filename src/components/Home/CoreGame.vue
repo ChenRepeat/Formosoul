@@ -2,11 +2,18 @@
     import { ref } from 'vue';
     import CoreShow from './CoreShow.vue';
 
-
+    //設定目前顯示頁面
     const currentView = ref('game');
     function showCore(){
         currentView.value = 'core';
     }
+
+    //接收子組件傳來的事件 - 重新開始遊戲 要做的事情
+    function doRestartGame(){
+        currentView.value = 'game';
+    }
+
+
 
 </script>
 
@@ -35,7 +42,11 @@
             
         </div>
     </main>
-    <CoreShow v-if="currentView === 'core'" class=""/>
+    <CoreShow
+    v-if="currentView === 'core'" 
+    @restart-coregame="doRestartGame"    
+    /> 
+    <!-- @restart-coregame="doRestartGame"  監聽 restart-game 事件，如果子組件有發送，接收到後要做什麼事 -->
     
 
 </template>
