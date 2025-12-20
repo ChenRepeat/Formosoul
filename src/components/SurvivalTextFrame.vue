@@ -10,6 +10,7 @@ const props = defineProps({
   height: { type: String, default: '250px'},
   align: {type: String, default: 'left'},
   tag: {type: String, default: 'p'},
+  showButton: { type: Boolean, default: true }
 })
 
 const emit = defineEmits(['click'])
@@ -30,7 +31,7 @@ const emit = defineEmits(['click'])
   </component>
 
   <!-- 用slot的話 預設是 Enter，但可以被其他想要使用的父層覆蓋 -->
-  <button class="survival-button" @click="emit('click')"> 
+  <button v-if="props.showButton" class="survival-button" @click="emit('click')"> 
     <slot name="textButton">ENTER</slot>
   </button>
   <!-- 或是可以用下面的方式引用的來寫 -->

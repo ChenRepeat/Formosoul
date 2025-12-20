@@ -128,9 +128,12 @@ function closeWelcomeFrame (){
 
 <!-------------------------------------- 夜市美食區塊 -------------------------------------------->
 <!---------------------------------------- 滷肉飯-------------------------------------------->
-                <div class="stall-wrapper-pork-rice" @mouseenter="isHover = 'pork'" @mouseleave="isHover = null" 
-                    :class="{'nm-is-active': isHover == 'pork',}">
-                    <img class="stall-pork-rice" src="/SurvivalGuide/rice-mask-group.png" alt="braised-pork-stall">
+                <div class="stall-wrapper-pork-rice" 
+                @mouseenter="isHover = 'pork'" 
+                @mouseleave="isHover = null" 
+                @click="openModal(0)"
+                :class="{'nm-is-active': isHover == 'pork',}">
+                <img class="stall-pork-rice" src="/SurvivalGuide/rice-mask-group.png" alt="braised-pork-stall">
                     
                     <!-- [] 是指從陣列裡面拿東西 ， ()是指執行，傳遞參數 -->
                     <SurvivalTextFrame class='text-frame-rice text-frame' 
@@ -139,14 +142,15 @@ function closeWelcomeFrame (){
                         :height="nmFrames[0].height"
                         tag="h5"
                         align="center"
-                        @click="openModal(0)">
-                    <template #textButton>
+                        :showButton="false">
+                    <!-- <template #textButton>
                         CLICK
-                    </template>
+                    </template> -->
                     </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 臭豆腐 -------------------------------------------->
                 <div class="stall-wrapper-sticky-tofu" @mouseenter="isHover='tofu'" @mouseleave="isHover = null"
+                    @click="openModal(1)"
                      :class="{'nm-is-active': isHover == 'tofu'}">
                     <img class="stall-sticky-tofu" src="/SurvivalGuide/tofu-mask-group.png" alt="sticky-tofu">
 
@@ -156,15 +160,18 @@ function closeWelcomeFrame (){
                     :height="nmFrames[1].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(1)"
+                    :showButton="false"
                     >
-                    <template #textButton>
+                    <!-- <template #textButton>
                         CLICK
-                    </template>    
+                    </template>     -->
                     </SurvivalTextFrame>                    
                 </div>
 <!---------------------------------------- 珍珠奶茶 -------------------------------------------->
-                <div class="stall-wrapper-bubble-tea" @mouseenter="isHover = 'bubble'" @mouseleave="isHover = null"
+                <div class="stall-wrapper-bubble-tea"  
+                    @mouseenter="isHover = 'bubble'" 
+                    @mouseleave="isHover = null"
+                    @click="openModal(2)"
                      :class="{'nm-is-active': isHover == 'bubble' }">
                     <img class="stall-bubble-tea" src="/SurvivalGuide/bubble-mask-group.png" alt="bubble-tea">
 
@@ -174,14 +181,17 @@ function closeWelcomeFrame (){
                         :height="nmFrames[2].height"
                         tag= "h5"
                         align="center"
-                        @click="openModal(2)">
-                    <template #textButton>
+                        :showButton="false">
+                    <!-- <template #textButton>
                         CLICK
-                    </template>
+                    </template>  -->
                     </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 大腸包小腸 -------------------------------------------->
-                <div class="stall-wrapper-sausage" @mouseenter="isHover = 'sausage'" @mouseleave="isHover = null"
+                <div class="stall-wrapper-sausage" 
+                    @mouseenter="isHover = 'sausage'" 
+                    @mouseleave="isHover = null"               
+                    @click="openModal(3)"
                     :class="{'nm-is-active':ishover == 'sausage'}">
                     <img class="stall-sausage" src="/SurvivalGuide/sausage-mask-group.png" alt="sausage">
                 
@@ -191,15 +201,18 @@ function closeWelcomeFrame (){
                     :height="nmFrames[3].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(3)"
+                    :showButton="false"
                     >
-                    <template #textButton>
+                    <!-- <template #textButton>
                         CLICK
-                    </template>    
+                    </template>     -->
                     </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 蔥油餅 -------------------------------------------->
-                <div class="stall-wrapper-oil" @mouseenter="isHover= 'oil'" @mouseleave = "isHover = null"
+                <div class="stall-wrapper-oil" 
+                    @mouseenter="isHover= 'oil'" 
+                    @mouseleave = "isHover = null"
+                    @click="openModal(4)"
                     :class="{'nm-is-active': isHover =='oil'}", >
                     <img class="stall-oil" src="/SurvivalGuide/oil-mask-group.png" alt="oil">
 
@@ -209,14 +222,17 @@ function closeWelcomeFrame (){
                     :height="nmFrames[4].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(4)">
-                    <template #textButton>
+                    :showButton="false">
+                    <!-- <template #textButton>
                         CLICK
-                    </template>
+                    </template> -->
                     </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 雞排 -------------------------------------------->
-                <div class="stall-wrapper-chicken" @mouseenter="isHover='chicken'" @mouseleave="isHover = null"
+                <div class="stall-wrapper-chicken" 
+                    @mouseenter="isHover='chicken'" 
+                    @mouseleave="isHover = null"
+                    @click="openModal(5)"
                      :class="{'nm-is-active': isHover == 'chicken'}">    
                     <img class="stall-chicken" src="/SurvivalGuide/chicken-mask-group.png" alt="fried-chicken">
 
@@ -226,11 +242,11 @@ function closeWelcomeFrame (){
                     :height="nmFrames[5].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(5)"
+                    :showButton="false"
                     >
-                    <template #textButton>
+                    <!-- <template #textButton>
                         CLICK
-                    </template>    
+                    </template>     -->
                     </SurvivalTextFrame>                     
             
                 </div>
@@ -242,7 +258,10 @@ function closeWelcomeFrame (){
 
 <!---------------------------------------- 遊戲 區塊 -------------------------------------------->
 <!---------------------------------------- 骰子 -------------------------------------------->
-                <div class="game-wrapper-dice" @mouseenter="isHover='game-dice'" @mouseleave="isHover= null"
+                <div class="game-wrapper-dice" 
+                    @mouseenter="isHover='game-dice'" 
+                    @mouseleave="isHover= null"
+                    @click="openModal(6)"
                      :class="{'nm-is-active': isHover =='game-dice'}", >
                      <img class="game-dice" src="/SurvivalGuide/dice-mask-group.png" alt="game-dice">
                      <SurvivalTextFrame class="text-frame text-frame-game-dice"
@@ -251,15 +270,18 @@ function closeWelcomeFrame (){
                     :height="nmFrames[6].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(6)"
+                    :showButton="false"
                     >
-                    <template #textButton>
+                    <!-- <template #textButton>
                         CLICK
-                    </template>
+                    </template> -->
                     </SurvivalTextFrame>
                 </div> 
 <!---------------------------------------- 釣蝦 -------------------------------------------->        
-                <div class="game-wrapper-prawning" @mouseenter="isHover='game-prawning'" @mouseleave="isHover= null"
+                <div class="game-wrapper-prawning" 
+                    @mouseenter="isHover='game-prawning'" 
+                    @mouseleave="isHover= null"
+                    @click="openModal(7)"
                      :class="{'nm-is-active': isHover =='game-prawning'}", >
                      <img class="game-prawning" src="/SurvivalGuide/prawning-mask-group.png" alt="game-prawning">
 
@@ -269,27 +291,29 @@ function closeWelcomeFrame (){
                     :height="nmFrames[7].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(7)">
-                    <template #textButton>
+                    :showButton="false">
+                    <!-- <template #textButton>
                         CLICK
-                    </template>
+                    </template> -->
                     </SurvivalTextFrame>                    
                 </div> 
 <!---------------------------------------- 套圈圈 -------------------------------------------->
-                <div class="game-wrapper-ring-toss" @mouseenter="isHover='game-ring-toss'" @mouseleave="isHover= null"
+                <div class="game-wrapper-ring-toss" 
+                    @mouseenter="isHover='game-ring-toss'" 
+                    @mouseleave="isHover= null"
+                    @click="openModal(8)"
                      :class="{'nm-is-active': isHover =='game-ring-toss'}", >
-                     <img class="game-ring-toss" src="/SurvivalGuide/ring-toss-mask-group.png" alt="game-ring-toss">
-
+                    <img class="game-ring-toss" src="/SurvivalGuide/ring-toss-mask-group.png" alt="game-ring-toss">
                     <SurvivalTextFrame class="text-frame text-frame-game-ring-toss"
                     :text="nmFrames[8].text"
                     :width="nmFrames[8].width"
                     :height="nmFrames[8].height"
                     tag="h5"
                     align="center"
-                    @click="openModal(8)">
-                    <template #textButton>
+                    :showButton="false">
+                    <!-- <template #textButton>
                         CLICK
-                    </template>
+                    </template> -->
                     </SurvivalTextFrame>  
                 </div> 
 <!---------------------------------------- 共用部分 -------------------------------------------->
