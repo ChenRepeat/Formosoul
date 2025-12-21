@@ -1,16 +1,12 @@
 <script setup>
-import { ref , computed, onMounted, onUnmounted} from 'vue';
-import siteLogo from '@/assets/logo_white.svg'; 
+import { ref , computed, onMounted, onUnmounted, inject} from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
-import { useI18n } from 'vue-i18n';
 import { useLangStore } from '@/stores/lang';
-
-
-const { t, locale } = useI18n();
+const execLanguageChange = inject('execLanguageChange');
 
 const props = defineProps({
   isBlackStyle: {
@@ -38,12 +34,13 @@ const langStore = useLangStore();
 //   }
 // }
 const isEnglish = computed({
-  get: () => langStore.locale === 'en-US', // 永遠跟著 Pinia 走
+  get: () => langStore.locale === 'en-US',
   set: (val) => langStore.setLanguage(val ? 'en-US' : 'zh-TW')
 });
 function toggleLang() {
-  isEnglish.value = !isEnglish.value; // 觸發 setter，進而更新 Pinia
-}
+  execLanguageChange(() => {
+    isEnglish.value = !isEnglish.value;
+  });}
 
 
 function handleUserIconClick( e ){
@@ -162,7 +159,7 @@ onUnmounted(() => {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <router-link to="/shoppingcart"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"
+          <router-link to="/shoppingcart" class="no-i18n-anim"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"
              @click="closeMenu"/></router-link>
           <!-- <a href="/member"></a> -->
          
@@ -329,7 +326,7 @@ img { object-fit: none; }
 .burger-list {
   // font-weight: 200;
   list-style: none;
-  padding: 10px 20px;
+  padding: 10px;
   margin: 0;
   background: transparent;
   border-radius: 12px;
