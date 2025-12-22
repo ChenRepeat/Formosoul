@@ -101,9 +101,9 @@ const InOrOut= (targetIndex, status)=>{ // 更新 mouseenter 的狀態
 }
 const mouseAt = ref({x:0, y:0}) // 紀錄滑鼠位置
 const info = ref([]) // 未來讀 json
-const professsor = ref(null)
-const job = ref(null)
-const skillDetail = ref(null)
+const professsor = ref('')
+const job = ref('')
+const skillDetail = ref('')
 const refBigPhoto =ref('')
 const clickedPhoto = ref('')
 const isOpen = ref(false);
@@ -251,7 +251,6 @@ let Carousel = new Swiper(".professor-carousel-container", {
 let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
   freemode:true,
-
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -272,6 +271,7 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
   resistance: true,
   resistanceRatio: 0,
   allowTouchMove: true,
+  grabCursor: true,
 });
 
   // setTimeout(slideChanged,5)
@@ -295,7 +295,7 @@ onUnmounted(()=>{
 <template> 
   <section class="professor-page-wrapper "> 
     <!-- class 對應 變更嘗試  -->
-    <h2 class="professor-title">Professor</h2>
+    <h2 class="professor-title">{{ $t('professor.title') }}</h2>
 
     <!-- swiper testing -->
     <div class="carousel-field">
@@ -357,21 +357,21 @@ onUnmounted(()=>{
 
 
     <section :class="{'professor-info':true,'bg-frostedGlass':true, 'active':isOpen==true }">
-      <li class="professor-big-photo-frame">
+      <div class="professor-big-photo-frame">
         <img :src="clickedPhoto" class="professor-big-photo" 
         ref="refBigPhoto" alt="Professor Photo" > 
-      </li>
+      </div>
       <article class="professor-text">
-        <font-awesome-icon icon="fa-solid fa-xmark" class="professor-xmark" @click="closeInfo"/>
+        <FontAwesomeIcon icon="fa-solid fa-xmark" class="professor-xmark" @click="closeInfo"/>
         
-        <h3 class="professor-name">{{ professsor }}</h3>
-        <p class="professor-job">{{ job }}</p>
+        <h3 class="professor-name">{{ $t(professsor) }}</h3>
+        <p class="professor-job ">{{ $t(job) }}</p>
         <div class="professor-skill-wand">
           <IconWandCore class="professor-wand"/>
-          <h5 class="professor-skill">Skills: </h5>
+          <h5 class="professor-skill">{{ $t('professor.skillTitle') }}</h5>
         </div>
         
-        <p class="professor-skill-detail">{{ skillDetail }}</p>
+        <p class="professor-skill-detail">{{ $t(skillDetail) }}</p>
       </article>
     </section>
   </section>
@@ -397,9 +397,9 @@ z-index: 80;
 
 
  .professor-info{
-  width: fit-content;
-  height: fit-content;
-  position: fixed;
+  width: min-content;
+  height: min-content;
+  position: absolute;
   top: 0;bottom: 0;
   left: 0;right: 0;
   margin: auto;
@@ -421,14 +421,14 @@ z-index: 80;
   }
   .professor-text{
     background-color: $color-fsWhite;
-    height: fit-content;
-    width: fit-content;//寬暫時值
+    height: max-content;
+    width: max-content;//寬暫時值
     padding: 40px 72px;
 
     border-radius: 8px;
     position: relative;
     top: 0;bottom: 0;
-    margin: auto;
+    margin: auto 0;
     .professor-xmark{ 
       height: 40px;
       width: 40px;
@@ -439,7 +439,7 @@ z-index: 80;
     }
     .professor-name{
       color: $color-fsTitle;
-      margin-top: 40px;
+      margin-top: 12px;
     }
     .professor-job, .professor-skill-detail{
       color: $color-fsContent;
@@ -456,33 +456,37 @@ z-index: 80;
         width: 4.48rem; // h5 
       }
     }
-
   }
 }
 .professor-info.active{
-  display: flex;
+  display: flex; 
 }
 @media (max-width: 992px){
   .professor-title{
   }
   .professor-info{
     max-width: 100vw;
-    // height: 100vh;
-    padding: 2%;
-    padding-top: 100px;
+    // height: calc(100vh + 120vw);
+    padding: 3%;
+    margin-top: 80px;
     position: absolute;
+    
     .professor-big-photo-frame{
-      max-height: calc(90vw * 4 / 3);
-      max-width: 90vw;
-      // max-height: 50vh; 
-      // width: calc(50vh * 3 / 4);
+      // max-height: calc(90vw * 4 / 3);
+      // max-width: 90vw;
+      height: calc(90vw * 4 / 3); 
+      width: 90vw;
+
     }
     &.active{
       flex-direction: column;
     }
     .professor-text{
-      width: 95vw;
+      // width: 95vw;
+      max-width: 95vw;
+      
       padding: 8%;
+      overflow: visible;
       .professor-name{
 
       }
@@ -500,6 +504,16 @@ z-index: 80;
 .professor-page-wrapper{
   // background-color: #000;
   padding-top: 80px;
+  height:100vh;
+}
+@media (max-width: 992px){
+  .professor-page-wrapper{
+    min-height:100vh;
+    .professor-info.active{
+  flex-direction: column-reverse; 
+
+}
+  }
 }
 // non-CAROUSEL styles↑-------------
 
@@ -507,7 +521,7 @@ z-index: 80;
 
 .carousel-field {
   width: 100%;
-  height: 100vh;
+  // height: 100vh;
   .professor-reverse-carousel-container,
   .professor-carousel-container,
   .marquee-carousel {
@@ -515,7 +529,6 @@ z-index: 80;
     transform: rotate(-2deg) translateY(-30px); 
     position: relative;
     
-
     &.middle{ //li
       // display: none;
       top: 30px;
@@ -525,7 +538,7 @@ z-index: 80;
     }
     .swiper-wrapper { // ul
       display: flex;
-
+      
       -webkit-transition-timing-function: linear !important;
       transition-timing-function: linear !important;
       .swiper-slide { // li
