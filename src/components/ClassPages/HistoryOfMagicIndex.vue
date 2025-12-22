@@ -25,7 +25,7 @@
       @touchstart.stop
       @click="goToPage(toNianPage)"
       >
-        New Year
+        {{$t('classes.newYearTitle')}}
       </h5>
     </li>
     <li class="dp-flex">
@@ -33,7 +33,7 @@
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toDuanOoPage)">
-        Dragon-boat  Festival
+        {{$t('classes.dragonBoatTitle')}}
       </h5>
     </li>
     <li class="dp-flex">
@@ -41,7 +41,7 @@
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toMoonPage)">
-        Mid-Autumn  Festival
+        {{$t('classes.moonFes')}}
       </h5>
     </li>
 
