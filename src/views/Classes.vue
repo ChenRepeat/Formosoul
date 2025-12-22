@@ -47,7 +47,7 @@
 
       <div class="page">
         <div class="page-content">
-          bikeGame
+          <BikeGame />
         </div>
       </div>
       <div class="page">
@@ -167,6 +167,7 @@ import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
 import CharmRight from '@/components/ClassPages/CharmRight.vue';
 import Maho from '@/components/ClassPages/Maho.vue';
+import BikeGame from '@/components/ClassPages/BikeGame.vue';
 
 const bookRef = ref(null);
 const isAnimating = ref(true);

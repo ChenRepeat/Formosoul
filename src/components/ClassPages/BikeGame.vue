@@ -1,342 +1,337 @@
 <template>
-  <div class="game-container">
-    <button @click="startGame" v-if="!gameStarted || gameOver">
-      {{ (gameStarted && gameOver) ? '重新開始' : '開始遊戲' }}
-    </button>
+  <div class="game-wrapper dp-flex">
+    <div 
+      class="game-container" 
+      ref="container"
+      @touchstart="handleTouchStart"
+      @touchmove="handleTouchMove"
+    >
+      <div class="stage" v-if="containerWidth > 0">
+        <div class="ground">
+          <div 
+            class="road-texture" 
+            :style="{ backgroundPositionY: `${roadOffset}px` }"
+          ></div>
+        </div>
 
-    <div class="game-window" :style="{ width: '375px', height: '500px' }">
-      <canvas ref="gameCanvas" width="375" height="500"></canvas>
+        <div 
+          v-for="obs in obstacles" 
+          :key="obs.id"
+          class="obstacle-box"
+          :style="getObsStyle(obs)"
+        >
+          <div class="obs-inner dp-flex" :style="{ backgroundColor: obs.color, borderColor: '#fff' }">
+            {{ obs.label }}
+          </div>
+        </div>
 
-      <div class="hud">
-        <p>生命: 🧡 x **{{ lives }}**</p>
-        <p>時間: ⏳ **{{ formattedTime }}**</p>
+        <div 
+          class="player-bike" 
+          :style="playerStyle"
+        >
+          <div class="bike-inner dp-flex">PLAYER</div>
+        </div>
       </div>
 
-      <div v-if="gameOver" class="game-over-screen">
-        <h3 v-if="lives > 0">🎉 恭喜！挑戰成功 🎉</h3>
-        <h3 v-else>💀 遊戲結束 (Game Over) 💀</h3>
-        <p v-if="lives === 0">很遺憾，生命耗盡了。</p>
-        <p v-else>時間結束，您成功存活！</p>
-        <button @click="startGame" class="restart-button">再玩一次</button>
+      <div class="hud dp-flex" v-if="gameState === 'playing'">
+        <h5>HP: {{ lives }}</h5>
+        <h5>TIME: {{ Math.ceil(timeRemaining) }}s</h5>
       </div>
+
+      <transition name="fade">
+        <div class="overlay dp-flex" v-if="gameState !== 'playing'">
+          <div v-if="gameState === 'start'" class="ui-panel">
+            <h2>MOTO RUNNER</h2>
+            <p>text</p>
+            <basic-button @click="startGame" class="btn-black">START</basic-button>
+          </div>
+
+          <div v-if="gameState === 'result'" class="ui-panel result">
+            <h2 :class="lives > 0 ? 'text-win' : 'text-lose'">
+              {{ lives > 0 ? 'Back To School Savety' : `You're Crashed !!` }}
+            </h2>
+            <div class="final-stats">
+              <div class="stat-row"><p>SURVIVAL{{ (60 - timeRemaining).toFixed(1) }}s</p></div>
+              <div class="stat-row"><p>LIFE{{ lives }}</p></div>
+            </div>
+            <basic-button @click="gameState = 'start'" class="btn-black">RETRY</basic-button>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
+
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
+import { gsap } from 'gsap';
+import BasicButton from '../BasicButton.vue';
 
-// --- 遊戲狀態 ---
-const gameCanvas = ref(null);
-const ctx = ref(null);
-const gameStarted = ref(false);
-const gameOver = ref(false);
+// --- 障礙物類型定義陣列 ---
+const obstacleConfigs = [
+  { label: 'TRUCK', color: '#ff4757', width: 140, score: 10 },
+  { label: 'CONE', color: '#ffa502', width: 60, score: 5 },
+  { label: 'WALL', color: '#747d8c', width: 110, score: 15 },
+  { label: 'OIL', color: '#2f3542', width: 90, score: 5 },
+  { label: 'BARRIER', color: '#eccc68', width: 100, score: 10 }
+];
+
+// --- 配置常數 ---
+const BIKE_WIDTH = 100;
+const Z_SPAWN = -3500;
+const Z_DESPAWN = 500;
+
+// --- 狀態 ---
+const container = ref(null);
+const containerWidth = ref(0);
+const gameState = ref('start');
 const lives = ref(3);
-const timeRemaining = ref(60); // 秒
-let gameLoopInterval = null;
-let countdownInterval = null;
+const timeRemaining = ref(60);
+const playerX = ref(0);
+const playerTilt = ref(0);
+const roadOffset = ref(0);
+const obstacles = reactive([]);
 
-// 玩家位置 (0: 左, 1: 中, 2: 右)
-const playerPosition = ref(1); 
-// 障礙物列表：{ x: 0/1/2, distance: 0-100 }
-const obstacles = ref([]); 
+let lastSpawnTime = 0;
+let obstacleId = 0;
+const keys = { ArrowLeft: false, ArrowRight: false };
 
-// 計算屬性：格式化時間
-const formattedTime = computed(() => {
-  const mins = Math.floor(timeRemaining.value / 60);
-  const secs = timeRemaining.value % 60;
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+// --- 3D 樣式計算 ---
+const playerStyle = computed(() => ({
+  transform: `translateX(-50%) translateX(${playerX.value}px) rotateX(-90deg) rotateY(${playerTilt.value}deg)`
+}));
+
+const getObsStyle = (obs) => ({
+  width: `${obs.width}px`,
+  transform: `translateX(-50%) translate3d(${obs.x}px, 0, ${obs.z}px) rotateX(-90deg)`,
+  opacity: obs.z > -1200 ? 1 : (obs.z + 3500) / 1000,
+  filter: obs.hit ? 'grayscale(1) brightness(0.5)' : 'none'
 });
 
-// --- 遊戲核心邏輯 ---
+// --- 遊戲邏輯循環 ---
+const update = (time, deltaTime) => {
+  if (gameState.value !== 'playing') return;
+  const dt = deltaTime / 1000;
 
-// 繪製遊戲畫面
-const drawGame = () => {
-  if (!ctx.value) return;
-  const c = ctx.value;
-  const W = 375;
-  const H = 500;
-
-  // 1. 清空畫面 (道路與天空)
-  c.fillStyle = '#87CEEB'; // 天空藍
-  c.fillRect(0, 0, W, H / 2); // 畫面上半部分為天空
-
-  c.fillStyle = '#666'; // 遠處地面/道路
-  c.fillRect(0, H / 2, W, H / 2); 
+  timeRemaining.value -= dt;
+  if (timeRemaining.value <= 0) endGame();
   
-  // 繪製道路 (簡單的透視效果)
-  c.fillStyle = '#444'; 
-  c.beginPath();
-  // 道路消失點（靠近畫面中央上方）
-  const vanishingPointY = H * 0.45; 
-  c.moveTo(0, vanishingPointY); 
-  c.lineTo(W, vanishingPointY);
-  c.lineTo(W, H);
-  c.lineTo(0, H);
-  c.fill();
+  roadOffset.value += 1800 * dt;
+
+  // 玩家移動
+  const moveSpeed = 1000 * dt;
+  let targetTilt = 0;
+  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 25; }
+  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -25; }
   
-  // 繪製道路中線（可選）
-  c.fillStyle = 'yellow';
-  c.fillRect(W / 2 - 2, vanishingPointY, 4, H - vanishingPointY);
+  playerTilt.value = gsap.utils.interpolate(playerTilt.value, targetTilt, 0.1);
 
+  // 【邊界鎖定】確保不跑出畫面
+  const limit = (containerWidth.value / 2) - (BIKE_WIDTH / 2);
+  if (playerX.value < -limit) playerX.value = -limit;
+  if (playerX.value > limit) playerX.value = limit;
 
-  // 2. 繪製玩家 (機車)
-  const playerX = [W / 6, W / 2, W * 5 / 6][playerPosition.value];
-  const playerY = H * 0.8;
-  c.fillStyle = 'blue';
-  c.fillRect(playerX - 20, playerY - 30, 40, 60); 
+  // 生成障礙物
+  if (time - lastSpawnTime > 0.8) {
+    spawnObstacle();
+    lastSpawnTime = time;
+  }
 
-  // 3. 繪製障礙物
-  obstacles.value.forEach(obs => {
-    // distance 從 100 遞減到 0，代表從遠到近
-    // 靠近時尺寸變大，最大為 50
-    const size = 10 + (100 - obs.distance) * 0.4; 
-    
-    // Y 座標計算：從消失點 (vanishingPointY) 向下移動到 playerY
-    // 當 distance = 100 時，Y 接近 vanishingPointY
-    // 當 distance = 0 時，Y 接近 playerY
-    const y = vanishingPointY + (100 - obs.distance) / 100 * (playerY - vanishingPointY);
-    
-    const x = [W / 6, W / 2, W * 5 / 6][obs.x];
-    
-    // 繪製物件
-    c.fillStyle = obs.collided ? 'gray' : 'red'; // 碰撞後變灰
-    c.fillRect(x - size / 2, y - size / 2, size, size);
+  // 障礙物移動與碰撞
+  const obsSpeed = 1700 * dt;
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    const obs = obstacles[i];
+    obs.z += obsSpeed;
 
-    // 碰撞檢測 (簡化：只判斷距離最近的障礙物)
-    // 當障礙物非常接近玩家時進行碰撞檢測
-    if (obs.distance < 5 && obs.x === playerPosition.value && !obs.collided) {
-      handleCollision(obs);
+    if (!obs.hit && obs.z > -60 && obs.z < 60) {
+      const collisionMargin = (obs.width + BIKE_WIDTH) / 2 - 15; // 稍微寬鬆一點的判定
+      if (Math.abs(obs.x - playerX.value) < collisionMargin) {
+        obs.hit = true;
+        lives.value--;
+        gsap.to(container.value, { y: 15, yoyo: true, repeat: 3, duration: 0.05 });
+        if (lives.value <= 0) endGame();
+      }
     }
+    if (obs.z > Z_DESPAWN) obstacles.splice(i, 1);
+  }
+};
+
+const spawnObstacle = () => {
+  const roadWidth = containerWidth.value * 0.92;
+  const laneCenters = [-roadWidth * 0.35, 0, roadWidth * 0.35];
+  
+  // 隨機生成障礙物
+  const config = obstacleConfigs[Math.floor(Math.random() * obstacleConfigs.length)];
+  
+  obstacles.push({
+    id: obstacleId++,
+    x: laneCenters[Math.floor(Math.random() * 3)],
+    z: Z_SPAWN,
+    hit: false,
+    label: config.label,
+    color: config.color,
+    width: config.width
   });
 };
 
-// 更新遊戲狀態 (每幀/每隔一段時間)
-const updateGame = () => {
-  if (!gameStarted.value || gameOver.value) return;
-
-  // 1. 障礙物移動和生成
-  obstacles.value = obstacles.value
-    .map(obs => ({ ...obs, distance: obs.distance - 2 })) // 向前移動
-    .filter(obs => obs.distance >= 0); // 移除通過的障礙物
-
-  // 隨機生成新的障礙物
-  if (Math.random() < 0.015 && obstacles.value.length < 5) { 
-    // 確保場景中障礙物數量不會太多
-    obstacles.value.push({
-      x: Math.floor(Math.random() * 3), // 隨機在左中右 (0, 1, 2)
-      distance: 100, // 從最遠處 (前上方) 開始
-      collided: false,
-    });
-  }
-
-  // 2. 檢查遊戲結束條件 (生命檢查)
-  if (lives.value <= 0) {
-    endGame(false); // 命用完了
-  }
-
-  drawGame();
-};
-
-// 處理碰撞事件
-const handleCollision = (collidedObstacle) => {
-  if (collidedObstacle.collided) return; // 避免重複碰撞
-
-  lives.value--;
-  collidedObstacle.collided = true; // 標記已碰撞
-  // 清除所有已碰撞的障礙物，或只移除當前的
-  obstacles.value = obstacles.value.filter(obs => obs !== collidedObstacle); 
-
-  if (lives.value <= 0) {
-    endGame(false);
-  }
-};
-
-// 倒計時
-const countdown = () => {
-  countdownInterval = setInterval(() => {
-    if (timeRemaining.value > 0) {
-      timeRemaining.value--;
-    } else {
-      endGame(true); // 時間結束
-    }
-  }, 1000);
-};
-
-// --- 遊戲流程控制 ---
-
-// 開始遊戲
 const startGame = () => {
-  if (gameStarted.value && !gameOver.value) return; 
-
-  // 重置狀態
   lives.value = 3;
   timeRemaining.value = 60;
-  playerPosition.value = 1;
-  obstacles.value = [];
-  gameStarted.value = true;
-  gameOver.value = false;
-
-  // 啟動遊戲循環
-  gameLoopInterval = setInterval(updateGame, 1000 / 60); // 60 FPS
-  countdown(); // 啟動時間計數
+  playerX.value = 0;
+  obstacles.length = 0;
+  gameState.value = 'playing';
+  lastSpawnTime = gsap.ticker.time;
 };
 
-// 結束遊戲
-const endGame = (timeUp) => {
-  clearInterval(gameLoopInterval);
-  clearInterval(countdownInterval);
-  gameStarted.value = true;
-  gameOver.value = true;
+const endGame = () => { gameState.value = 'result'; };
 
-  // 判斷勝利
-  if (timeUp && lives.value > 0) {
-    console.log("勝利！時間到且生命仍存。");
-  } else {
-    console.log("遊戲結束！生命耗盡或時間到但生命為零。");
-  }
+const updateSize = () => {
+  if (container.value) containerWidth.value = container.value.clientWidth;
 };
 
-// --- 玩家控制 ---
-
-// 左右移動玩家
-const movePlayer = (direction) => {
-  // -1: 左, 1: 右
-  const newPos = playerPosition.value + direction;
-  if (newPos >= 0 && newPos <= 2) {
-    playerPosition.value = newPos;
-  }
-};
-
-// 處理鍵盤事件
-const handleKeyDown = (event) => {
-  if (!gameStarted.value || gameOver.value) return;
-  if (event.key === 'ArrowLeft') {
-    movePlayer(-1);
-  } else if (event.key === 'ArrowRight') {
-    movePlayer(1);
-  }
-};
-
-// 處理手機滑動事件
-let touchStartX = 0;
-const handleTouchStart = (event) => {
-  touchStartX = event.touches[0].clientX;
-};
-
-const handleTouchEnd = (event) => {
-  if (!gameStarted.value || gameOver.value) return;
-
-  const touchEndX = event.changedTouches[0].clientX;
-  const diff = touchEndX - touchStartX;
-  const threshold = 30; // 最小滑動距離
-
-  if (diff > threshold) {
-    movePlayer(1); // 向右滑動
-  } else if (diff < -threshold) {
-    movePlayer(-1); // 向左滑動
-  }
-};
-
-// --- 組件生命週期 ---
+const handleKeyDown = (e) => { keys[e.key] = true; };
+const handleKeyUp = (e) => { keys[e.key] = false; };
 
 onMounted(() => {
-  ctx.value = gameCanvas.value.getContext('2d');
-  
-  // 綁定事件監聽
+  updateSize();
+  window.addEventListener('resize', updateSize);
   window.addEventListener('keydown', handleKeyDown);
-  gameCanvas.value.addEventListener('touchstart', handleTouchStart);
-  gameCanvas.value.addEventListener('touchend', handleTouchEnd);
-  
-  // 首次繪製靜態畫面
-  drawGame();
+  window.addEventListener('keyup', handleKeyUp);
+  gsap.ticker.add(update);
 });
 
 onUnmounted(() => {
-  // 清除計時器和事件監聽
-  clearInterval(gameLoopInterval);
-  clearInterval(countdownInterval);
+  window.removeEventListener('resize', updateSize);
   window.removeEventListener('keydown', handleKeyDown);
-  if (gameCanvas.value) {
-    gameCanvas.value.removeEventListener('touchstart', handleTouchStart);
-    gameCanvas.value.removeEventListener('touchend', handleTouchEnd);
-  }
+  window.removeEventListener('keyup', handleKeyUp);
+  gsap.ticker.remove(update);
 });
 </script>
-<style scoped>
-.game-container {
-  display: flex;
-  flex-direction: column;
+
+<style scoped lang="scss">
+.game-wrapper {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
 }
 
-.game-window {
+.game-container {
   position: relative;
-  border: 4px solid black;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  background-color: #333; /* Canvas 外部背景 */
+  background-color: #1a1b26; 
+  perspective: 1200px;
+  perspective-origin: 50% 45%; 
+}
+
+.stage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* 地面與標線：30% / 70% 固定定位 */
+.ground {
+  position: absolute;
+  width: 92%; 
+  height: 6000px;
+  left: 4%;
+  bottom: 0;
+  background: #000; 
+  transform: rotateX(90deg);
+  transform-origin: bottom center;
+}
+
+.road-texture {
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(to bottom, #fff 50%, transparent 50%),
+    linear-gradient(to bottom, #fff 50%, transparent 50%);
+  background-size: 8px 160px;
+  background-repeat: repeat-y;
+  background-position: 30% 0, 70% 0;
+  border-left: 6px solid #fff;
+  border-right: 6px solid #fff;
+  box-sizing: border-box;
+}
+
+// 玩家
+.player-bike {
+  position: absolute;
+  bottom: 0px; 
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  transform-style: preserve-3d;
+  z-index: 20;
+}
+
+// 障礙物
+.obstacle-box {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 80px;     // 固定高度，寬度由 JS 動態決定 
+  transform-style: preserve-3d;
+}
+
+.obs-inner, .bike-inner {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  border: 4px solid #fff;
+  box-sizing: border-box;
+  letter-spacing: 2px;
+}
+
+.bike-inner {
+  background: #00d2ff;
+  color: #fff;
+  border-radius: 8px;
+}
+
+/* UI 樣式 */
+.hud {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  justify-content: space-around;
+  z-index: 100;
 }
 
 .hud {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  color: white;
-  font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px 10px;
-  border-radius: 5px;
+  h5{
+    color: #fff;
+    font-size: 26px;
+    font-weight: bold;
+    background: rgba(0,0,0,0.5);
+    padding: 10px 30px;
+    border-radius: 4px;
+    border-left: 5px solid #fff;
+  }
 }
 
-.game-over-screen {
+.overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  display: flex;
-  flex-direction: column;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
   justify-content: center;
   align-items: center;
+  z-index: 200;
+}
+
+.ui-panel {
   text-align: center;
+  color: #fff;
+  padding: 50px;
+  border: 1px solid #333;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  cursor: pointer;
-  z-index: 10;
-}
-.game-over-screen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9); /* 更深的遮罩 */
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 5; /* 確保在 canvas 上方 */
-}
-
-.game-over-screen h3 {
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
-.restart-button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
 </style>

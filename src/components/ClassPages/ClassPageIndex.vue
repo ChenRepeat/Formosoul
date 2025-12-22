@@ -31,52 +31,52 @@
 <template>
   <ul class="class-index-case dp-flex-col">
     <li class="dp-flex">
-      <h5 class="page-index dp-flex"
+      <h5 class="page-index dp-flex no-i18n-anim"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toMotorPage)"
       >
-        <IconHelmet />Motorcycle
+        <IconHelmet /><span>{{$t('classes.motorClass')}}</span>
       </h5>
     </li>
     <li class="dp-flex">
-      <h5 class="page-index dp-flex"
+      <h5 class="page-index dp-flex no-i18n-anim"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toAnimaPage)">
-        <IconFoot /> Endemic Species
+        <IconFoot /> <span>{{$t('classes.animalTitle')}}</span>
       </h5>
     </li>
     <li class="dp-flex">
-      <h5 class="page-index dp-flex"
+      <h5 class="page-index dp-flex no-i18n-anim"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toHistoryPage)">
-        <IconHistory /> History of Magic
+        <IconHistory /> <span>{{$t('classes.historyTitle')}}</span>
       </h5>
     </li>
     <li class="dp-flex">
-      <h5 class="page-index dp-flex"
+      <h5 class="page-index dp-flex no-i18n-anim"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toCharmPage)">
-        <IconCharm size="43"/>Spell & Charms
+        <IconCharm size="43"/><span>{{$t('classes.charmTitle')}}</span>
       </h5>
     </li>
     <li class="dp-flex">
-      <h5 class="page-index dp-flex"
+      <h5 class="page-index dp-flex no-i18n-anim"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toPotionPage)">
-        <IconPotion />Potions
+        <IconPotion /><span>{{$t('classes.potionTitle')}}</span>
       </h5>
     </li>
     <li class="dp-flex">
-      <h5 class="page-index dp-flex"
+      <h5 class="page-index dp-flex no-i18n-anim"
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(toDivitionPage)">
-        <IconBue />Divinations
+        <IconBue /><span>{{$t('classes.divinationTitle')}}</span>
       </h5>
     </li>
   </ul>
