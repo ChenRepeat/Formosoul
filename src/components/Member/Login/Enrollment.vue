@@ -61,8 +61,15 @@
         <div class="login-bottom">
             <p>* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
         </div>
+        <div class="checkpolicy dp-flex">
+            <input type="checkbox" v-model="checkbox" id="checkbox">
+            <div class="agreetext dp-flex"><p>I have read and agree to the Terms of </p>
+                <p @click="gotoService" class="Service">Service</p><p>and</p>
+                <p @click="gotoPrivacy" class="Privacy">Privacy Policy</p>
+                <p>.</p></div>
+        </div>
         <BasicButton
-        class="btn-yellow-fill"
+        :class="btnclose ?  'btn-close' : 'btn-yellow-fill'"
         @click="handleEnrollment"
         :disabled="isLoading"
         >
@@ -77,7 +84,9 @@
 import BasicButton from '@/components/BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
-import { inject, ref } from 'vue';
+import { inject, ref, watch } from 'vue';
+import router from '@/router';
+
 
 const setSharedEmail = inject('setEnrollmentEmail');
 const authStore = useAuthStore();
@@ -85,6 +94,7 @@ const authStore = useAuthStore();
 const email = ref('');
 const password = ref('');
 const otp = ref('');
+const checkbox = ref(false);
 const isLoading = ref(false);
 const otpLoading = ref(false);
 const errorMessage = ref('');
@@ -92,8 +102,21 @@ const showPassword = ref(false);
 const otpSent = ref(false);
 const timer = ref(60);
 const btngray = ref(false);
+const btnclose = ref(true);
 let intervalId = null;
 
+
+
+watch(
+  [() => email.value, () => otp.value, () => password.value, () => checkbox.value],
+  ([newemail, newotp, newpassword, newcheckbox]) => {
+    if (!newemail  || !newotp || !newpassword || newcheckbox == false) {
+      btnclose.value = true;
+    }else{
+      btnclose.value = false;
+    }
+  }
+);
 
 async function sendOTPAPI(emailValue) {
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -167,6 +190,7 @@ async function startCountdown() {
     // }
 };
 
+
 async function handleEnrollment() {
     if(!email.value || !password.value || !otp.value){
         errorMessage.value = 'Please fill in all fields';
@@ -196,7 +220,10 @@ async function handleEnrollment() {
         errorMessage.value = 'Please request OTP first';
         return;
     }
-
+    if (!checkbox.value) {
+        errorMessage.value = 'Please agree to the Terms of Service and Privacy Policy.';
+        return;
+    }
     isLoading.value = true;
     errorMessage.value = '';
 
@@ -207,6 +234,7 @@ async function handleEnrollment() {
         // 這邊寫成跳到登入頁面 成功才會執行
         authStore.setloginView('loginpage');
         setSharedEmail(email.value);
+        
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';
     }finally {
@@ -222,6 +250,19 @@ function handleKeyDown(e) {
 
 function togglePassword() {
     showPassword.value = !showPassword.value;
+};
+
+const gotoPrivacy = () => { 
+
+    router.push('policy/privacypolicy');
+
+    authStore.isLoginModalOpen = false;
+};
+
+const gotoService = () => {
+    router.push('policy/returns');
+
+    authStore.isLoginModalOpen = false;
 };
 </script>
 
@@ -284,21 +325,31 @@ function togglePassword() {
     }
 
     .btn-yellow-fill{
-        width: 280px;
+
         display: flex;
         margin: 0 auto;
-        // padding-top: 16px;
-        // padding-bottom: 16px;
         justify-content: center;
-        // margin-bottom: 36px;
+
     }
+
+    .btn-close{
+        background-color: $color-fsContent;
+        color: $color-fsWhite;
+        display: flex;
+        margin: 0 auto;
+        justify-content: center;    
+        pointer-events: none;
+
+    }
+
     .btn-gray-fill{
         position: absolute;
         right: 8px;
         top: 50%;
         transform: translate(0, -50%);
         padding: 4px 8px;
-        cursor: not-allowed;
+        pointer-events: none;
+
     }
     .btn-gray-fill > p{
         font-size: 14px;
@@ -319,5 +370,21 @@ function togglePassword() {
 
     .error-message > p{
         color: $color-fsRed;
+    }
+    .checkpolicy{
+        margin-bottom: 36px;
+    }
+    .agreetext{
+        padding-top: 4px;
+        padding-left: 8px;
+        gap: 4px;
+    }
+    .Service,
+    .Privacy{
+        cursor: pointer;
+        color: $color-fsBlue;
+    }
+    .checkpolicy > input[type="checkbox"] {
+        transform: scale(1.3);
     }
 </style>

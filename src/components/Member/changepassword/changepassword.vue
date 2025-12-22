@@ -9,7 +9,7 @@
             type="text" 
             name="oldpassword" 
             id="oldpassword"
-            placeholder="請輸入舊密碼"/>
+            placeholder="Current password"/>
             
             <label for="Newpassword"><h6>New password：</h6></label>
             <input 
@@ -19,7 +19,7 @@
             class="input-text"
             id="Newpassword"
             @input="validateNewPassword"
-            placeholder="請輸入新密碼"/>
+            placeholder="New password"/>
             
             
             <label for="confirmpassword"><h6>Confirm new password：</h6></label>
@@ -30,24 +30,26 @@
             name="confirmpassword" 
             id="confirmpassword"
             @input="validateConfirmPassword"
-            placeholder="請再次輸入新密碼"/>
+            placeholder="Confirm new password"/>
             
             <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
-            <p class="text">* Password must contain at least 8 characters including uppercase and lowercase English letters and numbers.</p>
+            <p class="text">* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
 
-            <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword">Save changes</BasicButton>
+            <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword" :disabled="isLoading">{{ isLoading ? 'Loading...' : 'Save Change'}}</BasicButton>
         </div>  
     </div>
 </template>
 
 <script setup>
 import BasicButton from '@/components/BasicButton.vue';
-import { computed, ref } from 'vue';
+
+import { ref } from 'vue';
 
 const oldpassword = ref('');
 const Newpassword = ref('');
 const confirmpassword = ref('');
 const errorMessage = ref('');
+const isLoading = ref(false);
 
 //  驗證新密碼格式
 const validateNewPassword  = () => {
@@ -58,35 +60,26 @@ const validateNewPassword  = () => {
         return;
     }
 
-    if(password.length < 8){
-        errorMessage.value = '密碼至少需要8個字元';
-        return;
-    }
 
     const hasUppercase = /[A-Z]/.test(Newpassword.value);
     const hasLowercase = /[a-z]/.test(Newpassword.value);
     const hasNumber = /[0-9]/.test(Newpassword.value);
 
-    if(!hasUppercase){
-        errorMessage.value = '密碼必須包含大寫字母(A-Z)';
+    if (password.length < 8) {
+        errorMessage.value = 'Password must be at least 8 characters';
         return;
-    }
-    if(!hasLowercase){
-        errorMessage.value = '密碼必須包含小寫字母(a-z)';
-        return;
-    }
-    if(!hasNumber){
-        errorMessage.value = '密碼必須包含數字(0-9)';
+    }else if(!hasUppercase || !hasLowercase || !hasNumber){
+        errorMessage.value = 'Passwords must contain uppercase letters, lowercase letters, and numbers.';
         return;
     }
     // 只有當舊密碼有輸入，且新密碼等於舊密碼，才顯示錯誤 避免在用戶還沒輸入舊密碼時就顯示錯誤訊息 因為空字串是false
     if(password === oldpassword.value && oldpassword.value){
-        errorMessage.value = '新密碼不得與舊密碼相同';
+        errorMessage.value = 'New password must not be the same as the old password.';
         return;
     }
     // 當輸入確認密碼時才檢查
     if(confirmpassword.value && password !== confirmpassword.value){
-        errorMessage.value = '必須與新密碼相同';
+        errorMessage.value = 'Must be the same as the new password.';
     }else{
         errorMessage.value = '';
     }
@@ -98,19 +91,19 @@ const validateConfirmPassword = () => {
     errorMessage.value = '';
 
     if(!confirmpassword.value){
-        errorMessage.value = '請再輸入一次新密碼';
+        errorMessage.value = 'Please enter your new password again.';
         return;
     }
 
     if (Newpassword.value !== confirmpassword.value) {
-        errorMessage.value = '必須與新密碼相同';
+        errorMessage.value = 'Must be the same as the new password.';
     }
 
 };
 
 // 確認鍵
 
-const handleChangePassword  = () => {
+const handleChangePassword  = async() => {
     // 重製所有錯誤
     errorMessage.value = '';
 
@@ -132,25 +125,36 @@ const handleChangePassword  = () => {
         if(Newpassword.value.length < 8){
             errorMessage.value = 'Passwords must be at least 8 characters long';
         }else if(!hasUppercase || !hasLowercase || !hasNumber){
-            errorMessage.value = '密碼必須包含大寫、小寫字母和數字';
+            errorMessage.value = 'Passwords must contain uppercase letters, lowercase letters, and numbers.';
         }else if(Newpassword.value === oldpassword.value){
-            errorMessage.value = '新密碼不得與舊密碼相同';
+            errorMessage.value = 'Must be the same as the new password.';
 
         }
     }
 
     if(!confirmpassword.value){
-        errorMessage.value = '請再輸入一次新密碼';
+        errorMessage.value = 'Please enter your new password again.';
     }else if(Newpassword.value !== confirmpassword.value){
-        errorMessage.value = '必須與新密碼相同';
+        errorMessage.value = 'Must be the same as the new password.';
     }
 
     if(errorMessage.value){
-        errorMessage.value = '請確認所有欄位';
+        errorMessage.value = 'Please confirm all fields.';
         return;
     }
 
-    console.log('驗證通過！');
+    try{
+    }catch(error){
+        errorMessage.value = error.message || 'changepassword failed, please try again';
+    }finally{
+        isLoading.value = true;
+        setTimeout(() => {
+            isLoading.value = false;
+        }, 3000)
+        console.log('驗證通過！');
+
+    }
+
 
     // 補 AJAX 呼叫後端
     // TODO: 這裡放 axios / fetch 請求
