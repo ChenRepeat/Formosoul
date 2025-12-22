@@ -9,22 +9,22 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
       <div class="footer-icons-case dp-flex-col">
         <img :src="siteLogo" alt="Logo" class="logo-style" />
         <div class="footer-social-link dp-flex">
-          <a href="" class=" no-i18n-anim"
+          <a href="https://github.com/ChenRepeat/Formosoul" class=" no-i18n-anim"
             ><font-awesome-icon
               icon="fa-brands fa-github"
               class="footer-socialIcons"
           /></a>
-          <a href=""  class=" no-i18n-anim"
+          <a href="https://instagram.com/"  class=" no-i18n-anim"
             ><font-awesome-icon
               icon="fa-brands fa-instagram"
               class="footer-socialIcons no-i18n-anim"
           /></a>
-          <a href=""  class=" no-i18n-anim"
+          <a href="https://facebook.com/"  class=" no-i18n-anim"
             ><font-awesome-icon
               icon="fa-brands fa-square-facebook"
               class="footer-socialIcons no-i18n-anim"
           /></a>
-          <a href=""  class=" no-i18n-anim"
+          <a href="https://x.com/"  class=" no-i18n-anim"
             ><font-awesome-icon
               icon="fa-brands fa-x-twitter"
               class="footer-socialIcons no-i18n-anim"
