@@ -419,7 +419,7 @@ const initPageFlip = () => {
     maxWidth: 600,
     minHeight: 500,
     maxHeight: 800,
-    size: 'fixed',
+    size: 'stretch',
     showCover: true,
     maxShadowOpacity: 0.2,
     flippingTime: FLIP_SPEEDS.normal,

@@ -3,21 +3,18 @@ import { computed, ref } from 'vue';
   const showDialog = ref(1); 
   const dialogs = {
     1: {
-      name:'Mo-Bue',
-      introEn:'The curved backs turn upward, shielding secrets within. A dark omen bars your path; the ancient forces deny your request. Do not push further.',
-      introCn:'隆起的背部向上翻轉，將秘密緊鎖其中。這是一個拒絕的暗影徵兆，遠古力量否決了你的請求，不可強行推進。',
+      name:'classes.bue1Name',
+      intro:'classes.bue1Intro',
       imgUrl:'Classes/moBue.png',
     },
     2: {
-      name:'Chio-Bue',
-      introEn:'Two open faces stare back, mocking your hesitation. The ether finds your query clouded; clear your mind and cast the runes once more for truth.',
-      introCn:'兩個張開的平面凝視著你，嘲弄你的遲疑。乙太界認為你的提問過於模糊，請清空思緒再次施放符文。',
+      name:'classes.bue2Name',
+      intro:'classes.bue2Intro',
       imgUrl:'Classes/chiobue.png',
     },
     3: {
-      name:'Xin-Bue',
-      introEn:'A perfect harmony of light and shadow lies before you. The cosmos whispers consent, allowing your magic to flow freely into the woven reality.',
-      introCn:'光與影達成完美的和諧，宇宙對你低聲許諾，准許你的魔力在交織的現實中自由流動。',
+      name:'classes.bue3Name',
+      intro:'classes.bue3Intro',
       imgUrl:'Classes/xinbue.png',
     },
   };
@@ -32,12 +29,12 @@ import { computed, ref } from 'vue';
 <template>
 <section class="divination-left dp-flex-col">
   <div class="title">
-    <h2>Divination</h2>
-    <p>Taiwanese divination uses magical sticks and lot casting to seek guidance, predict luck, and explore mystical insights.</p>
+    <h2>{{ $t('classes.divinationTitle') }}</h2>
+    <p>{{ $t('classes.divinationIntro') }}</p>
   </div>
   <div class="bua-bue-intro">
-    <h5>BUA-BUE</h5>
-    <p>Wooden or bamboo blocks are tossed magically to answer yes/no questions, revealing luck and divine will.</p>
+    <h5>{{ $t('classes.bueTitle') }}</h5>
+    <p>{{ $t('classes.bueIntro') }}</p>
   </div>
   <div 
     class="intro-corner dp-flex-col"
@@ -60,8 +57,8 @@ import { computed, ref } from 'vue';
     <transition name="fade" mode="out-in">
       <div class="intro-text dp-flex-col"
         :key="showDialog">
-            <h5>{{currentDialog.name}}</h5>
-            <p>{{ currentDialog.introEn }}</p>
+            <h5>{{$t(currentDialog.name)}}</h5>
+            <p>{{ $t(currentDialog.intro) }}</p>
         </div>
     </transition>
   </div>

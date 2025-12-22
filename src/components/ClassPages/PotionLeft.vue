@@ -6,7 +6,7 @@
   const potions = {
     1: {
         name: 'Boba Milk Tea',
-        intro: 'A creamy blend of black tea and milk, featuring the signature, chewy tapioca.', 
+        intro: 'classes.potion1', 
         imgUrl:'Classes/potions/potion7.png',
         recipe:{
           1:{
@@ -25,7 +25,7 @@
       },
     2: {
         name: 'Aiyu Lemon Jelly Drink',
-        intro: 'Zesty lemon drink featuring slippery, natural aiyu (fig) jelly—a perfect summer cooler.', 
+        intro: 'classes.potion2', 
         imgUrl:'Classes/potions/potion2.png',
         recipe:{
           1:{
@@ -41,7 +41,7 @@
       },
     3: {
         name: 'No.1',
-        intro: 'Lightly oxidized oolong tea customized with three chewy toppings: boba, pearls, and nata de coco.', 
+        intro: 'classes.potion3', 
         imgUrl:'Classes/potions/potion11.png',
         recipe:{
           1:{
@@ -64,7 +64,7 @@
       },
       4: {
         name: 'Winter Melon Lemonade',
-        intro: 'A perfectly balanced drink: sweet winter melon combined with the refreshing tartness of lemon.', 
+        intro: 'classes.potion4', 
         imgUrl:'Classes/potions/potion3.png',
         recipe:{
           1:{
@@ -79,7 +79,7 @@
       },
       5: {
         name: 'Brown Sugar Boba',
-        intro: 'Warm, chewy pearls simmered in rich brown sugar syrup mixed with fresh milk.', 
+        intro: 'classes.potion5', 
         imgUrl:'Classes/potions/potion6.png',
         recipe:{
           1:{
@@ -102,7 +102,7 @@
       },
       6: {
         name: 'Winter Melon Drink with Grass Jelly',
-        intro: 'Sweet winter melon juice perfectly paired with smooth, cooling herbal grass jelly cubes.', 
+        intro: 'classes.potion6', 
         imgUrl:'Classes/potions/potion5.png',
         recipe:{
           1:{
@@ -121,7 +121,7 @@
       },
       7: {
         name: 'Cheese Foam Green Tea',
-        intro: 'Refreshing green tea topped with a thick, savory, and lightly salted cream foam.', 
+        intro: 'classes.potion7', 
         imgUrl:'Classes/potions/potion1.png',
         recipe:{
           1:{
@@ -140,7 +140,7 @@
       },
       8: {
         name: 'Winter Melon Drink with Nata de Coco',
-        intro: 'Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).', 
+        intro: 'classes.potion8', 
         imgUrl:'Classes/potions/potion9.png',
         recipe:{
           1:{
@@ -185,8 +185,8 @@
   <section class="potion-left dp-flex-col"
   :class="{'open':clickPotion != 0}">
     <div class="potion-title">
-      <h2>Potions</h2>
-      <p>Taiwan’s herbal potions refresh, heal, and bring magical energy with natural herbs and soothing flavors.</p>
+      <h2>{{$t('classes.potionTitle')}}</h2>
+      <p>{{$t('classes.potionIntro')}}</p>
     </div>
     <div class="potion-intro">
       <div class="potion-intro-img dp-flex"
@@ -232,7 +232,7 @@
             :src="item.imgUrl"
             :alt="item.name">
           </div>
-          <p>{{ currentIntro.intro }}</p>
+          <p>{{ $t(currentIntro.intro) }}</p>
         </div>
       </div>
     </div>

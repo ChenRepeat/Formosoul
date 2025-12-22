@@ -16,12 +16,12 @@ import { ref } from 'vue';
     },
   };
   const chouqianResult={
-    1: {name:'大吉',textEn:'The High Council grants you access to primordial magic; your ultimate quest shall succeed now.',textCn:'魔法議會准許您接觸太初魔法；您最終的任務現在將會成功。'},
-    2: {name:'中吉',textEn:'A profound connection to the celestial sphere assures a prosperous year of powerful enchantments.',textCn:'與天體領域的深切連結確保您擁有一個充滿強大魔法的繁榮學年。'},
-    3: {name:'小吉',textEn:'Remember to properly calibrate your crystal ball; minor errors are overcome by focused intent.',textCn:'記得正確校準您的水晶球；小錯誤能藉由專注的意圖來克服。'},
-    4: {name:'吉',textEn:'A dusty, forgotten scroll in the ancient library contains the exact answer you have been seeking.',textCn:'古老圖書館裡一份塵封已久的羊皮卷軸，載有您一直在尋找的確切答案。'},
-    5: {name:'末吉',textEn:'Though your invisibility cloak has a small tear, it will still offer minimal protection from detection.',textCn:'雖然您的隱形斗篷有個小破洞，但它仍能提供免於偵測的最低限度保護。'},
-    6: {name:'衰',textEn:'A dark hex has been cast upon your prized broomstick; expect serious turbulence during the next flight.',textCn:'一個黑暗的詛咒已施加在您心愛的飛天掃帚上；下次飛行時請預期會有嚴重的亂流。'},
+    1: {name:'大吉',text:'classes.stick1'},
+    2: {name:'中吉',text:'classes.stick1'},
+    3: {name:'小吉',text:'classes.stick1'},
+    4: {name:'吉',text:'classes.stick1'},
+    5: {name:'末吉',text:'classes.stick1'},
+    6: {name:'衰',text:'classes.stick1'},
   }
 
   function chouqian(){
@@ -92,8 +92,8 @@ const buaBue = () => {
     <div class="stick-top dp-flex">
       <div class="left dp-flex-col">
         <div class="intro">
-          <h5>Chōuqiān</h5>
-          <p>A magical ritual where enchanted lots are drawn to seek guidance and reveal hidden fortunes.</p>
+          <h5>{{$t('classes.stickName')}}</h5>
+          <p>{{$t('classes.stickIntro')}}</p>
         </div>
         <div class="img-case">
           <img 
@@ -147,9 +147,8 @@ const buaBue = () => {
           :class="{'show': chouqianFes == 3}" 
           >
           <h2>{{ chouqianResult[stickResult]?.name }}</h2>
-          <p>
-            <!-- {{ chouqianResult.stickResult.textCn }}<br><br> -->
-            {{ chouqianResult[stickResult]?.textEn }}
+          <p v-if="chouqianResult[stickResult]?.text">
+            {{ $t(chouqianResult[stickResult].text) }}
           </p>
             <h6 v-if="stickResult != 0">
               <FontAwesomeIcon icon="fa-solid fa-xmark" @click="closeResult" />
@@ -480,6 +479,7 @@ const buaBue = () => {
 }
 .clickMe{
   display: inline-block;
+  transform: rotate(-35deg);
   animation: 4s clickMe 5s linear infinite forwards;
   position: absolute;
   top: 10%;
