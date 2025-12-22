@@ -11,7 +11,7 @@ import { ref } from 'vue';
 
 
 
-// 商品
+// 商品  ＊傳送給子組件
 const products = ref([
    {
     id: 'FO2025110001',
@@ -963,7 +963,7 @@ const products = ref([
 
 <!-- 中間商品列表 -->
     <section class="list-all">
-        <TestProductCard />
+        <TestProductCard :product="products"/>  <!-- product 傳遞變數 products 的值，子組件接收時要用 product 來接收 -->
     </section>
 
 <!-- 下方頁碼 -->
