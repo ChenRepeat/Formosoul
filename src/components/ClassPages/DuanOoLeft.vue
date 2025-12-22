@@ -6,22 +6,22 @@
 <template>
   <section class="duan-left dp-flex-col">
     <div class="duan-title dp-flex-col">
-      <h3>Dragon-boat  Festival</h3>
-      <p>The Legend: Protecting the Dragon Soul When the magical scholar Qu Yuan cast himself into the river, his spirit transformed into a powerful Dragon Soul.</p>
+      <h3>{{$t('classes.dragonBoatTitle')}}</h3>
+      <p>{{$t('classes.dragonBoatIntro1')}}</p>
     </div>
     <div class="duan-mid-text">
-      <p>To safeguard him, villagers established three ancient rites: <br>
-          Dragon Boat Racing: Mystical battles on water to rescue his soul from malevolent spirits.<br>
-          Enchanted Dumplings: Ritual offerings infused with fortune spells to nourish his essence.<br>
-          Magical Defense: Hanging calamus and mugwort as talismans to forge a protective barrier.</p>
+      <p>{{$t('classes.dragonBoatIntro2')}} <br>
+          {{$t('classes.dragonBoatIntro3')}}<br>
+          {{$t('classes.dragonBoatIntro4')}}<br>
+          {{$t('classes.dragonBoatIntro5')}}</p>
     </div>
     <div class="duan-qu-yuan dp-flex">
       <div class="intro dp-flex-col">
         <img src="/Classes/QiYuan.png" alt="">
-        <h5>Qu Yuan</h5>
+        <h5>{{$t('classes.quYuan')}}</h5>
       </div>
-      <p>Modern Magic & Energy Alignment The ancient magic persists today through rituals of balance and blessing:
-        <br> The Noon Alignment: At midday, when world magic reaches equilibrium, the "Egg Balancing" ritual is performed. Success signifies personal alignment and a year of good fortune.</p>
+      <p>{{$t('classes.dragonBoatIntro6')}}
+        <br>{{$t('classes.dragonBoatIntro7')}}</p>
     </div>
   </section>
 </template>

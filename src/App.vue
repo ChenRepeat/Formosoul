@@ -27,7 +27,7 @@ const currentLogoDP = computed(() => {
 const langStore = useLangStore();
 
 const execLanguageChange = (changeAction) => {
-  const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label", "li", "ul"];
+  const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label",];
   const excludes = [
     ":not(.no-i18n-anim)",
     ":not(.trigger-lang)"

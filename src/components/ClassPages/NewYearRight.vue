@@ -4,13 +4,13 @@
   const zi10 = ref(1);
   const dialogs = {
     1: {
-        paragraph: 'Today, people enjoy magical fireworks, lantern parades, and family feasts. Red envelopes hold blessing charms, and online spells, music, and games mix ancient magic with modern fun.', 
+        paragraph: 'classes.newYearNow1', 
       },
     2: {
-        paragraph: 'Friends ignite brilliant fireworks under a moonlit sky, summoning sparks of enchantment that dance like ancient wishes in the winter air.', 
+        paragraph: 'classes.newYearNow2', 
       },
     3: {
-        paragraph: 'Crimson charms and mystical blessings shimmer on the doorpost, inviting good fortune to swirl in with softly glowing festive magic.', 
+        paragraph: 'classes.newYearNow3', 
       },
   };
   function changeDialog(i){
@@ -74,7 +74,7 @@
         <Transition name="fade" mode="out-in">
           <div class="newyear-right-text dp-flex-col"
           :key="zi10">
-              <p>{{ currentDialog.paragraph }}</p>
+              <p>{{ $t(currentDialog.paragraph) }}</p>
           </div>
         </Transition>
       </div>

@@ -1,18 +1,18 @@
 <script setup>
  const dialogs = {
     1: {
-        name: 'CHANG-E',
-        intro: 'Moon goddess with magical powers, living in a glowing palace, admired each Mid-Autumn Festival.',
+        name: 'classes.changE',
+        intro: 'classes.changEIntro',
         imgSrc: 'Classes/change.png'
     },
     2: {
-        name: 'YU-TOO',
-        intro: 'Mystical rabbit brews elixirs on the moon, spreading blessings and inspiring lunar legends.',
+        name: 'classes.yuToo',
+        intro: 'classes.yuTooIntro',
         imgSrc: 'Classes/yutoo.png'
     },
     3: {
-        name: 'WU-GANG',
-        intro: 'Immortal chopping a magical tree endlessly on the moon, symbolizing patience and perseverance.',
+        name: 'classes.wuGang',
+        intro: 'classes.wuGangIntro',
         imgSrc: 'Classes/woogang.png'
     },
 };
@@ -28,13 +28,13 @@
       class="intro-case dp-flex"
     >
       <div v-if="index == 2" class="inner-intro">
-          <h5 style="text-align: right;">{{ dialogs.name}}</h5>
-          <p>{{ dialogs.intro}}</p>
+          <h5 style="text-align: right;">{{ $t(dialogs.name) }}</h5>
+          <p>{{ $t(dialogs.intro)}}</p>
       </div>
       <img :src="dialogs.imgSrc" :alt="dialogs.name">
       <div v-if="index != 2" class="inner-intro">
-          <h5 style="text-align: left;">{{ dialogs.name}}</h5>
-          <p>{{ dialogs.intro}}</p>
+          <h5 style="text-align: left;">{{ $t(dialogs.name)}}</h5>
+          <p>{{ $t(dialogs.intro)}}</p>
       </div>
     </li>
   </ul>

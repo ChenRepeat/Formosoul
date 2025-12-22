@@ -22,6 +22,8 @@
     "privacyPolicy":"privacy Policy"
   },
   "classes":{
+    "escTip":"Press Esc To Skip and Stop",
+
     "motorClass":"Motorcycle",
     "motorIntro1Title":"Daily Life Essential",
     "motorIntro1text":"Motorcycles are vital in Taiwan, offering fast, flexible transportation through busy city streets.",
@@ -66,6 +68,40 @@
     "animalName4":"Formosan Salamander",
     "animalIntro4":"A rare high-altitude amphibian found in cold mountain streams, sensitive to habitat changes.",
     "animalName5":"Taiwan Blue Magpie",
-    "animalIntro5":"A striking blue bird with a long tail and cooperative family groups, often called “long-tailed mountain lady.”"
+    "animalIntro5":"A striking blue bird with a long tail and cooperative family groups, often called “long-tailed mountain lady.”",
+  
+    "historyTitle":"History of Magic",
+    "historyIntro":"Taiwan’s magical festivals: New Year lights red sparks, Dragon Boats race with charms, Mid-Autumn glows with lanterns and mooncakes, sharing joy under a shining moon.",
+    
+    "newYearTitle":"New Year",
+    "nian":"Nian",
+    "nianIntro":"A magical beast attacking villages each New Year, scared away by glowing red spells, booming thunder charms, and enchanted fire to protect everyone.",
+    "newYearIntro":"Villagers used magical firecrackers, red charms, and lanterns to scare Nian. They sprinkled fairy dust and prepared enchanted foods to bring safety, health, and luck.",
+    "newYearNow1":"Today, people enjoy magical fireworks, lantern parades, and family feasts. Red envelopes hold blessing charms, and online spells, music, and games mix ancient magic with modern fun.",
+    "newYearNow2":"Friends ignite brilliant fireworks under a moonlit sky, summoning sparks of enchantment that dance like ancient wishes in the winter air",
+    "newYearNow3":"Crimson charms and mystical blessings shimmer on the doorpost, inviting good fortune to swirl in with softly glowing festive magic.",
+    
+    "dragonBoatTitle":"Dragon-boat Festival",
+    "dragonBoatIntro1":"The Legend: Protecting the Dragon Soul When the magical scholar Qu Yuan cast himself into the river, his spirit transformed into a powerful Dragon Soul.",
+    "dragonBoatIntro2":"To safeguard him, villagers established three ancient rites:",
+    "dragonBoatIntro3":"Dragon Boat Racing: Mystical battles on water to rescue his soul from malevolent spirits.",
+    "dragonBoatIntro4":"Enchanted Dumplings: Ritual offerings infused with fortune spells to nourish his essence.",
+    "dragonBoatIntro5":"Magical Defense: Hanging calamus and mugwort as talismans to forge a protective barrier.",
+    "quYuan":"Qu Yuan",
+    "dragonBoatIntro6":"Modern Magic & Energy Alignment The ancient magic persists today through rituals of balance and blessing:",
+    "dragonBoatIntro7":"The Noon Alignment: At midday, when world magic reaches equilibrium, the “Egg Balancing” ritual is performed. Success signifies personal alignment and a year of good fortune.",
+    "dragonBoatIntro8":"Sacred Celebration: Families gather to feast on enchanted dumplings and hang colorful charms, weaving collective spells of wisdom, courage, and harmony.",
+    
+    "moonFes":"Mid-Autumn  Festival",
+    "moonFesIntro":"Celebrate Chang’e, Wu Gang, and the Jade Rabbit with glowing lanterns, magical mooncakes, and moonlit blessings shared with family and friends.",
+    "changE":"CHANG-E",
+    "changEIntro":"Moon goddess with magical powers, living in a glowing palace, admired each Mid-Autumn Festival.",
+    "yuToo":"YU-TOO",
+    "yuTooIntro":"Mystical rabbit brews elixirs on the moon, spreading blessings and inspiring lunar legends.",
+    "wuGang":"WU-GANG",
+    "wuGangIntro":"Immortal chopping a magical tree endlessly on the moon, symbolizing patience and perseverance.",
+    "moonFesIntro1":"Today, families enjoy magical lanterns, mooncakes, and storytelling. People cast blessing spells under the full moon, mixing ancient lunar magic with modern celebration and joy.",
+    "moonFesIntro2":"Villagers lit glowing lanterns, offered enchanted mooncakes, and gazed at the magical moon to honor Chang’e, Wu Gang, and the Jade Rabbit’s mystical deeds."
+    
   }
 }

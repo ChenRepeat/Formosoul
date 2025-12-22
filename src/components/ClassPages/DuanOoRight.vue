@@ -16,8 +16,7 @@ const items = {
   <section class="duan-right dp-flex-col">
     <div class="duan-right-top dp-flex">
       <img src="/Classes/DuanOo1.png" alt="BoaZongZu">
-      <p>
-Sacred Celebration: Families gather to feast on enchanted dumplings and hang colorful charms, weaving collective spells of wisdom, courage, and harmony.</p>
+      <p>{{$t('classes.dragonBoatIntro8')}}</p>
     </div>
     <div class="duan-right-bottom dp-flex">
       <img

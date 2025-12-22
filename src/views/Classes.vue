@@ -1,6 +1,6 @@
 <template>
   <div class="book-section">
-    <div v-if="isAnimating" class="blocking-overlay"><h4>Press Esc To Skip and Stop</h4></div>
+    <div v-if="isAnimating" class="blocking-overlay"><h4>{{$t('classes.escTip')}}</h4></div>
 
     <div 
       class="book" 
