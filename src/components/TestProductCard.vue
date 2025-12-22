@@ -8,7 +8,7 @@ const router = useRouter();
 
 // 設定路由功能
 function goProductDetail(){
-    router.push('/shop/productdetail')
+  router.push('/shop/productdetail')
 };
 
 
@@ -22,6 +22,15 @@ const cards = ref([
   { id: 6, img: 'Shop/6.png', isLike: false },
 ])
 
+// 接收商品陣列 ＊要放在 canvas 之前，程式才能讀得到
+const props = defineProps({
+  products:{
+    type: Array,
+    required: true,
+    default: () => []  // 預設空陣列，避免報錯
+  }
+})
+
 const canvasRefs = ref([])
 const pi = x => x * Math.PI / 180
 // const function pi(x){
@@ -29,6 +38,9 @@ const pi = x => x * Math.PI / 180
 //} 
 
 function draw(canvasElement, long, Camera, radius, imageSrc) {
+  console.log('draw 函數被呼叫，圖片路徑:', imageSrc);
+  
+
   const canvas = canvasElement; 
   if (!canvas) return;
   
@@ -62,10 +74,11 @@ function draw(canvasElement, long, Camera, radius, imageSrc) {
 }
 
 onMounted(() => {
+
   // 遍歷每一個 Canvas DOM 元素並執行繪圖
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
-    const imageUrl = cards.value[index].img;
+    const imageUrl = props.products[index].main_pic;
     const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
     draw(canvasEl, 230, 70, 32, finalImageUrl);
   })
@@ -74,22 +87,22 @@ onMounted(() => {
 
 // like 切換
 //const isLike = ref(false);
-function likeHeart(card){
+function likeHeart(product){
   //isLike.value = !isLike.value;  這樣會讓所有的收藏連動
-  card.isLike = !card.isLike;  //只調整點選的那一張
+  product.isLike = !product.isLike;  //只調整點選的那一張
   // 之後要連動到資料庫更新狀態
-
-
-    
+  
 }
+
+
 
 </script>
 
 <template>
   <div class="product-case"  >
     <div 
-      v-for="(card, index) in cards" 
-      :key="card.id" 
+      v-for="(product, index) in products" 
+      :key="product.id" 
       class="product-card dp-flex-col"
       @click="goProductDetail"
     >
@@ -109,23 +122,28 @@ function likeHeart(card){
 
       
       <div class="product-icon dp-flex-col">
-        <div class="btn-like" @click.stop="likeHeart(card)">
-          <!-- 用 card 作為參數，不用 index 的原因是，會跟其他組件還有後端溝通，所以這樣使用 card 的資料會比較直接，不用再用 index 找，造成 bug-->
+        <div class="btn-like" @click.stop="likeHeart(product)">
+          <!-- 用 product 作為參數，不用 index 的原因是，會跟其他組件還有後端溝通，所以這樣使用 product 的資料會比較直接，不用再用 index 找，造成 bug-->
           <!-- .stop：阻止向上冒泡（連動）到父層的 click 事件，是vue的事件修飾符 
                如果僅是為了阻止，這樣寫會容易閱讀，也能一眼看出，likeHeart 函數也有比較乾淨的執行邏輯 
                如果想在 likeHeart 函數裡寫，需要另外傳入 $event 來進行 DOM 的操作，每次點擊時，也需要多傳一個 event 物件，因此除非有其他複雜的處理，再用此方法，例如 有條件地阻止事件冒泡、取得點擊座標等等-->
           <!-- <font-awesome-icon v-if="isLike" class="detail-pic-icon" icon="fa-solid fa-heart" /> -->
-          <font-awesome-icon v-if="card.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
+          <font-awesome-icon v-if="product.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
           <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart" />
         </div>
         <font-awesome-icon icon="fa-solid fa-cart-shopping" />
       </div>
   
-      <h6 class="product-name" >Bamboo Helicopter</h6>
+      <h6 class="product-name" >{{product.name_en}}</h6>
+      <div class="product-content dp-flex" >
+        <p class="product-tag">#{{product.type}}</p>
+        <h6 class="product-price">NT {{product.price}}</h6>
+      </div>
+      <!-- <h6 class="product-name" >Bamboo Helicopter</h6>
       <div class="product-content dp-flex" >
         <p class="product-tag">#Traditional Toys</p>
         <h6 class="product-price">NT 300</h6>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -145,7 +163,7 @@ function likeHeart(card){
   }
   .product-card{
     width: 270px;
-    height: 370px;
+    height: 400px;
 
     backdrop-filter: blur(5px);
     position: relative;
@@ -205,6 +223,7 @@ function likeHeart(card){
     color: $color-fsWhite;
     align-self: flex-start;
     padding: 12px 20px;
+    height: 88px;
   }
 
   .product-content{
