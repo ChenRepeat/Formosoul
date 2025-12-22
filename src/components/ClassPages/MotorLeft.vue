@@ -77,7 +77,7 @@
         <div class="motor-text dp-flex-col"
         :key="zi10">
           <div class="motor-diolog1 motor-content">
-            <h5>{{$t(currentDialog.titleTop)}}</h5>
+            <h5>{{ $t(currentDialog.titleTop) }}</h5>
             <p>{{ $t(currentDialog.paragraphTop) }}</p>
           </div>
           <div class="motor-diolog2 motor-content">
