@@ -4,22 +4,22 @@
   const zi10 = ref(1);
   const dialogs = {
     1: {
-        titleTop: 'Daily Life Essential',
-        paragraphTop: 'Motorcycles are vital in Taiwan, offering fast, flexible transportation through busy city streets.', 
-        titleBottom: 'The Island’s Traffic Icon',
-        paragraphBottom: 'Motorcycles shape Taiwan’s traffic culture, filling intersections, morning commutes, and urban roadways.'
+        titleTop: 'classes.motorIntro1Title',
+        paragraphTop: 'classes.motorIntro1text', 
+        titleBottom: 'classes.motorIntro2Title',
+        paragraphBottom: 'classes.motorIntro2Text'
     },
     2: {
-        titleTop: 'Affordable and Convenient',
-        paragraphTop: 'Motorcycles provide low-cost, efficient travel, easy parking, and reliable short-distance mobility.', 
-        titleBottom: 'Tradition Meets Modernity',
-        paragraphBottom: 'Gas and electric motorcycles coexist, reflecting Taiwan’s evolving transportation habits and lifestyle.'
+        titleTop: 'classes.motorIntro3Title',
+        paragraphTop: 'classes.motorIntro3Text', 
+        titleBottom: 'classes.motorIntro4Title',
+        paragraphBottom: 'classes.motorIntro4Text'
     },
     3: {
-        titleTop: 'Social and Community Culture',
-        paragraphTop: 'Riders gather at night markets, scenic routes, and convenience stores, creating shared motorcycle culture.', 
-        titleBottom: 'Growing Eco-Friendly Trend',
-        paragraphBottom: 'Electric motorcycles rise quickly, supported by charging networks and sustainability incentives.'
+        titleTop: 'classes.motorIntro5Title',
+        paragraphTop: 'classes.motorIntro5Text', 
+        titleBottom: 'classes.motorIntro6Title',
+        paragraphBottom: 'classes.motorIntro6Text'
     },
   };
   function changeDialog(i){
@@ -77,12 +77,12 @@
         <div class="motor-text dp-flex-col"
         :key="zi10">
           <div class="motor-diolog1 motor-content">
-            <h5>{{currentDialog.titleTop}}</h5>
-            <p>{{ currentDialog.paragraphTop }}</p>
+            <h5>{{$t(currentDialog.titleTop)}}</h5>
+            <p>{{ $t(currentDialog.paragraphTop) }}</p>
           </div>
           <div class="motor-diolog2 motor-content">
-            <h5>{{currentDialog.titleBottom}}</h5>
-            <p>{{ currentDialog.paragraphBottom }}</p>
+            <h5>{{ $t(currentDialog.titleBottom) }}</h5>
+            <p>{{ $t(currentDialog.paragraphBottom) }}</p>
           </div>
         </div>
       </Transition>

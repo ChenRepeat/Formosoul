@@ -14,10 +14,10 @@
   const toggle = ref(1);
   const dialogs = {
     1: {
-      paragraph: 'Taiwan’s “motorcycle waterfall” appears during rush hours, when thousands of motorcycles flow down ramps in dense waves, creating a striking visual symbol of the island’s busy urban mobility.'
+      paragraph: 'classes.motorIntro8Intro'
     },
     2: {
-        paragraph: 'Motorcycle modification in Taiwan blends creativity and personal style, from custom paint and decals to engine tuning and upgraded lights, reflecting each rider’s identity while shaping a vibrant and expressive street culture across the island.'
+      paragraph: 'classes.motorIntro9Intro'
     },
   };
   function changeDialog(i){
@@ -34,12 +34,12 @@
 <template>
     <div class="motor-right-contain dp-flex-col">
       <div class="motor-right-title dp-flex-col">
-        <h2 class="title-text">Motorcycle</h2>
-        <p>Taiwan’s motorcycle culture defines daily life, providing fast, affordable mobility and shaping the island’s unique traffic, social habits, and modern transportation trends.</p>
+        <h2 class="title-text">{{ $t("classes.motorClass") }}</h2>
+        <p>{{$t("classes.motorIntro7Intro")}}</p>
       </div>
       <div class="motor-right-content dp-flex">
         <Transition name="fade" mode="out-in">
-          <p :key="toggle" class="motor-right-dialog">{{currentDialog.paragraph}}</p>
+          <p :key="toggle" class="motor-right-dialog">{{$t(currentDialog.paragraph)}}</p>
         </Transition>
         <div class="motor-right-iamge-case dp-flex-col">
           <div class="motor-right-iamge"

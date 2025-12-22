@@ -5,16 +5,16 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
   const zi10 = ref(1);
   const dialogs = {
     1: {
-        title: 'Formosan Black Bear',
-        paragraph: 'Taiwan’s iconic bear, known for its crescent chest mark. It lives in high mountains and symbolizes Taiwan’s wildlife.', 
+        title: 'classes.animalName1',
+        paragraph: 'classes.animalIntro1', 
       },
     2: {
-        title: 'Formosan Sika Deer',
-        paragraph: 'A small, elegant deer once nearly extinct in Taiwan, now restored through conservation efforts..', 
+        title: 'classes.animalName3',
+        paragraph: 'classes.animalIntro3', 
       },
     3: {
-        title: 'Formosan Rock Macaque',
-        paragraph: 'Taiwan’s only native monkey species, highly social and adaptable, often seen in forests and mountainous regions.', 
+        title: 'classes.animalName2',
+        paragraph: 'classes.animalIntro2', 
       },
   };
   function changeDialog(i){
@@ -28,8 +28,8 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
 <template>
   <div class="animal-left-main">
     <div class="animal-title">
-      <h2>Endemic Species</h2>
-      <p>Taiwan’s unique wildlife—from black bears to blue magpies—shows rich biodiversity and highlights the importance of protecting its endemic species.</p>
+      <h2>{{$t('classes.animalTitle')}}</h2>
+      <p>{{$t('classes.animalIntro')}}</p>
     </div>
     <div class="animal-contain dp-flex-col">
       <div class="animal-photo-case">
@@ -80,8 +80,8 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
       <Transition name="fade" mode="out-in">
         <div class="animal-text dp-flex-col"
         :key="zi10">
-            <h5>{{currentDialog.title}}</h5>
-            <p>{{ currentDialog.paragraph }}</p>
+            <h5>{{$t(currentDialog.title)}}</h5>
+            <p>{{ $t(currentDialog.paragraph) }}</p>
         </div>
       </Transition>
     </div>
