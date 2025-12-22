@@ -120,7 +120,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          Potion game
+          <PotionRight />
         </div>
       </div>
       <div class="page">
@@ -161,6 +161,7 @@ import MoonFesRight from '@/components/ClassPages/MoonFesRight.vue';
 import DuanOoLeft from '@/components/ClassPages/DuanOoLeft.vue';
 import DuanOoRight from '@/components/ClassPages/DuanOoRight.vue';
 import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
+import PotionRight from '@/components/ClassPages/PotionRight.vue';
 import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
