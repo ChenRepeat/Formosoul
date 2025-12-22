@@ -65,7 +65,7 @@ const save = () => {
   <div class="canvas-container dp-flex-col"
       @mousedown.stop
       @touchstart.stop>
-      <h5>Draw Your Own Charm !</h5>
+      <h5>{{$t('classes.drawText1')}}</h5>
     <canvas
       ref="canvasRef"
       @mousedown="startDrawing"

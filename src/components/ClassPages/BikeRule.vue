@@ -4,24 +4,24 @@ import { ref, onMounted } from 'vue';
 // 規則內容數據
 const rules = {
   1:{
-    title:"1. Controls",
-    content:" Use the Left and Right Arrow Keys, or drag the motorcycle with your mouse or finger to move across the road.",
+    title:"classes.motorRule1",
+    content:"classes.motorRule2",
   },
   2:{
-    title:"2. Objective",
-    content:" Reach the finish line within the time limit while avoiding all obstacles on the road.",
+    title:"classes.motorRule3",
+    content:"classes.motorRule4",
   },
   3:{
-    title:"3. Obstacles & Damage",
-    content:" Each collision with an obstacle reduces one health point. You have three health points. Losing all three results in game over.",
+    title:"classes.motorRule5",
+    content:"classes.motorRule6",
   },
   4:{
-    title:"4. Winning Condition",
-    content:" Successfully reach the end of the track before time runs out and with at least one remaining health point.",
+    title:"classes.motorRule7",
+    content:"classes.motorRule8",
   },
   5:{
-    title:"5. Tips",
-    content:" Stay alert, react quickly, and keep your motorcycle clear of incoming hazards to survive the run.",
+    title:"classes.motorRule9",
+    content:"classes.motorRule10",
   },
 }
 
@@ -34,11 +34,11 @@ onMounted(() => {
 
 <template>
   <div class="rule-title dp-flex-col">
-    <h5>Rider Edition</h5>
+    <h5>{{$t('classes.motorGame')}}</h5>
     <div v-for="(rule, key) in rules" 
       :key="key">
-    <p>{{ rule.title }}</p>
-    <p>{{ rule.content }}</p>
+    <p>{{ $t(rule.title) }}</p>
+    <p>{{ $t(rule.content) }}</p>
     </div>
     
 

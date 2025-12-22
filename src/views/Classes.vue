@@ -1,6 +1,6 @@
 <template>
   <div class="book-section">
-    <div v-if="isAnimating" class="blocking-overlay"><h4>Press Esc To Skip and Stop</h4></div>
+    <div v-if="isAnimating" class="blocking-overlay"><h4>{{$t('classes.escTip')}}</h4></div>
 
     <div 
       class="book" 
@@ -120,7 +120,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          Potion game
+          <PotionRight />
         </div>
       </div>
       <div class="page">
@@ -161,6 +161,7 @@ import MoonFesRight from '@/components/ClassPages/MoonFesRight.vue';
 import DuanOoLeft from '@/components/ClassPages/DuanOoLeft.vue';
 import DuanOoRight from '@/components/ClassPages/DuanOoRight.vue';
 import PotionLeft from '@/components/ClassPages/PotionLeft.vue';
+import PotionRight from '@/components/ClassPages/PotionRight.vue';
 import CharmLeft from '@/components/ClassPages/CharmLeft.vue';
 import DivinationLeft from '@/components/ClassPages/DivinationLeft.vue';
 import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
@@ -418,7 +419,7 @@ const initPageFlip = () => {
     maxWidth: 600,
     minHeight: 500,
     maxHeight: 800,
-    size: 'fixed',
+    size: 'stretch',
     showCover: true,
     maxShadowOpacity: 0.2,
     flippingTime: FLIP_SPEEDS.normal,

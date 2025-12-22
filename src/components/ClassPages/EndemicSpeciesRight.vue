@@ -15,14 +15,14 @@
           <img src="/Classes/Salamander.png" alt="" class="salamander">
         </div>
         <div class="animal-topic-text dp-flex-col top">
-          <h5 class="animal-topic-title">Formosa Salamander</h5>
-          <p>A rare high-altitude amphibian found in cold mountain streams, sensitive to habitat changes.</p>
+          <h5 class="animal-topic-title">{{$t('classes.animalName4')}}</h5>
+          <p>{{$t('classes.animalIntro4')}}</p>
         </div>
       </div>
       <div class="animal-bottom-topic dp-flex">
         <div class="animal-topic-text dp-flex-col buttom">
-          <h5 class="animal-topic-title">Taiwan <br>Blue Magpie</h5>
-          <p>A striking blue bird with a long tail and cooperative family groups, often called “long-tailed mountain lady.”</p>
+          <h5 class="animal-topic-title">{{$t('classes.animalName5')}}</h5>
+          <p>{{$t('classes.animalIntro5')}}</p>
         </div>
         <div class="animal-photo-case">
           <img src="/Classes/BlueBird.png" alt="" class="blue-bird">

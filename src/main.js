@@ -27,6 +27,11 @@ library.add(fas,fab,far)
 const app = createApp(App)
 
 app.use(createPinia())
+
+import { useLangStore } from '@/stores/lang'
+
+const langStore = useLangStore()
+langStore.setLanguage(langStore.locale)
 app.use(router)
 app.use(i18n)
 

@@ -4,9 +4,12 @@ import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
 import Popup from './components/popup.vue';
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed, onMounted,nextTick, provide } from 'vue';
 import { useAuthStore } from './stores/autoStore';
 import DefaultLogo from '@/assets/logo_white.svg';
+import { useLangStore } from './stores/lang';
+import { gsap } from 'gsap';
+
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -21,11 +24,45 @@ const currentLogoDP = computed(() => {
   return route.meta?.display || 'block';
 });
 
+const langStore = useLangStore();
+
+const execLanguageChange = (changeAction) => {
+  const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label",];
+  const excludes = [
+    ":not(.no-i18n-anim)",
+    ":not(.trigger-lang)"
+  ].join("");
+  const finalTargets = baseTags.map(tag => `${tag}${excludes}`).join(", ");
+  const tl = gsap.timeline();
+  tl.to(finalTargets, {
+    duration: 0.2,
+    opacity: 0,
+    y: -5,
+    ease: "power2.in",
+    onComplete: async () => {
+      changeAction(); 
+      await nextTick();
+      gsap.fromTo(finalTargets, 
+        { opacity: 0, y: 5 }, 
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.3, 
+          ease: "power2.out", 
+          stagger: 0.01 
+        }
+      );
+    }
+  });
+};
+provide('execLanguageChange', execLanguageChange);
+
 onMounted(async () => {
   if(authStore.token){
     await authStore.fetchUser();
   }
 });
+
 </script>
 
 <template>
@@ -37,7 +74,7 @@ onMounted(async () => {
   >
     <TheHeader :is-black-style="currentBgClass == 'white' || currentBgClass == 'transparent'"/>
     <main class="content">
-      <RouterLink to="/" :style="{'display':currentLogoDP}"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></RouterLink>
+      <RouterLink to="/" :style="{'display':currentLogoDP}" class=" no-i18n-anim"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></RouterLink>
       <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
       <div v-if="authStore.isLoading" class="loading">
         載入中...

@@ -1,8 +1,8 @@
 <script setup>
 
   const dialogs = {
-    1: 'Today, families enjoy magical lanterns, mooncakes, and storytelling. People cast blessing spells under the full moon, mixing ancient lunar magic with modern celebration and joy.',
-    2: 'Villagers lit glowing lanterns, offered enchanted mooncakes, and gazed at the magical moon to honor Chang’e, Wu Gang, and the Jade Rabbit’s mystical deeds.',
+    1: 'classes.moonFesIntro1',
+    2: 'classes.moonFesIntro2',
   };
 
   const moonFesPhoto={
@@ -21,15 +21,15 @@
 <template>
 <section class="moonfes-right dp-flex-col">
   <div class="moonfes-right-title">
-    <h3>Mid-Autumn  Festival</h3>
-    <p>Celebrate Chang’e, Wu Gang, and the Jade Rabbit with glowing lanterns, magical mooncakes, and moonlit blessings shared with family and friends.</p>
+    <h3>{{$t('classes.moonFes')}}</h3>
+    <p>{{$t('classes.moonFesIntro')}}</p>
   </div>
   <div class="moonfes-contain-case dp-flex">
     <div class="dp-flex-col moonfes-contain-left">
       <p
         v-for="(text, key) in dialogs"
         :key="key"
-      >{{ text }}</p>
+      >{{ $t(text) }}</p>
       <div class="moonfes-img-case">
         <img src="/Classes/MoonFes4.png" alt="">
       </div>

@@ -10,6 +10,10 @@ export const useLangStore = defineStore('lang', {
       i18n.global.locale.value = lang;
       localStorage.setItem('user-lang', lang);
       document.querySelector('html').setAttribute('lang', lang);
+    },
+    initLanguage() {
+      i18n.global.locale.value = this.locale;
+      document.querySelector('html').setAttribute('lang', this.locale);
     }
   }
 });

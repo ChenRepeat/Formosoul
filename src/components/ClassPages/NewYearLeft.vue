@@ -12,15 +12,15 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
 <template>
   <section class="dp-flex-col newyear-left">
     <div class="newyear-top-topic dp-flex-col">
-      <h3>New Year</h3>
+      <h3>{{$t('classes.newYearTitle')}}</h3>
       <div class="newyear-nian-intro dp-flex">
         <IconFlame class="flame"/>
         <div class="nian-case">
           <img src="/Classes/Nian.png" alt="">
         </div>
         <div class="nian-intro-text dp-flex-col">        
-          <h5>Nian</h5>
-          <p>A magical beast attacking villages each New Year, scared away by glowing red spells, booming thunder charms, and enchanted fire to protect everyone.</p>
+          <h5>{{$t('classes.nian')}}</h5>
+          <p>{{$t('classes.nianIntro')}}</p>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
       <img src="/Classes/NewYear1.png" alt="" class="right">
     </div>
     <div class="newyear-left-text">
-      <p>Villagers used magical firecrackers, red charms, and lanterns to scare Nian. They sprinkled fairy dust and prepared enchanted foods to bring safety, health, and luck.</p>
+      <p>{{$t('classes.newYearIntro')}}</p>
     </div>
   </section>
 

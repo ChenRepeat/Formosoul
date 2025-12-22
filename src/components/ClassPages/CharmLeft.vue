@@ -6,74 +6,74 @@
   const props = defineProps(['sharedImage']);
   const charmsRow1 = ref({
     1: {
-        name: 'Talisman of Celestial Banishing',
-        intro: 'Wards off misfortune and bad luck influences represented by the "Broom Star."', 
+        name: 'classes.charmName1',
+        intro: 'classes.charmText1', 
         imgUrl:'Classes/charms/charm1.png',
     },
-    2: {
-        name: 'Talisman of Conjugal Concord',
-        intro: 'Soothes marital strife; fosters mutual affection and respect between partners.', 
+    2: {        
+        name: 'classes.charmName2',
+        intro: 'classes.charmText2', 
         imgUrl:'Classes/charms/charm2.png',
     },
     3: {
-        name: 'Talisman of Night Terror Repulsion',
-        intro: 'Dispels ominous visions; ensures restful sleep free from evil premonitions.', 
+        name: 'classes.charmName3',
+        intro: 'classes.charmText3', 
         imgUrl:'Classes/charms/charm3.png',
     },
     4: {
-        name: 'Talisman of Feline & Canine Restraint',
-        intro: 'A minor ward to prevent pets from pilfering or consuming forbidden victuals.', 
+        name: 'classes.charmName4',
+        intro: 'classes.charmText4', 
         imgUrl:'Classes/charms/charm4.png',
     },
     5: {
-        name: 'Talisman of Discord Mending',
-        intro: 'Mends broken bonds; restores harmony and affectionate understanding between people.', 
+        name: 'classes.charmName5',
+        intro: 'classes.charmText5', 
         imgUrl:'Classes/charms/charm5.png',
     },
     6: {
-        name: 'Talisman of Hearth & Home Sanctity',
-        intro: 'Binds and fortifies the dwelling; grants lasting peace and stability to inhabitants.', 
+        name: 'classes.charmName6',
+        intro: 'classes.charmText6', 
         imgUrl:'Classes/charms/charm6.png',
     },
     7: {
-        name: `Talisman for Infant's Nocturnal Silence`,
-        intro: 'Soothes restless children; ensures infants remain quiet and sleep through the night.', 
+        name: 'classes.charmName7',
+        intro: 'classes.charmText7', 
         imgUrl:'Classes/charms/charm7.png',
     }})
   const charmsRow2 = ref({
     8: {
-        name: 'Talisman of Persistent Intruder Removal',
-        intro: 'Drives away chronic thievery; secures the premises against repeated burglaries.', 
+        name: 'classes.charmName8',
+        intro: 'classes.charmText8', 
         imgUrl:'Classes/charms/charm8.png',
     },
     9: {
-        name: 'Talisman Against Travel Adversity',
-        intro: 'Guards against perils of transport; ensures a smooth and safe journey by land or water.', 
+        name: 'classes.charmName9',
+        intro: 'classes.charmText9',  
         imgUrl:'Classes/charms/charm9.png',
     },
     10: {
-        name: 'Talisman of Dawn Awakening',
-        intro: 'Instills diligence; compels the user to rise promptly at the break of dawn.', 
+        name: 'classes.charmName10',
+        intro: 'classes.charmText10', 
         imgUrl:'Classes/charms/charm10.png',
     },
     11: {
-        name: 'Talisman of Fortuitous Chance',
-        intro: 'Influences probability, subtly guiding the fall of dice for favorable outcomes.', 
+        name: 'classes.charmName11',
+        intro: 'classes.charmText11', 
         imgUrl:'Classes/charms/charm11.png',
     },
     12: {
-        name: `Zhuge's Veil of Invisibility`,
-        intro: 'A protective charm providing minor camouflage and preventing others from noticing you.', 
+        name: 'classes.charmName12',
+        intro: 'classes.charmText12', 
         imgUrl:'Classes/charms/charm12.png',
     },
     13: {
-        name: 'Your Own',
-        intro: 'A magic charm by you own power and what you thought.', 
+        name: 'classes.charmName13',
+        intro: 'classes.charmText13', 
         imgUrl:'Classes/charms/charm13.png',
     },
     14: {
-        name: 'Talisman of Oneiric Rendezvous',
-        intro: 'Facilitates connection; allows two individuals to meet and communicate within a dream state.', 
+        name: 'classes.charmName14',
+        intro: 'classes.charmText14',  
         imgUrl:'Classes/charms/charm14.png',
     },
   });
@@ -97,9 +97,9 @@ watch(() => props.sharedImage, (newVal) => {
 });
 const buyWord = computed(() => {
   if (charmsRow2.value[13].imgUrl == 'Classes/charms/charm13.png') {
-    return 'Draw Your Own !';
+    return 'classes.drawText1';
   } else {
-    return 'Make Your Product!';
+    return 'classes.drawText2';
   }
 });
 </script>
@@ -107,12 +107,14 @@ const buyWord = computed(() => {
 <template>
   <section class="charm-left dp-flex-col">
     <div class="charm-title">
-      <h2>Spells & Charms</h2>
-      <p>Taiwanese charms and talismans use magic symbols to protect, bring luck, and ward off evil in daily life and festivals.</p>
+      <h2>{{$t('classes.charmTitle')}}</h2>
+      <p>{{$t('classes.charmIntro')}}</p>
     </div>
     <div class="intro-locate dp-flex-col"
     >
-      <div class="charm-top-row dp-flex">
+      <div class="charm-top-row dp-flex"
+        @mousedown.stop
+        @touchstart.stop>
         <div class="shadow-case"
           v-for="(charm, key) in charmsRow1" 
           :key="key"
@@ -168,8 +170,8 @@ const buyWord = computed(() => {
             @mousedown.stop
             @touchstart.stop/>
           </h6>
-          <p>{{ currentIntro.intro }}</p>
-          <p v-if="clickCharm==13" class="userDraw">{{buyWord}}
+          <p>{{ $t(currentIntro.intro) }}</p>
+          <p v-if="clickCharm==13" class="userDraw">{{$t(buyWord)}}
             <font-awesome-icon icon="fa-solid fa-circle-right" class="rightArrow"/>
           </p>
           </div>
@@ -210,8 +212,8 @@ const buyWord = computed(() => {
   }
   .intro-locate{
     position: relative;
-    margin-top: 92px;
-    gap: 78px;
+    margin-top: 10%;
+    gap: 36px;
   }
   .intro-case{
     width: 90%;
@@ -228,7 +230,7 @@ const buyWord = computed(() => {
     align-items: center;
     gap: 40px;
     img{
-      width: 140px;
+      width: 70px;
       height: 140px;
     }
     p{
