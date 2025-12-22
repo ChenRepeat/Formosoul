@@ -163,4 +163,12 @@ export const infoFrames = [
         subImg2: '/tjd103/SurvivalGuide/ringtoss3.jpg',
         buttonText: 'START GAME'
     },
+    {
+        id:'map-api',
+        mainImg: '/tjd103/SurvivalGuide/taiwan_image2_nobg.png',
+        subImg1: '/tjd103/SurvivalGuide/tw_north.png',
+        subImg2: '/tjd103/SurvivalGuide/tw_west.png',
+        subImg3: '/tjd103/SurvivalGuide/tw_south.png',
+        subImg4: '/tjd103/SurvivalGuide/tw_east.png',
+    },
 ]

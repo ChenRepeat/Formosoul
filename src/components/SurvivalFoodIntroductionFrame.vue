@@ -27,6 +27,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
     // 輪播
     const imgList = computed(()=>{ 
+        if (!props.title) {
+            return[props.mainImg];
+        }
         return [
         props.mainImg, 
         props.subImg3, 
@@ -56,7 +59,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         window.addEventListener('keydown', escClose); // 如果有發生keydown事件，啟動 escClose的 function
 
         document.body.style.overflow = 'hidden'; //鎖定背景 - 將網頁最外層設為不可滾動
-        startAutoPlay();
+        if(props.title && imgList.value.length > 1){
+            startAutoPlay();
+        }
     })
 
     onUnmounted (()=>{
@@ -69,34 +74,53 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 <template>
     <div class="food-introduction-overlay" @click="emit('close')">
-        <div class="food-introduction-frame" @click.stop> <!-- 用.stop來阻止傳到父層，如果不寫點擊彈窗就會吃到父層遮罩的emit('close') 就會直接關閉 -->
+        <div class="food-introduction-frame" :class="{ 'map-mode': !props.title }" @click.stop> <!-- 用.stop來阻止傳到父層，如果不寫點擊彈窗就會吃到父層遮罩的emit('close') 就會直接關閉 -->
             <div class="close-btn" ><font-awesome-icon @click="emit('close')" icon="fa-solid fa-xmark"  style="font-size:32px;"/></div>
             <div class="food-introduction-frame-left"
                 @mouseenter="stopAutoPlay"
                 @mouseleave="startAutoPlay"
                 >
                 <div class="carousel-wrapper">
-                    <transition name="fade" mode="out-in">
+                    <div v-if="!props.title" class="map-container">
+                        <div class="map-wrapper">
+                            <img class="base-map" :src="props.mainImg" alt="main-map">
+                            <div v-if="props.subImg1" class="map-pin pin-1" @click="emit('play', 1)">
+                                <img  :src="props.subImg1" alt="pin1">
+                            </div>
+                            <div v-if="props.subImg2" class="map-pin pin-2" @click="emit('play', 2)">
+                                <img :src="props.subImg2" alt="pin2">
+                            </div>
+                            <div v-if="props.subImg3" class="map-pin pin-3" @click="emit('play', 3)">
+                                <img :src="props.subImg3" alt="pin3">
+                            </div>
+                            <div v-if="props.subImg4" class="map-pin pin-4" @click="emit('play', 4)">
+                                <img :src="props.subImg4" alt="pin4">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <transition v-else name="fade" mode="out-in">
                         <img :key="currentIndex" 
                              :src="imgList[currentIndex]" 
                              alt="carousel-img">
                     </transition>
                 </div>
 
-                <button v-if="imgList.length > 1" class="nav-btn prev-btn" @click="prevSlide">
+                <button v-if="props.title && imgList.length > 1" class="nav-btn prev-btn" @click="prevSlide">
                     <font-awesome-icon icon="fa-solid fa-chevron-left" />
                 </button>
-                <button v-if="imgList.length > 1" class="nav-btn next-btn" @click="nextSlide">
+                <button v-if="props.title && imgList.length > 1" class="nav-btn next-btn" @click="nextSlide">
                     <font-awesome-icon icon="fa-solid fa-chevron-right" />
                 </button>
 
-                <div class="dots" v-if="imgList.length > 1">
+                <div class="dots" v-if="props.title && imgList.length > 1">
                     <span v-for="(img, idx) in imgList" :key="idx" 
                           :class="{'active': idx === currentIndex}"
                           @click="currentIndex = idx"></span>
                 </div>
             </div>
-            <div class="food-introduction-text-frame">
+            <div v-if="props.title" class="food-introduction-text-frame">
                 <h3>{{ props.title }}</h3>
                 <h5>{{ props.subTitle }}</h5>
                 <p>{{ props.text }}</p>
@@ -110,7 +134,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
                 </button>
                 
             </div>
-            <div class="food-introduction-frame-right">
+            <div v-if="props.title" class="food-introduction-frame-right">
                 <img :src="props.subImg1" alt="sub-img1">
                 <img :src="props.subImg2" alt="sub-img2">
             </div>
@@ -120,6 +144,72 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 <style scoped lang="scss">
 
+// ============== map api mode ====================
+.map-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a;
+    overflow: hidden;
+}
+
+.map-wrapper {
+    position: relative;
+    height: 90%;
+    display: flex;
+
+    img.base-map {
+        height: 100% !important; 
+        width: auto !important;  
+        display: block;
+    }
+}
+
+.pin-1 { width: 33.2%; top: 8.5%; left: 51.5%; }
+.pin-2 { width: 20.3%; top: 34.8%; left: 22.5%; }
+.pin-3 { width: 13.6%; top: 68.2%; left: 26%; }
+.pin-4 { width: 11.4%; top: 38.5%; left: 61.9%; }
+
+
+.map-pin {
+    position: absolute;
+    cursor: pointer;
+    z-index: 20;
+    transition: transform 0.3s ease;
+    // filter: drop-shadow(0 0 10px gold);
+        filter: drop-shadow(0 0 10px rgb(230, 1, 255));
+
+
+    img {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    &:hover {
+        transform: scale(1.15);
+    }
+}
+
+.food-introduction-frame.map-mode {
+    width: 95vw;  
+    height: 70vh;
+    max-width: none;
+    background-color: #1a1a1a;
+
+    .food-introduction-frame-left {
+        flex: 1; 
+        position: relative;
+        overflow: hidden;
+    }
+}
+
+.map-mode .close-btn {
+    color: white;
+    z-index: 100;
+}
+// ==========================
 .food-introduction-frame {
     width: 90%;
     max-width: 1200px;

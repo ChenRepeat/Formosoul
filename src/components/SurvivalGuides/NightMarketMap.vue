@@ -124,8 +124,12 @@ function closeWelcomeFrame (){
                     START
                 </template>
                 </SurvivalTextFrame>
-
-
+<!-------------------------------------- map 連API用 區塊 -------------------------------------------->
+                <div class="map-api-wrapper"
+                @click="openModal(9)"
+                >
+                    <img class='map-api' src="/SurvivalGuide/map_api.png" alt="map-api">
+                </div>
 <!-------------------------------------- 夜市美食區塊 -------------------------------------------->
 <!---------------------------------------- 滷肉飯-------------------------------------------->
                 <div class="stall-wrapper-pork-rice" 
@@ -447,6 +451,23 @@ function closeWelcomeFrame (){
     // z-index: 0;
 }
 
+// =====================    map api 的區塊 ===================
+.map-api-wrapper {
+    position: absolute;
+    width: 13%;
+    bottom: 25.3%;
+    right: 13%;
+
+    cursor: pointer;
+
+        &:hover {
+        .map-api {
+            transform: scale(1.025);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+        }
+    }
+}
+
 // ===================== 滷肉飯 攤位的區塊 ===================== 
 .stall-wrapper-pork-rice {
     position: absolute;
@@ -708,7 +729,7 @@ function closeWelcomeFrame (){
 }
 
 // ===================== 共同 的區塊 ===================== 
-
+.map-api,
 .stall-pork-rice, 
 .stall-bubble-tea, 
 .stall-chicken,
