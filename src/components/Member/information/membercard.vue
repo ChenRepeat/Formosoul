@@ -1,5 +1,5 @@
 <template>
-    <div class="membercard-wrapper">
+    <div class="membercard-wrapper" :class="{'hasscale': hasscale}">
         <div class="membercard">
             <div class="memberphoto">
                 <div v-if="!memberStore.imgURL" class="add">+</div>
@@ -49,7 +49,11 @@ const props = defineProps({
     withouteditbtn:{
         type: Boolean,
         default: false,
-    }
+    },
+    hasscale:{
+        type:Boolean,
+        default:false,
+    },     
 });
 
 
@@ -95,6 +99,9 @@ const saveName = () => {
         padding-top: 32px;
         justify-content: center;
         position: relative;
+                &.hasscale{
+            transform: scale(1.3);
+        }
     }
     .membercard-wrapper > img{
         height: 240px;
