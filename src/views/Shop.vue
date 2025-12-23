@@ -27,4 +27,11 @@ import Backgroundaction from '@/components/backgroundaction.vue';
   background-position: right; 
 }
 
+// RWD--------------------------------
+@media screen and (max-width: 1200px) {
+  .shop-main{
+    padding: 180px 60px 100px;
+  } 
+}
+
 </style>
