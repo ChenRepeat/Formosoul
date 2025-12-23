@@ -1,6 +1,6 @@
 <template>
     <div class="cardwrapper dp-flex-col">
-        <Membercard></Membercard>
+        <Membercard hasscale></Membercard>
         <BasicButton class="btn-yellow-fill" @click="upload">Save changes</BasicButton>
     </div>
 </template>
@@ -37,7 +37,8 @@ async function upload(){
 
 <style lang="scss" scoped>
     .cardwrapper{
-        gap: 72px;
+        height: 60%;
+        justify-content: space-between;
     }
 
     .btn-yellow-fill{
