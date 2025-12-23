@@ -349,7 +349,7 @@ img { object-fit: none; }
 
 /* 漢堡按鈕 */
 .hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;}
-.transition { transition: 0.3s ease; }
+.transition { transition: 0.5s ease-out; }
 .dot{
   width: 5px;height: 5px;position: absolute;background-color: $color-fsWhite;
 }
