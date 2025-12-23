@@ -164,7 +164,10 @@
     .otherlogin-title > h6{
         color: $color-fsCaption;
     }
+    .pagetop{
+        margin-bottom: 24px;
 
+    }
     .otherlogin-icon{
         display: flex;
         justify-content: center;
