@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 // ================ 試試看用 props 寫法 ================
 const props = defineProps({
   text: { type: String, default:'' },
+  description: { type: String, default: '' },
   width: { type: String, default: '280px'},
   height: { type: String, default: '250px'},
   align: {type: String, default: 'left'},
@@ -19,16 +20,26 @@ const emit = defineEmits(['click'])
 
 <template>
 <div class="survival-text-frame" :style="{ width: props.width, height: props.height }">
-  <component 
+
+  <template v-if="props.description">
+    <h4 class="text-content title-style" :style="{textAlign: props.align}">
+       <slot>{{ props.text }}</slot>
+    </h4>
+    <p class="desc-content" :style="{textAlign: props.align}">
+      {{ props.description }}
+      <slot name="descriptionExtra"></slot>
+    </p>
+  </template>
+
+  <template v-else>
+    <component 
     :is="props.tag" 
     class="text-content"
     :style="{ textAlign: props.align }" 
-  >
-  <slot>
-    {{ props.text }}
-
-  </slot>
-  </component>
+    >
+      <slot>{{ props.text }}</slot>
+    </component>
+  </template>
 
   <!-- 用slot的話 預設是 Enter，但可以被其他想要使用的父層覆蓋 -->
   <button v-if="props.showButton" class="survival-button" @click="emit('click')"> 
@@ -69,6 +80,15 @@ function handleClick() {
   outline-offset: -10px;
 }
 
+.title-style {
+  font-weight: bold;
+}
+
+.desc-content {
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
+
 .survival-text-frame .text-content {
   color: #000;
   margin-bottom: 20px;
@@ -95,6 +115,7 @@ function handleClick() {
   background-color: $color-fsGold300;
   cursor: pointer;
   transition: transform 0.2s;
+  margin-bottom: 16px;
 
   &:hover {
     transform: scale(1.05); 

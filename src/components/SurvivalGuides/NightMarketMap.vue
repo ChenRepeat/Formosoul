@@ -70,7 +70,8 @@ const startGamePlay = () => {
 const csFrame = ref([
     {
     id:'welcome',
-    text:'Welcome! \n Feel free to look around—there are different surprises waiting to be discovered.',
+    text:'Welcome!',
+    description: "Feel free to look around—there are different surprises waiting to be discovered. \n Try       clicking to see what's hidden!",
     width:'400px',
     height:'auto',
     },
@@ -99,16 +100,26 @@ function closeWelcomeFrame (){
 
 <template>
         <main class="survival-night-market-case">
+            <div class="survival-night-market-case-wrapper-outer">
             <div class="survival-night-market-case-wrapper" :class="{ 'locked': !isMapReady }" >
+                <!---------------------------------------- back btn -------------------------------------------->          
+                <div v-show="!isGameModalOpen">
+                    <RouterLink :to="{
+                        name:'SurvivalGuide'
+                    }">
+                        <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />BACK</BasicButton>
+                    </RouterLink>
+                </div>
+
                 <img class='survival-night-market-case-map' src="/SurvivalGuide/night_market_map_bg-min-no-logo.png" alt="map-base">
 
 <!------------------- 點入的歡迎頁面 ------------------->
                 <div v-if="isGameLocked" class="start-overlay"></div>
-
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
                 :text="welcomeFrame.text"
+                :description="welcomeFrame.description"
                 :width="welcomeFrame.width"
                 :height="welcomeFrame.height"
                 tag="h4"
@@ -117,9 +128,11 @@ function closeWelcomeFrame (){
                 >
                 <span>
                     {{ welcomeFrame.text }}
-                    <font-awesome-icon icon="fa-solid fa-eye" />
-                    <font-awesome-icon icon="fa-solid fa-eye" />
                 </span>
+                <template #descriptionExtra>
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                </template>
                 <template #textButton>
                     START
                 </template>
@@ -142,6 +155,7 @@ function closeWelcomeFrame (){
                     <!-- [] 是指從陣列裡面拿東西 ， ()是指執行，傳遞參數 -->
                     <SurvivalTextFrame class='text-frame-rice text-frame' 
                         :text="nmFrames[0].text"  
+                        :description="nmFrames[0].description"
                         :width="nmFrames[0].width" 
                         :height="nmFrames[0].height"
                         tag="h5"
@@ -160,6 +174,7 @@ function closeWelcomeFrame (){
 
                     <SurvivalTextFrame class="text-frame text-frame-tofu"
                     :text="nmFrames[1].text"
+                    :description="nmFrames[1].description"
                     :width="nmFrames[1].width"
                     :height="nmFrames[1].height"
                     tag="h5"
@@ -181,6 +196,7 @@ function closeWelcomeFrame (){
 
                     <SurvivalTextFrame class="text-frame text-frame-bubble "
                         :text="nmFrames[2].text"
+                        :description="nmFrames[2].description"
                         :width="nmFrames[2].width"
                         :height="nmFrames[2].height"
                         tag= "h5"
@@ -196,11 +212,12 @@ function closeWelcomeFrame (){
                     @mouseenter="isHover = 'sausage'" 
                     @mouseleave="isHover = null"               
                     @click="openModal(3)"
-                    :class="{'nm-is-active':ishover == 'sausage'}">
+                    :class="{'nm-is-active':isHover == 'sausage'}">
                     <img class="stall-sausage" src="/SurvivalGuide/sausage-mask-group.png" alt="sausage">
                 
                     <SurvivalTextFrame class="text-frame text-frame-sausage"
                     :text="nmFrames[3].text"
+                    :description="nmFrames[3].description"
                     :width="nmFrames[3].width"
                     :height="nmFrames[3].height"
                     tag="h5"
@@ -222,6 +239,7 @@ function closeWelcomeFrame (){
 
                     <SurvivalTextFrame class="text-frame text-frame-oil"
                     :text="nmFrames[4].text"
+                    :description="nmFrames[4].description"
                     :width="nmFrames[4].width"
                     :height="nmFrames[4].height"
                     tag="h5"
@@ -242,6 +260,7 @@ function closeWelcomeFrame (){
 
                     <SurvivalTextFrame class="text-frame text-frame-chicken"
                     :text="nmFrames[5].text"
+                    :description="nmFrames[5].description"
                     :width="nmFrames[5].width"
                     :height="nmFrames[5].height"
                     tag="h5"
@@ -270,6 +289,7 @@ function closeWelcomeFrame (){
                      <img class="game-dice" src="/SurvivalGuide/dice-mask-group.png" alt="game-dice">
                      <SurvivalTextFrame class="text-frame text-frame-game-dice"
                     :text="nmFrames[6].text"
+                    :description="nmFrames[6].description"
                     :width="nmFrames[6].width"
                     :height="nmFrames[6].height"
                     tag="h5"
@@ -291,6 +311,7 @@ function closeWelcomeFrame (){
 
                     <SurvivalTextFrame class="text-frame text-frame-game-prawning"
                     :text="nmFrames[7].text"
+                    :description="nmFrames[7].description"
                     :width="nmFrames[7].width"
                     :height="nmFrames[7].height"
                     tag="h5"
@@ -310,6 +331,7 @@ function closeWelcomeFrame (){
                     <img class="game-ring-toss" src="/SurvivalGuide/ring-toss-mask-group.png" alt="game-ring-toss">
                     <SurvivalTextFrame class="text-frame text-frame-game-ring-toss"
                     :text="nmFrames[8].text"
+                    :description="nmFrames[8].description"
                     :width="nmFrames[8].width"
                     :height="nmFrames[8].height"
                     tag="h5"
@@ -349,19 +371,18 @@ function closeWelcomeFrame (){
                     <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
                 </div>
             </div>
-<!---------------------------------------- back btn -------------------------------------------->            
-            <div v-show="!isGameModalOpen">
-                <RouterLink :to="{
-                    name:'SurvivalGuide'
-                }">
-                    <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />BACK</BasicButton>
-                </RouterLink>
-            </div>
+         </div>
         </main>
 </template>
 
 
 <style scoped lang="scss">
+// outer
+.survival-night-market-case-wrapper-outer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
 
 // 遮罩
 .start-overlay {
@@ -440,6 +461,7 @@ function closeWelcomeFrame (){
     padding: 0;
     overflow: hidden;
     display: block;
+    
 }
 
 .survival-night-market-case-map {

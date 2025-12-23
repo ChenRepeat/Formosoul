@@ -112,9 +112,9 @@ const rightFrame = computed(()=> frames.value[1])
         </div> -->
 
         <header class="survival-headline-case" :class="{ 'fade-out': isHover !== null }">
-          <h5 class="survival-headline-inner1-case">Welcome To Survival Guide！</h5>
+          <h3 class="survival-headline-inner1-case">Welcome To Survival Guide！</h3>
           <p>
-            Here, we'll introduce Taiwan's famous night market culture and
+            Here, we'll introduce Taiwan's famous night market culture <br> and
             convenience store culture.
           </p>
           <img class='taiwan-pic' src="/SurvivalGuide/taiwan_image.png" alt="taiwan_pic">
@@ -126,7 +126,7 @@ const rightFrame = computed(()=> frames.value[1])
               class="survival-arrow"
               icon="fa-solid fa-arrow-left"
             />
-            <h2>Select</h2>
+            <h5>Select</h5>
             <font-awesome-icon
               class="survival-arrow"
               icon="fa-solid fa-arrow-right"
@@ -136,6 +136,7 @@ const rightFrame = computed(()=> frames.value[1])
           <div class="survival-heropics-left-case"
           @mouseenter="isHover = 'left'"
           @mouseleave="isHover = null"
+          @click="isHover === null ? isHover = 'left' : isHover = null"
           :class="{
             'img-is-active': isHover == 'left',
             'img-is-inactive': isHover == 'right'
@@ -145,9 +146,9 @@ const rightFrame = computed(()=> frames.value[1])
             <img class="island-base" src="/SurvivalGuide/island-base.png" alt=""/>
             <img class="vendor" src="/SurvivalGuide/vendor.png" alt=""/>
           </div>
-            <img class="fc-img" src="/SurvivalGuide/friedChicken_br.png" alt="">
-            <h2 :class="{'text-is-active': isHover == 'left',}" >Night Market</h2>
-            <img class="tofu-img" src="/SurvivalGuide/tofu_image.png" alt="">
+            <img class="fc-img" :class="{ 'show-deco': isHover == 'left' }" src="/SurvivalGuide/friedChicken_br.png" alt="">
+            <img class="tofu-img" :class="{ 'show-deco': isHover == 'left' }" src="/SurvivalGuide/tofu_image.png" alt="">
+            <h4 :class="{'text-is-active': isHover == 'left',}" >Night Market</h4>
             
             <SurvivalTextFrame class='text-frame-left' 
             v-show="isHover == 'left'" 
@@ -159,8 +160,10 @@ const rightFrame = computed(()=> frames.value[1])
           </div>
 
 
-          <div class="survival-heropics-right-case" @mouseenter="isHover = 'right'"
+          <div class="survival-heropics-right-case" 
+          @mouseenter="isHover = 'right'"
           @mouseleave="isHover = null"
+          @click="isHover === null ? isHover = 'right' : isHover = null"
           :class="{
             'img-is-active': isHover =='right',
             'img-is-inactive': isHover == 'left'
@@ -170,11 +173,11 @@ const rightFrame = computed(()=> frames.value[1])
             <img class="island-base" src="/SurvivalGuide/island-base.png" alt=""/>
             <img class="store-building" src="/SurvivalGuide/store-building.png" alt=""/>
           </div>
-            <img class="bubble-img" src="/SurvivalGuide/bubble_tea.png" alt="">
-            <h2 :class="{
+            <img class="bubble-img" :class="{ 'show-deco': isHover == 'right' }" src="/SurvivalGuide/bubble_tea.png" alt="">
+            <img class="lantern-img" :class="{ 'show-deco': isHover == 'right' }" src="/SurvivalGuide/lantern_image.png" alt="">
+            <h4 :class="{
                 'text-is-active': isHover == 'right',
-            }"> Convenience Store </h2>
-            <img class="lantern-img" src="/SurvivalGuide/lantern_image.png" alt="">
+            }"> Convenience Store </h4>
 
             <SurvivalTextFrame class='text-frame-right' 
             v-show="isHover == 'right'" 
@@ -195,6 +198,11 @@ const rightFrame = computed(()=> frames.value[1])
 </template>
 
 <style scoped lang="scss">
+
+.show-deco {
+  opacity: 1 !important;
+  display: block;
+}
 
 .survival-case{
   // background-image: url(/public/Shop/bgi.jpg);
@@ -217,7 +225,7 @@ const rightFrame = computed(()=> frames.value[1])
 
 .survival-headline-case {
   text-align: center;
-  width: 500px;
+  // width: 500px;
   margin: 0 auto;
   z-index: 18;
   // 動畫過渡
@@ -237,9 +245,10 @@ const rightFrame = computed(()=> frames.value[1])
   color: $color-fsWhite;
 }
 
-.survival-headline-inner1-case {
-  font-weight: bold;
-}
+// .survival-headline-inner1-case {
+//   // font-weight: bold;
+//   // border: 1px solid red;
+// }
 
 .survival-headline-case p {
   text-align: center;
@@ -264,7 +273,7 @@ const rightFrame = computed(()=> frames.value[1])
   z-index: 21;
   color: $color-fsWhite;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   padding-left: 24px;
   padding-bottom: 80px;
 
@@ -279,7 +288,7 @@ const rightFrame = computed(()=> frames.value[1])
 }
 
 .survival-arrow {
-  font-size: 40px;
+  font-size: 24px;
 }
 
 
@@ -315,10 +324,14 @@ const rightFrame = computed(()=> frames.value[1])
     transform: scale(0.9);
   }
 
-.survival-heropics-left-case h2.text-is-active {
+.survival-heropics-left-case h4.text-is-active {
   text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 30;
   transform: translate(230px, -450px);
+}
+
+.survival-heropics-left-case:hover h4{
+  font-size: 5.2rem;
 }
 
 .survival-heropics-left-case .fc-img {
@@ -334,10 +347,10 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
-.survival-heropics-left-case:hover .fc-img {
-  opacity: 1;
-  display: block;
-}
+// .survival-heropics-left-case:hover .fc-img {
+//   opacity: 1;
+//   display: block;
+// }
 
 .survival-heropics-left-case .tofu-img {
   object-fit: contain;
@@ -350,10 +363,10 @@ const rightFrame = computed(()=> frames.value[1])
   transition: all 1.2s ease-in-out;
 }
 
-.survival-heropics-left-case:hover .tofu-img {
-  opacity: 1;
-  display: block;
-}
+// .survival-heropics-left-case:hover .tofu-img {
+//   opacity: 1;
+//   display: block;
+// }
 
 .survival-heropics-left-pics-group-case {
   position: relative;
@@ -420,12 +433,17 @@ const rightFrame = computed(()=> frames.value[1])
     transform: scale(0.9);
   }
 
-  h2.text-is-active {
+  h4.text-is-active {
   text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 30;
   transform: translate(-200px, -500px);
   } 
 }
+
+.survival-heropics-right-case:hover h4{
+  font-size: 5.2rem;
+}
+
 
 .survival-heropics-right-pics-group-case {
   position: relative;
@@ -472,10 +490,10 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
-.survival-heropics-right-case:hover .bubble-img {
-  opacity: 1;
-  display: block;
-}
+// .survival-heropics-right-case:hover .bubble-img {
+//   opacity: 1;
+//   display: block;
+// }
 
 .survival-heropics-right-case .lantern-img {
   object-fit: contain;
@@ -488,10 +506,10 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
-.survival-heropics-right-case:hover .lantern-img {
-  opacity: 1;
-  display: block;
-}
+// .survival-heropics-right-case:hover .lantern-img {
+//   opacity: 1;
+//   display: block;
+// }
 
 // ================ text frame position changed ================ 
 .text-frame-left {
@@ -567,4 +585,34 @@ const rightFrame = computed(()=> frames.value[1])
 // .survival-heropics-left-case:hover ~ .survival-heropics-right-case {
 //   transform: translateX(1600px);
 // }
+
+//=========================== RWD ===========================
+@media (max-width: 1200px) {
+  .survival-heropics-left-case.img-is-active {
+    transform: translateX(100px) scale(1.2); 
+  }
+  .survival-heropics-right-case.img-is-active {
+    transform: translateX(-100px) scale(1.2);
+  }
+  .survival-heropics-left-case,
+  .survival-heropics-right-case {
+    flex: 1; 
+  }
+  .survival-heropics-left-case h4.text-is-active {
+    transform: translate(150px, -400px); 
+  }
+  .survival-heropics-right-case h4.text-is-active {
+    transform: translate(-150px, -400px);
+  }
+}
+
+@media (max-width: 1080px) {
+  .survival-arrow {
+  font-size: 20px;
+  }
+  .survival-heropics-select-case {
+    gap: 8px;
+  }
+}
+
 </style>

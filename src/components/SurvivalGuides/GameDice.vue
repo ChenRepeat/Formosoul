@@ -378,7 +378,12 @@ onUnmounted (() => {
                 <div class="result-details">
                     <span>Player: {{ totalscore }}</span> vs <span>Banker: {{ bankerTotalScore }}</span>
                 </div>
-                <button class="btn-retry" @click="resetGame">PLAY AGAIN</button>
+                <div class="result-btn-wrapper">
+                    <button class=".btn-action btn-retry" @click="resetGame">PLAY AGAIN</button>
+                    <button class="btn-action btn-check">
+                        CHECK YOUR LEDGER
+                    </button>
+                </div>
             </div>
         </div>
 </template>
@@ -518,6 +523,11 @@ onUnmounted (() => {
         animation: popIn 0.3s ease-out;
     }
 
+    .modal-content p {
+        text-align: center;
+    }
+    
+
     @keyframes popIn {
         from { transform: scale(0.8); opacity: 0; }
         to { transform: scale(1); opacity: 1; }
@@ -544,12 +554,41 @@ onUnmounted (() => {
 
     .btn-big { background-color: $color-fsRed; box-shadow: 0 4px 0 $color-fsRed}
     .btn-small { background-color: $color-fsGreen; box-shadow: 0 4px 0 $color-fsGreen; }
-    .btn-retry { background-color: $color-fsBlue; margin-top: 20px; box-shadow: 0 4px 0 $color-fsBlue; }
+    
+    .result-btn-wrapper {
+        display: flex;
+        gap: 20px;
+    }
+    .btn-retry { background-color: $color-fsBlue;}
+
+    .btn-action {
+    padding: 12px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+    &:hover {
+        transform: scale(1.1);
+    }
+    
+    &:active {
+        transform: scale(0.95);
+    }
+}
+    .btn-check {
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    }
 
     .result-details {
         font-size: 24px;
         margin: 15px 0;
         font-weight: bold;
         color: $color-fsTitle;
+        margin-bottom: 40px;
     }
 </style>
