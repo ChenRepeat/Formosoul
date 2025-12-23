@@ -226,7 +226,7 @@ function qtyMinus(){
 }
 
 .detail-pic-big{
-    width: 460px;
+    width: 100%;
     height: 100%;
     border-radius: 10px; 
     position: relative;
@@ -235,6 +235,7 @@ function qtyMinus(){
 .detail-pic-big>img{
     width: 100%;
     height: 100%;
+    object-fit: cover;
     border-radius: 10px; 
 }
 
@@ -356,6 +357,18 @@ function qtyMinus(){
     margin: 60px auto 0;
     display: block;
 }
+
+// RWD------------------------------------- 
+@media screen and (max-width: 1200px) {
+  .detail-dock{ 
+    padding: 60px 40px 80px;
+  }
+
+  .detail-main{
+    gap: 40px;
+  }
+}
+
 
 
 
