@@ -27,7 +27,7 @@ const props = defineProps({
   products:{
     type: Array,
     required: true,
-    default: () => []  // 預設空陣列，避免報錯
+    default: () => []  // 預設空陣列，避免報錯  <<要在了解一下原因>>
   }
 })
 

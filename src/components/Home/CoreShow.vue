@@ -414,7 +414,7 @@ const wandCores = ref([
 //const coreSelect = ref(Math.trunc(Math.random() * 34));  // 把小數直接截掉
 
 //所以如果杖心的數量會變動，改成用陣列長度來取值，不寫死
-//因為要能讀到 wandCores ，所以需要把宣告的位置到 wandCores 後
+//因為要能讀到 wandCores ，所以需要把宣告的位置放到 wandCores 後
 //因為 wandCores 為陣列，用 ref 時，要用 .value 來讀
 
 const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));   

@@ -1,12 +1,11 @@
 <script setup>
-    import BasicButton from '../BasicButton.vue';
-    import { ref } from 'vue';
-    import CoreGame from './CoreGame.vue';
+import BasicButton from '../BasicButton.vue';
+import { ref } from 'vue';
+import CoreGame from './CoreGame.vue';
+const currentView = ref('history')
 
-    const currentView = ref('history')
-
-    function showGame(){
-    currentView.value = 'game';
+function showGame(){
+currentView.value = 'game';
 }
 
 </script>
