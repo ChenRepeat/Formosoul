@@ -70,22 +70,22 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
                 <router-link to="/classes"><h5>{{$t('nav.classes')}}</h5></router-link>
               </li>
               <li>
-                <a href=""><p>Motorcycle</p></a>
+                <a href=""><p>{{$t('classes.motorClass')}}</p></a>
               </li>
               <li>
-                <a href=""><p>Endemic Species</p></a>
+                <a href=""><p>{{$t('classes.animalTitle')}}</p></a>
               </li>
               <li>
-                <a href=""><p>History of Magic</p></a>
+                <a href=""><p>{{$t('classes.historyTitle')}}</p></a>
               </li>
               <li>
-                <a href=""><p>Spells & Charms</p></a>
+                <a href=""><p>{{$t('classes.charmTitle')}}</p></a>
               </li>
               <li>
-                <a href=""><p>Potions</p></a>
+                <a href=""><p>{{$t('classes.potionTitle')}}</p></a>
               </li>
               <li>
-                <a href=""><p>Divination</p></a>
+                <a href=""><p>{{$t('classes.divinationTitle')}}</p></a>
               </li>
               <li></li>
             </ul>
@@ -101,17 +101,17 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
               <router-link to="/policy"><h5>{{$t('nav.policy')}}</h5></router-link>
             </li>
             <li>
-              <router-link to="/policy/payment"><p>Payment</p></router-link>
+              <router-link to="/policy/payment"><p>{{$t('nav.Payment')}}</p></router-link>
             </li>
             <li>
-              <router-link to="/policy/delivery"><p>Delivery</p></router-link>
+              <router-link to="/policy/delivery"><p>{{$t('nav.Delivery')}}</p></router-link>
 
             </li>
             <li>
-              <router-link to="/policy/returns"><p>Returns</p></router-link>
+              <router-link to="/policy/returns"><p>{{$t('nav.Returns')}}</p></router-link>
             </li>
             <li>
-              <router-link to="/policy/privacypolicy"><p>Privacy Policy</p></router-link>
+              <router-link to="/policy/privacypolicy"><p>{{$t('nav.privacyPolicy')}}</p></router-link>
             </li>
           </ul>
         </div>
@@ -220,6 +220,7 @@ hr {
 ul a {
   text-decoration: none;
   color: #fff;
+  text-transform: capitalize;
 }
 .policy-inner-case {
   gap: 16px;

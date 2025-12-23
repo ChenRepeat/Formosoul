@@ -1,5 +1,8 @@
 <template>
-  <div class="game-wrapper dp-flex">
+  <div class="game-wrapper dp-flex"
+    @mousedown.stop
+    @touchstart.stop
+  >
     <div 
       class="game-container" 
       ref="container"
@@ -51,7 +54,7 @@
               {{ lives > 0 ? 'Back To School Savety' : `You're Crashed !!` }}
             </h2>
             <div class="final-stats">
-              <div class="stat-row"><p>SURVIVAL{{ (60 - timeRemaining).toFixed(1) }}s</p></div>
+              <div class="stat-row"><p>SURVIVAL{{ (30 - timeRemaining).toFixed(1) }}s</p></div>
               <div class="stat-row"><p>LIFE{{ lives }}</p></div>
             </div>
             <basic-button @click="gameState = 'start'" class="btn-black">RETRY</basic-button>
@@ -66,6 +69,7 @@
 import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
 import { gsap } from 'gsap';
 import BasicButton from '../BasicButton.vue';
+import { log } from 'three';
 
 // --- 障礙物類型定義陣列 ---
 const obstacleConfigs = [
@@ -86,7 +90,7 @@ const container = ref(null);
 const containerWidth = ref(0);
 const gameState = ref('start');
 const lives = ref(3);
-const timeRemaining = ref(60);
+const timeRemaining = ref(30);
 const playerX = ref(0);
 const playerTilt = ref(0);
 const roadOffset = ref(0);
@@ -132,7 +136,7 @@ const update = (time, deltaTime) => {
   if (playerX.value > limit) playerX.value = limit;
 
   // 生成障礙物
-  if (time - lastSpawnTime > 0.8) {
+  if (time - lastSpawnTime > 0.5) {
     spawnObstacle();
     lastSpawnTime = time;
   }
@@ -176,24 +180,28 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 60;
+  timeRemaining.value = 30;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
   lastSpawnTime = gsap.ticker.time;
+  updateSize();
+
 };
 
 const endGame = () => { gameState.value = 'result'; };
 
 const updateSize = () => {
-  if (container.value) containerWidth.value = container.value.clientWidth;
+  if (container.value) {containerWidth.value = container.value.getBoundingClientRect().width;}
+  console.log(container.value,'con');
+  console.log(containerWidth.value,'width');
+  
 };
 
 const handleKeyDown = (e) => { keys[e.key] = true; };
 const handleKeyUp = (e) => { keys[e.key] = false; };
 
 onMounted(() => {
-  updateSize();
   window.addEventListener('resize', updateSize);
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
