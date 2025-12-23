@@ -8,7 +8,7 @@
         <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
         <TheCoreSelection v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
         <loginpage v-else-if="authStore.memberView == 'login'"></loginpage>
-        <cardpage v-else-if="authStore.memberView == 'membercard'"></cardpage>
+        <cardpage v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
         <ledgerpage v-else-if="authStore.memberView == 'ledger'"></ledgerpage>
         <Editcardpage v-else-if="authStore.memberView == 'cardcontain'"></Editcardpage>
         </div>
