@@ -165,14 +165,16 @@ onUnmounted(() => {
          
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
 
-          <div class="transition hamburger-btn dp-flex-col" 
-               @click="toggleMenu"
-               :class="{ 'active': isMenuOpen }">
-            <div class="bar bar1 transition"></div>
-            <div class="bar bar2 transition"></div>
-            <div class="bar bar3 transition"></div>
+          <div class="hamburger-btn transition"
+              @click="toggleMenu"
+              :class="{ 'active': isMenuOpen }">
+            <div class="dot dot1 transition"></div>
+            <div class="dot dot2 transition"></div>
+            <div class="dot dot3 transition"></div>
+            <div class="dot dot4 transition"></div>
+            <div class="dot dot5 transition"></div>
+            <div class="dot dot6 transition"></div>
           </div>
-
           <!-- <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" @mosueDown="drag"/> -->
         </div>
       </div>
@@ -346,16 +348,27 @@ img { object-fit: none; }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
 
 /* 漢堡按鈕 */
-.bar { background-color: $color-fsWhite; border-radius: 8px; }
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; width: 24px;}
-.bar1 { width: 16px; height: 2px; }
-.bar2 { width: 12px; height: 1px; }
-.bar3 { width: 24px; height: 3px; }
+.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;}
 .transition { transition: 0.3s ease; }
-.hamburger-btn.active .bar1 { transform: rotate(-45deg) translate(-7px, 7px); width: 32px; height: 4px; }
-.hamburger-btn.active .bar2 { width: 0; height: 0; opacity: 0; }
-.hamburger-btn.active .bar3 { transform: rotate(45deg) translate(-7px, -7px); width: 32px;height: 4px;}
-
+.dot{
+  width: 5px;height: 5px;position: absolute;background-color: $color-fsWhite;
+}
+.dot1{left: 2px;top: 0px;border-radius: 50%;}
+.dot2{right: 2px;top: 0px;}
+.dot3{left: 2px;bottom: 0px;border-radius: 50%}
+.dot4{right: 2px;bottom: 0px;}
+.dot5{left: 2px;top: 9px;}
+.dot6{right: 2px;top: 9px;border-radius: 50%}
+.hamburger-btn.active{
+  .dot{width: 30px;height: 2.5px;transform-origin:0 50%}
+  .dot5,.dot6{width: 0;height: 0;opacity: 0;}
+  .dot1,.dot3{transform-origin:0 50%}
+  .dot2,.dot4{transform-origin:100% 50%}
+  .dot1{border-radius: unset;transform: rotate(45deg);}
+  .dot3{border-radius: unset;transform: rotate(-45deg);}
+  .dot2{border-radius: unset;transform: rotate(-45deg);}
+  .dot4{border-radius: unset;transform: rotate(45deg);}
+}
 
 .menu-slide-enter-active,
 .menu-slide-leave-active {
@@ -385,7 +398,7 @@ img { object-fit: none; }
   .header-icon { color: $color-fsTitle;}
   .burger-list li a { color: $color-fsTitle;}
   .logout > h5 { color: $color-fsTitle;}
-  .bar { background-color: $color-fsTitle;}
+  .dot { background-color: $color-fsTitle;}
 }
 
 
