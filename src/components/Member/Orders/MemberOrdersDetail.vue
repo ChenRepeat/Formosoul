@@ -24,6 +24,7 @@
             default: 1
         }
     });
+    
     const orders = ref([
         {
             number: 'OD20250001',
@@ -136,7 +137,6 @@
     const totalPages = computed(() =>{
         return Math.ceil(orders.value.length / itemsPerPage);
     });
-
     // 用 expose 把數據暴露給父組件
     defineExpose({
         orders,

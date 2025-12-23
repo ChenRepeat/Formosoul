@@ -132,7 +132,6 @@ const btnclose = ref(true);
 const otpnumber = ref('');
 let intervalId = null;
 
-console.log(otpnumber.value);
 watch(
   [() => email.value, () => otp.value, () => password.value, () => confirmpassword.value, () => checkbox.value],
   ([newemail, newotp, newpassword, confirmpassword, newcheckbox]) => {
@@ -302,14 +301,13 @@ function toggleconfirmPassword(){
 
 const gotoPrivacy = () => { 
 
-    router.push('policy/privacypolicy');
+    router.push({ name: 'Privacypolicy' });
 
     authStore.isLoginModalOpen = false;
 };
 
 const gotoService = () => {
-    router.push('policy/returns');
-
+    router.push({ name: 'Returns' });
     authStore.isLoginModalOpen = false;
 };
 </script>

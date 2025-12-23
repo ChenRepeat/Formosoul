@@ -76,7 +76,11 @@ export const useAuthStore = defineStore('auth', () => {
     const closeLoginModal = () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
-        
+        if(memberView.value = 'cardcontain'){
+            setTimeout(() => {
+                memberView.value = 'coreselection';
+            }, 500);
+        }
     };
 
     return{

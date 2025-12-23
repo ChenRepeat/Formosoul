@@ -53,7 +53,8 @@ const hasChildRoute = computed(() => {
 })
 
 const totalPages = computed(() =>{
-    return detailComponent.value?.totalPages || 0;
+    // ?. 就是當前面找不到 totalpages時 return 0 避免報錯
+    return detailComponent.value ?. totalPages || 0;
 });
 const prevPage = () => {
     if(currentPage.value > 1){
