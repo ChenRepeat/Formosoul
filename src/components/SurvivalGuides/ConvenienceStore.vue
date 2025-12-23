@@ -70,7 +70,8 @@ const activeItemData = computed(()=>{
 const csFrame = ref([
     {
     id:'welcome',
-    text:'Welcome! \n Feel free to look around—there are different surprises waiting to be discovered.',
+    text:'Welcome!',
+    description: "Feel free to look around—there are different surprises waiting to be discovered. \n Try       clicking to see what's hidden!",
     width:'400px',
     height:'auto',
     },
@@ -115,6 +116,7 @@ function closeWelcomeFrame (){
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
                 :text="welcomeFrame.text"
+                :description="welcomeFrame.description"
                 :width="welcomeFrame.width"
                 :height="welcomeFrame.height"
                 tag="h4"
@@ -123,9 +125,11 @@ function closeWelcomeFrame (){
                 >
                 <span>
                     {{ welcomeFrame.text }}
-                    <font-awesome-icon icon="fa-solid fa-eye" />
-                    <font-awesome-icon icon="fa-solid fa-eye" />
                 </span>
+                <template #descriptionExtra>
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                    <font-awesome-icon icon="fa-solid fa-eye" />
+                </template>                
                 <template #textButton>
                     START
                 </template>

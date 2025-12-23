@@ -45,6 +45,7 @@ import { useAuthStore } from '@/stores/autoStore';
             type:Boolean,
             default:false,
         },
+  
     });
 
     const authStore = useAuthStore();
@@ -88,6 +89,7 @@ import { useAuthStore } from '@/stores/autoStore';
         &.with-padding{
             padding: 100px 0px 100px 0px;
         }
+
     }
 
     .cardcontent{
