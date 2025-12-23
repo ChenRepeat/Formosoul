@@ -263,6 +263,9 @@ const checkWinner = () => {
   finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
 }
 
+'localhost/tjd103/public/php/test.php'
+
+'/hjkhk'
 //  重置遊戲 init , play again
 const resetGame = () => {
   gameState.value = "IDLE";
@@ -296,7 +299,7 @@ onUnmounted (() => {
 </script>
 
 <template>
-    <img src="../../../public/SurvivalGuide/Group 604.svg" alt="">
+    <!-- <img src="SurvivalGuide/Group 604.svg" alt=""> -->
         <div class="playerbox">
             <h4>Player {{ result }}</h4>
             <div class="scorebox">
