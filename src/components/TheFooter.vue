@@ -158,6 +158,14 @@ hr {
   width: 100%;
   z-index: 2;
   position: relative;
+
+  @media screen and (max-width: 1200px) {
+        width: 95%;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 32px;
+    align-items: center;
+  }
 }
 .footer-outer-case {
   margin: 0 auto;
