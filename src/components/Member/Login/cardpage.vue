@@ -11,8 +11,8 @@
                 <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">Don't leave the Common Room without it!</h5>
             </div>
         </div>        
-        <div class="buttonarea">
-            <BasicButton class="btn-gray-fill" @click="editcard" ><h6>Edit your membercard</h6></BasicButton>
+        <div class="buttonarea" :class="{ 'hascenter': hascenter}">
+            <BasicButton class="btn-gray-fill" @click="editcard" :class="{ 'withedit': withedit}"><h6>Edit your membercard</h6></BasicButton>
             <BasicButton class="btn-yellow-fill" @click="gotoledger"><h6>Check Your Ledger</h6></BasicButton>
         </div>
         
@@ -37,6 +37,14 @@ import { useAuthStore } from '@/stores/autoStore';
             type: Boolean,
             default: false,
         },
+        withedit:{
+            type:Boolean,
+            default:false,   
+        },
+        hascenter:{
+            type:Boolean,
+            default:false,
+        },
     });
 
     const authStore = useAuthStore();
@@ -50,7 +58,6 @@ import { useAuthStore } from '@/stores/autoStore';
     
 
     function editcard(){
-        console.log(authStore.memberView);
         authStore.openLoginModal();
         authStore.setmemberView('cardcontain');
     };
@@ -128,7 +135,11 @@ import { useAuthStore } from '@/stores/autoStore';
     .btn-yellow-fill{
         // padding: 16px 40px;
     }
-
+    .btn-gray-fill{
+        &.withedit{
+            display: none;
+        }  
+    }
     .buttonarea{
         width: 100%;
         display: flex;
