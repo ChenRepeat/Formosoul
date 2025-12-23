@@ -153,6 +153,7 @@ function likeHeart(product){
   .product-case {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    
 
     // display: flex;
     // flex-wrap: wrap;
@@ -243,6 +244,13 @@ function likeHeart(product){
   .product-price{
     color: $color-fsRed;
   }
+
+  // RWD--------------------------------
+@media screen and (max-width: 1200px) {
+    .product-case {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
 
 
 </style>

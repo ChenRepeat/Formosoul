@@ -962,7 +962,7 @@ const products = ref([
     </section>
 
 <!-- 中間商品列表 -->
-    <section class="list-all">
+    <section class="list-all dp-flex">
         <TestProductCard :products="products"/>  <!-- product 傳遞變數 products 的值，子組件接收時要用 product 來接收 -->
     </section>
 
@@ -1143,8 +1143,12 @@ const products = ref([
 //中間商品列表--------------------------------
 
 .list-all{
+  //放大時置中
   max-width: 1200px;
   margin: 0 auto;
+
+  //縮小時置中
+  justify-content: center;  
 }
 
 
@@ -1176,5 +1180,8 @@ const products = ref([
   background-color: $color-fsWhite;
   color: $color-fsTitle;
 }
+
+
+
 
 </style>
