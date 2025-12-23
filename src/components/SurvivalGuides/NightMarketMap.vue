@@ -8,6 +8,7 @@ import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
 import BasicButton from "../BasicButton.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import GameRinToss from "./GameRinToss.vue";
 
 const isShow = ref(-1);
 const animationWelcome = ref(false)
@@ -62,7 +63,6 @@ const startGamePlay = () => {
         activeGame.value = 'ring-toss';
         isGameModalOpen.value = true; 
         currentInfoData.value = null; 
-        console.log('套圈圈遊戲還沒做好!');
     }
 };
 
@@ -365,7 +365,7 @@ function closeWelcomeFrame (){
                     <button class="close-game-btn" @click="isGameModalOpen = false">
                         EXIT GAME
                     </button>
-
+                    <GameRinToss v-if="activeGame == 'ring-toss'"/>
                     <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false"></GamePrawning>
                     <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
                 </div>
