@@ -1,8 +1,8 @@
 <template>
     <div class="membercard-wrapper">
         <div class="membercard">
-            <div v-for="img in memberphoto" class="memberphoto">
-                <img :src="img.images" alt="1">
+            <div class="memberphoto">
+                <img v-if="imgURL" :src="imgURL" alt="會員頭像">
             </div>
             <div v-for="member in members" class="memberinformation">
                 <p>Name: <button
@@ -28,6 +28,7 @@
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 const publicPath = import.meta.env.BASE_URL;
+const imgURL = ref(`${publicPath}member/photo.png`);
 const props = defineProps({
     withouteditbtn:{
         type: Boolean,
@@ -35,11 +36,14 @@ const props = defineProps({
     }
 });
 
-const memberphoto = ref([
-    {
-        images: `${import.meta.env.BASE_URL}member/photo.png`,
-    },
-]);
+// const 
+
+
+// const memberphoto = ref([
+//     {
+//         images: `${import.meta.env.BASE_URL}member/photo.png`,
+//     },
+// ]);
 
 const members = ref([
     {

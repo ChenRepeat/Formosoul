@@ -57,6 +57,30 @@
                 </button>
             </div>
         </div>
+        <div class="form-group">
+            <div class="password-input">
+                <input 
+                id="confirmpassword"
+                v-model="confirmpassword"
+                :type="showconfirmPassword ? 'text' : 'password'"
+                class="input-text"
+                placeholder="Confirm password"
+                :disabled="isLoading"
+                @keydown="handleKeyDown"
+                />
+                <button
+                type="button"
+                class="toggle-password-btn"
+                @click="toggleconfirmPassword"
+                :disabled="isLoading"                
+                >
+                <font-awesome-icon 
+                :icon="showconfirmPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
+                style="font-size: 24px;"
+                />
+                </button>
+            </div>
+        </div>
         <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
         <div class="login-bottom">
             <p>* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
@@ -94,23 +118,25 @@ const authStore = useAuthStore();
 const email = ref('');
 const password = ref('');
 const otp = ref('');
+const confirmpassword = ref('');
 const checkbox = ref(false);
 const isLoading = ref(false);
 const otpLoading = ref(false);
 const errorMessage = ref('');
 const showPassword = ref(false);
+const showconfirmPassword = ref(false);
 const otpSent = ref(false);
 const timer = ref(60);
 const btngray = ref(false);
 const btnclose = ref(true);
+const otpnumber = ref('');
 let intervalId = null;
 
-
-
+console.log(otpnumber.value);
 watch(
-  [() => email.value, () => otp.value, () => password.value, () => checkbox.value],
-  ([newemail, newotp, newpassword, newcheckbox]) => {
-    if (!newemail  || !newotp || !newpassword || newcheckbox == false) {
+  [() => email.value, () => otp.value, () => password.value, () => confirmpassword.value, () => checkbox.value],
+  ([newemail, newotp, newpassword, confirmpassword, newcheckbox]) => {
+    if (!newemail  || !newotp || !newpassword || !confirmpassword || newcheckbox == false) {
       btnclose.value = true;
     }else{
       btnclose.value = false;
@@ -133,7 +159,7 @@ async function sendOTPAPI(emailValue) {
 async function enrollmentAPI(email, password, otp) {
     await new Promise(resolve => setTimeout(resolve, 1500));   
     
-    if(email == 'test@test.com' && password == 'As345678' && otp == '123456'){
+    if(email == 'test@test.com' && password == 'As345678' && otp == otpnumber.value){
         return{
             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
             user: {
@@ -160,7 +186,7 @@ async function startCountdown() {
         return;
     }
 
-
+    generateotp();
     otpLoading.value = true;
     errorMessage.value = '';
     btngray.value = true;
@@ -168,9 +194,8 @@ async function startCountdown() {
     try{
         await sendOTPAPI(email.value);
         otpSent.value = true;
-        errorMessage.value = '測試otp 123456';
+        errorMessage.value = `測試otp ${otpnumber.value}`;
         timer.value = 60;
-
         intervalId = setInterval(() => {
             timer.value--;
             if(timer.value <= 0){
@@ -215,22 +240,31 @@ async function handleEnrollment() {
     }
 
 
+    if(!confirmpassword.value){
+        errorMessage.value = 'Please enter your new password again.';
+        return;
+
+    }
+
+    if(confirmpassword.value != password.value){
+        errorMessage.value = 'Must be the same as the new password.';
+        return;
+    }
 
     if (!otpSent.value) {
-        errorMessage.value = 'Please request OTP first';
+        errorMessage.value = 'Please request OTP first.';
         return;
     }
     if (!checkbox.value) {
         errorMessage.value = 'Please agree to the Terms of Service and Privacy Policy.';
         return;
     }
+    
     isLoading.value = true;
     errorMessage.value = '';
 
     try{
         const response = await enrollmentAPI(email.value, password.value, otp.value);
-        authStore.setToken(response.token);
-        authStore.setUser(response.user);
         // 這邊寫成跳到登入頁面 成功才會執行
         authStore.setloginView('loginpage');
         setSharedEmail(email.value);
@@ -242,6 +276,16 @@ async function handleEnrollment() {
     }
 }
 
+
+function generateotp(){
+    let otp = ""
+    for (let i = 0; i < 6; i++) {
+        otp += Math.floor(Math.random() * 10)
+    }
+    otpnumber.value = otp
+    return otpnumber.value
+}
+
 function handleKeyDown(e) {
     if (e.key === 'Enter' && !isLoading.value) {
         handleEnrollment();
@@ -251,6 +295,10 @@ function handleKeyDown(e) {
 function togglePassword() {
     showPassword.value = !showPassword.value;
 };
+
+function toggleconfirmPassword(){
+    showconfirmPassword.value = !showconfirmPassword.value;
+}
 
 const gotoPrivacy = () => { 
 
@@ -356,7 +404,7 @@ const gotoService = () => {
     }
     .login-bottom{
         width: 100%;
-        margin-bottom: 36px;
+        margin-bottom: 16px;
 
     }
     .login-bottom > p > a{
@@ -379,12 +427,21 @@ const gotoService = () => {
         padding-left: 8px;
         gap: 4px;
     }
+    .agreetext > p{
+        font-size: 1.2rem;
+
+    }
     .Service,
     .Privacy{
         cursor: pointer;
         color: $color-fsBlue;
+        font-size: 1.2rem;
     }
     .checkpolicy > input[type="checkbox"] {
         transform: scale(1.3);
+    }
+
+    .login-bottom> p{
+        font-size: 1.2rem;
     }
 </style>
