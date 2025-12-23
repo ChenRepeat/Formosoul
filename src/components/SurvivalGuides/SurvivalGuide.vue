@@ -112,7 +112,7 @@ const rightFrame = computed(()=> frames.value[1])
         </div> -->
 
         <header class="survival-headline-case" :class="{ 'fade-out': isHover !== null }">
-          <h5 class="survival-headline-inner1-case">Welcome to survival guide！</h5>
+          <h5 class="survival-headline-inner1-case">Welcome To Survival Guide！</h5>
           <p>
             Here, we'll introduce Taiwan's famous night market culture and
             convenience store culture.
