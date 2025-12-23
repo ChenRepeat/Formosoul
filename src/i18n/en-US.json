@@ -218,5 +218,26 @@
     "name16": "Nándǒu Liùxīng",
     "job16": "Professors of Vital Sigilcraft",
     "skill16": "Starlit longevity, soul blessing"
+  },
+  "productdetail":{
+    "buynow": "Buy Now",
+    "addtocart":"Add to Cart",
+    "story":"Story",
+    "howtouse":"How to Play / Use",
+    "shipping":"Shipping",
+    "shippingTitle":"International Home Delivery",
+    "shippingContent":"We offer international shipping, delivering products to your specified address anywhere in the world. Once dispatched, you’ll receive global tracking information, allowing you to follow your package every step of the way.",
+    "payment": "Payment",
+    "paymentTitle1": "Credit Card Instant Online Payment",
+    "paymentContent1": "A convenient payment option. When you choose online card payment, the process is secured with SSL encryption to protect your personal and private data.",
+    "paymentTitle2": "Apple Pay",
+    "paymentContent2": "Experience the ultimate convenience of seamless payment. No more searching for physical cards—simply use biometric authentication on your Apple device for a secure and swift authorization. Apple’s encryption technology ensures your transaction data remains protected throughout the process, making every payment as private as it is effortless.",
+    "backtoshop": "Back to Shop"
+  },
+  "productlist":{
+    "folktoys": "Folktoys",
+    "personalized":"Personalized",
+    "accessories":"Accessories",
+    "voucher":"Voucher"
   }
 }

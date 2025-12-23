@@ -130,33 +130,40 @@ function qtyMinus(){
                 </div>
             </div> 
     
-            <div class="detail-text">
-                <p class="fw200">{{ productData.product_ID }}</p>
-                <h5>{{ productData.name_en }}</h5>
-                <h4>NT$ {{ productData.price }}</h4>
-                <p class="fw200">{{ productData.description_en }}</p>
-                <div class="share-icon">
-                    <font-awesome-icon icon="fa-brands fa-square-facebook" />
-                    <font-awesome-icon icon="fa-brands fa-instagram" />
+            <div class="detail-text dp-flex-col">
+                <div>
+                    <p class="fw200 no-i18n-anim">{{ productData.product_ID }}</p>
+                    <h5>{{ productData.name_en }}</h5>
+                    <h4 class="no-i18n-anim">NT$ {{ productData.price }}</h4>
+                    <p class="fw200">{{ productData.description_en }}</p>
+                    <div class="share-icon">
+                        <font-awesome-icon icon="fa-brands fa-square-facebook" />
+                        <font-awesome-icon icon="fa-brands fa-instagram" />
+                    </div>
                 </div>
-                <div class="qty dp-flex">
-                    <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
-                    <h6>{{ productQty }}</h6>
-                    <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
-                </div>
+                
+                <div>
 
-                <div class="btn-shopping dp-flex-col">
-                    <BasicButton 
-                    class="btn-yellow-fill btn-fix-width"
-                    @click="goCart()">    
-                        Buy Now
-                        <font-awesome-icon icon="fa-solid fa-bag-shopping" />
-                    </BasicButton>
+                    <div class="qty dp-flex">
+                        <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
+                        <h6 class="no-i18n-anim">{{ productQty }}</h6>
+                        <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
+                    </div>
     
-                    <BasicButton class="btn-gray-fill btn-fix-width">
-                        Add to Cart
-                        <font-awesome-icon icon="fa-solid fa-cart-plus" />
-                    </BasicButton>
+                    <div class="btn-shopping dp-flex-col">
+                        <BasicButton 
+                        class="btn-yellow-fill btn-fix-width"
+                        @click="goCart()">    
+                            Buy Now
+                            <font-awesome-icon icon="fa-solid fa-bag-shopping" />
+                        </BasicButton>
+        
+                        <BasicButton class="btn-gray-fill btn-fix-width">
+                            Add to Cart
+                            <font-awesome-icon icon="fa-solid fa-cart-plus" />
+                        </BasicButton>
+                    </div>
+
                 </div>
 
                 
@@ -166,10 +173,10 @@ function qtyMinus(){
     
         <section class="detail-secondary">
             <ul class="detail-tab dp-flex">
-                <li :class="{show: tabInfo === 'story'}" @click="tabInfo = 'story'">Story</li>
-                <li :class="{show: tabInfo === 'howtoplay'}" @click="tabInfo = 'howtoplay'">How to Play / Use</li>
-                <li :class="{show: tabInfo === 'shipping'}" @click="tabInfo = 'shipping'">Shipping</li>
-                <li :class="{show: tabInfo === 'payment'}" @click="tabInfo = 'payment'">Payment</li>
+                <li :class="{show: tabInfo === 'story'}" @click="tabInfo = 'story'"><span>{{$t('productdetail.story')}}</span></li>
+                <li :class="{show: tabInfo === 'howtoplay'}" @click="tabInfo = 'howtoplay'"><span>{{$t('productdetail.howtouse')}}</span></li>
+                <li :class="{show: tabInfo === 'shipping'}" @click="tabInfo = 'shipping'"><span>{{$t('productdetail.shipping')}}</span></li>
+                <li :class="{show: tabInfo === 'payment'}" @click="tabInfo = 'payment'"><span>{{$t('productdetail.payment')}}</span></li>
             </ul>
     
             <hr>
@@ -183,24 +190,20 @@ function qtyMinus(){
             </p>
 
             <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
-                International Home Delivery <br>
+                {{$t('productdetail.shippingTitle')}} <br>
                 <br>
-                We offer international shipping, delivering products to your specified address anywhere in the world. 
-                Once dispatched, you’ll receive global tracking information, allowing you to follow your package every step of the way.
+                {{$t('productdetail.shippingContent')}}
             </p>
     
             <p v-if="tabInfo === 'payment'" class="fw200 payment">
-                Credit Card Instant Online Payment <br>
+                {{$t('productdetail.paymentTitle1')}} <br>
                 <br>
-                A convenient payment option. 
-                When you choose online card payment, 
-                the process is secured with SSL encryption to protect your personal and private data. <br>
+                {{$t('productdetail.paymentContent1')}} <br>
+                <br><br>
+                {{$t('productdetail.paymentTitle2')}} <br>
                 <br>
-                Apple Pay Mobile Payment <br>
-                <br>
-                With Apple Pay, simply hold your iPhone or Apple Watch near the reader to securely and quickly complete your payment—no physical cards needed. 
-                The payment process is protected by Apple’s encryption technology, ensuring your transaction and personal information are safe.
-            </p>
+                {{$t('productdetail.paymentContent2')}}
+            </p>    
     
         </section>
     </div>
@@ -306,12 +309,21 @@ function qtyMinus(){
     min-width: 320px;
     flex-grow: 1;
     padding-bottom: 60px;
+    justify-content: space-between;
+
+    & h4{
+        color: $color-fsRed;
+        padding-top: 20px;
+    }
+
+    & .share-icon{
+        font-size: 2.8rem;
+        display: inline-block;
+        cursor: pointer;
+    }
+
 }
 
-.detail-text>h4{
-    color: $color-fsRed;
-    padding-top: 20px;
-}
 
 .detail-text p:first-child{
     background-color: $color-fsContent;
@@ -321,42 +333,37 @@ function qtyMinus(){
     color: $color-fsTitle;
 }
 
-.detail-text p:nth-of-type(2){
+.detail-text div p:nth-of-type(2){
     padding: 40px 0;
 }
 
-.share-icon{
-    font-size: 2.8rem;
-    display: inline-block;
-    cursor: pointer;
-}
 
 .qty{
     padding-top: 60px;
     justify-content: center;
     align-items: center;
+
+    & h6{
+        border-radius: 10px;
+        border: 0.5px solid $color-fsWhite;
+        width: 160px;
+        text-align: center;
+        margin: 0 20px;
+    }  
+
+    & .qty-icon{
+        font-size: 2rem;
+        cursor: pointer;
+    }
 }
 
-.qty-icon{
-    font-size: 2rem;
-    cursor: pointer;
-}
-
-.qty>h6{
-    border-radius: 10px;
-    border: 0.5px solid $color-fsWhite;
-    width: 160px;
-    text-align: center;
-    margin: 0 20px;
-}
 
 .btn-shopping{
     align-items: center;
-}
 
-.btn-fix-width{
-    margin-top: 16px;
-    width: 100%;
+    & .btn-fix-width{
+        margin-top: 16px;
+    }
 }
 
 
@@ -380,9 +387,7 @@ function qtyMinus(){
         &.show{
             border-bottom: 2px solid $color-fsWhite;
         }
-    }
-
-    
+    }   
 }
 
 

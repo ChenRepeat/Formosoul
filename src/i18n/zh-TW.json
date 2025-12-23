@@ -237,5 +237,26 @@
     "name16": "南斗六星",
     "job16": "生命魔符學教授",
     "skill16": "星能續命、靈魂庇佑"
+  },
+  "productdetail":{
+    "buynow": "立即購買",
+    "addtocart":"加入購物車",
+    "story":"商品故事",
+    "howtouse":"如何使用",
+    "shipping":"運送方式",
+    "shippingTitle":"－ 全球物流：跨越邊界的傳遞",
+    "shippingContent":"Formosoul 的服務不受地域限制，我們提供國際寄送服務，將您心儀的物件送往世界各地。隨著包裹寄出，您將獲得全球追蹤碼，見證物品穿梭文明與疆界的旅程，隨時掌握它的行蹤。",
+    "payment": "付款方式",
+    "paymentTitle1": "－ 信用卡一次付款",
+    "paymentContent1": "當您啟動線上刷卡，系統將透過 SSL 加密通道，確保您的個人隱私與交易資料在穿梭數位網路時獲得最完善的保護。",
+    "paymentTitle2": "－ Apple Pay 行動支付",
+    "paymentContent2": "體驗無感支付的極致便利。無需翻找實體卡片，結帳時只需透過您的 Apple 裝置進行生物辨識驗證，即可安全、快速地完成授權。Apple 加密技術將確保您的交易資訊全程受密鑰保護，讓支付過程既隱密又高效。",
+    "backtoshop": "回斜角巷"
+  },
+  "productlist":{
+    "folktoys": "童玩",
+    "personalized":"客製化商品",
+    "accessories":"飾品",
+    "voucher":"體驗卷"
   }
 }

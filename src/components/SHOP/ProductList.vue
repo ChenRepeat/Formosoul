@@ -929,7 +929,7 @@ const products = ref([
                         <font-awesome-icon class="list-faIcon" icon="fa-solid fa-gamepad" />
                     </div>
                 </div>
-                <p class="list-name">Folktoys</p>
+                <p class="list-name">{{$t('productlist.folktoys')}}</p>
             </li>
 
             <li class="list-category-group">
@@ -938,7 +938,7 @@ const products = ref([
                         <font-awesome-icon class="list-faIcon" icon="fa-solid fa-box-open" />
                     </div>
                 </div>
-                <p class="list-name">Personalized</p>
+                <p class="list-name">{{$t('productlist.personalized')}}</p>
             </li>
 
             <li class="list-category-group">
@@ -947,7 +947,7 @@ const products = ref([
                         <font-awesome-icon class="list-faIcon" icon="fa-solid fa-ring" />
                     </div>
                 </div>
-                <p class="list-name">Accessories</p>
+                <p class="list-name">{{$t('productlist.accessories')}}</p>
             </li>
 
             <li class="list-category-group">
@@ -956,7 +956,7 @@ const products = ref([
                     <font-awesome-icon class="list-faIcon" icon="fa-solid fa-ticket" />
                     </div>
                 </div>
-                <p class="list-name">Voucher</p>
+                <p class="list-name">{{$t('productlist.voucher')}}</p>
             </li>
         </ul>
     </section>
@@ -967,11 +967,11 @@ const products = ref([
     </section>
 
 <!-- 下方頁碼 -->
-    <nav class="nav-down fw200">
+    <nav class="nav-down fw200" >
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-left" />
-        <span class="list-page click">1</span>
-        <span class="list-page">2</span>
-        <span class="list-page">3</span>
+        <span class="list-page click no-i18n-anim">1</span>
+        <span class="list-page no-i18n-anim">2</span>
+        <span class="list-page no-i18n-anim">3</span>
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-right" />
     </nav>
 
