@@ -5,7 +5,7 @@ import BasicButton from '../BasicButton.vue';
 import { ref } from 'vue';
 
 
-// 按鈕
+// 按鈕 ------------------------------------
 // 宣告常數來接收 useRouter() ，方便後續使用
 const router = useRouter();
 
@@ -18,22 +18,57 @@ function goProductList(){
 };
 
 
-// Tab 開關
+// 商品資料動態載入------------------------------------
+// 之後要從資料庫抓跟整理成這個格式
+const productData = ref({
+    product_ID: 'FO2025110001',
+    type: 'Folktoys',
+    price: '80',
+    stock: '25',
+    status: 'Listed',
+    createdate: '20251101',
+    update: '20251115',
+    name_en: 'Spinning Top',
+    name_zh: '陀螺',
+    images: [
+        '/tjd103/Shop/1.png', 
+        '/tjd103/Shop/2-1.png', 
+        '/tjd103/Shop/2-2.png', 
+        '/tjd103/Shop/2-3.png', 
+        '/tjd103/Shop/2-4.png'
+    ],
+    description_en: 'A wooden conical toy that spins when thrown with a wound-up string.',
+    description_zh: '木製錐形玩具，繞上細繩後甩出旋轉。',
+    story_en: 'A famous craft from Daxi, Taiwan; it symbolizes the power of stability and grounding.',
+    story_zh: '台灣大溪等地著名的工藝，象徵重心的穩定。',
+    use_en: 'Wrap the string, hurl it toward the ground while pulling back to initiate a steady spin.',
+    use_zh: '纏繞繩子後向地甩出並收回繩索，使其平穩旋轉。', 
+    isLike: false
+  });
+
+
+
+const currentBigPic = ref(productData.value.images[0]);
+
+
+// Tab 開關 ------------------------------------
 //const tabInfo = ref(story);  story 對程式來說是變數，所以需要宣告程式才會認識
 const tabInfo = ref('story');
 
-// like 切換
-const isLike = ref(true);
+
+// like 切換 ------------------------------------
+//const isLike = ref(false);
 function likeHeart(){
     //isLike = !isLike;   因為是const，所以這樣寫無法改變值
-    isLike.value = !isLike.value;
+    productData.value.isLike = !productData.value.isLike;
 }
 
-//數量切換
+
+// 數量切換 ------------------------------------
 const productQty =ref(1);
 
 function qtyAdd(){
-    if( productQty.value < 27 ){      //之後庫存數量要從資料庫查詢
+    if( productQty.value < productData.value.stock ){      //之後庫存數量要從資料庫查詢
         productQty.value++;
     }
 }
@@ -53,9 +88,9 @@ function qtyMinus(){
     <h6 class="page-guide">
         <RouterLink class="page-guide-text" to="/shop">All Product </RouterLink>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        Traditional Toys
+        {{ productData.type }}
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        Bamboo Helicopter
+        {{ productData.name_en }}
     </h6>
 
         
@@ -67,26 +102,39 @@ function qtyMinus(){
     
             <div class="detail-pic dp-flex">
                 <ul class="detail-pic-small dp-flex-col">
-                    <li><img src="../../../public/Shop/2.png" alt=""></li>
+                    <li v-for="image in productData.images"
+                        :key="image"    
+                        @click="currentBigPic = image">
+
+                        <img :src="image" alt="" :class="{currentpic: currentBigPic === image}">
+                    </li>
+
+
+
+                    <!-- 把 li 變成動態載入 -->
+                    <!-- <li><img src="../../../public/Shop/2.png" alt=""></li>
                     <li><img src="../../../public/Shop/2-2.png" alt=""></li>
                     <li><img src="../../../public/Shop/2-1.png" alt=""></li>
                     <li><img src="../../../public/Shop/2-3.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2-4.png" alt=""></li>
+                    <li><img src="../../../public/Shop/2-4.png" alt=""></li> -->
                 </ul>
                 <div class="detail-pic-big">
-                    <img src="../../../public/Shop/2.png" alt="">
+                    <img :src="currentBigPic" alt="">
+
+                    <!-- 把 大圖 變成動態載入 -->
+                    <!-- <img src="../../../public/Shop/2.png" alt=""> -->
                     <div class="detail-pic-icon-dock" @click="likeHeart">
-                        <font-awesome-icon v-if="isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
+                        <font-awesome-icon v-if="productData.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
                         <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart"/>
                     </div>
                 </div>
             </div> 
     
             <div class="detail-text">
-                <p class="fw200">P20251206</p>
-                <h5>Bamboo Helicopter</h5>
-                <h4>NT$ 190</h4>
-                <p class="fw200">A Bamboo Helicopter (or Bamboo Dragonfly) is a traditional Taiwanese children’s toy made from bamboo. With its simple wing and spinning shaft design, it launches into the air with a quick twist between the fingers.</p>
+                <p class="fw200">{{ productData.product_ID }}</p>
+                <h5>{{ productData.name_en }}</h5>
+                <h4>NT$ {{ productData.price }}</h4>
+                <p class="fw200">{{ productData.description_en }}</p>
                 <div class="share-icon">
                     <font-awesome-icon icon="fa-brands fa-square-facebook" />
                     <font-awesome-icon icon="fa-brands fa-instagram" />
@@ -127,16 +175,11 @@ function qtyMinus(){
             <hr>
 
             <p v-if="tabInfo === 'story'" class="fw200 story">
-                The bamboo helicopter originated in ancient Asia and was a favorite among children, 
-                who would compete to see whose toy flew higher or farther. 
-                It’s a symbol of handmade ingenuity—a classic memory of childhood in rural Taiwan, 
-                blending natural materials with simple physical science.
+                {{ productData.story_en }}
             </p>
 
             <p v-if="tabInfo === 'howtoplay'" class="fw200 howtoplay">
-                Hold the stick between your fingers, twist rapidly upward, 
-                and release—the bamboo helicopter will spin and fly into the air. 
-                The traditional way to play is to compete for the highest or farthest flight.
+                {{ productData.use_en }}
             </p>
 
             <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
@@ -216,6 +259,12 @@ function qtyMinus(){
     height: 100px;  
     border-radius: 10px;  
     cursor: pointer;
+}
+
+.currentpic{
+    border: 2px solid $color-fsGold;
+    border-radius: 10px;  
+    box-shadow: 0 0 15px ;
 }
 
 .detail-pic-small>li>img{
@@ -368,8 +417,5 @@ function qtyMinus(){
     gap: 40px;
   }
 }
-
-
-
 
 </style>
