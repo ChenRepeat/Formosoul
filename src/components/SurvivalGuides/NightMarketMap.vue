@@ -14,7 +14,6 @@ const animationWelcome = ref(false)
 const isGameLocked = ref(true);
 //
 const isMapReady = ref(false);
-
 // 路由
 const router = useRouter();
 
@@ -196,7 +195,7 @@ function closeWelcomeFrame (){
                     @mouseenter="isHover = 'sausage'" 
                     @mouseleave="isHover = null"               
                     @click="openModal(3)"
-                    :class="{'nm-is-active':ishover == 'sausage'}">
+                    :class="{'nm-is-active':isHover == 'sausage'}">
                     <img class="stall-sausage" src="/SurvivalGuide/sausage-mask-group.png" alt="sausage">
                 
                     <SurvivalTextFrame class="text-frame text-frame-sausage"

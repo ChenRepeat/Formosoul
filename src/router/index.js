@@ -25,10 +25,10 @@ import ConvenienceStore from '@/components/SurvivalGuides/ConvenienceStore.vue'
 import ProductDetail from '@/components/SHOP/ProductDetail.vue'
 import ProductList from '@/components/SHOP/ProductList.vue'
 import Delivery from '@/components/policy/delivery.vue'
-import Returns from '@/components/policy/returns.vue'
-import Privacypolicy from '@/components/policy/privacypolicy.vue'
 import Payment from '@/components/policy/payment.vue'
 import BlackLogo from '@/assets/LOGO_black.svg';
+import Privacypolicy from '@/components/policy/privacypolicy.vue'
+import Returns from '@/components/policy/returns.vue'
 
 
 const router = createRouter({
@@ -169,7 +169,10 @@ const router = createRouter({
         bgColor:'white',
       },
       children: [
-        { path: 'information', component: Information },
+        { 
+          path: 'information', 
+          name: 'Information',
+          component: () => import ('../components/Member/information/information.vue')  },
         { path: 'changepassword', component: Changepassword },
         {
           path: 'orderslist', component: MemberOrders,
@@ -194,8 +197,8 @@ const router = createRouter({
       },
       children: [
         { path: 'delivery', component: Delivery},
-        { path: 'returns', component: Returns},
-        { path: 'privacypolicy', component: Privacypolicy},
+        { path: 'returns', name: 'Returns' ,component: () => import ('@/components/policy/returns.vue') },
+        { path: 'privacypolicy', name: 'Privacypolicy' ,component: () => import ('@/components/policy/privacypolicy.vue') },
         { path: 'payment', component: Payment},
       ]
     },

@@ -30,6 +30,7 @@ import BasicButton from '@/components/BasicButton.vue';
 
 import { useAuthStore } from '@/stores/autoStore';
 import Pointcard from '../information/pointcard.vue';
+import router from '@/router';
 
     const props = defineProps({
         withoutbtn:{
@@ -59,7 +60,8 @@ import Pointcard from '../information/pointcard.vue';
     };
 
     function goback(){
-        authStore.setmemberView('membercard');
+        authStore.closeLoginModal();    
+        router.push({ name: 'Information' });
         if(!authStore.isLoginModalOpen){
             authStore.setinformationView('informationmembercard');
         }
