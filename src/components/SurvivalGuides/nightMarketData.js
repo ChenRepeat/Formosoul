@@ -2,63 +2,63 @@ export const popupFrames = [
     {
         // index 0
         id: 'rice',
-        text: 'Food: \n Braised Pork Rice',
+        description: 'Food: \n Braised Pork Rice',
         width: '200px',
         height: 'auto',
     },
     {
         // index 1
         id: 'tofu',
-        text: 'Food: \n Sticky tofu',
+        description: 'Food: \n Sticky tofu',
         width: '200px',
         height: 'auto',
     },
     {
         // index 2
         id: 'bubble',
-        text: 'Food: \n Bubble tea',
+        description: 'Food: \n Bubble tea',
         width: '200px',
         height: 'auto',
     },
     {
         // index 3
         id: 'sausage',
-        text: 'Food: \n Taiwanese sausage with sticky rice',
+        description: 'Food: \n Taiwanese sausage with sticky rice',
         width: '200px',
         height: 'auto',
     },
     {
         // index 4
         id: 'oil',
-        text: 'Food: \n Scallion pancake',
+        description: 'Food: \n Scallion pancake',
         width: '200px',
         height: 'auto',
     },
     {
         // index 5
         id: 'fried-chicken',
-        text: 'Food: \n Fried chicken cutlet',
+        description: 'Food: \n Fried chicken cutlet',
         width: '200px',
         height: 'auto',
     },
     {
         // index 6
         id: 'game-dice',
-        text: 'Game: \n Dice',
+        description: 'Game: \n Dice',
         width: '200px',
         height: 'auto',
     },
     {
         // index 7
         id: 'game-prawning',
-        text: 'Game: \n Prawning',
+        description: 'Game: \n Prawning',
         width: '200px',
         height: 'auto',
     },
     {
         // index 8
         id: 'game-ring-toss',
-        text: 'Game: \n Ring toss',
+        description: 'Game: \n Ring toss',
         width: '200px',
         height: 'auto',
     },

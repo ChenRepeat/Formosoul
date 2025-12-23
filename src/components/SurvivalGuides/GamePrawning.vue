@@ -435,8 +435,8 @@ onUnmounted (()=> {
                     PLAY AGAIN ⟳
                 </button>
 
-                <button class="btn-action btn-exit" @click.stop="emit('close-game')">
-                    EXIT
+                <button class="btn-action btn-check">
+                    CHECK YOUR LEDGER
                 </button>
             </div>
         </div>
@@ -637,7 +637,7 @@ onUnmounted (()=> {
     border: 3px solid $color-fsWhite;
 }
 
-.btn-exit {
+.btn-check {
     background-color: $color-fsRed;
     color: $color-fsWhite;
     border: 3px solid $color-fsWhite;
