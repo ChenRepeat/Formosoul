@@ -180,7 +180,7 @@ onUnmounted(() => {
       </div>
       <transition
         @enter="onEnter"
-        @leave="onLeave"
+        @leave="onLeave" 
         :css="false"
       >
       <ul 

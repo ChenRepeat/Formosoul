@@ -345,7 +345,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
     // 選取 .close-btn 裡面，第一層的所有東西
     & > * {
-         /* 加上兩層白色陰影，製造發光效果 */
+         // 兩層白色陰影，發光
         filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
     }
     &:hover {
