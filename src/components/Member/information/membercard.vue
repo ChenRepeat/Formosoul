@@ -35,13 +35,12 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { useRoute } from 'vue-router';
 import { useMemberStore } from '@/stores/member';
 const publicPath = import.meta.env.BASE_URL;
-const imgURL = ref(`${publicPath}member/photo.png`);
 const route = useRoute();
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
@@ -55,6 +54,39 @@ const props = defineProps({
         default:false,
     },     
 });
+
+const loadMemberData = async () => {
+    const storedUser = localStorage.getItem('user');
+    // console.log(storedUser);
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/getMemberinformation.php`;
+    if(!storedUser) return;
+    
+    const { name: loginName } = JSON.parse(storedUser);
+
+    try{
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            // 這裡要對應 PHP 的接收格式
+            body: JSON.stringify({name: loginName})
+        });
+        const result = await response.json();
+        if(result.success){
+            const dbData = result.data;
+            memberStore.memberData.name = dbData.name;
+            memberStore.memberData.number = "N" +dbData.member_ID;
+            memberStore.memberData.date =  dbData.createdate;
+            memberStore.memberData.wandcore = dbData.magical_en || 'Not yet selected';
+        }else{
+            console.error(result.message);
+        }
+    }catch(error){
+        console.error("Fetch 發生錯誤:", error);
+    }
+};
 
 
 const fileChange = ( e ) => {
@@ -82,7 +114,9 @@ const saveName = () => {
 };
 
 
-
+onMounted(() => {
+    loadMemberData();
+});
 
 
 </script>
@@ -96,7 +130,9 @@ const saveName = () => {
         border-radius: 8px;
         margin: 0 auto;
         display: flex;
-        padding-top: 32px;
+        padding-top: 16px;
+        padding-left: 16px;
+        padding-right: 16px;
         justify-content: center;
         position: relative;
                 &.hasscale{
@@ -108,14 +144,14 @@ const saveName = () => {
         width: 240px;
         object-fit: contain;
         position: absolute;
-        left: 340px;
+        left: 380px;
         top: 150px;
     }
     .membercard{
         align-items: start;
         display: grid;
-        grid-template-columns: 0.2fr 1.2fr;
-        gap: 36px;
+        grid-template-columns: 0.8fr 1.3fr;
+        gap: 24px;
     }
 
     .memberphoto{
@@ -123,6 +159,9 @@ const saveName = () => {
         height: 180px;
         display: flex;
         position: relative;
+        top: 30%;  
+        left: 50%;
+        transform: translate(-50%, -30%);
         
     }
 
