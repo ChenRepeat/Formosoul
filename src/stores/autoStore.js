@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import { computed, ref} from "vue";
+import Cookies from 'js-cookie';
 // 之後可能有封裝好的 axios
 // import axios from 'axios';
 export const useAuthStore = defineStore('auth', () => {
     // 認證狀態
-    const user = ref(null);
-    const token = ref(localStorage.getItem('token') || null);
+    const user = ref(JSON.parse(localStorage.getItem('user')) || null);
+
+    const token = ref(Cookies.get('token') || null);
+
     // 載入狀態避免畫面閃爍
     const isLoading = ref(false);
     // 彈窗狀態
@@ -13,23 +16,25 @@ export const useAuthStore = defineStore('auth', () => {
     const memberView = ref('coreselection');
     const loginView = ref('loginpage');
     const informationView = ref('informationmembercard');
-    // 計算屬性 雙重否定會讓兩個value值 除了字串外都會是false
-    const isLoggedIn = computed(() => !!token.value && !!user.value);
+    
+    const isLoggedIn = computed(() => !!token.value);
 
     // 認證方法
     const setUser = (userData) => {
         user.value = userData;
+        localStorage.setItem('user', JSON.stringify(userData));
     };
 
     const setToken = (newToken) => {
         token.value = newToken;
-        localStorage.setItem('token', newToken);
+        // expires: 1 代表 1 天
+        Cookies.set('token', newToken, { expires: 1 }); 
     };
-
     const logout = () =>{
         user.value = null;
         token.value = null;
-        localStorage.removeItem('token');
+        Cookies.remove('token');
+        localStorage.removeItem('user');
     };
     const setmemberView = (viewName) => {
         memberView.value = viewName;
@@ -43,7 +48,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const fetchUser = async () => {
-        if(!token.value) return;
 
         isLoading.value = true;
         try{
@@ -52,8 +56,8 @@ export const useAuthStore = defineStore('auth', () => {
             //    headers: { Authorization: `Bearer ${token.value}` }
             // });
             // user.value = res.data;  
-            await new Promise(r => setTimeout(r, 500));
-            user.value = { id: 1, name: "test", role: "admin"};
+            // await new Promise(r => setTimeout(r, 500));
+            // user.value = { id: 1, name: "test", role: "admin"};
         } catch(error){
             console.error("Token 失效或網路錯誤", error);
             logout();

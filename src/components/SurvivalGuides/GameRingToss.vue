@@ -1,7 +1,12 @@
 <script setup>
-  import { ref, reactive, onMounted, computed, nextTick, onUnmounted } from 'vue';
+  import { ref, reactive, onMounted, computed, nextTick, onUnmounted, defineEmits } from 'vue';
   import { gsap } from 'gsap';
   import BasicButton from '../BasicButton.vue';
+
+// ================ 鍵盤esc關閉 ================ 
+  const emit = defineEmits(['close-game']);
+  const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
+  };
 
   // 物件設定
   const config = {
@@ -210,8 +215,12 @@
   onMounted(() => {
     updateSize();
     window.addEventListener('resize', updateSize);
+    window.addEventListener('keydown', handleKey);
   });
-  onUnmounted(() => window.removeEventListener('resize', updateSize));
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateSize);
+    window.addEventListener('keydown', handleKey);
+  });
 </script>
 <template>
   <div ref="gameContainer" class="game-wrapper" 
@@ -263,7 +272,9 @@
     overflow: hidden;
     perspective: 1200px;
     user-select: none;
-    background-color: rgba(0,0,0,0.85);
+    background-image: url('/SurvivalGuide/RingToss/RingTossBack.png');
+    background-position: center;
+    background-size: cover;
   }
   .stage {          /*  遊戲畫面設定  */
     width: 100%;

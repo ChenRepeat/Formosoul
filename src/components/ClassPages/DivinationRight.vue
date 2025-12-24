@@ -339,7 +339,7 @@ const buaBue = () => {
     
     h3{
       position: absolute;
-      bottom: -10%;right: 10%;
+      top: 80%;right: 10%;
     }
   }
   .bue-case {

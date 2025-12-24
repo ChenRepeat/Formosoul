@@ -40,7 +40,8 @@ const isEnglish = computed({
 function toggleLang() {
   execLanguageChange(() => {
     isEnglish.value = !isEnglish.value;
-  });}
+  });
+}
 
 
 function handleUserIconClick( e ){
@@ -163,8 +164,8 @@ onUnmounted(() => {
              @click="closeMenu"/></router-link>
           <!-- <a href="/member"></a> -->
          
-            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
-
+            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
+            <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"
               @click="toggleMenu"
               :class="{ 'active': isMenuOpen }">
@@ -180,7 +181,7 @@ onUnmounted(() => {
       </div>
       <transition
         @enter="onEnter"
-        @leave="onLeave"
+        @leave="onLeave" 
         :css="false"
       >
       <ul 
@@ -348,7 +349,7 @@ img { object-fit: none; }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
 
 /* 漢堡按鈕 */
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;}
+.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;overflow: hidden;}
 .transition { transition: 0.5s ease-out; }
 .dot{
   width: 5px;height: 5px;position: absolute;background-color: $color-fsWhite;
@@ -360,10 +361,10 @@ img { object-fit: none; }
 .dot5{left: 2px;top: 9px;}
 .dot6{right: 2px;top: 9px;border-radius: 50%}
 .hamburger-btn.active{
-  .dot{width: 30px;height: 2.5px;transform-origin:0 50%}
+  .dot{width: 38px;height: 3px;transform-origin:0 50%}
   .dot5,.dot6{width: 0;height: 0;opacity: 0;}
-  .dot1,.dot3{transform-origin:0 50%}
-  .dot2,.dot4{transform-origin:100% 50%}
+  .dot1,.dot3{left: 0px;transform-origin:5% 50%}
+  .dot2,.dot4{right: 0px;transform-origin:95% 50%}
   .dot1{border-radius: unset;transform: rotate(45deg);}
   .dot3{border-radius: unset;transform: rotate(-45deg);}
   .dot2{border-radius: unset;transform: rotate(-45deg);}
@@ -439,10 +440,6 @@ img { object-fit: none; }
   .header-icon{
     font-size: 22px;
   }
-  .hamburger-btn{
-    transform: scale(0.8);
-  }
-  
 }
 
 </style>

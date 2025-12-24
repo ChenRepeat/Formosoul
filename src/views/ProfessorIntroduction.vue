@@ -223,7 +223,7 @@ onMounted(() => { // DOM 生成後
 
 let Carousel = new Swiper(".professor-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
-  freemode:true,
+  // freeMode:true,
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -237,20 +237,23 @@ let Carousel = new Swiper(".professor-carousel-container", {
     slideShadows : true
   },
   slidesPerView: 'auto',
+  loopedSlides: 32,
   speed: 1500, // FOR MARQUEE SPEED
   loop: true,
-  spaceBetween: 12,
+  loopAdditionalSlides: 10,
   resistance: true,
   resistanceRatio: 0,
   allowTouchMove: true,
+  // mousewheel: true,
   grabCursor: true,
+
 });
 
 // REVERSE MARQUEE
   // DATA SPEED
 let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
-  freemode:true,
+  freeMode:true,
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -265,8 +268,10 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
     slideShadows : true
   },
   slidesPerView: 'auto',
+  loopedSlides: 32,
   speed: 1250, // FOR MARQUEE SPEED
   loop: true,
+  loopAdditionalSlides: 10,
   spaceBetween: 12,
   resistance: true,
   resistanceRatio: 0,
@@ -295,7 +300,7 @@ onUnmounted(()=>{
 <template> 
   <section class="professor-page-wrapper "> 
     <!-- class 對應 變更嘗試  -->
-    <h2 class="professor-title">{{ $t('professor.title') }}</h2>
+    <h2 class="professor-title">{{$t('professor.title')}}</h2>
 
     <!-- swiper testing -->
     <div class="carousel-field">
@@ -364,14 +369,14 @@ onUnmounted(()=>{
       <article class="professor-text">
         <FontAwesomeIcon icon="fa-solid fa-xmark" class="professor-xmark" @click="closeInfo"/>
         
-        <h3 class="professor-name">{{ $t(professsor) }}</h3>
-        <p class="professor-job ">{{ $t(job) }}</p>
+        <h3 class="professor-name">{{$t(professsor)}}</h3>
+        <p class="professor-job ">{{$t(job)}}</p>
         <div class="professor-skill-wand">
           <IconWandCore class="professor-wand"/>
-          <h5 class="professor-skill">{{ $t('professor.skillTitle') }}</h5>
+          <h5 class="professor-skill">{{$t('professor.skillTitle')}}</h5>
         </div>
         
-        <p class="professor-skill-detail">{{ $t(skillDetail) }}</p>
+        <p class="professor-skill-detail">{{$t(skillDetail)}}</p>
       </article>
     </section>
   </section>
@@ -462,8 +467,6 @@ z-index: 80;
   display: flex; 
 }
 @media (max-width: 992px){
-  .professor-title{
-  }
   .professor-info{
     max-width: 100vw;
     // height: calc(100vh + 120vw);
@@ -487,14 +490,7 @@ z-index: 80;
       
       padding: 8%;
       overflow: visible;
-      .professor-name{
-
-      }
-      .professor-skill-wand{
-        .professor-wand{
-
-        }
-      }
+      
     }
   }
 

@@ -36,17 +36,19 @@
         </div>
       </div>
 
-      <div class="hud dp-flex" v-if="gameState === 'playing'">
-        <h5>HP: {{ lives }}</h5>
+      <div class="hud dp-flex-col" v-if="gameState === 'playing'">
         <h5>TIME: {{ Math.ceil(timeRemaining) }}s</h5>
-      </div>
 
+        <div class="hpStock">
+        <h5 class="dp-flex">HP:<div v-for="n in totalLives" :key="n" class="heart-icon" :class="{ 'is-spent': n > lives}"><font-awesome-icon icon="fa-solid fa-heart" beat /></div></h5>
+        </div>
+      </div>
       <transition name="fade">
         <div class="overlay dp-flex" v-if="gameState !== 'playing'">
           <div v-if="gameState === 'start'" class="ui-panel">
             <h2>MOTO RUNNER</h2>
             <p>text</p>
-            <basic-button @click="startGame" class="btn-black">START</basic-button>
+            <basic-button @click="startGame" class="btn-white">START</basic-button>
           </div>
 
           <div v-if="gameState === 'result'" class="ui-panel result">
@@ -57,7 +59,7 @@
               <div class="stat-row"><p>SURVIVAL{{ (30 - timeRemaining).toFixed(1) }}s</p></div>
               <div class="stat-row"><p>LIFE{{ lives }}</p></div>
             </div>
-            <basic-button @click="gameState = 'start'" class="btn-black">RETRY</basic-button>
+            <basic-button @click="gameState = 'start'" class="btn-white">RETRY</basic-button>
           </div>
         </div>
       </transition>
@@ -70,6 +72,7 @@ import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
 import { gsap } from 'gsap';
 import BasicButton from '../BasicButton.vue';
 import { log } from 'three';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // --- 障礙物類型定義陣列 ---
 const obstacleConfigs = [
@@ -89,7 +92,8 @@ const Z_DESPAWN = 500;
 const container = ref(null);
 const containerWidth = ref(0);
 const gameState = ref('start');
-const lives = ref(3);
+const totalLives = ref(3);
+const lives = ref(totalLives.value);
 const timeRemaining = ref(30);
 const playerX = ref(0);
 const playerTilt = ref(0);
@@ -193,9 +197,7 @@ const endGame = () => { gameState.value = 'result'; };
 
 const updateSize = () => {
   if (container.value) {containerWidth.value = container.value.getBoundingClientRect().width;}
-  console.log(container.value,'con');
-  console.log(containerWidth.value,'width');
-  
+ 
 };
 
 const handleKeyDown = (e) => { keys[e.key] = true; };
@@ -308,8 +310,8 @@ onUnmounted(() => {
 /* UI 樣式 */
 .hud {
   position: absolute;
-  top: 30px;
-  width: 100%;
+  top: 10px;
+  width: 50%;
   justify-content: space-around;
   z-index: 100;
 }
@@ -317,15 +319,22 @@ onUnmounted(() => {
 .hud {
   h5{
     color: #fff;
-    font-size: 26px;
-    font-weight: bold;
-    background: rgba(0,0,0,0.5);
-    padding: 10px 30px;
-    border-radius: 4px;
-    border-left: 5px solid #fff;
+    padding: 10px;
+    text-align: left;
+    gap: 8px;
+  }
+  .hpStock{
+    gap: 4px;
+  }
+  .heart-icon{
+    color: $color-fsRed;
+    transition: all 0.8s;
   }
 }
-
+.is-spent{
+  opacity: 0;
+  transform: scale(0) translateY(-100%);
+}
 .overlay {
   position: absolute;
   inset: 0;

@@ -62,7 +62,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <Maho />
+          <Maho :correctPage="currentPage"/>
         </div>
       </div>
 
@@ -110,7 +110,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <CharmRight  @flip="goToPage" @save-image="handleReceiveFromA"/>
+          <CharmRight  @flip="goToPage" @save-image="handleReceiveFrom"/>
         </div>
       </div>
       <div class="page">
@@ -136,8 +136,11 @@
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover book-end">
-          <h3>The End</h3>
-          <p>© 2025 Class Project</p>
+          <img  
+            src="/public/About/about-island.png" 
+            class="island-img" 
+            alt="#"
+          >
         </div>
       </div>
     </div>
@@ -474,7 +477,7 @@ onUnmounted(() => {
 });
 const sharedImage = ref('');
 
-const handleReceiveFromA = (url) => {
+const handleReceiveFrom = (url) => {
   sharedImage.value = url;
 };
 </script>
@@ -561,6 +564,9 @@ const handleReceiveFromA = (url) => {
   .book-end {
     transform: rotate(0deg) scaleX(1.05);
   }
+}
+.island-img{
+  z-index: 100;
 }
 .book-logo {
   position: absolute;
