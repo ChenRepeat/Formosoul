@@ -23,7 +23,7 @@ const emit = defineEmits(['click'])
 
   <template v-if="props.description">
     <h4 class="text-content title-style" :style="{textAlign: props.align}">
-       <slot>{{ props.text }}</slot>
+       {{ props.text }}
     </h4>
     <p class="desc-content" :style="{textAlign: props.align}">
       {{ props.description }}
@@ -43,7 +43,7 @@ const emit = defineEmits(['click'])
 
   <!-- 用slot的話 預設是 Enter，但可以被其他想要使用的父層覆蓋 -->
   <button v-if="props.showButton" class="survival-button" @click="emit('click')"> 
-    <slot name="textButton">ENTER</slot>
+    <slot name="textButton">{{$t("survivalguide.enterbutton")}}</slot>
   </button>
   <!-- 或是可以用下面的方式引用的來寫 -->
    <!-- <basic-button class='btn-yellow-fill' @click="emit('click')">Enter</basic-button> -->
