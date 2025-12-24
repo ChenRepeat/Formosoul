@@ -69,56 +69,34 @@
     const errorMessage = ref('');
     const showPassword = ref(false);
 
-    async function loginAPI(email, password) {
-        // 測試 isLoading 的效果
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        // 暫時模擬登入
-        if (email === 'test@test.com' && password === 'As345678') {
-            // 回傳 JSON
-            return {
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-                user: {
-                    id: 1,
-                    name: '測試人員',
-                    email: 'test@test.com'
-                },
-                message: '登入成功'
-            };
-        } else {
-            throw new Error('帳號或密碼錯誤');
-        }
-        // const response = await fetch('/api/login', {
-        //     method: 'POST',
-        //     headers: {  'Content-Type': 'application/json'},
-        //     body: JSON.stringify({email, password})
+    function loginAPI(email, password) {
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/memberlogin.php`;
+
+        return fetch(API_URL , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                email, password
+            })
+        }).then( res => res.json());
+        // 之後接回其他資料
+        //   .then(member => {
+        //   const { id, nickname, avatar} = member; // 解構指定語法
+        //   console.log("頭像資料內容:", avatar);
+        //   nicknameH1.textContent = nickname;
+        //   avatarimg.src = `data:image/png;base64,${avatar}`;
+        // // avatarimg.src = `data:image/jpeg;base64,${avatar}`;
+        // // avatarimg.src = avatar;
         // });
-        // 防止
-        // const text = await response.text();
-        // console.log('後端回傳的內容', text);
-        
-        // 安全的轉換成JSON
-        // let data = null;
-        // try{
-        //     data = text ? JSON.parse(text) : null;
-        // }catch( e ){
-        //     throw new Error('目前後端尚未回傳 JSON 格式資料');
-        // }
-
-        // if (!response.ok) {
-        //     throw new Error(data?.message || 'Login failed');
-        // }
-
-        // return data;
-        // 如果沒資料會炸開 先不用    
-        // if(!response.ok){
-        //     const errorData = await response.json();
-        //     throw new Error(errorData.message || 'Login failed')
-        // }
-
-        // return response.json();
     };
 
     async function handleLogin() {
+
+        // await new Promise(resolve => setTimeout(resolve, 1500));
+
         if(!email.value || !password.value){
             errorMessage.value = 'Please enter your email or password'
             return
@@ -134,12 +112,16 @@
 
         try {
             const response = await loginAPI(email.value, password.value);
-            
-            // 這邊就保存到 store
-            authStore.setToken(response.token)
-            authStore.setUser(response.user)
-            // authStore.closeLoginModal();
-            authStore.setmemberView('membercard');
+            if(response.success){
+                // 這邊就保存到 store
+                authStore.setToken(response.token)
+                authStore.setUser(response.user)
+                // authStore.closeLoginModal();
+                authStore.setmemberView('membercard');
+            }else{
+                errorMessage.value = response.message;
+            }
+
         } catch (error) {
             errorMessage.value = error.message || 'Login failed,Please tryagain';
         } finally{
