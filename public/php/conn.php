@@ -7,13 +7,16 @@ require_once 'db_config.php';
 // ---------------------------------------------------------
 
 // 允許來自任何網域的請求 (開發階段方便，正式上線建議改成前端網址 'http://localhost:5173')
-header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Origin: http://localhost:5173"); 
 
 // 允許的請求方法 (GET, POST, OPTIONS, PUT, DELETE)
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); 
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"); 
 
 // 允許的 Header 內容
-header("Access-Control-Allow-Headers: Content-Type, Authorization"); 
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With"); 
+
+// 允許攜帶 Cookie 和 認證資訊
+header('Access-Control-Allow-Credentials: true');
 
 // 設定回傳內容為 JSON 格式
 header('Content-Type: application/json; charset=utf-8');
