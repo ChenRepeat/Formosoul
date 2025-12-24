@@ -69,8 +69,9 @@ const startGamePlay = () => {
 const csFrame = ref([
     {
     id:'welcome',
-    text:'Welcome!',
-    description: "Feel free to look around—there are different surprises waiting to be discovered. \n Try       clicking to see what's hidden!",
+    text:'survivalguide.welcometexttitle',
+    description: "survivalguide.welcometextdescription",
+    button: "survivalguide.startbutton",
     width:'400px',
     height:'auto',
     },
@@ -106,7 +107,7 @@ function closeWelcomeFrame (){
                     <RouterLink :to="{
                         name:'SurvivalGuide'
                     }">
-                        <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />BACK</BasicButton>
+                        <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />{{ $t("survivalguide.backbutton") }}</BasicButton>
                     </RouterLink>
                 </div>
 
@@ -117,23 +118,20 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
-                :text="welcomeFrame.text"
-                :description="welcomeFrame.description"
+                :text="$t(welcomeFrame.text)"
+                            :description="$t(welcomeFrame.description)"
                 :width="welcomeFrame.width"
                 :height="welcomeFrame.height"
                 tag="h4"
                 align="center"
                 @click="closeWelcomeFrame"
                 >
-                <span>
-                    {{ welcomeFrame.text }}
-                </span>
                 <template #descriptionExtra>
                     <font-awesome-icon icon="fa-solid fa-eye" />
                     <font-awesome-icon icon="fa-solid fa-eye" />
                 </template>
                 <template #textButton>
-                    START
+                    {{ $t("survivalguide.startbutton") }}
                 </template>
                 </SurvivalTextFrame>
 <!-------------------------------------- map 連API用 區塊 -------------------------------------------->
@@ -150,7 +148,7 @@ function closeWelcomeFrame (){
                 :class="[{'nm-is-active': isHover == item.id,}, item.class ]">
                 <img :class="item.imgclass" :src="item.imgurl" :alt="item.imgalt">
                     
-                    <SurvivalTextFrame class='text-frame-rice text-frame'                         :description="item.description"
+                    <SurvivalTextFrame :class="`text-frame-${item.id}`"          :description="$t(item.description)"
                         :width="item.width" 
                         :height="item.height"
                         tag="h5"
@@ -171,14 +169,14 @@ function closeWelcomeFrame (){
                     @close="currentInfoData = null"
                     @play="startGamePlay"
                     :mainImg="currentInfoData.mainImg"
-                    :title="currentInfoData.title"
-                    :subTitle="currentInfoData.subTitle"
-                    :text="currentInfoData.text"
+                    :title="currentInfoData.id === 'map-api' ? '' : $t(currentInfoData.title)"
+                    :subTitle="currentInfoData.subTitle ? $t(currentInfoData.subTitle) : ''"
+                    :text="currentInfoData.text ? $t(currentInfoData.text) : ''"
                     :subImg1="currentInfoData.subImg1"
                     :subImg2="currentInfoData.subImg2"
                     :subImg3="currentInfoData.subImg3"
                     :subImg4="currentInfoData.subImg4"
-                    :buttonText="currentInfoData.buttonText"
+                    :buttonText="currentInfoData.buttonText ? $t(currentInfoData.buttonText) : ''"
                     ></SurvivalFoodIntroductionFrame>
                 </div>
             </div>

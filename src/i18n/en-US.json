@@ -243,7 +243,76 @@
   "survivalguide":{
     "indexpageheader":"Welcome To Survival Guide！",
     "indexpageheaderp":"Here, we'll introduce Taiwan's famous night market culture and convenience store culture.",
+    "select":"Select",
+    "nightmarket":"Night Market",
+    "conveniencestore":"Convenience Store",
     "leftframetext":"Taiwan’s night markets are known for food, games. Stinky tofu, braised pork rice,  are must-tries, showing the heart of local Taiwanese culture.",
-    "rightframetext":"Most convenience stores in Taiwan are open 24/7 and offer food, bill payments, shipping, and more—an essential part of daily life."
+    "rightframetext":"Most convenience stores in Taiwan are open 24/7 and offer food, bill payments, shipping, and more—an essential part of daily life.",
+    "enterbutton":"ENTER",
+    "welcometexttitle":"Welcome!",
+    "welcometextdescription":"Feel free to look around—there are different surprises waiting to be discovered. Try clicking to see what's hidden!",
+    "startbutton":"START",
+    "backbutton":"BACK"
+  },
+  "nightmarket":{
+    "items":{
+      "rice": {
+        "title":"Braised Pork Rice",
+        "subTitle":"(Lu Rou Fan)",
+        "popupDesc":"Food: \n Braised Pork Rice",
+        "fullText":"Lu rou fan, or braised pork rice, is a popular Taiwanese comfort food made from minced or finely chopped pork belly slowly braised in a savory and slightly sweet soy sauce–based gravy with garlic, shallots, five-spice powder, and Shaoxing rice wine. The pork is cooked until tender and flavorful, then served over hot steamed white rice, creating a rich and satisfying meal loved across Taiwan. This dish is simple yet deeply aromatic, with a balance of salty, sweet, and umami flavors that make it a staple in Taiwanese cuisine."
+      },
+      "tofu": {
+        "title": "Sticky Tofu",
+        "subTitle":"(Chou Dou Fu)",
+        "popupDesc": "Food: \n Sticky tofu",
+        "fullText":"Stinky Tofu is one of Taiwan's most iconic and famous street foods, known for its unique characteristic: 'the stronger the smell, the better the taste.' Made from fermented bean curd, it is typically deep-fried until the skin is golden and crispy, while the inside remains soft and juicy. It is best enjoyed with a side of sweet and sour pickled cabbage and a splash of garlic soy sauce. For travelers, trying Stinky Tofu is the ultimate challenge and a true taste of Taiwanese night market culture."
+    },
+    "bubble": {
+        "title": "Bubble Tea",
+        "subTitle":"(Boba Tea)",
+        "popupDesc": "Food: \n Bubble tea",
+        "fullText":"Bubble Tea, also known as Pearl Milk Tea, is Taiwan's most iconic beverage that has taken the world by storm. It perfectly blends rich, creamy milk tea with chewy tapioca pearls, known locally as 'boba.' The unique combination of the smooth tea and the springy texture of the pearls creates a delightful experience in every sip. Whether served ice-cold or warm, it is the ultimate symbol of Taiwanese innovations in tea culture."
+    },
+    "sausage": {
+        "title": "Taiwanese Sausage With Sticky Rice",
+        "subTitle":"(Taiwanese Hot Dog)",
+        "popupDesc": "Food: \n Taiwanese sausage with sticky rice",
+        "fullText":"Known as the 'Taiwanese Hot Dog,' this snack features a juicy pork sausage wrapped inside a chewy sticky rice 'bun.' Stuffed with garlic, pickled vegetables, and soy paste, it delivers a perfect mix of textures—crispy skin, tender meat, and soft rice—creating a unique savory and sweet flavor."
+    },
+    "oil": {
+        "title": "Scallion Pancake",
+        "subTitle":"(Green Onion Pancake)",
+        "popupDesc": "Food: \n Scallion pancake",
+        "fullText":"Scallion Pancakes are a beloved Taiwanese street snack known for their crispy, flaky layers. Made from dough folded with oil and fresh green onions, they are pan-fried until golden brown. Whether eaten plain or topped with an egg and soy paste, they offer a savory, aromatic bite with a satisfyingly chewy texture."
+    },
+    "chicken": {
+        "title": "Fried Chicken Cutlet",
+        "subTitle":"(Taiwanese Fried Chicken)",
+        "popupDesc": "Food: \n Scallion pancake",
+        "fullText":"Famous for its massive size—often bigger than a human face—the Taiwanese Fried Chicken Cutlet is the king of night market snacks. The chicken breast is flattened, battered, and deep-fried to golden perfection. Seasoned generously with salt, pepper, and five-spice powder, it creates a crispy outer shell while keeping the meat incredibly juicy and tender inside."
+    },
+    "dice": {
+        "title": "Taiwanese Dice Game",
+        "subTitle":"(Si-Ba-La)",
+        "popupDesc": "Game: \n Dice",
+        "fullText":"Ready to test your luck? 'Si-Ba-La' is the loudest and most exciting game in the night market! The rules are simple: throw three dice into the bowl and try to beat the stall owner's score. If your points are higher, you win a delicious sausage! But watch out—competition is fierce. Are you ready to challenge the boss?",
+        "buttonText": "START GAME"
+    },
+    "prawning": {
+        "title": "Prawning",
+        "subTitle":"(Shrimp Fishing)",
+        "popupDesc": "Game: \n Prawning",
+        "fullText":"Ready to test your luck? 'Si-Ba-La' is the loudest and most exciting game in the night market! The rules are simple: throw three dice into the bowl and try to beat the stall owner's score. If your points are higher, you win a delicious sausage! But watch out—competition is fierce. Are you ready to challenge the boss?",
+        "buttonText": "START GAME"
+    },
+    "ring-toss": {
+        "title": "Ring Toss",
+        "subTitle":"(Hoop Toss)",
+        "popupDesc": "Game: \n Ring Toss",
+        "fullText":"Step right up to the ultimate test of aim and precision! Ring Toss is a legendary night market challenge where things are harder than they look. Your goal? Land a plastic ring around the neck of a bottle or a figurine to win it. It sounds easy, but those rings love to bounce away! Do you have the magic touch to claim the big prize? Line up your shot and let it fly!",
+        "buttonText": "START GAME"
+    }
+  }
   }
 }

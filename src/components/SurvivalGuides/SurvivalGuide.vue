@@ -113,10 +113,7 @@ const rightFrame = computed(()=> frames.value[1])
 
         <header class="survival-headline-case" :class="{ 'fade-out': isHover !== null }">
           <h3 class="survival-headline-inner1-case">{{$t("survivalguide.indexpageheader")}}</h3>
-          <p>
-            Here, we'll introduce Taiwan's famous night market culture <br> and
-            convenience store culture.
-          </p>
+          <p>{{ $t("survivalguide.indexpageheaderp") }}</p>
           <img class='taiwan-pic' src="/SurvivalGuide/taiwan_image.png" alt="taiwan_pic">
         </header>
 
@@ -126,7 +123,7 @@ const rightFrame = computed(()=> frames.value[1])
               class="survival-arrow"
               icon="fa-solid fa-arrow-left"
             />
-            <h5>Select</h5>
+            <h5>{{ $t("survivalguide.select") }}</h5>
             <font-awesome-icon
               class="survival-arrow"
               icon="fa-solid fa-arrow-right"
@@ -148,7 +145,7 @@ const rightFrame = computed(()=> frames.value[1])
           </div>
             <img class="fc-img" :class="{ 'show-deco': isHover == 'left' }" src="/SurvivalGuide/friedChicken_br.png" alt="">
             <img class="tofu-img" :class="{ 'show-deco': isHover == 'left' }" src="/SurvivalGuide/tofu_image.png" alt="">
-            <h4 :class="{'text-is-active': isHover == 'left',}" >Night Market</h4>
+            <h4 :class="{'text-is-active': isHover == 'left',}" >{{$t("survivalguide.nightmarket")}}</h4>
             
             <!-- "$t(leftFrame.text)" 等於 $t("survivalguide.leftframetext") -->
             <SurvivalTextFrame class='text-frame-left' 
@@ -178,7 +175,7 @@ const rightFrame = computed(()=> frames.value[1])
             <img class="lantern-img" :class="{ 'show-deco': isHover == 'right' }" src="/SurvivalGuide/lantern_image.png" alt="">
             <h4 :class="{
                 'text-is-active': isHover == 'right',
-            }"> Convenience Store </h4>
+            }">{{ $t("survivalguide.conveniencestore") }}</h4>
 
             <SurvivalTextFrame class='text-frame-right' 
             v-show="isHover == 'right'" 
