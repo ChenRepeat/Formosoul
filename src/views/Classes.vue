@@ -62,7 +62,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <Maho />
+          <Maho :correctPage="currentPage"/>
         </div>
       </div>
 
@@ -110,7 +110,7 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <CharmRight  @flip="goToPage" @save-image="handleReceiveFromA"/>
+          <CharmRight  @flip="goToPage" @save-image="handleReceiveFrom"/>
         </div>
       </div>
       <div class="page">
@@ -474,7 +474,7 @@ onUnmounted(() => {
 });
 const sharedImage = ref('');
 
-const handleReceiveFromA = (url) => {
+const handleReceiveFrom = (url) => {
   sharedImage.value = url;
 };
 </script>
