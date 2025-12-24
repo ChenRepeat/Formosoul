@@ -1,7 +1,12 @@
 <script setup>
-  import { ref, reactive, onMounted, computed, nextTick, onUnmounted } from 'vue';
+  import { ref, reactive, onMounted, computed, nextTick, onUnmounted, defineEmits } from 'vue';
   import { gsap } from 'gsap';
   import BasicButton from '../BasicButton.vue';
+
+// ================ 鍵盤esc關閉 ================ 
+const emit = defineEmits(['close-game']);
+const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
+};
 
   // 物件設定
   const config = {
@@ -210,8 +215,12 @@
   onMounted(() => {
     updateSize();
     window.addEventListener('resize', updateSize);
+    window.addEventListener('keydown', handleKey);
   });
-  onUnmounted(() => window.removeEventListener('resize', updateSize));
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateSize);
+    window.addEventListener('keydown', handleKey);
+  });
 </script>
 <template>
   <div ref="gameContainer" class="game-wrapper" 

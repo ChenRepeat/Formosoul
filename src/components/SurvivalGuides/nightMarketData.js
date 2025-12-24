@@ -1,66 +1,93 @@
 export const popupFrames = [
     {
-        // index 0
         id: 'rice',
         description: 'Food: \n Braised Pork Rice',
         width: '200px',
         height: 'auto',
+        class: 'stall-wrapper-pork-rice',
+        imgclass:'stall-pork-rice',
+        imgurl:'/tjd103/SurvivalGuide/rice-mask-group.png',
+        imgalt:'braised-pork-stall',
     },
     {
-        // index 1
         id: 'tofu',
         description: 'Food: \n Sticky tofu',
         width: '200px',
         height: 'auto',
+        class: 'stall-wrapper-sticky-tofu',
+        imgclass:'stall-sticky-tofu',
+        imgurl:'/tjd103/SurvivalGuide/tofu-mask-group.png',
+        imgalt:'sticky-tofu',
     },
     {
-        // index 2
         id: 'bubble',
         description: 'Food: \n Bubble tea',
         width: '200px',
         height: 'auto',
+        class: 'stall-wrapper-bubble-tea',
+        imgclass:'stall-bubble-tea',
+        imgurl:'/tjd103/SurvivalGuide/bubble-mask-group.png',
+        imgalt:'bubble-tea',
     },
     {
-        // index 3
         id: 'sausage',
         description: 'Food: \n Taiwanese sausage with sticky rice',
         width: '200px',
         height: 'auto',
+        class: 'stall-wrapper-sausage',
+        imgclass:'stall-sausage',
+        imgurl:'/tjd103/SurvivalGuide/sausage-mask-group.png',
+        imgalt:'sausage',
     },
     {
-        // index 4
         id: 'oil',
         description: 'Food: \n Scallion pancake',
         width: '200px',
         height: 'auto',
+        class: 'stall-wrapper-oil',
+        imgclass:'stall-oil',
+        imgurl:'/tjd103/SurvivalGuide/oil-mask-group.png',
+        imgalt:'oil',
     },
     {
-        // index 5
         id: 'fried-chicken',
         description: 'Food: \n Fried chicken cutlet',
         width: '200px',
         height: 'auto',
+        class: 'stall-wrapper-chicken',
+        imgclass:'stall-chicken',
+        imgurl:'/tjd103/SurvivalGuide/chicken-mask-group.png',
+        imgalt:'fried-chicken',
     },
     {
-        // index 6
         id: 'game-dice',
         description: 'Game: \n Dice',
         width: '200px',
         height: 'auto',
+        class: 'game-wrapper-dice',
+        imgclass:'game-dice',
+        imgurl:'/tjd103/SurvivalGuide/dice-mask-group.png',
+        imgalt:'game-dice',
     },
     {
-        // index 7
         id: 'game-prawning',
         description: 'Game: \n Prawning',
         width: '200px',
         height: 'auto',
+        class: 'game-wrapper-prawning',
+        imgclass:'game-prawning',
+        imgurl:'/tjd103/SurvivalGuide/prawning-mask-group.png',
+        imgalt:'game-prawning',
     },
     {
-        // index 8
         id: 'game-ring-toss',
         description: 'Game: \n Ring toss',
         width: '200px',
         height: 'auto',
+        class: 'game-wrapper-ring-toss',
+        imgclass:'game-ring-toss',
+        imgurl:'/tjd103/SurvivalGuide/ring-toss-mask-group.png',
+        imgalt:'game-ring-toss',
     },
 ]
 

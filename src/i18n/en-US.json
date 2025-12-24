@@ -239,5 +239,11 @@
     "personalized":"Personalized",
     "accessories":"Accessories",
     "voucher":"Voucher"
+  },
+  "survivalguide":{
+    "indexpageheader":"Welcome To Survival Guide！",
+    "":"",
+    "leftframetext":"Taiwan’s night markets are known for food, games. Stinky tofu, braised pork rice,  are must-tries, showing the heart of local Taiwanese culture.",
+    "rightframetext":"Most convenience stores in Taiwan are open 24/7 and offer food, bill payments, shipping, and more—an essential part of daily life."
   }
 }
