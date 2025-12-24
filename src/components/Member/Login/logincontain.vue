@@ -69,7 +69,7 @@
     const errorMessage = ref('');
     const showPassword = ref(false);
 
-    function loginAPI(email, password) {
+    function loginAPI(email, password, name) {
         const apiBase = import.meta.env.VITE_API_BASE;
         const API_URL = `${apiBase}/memberlogin.php`;
 
@@ -79,8 +79,10 @@
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify({
-                email, password
-            })
+                email, password, name
+            }),
+            // 允許跨域請求攜帶 Cookie
+            credentials: 'include'
         }).then( res => res.json());
         // 之後接回其他資料
         //   .then(member => {
@@ -111,7 +113,7 @@
         errorMessage.value = ''
 
         try {
-            const response = await loginAPI(email.value, password.value);
+            const response = await loginAPI(email.value, password.value, name.value);
             if(response.success){
                 // 這邊就保存到 store
                 authStore.setToken(response.token)
