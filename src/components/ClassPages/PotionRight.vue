@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import BasicButton from '../BasicButton.vue';
 import { useRouter } from 'vue-router';
-import PotionGame from './PotionGame.vue';
 import { faDisplay } from '@fortawesome/free-solid-svg-icons';
 
 //Boolean

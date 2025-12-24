@@ -136,8 +136,11 @@
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover book-end">
-          <h3>The End</h3>
-          <p>© 2025 Class Project</p>
+          <img  
+            src="/public/About/about-island.png" 
+            class="island-img" 
+            alt="#"
+          >
         </div>
       </div>
     </div>
@@ -561,6 +564,9 @@ const handleReceiveFrom = (url) => {
   .book-end {
     transform: rotate(0deg) scaleX(1.05);
   }
+}
+.island-img{
+  z-index: 100;
 }
 .book-logo {
   position: absolute;
