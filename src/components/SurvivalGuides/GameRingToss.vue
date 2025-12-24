@@ -272,7 +272,9 @@ const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
     overflow: hidden;
     perspective: 1200px;
     user-select: none;
-    background-color: rgba(0,0,0,0.85);
+    background-image: url('/SurvivalGuide/RingToss/RingTossBack.png');
+    background-position: center;
+    background-size: cover;
   }
   .stage {          /*  遊戲畫面設定  */
     width: 100%;
