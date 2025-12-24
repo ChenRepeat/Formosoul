@@ -185,7 +185,6 @@ function shuffle(arr) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]]; // swap
   }
-
 }
 
 shuffle(ingredientList)
@@ -208,9 +207,9 @@ const cook=()=>{
 
 
 const dragStart=( e )=>{
- const data = refIngredient.value.src
+ const data = e.target.src // try e.target // refIngredient 抓不到
  // 取得連結字串 之後去食譜物件比對
- // or = e.target?
+ 
  e.dataTransfer.setData('ingredient', data)
 }
 
