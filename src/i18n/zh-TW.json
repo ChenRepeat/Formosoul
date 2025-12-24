@@ -258,5 +258,9 @@
     "personalized":"客製化商品",
     "accessories":"飾品",
     "voucher":"體驗卷"
+  },
+  "survivalguide":{
+    "indexpageheader":"歡迎光臨生存守則！",
+    "":""
   }
 }
