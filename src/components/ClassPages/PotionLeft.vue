@@ -168,13 +168,17 @@
   return { 'display': 'none' };
 };
   function changeIntro(i){
-    if(clickPotion.value != String(i)){
-      clickPotion.value = false;
-      setTimeout(() => {
-        clickPotion.value = String(i);
-      }, 450);
+    if(clickPotion.value != false){
+      if(clickPotion.value != String(i)){
+        clickPotion.value = false;
+        setTimeout(() => {
+          clickPotion.value = String(i);
+        }, 450);
+      }else{
+        clickPotion.value = false;
+      }
     }else{
-      clickPotion.value = false;
+      clickPotion.value = String(i);
     }
   }
   const currentIntro = computed(() => {

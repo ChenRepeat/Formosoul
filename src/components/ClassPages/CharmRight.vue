@@ -75,10 +75,12 @@ const save = () => {
     ></canvas>
     <div class="toolbar dp-flex-col">
       <div class="dp-flex tool-case">
-        <!-- <p>Color</p> -->
-        <input type="color" v-model="brushColor" />
-        <!-- <p>Bursh Size</p> -->
-        <input type="range" min="1" max="20" v-model="brushSize" />
+        <div class="dp-flex">
+          <p>Width</p><input type="range" min="1" max="20" v-model="brushSize" />
+        </div>
+        <div class="dp-flex">
+          <p>Color</p><input type="color" v-model="brushColor" />
+        </div>
       </div>
       <div class="dp-flex btn-case">
         <BasicButton
@@ -99,6 +101,7 @@ const save = () => {
 .canvas-container {
   align-items: center;
   gap: 10px;
+  width: 80%;
 }
 canvas {
   cursor: crosshair;
@@ -108,10 +111,22 @@ canvas {
 .toolbar {
   gap: 10px;
   padding: 10px;
+  width: 100%;
 }
 .tool-case{
+  width: 100%;
   gap: 16px;
   justify-content: center;
+  div{
+    gap: 8px;
+    width: 45%;
+  }
+  p{
+    display: inline-block;
+  }
+  input{
+    width: 80%;
+  }
 }
 .btn-case{
   gap: 16px;

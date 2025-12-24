@@ -72,7 +72,7 @@
   }
   .moonfes-img-case{
       position: absolute;
-      bottom: -60%;
+      top: 100%;
       left: -15%;
       img{
       width: 200px;
@@ -100,7 +100,7 @@
     width: 240px;
     height: 240px;
     position: absolute;
-    left: 0%;bottom: -40%;
+    left: 0%;top: 80%;
     transform: rotate(-9deg);
     border-radius: 8px;
     box-shadow: 3px 3px 6px #000;

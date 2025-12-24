@@ -3,6 +3,7 @@
   import { computed , ref , Transition, watch } from 'vue';
   const rightArrow = ref(null);
   const clickCharm = ref('0');
+  const showText = ref('0');
   const props = defineProps(['sharedImage']);
   const charmsRow1 = ref({
     1: {
@@ -80,9 +81,10 @@
 
   function changeIntro(i){
     clickCharm.value = String(i);
+    showText.value = String(i)
   }
  const currentIntro = computed(() => {
-    const selectedId = clickCharm.value;
+    const selectedId = showText.value;
     if (charmsRow1.value[selectedId]) {
       return charmsRow1.value[selectedId];
     }
@@ -91,7 +93,11 @@
     }
 });
 watch(() => props.sharedImage, (newVal) => {
-  if (newVal) {
+  if (newVal != 'Classes/charms/charm13.png') {
+    charmsRow2.value[13].imgUrl = newVal;
+    clickCharm.value = '13';
+  }else{
+    clickCharm.value = '0';
     charmsRow2.value[13].imgUrl = newVal;
   }
 });
@@ -171,7 +177,7 @@ const buyWord = computed(() => {
             @touchstart.stop/>
           </h6>
           <p>{{ $t(currentIntro.intro) }}</p>
-          <p v-if="clickCharm==13" class="userDraw">{{$t(buyWord)}}
+          <p v-if="showText==13" class="userDraw">{{$t(buyWord)}}
             <font-awesome-icon icon="fa-solid fa-circle-right" class="rightArrow"/>
           </p>
           </div>
@@ -279,7 +285,7 @@ const buyWord = computed(() => {
   text-align: right;
 }
 .userDrowed{
-  animation: changeShadow 5s ease infinite;
+  animation: changeShadow 1s ease infinite;
 }
 .rightArrow{
   animation: changeColor 0.5s ease infinite;
@@ -290,9 +296,9 @@ const buyWord = computed(() => {
   100%{color:$color-fsGold}
 }
 @keyframes changeShadow {
-  0%{box-shadow: 0px 0px 12px $color-fsGold;}
+  0%{box-shadow: 0px 0px 18px $color-fsRed;}
   50%{box-shadow: 0px 0px 6px $color-fsGold;}
-  100%{box-shadow: 0px 0px 12px $color-fsGold;}
+  100%{box-shadow: 0px 0px 18px $color-fsRed;}
 }
 .fade-enter-active,.fade-leave-active {
   transition: opacity 0.5s ease;

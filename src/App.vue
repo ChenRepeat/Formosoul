@@ -93,7 +93,6 @@ onMounted(async () => {
 .wrapper {
   min-height: 100vh;
   background-color: #000;
-  position: relative;
 }
 .wrapper.white{
   background-color: #fff;
