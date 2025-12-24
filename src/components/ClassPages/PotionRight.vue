@@ -1,8 +1,16 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import BasicButton from '../BasicButton.vue';
 import { useRouter } from 'vue-router';
 import { faDisplay } from '@fortawesome/free-solid-svg-icons';
+import { gsap } from 'gsap/gsap-core';
+import { Draggable } from 'gsap/Draggable';
+import { potions } from '../ClassPages/potions'
+
+console.log(potions);
+
+//plugins
+gsap.registerPlugin(Draggable)
 
 //Boolean
 const isShow = ref(true)
@@ -12,161 +20,13 @@ const afterCook = ref(false)
 // template 標籤 ref綁定 
 const refIngredient = ref(null)
 const refWrapper = ref(null)
-//variables
+// variables
+const resultImg = ref('');
+const resultTitle = ref('');
+const resultIntro = ref('');
 
 // potions[i].recipe.values()  .hasOwn('Classes/potions/recipeMilk.png')
-
-const potions = {
-    1: {
-        name: 'Boba Milk Tea',
-        intro: 'A creamy blend of black tea and milk, featuring the signature, chewy tapioca.', 
-        imgUrl:'Classes/potions/potion7.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'BlackTea',
-            imgUrl:'Classes/potions/recipeBlackTea.png',
-          },
-          3:{
-            name:'Topioca',
-            imgUrl:'Classes/potions/recipeTopioca.png',
-          },
-        }
-      },
-    2: {
-        name: 'Aiyu Lemon Jelly Drink',
-        intro: 'Zesty lemon drink featuring slippery, natural aiyu (fig) jelly—a perfect summer cooler.', 
-        imgUrl:'Classes/potions/potion2.png',
-        recipe:{
-          1:{
-            name:'Aiyu',
-            imgUrl:'Classes/potions/recipeAiyu.png',
-          },
-          2:{
-            name:'Lemon',
-            imgUrl:'Classes/potions/recipeLemon.png',
-          },
-          
-        }
-      },
-    3: {
-        name: 'No.1',
-        intro: 'Lightly oxidized oolong tea customized with three chewy toppings: boba, pearls, and nata de coco.', 
-        imgUrl:'Classes/potions/potion11.png',
-        recipe:{
-          1:{
-            name:'Greentea',
-            imgUrl:'Classes/potions/recipeGreentea.png',
-          },
-          2:{
-            name:'Coconut',
-            imgUrl:'Classes/potions/recipeCoconut.png',
-          },
-          3:{
-            name:'Aiyu',
-            imgUrl:'Classes/potions/recipeAiyu.png',
-          },
-          4:{
-            name:'Topioca',
-            imgUrl:'Classes/potions/recipeTopioca.png',
-          },
-        }
-      },
-      4: {
-        name: 'Winter Melon Lemonade',
-        intro: 'A perfectly balanced drink: sweet winter melon combined with the refreshing tartness of lemon.', 
-        imgUrl:'Classes/potions/potion3.png',
-        recipe:{
-          1:{
-            name:'Winter Melon',
-            imgUrl:'Classes/potions/recipeEastMelon.png',
-          },
-          2:{
-            name:'Lemon',
-            imgUrl:'Classes/potions/recipeLemon.png',
-          },
-        }
-      },
-      5: {
-        name: 'Brown Sugar Boba',
-        intro: 'Warm, chewy pearls simmered in rich brown sugar syrup mixed with fresh milk.', 
-        imgUrl:'Classes/potions/potion6.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'suger',
-            imgUrl:'Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'BlackTea',
-            imgUrl:'Classes/potions/recipeBlackTea.png',
-          },
-          4:{
-            name:'Topioca',
-            imgUrl:'Classes/potions/recipeTopioca.png',
-          },
-        }
-      },
-      6: {
-        name: 'Winter Melon Drink with Grass Jelly',
-        intro: 'Sweet winter melon juice perfectly paired with smooth, cooling herbal grass jelly cubes.', 
-        imgUrl:'Classes/potions/potion5.png',
-        recipe:{
-          1:{
-            name:'Winter Melon',
-            imgUrl:'Classes/potions/recipeEastMelon.png',
-          },
-          2:{
-            name:'Lemon',
-            imgUrl:'Classes/potions/recipeLemon.png',
-          },
-          3:{
-            name:'Xian Tsou',
-            imgUrl:'Classes/potions/recipeXianTsou.png',
-          },
-        }
-      },
-      7: {
-        name: 'Cheese Foam Green Tea',
-        intro: 'Refreshing green tea topped with a thick, savory, and lightly salted cream foam.', 
-        imgUrl:'Classes/potions/potion1.png',
-        recipe:{
-          1:{
-            name:'milk',
-            imgUrl:'Classes/potions/recipeMilk.png',
-          },
-          2:{
-            name:'suger',
-            imgUrl:'Classes/potions/recipeSuger.png',
-          },
-          3:{
-            name:'Greentea',
-            imgUrl:'Classes/potions/recipeGreentea.png',
-          },
-        }
-      },
-      8: {
-        name: 'Winter Melon Drink with Nata de Coco',
-        intro: 'Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).', 
-        imgUrl:'Classes/potions/potion9.png',
-        recipe:{
-          1:{
-            name:'Winter Melon',
-            imgUrl:'Classes/potions/recipeEastMelon.png',
-          },
-          2:{
-            name:'Coconut',
-            imgUrl:'Classes/potions/recipeCoconut.png',
-          },
-        }
-      },
-  };
+let selectList = []
 let ingredientList = ['Classes/potions/recipeAiyu.png',
   'Classes/potions/recipeBlackTea.png',
   'Classes/potions/recipeCoconut.png',
@@ -179,6 +39,7 @@ let ingredientList = ['Classes/potions/recipeAiyu.png',
   'Classes/potions/recipeXianTsou.png',
 ]
 
+
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -186,38 +47,59 @@ function shuffle(arr) {
   }
 }
 
-shuffle(ingredientList)
+shuffle(ingredientList) // 會直接改動原始陣列
 
 //functions
-const start= ()=>{
+const initDraggable = () => { //清掉上回合的實體
+
+    const oldInstances = Draggable.get('.potion-right-ingredient')
+    if(oldInstances){
+      if(Array.isArray(oldInstances)){
+        oldInstances.forEach(element => element.kill())
+      }else { oldInstances.kill()} 
+    }
+    Draggable.create( '.potion-right-ingredient', {
+      type:'x, y', // == default 允許平面上下左右移動
+  
+      onDragEnd: e => {
+       const instance = Draggable.get(e.target)
+  
+       if (instance.hitTest('.potion-right-pot')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
+        gsap.to(e.target, { scale: 0, duration: 0.3 });
+        selectList.push(e.target.src)
+        
+      }else{      
+        gsap.to(e.target, { x: 0, y: 0, duration: 0.3 });
+        // 未通過hitTest 判定為沒有進入鍋子
+       }
+      }
+    })
+}
+
+const start= async()=>{ // 暫定 retry 呼叫同一個 FUNCTION
   isShow.value = false
   beforeStart.value = false
   beforeCook.value = true
   afterCook.value= false
 
+  await nextTick() // 等待DOM更新 直到beforeCook要呈現的標籤都存在 (還沒渲染 但這邊不影響)
+  selectList = []
+  initDraggable()
 }
 
 const cook=()=>{
   isShow.value = true
   beforeCook.value = false
   afterCook.value= true
+  //判斷石材屬於哪個食譜寫在這?
 }
 
 
 
-const dragStart=( e )=>{
- const data = e.target.src // try e.target // refIngredient 抓不到
- // 取得連結字串 之後去食譜物件比對
- 
- e.dataTransfer.setData('ingredient', data)
-}
-
-
-const dragEnd=(  )=>{
-  refIngredient.value.style.display = `none`
-}
 onMounted(()=>{
+
 })
+
 // prevent-->drop
 
 </script>
@@ -243,11 +125,13 @@ onMounted(()=>{
       <img v-for="(item, index) in ingredientList" 
           :src="item" :id="'img'+(index + 1)" alt="" 
           class="potion-right-ingredient" 
-          @dragstart="dragStart" @dragend="dragEnd"
+        
           ref="refIngredient">
+          <!-- @dragstart="dragStart" @dragend="dragEnd" -->
     </div>
-    <img src="../../../public/Classes/potions/eletricPot.png" alt=""  class="potion-right-pot">
-    <BasicButton class="potion-right-cook btn-black " 
+    <img src="../../../public/Classes/potions/eletricPot.png" alt=""  class="potion-right-pot" 
+    @drop="dropped">
+    <BasicButton class="potion-right-cook btn-black" 
       @click="cook" >
         COOK
     </BasicButton>
@@ -256,9 +140,9 @@ onMounted(()=>{
 <!-- 結果畫面 -->
   <section v-else-if="afterCook" class="potion-right-result">
     <div>
-      <img :src= afterCook alt="">
-      <h5 class="potion-right-result-title"></h5>
-      <p class="potion-right-result-intro"></p>
+      <img :src='resultImg' alt="">
+      <h5 class="potion-right-result-title">{{ resultTitle }}</h5>
+      <p class="potion-right-result-intro">{{ resultIntro }}</p>
     </div>
     <BasicButton class="potion-right-retry btn-black" v-if="afterCook"
     @click="start">
