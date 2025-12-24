@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const fetchUser = async () => {
-        if(!token.value) return;
+        // if(!token.value) return;
 
         isLoading.value = true;
         try{
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
             // });
             // user.value = res.data;  
             await new Promise(r => setTimeout(r, 500));
-            user.value = { id: 1, name: "test", role: "admin"};
+            // user.value = { id: 1, name: "test", role: "admin"};
         } catch(error){
             console.error("Token 失效或網路錯誤", error);
             logout();
