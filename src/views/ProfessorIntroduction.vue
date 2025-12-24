@@ -223,7 +223,7 @@ onMounted(() => { // DOM 生成後
 
 let Carousel = new Swiper(".professor-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
-  freemode:true,
+  // freeMode:true,
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -237,20 +237,23 @@ let Carousel = new Swiper(".professor-carousel-container", {
     slideShadows : true
   },
   slidesPerView: 'auto',
+  loopedSlides: 32,
   speed: 1500, // FOR MARQUEE SPEED
   loop: true,
-  spaceBetween: 12,
+  loopAdditionalSlides: 10,
   resistance: true,
   resistanceRatio: 0,
   allowTouchMove: true,
+  // mousewheel: true,
   grabCursor: true,
+
 });
 
 // REVERSE MARQUEE
   // DATA SPEED
 let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
-  freemode:true,
+  freeMode:true,
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -265,8 +268,10 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
     slideShadows : true
   },
   slidesPerView: 'auto',
+  loopedSlides: 32,
   speed: 1250, // FOR MARQUEE SPEED
   loop: true,
+  loopAdditionalSlides: 10,
   spaceBetween: 12,
   resistance: true,
   resistanceRatio: 0,
@@ -462,8 +467,6 @@ z-index: 80;
   display: flex; 
 }
 @media (max-width: 992px){
-  .professor-title{
-  }
   .professor-info{
     max-width: 100vw;
     // height: calc(100vh + 120vw);
@@ -487,14 +490,7 @@ z-index: 80;
       
       padding: 8%;
       overflow: visible;
-      .professor-name{
-
-      }
-      .professor-skill-wand{
-        .professor-wand{
-
-        }
-      }
+      
     }
   }
 

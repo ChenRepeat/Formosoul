@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
     const memberView = ref('coreselection');
     const loginView = ref('loginpage');
     const informationView = ref('informationmembercard');
-    // 計算屬性 雙重否定會讓兩個value值 除了字串外都會是false
+    
     const isLoggedIn = computed(() => !!token.value);
 
     // 認證方法
@@ -75,7 +75,6 @@ export const useAuthStore = defineStore('auth', () => {
     const openLoginModal = () => {
         isLoginModalOpen.value = true;
         document.body.style.overflow = 'hidden';  //鎖定背景 - 將網頁最外層設為不可滾動
-
     };
 
     const closeLoginModal = () => {

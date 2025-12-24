@@ -193,9 +193,7 @@ const endGame = () => { gameState.value = 'result'; };
 
 const updateSize = () => {
   if (container.value) {containerWidth.value = container.value.getBoundingClientRect().width;}
-  console.log(container.value,'con');
-  console.log(containerWidth.value,'width');
-  
+ 
 };
 
 const handleKeyDown = (e) => { keys[e.key] = true; };

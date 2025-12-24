@@ -9,12 +9,12 @@ export const useMemberStore = defineStore('member', () => {
 
 
     const memberData = ref({
-        name: 'H.Potter',
-        wandcore: 'Cornu Cervi Pantotrichum',
-        number: 'L09190116',
-        date: '2025.09.19',
+        name: 'Your Name',
+        wandcore: 'Your WandCore',
+        number: 'Your Number',
+        date: 'Enrollment Date',
         isEditing: false, 
-        tempName: 'H.Potter' 
+        tempName: '' 
     });
 
 
