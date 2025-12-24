@@ -295,7 +295,7 @@ onUnmounted(()=>{
 <template> 
   <section class="professor-page-wrapper "> 
     <!-- class 對應 變更嘗試  -->
-    <h2 class="professor-title">{{ $t('professor.title') }}</h2>
+    <h2 class="professor-title">{{$t('professor.title')}}</h2>
 
     <!-- swiper testing -->
     <div class="carousel-field">
@@ -364,14 +364,14 @@ onUnmounted(()=>{
       <article class="professor-text">
         <FontAwesomeIcon icon="fa-solid fa-xmark" class="professor-xmark" @click="closeInfo"/>
         
-        <h3 class="professor-name">{{ $t(professsor) }}</h3>
-        <p class="professor-job ">{{ $t(job) }}</p>
+        <h3 class="professor-name">{{$t(professsor)}}</h3>
+        <p class="professor-job ">{{$t(job)}}</p>
         <div class="professor-skill-wand">
           <IconWandCore class="professor-wand"/>
-          <h5 class="professor-skill">{{ $t('professor.skillTitle') }}</h5>
+          <h5 class="professor-skill">{{$t('professor.skillTitle')}}</h5>
         </div>
         
-        <p class="professor-skill-detail">{{ $t(skillDetail) }}</p>
+        <p class="professor-skill-detail">{{$t(skillDetail)}}</p>
       </article>
     </section>
   </section>
