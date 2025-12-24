@@ -4,9 +4,9 @@
   import BasicButton from '../BasicButton.vue';
 
 // ================ 鍵盤esc關閉 ================ 
-const emit = defineEmits(['close-game']);
-const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
-};
+  const emit = defineEmits(['close-game']);
+  const handleKey = (e) => { if (e.code === 'Escape') emit('close-game');
+  };
 
   // 物件設定
   const config = {
