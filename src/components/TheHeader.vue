@@ -164,8 +164,8 @@ onUnmounted(() => {
              @click="closeMenu"/></router-link>
           <!-- <a href="/member"></a> -->
          
-            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick"/>
-
+            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
+            <font-awesome-icon icon="fa-solid fa-hat-wizard" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"
               @click="toggleMenu"
               :class="{ 'active': isMenuOpen }">
