@@ -61,7 +61,7 @@ const loadMemberData = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/getMemberinformation.php`;
     if(!storedUser) return;
-    
+    // 解構賦值也能讓解析出來的變數重新命名
     const { name: loginName } = JSON.parse(storedUser);
 
     try{
@@ -77,7 +77,7 @@ const loadMemberData = async () => {
         if(result.success){
             const dbData = result.data;
             memberStore.memberData.name = dbData.name;
-            memberStore.memberData.number = "N" +dbData.member_ID;
+            memberStore.memberData.number = dbData.member_ID;
             memberStore.memberData.date =  dbData.createdate;
             memberStore.memberData.wandcore = dbData.magical_en || 'Not yet selected';
         }else{
