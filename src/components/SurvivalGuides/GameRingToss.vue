@@ -46,24 +46,28 @@
   // 生成目標物
   const createGridTargets = () => {
     const newTargets = [];
-    const colors = ['#FF5252', '#FFD740', '#64FFDA'];
+    const imgUrl = [
+      `${import.meta.env.BASE_URL}SurvivalGuide/RingToss/RingTossCandy.png`,
+      `${import.meta.env.BASE_URL}SurvivalGuide/RingToss/RingTossBear.png`,
+      `${import.meta.env.BASE_URL}SurvivalGuide/RingToss/RingTossBottle.png`
+    ];
     const centerX = containerSize.w / 2;
     const startY = containerSize.h * 0.17;
 
-    for (let r = 0; r < config.rows; r++) {
-      const isOddRow = r % 2 === 1;
+    for (let row = 0; row < config.rows; row++) {
+      const isOddRow = row % 2 === 1;
       const itemsInRow = isOddRow ? config.cols + 1 : config.cols;
       const rowWidth = (itemsInRow - 1) * config.colGap;
       const rowStartX = centerX - (rowWidth / 2);
 
-      for (let c = 0; c < itemsInRow; c++) {
+      for (let col = 0; col < itemsInRow; col++) {
         newTargets.push({
-          id: `${r}-${c}`,
-          x: rowStartX + (c * config.colGap),
-          y: startY + (r * config.rowGap),
-          row: r,
-          color: colors[r % colors.length],
-          score: (config.rows - r) * 100,
+          id: `${row}-${col}`,
+          x: rowStartX + (col * config.colGap),
+          y: startY + (row * config.rowGap),
+          row: row,
+          img: imgUrl[row % imgUrl.length],
+          score: (config.rows - row) * 100,
           hit: false
         });
       }
@@ -169,11 +173,8 @@
   });
 
   const getTargetBodyStyle = (t) => ({
-    backgroundColor: t.color,
     width: `${config.objWidth}px`,
     height: `${config.objHeight}px`,
-    borderRadius: '20px',
-    boxShadow: `0 8px 20px rgba(0,0,0,0.5)`
   });
 
   const aimLineStyle = computed(() => {
@@ -249,7 +250,7 @@
            :ref="el => targetRefs[t.id] = el"
            class="target-object" :style="getTargetStyle(t)">
         <div class="target-body dp-flex" :style="getTargetBodyStyle(t)">
-          <p class="score-text">{{ t.score }}</p>
+          <img :src="t.img" alt="" srcset="">
         </div>
       </div>
 
@@ -259,7 +260,9 @@
     <div class="game-ui">
       <div class="score-tag"><h6>SCORE: {{ score }}</h6></div>
       <div class="ring-stock dp-flex">
-        <div v-for="n in totalRings" :key="n" class="ring-mini-icon" :class="{ 'is-spent': n > ringsLeft }"></div>
+        <div v-for="n in totalRings" :key="n" class="ring-mini-icon">
+          <img src="/SurvivalGuide/RingToss/Ring.png" alt="" :class="{ 'is-spent': n > ringsLeft}">
+        </div>
       </div>
     </div>
   </div>
@@ -287,8 +290,9 @@
     position: absolute;
     width: 100px;
     height: 100px;
-    border: 10px solid $color-fsGold;
-    border-radius: 50%;
+    background-image: url('/SurvivalGuide/RingToss/Ring.png');
+    background-size: contain;
+    background-repeat: no-repeat;
     pointer-events: none;
     z-index: 2000;
   }
@@ -297,8 +301,13 @@
     transition: opacity 0.4s;
   }
   .target-body {
-    align-items: center;
-    justify-content: center;
+
+    img{
+      height: auto;
+      width: 100%;
+      object-fit: contain;
+      margin: 0 auto;
+    }
   }
   .score-text { color: $color-fsTitle;}
   .aim-line {
@@ -323,10 +332,14 @@
   .ring-mini-icon { 
     width: 24px;
     height: 24px; 
-    border: 3px solid #f1c40f; 
-    border-radius: 50%; 
+    background-image: url('/SurvivalGuide/RingToss/Ring.png');
     transition: 0.3s; 
-    &.is-spent { opacity: 0.1; transform: scale(0.8); }
+    
+    img{
+      width: 100%;
+      height: auto;
+      &.is-spent { opacity: 0.4; transform: scale(0.8); }
+    }
   }
 
   .overlay { 
