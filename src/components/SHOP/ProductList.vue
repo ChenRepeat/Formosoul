@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from "vue-router";     //使用路由功能
 import TestProductCard from '@/components/TestProductCard.vue';
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 
 // 宣告常數來接收 useRouter() ，方便後續使用
 
@@ -30,10 +30,10 @@ const products = ref([
     use_en: 'Wrap the string, hurl it toward the ground while pulling back to initiate a steady spin.',
     use_zh: '纏繞繩子後向地甩出並收回繩索，使其平穩旋轉。',
     main_pic: 'Shop/1.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -76,10 +76,10 @@ const products = ref([
     use_en: 'Twist the handle rapidly back and forth so the pellets strike the drum to produce a rhythmic beat.',
     use_zh: '快速來回轉動手柄，使小球擊打鼓面發出咚咚聲。',
     main_pic: 'Shop/3.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -99,10 +99,10 @@ const products = ref([
     use_en: 'Hold the fork in one hand, pull the band with the other, aim, and release.',
     use_zh: '一手握叉、一手拉動橡皮筋，對準目標後放開。',
     main_pic: 'Shop/4.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -122,10 +122,10 @@ const products = ref([
     use_en: 'Keep the shuttlecock airborne by repeatedly striking it with your inner foot or knees.',
     use_zh: '使用腳內側或膝蓋持續擊打毽子使其不落地。',
     main_pic: 'Shop/5.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -144,11 +144,11 @@ const products = ref([
     story_zh: '廟會著名的民俗工藝，將藝術與可食性結合。',
     use_en: 'Knead, pinch, and carve different colors of dough into your desired shapes.',
     use_zh: '揉、捏、掐、刻，將不同顏色的麵糰塑造成型。',
-    main_pic: 'Shop/6.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/6.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -156,7 +156,7 @@ const products = ref([
     type: 'Folktoys',
     price: '20',
     stock: '100',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251130',
     name_en: 'Battle Cards',
@@ -168,10 +168,10 @@ const products = ref([
     use_en: 'Flick your card against your opponent\'s to flip it over or knock it out of bounds.',
     use_zh: '用自己的卡片彈擊對方的卡片，試圖翻轉或擊出場外。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -179,7 +179,7 @@ const products = ref([
     type: 'Folktoys',
     price: '150',
     stock: '18',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251202',
     name_en: 'Kendama',
@@ -191,10 +191,10 @@ const products = ref([
     use_en: 'Use a wrist flick to toss the ball and catch it precisely in the wooden cups or spike.',
     use_zh: '利用手腕巧勁將紅球甩起，使其精準落在木柄凹槽。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -202,7 +202,7 @@ const products = ref([
     type: 'Folktoys',
     price: '100',
     stock: '22',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251111',
     name_en: 'Clapper',
@@ -214,10 +214,10 @@ const products = ref([
     use_en: 'Hold in both hands to strike alternately or shake rapidly with one hand for rhythm.',
     use_zh: '雙手持板交替擊打或單手快速搖動，產生節奏感。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -225,7 +225,7 @@ const products = ref([
     type: 'Folktoys',
     price: '200',
     stock: '10',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251221',
     name_en: 'Rubber Band Gun',
@@ -237,10 +237,10 @@ const products = ref([
     use_en: 'Hook the band to the muzzle and trigger, then pull the trigger to fire at your target.',
     use_zh: '將橡皮筋勾在前端與扳機，扣下扳機將其射向目標。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -248,7 +248,7 @@ const products = ref([
     type: 'Folktoys',
     price: '250',
     stock: '8',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251125',
     name_en: 'Stilts',
@@ -260,10 +260,10 @@ const products = ref([
     use_en: 'Step onto the footrests and hold the tops of the poles to walk while maintaining balance.',
     use_zh: '雙腳踩在木板支撐點，手握桿頂維持平衡行走。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -282,11 +282,11 @@ const products = ref([
     story_zh: '象徵自由與將願望傳達給上蒼的媒介。',
     use_en: 'Run against the wind while slowly releasing the line to let the airflow lift it high.',
     use_zh: '逆風奔跑並逐漸放線，利用氣流將其升至高空。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/12.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -294,7 +294,7 @@ const products = ref([
     type: 'Folktoys',
     price: '70',
     stock: '35',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251104',
     name_en: 'Flying Disc',
@@ -306,10 +306,10 @@ const products = ref([
     use_en: 'Flick your wrist outward to spin the disc, allowing it to glide smoothly.',
     use_zh: '手腕向外甩出並帶動盤身旋轉，使其滑翔。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -317,7 +317,7 @@ const products = ref([
     type: 'Folktoys',
     price: '30',
     stock: '60',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251209',
     name_en: 'Paper Pinwheel',
@@ -329,10 +329,10 @@ const products = ref([
     use_en: 'Hold it while running or face the wind to let the blades catch the breeze and spin.',
     use_zh: '手持奔跑或對著風向，讓葉片受力旋轉。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -340,7 +340,7 @@ const products = ref([
     type: 'Folktoys',
     price: '110',
     stock: '20',
-    status: 'Listed',
+    status: 'unListed',
     createdate: '20251101',
     update: '20251119',
     name_en: 'Rolling Iron Hoop',
@@ -352,10 +352,10 @@ const products = ref([
     use_en: 'Use the hook to push the base of the hoop, running to maintain its momentum.',
     use_zh: '利用鐵鉤推動環身底部，一邊奔跑一邊維持轉動。',
     main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -374,11 +374,11 @@ const products = ref([
     story_zh: '考驗手指靈活度，多為早期女孩子的集體回憶。',
     use_en: 'Toss one bag upward and try to scoop up others from the ground before it falls.',
     use_zh: '向上拋起一包，在落下前抓取地上的其餘沙包。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/16.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -397,11 +397,11 @@ const products = ref([
     story_zh: '代表契約、身分與法規的正式力量。',
     use_en: 'Dip in cinnabar ink and press onto documents or codices.',
     use_zh: '蘸上硃砂印泥，在文件或法典上用印。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/17.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -420,11 +420,11 @@ const products = ref([
     story_zh: '台灣最普遍的信仰，象徵神明的隱形盾牌。',
     use_en: 'Carry it with you or keep it in your daily bag.',
     use_zh: '隨身攜帶或放在隨身包內。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/18.png',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -443,11 +443,11 @@ const products = ref([
     story_zh: '多掛於交通工具上，祈求行路平安。',
     use_en: 'Hang it on your broomstick or vehicle\'s front.',
     use_zh: '掛於魔法掃帚或代步工具前端。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/19.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -466,11 +466,11 @@ const products = ref([
     story_zh: '用於改善磁場，讓使用者常遇貴人。',
     use_en: 'Place in a wealth corner or wear it daily.',
     use_zh: '放置於財位或日常佩戴。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/20.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -489,11 +489,11 @@ const products = ref([
     story_zh: '考季熱賣品，專為學院測驗設計的 Buff。',
     use_en: 'Place on the top-left of your desk while studying or testing.',
     use_zh: '閱讀或考試時放在書桌左上角。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/21.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -512,11 +512,11 @@ const products = ref([
     story_zh: '保生大帝加持，適合體弱的巫師。',
     use_en: 'Wear it on your chest, close to your heartbeat.',
     use_zh: '佩戴於胸前，貼近心跳處。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/22.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -535,11 +535,11 @@ const products = ref([
     story_zh: '象徵生命的傳承與註生娘娘的慈悲。',
     use_en: 'Place by the bedside or carry it for protection.',
     use_zh: '放置於床頭 or 隨身攜帶以求守護。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/23.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -558,12 +558,11 @@ const products = ref([
     story_zh: '基礎魔法，用於去除空氣中的暗影晦氣。',
     use_en: 'Burn and mix with water for sprinkling, or paste on doors.',
     use_zh: '焚化於水中淨灑或貼於門窗。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
-    isLike: false
+    main_pic: 'Shop/24.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
   },
   {
     product_ID: 'PE2025100009',
@@ -581,11 +580,11 @@ const products = ref([
     story_zh: '專門處理屬性衝突，穩定狂暴的能量場。',
     use_en: 'Place within ritual circles experiencing unstable fluctuations.',
     use_zh: '放置於能量波動不穩的儀式陣中。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/25.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -604,11 +603,11 @@ const products = ref([
     story_zh: '黑色屬水，以水克火，是家庭巫師必備。',
     use_en: 'Paste on walls near the kitchen or heat sources.',
     use_zh: '貼於廚房或火源附近的牆面上。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/26.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -627,11 +626,11 @@ const products = ref([
     story_zh: '處理紛爭，象徵正義與真相的顯現。',
     use_en: 'Carry it during mediations or courtroom debates.',
     use_zh: '在進行調解或法庭辯論時攜帶。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/27.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -650,11 +649,11 @@ const products = ref([
     story_zh: '類似春聯，用於節慶增強幸運魔法。',
     use_en: 'Paste at entrances during festivals or put in red envelopes.',
     use_zh: '節慶時貼於門口或放入紅包中。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/28.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -665,19 +664,19 @@ const products = ref([
     status: 'Listed',
     createdate: '20250901',
     update: '20251114',
-    name_en: 'House Enamel Pin',
-    name_zh: '學院金屬徽章',
+    name_en: 'Enamel Pin',
+    name_zh: '金屬徽章',
     description_en: 'Exquisite enamel pins engraved with divine beasts such as the Taiwan Blue Magpie, Formosan Black Bear, or Clouded Leopard.',
     description_zh: '精緻的琺瑯金屬針章，刻有台灣藍鵲、黑熊或雲豹等神獸。',
-    story_en: 'Represents the honor of the student\'s house. Different divine beast totems symbolize unique personality traits and magical talents.',
-    story_zh: '代表學員所屬的學院榮譽。不同的神獸圖騰象徵不同的性格特質與魔法天賦。',
+    story_en: 'Represents the honor of the student. Different divine beast totems symbolize unique personality traits and magical talents.',
+    story_zh: '代表學員所屬的榮譽。不同的神獸圖騰象徵不同的性格特質與魔法天賦。',
     use_en: 'Wear it on the collar of your wizard robe or backpack. During specific house events, it glows faintly when sensing the presence of fellow housemates.',
     use_zh: '佩戴於巫師袍領口或背包上。在特定活動中，會因感應同儕氣息而發出微光。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/29.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -696,11 +695,11 @@ const products = ref([
     story_zh: '台灣民間信仰中，雷劈木被視為具極強驅魔能力的材料。能自動偵測周遭負面能量。',
     use_en: 'Attach to your phone or keys. The wooden sword will grow warm to alert the wearer when negative aura or evil spirits are nearby.',
     use_zh: '掛在手機或鑰匙上。當附近有晦氣或邪靈接近時，木劍會微微發熱以提醒佩戴者。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/30.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -719,11 +718,11 @@ const products = ref([
     story_zh: '源自排灣族工藝。每一顆珠子都擁有古老靈魂，如孔雀珠代表愛情，勇士珠代表勇氣。',
     use_en: 'Wear around the neck. Touch the corresponding bead while casting spells to enhance the success rate of that specific magical attribute.',
     use_zh: '佩戴於頸部。施法時觸摸對應意義的珠子，可增強該屬性魔法的成功率。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/31.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -742,34 +741,34 @@ const products = ref([
     story_zh: '虎爺是台灣廟宇守護神，保護孩童與旅人。此飾品具備「咬錢」與「避險」的加持。',
     use_en: 'Hang on keys or bags. Pat the tiger\'s head three times when entering dangerous areas to gain temporary light-footedness and luck protection.',
     use_zh: '掛在鑰匙或背包。進出危險區域時輕拍虎頭三次，能獲得短暫的腳步輕盈與保護。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/32.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
     product_ID: 'AC2025090005',
     type: 'Accessories',
-    price: '550',
+    price: '350',
     stock: '60',
     status: 'Listed',
     createdate: '20250901',
     update: '20251129',
-    name_en: 'Five Elements Balance Pin',
-    name_zh: '五行能量胸章',
-    description_en: 'A circular base inlaid with five-colored crystals representing Metal, Wood, Water, Fire, and Earth.',
-    description_zh: '圓形底座上鑲嵌金、木、水、火、土五色晶石。',
-    story_en: 'Combines Eastern Five Elements principles to ensure stable mana flow. Crucial in locations where elemental energy is chaotic.',
-    story_zh: '結合東方五行原理，確保巫師體內魔力流動穩定。在元素混亂的地點特別重要。',
-    use_en: 'Pin to the chest of your robe. When feeling magical imbalance, rotate the center clockwise to help harmonize your internal energy.',
-    use_zh: '固定於外袍胸前。感到魔力失衡時，順時針旋轉胸章中心，可幫助理順體內氣息。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    name_en: 'Spirit-wood Jiao-bei',
+    name_zh: '靈木聖筊吊飾',
+    description_en: 'A pair of crescent-shaped wooden blocks, often red, used to seek divine guidance.',
+    description_zh: '一對紅色的新月形木塊，常用於向神明尋求指引。',
+    story_en: 'Represents the communication between humans and gods. In Formosoul, it helps wizards make decisions when facing crossroad choices.',
+    story_zh: '代表人與神靈間的溝通管道。在 Formosoul 中，它能幫助巫師在面臨十字路口抉擇時獲得指引。',
+    use_en: 'Hold both blocks in your palms, whisper your question, and drop them. One flat and one curved side up indicates a positive magical confirmation.',
+    use_zh: '雙手合十握住筊杯，心中默念問題後擲下。一平一凸（聖筊）代表獲得正向的魔法確認。',
+    main_pic: 'Shop/33.png',
+    pic1: 'Shop/33-1.png',
+    pic2: 'Shop/33-2.png',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -788,11 +787,11 @@ const products = ref([
     story_zh: '鹽水蜂炮是台灣最具震撼力的驅邪儀式。萬炮齊發象徵掃除瘟疫，對巫師而言是最高等級的膽量試煉。',
     use_en: 'Redeem your gear at the Tainan Yanshui Office and suit up before entering the array. Maintaining your composure amidst the barrage will significantly boost your defense.',
     use_zh: '在台南鹽水辦事處兌換裝備後，穿戴整齊進入炮陣。在炮火中保持冷靜能大幅提升防禦力。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/34.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -811,11 +810,11 @@ const products = ref([
     story_zh: '天燈是通往天界與神靈溝通的信使。在Formosoul，天燈用於將畢業願望送往星辰。',
     use_en: 'Redeem at designated shops near Pingxi Station. Write down your wish and ignite the lantern under a professor\'s guidance. Observe its flight path to divine your fortune.',
     use_zh: '在平溪車站指定店鋪兌換，寫下願望後在教授指導下點火釋放。觀察上升路徑可預知運勢。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/35.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -834,11 +833,11 @@ const products = ref([
     story_zh: '辦桌是台灣魔法社交的精髓。在眾神見證下的饗宴，能讓巫師恢復大量的魔力與精神力。',
     use_en: 'Proceed to the active temple square and present your voucher to the \'Zong-pu-shi\' (Head Chef). After the meal, you may pray to nearby deities for inspiration.',
     use_zh: '前往活動廟口，憑券向總舖師兌換席位。用餐後可向附近的神明祈求靈感。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/36.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -857,11 +856,11 @@ const products = ref([
     story_zh: '跟隨大甲媽祖進香是全台灣最長的魔法長征。香客大樓能提供在長途跋涉後的深度身心修復。',
     use_en: 'Present this voucher at designated temples along the pilgrimage route. Participate in the morning drum ceremony after check-in to receive spiritual purification.',
     use_zh: '在進香沿線的指定廟宇出示此券。入住後於晨間參與廟宇擊鼓儀式，可獲得身心淨化。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/37.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   },
   {
@@ -880,14 +879,56 @@ const products = ref([
     story_zh: '台灣的高山峽谷藏有古老的森林精靈。此車票專為不擅長長距離飛行的學員設計。',
     use_en: 'Present the pass at major transit hubs and board the shuttle marked with the academy\'s totem. The vehicle is enchanted with anti-motion-sickness magic for a comfortable journey.',
     use_zh: '在各縣市交通轉運站出示，登上漆有學院圖騰的接駁車。車內配有抗暈魔法，確保旅途舒適。',
-    main_pic: 'Shop/2.png',
-    pic1: 'Shop/2-1.png',
-    pic2: 'Shop/2-2.png',
-    pic3: 'Shop/2-3.png',
-    pic4: 'Shop/2-4.png',
+    main_pic: 'Shop/38.jpg',
+    pic1: '',
+    pic2: '',
+    pic3: '',
+    pic4: '',
     isLike: false
   }
 ]);
+
+
+// 分頁功能
+
+const itemsPerPage = 12;      // 因為每頁顯示幾筆資料是固定的，所以不用 ref，告訴 vue 不用來追蹤這個值。
+                              // 如果之後每頁顯示的數量可以讓使用者調整，就需要改成 ref(12)
+
+//const totalPages = Math.ceil ( products.value.length / itemsPerPage );
+//要讓總頁數可以追蹤 products.value.length 跟 itemsPerPage 是否有改變，並即時更新，要改成用 computed ，如果沒用，那 totalPages 只會在一開始進到網頁時跑一次，無法跟進後續的改變
+// 寫法一
+const totalPages = computed(() => 
+  Math.ceil ( products.value.length / itemsPerPage )
+);
+
+// 寫法二
+// const totalPages = computed(() => {
+//   return Math.ceil(products.value.length / itemsPerPage);
+// });
+
+// 寫法三
+// const totalPages = computed(function() {
+//   return Math.ceil(products.value.length / itemsPerPage);
+// });
+
+
+// 讓頁碼動態載入     *記得用 .value 來取值，才能比較
+const currentPage = ref(1);
+const allPage = ref(1);
+function loadPages(){
+  if( allPage.value < totalPages.value ){
+    allPage.value++;
+  }
+}
+
+
+
+
+
+
+
+
+
 
 </script>
 
@@ -969,9 +1010,15 @@ const products = ref([
 <!-- 下方頁碼 -->
     <nav class="nav-down fw200" >
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-left" />
-        <span class="list-page click no-i18n-anim">1</span>
-        <span class="list-page no-i18n-anim">2</span>
-        <span class="list-page no-i18n-anim">3</span>
+        <!-- 改成動態產生頁碼 -->
+        <!-- <span class="list-page click no-i18n-anim">{{ allPage }}</span> -->
+        <span v-for="page in totalPages"
+              :key="page" 
+              class="list-page click no-i18n-anim"
+              >
+              {{ page }}</span>
+        <!-- <span class="list-page no-i18n-anim">2</span>
+        <span class="list-page no-i18n-anim">3</span> -->
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-right" />
     </nav>
 
