@@ -424,7 +424,7 @@ const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));
 <template>
 
     <main class="coregame-dock dp-flex-col">
-        <h5>Power Forged!</h5>
+        <h5>{{ $t('coreselection.coreshowTitle')}}</h5>
         <div class="coregame-top dp-flex">
             <div>
                 <div class="core-pic dp-flex">
@@ -437,9 +437,9 @@ const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));
 
                 <!-- <h6>{{wandCores.nameEn}}</h6>   因為wandCores是陣列，所以這樣無法直接取值，要加入索引 -->
                 <h6>{{wandCores[coreSelect].nameEn}}</h6>
-                <p>Source ：{{wandCores[coreSelect].sourceEn}}</p>
-                <p>Property ：{{wandCores[coreSelect].propertyEn}}</p>
-                <p>Effect：{{wandCores[coreSelect].effectEn}}</p>
+                <p>{{ $t('coreselection.coreshowSource')}}{{wandCores[coreSelect].sourceEn}}</p>
+                <p>{{ $t('coreselection.coreshowProperty')}}{{wandCores[coreSelect].propertyEn}}</p>
+                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCores[coreSelect].effectEn}}</p>
                 
                 <!-- <h6>Cornu Cervi Pantotrichum</h6>
                 <p>Source ：Young antler of Sika or Red Deer.</p>
@@ -452,9 +452,8 @@ const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));
         <div class="coregame-down">
             <div class="coregame-record">
 
-                <p>Your Formosoul bond is sealed. <br>
-                    The core is already etched onto your Student Card.
-                    Finalize enrollment now, before the energy dissipates.
+                <p>{{ $t('coreselection.coreshowIntro1')}} <br>
+                    {{ $t('coreselection.coreshowIntro2')}} 
                 </p>
 
                 <div class="btn-step dp-flex">
