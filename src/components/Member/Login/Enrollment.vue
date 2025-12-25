@@ -155,22 +155,22 @@ async function sendOTPAPI(emailValue) {
             throw new Error('Invalid email');
         }
 }
-async function enrollmentAPI(email, password, otp) {
-    await new Promise(resolve => setTimeout(resolve, 1500));   
-    
-    if(email == 'test@test.com' && password == 'As345678' && otp == otpnumber.value){
-        return{
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-            user: {
-                id: 1,
-                name: '新註冊用戶',
-                email: 'test@test.com'
-            },
-            message: '註冊成功',
-        }
-    }else{
-        throw new Error('註冊失敗');
-    }
+
+
+function enrollmentAPI(email, password) {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/Enrollment.php`;
+
+    return fetch(API_URL, {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email, password
+        })
+    }).then( res => res.json());
+
 }
 
 
@@ -263,10 +263,15 @@ async function handleEnrollment() {
     errorMessage.value = '';
 
     try{
-        const response = await enrollmentAPI(email.value, password.value, otp.value);
+        const response = await enrollmentAPI(email.value, password.value);
         // 這邊寫成跳到登入頁面 成功才會執行
-        authStore.setloginView('loginpage');
-        setSharedEmail(email.value);
+        if(response.success){
+            authStore.setloginView('loginpage');
+            setSharedEmail(email.value);
+        }else{
+            errorMessage.value = response.message;
+        }
+
         
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';

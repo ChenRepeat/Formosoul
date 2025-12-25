@@ -18,13 +18,16 @@
 
 
     const response = await fetch(API_URL);
-    console.log(response);
     const data = await response.json();
-    console.log(data);
     memberData.value = data;
 
     total.value = data.length;
   }
+
+
+
+
+
   
   onMounted (() => {
     getMemberData();
