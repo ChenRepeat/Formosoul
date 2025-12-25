@@ -23,16 +23,13 @@
           class="obstacle-box"
           :style="getObsStyle(obs)"
         >
-          <div class="obs-inner dp-flex" :style="{ backgroundColor: obs.color, borderColor: '#fff' }">
-            {{ obs.label }}
-          </div>
+            <img :src="obs.img" alt="" class="obs-inner">
         </div>
-
         <div 
           class="player-bike" 
           :style="playerStyle"
         >
-          <div class="bike-inner dp-flex">PLAYER</div>
+          <img src="/Classes/MotorGame/MotorPlayer.png" alt="PLAYER" class="bike-inner">
         </div>
       </div>
 
@@ -71,16 +68,14 @@
 import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
 import { gsap } from 'gsap';
 import BasicButton from '../BasicButton.vue';
-import { log } from 'three';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // --- 障礙物類型定義陣列 ---
 const obstacleConfigs = [
-  { label: 'TRUCK', color: '#ff4757', width: 140, score: 10 },
-  { label: 'CONE', color: '#ffa502', width: 60, score: 5 },
-  { label: 'WALL', color: '#747d8c', width: 110, score: 15 },
-  { label: 'OIL', color: '#2f3542', width: 90, score: 5 },
-  { label: 'BARRIER', color: '#eccc68', width: 100, score: 10 }
+  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Motor.png`, width: 60, score: 10 },
+  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Taxi.png`, width: 120, score: 5 },
+  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Truck.png`, width: 150, score: 15 },
+
 ];
 
 // --- 配置常數 ---
@@ -166,7 +161,7 @@ const update = (time, deltaTime) => {
 
 const spawnObstacle = () => {
   const roadWidth = containerWidth.value * 0.92;
-  const laneCenters = [-roadWidth * 0.35, 0, roadWidth * 0.35];
+  const laneCenters = [-roadWidth * 0.3, 0, roadWidth * 0.3];
   
   // 隨機生成障礙物
   const config = obstacleConfigs[Math.floor(Math.random() * obstacleConfigs.length)];
@@ -176,8 +171,7 @@ const spawnObstacle = () => {
     x: laneCenters[Math.floor(Math.random() * 3)],
     z: Z_SPAWN,
     hit: false,
-    label: config.label,
-    color: config.color,
+    img: config.img,
     width: config.width
   });
 };
@@ -232,7 +226,10 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #1a1b26; 
+  background-image: url('/Classes/MotorGame/MotorBackGround.png');  
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
   perspective: 1200px;
   perspective-origin: 50% 45%; 
 }
@@ -285,8 +282,7 @@ onUnmounted(() => {
 .obstacle-box {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  height: 80px;     // 固定高度，寬度由 JS 動態決定 
+  left: 50%;     // 固定高度，寬度由 JS 動態決定 
   transform-style: preserve-3d;
 }
 
@@ -296,15 +292,24 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   font-weight: 900;
-  border: 4px solid #fff;
   box-sizing: border-box;
   letter-spacing: 2px;
+  transform-origin: bottom center;
+  transform: rotateX(90deg);
 }
-
-.bike-inner {
-  background: #00d2ff;
-  color: #fff;
-  border-radius: 8px;
+.obs-inner{
+  img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+.bike-inner{
+  img{
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 /* UI 樣式 */
