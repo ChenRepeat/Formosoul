@@ -1,17 +1,10 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useRouter } from "vue-router";     //使用路由功能
 import TestProductCard from '@/components/TestProductCard.vue';
 import { ref,computed } from 'vue';
 
-// 宣告常數來接收 useRouter() ，方便後續使用
 
-// 設定路由功能
-
-
-
-
-// 商品  ＊傳送給子組件
+// 所有商品 ----------------------------------------
 const products = ref([
   {
     product_ID: 'FO2025110001',
@@ -747,8 +740,15 @@ const products = ref([
   }
 ]);
 
+// 先過濾商品的上下架狀態，再傳送給子組件    ＊加 computed 追蹤 products 有無改變並即時更新
+const listedProducts = computed(() => 
+products.value.filter( p => p.status ==='Listed')
+);
 
-// 分頁功能
+// 單獨呈現不同分類的商品
+
+
+// 分頁功能 ----------------------------------------
 
 const itemsPerPage = 12;      // 因為每頁顯示幾筆資料是固定的，所以不用 ref，告訴 vue 不用來追蹤這個值。
                               // 如果之後每頁顯示的數量可以讓使用者調整，就需要改成 ref(12)
@@ -758,7 +758,7 @@ const itemsPerPage = 12;      // 因為每頁顯示幾筆資料是固定的，�
 //要讓總頁數可以追蹤 products.value.length 跟 itemsPerPage 是否有改變，並即時更新，要改成用 computed ，如果沒用，那 totalPages 只會在一開始進到網頁時跑一次，無法跟進後續的改變
 // 寫法一
 const totalPages = computed(() => 
-  Math.ceil ( products.value.length / itemsPerPage )
+  Math.ceil ( listedProducts.value.length / itemsPerPage )
 );
 
 // 寫法二
@@ -778,9 +778,8 @@ const currentPage = ref(1);
 
 function changePage(page){     //記得傳參數
   //currentPage.value = page.value;
-  currentPage.value = page;    // 記得要用 .value 才能重新更新常數的值，但是 page 是從 templete 來，為純數字，並不是 ref，所以不用再 .value
-
-  // 讓每頁只呈現 itemsPerPage = 12 的數量
+  currentPage.value = page;    // 記得要用 .value 才能重新更新常數的值，但是 page 是從 templete 來，為純數字，並不是 ref，所以不用再 .value 
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 
@@ -789,20 +788,31 @@ function changePage(page){     //記得傳參數
 function pageMinus(){
   if(currentPage.value > 1){
     currentPage.value--;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-// 因為 icon 不認識 page，所以不能這樣用  
-//  if(page.value > 1){
-//   page.value--;
-//   currentPage.value = page.value;
-//  };
-}
-
-function pageAdd(){
+  
+  // 因為 icon 不認識 page，所以不能這樣用  
+  //  if(page.value > 1){
+    //   page.value--;
+    //   currentPage.value = page.value;
+    //  };
+  }
+  
+  function pageAdd(){
     if(currentPage.value < totalPages.value){
-    currentPage.value++;
+      currentPage.value++;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
-}
+  
+  // 讓每頁只呈現 itemsPerPage = 12 的數量  ----------------------------------------
+  // 分割陣列後再傳給子組件
+  const productsPerPage = computed(() => {
+    const start = (currentPage.value -1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return listedProducts.value.slice(start, end);
+  });
+
 
 
 
@@ -880,14 +890,16 @@ function pageAdd(){
 
 <!-- 中間商品列表 -->
     <section class="list-all dp-flex">
-        <TestProductCard :products="products"/>  <!-- product 傳遞變數 products 的值，子組件接收時要用 product 來接收 -->
+        <TestProductCard 
+          :products="productsPerPage"
+          />  <!-- product 傳遞變數 listedProducts 的值，子組件接收時要用 products 來接收 -->
+          <!-- :key="currentPage" 可以在每次換頁時，讓舊組件被銷毀，重新掛載TestProductCard繪製新組件，但是這樣會讓效能變差，所以優先在 TestProductCard 加入 watch 來處理這件事，如果之後還有 bug 再多加上這個方式 -->
     </section>
 
 <!-- 下方頁碼 -->
     <nav class="nav-down fw200" >
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-left" @click="pageMinus()"/>
         <!-- 改成動態產生頁碼 -->
-        <!-- <span class="list-page click no-i18n-anim">{{ allPage }}</span> -->
         <span v-for="page in totalPages"
               :key="page" 
               class="list-page no-i18n-anim"
