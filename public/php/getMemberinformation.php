@@ -16,10 +16,9 @@
   ';
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':name', $member['name']);
+    $stmt->bindValue(':name', $member['name']);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-    header('Content-Type: application/json; charset=utf-8');
     if ($user_data) {
         echo json_encode(['success' => true, 'data' => $user_data]);
     } else {
