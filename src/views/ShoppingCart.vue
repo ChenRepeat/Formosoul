@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { RouterView, useRoute } from 'vue-router';    //因為computed需要使用到useRoute
 import Backgroundaction from '@/components/backgroundaction.vue';
-import { ref, computed } from 'vue'; //使用computed的功能，未傳參數但是有傳回值，因為route已經改變
+import { computed } from 'vue'; //使用computed的功能，未傳參數但是有傳回值，因為route已經改變
 
 
 // 步驟切換
