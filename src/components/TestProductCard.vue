@@ -78,7 +78,7 @@ onMounted(() => {
   // 遍歷每一個 Canvas DOM 元素並執行繪圖
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
-    const imageUrl = props.products[index].main_pic;
+    const imageUrl = props.products[index].images[0];
     const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
     draw(canvasEl, 230, 70, 32, finalImageUrl);
   })
