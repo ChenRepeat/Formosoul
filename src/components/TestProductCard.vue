@@ -104,7 +104,8 @@ onMounted(() => {
   */
 })
 
-//step3. 監聽 products 的變化
+//step3. 監聽 products 的變化。 
+// ＊＊現在因為陣列中有isLike，所以他改變就會讓canvas重繪，如果之後從後端取出的還是有isLike，可以先把陣列轉換成沒有isLike的陣列，作為重繪的基礎依據
 watch(
   () => props.products,
   () =>{
