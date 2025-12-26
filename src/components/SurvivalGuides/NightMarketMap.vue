@@ -8,8 +8,24 @@ import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
 import GameRingToss from "./GameRingToss.vue";
 import BasicButton from "../BasicButton.vue";
+import MapTWNightMarket from "./MapTWNightMarket.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+// ================ 鍵盤esc關閉 ================ 
+const closeCurrentModal = () => {
+    if (isGameModalOpen.value) {
+        isGameModalOpen.value = false;
+    } 
+    else if (currentInfoData.value) {
+        currentInfoData.value = null;
+    }
+};
+
+const handleKey = (e) => { 
+    if (e.key === 'Escape' || e.code === 'Escape') {
+        closeCurrentModal();
+    }
+};
 
 const isShow = ref(-1);
 const animationWelcome = ref(false)
@@ -64,7 +80,13 @@ const startGamePlay = () => {
         activeGame.value = 'ring-toss';
         isGameModalOpen.value = true; 
         currentInfoData.value = null; 
-    }
+    } 
+};
+
+const openTaiwanMap = () => {
+    activeGame.value = 'taiwan-map';
+    isGameModalOpen.value = true;    
+    currentInfoData.value = null;    
 };
 
 const csFrame = ref([
@@ -80,6 +102,9 @@ const csFrame = ref([
 const welcomeFrame = computed(()=> csFrame.value[0])
 
 onMounted (()=>{
+    window.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+
     isShow.value = 1001;
 
     setTimeout(() => {
@@ -89,7 +114,14 @@ onMounted (()=>{
     setTimeout(()=>{
         animationWelcome.value=true;
     },50)
+
 })
+
+onUnmounted (()=>{
+    window.removeEventListener('keydown', handleKey);
+    document.body.style.overflow = '';
+})
+
 
 function closeWelcomeFrame (){
     isShow.value = -1
@@ -137,7 +169,7 @@ function closeWelcomeFrame (){
                 </SurvivalTextFrame>
 <!-------------------------------------- map 連API用 區塊 -------------------------------------------->
                 <div class="map-api-wrapper"
-                @click="openModal(9)"
+                @click="openTaiwanMap"
                 >
                     <img class='map-api' src="/SurvivalGuide/map_api.png" alt="map-api">
                 </div>
@@ -184,12 +216,20 @@ function closeWelcomeFrame (){
 <!---------------------------------------- 遊戲 Modal 視窗 -------------------------------------------->
             <div v-if="isGameModalOpen" class="game-modal-overlay">
                 <div class="game-content-modal">
-                    <button class="close-game-btn" @click="isGameModalOpen = false">
-                        EXIT GAME
+                    <button class="close-game-btn"
+                    :class="{ 'is-x-style': activeGame === 'taiwan-map' }"
+                     @click="isGameModalOpen = false">
+                        <template v-if="activeGame === 'taiwan-map'">
+                            <font-awesome-icon @click="close" icon="fa-solid fa-xmark"  style="font-size:32px;"/>
+                        </template> 
+                        <template v-else>
+                            EXIT GAME
+                        </template>
                     </button>
                     <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
                     <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
                     <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
+                    <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" />
                 </div>
             </div>
          </div>
@@ -783,8 +823,8 @@ function closeWelcomeFrame (){
     border: 2px solid white;
     border-radius: 30px;
     cursor: pointer;
-    z-index: 4000; /* 確保按鈕在最上層 */
-    transition: transform 0.3s;
+    z-index: 4000; 
+    transition: transform 0.5s;
 
     &:hover {
         transform: scale(1.1);
@@ -792,6 +832,37 @@ function closeWelcomeFrame (){
         color: $color-fsWhite;
     }    
 }
+
+.is-x-style {
+
+    background-color: transparent !important; 
+    border: none !important; 
+    box-shadow: none !important;
+
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    transition: all 0.5s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+        // 兩層白色陰影，發光
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+        }
+    &:hover {
+            color: $color-fsRed;
+            transform: rotate(360deg);
+            transition: all .5s ease;
+    }
+        
+}
+
 
 .locked {
     pointer-events: none;
