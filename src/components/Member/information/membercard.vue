@@ -6,31 +6,38 @@
                 <img v-else-if="memberStore.imgURL" :src="memberStore.imgURL" alt="會員頭像">
                 <input type="file" class="thefile" @change="fileChange" :disabled="authStore.memberView !== 'cardcontain' || route.path == 'member/information'">
             </div>
+
             <div class="memberinformation">
-                <p>Name: <button
-                            class="edit-btn"
-                            :class="{ 'without': withouteditbtn}"
-                            @click="memberStore.memberData.isEditing = !memberStore.memberData.isEditing"
-                            >
-                            <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
-                        </button></p>
+                <p>Name: 
+                    <button
+                        class="edit-btn"
+                        :class="{ 'without': withouteditbtn}"
+                        @click="memberStore.memberData.isEditing = !memberStore.memberData.isEditing"
+                    >
+                        <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
+                    </button>
+                </p>
+                
                 <div v-if="memberStore.memberData.isEditing">
                     <input
                         v-model="memberStore.memberData.tempName" 
-                        @keyup.enter="saveName(memberStore.memberData)"
+                        @keyup.enter="saveName"
                         class="input-text"
                     >
-                </div> 
+                </div>
                 <h6 v-else class="fw200">{{ memberStore.memberData.name }}</h6>
+
                 <p>Wand Core:</p>
                 <h6 class="fw200">{{ memberStore.memberData.wandcore }}</h6>
+
                 <p>Enrollment Number:</p>
                 <h6 class="fw200">{{ memberStore.memberData.number }}</h6>
+
                 <p>Enrollment Since:</p>
                 <h6 class="fw200">{{ memberStore.memberData.date }}</h6>
             </div>
         </div>
-        <img :src="`${publicPath}member/icon.png`" alt="">
+        <img :src="`${publicPath}member/icon.png`" class="card-bg-icon" alt="">
     </div>
 </template>
 
@@ -40,10 +47,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { useRoute } from 'vue-router';
 import { useMemberStore } from '@/stores/member';
+
+
 const publicPath = import.meta.env.BASE_URL;
 const route = useRoute();
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
+
 const props = defineProps({
     withouteditbtn:{
         type: Boolean,
@@ -53,7 +63,9 @@ const props = defineProps({
         type:Boolean,
         default:false,
     },     
+
 });
+
 
 const loadMemberData = async () => {
     const storedUser = localStorage.getItem('user');
@@ -118,7 +130,6 @@ onMounted(() => {
     loadMemberData();
 });
 
-
 </script>
 
 <style lang="scss" scoped>
@@ -138,7 +149,20 @@ onMounted(() => {
                 &.hasscale{
             transform: scale(1.3);
         }
+        overflow: hidden;
     }
+
+    .shrimp-slot-box, .empty-slot {
+        width: 110px;
+        height: 110px;
+        border: 2px dashed #B0B0B0;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255,255,255,0.5);
+    }
+
     .membercard-wrapper > img{
         height: 240px;
         width: 240px;
@@ -148,10 +172,10 @@ onMounted(() => {
         top: 150px;
     }
     .membercard{
-        align-items: start;
         display: grid;
         grid-template-columns: 0.8fr 1.3fr;
         gap: 24px;
+        align-items: start;
     }
 
     .memberphoto{

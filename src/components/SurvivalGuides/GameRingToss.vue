@@ -2,6 +2,32 @@
   import { ref, reactive, onMounted, computed, nextTick, onUnmounted, defineEmits } from 'vue';
   import { gsap } from 'gsap';
   import BasicButton from '../BasicButton.vue';
+  import MemberLedger from "../Member/information/memberLedger.vue";
+
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
+
+const handleCheckLedger = () => {
+    showCardOverlay.value = true;
+};
+
+const checkGamePass = () => {
+    setTimeout(() => {
+        showCardOverlay.value = true;
+        setTimeout(() => {
+            activeTriggers.value.ringtoss = true;
+            setTimeout(() => {
+                passedGames.value.ringtoss = true;
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.ringtoss = true; 
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+                activeTriggers.value.ringtoss = false; 
+            }, 600);
+        }, 500);
+    }, 1000); 
+};
 
 // ================ 鍵盤esc關閉 ================ 
   const emit = defineEmits(['close-game']);
@@ -95,6 +121,9 @@
         setTimeout(() => {
           if (ringsLeft.value <= 0) {
             isGameOver.value = true;
+            if (score.value >= 100) {
+                checkGamePass();
+            }
           } else {
             isFlying.value = false;
             initRingPosition();
@@ -217,6 +246,14 @@
     updateSize();
     window.addEventListener('resize', updateSize);
     window.addEventListener('keydown', handleKey);
+
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        passedGames.value.shrimp = !!progress.shrimp; 
+        passedGames.value.dice = !!progress.dice;
+        passedGames.value.ringtoss = !!progress.ringtoss;
+    }
   });
   onUnmounted(() => {
     window.removeEventListener('resize', updateSize);
@@ -236,11 +273,25 @@
 
     <div v-else-if="isGameOver" class="overlay dp-flex">
       <div class="menu-box result-box">
-        <h2 v-if="score < 1500" class="result-title">Game Over</h2>
-        <h2 v-if="score >= 1500" class="result-title">Congraduations !!</h2>
+        <h2 v-if="score < 100" class="result-title">Game Over</h2>
+        <h2 v-if="score >= 100" class="result-title">Congraduations !!</h2>
         <h6 class="result-title">Score: {{ score }}</h6>
-        <BasicButton @click="startGame"><p>Try Again</p></BasicButton>
+        <div class="btn-group-row" style="display: flex; gap: 20px; margin-top: 20px;">
+          <BasicButton @click="startGame"><p>Try Again</p></BasicButton>
+          <BasicButton @click="handleCheckLedger" class="btn-check-ledger"><p>Check Ledger</p></BasicButton>
+        </div>
       </div>
+    </div>
+
+    <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+        <div class="card-modal">
+            <MemberLedger
+                :hasscale="false" 
+                :passedGames="passedGames" 
+                :activeTriggers="activeTriggers"
+            />
+            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+        </div>
     </div>
 
     <div v-else class="stage">
@@ -269,6 +320,36 @@
 </template>
 
 <style scoped lang="scss">
+
+.ledger-overlay-in-game {
+    position: fixed; 
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4000; 
+}
+
+.card-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 20px;
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
   .game-wrapper {   /*  遊戲底圖設定  */
     width: 100%; height: 100%;
     position: relative;
