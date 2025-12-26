@@ -70,8 +70,9 @@ const activeItemData = computed(()=>{
 const csFrame = ref([
     {
     id:'welcome',
-    text:'Welcome!',
-    description: "Feel free to look around—there are different surprises waiting to be discovered. \n Try       clicking to see what's hidden!",
+    text:'survivalguide.welcometexttitle',
+    description: "survivalguide.welcometextdescription",
+    button: "survivalguide.startbutton",
     width:'400px',
     height:'auto',
     },
@@ -115,8 +116,8 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
-                :text="welcomeFrame.text"
-                :description="welcomeFrame.description"
+                :text="$t(welcomeFrame.text)"
+                :description="$t(welcomeFrame.description)"
                 :width="welcomeFrame.width"
                 :height="welcomeFrame.height"
                 tag="h4"
@@ -131,7 +132,7 @@ function closeWelcomeFrame (){
                     <font-awesome-icon icon="fa-solid fa-eye" />
                 </template>                
                 <template #textButton>
-                    START
+                    {{ $t("survivalguide.startbutton") }}
                 </template>
                 </SurvivalTextFrame>
 
@@ -382,7 +383,7 @@ function closeWelcomeFrame (){
                 <RouterLink :to="{
                     name:'SurvivalGuide'
                 }">
-                    <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />BACK</BasicButton>
+                    <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />{{ $t("survivalguide.backbutton") }}</BasicButton>
                 </RouterLink>
             </div>
         </main>

@@ -29,7 +29,8 @@ import Payment from '@/components/policy/payment.vue'
 import BlackLogo from '@/assets/LOGO_black.svg';
 import Privacypolicy from '@/components/policy/privacypolicy.vue'
 import Returns from '@/components/policy/returns.vue'
-
+import Cookies from 'js-cookie'
+import { useAuthStore } from '@/stores/autoStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -167,6 +168,7 @@ const router = createRouter({
       meta:{ 
         logo: BlackLogo,
         bgColor:'white',
+        requiresAuth: true,
       },
       children: [
         { 
@@ -242,6 +244,17 @@ const router = createRouter({
           name: "AnnualEventManagement",
           component: () => import ('@/components/Admin/AnnualEventManagement.vue')
         },
+                {
+          path: "product-add",
+          name: "ProductAdd",
+          component: () => import ('@/components/Admin/ProductAdd.vue')
+        },
+                {
+          path: "order-details/:id",
+          name: "OrderDetails",
+          component: () => import ('@/components/Admin/OrderDetails.vue'),
+          props: true
+        },
       ],
     },
   ],
@@ -259,6 +272,34 @@ scrollBehavior(to, from, savedPosition) {
     })
   }
 })
+
+router.beforeEach((to, from, next) => {
+    // 從 Cookie 中讀取 token 與 userRole
+    const isLogin = Cookies.get('token')
+    // const isAdmin = Cookies.get('userRole') === 'admin'
+
+    // console.log(`從 ${from.path} 跳轉到 ${to.path}`)
+    const authStore = useAuthStore();
+    if (to.meta.requiresAuth && !isLogin) {
+        alert('請先登入')
+        // authStore.openLoginModal();
+        // authStore.setmemberView('login');
+        // authStore.setloginView('loginpage');
+        return next('/')
+    }
+
+    // if (to.meta.requiresAdmin && !isAdmin) {
+    //     alert('權限不足')
+    //     return next('/')
+    // }
+
+    if (to.path === '/login' && isLogin) {
+        return next('/')
+    }
+
+    next();
+})
+
 router.beforeEach((to, from, next) => {
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual'; 

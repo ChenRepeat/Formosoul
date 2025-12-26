@@ -30,12 +30,10 @@
 
         <div class="coregame-right">
             <div class="coregame-guide">
-                <h5>Ritual Guidance</h5>
-                <p>To discover your destined core, you must sense this 'Herbal Core Cabinet.' <br> 
-                    Each drawer seals a unique core ingredient.  
-                    Simply trust your intuition and click a single drawer—your soul will make the choice.
-                    Carefully explore the drawer that resonates with you.<br> <br>
-                    Remember, you have only one chance to activate the sensing.
+                <h5>{{ $t('coreselection.gameGuide')}}</h5>
+                <p>{{ $t('coreselection.gameIntro1')}}<br> 
+                    {{ $t('coreselection.gameIntro2')}}<br> <br>
+                    {{ $t('coreselection.gameIntro3')}}
                 </p>
             </div>
 

@@ -2,6 +2,32 @@
   import { ref, reactive, onMounted, computed, nextTick, onUnmounted, defineEmits } from 'vue';
   import { gsap } from 'gsap';
   import BasicButton from '../BasicButton.vue';
+  import MemberLedger from "../Member/information/memberLedger.vue";
+
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
+
+const handleCheckLedger = () => {
+    showCardOverlay.value = true;
+};
+
+const checkGamePass = () => {
+    setTimeout(() => {
+        showCardOverlay.value = true;
+        setTimeout(() => {
+            activeTriggers.value.ringtoss = true;
+            setTimeout(() => {
+                passedGames.value.ringtoss = true;
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.ringtoss = true; 
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+                activeTriggers.value.ringtoss = false; 
+            }, 600);
+        }, 500);
+    }, 1000); 
+};
 
 // ================ 鍵盤esc關閉 ================ 
   const emit = defineEmits(['close-game']);
@@ -46,24 +72,28 @@
   // 生成目標物
   const createGridTargets = () => {
     const newTargets = [];
-    const colors = ['#FF5252', '#FFD740', '#64FFDA'];
+    const imgUrl = [
+      `${import.meta.env.BASE_URL}SurvivalGuide/RingToss/RingTossCandy.png`,
+      `${import.meta.env.BASE_URL}SurvivalGuide/RingToss/RingTossBear.png`,
+      `${import.meta.env.BASE_URL}SurvivalGuide/RingToss/RingTossBottle.png`
+    ];
     const centerX = containerSize.w / 2;
     const startY = containerSize.h * 0.17;
 
-    for (let r = 0; r < config.rows; r++) {
-      const isOddRow = r % 2 === 1;
+    for (let row = 0; row < config.rows; row++) {
+      const isOddRow = row % 2 === 1;
       const itemsInRow = isOddRow ? config.cols + 1 : config.cols;
       const rowWidth = (itemsInRow - 1) * config.colGap;
       const rowStartX = centerX - (rowWidth / 2);
 
-      for (let c = 0; c < itemsInRow; c++) {
+      for (let col = 0; col < itemsInRow; col++) {
         newTargets.push({
-          id: `${r}-${c}`,
-          x: rowStartX + (c * config.colGap),
-          y: startY + (r * config.rowGap),
-          row: r,
-          color: colors[r % colors.length],
-          score: (config.rows - r) * 100,
+          id: `${row}-${col}`,
+          x: rowStartX + (col * config.colGap),
+          y: startY + (row * config.rowGap),
+          row: row,
+          img: imgUrl[row % imgUrl.length],
+          score: (config.rows - row) * 100,
           hit: false
         });
       }
@@ -91,6 +121,9 @@
         setTimeout(() => {
           if (ringsLeft.value <= 0) {
             isGameOver.value = true;
+            if (score.value >= 100) {
+                checkGamePass();
+            }
           } else {
             isFlying.value = false;
             initRingPosition();
@@ -169,11 +202,8 @@
   });
 
   const getTargetBodyStyle = (t) => ({
-    backgroundColor: t.color,
     width: `${config.objWidth}px`,
     height: `${config.objHeight}px`,
-    borderRadius: '20px',
-    boxShadow: `0 8px 20px rgba(0,0,0,0.5)`
   });
 
   const aimLineStyle = computed(() => {
@@ -216,6 +246,14 @@
     updateSize();
     window.addEventListener('resize', updateSize);
     window.addEventListener('keydown', handleKey);
+
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        passedGames.value.shrimp = !!progress.shrimp; 
+        passedGames.value.dice = !!progress.dice;
+        passedGames.value.ringtoss = !!progress.ringtoss;
+    }
   });
   onUnmounted(() => {
     window.removeEventListener('resize', updateSize);
@@ -227,19 +265,41 @@
        @mousedown="onDragStart" @mousemove="onDragging" @mouseup="onDragEnd">
     
     <div v-if="!gameStarted" class="overlay dp-flex">
-      <div class="menu-box">
-        <h1 class="title">Ring Toss</h1>
-        <BasicButton @click="startGame"><p>Start</p></BasicButton>
+      <div class="menu-box dp-flex-col">
+        <h1 class="title">{{$t("nightmarket.items.ring-toss.title")}}</h1>
+        <h5>{{$t("nightmarket.items.ring-toss.rule1")}}</h5>
+        <h6>{{$t("nightmarket.items.ring-toss.rule2")}}</h6>
+        <h5>{{$t("nightmarket.items.ring-toss.rule3")}}</h5>
+        <h6>{{$t("nightmarket.items.ring-toss.rule4")}}</h6>
+        <h5>{{$t("nightmarket.items.ring-toss.rule5")}}</h5>
+        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule6")}}</h6>
+        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule7")}}</h6>
+        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule8")}}</h6>
+        <BasicButton @click="startGame" class="startBtn"><p>{{$t("nightmarket.items.ring-toss.buttonText")}}</p></BasicButton>
       </div>
     </div>
 
     <div v-else-if="isGameOver" class="overlay dp-flex">
       <div class="menu-box result-box">
-        <h2 v-if="score < 1500" class="result-title">Game Over</h2>
-        <h2 v-if="score >= 1500" class="result-title">Congraduations !!</h2>
+        <h2 v-if="score < 100" class="result-title">Game Over</h2>
+        <h2 v-if="score >= 100" class="result-title">Congraduations !!</h2>
         <h6 class="result-title">Score: {{ score }}</h6>
-        <BasicButton @click="startGame"><p>Try Again</p></BasicButton>
+        <div class="btn-group-row dp-flex">
+          <BasicButton @click="startGame" class="btn-white"><p>Try Again</p></BasicButton>
+          <BasicButton @click="handleCheckLedger" class="btn-white"><p>Check Ledger</p></BasicButton>
+        </div>
       </div>
+    </div>
+
+    <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+        <div class="card-modal">
+            <MemberLedger
+                :hasscale="false" 
+                :passedGames="passedGames" 
+                :activeTriggers="activeTriggers"
+            />
+            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+        </div>
     </div>
 
     <div v-else class="stage">
@@ -249,7 +309,7 @@
            :ref="el => targetRefs[t.id] = el"
            class="target-object" :style="getTargetStyle(t)">
         <div class="target-body dp-flex" :style="getTargetBodyStyle(t)">
-          <p class="score-text">{{ t.score }}</p>
+          <img :src="t.img" alt="" srcset="">
         </div>
       </div>
 
@@ -259,13 +319,45 @@
     <div class="game-ui">
       <div class="score-tag"><h6>SCORE: {{ score }}</h6></div>
       <div class="ring-stock dp-flex">
-        <div v-for="n in totalRings" :key="n" class="ring-mini-icon" :class="{ 'is-spent': n > ringsLeft }"></div>
+        <div v-for="n in totalRings" :key="n" class="ring-mini-icon">
+          <img src="/SurvivalGuide/RingToss/Ring.png" alt="" :class="{ 'is-spent': n > ringsLeft}">
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+
+.ledger-overlay-in-game {
+    position: fixed; 
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4000; 
+}
+
+.card-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 20px;
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
   .game-wrapper {   /*  遊戲底圖設定  */
     width: 100%; height: 100%;
     position: relative;
@@ -287,8 +379,9 @@
     position: absolute;
     width: 100px;
     height: 100px;
-    border: 10px solid $color-fsGold;
-    border-radius: 50%;
+    background-image: url('/SurvivalGuide/RingToss/Ring.png');
+    background-size: contain;
+    background-repeat: no-repeat;
     pointer-events: none;
     z-index: 2000;
   }
@@ -297,8 +390,13 @@
     transition: opacity 0.4s;
   }
   .target-body {
-    align-items: center;
-    justify-content: center;
+
+    img{
+      height: auto;
+      width: 100%;
+      object-fit: contain;
+      margin: 0 auto;
+    }
   }
   .score-text { color: $color-fsTitle;}
   .aim-line {
@@ -323,10 +421,14 @@
   .ring-mini-icon { 
     width: 24px;
     height: 24px; 
-    border: 3px solid #f1c40f; 
-    border-radius: 50%; 
+    background-image: url('/SurvivalGuide/RingToss/Ring.png');
     transition: 0.3s; 
-    &.is-spent { opacity: 0.1; transform: scale(0.8); }
+    
+    img{
+      width: 100%;
+      height: auto;
+      &.is-spent { opacity: 0.4; transform: scale(0.8); }
+    }
   }
 
   .overlay { 
@@ -340,9 +442,41 @@
     backdrop-filter: blur(8px);
   }
   .menu-box {
-    text-align: center;
-    color:  $color-fsTitle;
+    color:  $color-fsWhite;
+    width: 60%;
+    align-items: center;
+
+    
+    h5,h6{
+      text-align: left;
+    }
+    h5{
+      padding: 16px 0;
+    }
+    h6{
+      text-indent:32px;
+    }
+    .startBtn{
+      align-self: center;
+      margin-top: 16px;
+    }
+    &.result-box{
+      h6,h2{
+        text-align: center;
+        text-indent: unset;
+      }
+      
+    }
   }
-  .title {color: $color-fsGold;}
+  .btn-group-row{
+    justify-content: center;
+    gap: 5%;
+    margin-top: 5%;
+    button{
+      width: 200px;
+    }
+    p{text-align: center;}
+  }
+  .title {color: $color-fsGold;text-align: center;}
   .result-title { color: #ff5252;}
 </style>

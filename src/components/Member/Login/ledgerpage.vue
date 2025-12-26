@@ -31,6 +31,7 @@ import BasicButton from '@/components/BasicButton.vue';
 import { useAuthStore } from '@/stores/autoStore';
 import Pointcard from '../information/pointcard.vue';
 import router from '@/router';
+import { useMemberStore } from '@/stores/member';
 
     const props = defineProps({
         withoutbtn:{
@@ -54,12 +55,16 @@ import router from '@/router';
             default:false,
         },
     });
+    const memberStore = useMemberStore();
     const authStore = useAuthStore();
     function handleEmbark() {
-        authStore.closeLoginModal();    
+        authStore.closeLoginModal();
+        memberStore.data_uptime();
+
     };
 
     function goback(){
+        memberStore.data_uptime();
         authStore.closeLoginModal();    
         router.push({ name: 'Information' });
         if(!authStore.isLoginModalOpen){

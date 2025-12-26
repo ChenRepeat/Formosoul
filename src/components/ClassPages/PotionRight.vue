@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
 import BasicButton from '../BasicButton.vue';
-// import { faDisplay } from '@fortawesome/free-solid-svg-icons';
 import { gsap } from 'gsap/gsap-core';
 import { Draggable } from 'gsap/Draggable';
 import { potions } from '../ClassPages/potions'

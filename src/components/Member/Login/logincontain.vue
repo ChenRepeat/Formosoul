@@ -114,12 +114,17 @@
 
         try {
             const response = await loginAPI(email.value, password.value, name.value);
-            if(response.success){
+            if(response.success && response.user.isFirstLogin){
                 // 這邊就保存到 store
-                authStore.setToken(response.token)
-                authStore.setUser(response.user)
+                authStore.setToken(response.token);
+                authStore.setUser(response.user);
                 // authStore.closeLoginModal();
                 authStore.setmemberView('membercard');
+            }else if(response.success && !response.user.isFirstLogin){
+                authStore.setToken(response.token);
+                authStore.setUser(response.user);
+                authStore.closeLoginModal();
+                // authStore.setmemberView('membercard');              
             }else{
                 errorMessage.value = response.message;
             }

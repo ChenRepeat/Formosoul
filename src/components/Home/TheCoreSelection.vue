@@ -38,11 +38,11 @@ function showCore(){
                  function 需要是因為那是 js -->
             <main class="coregame-dock dp-flex">
                 <div class="coregame-left">
-                    <h3>The Core Selection</h3>
-                    <p>Welcome to Formosoul Institute!<br>
-                        <span class="fw200">「 The Wand Chooses the Wizard. 」</span> <br>
-                        When your Soul achieves perfect balance with the material’s Essence, the spirit will reach out—signaled by warmth, tremor, or light. <br>
-                        This core will then become the soul of your wand, accompanying your magical journey.</p>
+                    <h3>{{ $t('coreselection.thecoreselection')}}</h3>
+                    <p>{{ $t('coreselection.welcome')}}<br>
+                        <span class="fw200">{{ $t('coreselection.intro1')}}</span> <br>
+                        {{ $t('coreselection.intro2')}} <br>
+                        {{ $t('coreselection.intro3')}}</p>
         
                 </div>
                 <div class="coregame-right dp-flex">

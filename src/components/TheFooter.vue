@@ -1,13 +1,54 @@
 <script setup>
 import siteLogo from '@/assets/LOGO_white_footer.svg'
+import { useclassesStore } from '@/stores/classes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { onMounted, onUnmounted, ref } from 'vue';
+
+const turnPage =(num)=>{
+  useclassesStore().setPage(num);
+}
+const vWidth = ref(0)
+const toMotorPage = ref(2);
+const toAnimaPage = ref(4);
+const toHistoryPage = ref(5);
+const toCharmPage = ref(9);
+const toPotionPage = ref(10);
+const toDivitionPage = ref(11);
+const newVSize=()=>{
+ vWidth.value = window.innerWidth;
+   if(vWidth.value < 770){
+    toMotorPage.value = 3;
+    toAnimaPage.value = 7;
+    toHistoryPage.value = 10;
+    toCharmPage.value = 17;
+    toPotionPage.value = 19;
+    toDivitionPage.value = 21;
+  }else{
+    toMotorPage.value = 2;
+    toAnimaPage.value = 4;
+    toHistoryPage.value = 5;
+    toCharmPage.value = 9;
+    toPotionPage.value = 10;
+    toDivitionPage.value = 11;
+  }
+}
+
+
+  onMounted(()=>{
+    newVSize();
+    window.addEventListener('resize', newVSize);
+  })
+  
+  onUnmounted(()=>{
+    window.addEventListener('resize', newVSize);
+  })
 </script>
 
 <template>
   <main class="footer-case">
     <section class="footer-outer-case dp-flex">
       <div class="footer-icons-case dp-flex-col">
-        <img :src="siteLogo" alt="Logo" class="logo-style" />
+        <router-link to="/" class="no-i18n-anim"><img :src="siteLogo" alt="Logo" class="logo-style" /></router-link>
         <div class="footer-social-link dp-flex">
           <a href="https://github.com/ChenRepeat/Formosoul" class=" no-i18n-anim"
             ><font-awesome-icon
@@ -67,25 +108,25 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
-                <router-link to="/classes"><h5>{{$t('nav.classes')}}</h5></router-link>
+                <router-link to="/classes" @click="turnPage(0)"><h5>{{$t('nav.classes')}}</h5></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.motorClass')}}</p></a>
+                <router-link to="/classes" @click="turnPage(toMotorPage)"><p>{{$t('classes.motorClass')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.animalTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(toAnimaPage)"><p>{{$t('classes.animalTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.historyTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(toHistoryPage)"><p>{{$t('classes.historyTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.charmTitle')}}</p></a>
+                <router-link  to="/classes" @click="turnPage(toCharmPage)"><p>{{$t('classes.charmTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.potionTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(toPotionPage)"><p>{{$t('classes.potionTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.divinationTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(toDivitionPage)"><p>{{$t('classes.divinationTitle')}}</p></router-link>
               </li>
               <li></li>
             </ul>
@@ -160,9 +201,8 @@ hr {
   position: relative;
 
   @media screen and (max-width: 1200px) {
-        width: 95%;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 32px;
     align-items: center;
   }
@@ -172,6 +212,12 @@ hr {
   width: 1200px;
   gap: 100px;
   justify-content: center;
+  @media screen and (max-width: 1200px) {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 32px;
+    align-items: center;
+  }
 }
 .footer-inner-case {
   justify-content: start;
@@ -216,8 +262,21 @@ hr {
 .tibame-policy {
   text-align: center;
   font-size: 12px;
-  color: #b0b0b0;
+  color: $color-fsCaption;
   margin-top: 60px;
+  a{
+    transition: all 0.3s ease;
+    &:visited {
+      color: $color-fsCaption;
+    }
+    &:hover {
+      color:  $color-fsGold300;
+      text-decoration: underline;
+    }
+    &:active {
+      color: $color-fsGold;
+    }
+  }
 }
 .trim-case-policy,
 .trim-case-link {

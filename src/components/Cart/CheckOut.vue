@@ -2,11 +2,90 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '../../components/BasicButton.vue';
 import { useRouter } from 'vue-router';
+import OrderList from '../OrderList.vue';
+import { ref } from 'vue'
 
 const router = useRouter();
 
 function goOrder(){
     router.push('/shoppingcart/ordersuccess');
+}
+
+// 信用卡填完跳轉下一格
+const cardNum = ref([]);
+const cardMonth = ref(null);
+const cardYear = ref(null);
+const cardCode = ref(null);
+const cardName = ref(null);
+
+/*
+//這個寫法要寫好幾個function來進行跳轉
+function nextInput( e, index ){
+    //檢查內容是否為數字
+
+    //檢查內容的長度
+    if(e.target.value.length === 4 ){    
+        //檢查是否為最後一格
+        if(index < 3){
+            cardNum.value[ index + 1 ].focus();
+        }else{
+            cardMonth.value.focus();
+        }
+    }
+}
+*/
+
+//用一個 function 統一處理跳轉
+function goNext( e, maxlength, nextOne ){
+
+    // 先過濾輸入的內容是否為數字，但是排除姓名欄
+    // 因為在目前情況下，剛好有限制長度的欄位皆為數字，所以一定會輸入限制長度，而長度必大於0，所以可以用這件事來進行排除
+    if( maxlength > 0 ){
+        //e.target.value = e.target.value.replace(/[^\d]/g, '');
+        e.target.value = e.target.value.replace(/\D/g, '');
+        // replace() 是字串的方法，因為 input 的內容會被視為字串傳回來，所以可以使用字串的方法
+        // replace(舊值, 取代舊值的新值)
+
+        /*
+        /[^\d]/g 正則表達式
+        /  / ：中間寫規則
+        g    ：修飾符，代表規則的備註 / 設定 => g代表全部都要找出來，如果沒有 g，找到一個之後就會停止
+        \d   ：代表 數字 (0-9)。
+        \D   ：代表 非數字 (0-9)。
+        [^  ]：代表 除了... 以外。
+        ^    ：代表 開頭為...
+        */
+    }
+
+    if(e.target.value.length === maxlength){
+        //nextOne.value.focus();  因為nextOne在目前的情況，有可能是 陣列裡的某一個 或 單獨的 Ref，所以這樣寫會有 bug，跑不動
+
+        // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
+        if(nextOne){
+            // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
+            // nextOne.focus 代表 檢查有沒有這個功能 => 回傳函式本身 (True) 或 undefined (False)。
+            // nextOne.focus() 代表 現在立刻執行這個功能！ 
+            const target = nextOne.focus ? nextOne : nextOne.value;
+            // step3 程式保護，避免報錯，網頁會死掉
+            // ? : 萬一沒有就停在這邊，不要繼續執行（ JavaScript (ES2020)的語法糖 ）
+            target?.focus?.();
+        }
+    }
+};
+
+
+function goBack(e, previousOne){
+    if(e.target.value.length === 0){
+
+        // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
+        if(previousOne){
+
+            // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
+            const target = previousOne.focus ? previousOne : previousOne.value;
+            // step3 程式保護，避免報錯，網頁會死掉
+            target?.focus?.();
+        }
+    }
 }
 
 
@@ -16,111 +95,71 @@ function goOrder(){
     <section class="check-dock">
         <!-- 內容 -->
         <section class="my-cart-dock">
-            <h5>Order Details</h5>
-            <div class="orderdetail-total dp-flex-col">
-                <div class="total-price dp-flex fw200">
-                    <h6>Price：</h6>
-                    <h6>NT$ 380</h6>
-                </div>
 
-                <div class="total-qty dp-flex fw200">
-                    <h6>Quantity：</h6>
-                    <h6>2</h6>
-                    <h6>item(s)</h6>
-                </div>
-            </div>
+            <OrderList 
+                :showCart="false"
+                :showTitle="false"
+                :showTotal="false"
+            ></OrderList>
             
-            <div class="orderdetail-body dp-flex">
-                <div class="item-image">
-                    <img src="../../../public/Shop/2.png" alt="">
-                </div>
-                <h6 class="item-name">Bamboo Helicopter</h6>
-                <div class="item-qty dp-flex">
-                    <h6>1</h6>
-                    <h6>item(s)</h6>
-                </div>
-                <h6 class="item-price">NT$ 190</h6>
-                
-                
-            </div>
-            <hr class="item-bar">
-
-            <div class="orderdetail-body dp-flex">
-                <div class="item-image">
-                    <img src="../../../public/Shop/2.png" alt="">
-                </div>
-                <h6 class="item-name">Bamboo Helicopter</h6>
-                <div class="item-qty dp-flex">
-                    <h6>1</h6>
-                    <h6>item(s)</h6>
-                </div>
-                <h6 class="item-price">NT$ 190</h6>
-                
-                
-            </div>
-            <hr class="item-bar">
-
-            <p class="warning-text fw200">Import duties are charged once the parcel reaches its destination country. These charges must be paid by the recipient of the parcel. We have no control over these charges and we can’t tell you what the cost would be, as customs policies and import duties vary widely from country to country. It might be a good idea to contact your local customs office for more information on the current charges.</p>
-  
         </section>
         <!-- 付款 -->
         <section class="payment-total dp-flex">
             <div class="check-payment">
-                <h5>Payment & Shipping</h5>
+                <h5>{{$t('shoppingcart.paymentShipping')}}</h5>
                 <hr>
-                <p>Country</p>
+                <p>{{$t('shoppingcart.country')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>Taiwan</option>
-                        <option class="list-option">Japan</option>
-                        <option class="list-option">Singapore</option>
-                        <option class="list-option">The Netherlands</option>
-                        <option class="list-option">Ireland</option>
+                        <option class="list-option">{{$t('shoppingcart.taiwan')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.japan')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.singapore')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.netherlands')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.ireland')}}</option>
                     </select>
                 </nav>
-                <p>Delivery</p>
+                <p>{{$t('shoppingcart.delivery')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>Home Delivery</option>
+                        <option class="list-option">{{$t('shoppingcart.homeDelivery')}}</option>
                     </select>
                 </nav>
-                <p>Payment</p>
+                <p>{{$t('shoppingcart.payment')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>Credit Card</option>
-                        <option class="list-option">Apple PAY</option>
-
+                        <option class="list-option">{{$t('shoppingcart.card')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.applePAY')}}</option>
                     </select>
                 </nav>
             </div>
             <div class="check-total">
-                <h5>Total Details</h5>
+                <h5>{{$t('shoppingcart.totalDetails')}}</h5>
                 <hr>
 
                 <div class="check-total-dock">
                     <div class="check-price dp-flex">
-                        <p>Price：</p>
+                        <p>{{$t('shoppingcart.price')}}：</p>
                         <p>NT$ 380</p>
                     </div>
                     <div class="check-discount dp-flex">
-                        <p>Discount：</p>
+                        <p>{{$t('shoppingcart.discount')}}：</p>
                         <p>－ NT$ 60</p>
                     </div>
                     <div class="check-shippingfee dp-flex">
-                        <p>Shipping Fee：</p>
+                        <p>{{$t('shoppingcart.shippingFee')}}：</p>
                         <p>NT$ 80</p>
                     </div>
                     <hr>
                     <div class="check-total-payment dp-flex">
-                        <h5>Total：</h5>
+                        <h5>{{$t('shoppingcart.total')}}：</h5>
                         <h5>NT$ 400</h5>
                     </div>
                 </div>
                 <BasicButton class="btn-blue-fill btn-fix-width btn-coupon">
-                    Select COUPON
+                    {{$t('shoppingcart.btn-selectCoupon')}}
                 </BasicButton>
 
             </div>
@@ -133,24 +172,40 @@ function goOrder(){
             
             <!-- 信用卡資料 -->
             <section class="creditcard-info">
-                <h5>Credit Card<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
+                <h5>{{$t('shoppingcart.creditCard')}}<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
                 <hr>  
                 <div class="card-dock dp-flex">
-                    <div class="card-left">
+                    <div class="card-left dp-flex-col">
 
                         <div class="card-num">
-                            <p>Card Number</p>
-                            <input class="input-text" type="text" required>
+                            <p>{{$t('shoppingcart.cardNumber')}}</p>
+                            <!-- 改用 v-for 產生輸入框，方便接下來的輸入框跳轉 -->
+                            <span v-for="(num, index) in 4">
+                                <input class="input-text" type="text" maxlength="4" required
+                                        ref="cardNum" 
+                                        @input="goNext($event, 4, ( index < 3 ? cardNum[index + 1] : cardMonth))"
+                                        @keydown.delete="goBack($event, ( index > 0 ? cardNum[index - 1] : cardNum[0]))"
+                                        >  <!-- maxlength 限制只能填4個
+                                                $event 因為還要傳遞 index 值，所以不能省略-->
+                                <span v-if="index < 3">－</span>
+                            </span>
+
+                            <!-- <input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
-                            －<input class="input-text" type="text" required>
+                            －<input class="input-text" type="text" required> -->
                         </div>
 
                         <div class="card-date-type dp-flex">
                             <div class="card-date">
-                                <p>Expiration Date</p>
-                                <input class="input-text" type="text" placeholder="mm" required>
-                                ／<input class="input-text" type="text" placeholder="yy" required>
+                                <p>{{$t('shoppingcart.expirationDate')}}</p>
+
+                                <input ref="cardMonth" class="input-text" type="text" placeholder="mm" maxlength="2" required
+                                        @input="goNext($event, 2, cardYear)"
+                                        @keydown.delete="goBack($event, cardNum[3])">
+                                ／<input ref="cardYear" class="input-text" type="text" placeholder="yy" maxlength="2" required
+                                        @input="goNext($event, 2, cardCode)"
+                                        @keydown.delete="goBack($event, cardMonth)">
                             </div>
     
                             <div class="card-type">
@@ -162,14 +217,18 @@ function goOrder(){
                     </div>
                     
                     
-                    <div class="card-right">
+                    <div class="card-right dp-flex-col">
                         <div class="card-code dp-flex">
-                            <p>Security code</p>
-                            <input class="input-text" type="text" required>
+                            <p>{{$t('shoppingcart.securityCode')}}</p>
+                            <input ref="cardCode" class="input-text" type="text" maxlength="3" required
+                                    @input="goNext($event, 3, cardName)"
+                                    @keydown.delete="goBack($event, cardYear)">
                         </div>
                         <div class="card-name">
-                            <p>AUTHORIZED SIGNATURE</p>
-                            <input class="input-text" type="text" required>
+                            <p>{{$t('shoppingcart.authorized')}}</p>
+                            <input ref="cardName" class="input-text" type="text" required
+                                    @input="goNext($event, 0, )"
+                                    @keydown.delete="goBack($event, cardCode)">
                         </div>
 
                         
@@ -181,23 +240,23 @@ function goOrder(){
 
             <!-- 收件資料 -->
             <section class="received-info">
-                <h5>Recipient Information</h5>
+                <h5>{{$t('shoppingcart.recipientInformation')}}</h5>
                 <hr>
                 <div class="received-info-dock">
 
                     <div class="received-name-phone dp-flex">
                         <div class="received-name">
-                            <p>Name</p>
+                            <p>{{$t('shoppingcart.name')}}</p>
                             <input class="input-text" type="text" required>
                         </div>
                         <div class="received-phone">
-                            <p>Phone Number</p>
+                            <p>{{$t('shoppingcart.phoneNumber')}}</p>
                             <input class="input-text" type="text" required>
                         </div>
                     </div>
                     <div class="received-address dp-flex">
                         <div>
-                            <p>Address</p>
+                            <p>{{$t('shoppingcart.address')}}</p>
                             <input class="input-text" placeholder="Country" type="text" required>
                         </div>
                         <div>
@@ -208,12 +267,12 @@ function goOrder(){
 
                     <label class="checkbox-dock dp-flex">
                         <input class="input-checkbox" type="checkbox" name="" id="">
-                        <span>Remember delivery address.</span>
+                        <span>{{$t('shoppingcart.record')}}</span>
                     </label>
 
                     <textarea 
                     class="input-text input-textarea " 
-                    placeholder="Please leave a note here for any special requests regarding your purchase." 
+                    :placeholder="$t('shoppingcart.remark')" 
                     type="textarea"
                     rows="3"
                     ></textarea>
@@ -226,7 +285,7 @@ function goOrder(){
             <!-- order -->
             <div>  <!-- 這邊用@click的話，會直接執行，表單的sumbit的檢查必填功能會被跳過，所以要改寫在表單的submit功能的預設事件後執行想執行的動作 -->
                 <BasicButton class="btn-yellow-fill btn-fix-width btn-order" type="submit">
-                    ORDER
+                    {{$t('shoppingcart.order')}}
                 </BasicButton>
             </div>
         </form>
@@ -244,98 +303,6 @@ function goOrder(){
             0 0px 10px rgba(0,0,0,0.5);
         backdrop-filter: blur(70px);  
         border-radius: 10px;    
-        margin-top: 40px;
-        padding: 60px 40px 80px;
-        text-align: center;
-    }
-
-    .my-cart-dock>h5{
-        margin-bottom: 60px;
-    }
-
-    .orderdetail-total{
-        border: 0.5px solid $color-fsWhite;
-        margin-bottom: 20px;
-    }
-
-    .total-price, .total-qty {
-        justify-content: center;
-        margin: 8px 0;
-    }
-
-    .total-price>h6:last-of-type{
-        color: $color-fsRed;
-    }
-
-    .total-qty>h6:nth-of-type(2){
-        margin-right: 8px;
-    }
-
-
-
-
-
-    //body
-    .orderdetail-body{
-        padding: 0 20px;
-        align-items: center;
-    }
-
-    .item-bar{
-        margin: 20px 0;
-        border: none;
-        height: 0.5px;
-        background-color: $color-fsWhite;
-    }
-
-    .item-bar:last-of-type{
-        height: 1px;
-    }
-
-    .item-image{
-        width: 100px;
-        height: 100px;
-
-        flex-grow: 0;
-    }
-
-    .item-image>img{
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-    }
-
-    .item-name{
-        flex-basis: 0;
-        flex-grow: 4;
-    }
-
-    .item-price{
-        flex-basis: 0;
-        flex-grow: 2;
-    }
-
-    .item-qty{
-        justify-content: center;
-        align-items: center;
-
-        flex-basis: 0;
-        flex-grow: 3;
-    }
-
-    .item-qty-icon, .item-icon-delete{
-        font-size: 2rem;
-        cursor: pointer;
-    }
-
-    .item-qty>h6{
-        text-align: center;
-        margin-right:8px;
-    }
-
-    .warning-text{
-        margin-top: 60px;
-        color: $color-fsCaption;
     }
 
     //背景設定
@@ -436,7 +403,7 @@ function goOrder(){
     }
 
     .card-dock{
-        padding: 20px 20px 0;
+        padding: 50px 20px 30px;
         gap: 20px;
         flex-shrink: 0;
         justify-content: space-around;
@@ -444,10 +411,12 @@ function goOrder(){
 
     .card-left, .card-right{
         background-color: $color-fsContent;
-        width: 360px;
+        min-width: 360px;
+        width: 40%;
         aspect-ratio: 3/1.8;
         border-radius: 20px;
-        padding: 20px;   
+        padding: 28px;   
+        justify-content: space-around;
     }
 
     .card-left input, .card-right input{
@@ -464,6 +433,11 @@ function goOrder(){
         border-bottom: 0.5px solid $color-fsWhite;
         margin: 8px 0 16px;
         text-align: center;
+        & >span{
+            span{
+                margin: 0 4px;
+            }
+        }
     }
 
     .card-date-type{
@@ -488,7 +462,8 @@ function goOrder(){
     .card-code input{
         background-color: $color-fsWhite;
         border: 1px solid $color-fsCaption;
-        width: 150px;
+        width: 60%;
+        //min-width: 150px;
     }
     
     .card-name input{
@@ -541,6 +516,13 @@ function goOrder(){
     .btn-order{
         display: block;
         margin: 100px auto 0;
+    }
+
+    // RWD------------------------------------- 
+    @media screen and (max-width: 1200px) {
+        .card-left, .card-right{
+            padding: 20px;   
+        }
     }
 
 </style>

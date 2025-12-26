@@ -1,11 +1,17 @@
 <script setup>
+import Bowl from './bowl.vue';
+import Dice from './Dice.vue';
+import Hand from './Hand.vue';
+import HandBack from './HandBack.vue';
+import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
+import MemberLedger from "../Member/information/memberLedger.vue";
+import IconDice from '@/components/icons/SVG/IconDice.vue';
     
-    import Bowl from './bowl.vue';
-    import Dice from './Dice.vue';
-    import Hand from './Hand.vue';
-    import HandBack from './HandBack.vue';
-    import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
-    
+
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
 
 // ================ 鍵盤esc關閉 ================ 
 const emit = defineEmits(['close-game']);
@@ -261,7 +267,30 @@ const checkWinner = () => {
   }
 
   finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
+  if (isWin) {
+    setTimeout(() => {
+        showCardOverlay.value = true;
+        
+        setTimeout(() => {
+            activeTriggers.value.dice = true;
+
+            setTimeout(() => {
+                passedGames.value.dice = true;
+
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.dice = true; 
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+
+                activeTriggers.value.dice = false;
+            }, 600);
+        }, 500);
+    }, 1000);
+  }
 }
+
+const handleCheckLedger = () => {
+    showCardOverlay.value = true;
+};
 
 'localhost/tjd103/public/php/test.php'
 
@@ -285,6 +314,14 @@ onMounted(()=>{
   window.addEventListener('mousedown', handleMouseDown)
   window.addEventListener('mouseup', handleMouseUp)
   window.addEventListener('keydown', handleKey);
+
+  const saved = localStorage.getItem('game_progress');
+  if (saved) {
+    const progress = JSON.parse(saved);
+    passedGames.value.shrimp = !!progress.shrimp;
+    passedGames.value.dice = !!progress.dice;
+    passedGames.value.ringtoss = !!progress.ringtoss;
+  }
 })
 
 onUnmounted (() => {
@@ -387,12 +424,54 @@ onUnmounted (() => {
                         CHECK YOUR LEDGER
                     </button>
                 </div>
+
+                <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+                    <div class="card-modal">
+                        <MemberLedger
+                            :hasscale="false" 
+                            :passedGames="passedGames" 
+                            :activeTriggers="activeTriggers"
+                        />
+                        <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+                    </div>
+                </div>
             </div>
         </div>
 </template>
 
 
 <style lang="scss" scoped>
+
+.ledger-overlay-in-game {
+    position: fixed; // 改用 fixed 確保蓋住整個螢幕
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; // 必須比原本的 result modal (2000) 還高
+}
+
+.card-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 20px;
+    background-color: #ff6b81;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
 
     /* 移除了 .drop-wrapper 樣式 */
 

@@ -10,12 +10,11 @@ import { RouterLink } from 'vue-router';
             <font-awesome-icon class="success-icon" icon="fa-solid fa-check-double" />
         </div>
 
-        <h3>Your order has been received !</h3>
+        <h3>{{$t('shoppingcart.ordersuccess')}}</h3>
 
         <p class="success-text">
-            To check your order, please visit the
-            <router-link to="/member/orderslist/orderscontain" class="success-orderlist">Member Center</router-link>
-            .
+            {{$t('shoppingcart.orderText1')}}
+            <router-link to="/member/orderslist/orderscontain" class="success-orderlist">{{$t('shoppingcart.orderText2')}}</router-link>
         </p>
 
     </section>

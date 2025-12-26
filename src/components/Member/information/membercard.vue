@@ -6,44 +6,54 @@
                 <img v-else-if="memberStore.imgURL" :src="memberStore.imgURL" alt="會員頭像">
                 <input type="file" class="thefile" @change="fileChange" :disabled="authStore.memberView !== 'cardcontain' || route.path == 'member/information'">
             </div>
+
             <div class="memberinformation">
-                <p>Name: <button
-                            class="edit-btn"
-                            :class="{ 'without': withouteditbtn}"
-                            @click="memberStore.memberData.isEditing = !memberStore.memberData.isEditing"
-                            >
-                            <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
-                        </button></p>
+                <p>Name: 
+                    <button
+                        class="edit-btn"
+                        :class="{ 'without': withouteditbtn}"
+                        @click="memberStore.memberData.isEditing = !memberStore.memberData.isEditing"
+                    >
+                        <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
+                    </button>
+                </p>
+                
                 <div v-if="memberStore.memberData.isEditing">
                     <input
                         v-model="memberStore.memberData.tempName" 
-                        @keyup.enter="saveName(memberStore.memberData)"
+                        @keyup.enter="saveName(memberStore.memberData.tempName)"
                         class="input-text"
                     >
                 </div> 
-                <h6 v-else class="fw200">{{ memberStore.memberData.name }}</h6>
+                <h6 v-else-if="isNameNull" class="fw200">{{ memberStore.memberData.name }}</h6>
+                <h6 v-else class="fw200">{{ memberStore.memberData.tempName }}</h6>
                 <p>Wand Core:</p>
                 <h6 class="fw200">{{ memberStore.memberData.wandcore }}</h6>
+
                 <p>Enrollment Number:</p>
                 <h6 class="fw200">{{ memberStore.memberData.number }}</h6>
+
                 <p>Enrollment Since:</p>
                 <h6 class="fw200">{{ memberStore.memberData.date }}</h6>
             </div>
         </div>
-        <img :src="`${publicPath}member/icon.png`" alt="">
+        <img :src="`${publicPath}member/icon.png`"  alt="">
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { useRoute } from 'vue-router';
 import { useMemberStore } from '@/stores/member';
+
+
 const publicPath = import.meta.env.BASE_URL;
 const route = useRoute();
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
+
 const props = defineProps({
     withouteditbtn:{
         type: Boolean,
@@ -53,7 +63,9 @@ const props = defineProps({
         type:Boolean,
         default:false,
     },     
+
 });
+
 
 const loadMemberData = async () => {
     const storedUser = localStorage.getItem('user');
@@ -61,8 +73,8 @@ const loadMemberData = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/getMemberinformation.php`;
     if(!storedUser) return;
-    
-    const { name: loginName } = JSON.parse(storedUser);
+    // 解構賦值也能讓解析出來的變數重新命名
+    const { name: loginName , member_ID} = JSON.parse(storedUser);
 
     try{
         const response = await fetch(API_URL, {
@@ -71,15 +83,15 @@ const loadMemberData = async () => {
                 'Content-Type': 'application/json; charset=utf-8'
             },
             // 這裡要對應 PHP 的接收格式
-            body: JSON.stringify({name: loginName})
+            body: JSON.stringify({name: loginName, member_ID})
         });
         const result = await response.json();
         if(result.success){
             const dbData = result.data;
-            memberStore.memberData.name = dbData.name;
-            memberStore.memberData.number = "N" +dbData.member_ID;
+            memberStore.memberData.tempName = dbData.name;
+            memberStore.memberData.number = dbData.member_ID;
             memberStore.memberData.date =  dbData.createdate;
-            memberStore.memberData.wandcore = dbData.magical_en || 'Not yet selected';
+            memberStore.memberData.wandcore = dbData.magical_en || 'Select Your WandCore';
         }else{
             console.error(result.message);
         }
@@ -88,6 +100,14 @@ const loadMemberData = async () => {
     }
 };
 
+const isNameNull = computed(() => {
+
+    const username = localStorage.getItem('user');
+    if (!username) return true;
+    const nameobj = JSON.parse(username);
+    return !nameobj.name;
+
+});
 
 const fileChange = ( e ) => {
         let file = e.target.files[0];
@@ -118,7 +138,6 @@ onMounted(() => {
     loadMemberData();
 });
 
-
 </script>
 
 <style lang="scss" scoped>
@@ -139,6 +158,18 @@ onMounted(() => {
             transform: scale(1.3);
         }
     }
+
+    .shrimp-slot-box, .empty-slot {
+        width: 110px;
+        height: 110px;
+        border: 2px dashed #B0B0B0;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255,255,255,0.5);
+    }
+
     .membercard-wrapper > img{
         height: 240px;
         width: 240px;
@@ -146,12 +177,13 @@ onMounted(() => {
         position: absolute;
         left: 380px;
         top: 150px;
+        z-index: 10;
     }
     .membercard{
-        align-items: start;
         display: grid;
         grid-template-columns: 0.8fr 1.3fr;
         gap: 24px;
+        align-items: start;
     }
 
     .memberphoto{

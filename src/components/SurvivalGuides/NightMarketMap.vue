@@ -6,9 +6,26 @@ import { RouterLink, useRouter } from "vue-router";
 import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarketData.js";
 import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
-import BasicButton from "../BasicButton.vue";
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import GameRingToss from "./GameRingToss.vue";
+import BasicButton from "../BasicButton.vue";
+import MapTWNightMarket from "./MapTWNightMarket.vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// ================ 鍵盤esc關閉 ================ 
+const closeCurrentModal = () => {
+    if (isGameModalOpen.value) {
+        isGameModalOpen.value = false;
+    } 
+    else if (currentInfoData.value) {
+        currentInfoData.value = null;
+    }
+};
+
+const handleKey = (e) => { 
+    if (e.key === 'Escape' || e.code === 'Escape') {
+        closeCurrentModal();
+    }
+};
 
 const isShow = ref(-1);
 const animationWelcome = ref(false)
@@ -63,14 +80,21 @@ const startGamePlay = () => {
         activeGame.value = 'ring-toss';
         isGameModalOpen.value = true; 
         currentInfoData.value = null; 
-    }
+    } 
+};
+
+const openTaiwanMap = () => {
+    activeGame.value = 'taiwan-map';
+    isGameModalOpen.value = true;    
+    currentInfoData.value = null;    
 };
 
 const csFrame = ref([
     {
     id:'welcome',
-    text:'Welcome!',
-    description: "Feel free to look around—there are different surprises waiting to be discovered. \n Try       clicking to see what's hidden!",
+    text:'survivalguide.welcometexttitle',
+    description: "survivalguide.welcometextdescription",
+    button: "survivalguide.startbutton",
     width:'400px',
     height:'auto',
     },
@@ -78,6 +102,9 @@ const csFrame = ref([
 const welcomeFrame = computed(()=> csFrame.value[0])
 
 onMounted (()=>{
+    window.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+
     isShow.value = 1001;
 
     setTimeout(() => {
@@ -87,7 +114,14 @@ onMounted (()=>{
     setTimeout(()=>{
         animationWelcome.value=true;
     },50)
+
 })
+
+onUnmounted (()=>{
+    window.removeEventListener('keydown', handleKey);
+    document.body.style.overflow = '';
+})
+
 
 function closeWelcomeFrame (){
     isShow.value = -1
@@ -106,7 +140,7 @@ function closeWelcomeFrame (){
                     <RouterLink :to="{
                         name:'SurvivalGuide'
                     }">
-                        <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />BACK</BasicButton>
+                        <BasicButton class="btn-blue-fill"><font-awesome-icon icon="fa-solid fa-angle-left" />{{ $t("survivalguide.backbutton") }}</BasicButton>
                     </RouterLink>
                 </div>
 
@@ -117,28 +151,25 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
-                :text="welcomeFrame.text"
-                :description="welcomeFrame.description"
+                :text="$t(welcomeFrame.text)"
+                            :description="$t(welcomeFrame.description)"
                 :width="welcomeFrame.width"
                 :height="welcomeFrame.height"
                 tag="h4"
                 align="center"
                 @click="closeWelcomeFrame"
                 >
-                <span>
-                    {{ welcomeFrame.text }}
-                </span>
                 <template #descriptionExtra>
                     <font-awesome-icon icon="fa-solid fa-eye" />
                     <font-awesome-icon icon="fa-solid fa-eye" />
                 </template>
                 <template #textButton>
-                    START
+                    {{ $t("survivalguide.startbutton") }}
                 </template>
                 </SurvivalTextFrame>
 <!-------------------------------------- map 連API用 區塊 -------------------------------------------->
                 <div class="map-api-wrapper"
-                @click="openModal(9)"
+                @click="openTaiwanMap"
                 >
                     <img class='map-api' src="/SurvivalGuide/map_api.png" alt="map-api">
                 </div>
@@ -150,7 +181,7 @@ function closeWelcomeFrame (){
                 :class="[{'nm-is-active': isHover == item.id,}, item.class ]">
                 <img :class="item.imgclass" :src="item.imgurl" :alt="item.imgalt">
                     
-                    <SurvivalTextFrame class='text-frame-rice text-frame'                         :description="item.description"
+                    <SurvivalTextFrame :class="`text-frame-${item.id}`"          :description="$t(item.description)"
                         :width="item.width" 
                         :height="item.height"
                         tag="h5"
@@ -171,26 +202,34 @@ function closeWelcomeFrame (){
                     @close="currentInfoData = null"
                     @play="startGamePlay"
                     :mainImg="currentInfoData.mainImg"
-                    :title="currentInfoData.title"
-                    :subTitle="currentInfoData.subTitle"
-                    :text="currentInfoData.text"
+                    :title="currentInfoData.id === 'map-api' ? '' : $t(currentInfoData.title)"
+                    :subTitle="currentInfoData.subTitle ? $t(currentInfoData.subTitle) : ''"
+                    :text="currentInfoData.text ? $t(currentInfoData.text) : ''"
                     :subImg1="currentInfoData.subImg1"
                     :subImg2="currentInfoData.subImg2"
                     :subImg3="currentInfoData.subImg3"
                     :subImg4="currentInfoData.subImg4"
-                    :buttonText="currentInfoData.buttonText"
+                    :buttonText="currentInfoData.buttonText ? $t(currentInfoData.buttonText) : ''"
                     ></SurvivalFoodIntroductionFrame>
                 </div>
             </div>
 <!---------------------------------------- 遊戲 Modal 視窗 -------------------------------------------->
             <div v-if="isGameModalOpen" class="game-modal-overlay">
                 <div class="game-content-modal">
-                    <button class="close-game-btn" @click="isGameModalOpen = false">
-                        EXIT GAME
+                    <button class="close-game-btn"
+                    :class="{ 'is-x-style': activeGame === 'taiwan-map' }"
+                     @click="isGameModalOpen = false">
+                        <template v-if="activeGame === 'taiwan-map'">
+                            <font-awesome-icon @click="close" icon="fa-solid fa-xmark"  style="font-size:32px;"/>
+                        </template> 
+                        <template v-else>
+                            EXIT GAME
+                        </template>
                     </button>
-                    <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false" />
-                    <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false"></GamePrawning>
-                    <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
+                    <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
+                    <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
+                    <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
+                    <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" />
                 </div>
             </div>
          </div>
@@ -784,8 +823,8 @@ function closeWelcomeFrame (){
     border: 2px solid white;
     border-radius: 30px;
     cursor: pointer;
-    z-index: 1000; /* 確保按鈕在最上層 */
-    transition: transform 0.3s;
+    z-index: 4000; 
+    transition: transform 0.5s;
 
     &:hover {
         transform: scale(1.1);
@@ -793,6 +832,37 @@ function closeWelcomeFrame (){
         color: $color-fsWhite;
     }    
 }
+
+.is-x-style {
+
+    background-color: transparent !important; 
+    border: none !important; 
+    box-shadow: none !important;
+
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    transition: all 0.5s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+        // 兩層白色陰影，發光
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+        }
+    &:hover {
+            color: $color-fsRed;
+            transform: rotate(360deg);
+            transition: all .5s ease;
+    }
+        
+}
+
 
 .locked {
     pointer-events: none;

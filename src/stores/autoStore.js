@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref} from "vue";
 import Cookies from 'js-cookie';
+import { useMemberStore } from "./member";
 // 之後可能有封裝好的 axios
 // import axios from 'axios';
 export const useAuthStore = defineStore('auth', () => {
@@ -18,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
     const informationView = ref('informationmembercard');
     
     const isLoggedIn = computed(() => !!token.value);
-
+    const memberStore = useMemberStore();
     // 認證方法
     const setUser = (userData) => {
         user.value = userData;
@@ -80,9 +81,22 @@ export const useAuthStore = defineStore('auth', () => {
     const closeLoginModal = () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
-        if(memberView.value = 'cardcontain'){
+        memberStore.memberData.isEditing = false;
+        if(memberView.value != 'coreselection'){
             setTimeout(() => {
                 memberView.value = 'coreselection';
+            }, 500);
+        }
+
+        if(loginView.value != 'loginpage'){
+            setTimeout(() => {
+                memberView.value = 'loginpage';
+            }, 500);
+        }
+
+        if(informationView.value != 'informationmembercard'){
+            setTimeout(() => {
+                memberView.value = 'informationmembercard';
             }, 500);
         }
     };

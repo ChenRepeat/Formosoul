@@ -1,19 +1,23 @@
 <template>
   <div class="book-section">
-    <div v-if="isAnimating" class="blocking-overlay"><h4>{{$t('classes.escTip')}}</h4></div>
+    <div v-if="isAnimating" class="blocking-overlay" 
+    :class="{ 
+        'unload': !isLoad 
+      }"><h4>{{$t('classes.escTip')}}</h4></div>
 
     <div 
       class="book" 
       ref="bookRef"
       :class="{ 
         'intro-center-pos': isIntroPosition,
-        'flipping': isFlip  
+        'flipping': isFlip ,
+        'unload': !isLoad 
       }"
     >
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover">
-          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo">
+          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo" @load="loadImg">
         </div>
       </div>
       <div class="page">
@@ -136,8 +140,11 @@
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover book-end">
-          <h3>The End</h3>
-          <p>© 2025 Class Project</p>
+          <img  
+            src="/public/About/about-island.png" 
+            class="island-img" 
+            alt="#"
+          >
         </div>
       </div>
     </div>
@@ -145,7 +152,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
+import { onMounted, onUnmounted, ref, computed, watch, nextTick } from 'vue';
 import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
@@ -168,7 +175,8 @@ import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
 import CharmRight from '@/components/ClassPages/CharmRight.vue';
 import Maho from '@/components/ClassPages/Maho.vue';
 import BikeGame from '@/components/ClassPages/BikeGame.vue';
-
+import { useclassesStore } from '@/stores/classes';
+const classesStore = useclassesStore();
 const bookRef = ref(null);
 const isAnimating = ref(true);
 const isFlip = ref(false);
@@ -177,6 +185,7 @@ const currentPage = ref(0);
 const totalPages = ref(0);
 const innerWidth = ref(window.innerWidth);
 const isIntroPlaying = ref(false);
+const isLoad = ref(false)
 
 let animationTimeoutId = null;
 let resizeTimeoutId = null;
@@ -348,7 +357,7 @@ const playIntroAnimation = async () => {
     isAnimating.value = false;
     updatePageNumber();
     cleanupAnimation();
-
+    sessionStorage.setItem("bookLoaded", "true");
   } catch (error) {
     console.error('Intro animation error:', error);
     cleanupAnimation();
@@ -450,12 +459,49 @@ watch(isDoublePage, (newVal, oldVal) => {
     console.log(`Display mode changed to: ${newVal ? 'Double Page' : 'Single Page'}`);
   }
 });
-
-onMounted(() => {
+const loadImg=async()=>{
+  isLoad.value = true;
   initPageFlip();
-  
-  isIntroPlaying.value = true;
-  playIntroAnimation();
+  isAnimating.value = false;
+  isIntroPlaying.value = false;
+  isIntroPosition.value = false;
+  if(!sessionStorage.getItem("bookLoaded")){
+    playIntroAnimation();
+    isIntroPlaying.value = true;
+    isAnimating.value = true;
+  }else{
+   await nextTick();
+
+    const targetLogicalPage = classesStore.pageToTurn;
+    const targetPhysicalIndex = getPhysicalIndex(targetLogicalPage);
+    if (pageFlip && targetLogicalPage > 1) {
+       console.log(`Auto flipping to logical: ${targetLogicalPage}, physical: ${targetPhysicalIndex}`);
+       pageFlip.flip(targetPhysicalIndex);
+       updatePageNumber();
+       classesStore.setPage(1);
+    } else {
+       if(pageFlip) {
+        pageFlip.flip(0);
+        await wait(300);
+        pageFlip.flip(targetPhysicalIndex);
+        classesStore.setPage(1);
+        updatePageNumber();
+        }
+    }
+  }
+}
+watch(
+  () => classesStore.pageToTurn, // 監聽目標
+  (newPage) => {
+    if (newPage !== 1 && pageFlip) {
+      const targetPhysicalIndex = getPhysicalIndex(newPage);
+      pageFlip.flip(targetPhysicalIndex);
+      updatePageNumber();
+      classesStore.setPage(1);
+    }
+  }
+);
+onMounted(() => {
   window.addEventListener('keydown', handleKeydown);
   window.addEventListener('resize', handleResize);
 });
@@ -494,6 +540,9 @@ const handleReceiveFrom = (url) => {
 .book {
   // filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5)); 書本陰影
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.unload{
+  opacity: 0;
 }
 
 .blocking-overlay {
@@ -561,6 +610,9 @@ const handleReceiveFrom = (url) => {
   .book-end {
     transform: rotate(0deg) scaleX(1.05);
   }
+}
+.island-img{
+  z-index: 100;
 }
 .book-logo {
   position: absolute;

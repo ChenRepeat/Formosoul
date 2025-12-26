@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, nextTick } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 
-// 宣告常數來接收 useRouter() ，方便後續使用
+// 宣告常數來接收 useRouter() ，方便後續使用 ----------------------------------------------
 const router = useRouter();
 
 // 設定路由功能
@@ -12,7 +12,7 @@ function goProductDetail(){
 };
 
 
-// 圖片陣列
+// 圖片陣列 ----------------------------------------------
 const cards = ref([
   { id: 1, img: 'Shop/1.png', isLike: false },
   { id: 2, img: 'Shop/2.png', isLike: false },
@@ -22,14 +22,15 @@ const cards = ref([
   { id: 6, img: 'Shop/6.png', isLike: false },
 ])
 
-// 接收商品陣列 ＊要放在 canvas 之前，程式才能讀得到
+// 接收商品陣列 ＊要放在 canvas 之前，程式才能讀得到 ----------------------------------------------
 const props = defineProps({
   products:{
     type: Array,
     required: true,
-    default: () => []  // 預設空陣列，避免報錯
+    default: () => []  // 預設空陣列，避免報錯  <<要在了解一下原因>>
   }
 })
+
 
 const canvasRefs = ref([])
 const pi = x => x * Math.PI / 180
@@ -73,19 +74,55 @@ function draw(canvasElement, long, Camera, radius, imageSrc) {
   img.src = imageSrc; 
 }
 
-onMounted(() => {
+// 為了讓每次接收的資料更新時，圖片可以重新繪製，加上 watch 跟 nextTick
+// step1. 將繪製的方式變成一個能獨立執行的函數，就能重複
+function drawProductImage(){
+  // 使用 nextTick 確保 DOM 已經更新完成
+  nextTick(() => {
+    canvasRefs.value.forEach((canvasEl, index) => {
+    const imageUrl = props.products[index].images[0];
+    const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
+    draw(canvasEl, 230, 70, 32, finalImageUrl);
+    })
+  })
+}
 
+
+
+onMounted(() => {
+  //step2. 呼叫繪製函數
+  drawProductImage();
+  
+  /* 原方案：掛載時繪製一次，之後有任何變動都不會重新繪製
   // 遍歷每一個 Canvas DOM 元素並執行繪圖
   // canvasRefs.value 是一個陣列，裡面裝著所有的 canvas 元素
   canvasRefs.value.forEach((canvasEl, index) => {
-    const imageUrl = props.products[index].main_pic;
+    const imageUrl = props.products[index].images[0];
     const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
     draw(canvasEl, 230, 70, 32, finalImageUrl);
   })
+  */
 })
 
+//step3. 監聽 products 的變化。 
+// ＊＊現在因為陣列中有isLike，所以他改變就會讓canvas重繪，如果之後從後端取出的還是有isLike，可以先把陣列轉換成沒有isLike的陣列，作為重繪的基礎依據
+watch(
+  () => props.products,
+  () =>{
 
-// like 切換
+    // 清空舊的 canvas，避免殘留
+    canvasRefs.value = [];
+      
+    // 重新繪製所有 canvas
+    drawProductImage();
+  },
+  { deep: true,           // deep 
+    //immediate: false    //可以不寫，因為預設為false
+  } 
+);
+
+
+// like 切換 ----------------------------------------------
 //const isLike = ref(false);
 function likeHeart(product){
   //isLike.value = !isLike.value;  這樣會讓所有的收藏連動
@@ -153,11 +190,6 @@ function likeHeart(product){
   .product-case {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    
-
-    // display: flex;
-    // flex-wrap: wrap;
-    // justify-content: center;
     gap: 40px;
 
     position: relative;

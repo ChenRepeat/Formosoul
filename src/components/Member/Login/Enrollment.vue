@@ -110,6 +110,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { inject, ref, watch } from 'vue';
 import router from '@/router';
+import emailjs from '@emailjs/browser';
 
 
 const setSharedEmail = inject('setEnrollmentEmail');
@@ -155,22 +156,23 @@ async function sendOTPAPI(emailValue) {
             throw new Error('Invalid email');
         }
 }
-async function enrollmentAPI(email, password, otp) {
-    await new Promise(resolve => setTimeout(resolve, 1500));   
-    
-    if(email == 'test@test.com' && password == 'As345678' && otp == otpnumber.value){
-        return{
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-            user: {
-                id: 1,
-                name: '新註冊用戶',
-                email: 'test@test.com'
-            },
-            message: '註冊成功',
-        }
-    }else{
-        throw new Error('註冊失敗');
-    }
+
+
+function enrollmentAPI(email, password, otp) {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/Enrollment.php`;
+
+    return fetch(API_URL, {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            email, password, otp
+        })
+    }).then( res => res.json());
+
 }
 
 
@@ -185,15 +187,37 @@ async function startCountdown() {
         return;
     }
 
-    generateotp();
+    const code = generateotp();
     otpLoading.value = true;
     errorMessage.value = '';
     btngray.value = true;
 
     try{
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/save_otp.php`;
+        await fetch( API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email.value, otp: code}),
+            credentials: 'include' // 這行是確保 Session Cookie 能運作
+        });
+        // emailJS API
+        const templateParams = {
+            email: email.value,
+            otp_code: code,
+        };
+
+        await emailjs.send(
+            'service_3xw68ou',   // 替換為你的 Service ID
+            'template_1tux8ni',  // 替換為你的 Template ID
+            templateParams, 
+            'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
+        )
+
         await sendOTPAPI(email.value);
         otpSent.value = true;
-        errorMessage.value = `測試otp ${otpnumber.value}`;
+        // errorMessage.value = `測試otp ${otpnumber.value}`;
+        errorMessage.value = 'Verification code sent!';
         timer.value = 60;
         intervalId = setInterval(() => {
             timer.value--;
@@ -208,10 +232,6 @@ async function startCountdown() {
         errorMessage.value = error.message || 'Failed to send OTP';
         otpLoading.value = false;
     }
-    // 要有倒數計時就不能用用統一個 finally 因為 finally 一定會執行 
-    // finally{
-    //     otpLoading.value = false;
-    // }
 };
 
 
@@ -265,9 +285,12 @@ async function handleEnrollment() {
     try{
         const response = await enrollmentAPI(email.value, password.value, otp.value);
         // 這邊寫成跳到登入頁面 成功才會執行
-        authStore.setloginView('loginpage');
-        setSharedEmail(email.value);
-        
+        if(response.success){
+            authStore.setloginView('loginpage');
+            setSharedEmail(email.value);
+        }else{
+            errorMessage.value = response.message;
+        }
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';
     }finally {
