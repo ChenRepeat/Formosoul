@@ -2,9 +2,11 @@
   require_once 'conn.php';
   $member = json_decode(file_get_contents("php://input"), true);
 
-
+  
+  
+  
   $sql = '
-    select email, password, name
+    select email, password, name, createdate, updatetime, member_ID
     from member
     where email = :email and password = :pwd
     ';
@@ -18,8 +20,9 @@
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $resbody = [];
-
-        if($user){
+    
+    if($user){
+            $isFirstLogin = ($user['createdate'] === $user['updatetime']);
             $resbody['success'] = true;
             // 隨機 64 字元的字串
             $token = bin2hex(random_bytes(32));
@@ -27,7 +30,10 @@
             $resbody['user'] = [
                 // 之後會有要回傳給前端的資料 讓前端能去接
                 // 'email' => $user['email']
-                'name' => $user['name']
+                'name' => $user['name'],
+                'member_ID' => $user['member_ID'],
+                'isFirstLogin' => $isFirstLogin,
+                'message' => $isFirstLogin ? '第一次登入' : '登入成功',
             ];
 
             setcookie("token", $token, [
@@ -41,14 +47,24 @@
                 // 常用的是 lax 跨站是否帶cookie
                 'samesite' => 'Lax',
             ]);
-            setcookie("user_name", $user['name'], time() + 600, "/");
+            setcookie(
+                "user_name", 
+                $user['name'], 
+                time() + 600, 
+                "/",            
+            );
         }else{
             $resbody['success'] = false;
             $resbody['message'] = '帳號或密碼錯誤，請重新輸入。';
         }
         
-        // 告訴瀏覽器是純資料 (JSON)
-        header('Content-Type: application/json; charset=utf-8');
+
         // 把 PHP 陣列 ($rows) 轉成 JSON 字串並傳到前端
         echo json_encode($resbody);
+
+
+        
+
+
+
 ?>

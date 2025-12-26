@@ -29,7 +29,7 @@ import Payment from '@/components/policy/payment.vue'
 import BlackLogo from '@/assets/LOGO_black.svg';
 import Privacypolicy from '@/components/policy/privacypolicy.vue'
 import Returns from '@/components/policy/returns.vue'
-
+import Cookies from 'js-cookie'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -167,6 +167,7 @@ const router = createRouter({
       meta:{ 
         logo: BlackLogo,
         bgColor:'white',
+        requiresAuth: true,
       },
       children: [
         { 
@@ -269,6 +270,31 @@ scrollBehavior(to, from, savedPosition) {
     })
   }
 })
+
+router.beforeEach((to, from, next) => {
+    // 從 Cookie 中讀取 token 與 userRole
+    const isLogin = Cookies.get('token')
+    // const isAdmin = Cookies.get('userRole') === 'admin'
+
+    // console.log(`從 ${from.path} 跳轉到 ${to.path}`)
+
+    if (to.meta.requiresAuth && !isLogin) {
+        alert('請先登入')
+        return next('/')
+    }
+
+    // if (to.meta.requiresAdmin && !isAdmin) {
+    //     alert('權限不足')
+    //     return next('/')
+    // }
+
+    if (to.path === '/login' && isLogin) {
+        return next('/')
+    }
+
+    next();
+})
+
 router.beforeEach((to, from, next) => {
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual'; 

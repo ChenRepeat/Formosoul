@@ -62,7 +62,7 @@ const loadMemberData = async () => {
     const API_URL = `${apiBase}/getMemberinformation.php`;
     if(!storedUser) return;
     // 解構賦值也能讓解析出來的變數重新命名
-    const { name: loginName } = JSON.parse(storedUser);
+    const { name: loginName , member_ID} = JSON.parse(storedUser);
 
     try{
         const response = await fetch(API_URL, {
@@ -71,7 +71,7 @@ const loadMemberData = async () => {
                 'Content-Type': 'application/json; charset=utf-8'
             },
             // 這裡要對應 PHP 的接收格式
-            body: JSON.stringify({name: loginName})
+            body: JSON.stringify({name: loginName, member_ID})
         });
         const result = await response.json();
         if(result.success){

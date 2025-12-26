@@ -80,9 +80,21 @@ export const useAuthStore = defineStore('auth', () => {
     const closeLoginModal = () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
-        if(memberView.value = 'cardcontain'){
+        if(memberView.value != 'coreselection'){
             setTimeout(() => {
                 memberView.value = 'coreselection';
+            }, 500);
+        }
+
+        if(loginView.value != 'loginpage'){
+            setTimeout(() => {
+                memberView.value = 'loginpage';
+            }, 500);
+        }
+
+        if(informationView.value != 'informationmembercard'){
+            setTimeout(() => {
+                memberView.value = 'informationmembercard';
             }, 500);
         }
     };
