@@ -37,7 +37,7 @@
                 <h6 class="fw200">{{ memberStore.memberData.date }}</h6>
             </div>
         </div>
-        <img :src="`${publicPath}member/icon.png`" class="card-bg-icon" alt="">
+        <img :src="`${publicPath}member/icon.png`"  alt="">
     </div>
 </template>
 
@@ -91,7 +91,7 @@ const loadMemberData = async () => {
             memberStore.memberData.tempName = dbData.name;
             memberStore.memberData.number = dbData.member_ID;
             memberStore.memberData.date =  dbData.createdate;
-            memberStore.memberData.wandcore = dbData.magical_en || 'Not yet selected';
+            memberStore.memberData.wandcore = dbData.magical_en || 'Select Your WandCore';
         }else{
             console.error(result.message);
         }
@@ -157,7 +157,6 @@ onMounted(() => {
                 &.hasscale{
             transform: scale(1.3);
         }
-        overflow: hidden;
     }
 
     .shrimp-slot-box, .empty-slot {
@@ -178,6 +177,7 @@ onMounted(() => {
         position: absolute;
         left: 380px;
         top: 150px;
+        z-index: 10;
     }
     .membercard{
         display: grid;

@@ -86,7 +86,7 @@ function handlelogout() {
   }else{
     authStore.logout();
     isMemberMenuOpen.value = false;
-    alert('登出惹');
+    router.push('/');
   }
 }
 function onEnter(el, done) {
