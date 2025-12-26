@@ -1,6 +1,12 @@
 <script setup>
 import siteLogo from '@/assets/LOGO_white_footer.svg'
+import { useclassesStore } from '@/stores/classes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { ref } from 'vue';
+
+const turnPage =(num)=>{
+  useclassesStore().setPage(num);
+}
 </script>
 
 <template>
@@ -67,25 +73,25 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
-                <router-link to="/classes"><h5>{{$t('nav.classes')}}</h5></router-link>
+                <router-link to="/classes" @click="turnPage(0)"><h5>{{$t('nav.classes')}}</h5></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.motorClass')}}</p></a>
+                <router-link to="/classes" @click="turnPage(2)"><p>{{$t('classes.motorClass')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.animalTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(4)"><p>{{$t('classes.animalTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.historyTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(5)"><p>{{$t('classes.historyTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.charmTitle')}}</p></a>
+                <router-link  to="/classes" @click="turnPage(9)"><p>{{$t('classes.charmTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.potionTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(10)"><p>{{$t('classes.potionTitle')}}</p></router-link>
               </li>
               <li>
-                <a href=""><p>{{$t('classes.divinationTitle')}}</p></a>
+                <router-link to="/classes" @click="turnPage(11)"><p>{{$t('classes.divinationTitle')}}</p></router-link>
               </li>
               <li></li>
             </ul>

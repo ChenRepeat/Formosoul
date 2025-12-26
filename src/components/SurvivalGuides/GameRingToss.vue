@@ -284,9 +284,9 @@ const checkGamePass = () => {
         <h2 v-if="score < 100" class="result-title">Game Over</h2>
         <h2 v-if="score >= 100" class="result-title">Congraduations !!</h2>
         <h6 class="result-title">Score: {{ score }}</h6>
-        <div class="btn-group-row" style="display: flex; gap: 20px; margin-top: 20px;">
-          <BasicButton @click="startGame"><p>Try Again</p></BasicButton>
-          <BasicButton @click="handleCheckLedger" class="btn-check-ledger"><p>Check Ledger</p></BasicButton>
+        <div class="btn-group-row dp-flex">
+          <BasicButton @click="startGame" class="btn-white"><p>Try Again</p></BasicButton>
+          <BasicButton @click="handleCheckLedger" class="btn-white"><p>Check Ledger</p></BasicButton>
         </div>
       </div>
     </div>
@@ -444,6 +444,9 @@ const checkGamePass = () => {
   .menu-box {
     color:  $color-fsWhite;
     width: 60%;
+    align-items: center;
+
+    
     h5,h6{
       text-align: left;
     }
@@ -457,6 +460,22 @@ const checkGamePass = () => {
       align-self: center;
       margin-top: 16px;
     }
+    &.result-box{
+      h6,h2{
+        text-align: center;
+        text-indent: unset;
+      }
+      
+    }
+  }
+  .btn-group-row{
+    justify-content: center;
+    gap: 5%;
+    margin-top: 5%;
+    button{
+      width: 200px;
+    }
+    p{text-align: center;}
   }
   .title {color: $color-fsGold;text-align: center;}
   .result-title { color: #ff5252;}
