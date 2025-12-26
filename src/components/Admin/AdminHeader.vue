@@ -43,17 +43,11 @@ import { HomeFilled, Bell, CaretBottom, UserFilled } from '@element-plus/icons-v
 <style scoped>
 
 .admin-header {
-  background-color: #fff;
-  border-bottom: 1px solid #dcdfe6; 
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 60px; 
-  border: 1px solid green;
-  /* 👇 關鍵設定：上下0，左右20px，並強制生效 */
-  padding: 0 40px 0 20px !important;
-
-  /* 👇 保險起見加上這行，確保寬度不會因為加了 padding 而爆掉變寬 */
+  padding: 0 20px 0 20px !important;
   box-sizing: border-box;
 }
 
@@ -65,28 +59,27 @@ import { HomeFilled, Bell, CaretBottom, UserFilled } from '@element-plus/icons-v
 }
 
 .logo {
-  width: 120px; /* 依你的 Logo 調整 */
+  width: 120px; 
 }
 
-/* 右側功能區 */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px; /* 元件之間的間距 */
+  gap: 20px; 
 }
 
-/* Icon 滑鼠互動效果 */
 .action-icon {
   cursor: pointer;
   color: #606266;
   transition: color 0.3s;
+  display: flex;
+  align-items: center;
 }
 
 .action-icon:hover {
-  color: #409eff; /* Element Plus 主色 */
+  color: #409eff;
 }
 
-/* 用戶區塊 */
 .user-profile {
   display: flex;
   align-items: center;
@@ -95,7 +88,7 @@ import { HomeFilled, Bell, CaretBottom, UserFilled } from '@element-plus/icons-v
   color: #606266;
 }
 
-/* 修正 Badge 被切到的問題 */
+/* 修正 Badge 被切到 */
 .action-item :deep(.el-badge__content) {
   top: 15px;   
   right: 5px;

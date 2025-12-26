@@ -1,5 +1,6 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
+  import ListLayout from './ListLayout.vue'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
@@ -34,26 +35,19 @@
   });
 </script>
 <template>
-  <div class="page-container">
-    <div class="pagination-layout">
-      <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
-      </div>
-      <el-pagination 
-        v-model:current-page="currentPage"
-        :total="total"
-        layout="prev, pager, next"
-        background
-        class="pagination-btn"
-      />
-    </div>
+  <ListLayout>
+
+  <template #title>
     <h6>會員列表</h6>
     <p>檢視目前系統的所有會員資料。</p>
-    <div class="search-add-container">
-      <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input>
-      <el-button class="add-btn" round>新增會員</el-button>
-    </div>
-    <el-table :data="pagedData" stripe>
+  </template>
+
+  <template #controls>
+    <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input>
+    <el-button class="add-btn" round>新增會員</el-button>
+  </template>
+
+  <el-table :data="pagedData" stripe>
       <el-table-column label="會員編號" prop="member_ID"  width="90px"></el-table-column>
       <el-table-column label="姓名" prop="name" width="180px"></el-table-column>
       <el-table-column label="Email" prop="email"></el-table-column>
@@ -87,23 +81,24 @@
         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
       </el-table-column>
     </el-table>
-  </div>
+
+    <template #footer>
+      <div class="pagination-text">
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
+      </div>
+      <el-pagination 
+        v-model:current-page="currentPage"
+        :total="total"
+        layout="prev, pager, next"
+        background
+        class="pagination-btn"
+      />
+    </template>
+
+  </ListLayout>
 </template>
 <style lang="scss" scoped>
-.page-container{
-  position: relative; 
-  min-height: calc(100vh - 100px); /* 撐到底部 */
-  padding-bottom: 60px;
-}
-.el-main p{
-  color: #B0B0B0;
-  margin-bottom: 8px;
-}
-.search-add-container{
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
+
 :deep(.custom-search-input .el-input__wrapper){
   border-radius:50px;
   background-color: #F0F7FF;
@@ -125,23 +120,11 @@
   padding: 4px 0;
 }
 
-.pagination-layout {
-  position: absolute;
-  bottom: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 50px;  
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 10px; 
-}
-
 .pagination-text {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  bottom: -50px;
   
   font-size: 14px;
   color: #606266;

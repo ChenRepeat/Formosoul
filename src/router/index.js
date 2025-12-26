@@ -242,6 +242,16 @@ const router = createRouter({
           name: "AnnualEventManagement",
           component: () => import ('@/components/Admin/AnnualEventManagement.vue')
         },
+                {
+          path: "product-add",
+          name: "ProductAdd",
+          component: () => import ('@/components/Admin/ProductAdd.vue')
+        },
+                {
+          path: "order-details",
+          name: "OrderDetails",
+          component: () => import ('@/components/Admin/OrderDetails.vue')
+        },
       ],
     },
   ],

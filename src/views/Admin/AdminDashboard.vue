@@ -45,16 +45,15 @@ const activeMenu = computed(() => {
 
 <style scoped>
 .layout-container {
-  height: auto;
+  height:calc(100vh - 60px);
   max-width: 1200px;
   margin: 0 auto;
 }
 .el-header {
-  background-color: #b3c0d1;
-  color: #333;
+  color: black;
   text-align: center;
   line-height: 60px;
-  width: 100vw;
+  width: 100%;
   padding: 0;
 }
 .el-aside {
@@ -62,7 +61,7 @@ const activeMenu = computed(() => {
   text-align: center;
 }
 .aside-container{
-  height: 100%;
+  height: 100% ;
   display: flex;
   flex-direction: column;
   margin: 0 10px;
@@ -70,6 +69,9 @@ const activeMenu = computed(() => {
 .el-menu{
   padding: 10px;
   border-right: none;
+}
+.el-main{
+  padding: 40px 20px 0 20px;
 }
 /* 一般狀態的按鈕 */
 .el-menu-item {
@@ -95,12 +97,12 @@ const activeMenu = computed(() => {
 .aside-container h6{
   font-size: 2rem;
   line-height: 160%;
-  margin-top: 50px;
+  margin-top: 40px;
   margin-bottom: 10px;
 }
 .logout-btn {
   /* 推到最下面 */
-  margin: 100px 10px 20px 10px;
+  margin: 40px 10px 10px 10px;
   border-radius: 10px;
   background-color: #F0F7FF;
   text-align: center;
