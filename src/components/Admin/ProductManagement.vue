@@ -7,31 +7,35 @@
   const total = ref(0)
 
   const memberSearch = ref('')
-  const memberData = ref([])
+  const ProductData = ref([])
 
   const pagedData = computed( () => {
-    return memberData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+    return ProductData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
   })
 
-  const getMemberData = async () => {
+  const getProductData = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getMemberData.php`;
+    const API_URL = `${apiBase}/getProductData.php`;
 
 
     const response = await fetch(API_URL);
     const data = await response.json();
-    memberData.value = data;
+    ProductData.value = data;
 
     total.value = data.length;
   }
 
+const getImageUrl = (filename) => {
+  const apiBase = import.meta.env.VITE_API_BASE; // http://localhost/tjd103
 
+  return `${apiBase}/uploads/${filename}`;
+}
 
 
 
   
   onMounted (() => {
-    getMemberData();
+    getProductData();
   });
 </script>
 <template>
@@ -49,13 +53,26 @@
   </template>
 
   <el-table :data="pagedData" stripe>
-      <el-table-column label="商品主圖" width="100px"></el-table-column>
-      <el-table-column label="商品編號" prop=""></el-table-column>
-      <el-table-column label="商品名稱" prop=""></el-table-column>
-      <el-table-column label="分類" prop=""></el-table-column>
-      <el-table-column label="價格" prop=""></el-table-column>
-      <el-table-column label="庫存" prop=""></el-table-column>
-      <el-table-column label="狀態" prop="">
+          <el-table-column label="商品主圖" width="120px">
+      <template #default="scope">
+        <div v-if="scope.row.main_image">
+          <img 
+            :src="getImageUrl(scope.row.main_image)" 
+            alt="主圖"
+            style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;"
+          />
+        </div>
+        <div v-else>
+          <span style="color: #ccc; font-size: 12px;">無圖片</span>
+        </div>
+      </template>
+    </el-table-column>
+      <el-table-column label="商品編號" prop="product_ID"></el-table-column>
+      <el-table-column label="商品名稱" prop="name_zh"></el-table-column>
+      <el-table-column label="分類" prop="type"></el-table-column>
+      <el-table-column label="價格" prop="price"></el-table-column>
+      <el-table-column label="庫存" prop="stock"></el-table-column>
+      <el-table-column label="狀態" prop="status">
         <template #default="scope">
           <span v-if="scope.row.status === 1">
             上架中

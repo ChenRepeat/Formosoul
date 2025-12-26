@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="product-add-container">
     <div class="header-section">
       <div class="header-left">
@@ -57,8 +57,8 @@
 
       <el-form-item label="初始狀態">
         <el-radio-group v-model="addProductForm.status">
-          <el-radio label="on">上架</el-radio>
-          <el-radio label="off">下架</el-radio>
+          <el-radio :label="1">上架</el-radio>
+          <el-radio :label="0">下架</el-radio>
         </el-radio-group>
       </el-form-item>
 
@@ -176,6 +176,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 
@@ -205,15 +206,58 @@ const goBack = () => {
   router.push('/admin/product-management') 
 }
 
-const submitForm = async() => {
-  console.log('表單資料:', addProductForm)
-  console.log('主圖:', mainImage.value)
-  console.log('小圖:', subImages.value)
-
+const submitForm = async () => {
+  // 1. 準備 API 網址
   const apiBase = import.meta.env.VITE_API_BASE;
   const API_URL = `${apiBase}/addProduct.php`;
-  const response = await fetch(API_URL);
-  const data = await response.json();
+
+  // 2. 建立 FormData 物件 (這是上傳檔案的關鍵)
+  const fd = new FormData();
+
+  // 3. 將一般文字欄位加入 FormData
+  // 使用迴圈將 addProductForm 裡面的所有欄位塞進去
+  for (const [key, value] of Object.entries(addProductForm)) {
+    fd.append(key, value);
+  }
+
+  // 4. 處理「主圖」
+  // Element Plus 的 file-list 是一個陣列，我們取第一個
+  // 重點：一定要用 .raw 才能拿到真正的檔案物件
+  if (mainImage.value.length > 0) {
+    fd.append('mainImage', mainImage.value[0].raw);
+  }
+
+  // 5. 處理「小圖」 (多張)
+  // 為了讓 PHP 知道這是陣列，建議 key 後面加上 []
+  subImages.value.forEach((file) => {
+    fd.append('subImages[]', file.raw);
+  });
+
+  // 6. 發送請求
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST', // 一定要是 POST
+      body: fd        // 直接把 FormData 放進去，瀏覽器會自動處理 Header
+    });
+
+    // 7. 解析後端回傳的 JSON
+    const data = await response.json();
+
+    if (data.success) {
+      ElMessage.success('商品新增成功！');
+      // 成功後跳轉回列表
+      router.push('/admin/product-management');
+    } else {
+      // 後端回傳失敗 (例如資料庫錯誤)
+      ElMessage.error('新增失敗：' + data.message);
+      console.error('Error details:', data);
+    }
+
+  } catch (error) {
+    // 網路錯誤或 JSON 解析錯誤
+    console.error('Network or Parsing error:', error);
+    ElMessage.error('系統發生錯誤，無法連線到伺服器');
+  }
 }
 </script>
 
@@ -361,4 +405,4 @@ const submitForm = async() => {
   justify-content: center;
   align-items: center;
 }
-</style> -->
+</style>
