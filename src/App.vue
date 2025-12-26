@@ -10,7 +10,6 @@ import DefaultLogo from '@/assets/logo_white.svg';
 import { useLangStore } from './stores/lang';
 import { gsap } from 'gsap';
 
-
 const route = useRoute();
 const authStore = useAuthStore();
 

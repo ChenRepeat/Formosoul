@@ -1,19 +1,23 @@
 <template>
   <div class="book-section">
-    <div v-if="isAnimating" class="blocking-overlay"><h4>{{$t('classes.escTip')}}</h4></div>
+    <div v-if="isAnimating" class="blocking-overlay" 
+    :class="{ 
+        'unload': !isLoad 
+      }"><h4>{{$t('classes.escTip')}}</h4></div>
 
     <div 
       class="book" 
       ref="bookRef"
       :class="{ 
         'intro-center-pos': isIntroPosition,
-        'flipping': isFlip  
+        'flipping': isFlip ,
+        'unload': !isLoad 
       }"
     >
       <div class="page cover">
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover">
-          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo">
+          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo" @load="loadImg">
         </div>
       </div>
       <div class="page">
@@ -180,6 +184,7 @@ const currentPage = ref(0);
 const totalPages = ref(0);
 const innerWidth = ref(window.innerWidth);
 const isIntroPlaying = ref(false);
+const isLoad = ref(false)
 
 let animationTimeoutId = null;
 let resizeTimeoutId = null;
@@ -351,7 +356,7 @@ const playIntroAnimation = async () => {
     isAnimating.value = false;
     updatePageNumber();
     cleanupAnimation();
-
+    sessionStorage.setItem("bookLoaded", "true");
   } catch (error) {
     console.error('Intro animation error:', error);
     cleanupAnimation();
@@ -453,12 +458,20 @@ watch(isDoublePage, (newVal, oldVal) => {
     console.log(`Display mode changed to: ${newVal ? 'Double Page' : 'Single Page'}`);
   }
 });
+const loadImg=()=>{
+  isLoad.value = true;
+  initPageFlip();
+  isAnimating.value = false;
+  isIntroPlaying.value = false;
+  isIntroPosition.value = false;
+  if(!sessionStorage.getItem("bookLoaded")){
+    playIntroAnimation();
+    isIntroPlaying.value = true;
+    isAnimating.value = true;
+  }
+}
 
 onMounted(() => {
-  initPageFlip();
-  
-  isIntroPlaying.value = true;
-  playIntroAnimation();
   window.addEventListener('keydown', handleKeydown);
   window.addEventListener('resize', handleResize);
 });
@@ -497,6 +510,9 @@ const handleReceiveFrom = (url) => {
 .book {
   // filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5)); 書本陰影
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.unload{
+  opacity: 0;
 }
 
 .blocking-overlay {
