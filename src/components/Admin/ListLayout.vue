@@ -24,7 +24,7 @@
 
 .page-container {
   position: relative;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 100px)
 }
 
 
@@ -36,8 +36,8 @@
 .search-add-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .pagination-layout {

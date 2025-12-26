@@ -7,20 +7,20 @@
   const total = ref(0)
 
   const memberSearch = ref('')
-  const memberData = ref([])
+  const orderData = ref([])
 
   const pagedData = computed( () => {
-    return memberData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+    return orderData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
   })
 
-  const getMemberData = async () => {
+  const getOrderData = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getMemberData.php`;
+    const API_URL = `${apiBase}/getOrderData.php`;
 
 
     const response = await fetch(API_URL);
     const data = await response.json();
-    memberData.value = data;
+    orderData.value = data;
 
     total.value = data.length;
   }
@@ -31,7 +31,7 @@
 
   
   onMounted (() => {
-    getMemberData();
+    getOrderData();
   });
 </script>
 <template>
@@ -47,18 +47,18 @@
   </template>
 
   <el-table :data="pagedData" stripe>
-      <el-table-column label="訂單編號" width="100px"></el-table-column>
-      <el-table-column label="會員姓名" prop=""></el-table-column>
-      <el-table-column label="訂單金額" prop=""></el-table-column>
-      <el-table-column label="付款方式" prop=""></el-table-column>
-      <el-table-column label="運送方式" prop=""></el-table-column>
-      <el-table-column label="訂單狀態" prop=""></el-table-column>
-      <el-table-column label="建立時間" prop=""></el-table-column>
-      <el-table-column label="訂單明細" prop=""></el-table-column>
-      <el-table-column width="50">
-        <router-link :to="{name:'OrderDetails'}">
-          <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
-        </router-link>
+      <el-table-column label="訂單編號" width="100px" prop="order_ID"></el-table-column>
+      <el-table-column label="會員姓名" prop="name_en"></el-table-column>
+      <el-table-column label="付款方式" prop="payment"></el-table-column>
+      <el-table-column label="運送方式" prop="shipping"></el-table-column>
+      <el-table-column label="訂單狀態" prop="status"></el-table-column>
+      <el-table-column label="建立時間" prop="date"></el-table-column>
+      <el-table-column label="訂單明細">
+        <template #default="{ row }">
+          <router-link :to="{name:'OrderDetails', params:{id: row_order_ID}}">
+            <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
+          </router-link>
+        </template>
       </el-table-column>
     </el-table>
 
