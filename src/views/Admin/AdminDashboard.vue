@@ -71,7 +71,7 @@ const activeMenu = computed(() => {
   border-right: none;
 }
 .el-main{
-  padding: 40px 20px 0 20px;
+  padding: 20px 20px 0 20px;
 }
 /* 一般狀態的按鈕 */
 .el-menu-item {
@@ -97,7 +97,7 @@ const activeMenu = computed(() => {
 .aside-container h6{
   font-size: 2rem;
   line-height: 160%;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 10px;
 }
 .logout-btn {

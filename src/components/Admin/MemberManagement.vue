@@ -122,13 +122,14 @@
 
 .pagination-text {
   position: absolute;
+  bottom:0;
   left: 50%;
   transform: translateX(-50%);
-  bottom: -50px;
-  
-  font-size: 14px;
   color: #606266;
   margin: 0;
   white-space: nowrap;
+}
+.pagination-btn{
+  margin-bottom: 48px;
 }
 </style>

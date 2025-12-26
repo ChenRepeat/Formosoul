@@ -55,11 +55,11 @@ const getImageUrl = (filename) => {
   <el-table :data="pagedData" stripe>
           <el-table-column label="商品主圖" width="120px">
       <template #default="scope">
-        <div v-if="scope.row.main_image">
+        <div v-if="scope.row.main_image" style="display: flex; align-items: center; height: 100%;">
           <img 
             :src="getImageUrl(scope.row.main_image)" 
             alt="主圖"
-            style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;"
+            style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;"
           />
         </div>
         <div v-else>
@@ -138,8 +138,6 @@ const getImageUrl = (filename) => {
   left: 50%;
   transform: translateX(-50%);
   bottom: -50px;
-  
-  font-size: 14px;
   color: #606266;
   margin: 0;
   white-space: nowrap;
