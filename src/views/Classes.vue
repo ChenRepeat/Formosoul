@@ -468,6 +468,11 @@ const loadImg=()=>{
     playIntroAnimation();
     isIntroPlaying.value = true;
     isAnimating.value = true;
+  }else{
+    setTimeout(() => {      
+      pageFlip.flip(1);
+      updatePageNumber();
+    }, 800);
   }
 }
 

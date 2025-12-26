@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   <main class="footer-case">
     <section class="footer-outer-case dp-flex">
       <div class="footer-icons-case dp-flex-col">
-        <router-link to="/"><img :src="siteLogo" alt="Logo" class="logo-style" /></router-link>
+        <router-link to="/" class="no-i18n-anim"><img :src="siteLogo" alt="Logo" class="logo-style" /></router-link>
         <div class="footer-social-link dp-flex">
           <a href="https://github.com/ChenRepeat/Formosoul" class=" no-i18n-anim"
             ><font-awesome-icon
