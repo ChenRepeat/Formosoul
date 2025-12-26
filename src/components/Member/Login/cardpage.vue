@@ -23,6 +23,7 @@
 import BasicButton from '@/components/BasicButton.vue';
 import Membercard from '../information/membercard.vue'; 
 import { useAuthStore } from '@/stores/autoStore';
+import { useMemberStore } from '@/stores/member';
     const props = defineProps({
         hasgap:{
             type: Boolean,
@@ -49,10 +50,12 @@ import { useAuthStore } from '@/stores/autoStore';
     });
 
     
+    const memberStore = useMemberStore();
 
     const authStore = useAuthStore();
 
     function gotoledger() {
+        memberStore.data_uptime();
         authStore.setmemberView('ledger');
         if(!authStore.isLoginModalOpen){
             authStore.setinformationView('informationledger');

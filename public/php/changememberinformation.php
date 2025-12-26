@@ -3,12 +3,13 @@
     $member = json_decode(file_get_contents("php://input"), true);
     $sql = '
         UPDATE member
-        SET updatetime = now()
+        SET name = :name
         WHERE member_ID = :member_ID;
     ';
     
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':member_ID', $member['member_ID']);
+    $stmt->bindValue(':name', $member['name']);
     $stmt->execute();
 
     echo json_encode([

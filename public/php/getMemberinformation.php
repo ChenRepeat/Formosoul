@@ -21,11 +21,8 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($user_data) {
-        $isFirstLogin = ($user_data['createdate'] === $user_data['updatetime']);
         echo json_encode([
         'success' => true,
-        'isFirstLogin' => $isFirstLogin,
-        'message' => $isFirstLogin ? '第一次登入' : '登入成功',
         'data' => $user_data,
       ]);
     } else {
