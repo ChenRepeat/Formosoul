@@ -1,171 +1,199 @@
 <template>
   <div class="product-add-container">
-    <div class="header-section">
-      <div class="header-left">
-        <h6>商品新增</h6>
-        <p class="sub-title">請輸入商品基本資料與圖片，儲存後將新增一筆商品，可再於商品列表中調整上下架狀態。</p>
+    
+    <div class="page-header">
+      <div class="header-content">
+        <h6 class="title">商品新增</h6>
+        <p class="sub-title">建立新的商品資料，儲存後預設為下架狀態。</p>
       </div>
-      <el-button round @click="goBack" class="back-btn">返回商品列表</el-button>
+      <el-button @click="goBack" class="add-btn" round>返回列表</el-button>
     </div>
 
     <el-form 
       :model="addProductForm" 
-      label-width="120px" 
-      label-position="left"
+      label-position="top"
       class="product-form"
     >
       
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="商品名稱" label-width="120px">
-            <el-input v-model="addProductForm.nameZh" placeholder="請輸入中文名稱" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="Product Name" label-width="170px">
-            <el-input v-model="addProductForm.nameEn" placeholder="Enter EN product name" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-form-item label="商品編號">
-        <el-input v-model="addProductForm.id" disabled class="read-only-input" placeholder="系統自動產生" style="width:333px;"/>
-      </el-form-item>
-
-      <el-form-item label="分類">
-        <el-select v-model="addProductForm.type" placeholder="請選擇分類" style="width:333px;">
-          <el-option label="Folktoys" value="Folktoys" />
-          <el-option label="Personalized" value="Personalized" />
-          <el-option label="Accessories" value="Accessories" />
-          <el-option label="Voucher" value="Voucher" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="價格">
-        <el-input v-model="addProductForm.price" placeholder="0" style="width:333px;">
-          <template #prefix>NT$</template>
-        </el-input>
-      </el-form-item>
-
-      <el-form-item label="庫存">
-        <el-input v-model="addProductForm.stock" placeholder="0" style="width:333px;"/>
-      </el-form-item>
-
-      <el-form-item label="建立日期">
-        <el-input v-model="addProductForm.createDate" disabled class="read-only-input" placeholder="系統自動產生" style="width:333px;"/>
-      </el-form-item>
-
-      <el-form-item label="初始狀態">
-        <el-radio-group v-model="addProductForm.status">
-          <el-radio :label="1">上架</el-radio>
-          <el-radio :label="0">下架</el-radio>
-        </el-radio-group>
-      </el-form-item>
-
-      <div class="image-section">
+      <div class="content-card">
         
-        <div class="main-image-upload">
-          <div class="field-label"><p>商品主圖</p></div>
-          <el-upload
-            class="upload-demo main-uploader"
-            drag
-            action="#"
-            :auto-upload="false"
-            :limit="1"
-            v-model:file-list="mainImage"
-          >
-            <el-icon class="el-icon--upload"><plus /></el-icon>
-            <div class="el-upload__text">
-              點擊或拖曳圖片至此
-              <div class="sub-text">
-                <span>建議尺寸1200*1200 px，檔案大小 ≤ 1MB</span> 
-                <br> 
-                <span>格式：JPG / PNG</span>
-              </div>
-            </div>
-          </el-upload>
-        </div>
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="商品名稱 (中文)" required>
+              <el-input v-model="addProductForm.nameZh" placeholder="請輸入中文名稱" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Product Name (English)">
+              <el-input v-model="addProductForm.nameEn" placeholder="Enter product name" />
+            </el-form-item>
+          </el-col>
 
-        <div class="sub-images-upload">
-          <div class="field-label">
-            <p>商品小圖（可拖曳排序,最多 4 張）</p>
-            <p class="hint">建議尺寸800*800 px 最多4張 檔案大小 ≤ 500KB 格式：JPG / PNG</p>
-          </div>
-          <el-upload
-            v-model:file-list="subImages"
-            action="#"
-            list-type="picture-card"
-            drag
-            :auto-upload="false"
-            :limit="4"
-          >
-            <el-icon><Plus /></el-icon>
-          </el-upload>
-        </div>
+                    <el-col :span="12">
+            <el-form-item label="商品價格" required>
+              <el-input-number 
+                v-model="addProductForm.price" 
+                :min="0" 
+                style="width: 100%" 
+                :controls="false"
+                placeholder="0"
+              />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="庫存數量" required>
+              <el-input-number 
+                v-model="addProductForm.stock" 
+                :min="0" 
+                style="width: 100%" 
+               :controls="false"
+                placeholder="0"
+              />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="商品分類" required>
+              <el-select v-model="addProductForm.type" placeholder="請選擇分類" style="width: 100%">
+                <el-option label="Folktoys" value="Folktoys" />
+                <el-option label="Personalized" value="Personalized" />
+                <el-option label="Accessories" value="Accessories" />
+                <el-option label="Voucher" value="Voucher" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="初始上下架狀態">
+              <el-radio-group v-model="addProductForm.status">
+                <el-radio-button :label="1">立即上架</el-radio-button>
+                <el-radio-button :label="0">暫時下架</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          
+          <el-col :span="12">
+             <div class="system-info-group">
+                <el-form-item label="系統編號">
+                   <el-input v-model="addProductForm.id" disabled placeholder="自動生成" />
+                </el-form-item>
+                <el-form-item label="建立日期">
+                   <el-input v-model="addProductForm.createDate" disabled placeholder="自動生成" />
+                </el-form-item>
+             </div>
+          </el-col>
+        </el-row>
       </div>
 
-      <div class="description-section">
-        <el-row :gutter="20" class="desc-row">
-          <el-col :span="12">
-            <div class="desc-label">商品描述（中文）</div>
-            <el-input
-              v-model="addProductForm.descriptionZh"
-              type="textarea"
-              :rows="5"
-            />
+      <div class="content-card">
+        
+        <el-row :gutter="40">
+          <el-col :span="10">
+            <div class="upload-block">
+              <div class="field-header">
+                <span class="label">商品主圖 (封面)</span>
+                <span class="hint">建議 1200x1200px, JPG/PNG</span>
+              </div>
+              <el-upload
+                class="main-uploader"
+                drag
+                action="#"
+                :auto-upload="false"
+                :limit="1"
+                :show-file-list="true"
+                v-model:file-list="mainImage"
+                list-type="picture"
+              >
+                <div class="upload-content">
+                  <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                  <div class="el-upload__text">
+                    拖曳圖片至此或 <em>點擊上傳</em>
+                  </div>
+                </div>
+              </el-upload>
+            </div>
           </el-col>
-          <el-col :span="12">
-            <div class="desc-label">Product Description（EN）</div>
-            <el-input
-              v-model="addProductForm.descriptionEn"
-              type="textarea"
-              :rows="5"
-            />
-          </el-col>
-        </el-row>
 
-        <el-row :gutter="20" class="desc-row">
-          <el-col :span="12">
-            <div class="desc-label">商品故事及延伸文化（中文）</div>
-            <el-input
-              v-model="addProductForm.storyZh"
-              type="textarea"
-              :rows="5"
-            />
-          </el-col>
-          <el-col :span="12">
-            <div class="desc-label">Product Story & Cultural Background (EN)</div>
-            <el-input
-              v-model="addProductForm.storyEn"
-              type="textarea"
-              :rows="5"
-            />
+          <el-col :span="14">
+            <div class="upload-block">
+              <div class="field-header">
+                <span class="label">商品更多視角 (最多 4 張)</span>
+                <span class="hint">建議 800x800px, 可拖曳排序</span>
+              </div>
+              <el-upload
+                v-model:file-list="subImages"
+                action="#"
+                list-type="picture-card"
+                :auto-upload="false"
+                :limit="4"
+                multiple
+                class="sub-uploader"
+              >
+                <el-icon><Plus /></el-icon>
+              </el-upload>
+            </div>
           </el-col>
         </el-row>
+      </div>
 
-        <el-row :gutter="20" class="desc-row">
-          <el-col :span="12">
-            <div class="desc-label">如何玩或使用（中文）</div>
-            <el-input
-              v-model="addProductForm.useZh"
-              type="textarea"
-              :rows="5"
-            />
-          </el-col>
-          <el-col :span="12">
-            <div class="desc-label">How to Play or Use (EN)</div>
-            <el-input
-              v-model="addProductForm.useEn"
-              type="textarea"
-              :rows="5"
-            />
-          </el-col>
-        </el-row>
+      <div class="content-card">
+        
+        <div class="desc-group">
+          <el-row :gutter="24">
+            <el-col :span="12">
+              <el-form-item label="商品描述">
+                <el-input v-model="addProductForm.descriptionZh" type="textarea" :rows="4" placeholder="請輸入商品詳細介紹..." />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="English Description">
+                <el-input v-model="addProductForm.descriptionEn" type="textarea" :rows="4" placeholder="Enter product description..." />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+
+        <el-divider border-style="dashed" />
+
+        <div class="desc-group">
+          <el-row :gutter="24">
+            <el-col :span="12">
+              <el-form-item label="商品故事及延伸文化">
+                <el-input v-model="addProductForm.storyZh" type="textarea" :rows="4" placeholder="請輸入設計理念或背景故事..." />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="English Story">
+                <el-input v-model="addProductForm.storyEn" type="textarea" :rows="4" placeholder="Enter design story..." />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+
+        <el-divider border-style="dashed" />
+
+        <div class="desc-group">
+          <el-row :gutter="24">
+            <el-col :span="12">
+              <el-form-item label="商品如何玩或使用">
+                <el-input v-model="addProductForm.useZh" type="textarea" :rows="3" placeholder="請輸入使用或遊玩方式..." />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="English Instructions">
+                <el-input v-model="addProductForm.useEn" type="textarea" :rows="3" placeholder="Enter usage instructions..." />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
       </div>
 
       <div class="footer-actions">
-        <el-button @click="goBack">取消</el-button>
-        <el-button type="primary" color="#003060" @click="submitForm">儲存新增</el-button>
+        <el-button @click="goBack" size="large">取消新增</el-button>
+        <el-button type="primary" color="#003060" @click="submitForm" size="large" :loading="loading">
+          新增商品
+        </el-button>
       </div>
 
     </el-form>
@@ -175,21 +203,22 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, UploadFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
+const loading = ref(false)
 
 // 表單資料模型
 const addProductForm = reactive({
   nameZh: '',
   nameEn: '',
-  // id: '', // 系統自動產生
+  id: '', 
   type: '',
-  price: '',
-  stock: '',
-  // createDate: '', // 系統自動產生
-  status: 'off',
+  price: undefined, // 改為 undefined 讓 input-number 顯示為空
+  stock: undefined,
+  createDate: '', 
+  status: 0, // 預設下架 (對應 radio-button)
   descriptionZh: '',
   descriptionEn: '',
   storyZh: '',
@@ -207,13 +236,23 @@ const goBack = () => {
 }
 
 const submitForm = async () => {
+  loading.value = true;
+  
+  // 簡單驗證
+  if(!addProductForm.nameZh || !addProductForm.price) {
+      ElMessage.warning('請填寫必填欄位 (名稱、價格)');
+      loading.value = false;
+      return;
+  }
+
   const apiBase = import.meta.env.VITE_API_BASE;
   const API_URL = `${apiBase}/addProduct.php`;
 
   const fd = new FormData();
 
   for (const [key, value] of Object.entries(addProductForm)) {
-    fd.append(key, value);
+    // 處理 undefined 或 null 轉空字串
+    fd.append(key, value === undefined || value === null ? '' : value);
   }
 
   if (mainImage.value.length > 0) {
@@ -237,159 +276,131 @@ const submitForm = async () => {
       router.push('/admin/product-management');
     } else {
       ElMessage.error('新增失敗：' + data.message);
-      console.error('Error details:', data);
     }
 
   } catch (error) {
-    // 網路錯誤或 JSON 解析錯誤
-    console.error('Network or Parsing error:', error);
+    console.error('Network error:', error);
     ElMessage.error('系統發生錯誤，無法連線到伺服器');
+  } finally {
+    loading.value = false;
   }
 }
 </script>
 
 <style scoped>
 .product-add-container {
-  max-width: 1200px;
-  margin: 0 auto 10px;
-  background-color: #fff;
+  max-width: 1000px;
+  margin: 0 auto 80px; /* 底部留白給按鈕 */
 }
 
 /* 標題區 */
-.header-section {
+.page-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  align-items: flex-end;
+  margin-bottom: 24px;
 }
-.header-section h6 {
-  margin-bottom: 8px;
+.title {
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
 }
 .sub-title {
-  color: #999;
+  color: #666;
+  margin: 0;
 }
 
-/* 表單通用調整 */
-.product-form :deep(.el-input__wrapper) {
-  /* 讓輸入框稍微圓潤一點，符合設計圖 */
-  border-radius: 4px; 
-}
-.read-only-input :deep(.el-input__inner) {
-  /* 模擬設計圖中唯讀欄位的淡藍/灰色背景 */
-  background-color: #F0F5FA;
-  color: #999;
-}
-.read-only-input :deep(.el-input__wrapper) {
-  background-color: #F0F5FA;
-  box-shadow: none !important; /* 移除外框線 */
+/* 通用卡片樣式 */
+.content-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  margin-bottom: 24px;
 }
 
-/* 圖片區塊 */
-.image-section {
-  margin-top: 40px;
-  border-top: 1px solid #eee; /* 分隔線可選 */
-  padding-top: 20px;
+
+/* 系統資訊群組 (ID, Date) */
+.system-info-group {
+    display: flex;
+    gap: 20px;
+}
+.system-info-group .el-form-item {
+    flex: 1;
 }
 
-/* 主圖上傳 */
-.main-image-upload {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 40px;
+/* 表單優化 */
+.product-form :deep(.el-form-item__label) {
+  color: #444;
+  padding-bottom: 6px;
 }
-.field-label {
-  width: 120px; 
-  color: #606266;
-  padding-right: 12px;
+.product-form :deep(.el-input__wrapper),
+.product-form :deep(.el-textarea__inner) {
+  box-shadow: 0 0 0 1px #dcdfe6 inset;
+  padding: 8px 12px;
 }
-.main-uploader {
-  flex: 1;
+/* 唯讀欄位樣式 */
+.product-form :deep(.el-input.is-disabled .el-input__wrapper) {
+    background-color: #f5f7fa;
+    box-shadow: 0 0 0 1px #e4e7ed inset;
 }
+
+/* 圖片上傳區優化 */
+.upload-block {
+    display: flex;
+    flex-direction: column;
+}
+.field-header {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.field-header .label {
+    color: #444;
+    margin-bottom: 4px;
+}
+.field-header .hint {
+    color: #999;
+}
+
 .main-uploader :deep(.el-upload-dragger) {
-  width: 100%;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 2px dashed #dcdfe6;
-  background-color: #fff;
+    height: 220px; /* 降低高度 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 2px dashed #dcdfe6;
+    transition: all 0.3s;
+}
+.main-uploader :deep(.el-upload-dragger:hover) {
+    border-color: #003060;
+    background-color: #f0f7ff;
 }
 .el-icon--upload {
-  color: #999;
-  margin-bottom: 10px;
-}
-.sub-text {
-  color: #999;
-  margin-top: 8px;
-}
-.sub-images-upload {
-  margin-bottom: 40px;
-}
-.sub-images-upload .field-label {
-  margin-bottom: 10px;
-  width: 100%; 
-}
-.sub-images-upload .hint {
-  color: #999;
+    color: #003060;
+    margin-bottom: 10px;
 }
 
-
-.description-section {
-  margin-top: 20px;
-}
-.desc-row {
-  margin-bottom: 30px;
-}
-.desc-label {
-  color: #333;
-  margin-bottom: 10px;
+/* 副圖 Grid */
+.sub-uploader :deep(.el-upload-list--picture-card .el-upload-list__item),
+.sub-uploader :deep(.el-upload--picture-card) {
+    width: 100px;
+    height: 100px;
+    margin: 0 10px 10px 0;
 }
 
+/* 底部按鈕 */
 .footer-actions {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 16px;
   margin-top: 40px;
   padding-top: 20px;
   border-top: 1px solid #eee;
 }
 
-.back-btn{
+.add-btn{
   background-color: #F0F7FF;
-  margin-top: 30px;
-}
-
-/* 隱藏預覽按鈕 */
-.sub-images-upload :deep(.el-upload-list__item-preview) {
-  display: none !important;
-}
-
-/* 移除垃圾桶自帶邊距 */
-.sub-images-upload :deep(.el-upload-list__item-delete) {
-  margin: 0 !important;
-}
-
-.product-form{
-  font-size: 16px;
-}
-.product-form :deep(.el-form-item__label) {
-  font-size: 16px;
-}
-/* 修改整張表單內所有輸入框的 placeholder */
-.product-form :deep(.el-input__inner::placeholder),
-.product-form :deep(.el-textarea__inner::placeholder) {
-  font-size: 16px;
-}
-
-/* 修正：當 picture-card 搭配 drag 使用時，強制讓感應區填滿 */
-.sub-images-upload :deep(.el-upload--picture-card .el-upload-dragger) {
-  width: 100%;
-  height: 100%;
-
-  /* 內容物（+號）置中 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 140px;
 }
 </style>
