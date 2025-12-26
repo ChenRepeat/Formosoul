@@ -13,7 +13,7 @@
   $checkstmt->bindValue(':email', $member['email']);
   $checkstmt->execute();
   // fetchColumn 可以只拿單一欄位
-  $count = $checkstmt->fetchColumn(PDO::FETCH_ASSOC);
+  $count = $checkstmt->fetchColumn();
 
   if($count > 0){
     echo json_encode([
@@ -31,7 +31,7 @@
 
     exit;
   }
-  if(time() - $_SESSION['otp_email'] > 600){
+  if(time() - $_SESSION['otp_time'] > 600){
     echo json_encode([
       'success' => false,
       'message' => 'The verification code has expired. Please obtain a new one.'
