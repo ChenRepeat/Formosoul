@@ -9,7 +9,7 @@ export const useMemberStore = defineStore('member', () => {
 
     const memberData = ref({
         name: 'Your Name',
-        wandcore: 'Your WandCore',
+        wandcore: 'Select Your WandCore',
         number: 'Your Number',
         date: 'Enrollment Date',
         isEditing: false, 
