@@ -9,6 +9,9 @@ onMounted(() => {
   const canvas = canvasRef.value;
   const container = containerRef.value;
   const context = canvas.getContext('2d');
+  setTimeout(() => {
+    
+  
   const updateSize = () => {
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
@@ -55,6 +58,8 @@ onMounted(() => {
   }
 
   drawing();
+
+  }, 300);
 });
 
 onUnmounted(() => {

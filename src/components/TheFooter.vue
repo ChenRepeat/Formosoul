@@ -2,11 +2,46 @@
 import siteLogo from '@/assets/LOGO_white_footer.svg'
 import { useclassesStore } from '@/stores/classes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const turnPage =(num)=>{
   useclassesStore().setPage(num);
 }
+const vWidth = ref(0)
+const toMotorPage = ref(2);
+const toAnimaPage = ref(4);
+const toHistoryPage = ref(5);
+const toCharmPage = ref(9);
+const toPotionPage = ref(10);
+const toDivitionPage = ref(11);
+const newVSize=()=>{
+ vWidth.value = window.innerWidth;
+   if(vWidth.value < 770){
+    toMotorPage.value = 3;
+    toAnimaPage.value = 7;
+    toHistoryPage.value = 10;
+    toCharmPage.value = 17;
+    toPotionPage.value = 19;
+    toDivitionPage.value = 21;
+  }else{
+    toMotorPage.value = 2;
+    toAnimaPage.value = 4;
+    toHistoryPage.value = 5;
+    toCharmPage.value = 9;
+    toPotionPage.value = 10;
+    toDivitionPage.value = 11;
+  }
+}
+
+
+  onMounted(()=>{
+    newVSize();
+    window.addEventListener('resize', newVSize);
+  })
+  
+  onUnmounted(()=>{
+    window.addEventListener('resize', newVSize);
+  })
 </script>
 
 <template>
@@ -76,22 +111,22 @@ const turnPage =(num)=>{
                 <router-link to="/classes" @click="turnPage(0)"><h5>{{$t('nav.classes')}}</h5></router-link>
               </li>
               <li>
-                <router-link to="/classes" @click="turnPage(2)"><p>{{$t('classes.motorClass')}}</p></router-link>
+                <router-link to="/classes" @click="turnPage(toMotorPage)"><p>{{$t('classes.motorClass')}}</p></router-link>
               </li>
               <li>
-                <router-link to="/classes" @click="turnPage(4)"><p>{{$t('classes.animalTitle')}}</p></router-link>
+                <router-link to="/classes" @click="turnPage(toAnimaPage)"><p>{{$t('classes.animalTitle')}}</p></router-link>
               </li>
               <li>
-                <router-link to="/classes" @click="turnPage(5)"><p>{{$t('classes.historyTitle')}}</p></router-link>
+                <router-link to="/classes" @click="turnPage(toHistoryPage)"><p>{{$t('classes.historyTitle')}}</p></router-link>
               </li>
               <li>
-                <router-link  to="/classes" @click="turnPage(9)"><p>{{$t('classes.charmTitle')}}</p></router-link>
+                <router-link  to="/classes" @click="turnPage(toCharmPage)"><p>{{$t('classes.charmTitle')}}</p></router-link>
               </li>
               <li>
-                <router-link to="/classes" @click="turnPage(10)"><p>{{$t('classes.potionTitle')}}</p></router-link>
+                <router-link to="/classes" @click="turnPage(toPotionPage)"><p>{{$t('classes.potionTitle')}}</p></router-link>
               </li>
               <li>
-                <router-link to="/classes" @click="turnPage(11)"><p>{{$t('classes.divinationTitle')}}</p></router-link>
+                <router-link to="/classes" @click="turnPage(toDivitionPage)"><p>{{$t('classes.divinationTitle')}}</p></router-link>
               </li>
               <li></li>
             </ul>
