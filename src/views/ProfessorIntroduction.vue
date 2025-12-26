@@ -30,86 +30,28 @@ const all = [  'ProfessorIntroduction/JiutianXuannu.png',
 //----------------ref----------------------------------
 const doubleAll = ref([]) 
 const refLists = ref([]) // ul s
-const refCard = ref(null) // li
-const cardWidth = ref(0) 
-let index = 0; // 計數器
-
-const calculateCardWidth = () => {
-  // querySelector 只會抓「第一個」符合的元素
-  const cardElement = refCard.value[0]
-  if (cardElement) {
-    // 處理 ref 物件 記得加 .value 
-    cardWidth.value = cardElement.offsetWidth // offsetWidth (包含 padding + border) 
-  }
-  if (refCard.value && refCard.value.length > 0) {
-    const cardMargin = parseInt(window.getComputedStyle( refCard.value[0]).marginLeft)
-    cardWidth.value += cardMargin * 2 // 左右 margin 都要計入
-  }
-}
-const setAllStyle = (callback) => { 
-  refLists.value.forEach((ul, i) => {
-    // 把這個 ul 的 style 物件傳給 callback 函式
-    if (ul) callback(ul.style, i) 
-  })
-}
-const slider = async() => {
-  calculateCardWidth()
-  if(!refLists.value.length) return 
-  currentTranslateX.value = -index * cardWidth.value 
-  setAllStyle((style, i) =>{ // 
-    style.transition = `all .5s linear`;
-    style.transform = `translateX(${currentTranslateX.value}px)`;
-    // if(i == 1) style.transform = `translateX(${-currentTranslateX.value}px)`; // 右移
-  })
-  await nextTick() // 保證指令寫入DOM 動畫還未完成
-  if( index == all.length ){ // 走到複製第一張 
-    setTimeout(() => {
-      setAllStyle(style => {
-        style.transition = '0s';
-        void document.body.offsetHeight; // 強迫瀏覽器現在就把高度算出來 (會阻止瀏覽器把兩個指令合併 導致動畫殘留)
-        style.transform = 'translateX(0)';
-      })
-      index = 0 // 回到原始資料開頭
-      currentTranslateX.value = 0
-    }, 500)
-  }
-  else if( index > all.length ){ 
-    setTimeout(()=>{
-      setAllStyle(style => {
-        style.transition = '0s';
-        void document.body.offsetHeight; 
-        style.transform = `translateX(${currentTranslateX.value}px)`;
-      })
-      index = index % all.length 
-      currentTranslateX.value = -index * cardWidth.value // 
-    }, 500)
-  }
-  // setTimeout(slideChanged,5)
-} 
-const move = () => {
-  index ++
-  slider()
-}
-// let timer = ref(null)
-for(let i=0; i< all.length * 2; i++){
-  let src = all[i % all.length]
-  doubleAll.value.push(src); 
-} 
-const isIn = ref(Array(doubleAll.value.length*3).fill(false))
-const InOrOut= (targetIndex, status)=>{ // 更新 mouseenter 的狀態
-  isIn.value[targetIndex]=status // 
-}
-const mouseAt = ref({x:0, y:0}) // 紀錄滑鼠位置
 const info = ref([]) // 未來讀 json
+const mouseAt = ref({x:0, y:0}) // 紀錄滑鼠位置
 const professsor = ref('')
 const job = ref('')
 const skillDetail = ref('')
 const refBigPhoto =ref('')
 const clickedPhoto = ref('')
-const isOpen = ref(false);
 const xStart = ref(0) //起點
 const xNow = ref(0)
 const distance = ref(0)
+const isOpen = ref(false);
+const isPress =ref(false) 
+
+
+for(let i=0; i< all.length * 2; i++){
+  let src = all[i % all.length]
+  doubleAll.value.push(src); 
+} 
+const isIn = ref(Array(doubleAll.value.length*3).fill(false)) // hover 待修復
+const InOrOut= (targetIndex, status)=>{ // 更新 mouseenter 的狀態
+  isIn.value[targetIndex]=status 
+}
 
 ;(async ()=>{ //讀 json 
   let jsonFile = await fetch('ProfessorIntroduction/professorInfo.json')
@@ -138,86 +80,24 @@ const closeInfo = () => {
   isOpen.value = false
 }
 
-const isPress =ref(false) 
-let originalShift = 0
-const currentTranslateX = ref(0)
+
 
 const onMousemove = (e) => { // mousemove 1px 呼叫一次
   // 1. 偵測滑鼠位置，slideChanged()判斷hover。
   mouseAt.value.x = e.clientX 
   mouseAt.value.y = e.clientY // 以viewport左上角為原點的座標位置
-  // 2. 如果滑鼠有按下，偵測移動距離讓user拉動卡片
+  // 2. 如果滑鼠有按下，偵測移動距離
   if(!isPress.value)return
   if (!refLists.value.length) return;
   
   xNow.value = e.clientX // 滑鼠按下&&移動時的當下位置
   distance.value = xNow.value - xStart.value // 距離按下時的總位移
 
-  let newTranslateX = originalShift + distance.value // 2-1. 計算理論上的新位移
-
-  calculateCardWidth()
-  const oneSetWidth = cardWidth.value * all.length
-
-  // 2-2. 左右移動應對
-    // 往右拉過第0張 -> 瞬移
-    if(newTranslateX > 0){
-      newTranslateX -= oneSetWidth
-      // originalShift -= oneSetWidth
-    } 
-    // 往左拉超過原始資料尾 
-    else if(newTranslateX < -oneSetWidth  ){
-      newTranslateX += oneSetWidth
-      // originalShift += oneSetWidth      
-    }
-    setAllStyle((style)=>{
-      style.transform = `translateX(${newTranslateX}px)`;
-    }) // 移動一次
-    
-    currentTranslateX.value = newTranslateX // newTranslateX 是區域變數 寫到 currentTranslateX 才可以在另一個函數用這個值
 }
-// const timerControl=()=>{ // 計時器控制
-//   if(isPress.value){ // 滑鼠按下則停止
-//     if(timer.value){
-//       clearInterval(timer.value)
-//       timer.value = null
-//     }
-//   }else if(!timer.value)
-//     timer.value = setInterval(move, 500) 
-// }
-// const onPress = e => { 
-//   isPress.value = true
-//   xStart.value = e.clientX // 按下時開始追蹤起點
-//   originalShift = currentTranslateX.value // 取得輪播位移變數 作為起始數值
-//   timerControl() // 關閉計時器
-//   if (refLists.value.length) 
-//   setAllStyle(style =>{
-//     style.transition = '0s'; // 關閉動畫
-//   })
-//   distance.value = 0 // 將移動距離歸零 以便作為click是件事發的判讀條件
-// }
 const offPress =()=>{
   isPress.value = false
-  index = Math.round(Math.abs(currentTranslateX.value) / cardWidth.value) // 更新index 對應到最近的卡片
-  
-  slider() // 讓新的index 跑動畫 
-  // timerControl() // 恢復自動輪播 
-  if (refLists.value.length) 
-  setAllStyle((style, i)=>{
-    style.transition = `all .5s linear`; // 重啟動畫
-  }) 
-  
 }
-// const slideChanged =  () => { 
-//   const topmostElement = document.elementFromPoint(mouseAt.value.x, mouseAt.value.y) // 離滑鼠最上層的元素 // mouseenter 卡片<li> 會回傳 <img>
-//     if(!topmostElement) return
-//     const closestLi = topmostElement.closest('.professor-photo-wrapper') // 找離最上層元素最近的(父層)li 
-//     // 改抓 class
-//     if(closestLi){ // 附近沒有 li
-//     const indexNum = Number(closestLi.dataset.index)
-//     isIn.value.fill(false)
-//     InOrOut(indexNum, true)
-//   }
-// }
+
 onMounted(() => { // DOM 生成後
     // ------------------------------------swiper 屬性---------------------------------------------
 
@@ -253,7 +133,6 @@ let Carousel = new Swiper(".professor-carousel-container", {
   // DATA SPEED
 let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
-  freeMode:true,
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -279,9 +158,6 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
   grabCursor: true,
 });
 
-  // setTimeout(slideChanged,5)
-
-  // timer.value = setInterval(move, 500) 
 
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', offPress)  
