@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { RouterView, useRoute } from 'vue-router';    //因為computed需要使用到useRoute
 import Backgroundaction from '@/components/backgroundaction.vue';
 import { computed } from 'vue'; //使用computed的功能，未傳參數但是有傳回值，因為route已經改變
+import OrderList from '@/components/OrderList.vue';
 
 
 // 步驟切換
@@ -22,22 +23,22 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
 <main class="shoppingcart-main">
     <!-- 麵包屑 -->
     <h6 class="page-guide">
-        Shopping Cart   
+        {{$t('shoppingcart.shoppingCart')}}   
     </h6>
 
     <h6 v-if="currentStep === 1" class="page-guide-step">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        STEP 1. MY CART
+        STEP 1. {{$t('shoppingcart.step1')}}  
     </h6>
 
     <h6 v-else-if="currentStep === 2" class="page-guide-step">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        STEP 2. PAYMENT & SHIPPING
+        STEP 2. {{$t('shoppingcart.step2')}}
     </h6>
     
     <h6 v-else class="page-guide-step">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        STEP 3. COMPLETED
+        STEP 3. {{$t('shoppingcart.step3')}}
     </h6>
 
 
@@ -48,25 +49,27 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
             class="cart-dock-block"
             :class="{nowblock: currentStep === 1}">
                 <h1 class="cart-step fw200" :class="{nowstep: currentStep === 1}">1</h1>
-                <h6 class="cart-step-text" :class="{nowtext: currentStep === 1}">MY CART</h6>
+                <h6 class="cart-step-text" :class="{nowtext: currentStep === 1}">{{$t('shoppingcart.step1')}}</h6>
             </li>
             <li 
             class="cart-dock-block"
             :class="{nowblock: currentStep === 2}">
                 <h1 class="cart-step fw200" :class="{nowstep: currentStep === 2}">2</h1>
-                <h6 class="cart-step-text" :class="{nowtext: currentStep === 2}">PAYMENT & SHIPPING</h6>
+                <h6 class="cart-step-text" :class="{nowtext: currentStep === 2}">{{$t('shoppingcart.step2')}}</h6>
             </li>
             <li 
             class="cart-dock-block"
             :class="{nowblock: currentStep === 3}">
                 <h1 class="cart-step fw200" :class="{nowstep: currentStep === 3}">3</h1>
-                <h6 class="cart-step-text" :class="{nowtext: currentStep === 3}">COMPLETED</h6>
+                <h6 class="cart-step-text" :class="{nowtext: currentStep === 3}">{{$t('shoppingcart.step3')}}</h6>
             </li>
         </ul>
         <hr class="cart-step-bar">
     </section>
 
     <RouterView></RouterView>
+
+    <!-- <OrderList></OrderList> -->
 
     <Backgroundaction></Backgroundaction>
 
