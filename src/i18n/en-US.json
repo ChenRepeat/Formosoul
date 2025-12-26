@@ -334,7 +334,15 @@
         "subTitle":"(Hoop Toss)",
         "popupDesc": "Game: \n Ring Toss",
         "fullText":"Step right up to the ultimate test of aim and precision! Ring Toss is a legendary night market challenge where things are harder than they look. Your goal? Land a plastic ring around the neck of a bottle or a figurine to win it. It sounds easy, but those rings love to bounce away! Do you have the magic touch to claim the big prize? Line up your shot and let it fly!",
-        "buttonText": "START GAME"
+        "buttonText": "START GAME",
+        "rule1":"1. How to Cast Your Spell : ",
+        "rule2":"Anywhere within the arcane view (screen), wield your wand (mouse) and drag backward to feel the elemental tension gathering at your fingertips.",
+        "rule3":"2. How to Proceed with the Trial : ",
+        "rule4":"To ensure safety, fairness, and preserve your mana, you are granted only ten incantations. Click and drag backward anywhere to control the intensity and cast towards the target.",
+        "rule5":"3. How Points are Awarded : ",
+        "rule6":"Novice Supplies (1st Row) : 100 Points",
+        "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
+        "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
     }
   }
   }

@@ -228,9 +228,17 @@
        @mousedown="onDragStart" @mousemove="onDragging" @mouseup="onDragEnd">
     
     <div v-if="!gameStarted" class="overlay dp-flex">
-      <div class="menu-box">
-        <h1 class="title">Ring Toss</h1>
-        <BasicButton @click="startGame"><p>Start</p></BasicButton>
+      <div class="menu-box dp-flex-col">
+        <h1 class="title">{{$t("nightmarket.items.ring-toss.title")}}</h1>
+        <h5>{{$t("nightmarket.items.ring-toss.rule1")}}</h5>
+        <h6>{{$t("nightmarket.items.ring-toss.rule2")}}</h6>
+        <h5>{{$t("nightmarket.items.ring-toss.rule3")}}</h5>
+        <h6>{{$t("nightmarket.items.ring-toss.rule4")}}</h6>
+        <h5>{{$t("nightmarket.items.ring-toss.rule5")}}</h5>
+        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule6")}}</h6>
+        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule7")}}</h6>
+        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule8")}}</h6>
+        <BasicButton @click="startGame" class="startBtn"><p>{{$t("nightmarket.items.ring-toss.buttonText")}}</p></BasicButton>
       </div>
     </div>
 
@@ -353,9 +361,22 @@
     backdrop-filter: blur(8px);
   }
   .menu-box {
-    text-align: center;
-    color:  $color-fsTitle;
+    color:  $color-fsWhite;
+    width: 60%;
+    h5,h6{
+      text-align: left;
+    }
+    h5{
+      padding: 16px 0;
+    }
+    h6{
+      text-indent:32px;
+    }
+    .startBtn{
+      align-self: center;
+      margin-top: 16px;
+    }
   }
-  .title {color: $color-fsGold;}
+  .title {color: $color-fsGold;text-align: center;}
   .result-title { color: #ff5252;}
 </style>

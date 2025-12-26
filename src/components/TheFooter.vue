@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   <main class="footer-case">
     <section class="footer-outer-case dp-flex">
       <div class="footer-icons-case dp-flex-col">
-        <img :src="siteLogo" alt="Logo" class="logo-style" />
+        <router-link to="/"><img :src="siteLogo" alt="Logo" class="logo-style" /></router-link>
         <div class="footer-social-link dp-flex">
           <a href="https://github.com/ChenRepeat/Formosoul" class=" no-i18n-anim"
             ><font-awesome-icon
@@ -160,9 +160,8 @@ hr {
   position: relative;
 
   @media screen and (max-width: 1200px) {
-        width: 95%;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 32px;
     align-items: center;
   }
@@ -172,6 +171,12 @@ hr {
   width: 1200px;
   gap: 100px;
   justify-content: center;
+  @media screen and (max-width: 1200px) {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 32px;
+    align-items: center;
+  }
 }
 .footer-inner-case {
   justify-content: start;
@@ -216,8 +221,21 @@ hr {
 .tibame-policy {
   text-align: center;
   font-size: 12px;
-  color: #b0b0b0;
+  color: $color-fsCaption;
   margin-top: 60px;
+  a{
+    transition: all 0.3s ease;
+    &:visited {
+      color: $color-fsCaption;
+    }
+    &:hover {
+      color:  $color-fsGold300;
+      text-decoration: underline;
+    }
+    &:active {
+      color: $color-fsGold;
+    }
+  }
 }
 .trim-case-policy,
 .trim-case-link {

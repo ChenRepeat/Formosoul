@@ -4,7 +4,7 @@ import en from './en-US.json';
 
 const i18n = createI18n({
   legacy: false,
-  locale: localStorage.getItem('user-lang') || 'en-US', // 預設語系
+  locale: sessionStorage.getItem('user-lang') || 'en-US', // 預設語系
   fallbackLocale: 'en-US', // 找不到翻譯時的備用語系
   messages: {
     'zh-TW': zh,
