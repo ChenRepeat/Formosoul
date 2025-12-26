@@ -18,6 +18,7 @@
     "安裝element-plus自訂標籤": "npm install -D unplugin-vue-components unplugin-auto-import",
     "安裝sass": " npm install -D sass",
     "安裝js-cookie": "npm install js-cookie",
+    "安裝EmailJS": "npm install @emailjs/browser",
     "ios安裝fa": "sudo npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome@latest-3",
     "ios安裝three.js": "sudo npm install three",
     "iOS安裝sass": "sudo npm install -D sass",
@@ -35,6 +36,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "@emailjs/browser": "^4.4.1",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
