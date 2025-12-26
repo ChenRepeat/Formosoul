@@ -1,12 +1,11 @@
 <script setup>
-    import BasicButton from '../BasicButton.vue';
-    import { ref } from 'vue';
-    import CoreGame from './CoreGame.vue';
+import BasicButton from '../BasicButton.vue';
+import { ref } from 'vue';
+import CoreGame from './CoreGame.vue';
+const currentView = ref('history')
 
-    const currentView = ref('history')
-
-    function showGame(){
-    currentView.value = 'game';
+function showGame(){
+currentView.value = 'game';
 }
 
 </script>
@@ -21,8 +20,8 @@
         </div>
         <div class="coregame-down">
 
-            <h5>Poking Lottery</h5>
-            <p>This is a classic Taiwanese childhood game where players pay a small fee to punch a hole through one of many covered squares on a board, winning the surprise prize hidden inside. It's all about luck and a little fun poke!</p>
+            <h5>{{ $t('coreselection.pokinglottery')}}</h5>
+            <p>{{ $t('coreselection.historyIntro')}}</p>
 
         </div>
         <BasicButton class="btn-yellow-fill" @click="showGame">Begin the Core Sensing</BasicButton>
