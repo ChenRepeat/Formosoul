@@ -152,7 +152,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
+import { onMounted, onUnmounted, ref, computed, watch, nextTick } from 'vue';
 import { PageFlip } from 'page-flip';
 import ClassPageIndex from '@/components/ClassPages/ClassPageIndex.vue';
 import MotorLeft from '@/components/ClassPages/MotorLeft.vue';
@@ -175,7 +175,8 @@ import DivinationRight from '@/components/ClassPages/DivinationRight.vue';
 import CharmRight from '@/components/ClassPages/CharmRight.vue';
 import Maho from '@/components/ClassPages/Maho.vue';
 import BikeGame from '@/components/ClassPages/BikeGame.vue';
-
+import { useclassesStore } from '@/stores/classes';
+const classesStore = useclassesStore();
 const bookRef = ref(null);
 const isAnimating = ref(true);
 const isFlip = ref(false);
@@ -458,7 +459,7 @@ watch(isDoublePage, (newVal, oldVal) => {
     console.log(`Display mode changed to: ${newVal ? 'Double Page' : 'Single Page'}`);
   }
 });
-const loadImg=()=>{
+const loadImg=async()=>{
   isLoad.value = true;
   initPageFlip();
   isAnimating.value = false;
@@ -469,13 +470,37 @@ const loadImg=()=>{
     isIntroPlaying.value = true;
     isAnimating.value = true;
   }else{
-    setTimeout(() => {      
-      pageFlip.flip(1);
-      updatePageNumber();
-    }, 800);
+   await nextTick();
+
+    const targetLogicalPage = classesStore.pageToTurn;
+    const targetPhysicalIndex = getPhysicalIndex(targetLogicalPage);
+    if (pageFlip && targetLogicalPage > 1) {
+       console.log(`Auto flipping to logical: ${targetLogicalPage}, physical: ${targetPhysicalIndex}`);
+       pageFlip.flip(targetPhysicalIndex);
+       updatePageNumber();
+       classesStore.setPage(1);
+    } else {
+       if(pageFlip) {
+        pageFlip.flip(0);
+        await wait(300);
+        pageFlip.flip(targetPhysicalIndex);
+        classesStore.setPage(1);
+        updatePageNumber();
+        }
+    }
   }
 }
-
+watch(
+  () => classesStore.pageToTurn, // 監聽目標
+  (newPage) => {
+    if (newPage !== 1 && pageFlip) {
+      const targetPhysicalIndex = getPhysicalIndex(newPage);
+      pageFlip.flip(targetPhysicalIndex);
+      updatePageNumber();
+      classesStore.setPage(1);
+    }
+  }
+);
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown);
   window.addEventListener('resize', handleResize);
