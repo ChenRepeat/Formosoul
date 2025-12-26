@@ -110,6 +110,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { inject, ref, watch } from 'vue';
 import router from '@/router';
+import emailjs from '@emailjs/browser';
 
 
 const setSharedEmail = inject('setEnrollmentEmail');
@@ -157,7 +158,7 @@ async function sendOTPAPI(emailValue) {
 }
 
 
-function enrollmentAPI(email, password) {
+function enrollmentAPI(email, password, otp) {
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/Enrollment.php`;
 
@@ -166,8 +167,9 @@ function enrollmentAPI(email, password) {
         headers:{
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
-            email, password
+            email, password, otp
         })
     }).then( res => res.json());
 
@@ -185,15 +187,37 @@ async function startCountdown() {
         return;
     }
 
-    generateotp();
+    const code = generateotp();
     otpLoading.value = true;
     errorMessage.value = '';
     btngray.value = true;
 
     try{
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/save_otp.php`;
+        await fetch( API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email.value, otp: code}),
+            credentials: 'include' // 這行是確保 Session Cookie 能運作
+        });
+        // emailJS API
+        const templateParams = {
+            email: email.value,
+            otp_code: code,
+        };
+
+        await emailjs.send(
+            'service_3xw68ou',   // 替換為你的 Service ID
+            'template_1tux8ni',  // 替換為你的 Template ID
+            templateParams, 
+            'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
+        )
+
         await sendOTPAPI(email.value);
         otpSent.value = true;
-        errorMessage.value = `測試otp ${otpnumber.value}`;
+        // errorMessage.value = `測試otp ${otpnumber.value}`;
+        errorMessage.value = 'Verification code sent!';
         timer.value = 60;
         intervalId = setInterval(() => {
             timer.value--;
@@ -263,7 +287,7 @@ async function handleEnrollment() {
     errorMessage.value = '';
 
     try{
-        const response = await enrollmentAPI(email.value, password.value);
+        const response = await enrollmentAPI(email.value, password.value, otp.value);
         // 這邊寫成跳到登入頁面 成功才會執行
         if(response.success){
             authStore.setloginView('loginpage');
@@ -271,8 +295,6 @@ async function handleEnrollment() {
         }else{
             errorMessage.value = response.message;
         }
-
-        
     }catch(error){
         errorMessage.value = error.message || 'Enrollment failed, please try again';
     }finally {
