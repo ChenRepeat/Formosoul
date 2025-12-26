@@ -232,10 +232,6 @@ async function startCountdown() {
         errorMessage.value = error.message || 'Failed to send OTP';
         otpLoading.value = false;
     }
-    // 要有倒數計時就不能用用統一個 finally 因為 finally 一定會執行 
-    // finally{
-    //     otpLoading.value = false;
-    // }
 };
 
 

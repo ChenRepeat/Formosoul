@@ -48,6 +48,8 @@ import { useAuthStore } from '@/stores/autoStore';
   
     });
 
+    
+
     const authStore = useAuthStore();
 
     function gotoledger() {

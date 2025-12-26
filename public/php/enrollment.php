@@ -13,7 +13,7 @@
   $checkstmt->bindValue(':email', $member['email']);
   $checkstmt->execute();
   // fetchColumn 可以只拿單一欄位
-  $count = $checkstmt->fetchColumn();
+  $count = $checkstmt->fetchColumn(PDO::FETCH_ASSOC);
 
   if($count > 0){
     echo json_encode([
