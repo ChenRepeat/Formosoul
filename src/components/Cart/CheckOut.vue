@@ -102,7 +102,7 @@ function goOrder(){
 
                         <div class="card-num">
                             <p>{{$t('shoppingcart.cardNumber')}}</p>
-                            <input class="input-text" type="text" required>
+                            <input class="input-text" type="text" maxlength="4" required>  <!-- 限制只能填4個-->
                             －<input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>

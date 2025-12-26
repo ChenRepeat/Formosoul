@@ -260,7 +260,7 @@
     "cardNumber":"Card Number",
     "expirationDate":"Expiration Date",
     "securityCode":"Security Code",
-    "authorized":"AUTHORIZED SIGNATURE",
+    "authorized":"AUTHORIZED NAME",
     "recipientInformation":"Recipient Information",
     "name":"Name",
     "phoneNumber":"Phone Number",

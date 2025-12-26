@@ -149,7 +149,7 @@ function qtyPlus(product_ID){
 
         <!-- 一般內容組件 ＊有 item-bar -->
         <div 
-            v-for="item in orderitems"
+            v-for="(item, index) in orderitems"
             :key="item.product_ID" 
             >
             <div class="orderlist-body dp-flex">
@@ -172,7 +172,8 @@ function qtyPlus(product_ID){
                 <font-awesome-icon v-if="showCart" class="item-icon-delete" icon="fa-regular fa-trash-can" />
             
             </div>
-            <hr class="item-bar">
+            <hr v-if="index < ( orderitems.length -1 )" class="item-bar">
+            <!-- 無法用 css 來抓最後一個<hr>，所以改用 index 來處理 -->
 
         </div>
 
