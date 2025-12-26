@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '../../components/BasicButton.vue';
 import { useRouter } from 'vue-router';
+import OrderList from '../OrderList.vue';
 
 const router = useRouter();
 
@@ -16,111 +17,72 @@ function goOrder(){
     <section class="check-dock">
         <!-- 內容 -->
         <section class="my-cart-dock">
-            <h5>Order Details</h5>
-            <div class="orderdetail-total dp-flex-col">
-                <div class="total-price dp-flex fw200">
-                    <h6>Price：</h6>
-                    <h6>NT$ 380</h6>
-                </div>
 
-                <div class="total-qty dp-flex fw200">
-                    <h6>Quantity：</h6>
-                    <h6>2</h6>
-                    <h6>item(s)</h6>
-                </div>
-            </div>
+            <OrderList 
+                :showCart="false"
+                :showTitle="false"
+                :showTotal="false"
+            ></OrderList>
             
-            <div class="orderdetail-body dp-flex">
-                <div class="item-image">
-                    <img src="../../../public/Shop/2.png" alt="">
-                </div>
-                <h6 class="item-name">Bamboo Helicopter</h6>
-                <div class="item-qty dp-flex">
-                    <h6>1</h6>
-                    <h6>item(s)</h6>
-                </div>
-                <h6 class="item-price">NT$ 190</h6>
-                
-                
-            </div>
-            <hr class="item-bar">
-
-            <div class="orderdetail-body dp-flex">
-                <div class="item-image">
-                    <img src="../../../public/Shop/2.png" alt="">
-                </div>
-                <h6 class="item-name">Bamboo Helicopter</h6>
-                <div class="item-qty dp-flex">
-                    <h6>1</h6>
-                    <h6>item(s)</h6>
-                </div>
-                <h6 class="item-price">NT$ 190</h6>
-                
-                
-            </div>
-            <hr class="item-bar">
-
-            <p class="warning-text fw200">Import duties are charged once the parcel reaches its destination country. These charges must be paid by the recipient of the parcel. We have no control over these charges and we can’t tell you what the cost would be, as customs policies and import duties vary widely from country to country. It might be a good idea to contact your local customs office for more information on the current charges.</p>
-  
         </section>
         <!-- 付款 -->
         <section class="payment-total dp-flex">
             <div class="check-payment">
-                <h5>Payment & Shipping</h5>
+                <h5>{{$t('shoppingcart.paymentShipping')}}</h5>
                 <hr>
-                <p>Country</p>
+                <p>{{$t('shoppingcart.country')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>Taiwan</option>
-                        <option class="list-option">Japan</option>
-                        <option class="list-option">Singapore</option>
-                        <option class="list-option">The Netherlands</option>
-                        <option class="list-option">Ireland</option>
+                        <option class="list-option" selested>{{$t('shoppingcart.taiwan')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.japan')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.singapore')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.netherlands')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.ireland')}}</option>
                     </select>
                 </nav>
-                <p>Delivery</p>
+                <p>{{$t('shoppingcart.delivery')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>Home Delivery</option>
+                        <option class="list-option" selested>{{$t('shoppingcart.homeDelivery')}}</option>
                     </select>
                 </nav>
-                <p>Payment</p>
+                <p>{{$t('shoppingcart.payment')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>Credit Card</option>
-                        <option class="list-option">Apple PAY</option>
+                        <option class="list-option" selested>{{$t('shoppingcart.card')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.applePAY')}}</option>
 
                     </select>
                 </nav>
             </div>
             <div class="check-total">
-                <h5>Total Details</h5>
+                <h5>{{$t('shoppingcart.totalDetails')}}</h5>
                 <hr>
 
                 <div class="check-total-dock">
                     <div class="check-price dp-flex">
-                        <p>Price：</p>
+                        <p>{{$t('shoppingcart.price')}}：</p>
                         <p>NT$ 380</p>
                     </div>
                     <div class="check-discount dp-flex">
-                        <p>Discount：</p>
+                        <p>{{$t('shoppingcart.discount')}}：</p>
                         <p>－ NT$ 60</p>
                     </div>
                     <div class="check-shippingfee dp-flex">
-                        <p>Shipping Fee：</p>
+                        <p>{{$t('shoppingcart.shippingFee')}}：</p>
                         <p>NT$ 80</p>
                     </div>
                     <hr>
                     <div class="check-total-payment dp-flex">
-                        <h5>Total：</h5>
+                        <h5>{{$t('shoppingcart.total')}}：</h5>
                         <h5>NT$ 400</h5>
                     </div>
                 </div>
                 <BasicButton class="btn-blue-fill btn-fix-width btn-coupon">
-                    Select COUPON
+                    {{$t('shoppingcart.btn-selectCoupon')}}
                 </BasicButton>
 
             </div>
@@ -133,13 +95,13 @@ function goOrder(){
             
             <!-- 信用卡資料 -->
             <section class="creditcard-info">
-                <h5>Credit Card<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
+                <h5>{{$t('shoppingcart.creditCard')}}<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
                 <hr>  
                 <div class="card-dock dp-flex">
                     <div class="card-left">
 
                         <div class="card-num">
-                            <p>Card Number</p>
+                            <p>{{$t('shoppingcart.cardNumber')}}</p>
                             <input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
@@ -148,7 +110,7 @@ function goOrder(){
 
                         <div class="card-date-type dp-flex">
                             <div class="card-date">
-                                <p>Expiration Date</p>
+                                <p>{{$t('shoppingcart.expirationDate')}}</p>
                                 <input class="input-text" type="text" placeholder="mm" required>
                                 ／<input class="input-text" type="text" placeholder="yy" required>
                             </div>
@@ -164,11 +126,11 @@ function goOrder(){
                     
                     <div class="card-right">
                         <div class="card-code dp-flex">
-                            <p>Security code</p>
+                            <p>{{$t('shoppingcart.securityCode')}}</p>
                             <input class="input-text" type="text" required>
                         </div>
                         <div class="card-name">
-                            <p>AUTHORIZED SIGNATURE</p>
+                            <p>{{$t('shoppingcart.authorized')}}</p>
                             <input class="input-text" type="text" required>
                         </div>
 
@@ -181,23 +143,23 @@ function goOrder(){
 
             <!-- 收件資料 -->
             <section class="received-info">
-                <h5>Recipient Information</h5>
+                <h5>{{$t('shoppingcart.recipientInformation')}}</h5>
                 <hr>
                 <div class="received-info-dock">
 
                     <div class="received-name-phone dp-flex">
                         <div class="received-name">
-                            <p>Name</p>
+                            <p>{{$t('shoppingcart.name')}}</p>
                             <input class="input-text" type="text" required>
                         </div>
                         <div class="received-phone">
-                            <p>Phone Number</p>
+                            <p>{{$t('shoppingcart.phoneNumber')}}</p>
                             <input class="input-text" type="text" required>
                         </div>
                     </div>
                     <div class="received-address dp-flex">
                         <div>
-                            <p>Address</p>
+                            <p>{{$t('shoppingcart.address')}}</p>
                             <input class="input-text" placeholder="Country" type="text" required>
                         </div>
                         <div>
@@ -208,12 +170,12 @@ function goOrder(){
 
                     <label class="checkbox-dock dp-flex">
                         <input class="input-checkbox" type="checkbox" name="" id="">
-                        <span>Remember delivery address.</span>
+                        <span>{{$t('shoppingcart.record')}}</span>
                     </label>
 
                     <textarea 
                     class="input-text input-textarea " 
-                    placeholder="Please leave a note here for any special requests regarding your purchase." 
+                    :placeholder="$t('shoppingcart.remark')" 
                     type="textarea"
                     rows="3"
                     ></textarea>
@@ -226,7 +188,7 @@ function goOrder(){
             <!-- order -->
             <div>  <!-- 這邊用@click的話，會直接執行，表單的sumbit的檢查必填功能會被跳過，所以要改寫在表單的submit功能的預設事件後執行想執行的動作 -->
                 <BasicButton class="btn-yellow-fill btn-fix-width btn-order" type="submit">
-                    ORDER
+                    {{$t('shoppingcart.order')}}
                 </BasicButton>
             </div>
         </form>
@@ -244,98 +206,6 @@ function goOrder(){
             0 0px 10px rgba(0,0,0,0.5);
         backdrop-filter: blur(70px);  
         border-radius: 10px;    
-        margin-top: 40px;
-        padding: 60px 40px 80px;
-        text-align: center;
-    }
-
-    .my-cart-dock>h5{
-        margin-bottom: 60px;
-    }
-
-    .orderdetail-total{
-        border: 0.5px solid $color-fsWhite;
-        margin-bottom: 20px;
-    }
-
-    .total-price, .total-qty {
-        justify-content: center;
-        margin: 8px 0;
-    }
-
-    .total-price>h6:last-of-type{
-        color: $color-fsRed;
-    }
-
-    .total-qty>h6:nth-of-type(2){
-        margin-right: 8px;
-    }
-
-
-
-
-
-    //body
-    .orderdetail-body{
-        padding: 0 20px;
-        align-items: center;
-    }
-
-    .item-bar{
-        margin: 20px 0;
-        border: none;
-        height: 0.5px;
-        background-color: $color-fsWhite;
-    }
-
-    .item-bar:last-of-type{
-        height: 1px;
-    }
-
-    .item-image{
-        width: 100px;
-        height: 100px;
-
-        flex-grow: 0;
-    }
-
-    .item-image>img{
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-    }
-
-    .item-name{
-        flex-basis: 0;
-        flex-grow: 4;
-    }
-
-    .item-price{
-        flex-basis: 0;
-        flex-grow: 2;
-    }
-
-    .item-qty{
-        justify-content: center;
-        align-items: center;
-
-        flex-basis: 0;
-        flex-grow: 3;
-    }
-
-    .item-qty-icon, .item-icon-delete{
-        font-size: 2rem;
-        cursor: pointer;
-    }
-
-    .item-qty>h6{
-        text-align: center;
-        margin-right:8px;
-    }
-
-    .warning-text{
-        margin-top: 60px;
-        color: $color-fsCaption;
     }
 
     //背景設定
