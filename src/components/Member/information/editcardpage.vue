@@ -22,12 +22,15 @@ const memberStore = useMemberStore();
         const userData = JSON.parse(storedUser);
         const { member_ID } = userData;
         const originalName = userData.name;
-        const newName = memberStore.memberData.name;
-        if (originalName === newName) {
+        const tempName = memberStore.memberData.tempName;
+        if (originalName == tempName) {
             console.log('名字未變動，直接關閉');
-            authStore.closeLoginModal(); // 關閉彈窗
-            return; // 使用 return 確保後面的 API 請求不會執行
+            authStore.closeLoginModal();
+            return; 
         }
+        if(memberStore.memberData.isEditing == true){
+            userData.name = tempName;
+        };
         try{
 
             const response = await fetch(API_URL, {
@@ -35,12 +38,13 @@ const memberStore = useMemberStore();
                 headers:{
                     'Content-Type': 'application/json; charset=utf-8'
                 },
-                body: JSON.stringify({name: newName, member_ID})
+                body: JSON.stringify({name: tempName, member_ID})
             });
 
             const result = await response.json();
             if(result.success){
-                userData.name = newName;
+                userData.name = tempName;
+                // tempName = newName;
                 localStorage.setItem('user', JSON.stringify(userData));
                 await upload();
             }else{

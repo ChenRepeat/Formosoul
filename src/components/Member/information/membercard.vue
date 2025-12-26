@@ -21,12 +21,12 @@
                 <div v-if="memberStore.memberData.isEditing">
                     <input
                         v-model="memberStore.memberData.tempName" 
-                        @keyup.enter="saveName"
+                        @keyup.enter="saveName(memberStore.memberData.tempName)"
                         class="input-text"
                     >
-                </div>
-                <h6 v-else class="fw200">{{ memberStore.memberData.name }}</h6>
-
+                </div> 
+                <h6 v-else-if="isNameNull" class="fw200">{{ memberStore.memberData.name }}</h6>
+                <h6 v-else class="fw200">{{ memberStore.memberData.tempName }}</h6>
                 <p>Wand Core:</p>
                 <h6 class="fw200">{{ memberStore.memberData.wandcore }}</h6>
 
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { useRoute } from 'vue-router';
@@ -88,7 +88,7 @@ const loadMemberData = async () => {
         const result = await response.json();
         if(result.success){
             const dbData = result.data;
-            memberStore.memberData.name = dbData.name;
+            memberStore.memberData.tempName = dbData.name;
             memberStore.memberData.number = dbData.member_ID;
             memberStore.memberData.date =  dbData.createdate;
             memberStore.memberData.wandcore = dbData.magical_en || 'Not yet selected';
@@ -100,6 +100,14 @@ const loadMemberData = async () => {
     }
 };
 
+const isNameNull = computed(() => {
+
+    const username = localStorage.getItem('user');
+    if (!username) return true;
+    const nameobj = JSON.parse(username);
+    return !nameobj.name;
+
+});
 
 const fileChange = ( e ) => {
         let file = e.target.files[0];
