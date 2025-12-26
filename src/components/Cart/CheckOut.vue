@@ -3,11 +3,89 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '../../components/BasicButton.vue';
 import { useRouter } from 'vue-router';
 import OrderList from '../OrderList.vue';
+import { ref } from 'vue'
 
 const router = useRouter();
 
 function goOrder(){
     router.push('/shoppingcart/ordersuccess');
+}
+
+// 信用卡填完跳轉下一格
+const cardNum = ref([]);
+const cardMonth = ref(null);
+const cardYear = ref(null);
+const cardCode = ref(null);
+const cardName = ref(null);
+
+/*
+//這個寫法要寫好幾個function來進行跳轉
+function nextInput( e, index ){
+    //檢查內容是否為數字
+
+    //檢查內容的長度
+    if(e.target.value.length === 4 ){    
+        //檢查是否為最後一格
+        if(index < 3){
+            cardNum.value[ index + 1 ].focus();
+        }else{
+            cardMonth.value.focus();
+        }
+    }
+}
+*/
+
+//用一個 function 統一處理跳轉
+function goNext( e, maxlength, nextOne ){
+
+    // 先過濾輸入的內容是否為數字，但是排除姓名欄
+    // 因為在目前情況下，剛好有限制長度的欄位皆為數字，所以一定會輸入限制長度，而長度必大於0，所以可以用這件事來進行排除
+    if( maxlength > 0 ){
+        //e.target.value = e.target.value.replace(/[^\d]/g, '');
+        e.target.value = e.target.value.replace(/\D/g, '');
+        // replace() 是字串的方法，因為 input 的內容會被視為字串傳回來，所以可以使用字串的方法
+        // replace(舊值, 取代舊值的新值)
+
+        /*
+        /[^\d]/g 正則表達式
+        /  / ：中間寫規則
+        g    ：修飾符，代表規則的備註 / 設定 => g代表全部都要找出來，如果沒有 g，找到一個之後就會停止
+        \d   ：代表 數字 (0-9)。
+        \D   ：代表 非數字 (0-9)。
+        [^  ]：代表 除了... 以外。
+        ^    ：代表 開頭為...
+        */
+    }
+
+    if(e.target.value.length === maxlength){
+        //nextOne.value.focus();  因為nextOne在目前的情況，有可能是 陣列裡的某一個 或 單獨的 Ref，所以這樣寫會有 bug，跑不動
+
+        // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
+        if(nextOne){
+            // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
+            // nextOne.focus 代表 檢查有沒有這個功能 => 回傳函式本身 (True) 或 undefined (False)。
+            // nextOne.focus() 代表 現在立刻執行這個功能！ 
+            const target = nextOne.focus ? nextOne : nextOne.value;
+            // step3 程式保護，避免報錯，網頁會死掉
+            // ? : 萬一沒有就停在這邊，不要繼續執行（ JavaScript (ES2020)的語法糖 ）
+            target?.focus?.();
+        }
+    }
+};
+
+
+function goBack(e, previousOne){
+    if(e.target.value.length === 0){
+
+        // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
+        if(previousOne){
+
+            // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
+            const target = previousOne.focus ? previousOne : previousOne.value;
+            // step3 程式保護，避免報錯，網頁會死掉
+            target?.focus?.();
+        }
+    }
 }
 
 
@@ -34,7 +112,7 @@ function goOrder(){
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>{{$t('shoppingcart.taiwan')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.taiwan')}}</option>
                         <option class="list-option">{{$t('shoppingcart.japan')}}</option>
                         <option class="list-option">{{$t('shoppingcart.singapore')}}</option>
                         <option class="list-option">{{$t('shoppingcart.netherlands')}}</option>
@@ -45,16 +123,15 @@ function goOrder(){
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>{{$t('shoppingcart.homeDelivery')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.homeDelivery')}}</option>
                     </select>
                 </nav>
                 <p>{{$t('shoppingcart.payment')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
                     <select class="nav-list fw200">
-                        <option class="list-option" selested>{{$t('shoppingcart.card')}}</option>
+                        <option class="list-option">{{$t('shoppingcart.card')}}</option>
                         <option class="list-option">{{$t('shoppingcart.applePAY')}}</option>
-
                     </select>
                 </nav>
             </div>
@@ -98,21 +175,37 @@ function goOrder(){
                 <h5>{{$t('shoppingcart.creditCard')}}<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
                 <hr>  
                 <div class="card-dock dp-flex">
-                    <div class="card-left">
+                    <div class="card-left dp-flex-col">
 
                         <div class="card-num">
                             <p>{{$t('shoppingcart.cardNumber')}}</p>
-                            <input class="input-text" type="text" maxlength="4" required>  <!-- 限制只能填4個-->
+                            <!-- 改用 v-for 產生輸入框，方便接下來的輸入框跳轉 -->
+                            <span v-for="(num, index) in 4">
+                                <input class="input-text" type="text" maxlength="4" required
+                                        ref="cardNum" 
+                                        @input="goNext($event, 4, ( index < 3 ? cardNum[index + 1] : cardMonth))"
+                                        @keydown.delete="goBack($event, ( index > 0 ? cardNum[index - 1] : cardNum[0]))"
+                                        >  <!-- maxlength 限制只能填4個
+                                                $event 因為還要傳遞 index 值，所以不能省略-->
+                                <span v-if="index < 3">－</span>
+                            </span>
+
+                            <!-- <input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
                             －<input class="input-text" type="text" required>
-                            －<input class="input-text" type="text" required>
+                            －<input class="input-text" type="text" required> -->
                         </div>
 
                         <div class="card-date-type dp-flex">
                             <div class="card-date">
                                 <p>{{$t('shoppingcart.expirationDate')}}</p>
-                                <input class="input-text" type="text" placeholder="mm" required>
-                                ／<input class="input-text" type="text" placeholder="yy" required>
+
+                                <input ref="cardMonth" class="input-text" type="text" placeholder="mm" maxlength="2" required
+                                        @input="goNext($event, 2, cardYear)"
+                                        @keydown.delete="goBack($event, cardNum[3])">
+                                ／<input ref="cardYear" class="input-text" type="text" placeholder="yy" maxlength="2" required
+                                        @input="goNext($event, 2, cardCode)"
+                                        @keydown.delete="goBack($event, cardMonth)">
                             </div>
     
                             <div class="card-type">
@@ -124,14 +217,18 @@ function goOrder(){
                     </div>
                     
                     
-                    <div class="card-right">
+                    <div class="card-right dp-flex-col">
                         <div class="card-code dp-flex">
                             <p>{{$t('shoppingcart.securityCode')}}</p>
-                            <input class="input-text" type="text" required>
+                            <input ref="cardCode" class="input-text" type="text" maxlength="3" required
+                                    @input="goNext($event, 3, cardName)"
+                                    @keydown.delete="goBack($event, cardYear)">
                         </div>
                         <div class="card-name">
                             <p>{{$t('shoppingcart.authorized')}}</p>
-                            <input class="input-text" type="text" required>
+                            <input ref="cardName" class="input-text" type="text" required
+                                    @input="goNext($event, 0, )"
+                                    @keydown.delete="goBack($event, cardCode)">
                         </div>
 
                         
@@ -306,7 +403,7 @@ function goOrder(){
     }
 
     .card-dock{
-        padding: 20px 20px 0;
+        padding: 50px 20px 30px;
         gap: 20px;
         flex-shrink: 0;
         justify-content: space-around;
@@ -314,10 +411,12 @@ function goOrder(){
 
     .card-left, .card-right{
         background-color: $color-fsContent;
-        width: 360px;
+        min-width: 360px;
+        width: 40%;
         aspect-ratio: 3/1.8;
         border-radius: 20px;
-        padding: 20px;   
+        padding: 28px;   
+        justify-content: space-around;
     }
 
     .card-left input, .card-right input{
@@ -334,6 +433,11 @@ function goOrder(){
         border-bottom: 0.5px solid $color-fsWhite;
         margin: 8px 0 16px;
         text-align: center;
+        & >span{
+            span{
+                margin: 0 4px;
+            }
+        }
     }
 
     .card-date-type{
@@ -358,7 +462,8 @@ function goOrder(){
     .card-code input{
         background-color: $color-fsWhite;
         border: 1px solid $color-fsCaption;
-        width: 150px;
+        width: 60%;
+        //min-width: 150px;
     }
     
     .card-name input{
@@ -411,6 +516,13 @@ function goOrder(){
     .btn-order{
         display: block;
         margin: 100px auto 0;
+    }
+
+    // RWD------------------------------------- 
+    @media screen and (max-width: 1200px) {
+        .card-left, .card-right{
+            padding: 20px;   
+        }
     }
 
 </style>
