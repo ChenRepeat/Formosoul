@@ -1,6 +1,7 @@
 <script setup>    
-import { ref, onMounted, onUnmounted , defineEmits, computed} from "vue";
+import { ref, onMounted, onUnmounted , defineEmits, defineProps, computed} from "vue";
 import gsap from "gsap";
+import MemberLedger from "../Member/information/memberLedger.vue";
 // import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
 // 遊戲狀態 
@@ -9,6 +10,16 @@ import gsap from "gsap";
 會發射：按空白鍵或點擊，鉤子射出去。
 會抓東西：碰到蝦子會抓回來加分。
 */
+
+const emit = defineEmits([
+    'close-game', 
+    'pass-game',   
+    'open-ledger'  
+]);
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
 
 // 圖片路徑打包
 const publicPath = import.meta.env.BASE_URL;
@@ -29,7 +40,7 @@ const toggleMute = () => { // 切換靜音
     }
 }
 
-const emit = defineEmits(['close-game']);
+// const emit = defineEmits(['close-game']);
 
 const score = ref(0);
 const gameArea = ref(null);
@@ -166,7 +177,7 @@ let timerInterval = null;
 const initGame = () => {
     // 重置資料數據
     score.value = 0;
-    timeLeft.value = 30;
+    timeLeft.value = 10;
     isGameOver.value = false;
     isGameReady.value = true;
 
@@ -214,12 +225,37 @@ const gameOver = () => {
     isGameOver.value = true;
     clearInterval(timerInterval); // stop 計時
 
-    // 停止擺盪
+    // 停止擺盪 & music
     if(swingBetween) swingBetween.pause();
     if(bgmAudio.value) {
         bgmAudio.value.pause();
     }
+
+    if(score.value >= 500) {
+        setTimeout(() => {
+            showCardOverlay.value = true;
+            setTimeout(() => {
+                activeTriggers.value.shrimp = true;
+
+                setTimeout(() => {
+                passedGames.value.shrimp = true;
+
+                // 儲存進度
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.shrimp = true; 
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+
+                activeTriggers.value.shrimp = false;
+            }, 600);
+        }, 500);   
+    }, 1000);
 }
+}
+
+const handleCheckLedger = () => {
+    emit('open-ledger'); // 通知父層打開集點卡
+    emit('close-game');  // 關閉遊戲視窗
+};
 
 
 // 1 擺盪
@@ -357,6 +393,14 @@ onMounted (()=>{
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        passedGames.value.shrimp = !!progress.shrimp; 
+        passedGames.value.dice = !!progress.dice;
+        passedGames.value.ringtoss = !!progress.ringtoss;
+    }
+
     initGame();
     window.addEventListener('keydown', handleKey);
 });
@@ -423,6 +467,16 @@ onUnmounted (()=> {
         </div>
 
         <div v-if="isGameOver" class="game-over-text">
+            <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+                <div class="card-modal">
+                    <MemberLedger
+                        :hasscale="false" 
+                        :passedGames="passedGames" 
+                        :activeTriggers="activeTriggers"
+                    />
+                    <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+                </div>
+            </div>
             <div class="result-title">TIME'S UP!</div>
             <h3>Your score is:  {{  score }}</h3>
             <div v-if="score >= 500" class="result-msg win"><h1>CONGRATS!</h1></div>
@@ -435,7 +489,7 @@ onUnmounted (()=> {
                     PLAY AGAIN ⟳
                 </button>
 
-                <button class="btn-action btn-check">
+                <button class="btn-action btn-check" @click.stop="handleCheckLedger">
                     CHECK YOUR LEDGER
                 </button>
             </div>
@@ -693,5 +747,36 @@ onUnmounted (()=> {
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
 }
 
+.ledger-overlay-in-game {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; 
+}
+
+.card-modal {
+    position: relative;
+    transform: scale(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 20px;
+    background-color: #ff6b81;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
 </style>

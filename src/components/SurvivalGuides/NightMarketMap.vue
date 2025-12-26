@@ -6,9 +6,10 @@ import { RouterLink, useRouter } from "vue-router";
 import { popupFrames, infoFrames } from "@/components/SurvivalGuides/nightMarketData.js";
 import GamePrawning from '@/components/SurvivalGuides/GamePrawning.vue';
 import GameDice from "./GameDice.vue";
+import GameRingToss from "./GameRingToss.vue";
 import BasicButton from "../BasicButton.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import GameRingToss from "./GameRingToss.vue";
+
 
 const isShow = ref(-1);
 const animationWelcome = ref(false)
@@ -186,9 +187,9 @@ function closeWelcomeFrame (){
                     <button class="close-game-btn" @click="isGameModalOpen = false">
                         EXIT GAME
                     </button>
-                    <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false" />
-                    <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false"></GamePrawning>
-                    <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false"></GameDice>
+                    <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
+                    <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
+                    <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
                 </div>
             </div>
          </div>
@@ -782,7 +783,7 @@ function closeWelcomeFrame (){
     border: 2px solid white;
     border-radius: 30px;
     cursor: pointer;
-    z-index: 1000; /* 確保按鈕在最上層 */
+    z-index: 4000; /* 確保按鈕在最上層 */
     transition: transform 0.3s;
 
     &:hover {
