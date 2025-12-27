@@ -157,6 +157,9 @@ const router = createRouter({
       path: '/classes',
       name: 'Classes',
       component: Classes,
+      meta:{ 
+        hideLogoRWD: true,
+      },
     },
     
     {

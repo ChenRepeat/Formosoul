@@ -22,7 +22,9 @@ const currentBgClass = computed(() => {
 const currentLogoDP = computed(() => {
   return route.meta?.display || 'block';
 });
-
+const hideLogoRWD = computed(() => {
+  return route.meta?.hideLogoRWD || false;
+});
 const langStore = useLangStore();
 
 const execLanguageChange = (changeAction) => {
@@ -73,7 +75,9 @@ onMounted(async () => {
   >
     <TheHeader :is-black-style="currentBgClass == 'white' || currentBgClass == 'transparent'"/>
     <main class="content">
-      <RouterLink to="/" :style="{'display':currentLogoDP}" class=" no-i18n-anim"><img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" /></RouterLink>
+      <RouterLink to="/" :style="{'display':currentLogoDP}" class=" no-i18n-anim">
+        <img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" :class="{'dpn':hideLogoRWD}"/>
+      </RouterLink>
       <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
       <div v-if="authStore.isLoading" class="loading">
         載入中...
@@ -118,6 +122,9 @@ onMounted(async () => {
   gap: 12px;
 }
 
-@media (min-width: 1024px) {
+@media screen and (max-width: 1200px) {
+  .dpn{
+    display: none;
+  }
 }
 </style>

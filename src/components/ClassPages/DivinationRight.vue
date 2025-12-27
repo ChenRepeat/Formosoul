@@ -17,11 +17,11 @@ import { ref } from 'vue';
   };
   const chouqianResult={
     1: {name:'大吉',text:'classes.stick1'},
-    2: {name:'中吉',text:'classes.stick1'},
-    3: {name:'小吉',text:'classes.stick1'},
-    4: {name:'吉',text:'classes.stick1'},
-    5: {name:'末吉',text:'classes.stick1'},
-    6: {name:'衰',text:'classes.stick1'},
+    2: {name:'中吉',text:'classes.stick2'},
+    3: {name:'小吉',text:'classes.stick3'},
+    4: {name:'吉',text:'classes.stick4'},
+    5: {name:'末吉',text:'classes.stick5'},
+    6: {name:'衰',text:'classes.stick6'},
   }
 
   function chouqian(){
