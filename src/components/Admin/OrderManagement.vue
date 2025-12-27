@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import ListLayout from './ListLayout.vue'
+  import { ArrowDown } from '@element-plus/icons-vue'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
@@ -13,9 +14,9 @@
     return orderData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
   })
 
-  const getOrderData = async () => {
+  const getOrders = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getOrderData.php`;
+    const API_URL = `${apiBase}/getOrders.php`;
 
 
     const response = await fetch(API_URL);
@@ -31,7 +32,7 @@
 
   
   onMounted (() => {
-    getOrderData();
+    getOrders();
   });
 </script>
 <template>
@@ -43,7 +44,20 @@
 
   <template #controls>
     <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋訂單編號/會員姓名" style="width: 400px;"></el-input>
-    <el-dropdown trigger="click">訂單狀態:全部</el-dropdown>
+    <el-dropdown trigger="click">
+    <div class="capsule-btn">
+      <span class="label">訂單狀態: 全部</span>
+      <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+    </div>
+
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item>全部</el-dropdown-item>
+        <el-dropdown-item>已付款</el-dropdown-item>
+        <el-dropdown-item>未付款</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
   </template>
 
   <el-table :data="pagedData" stripe>
@@ -55,7 +69,7 @@
       <el-table-column label="建立時間" prop="date"></el-table-column>
       <el-table-column label="訂單明細">
         <template #default="{ row }">
-          <router-link :to="{name:'OrderDetails', params:{id: row_order_ID}}">
+          <router-link :to="{name:'OrderDetails', params:{id: row.order_ID}}">
             <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
           </router-link>
         </template>
@@ -111,5 +125,39 @@
   color: #606266;
   margin: 0;
   white-space: nowrap;
+}
+
+.capsule-btn {
+  display: flex;            /* 讓文字跟箭頭並排 */
+  align-items: center;      /* 垂直置中 */
+  justify-content: center;
+  
+  background-color: #F0F7FF; /* 與左邊 input 同樣的淺藍色背景 */
+  border-radius: 50px;       /* 膠囊圓角 */
+  padding: 8px 20px;         /* 內距：讓字不要貼邊，看起來像按鈕 */
+  
+  color: #606266;            /* 文字顏色 */
+  cursor: pointer;           /* 滑鼠移上去變手指 */
+  font-size: 14px;
+  border: 1px solid transparent; /* 預留邊框位置，若需要邊框可改成 #dcdfe6 */
+  
+  /* 避免文字換行 */
+  white-space: nowrap; 
+
+  /* 為了跟左邊的 input 高度對齊 (視情況調整) */
+  height: 32px; 
+  box-sizing: border-box; 
+  
+  transition: all 0.3s;
+}
+
+/* 滑鼠移上去的效果 (選擇性) */
+.capsule-btn:hover {
+  background-color: #e1f0ff;
+}
+
+/* 確保箭頭跟文字有一點距離 */
+.el-icon--right {
+  margin-left: 8px;
 }
 </style>

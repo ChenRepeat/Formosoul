@@ -4,9 +4,9 @@
     <div class="page-header">
       <div class="header-left">
         <h6 class="title">訂單查看</h6>
-        <span class="order-id">#{{ formData.orderId }}</span>
-        <el-tag :type="getStatusType(formData.status)" effect="dark" class="status-tag">
-          {{ formData.status }}
+        <span class="order-id">#{{ OrderData.orderId }}</span>
+        <el-tag :type="getStatusType(OrderData.status)" effect="dark" class="status-tag">
+          {{ OrderData.status }}
         </el-tag>
       </div>
       <el-button @click="goBack" class="add-btn" round>返回列表</el-button>
@@ -19,19 +19,19 @@
           <el-col :span="8">
             <div class="info-item">
               <p>會員姓名</p>
-              <div class="info-value">{{ formData.memberName }}</div>
+              <div class="info-value">{{ OrderData.memberName }}</div>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="info-item">
               <p>付款方式</p>
-              <div class="info-value">{{ formData.paymentMethod }}</div>
+              <div class="info-value">{{ OrderData.paymentMethod }}</div>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="info-item">
               <p>建立時間</p>
-              <div class="info-value">{{ formData.createTime }}</div>
+              <div class="info-value">{{ OrderData.createTime }}</div>
             </div>
           </el-col>
         </el-row>
@@ -40,7 +40,7 @@
       <el-divider />
 
       <el-form 
-        :model="formData" 
+        :model="OrderData" 
         label-position="top"
         class="order-form"
       >
@@ -53,31 +53,31 @@
           <el-row :gutter="24">
             <el-col :span="12">
               <el-form-item label="收件人姓名 (中文)">
-                <el-input v-model="formData.recipientNameZh" :suffix-icon="Edit" placeholder="請輸入中文姓名" />
+                <el-input v-model="OrderData.recipientNameZh" :suffix-icon="Edit" placeholder="請輸入中文姓名" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="Recipient Name (English)">
-                <el-input v-model="formData.recipientNameEn" :suffix-icon="Edit" placeholder="Enter name" />
+                <el-input v-model="OrderData.recipientNameEn" :suffix-icon="Edit" placeholder="Enter name" />
               </el-form-item>
             </el-col>
 
             <el-col :span="12">
               <el-form-item label="聯絡電話">
-                <el-input v-model="formData.phone" :suffix-icon="Edit" />
+                <el-input v-model="OrderData.phone" :suffix-icon="Edit" />
               </el-form-item>
             </el-col>
             
             <el-col :span="24">
               <el-form-item label="收件人地址 (中文)">
-                <el-input v-model="formData.addressZh" :suffix-icon="Edit" />
+                <el-input v-model="OrderData.addressZh" :suffix-icon="Edit" />
               </el-form-item>
             </el-col>
             
             <el-col :span="24">
               <el-form-item label="Recipient Address (English)">
                 <el-input 
-                  v-model="formData.addressEn" 
+                  v-model="OrderData.addressEn" 
                   :suffix-icon="Edit" 
                   type="textarea" 
                   :rows="2"
@@ -90,14 +90,14 @@
 
         <div class="section-block cancel-section">
           <el-form-item label-width="0">
-             <el-checkbox v-model="formData.isCancel" label="申請取消此訂單" size="large" border class="cancel-checkbox"/>
+             <el-checkbox v-model="OrderData.isCancel" label="申請取消此訂單" size="large" border class="cancel-checkbox"/>
           </el-form-item>
           
           <transition name="el-zoom-in-top">
-            <div v-if="formData.isCancel" class="cancel-reason-box">
+            <div v-if="OrderData.isCancel" class="cancel-reason-box">
               <el-form-item label="請輸入取消原因與備註">
                 <el-input 
-                  v-model="formData.cancelReason" 
+                  v-model="OrderData.cancelReason" 
                   type="textarea" 
                   placeholder="例如：訂錯商品、更換付款方式..." 
                 />
@@ -121,34 +121,28 @@
       <div class="items-list">
         <div v-for="item in orderItems" :key="item.id" class="item-row">
           <div class="col-name item-info">
-            <img :src="item.image" class="product-img" alt="product" />
+            <img :src="`${imgBase}${item.url}`" class="product-img" alt="product" />
             <div class="info-text">
-              <div class="p-name">{{ item.name }}</div>
+              <div class="p-name">{{ item.name_en }}</div>
             </div>
           </div>
-          <div class="col-qty item-qty">x {{ item.qty }}</div>
+          <div class="col-qty item-qty">x {{ item.quantity }}</div>
           <div class="col-price item-price">NT$ {{ item.price }}</div>
-        </div>
-      </div>
-      
-      <div class="order-summary">
-        <div class="summary-row total">
-          <span>訂單總金額</span>
-          <span class="amount">NT$ 1,998</span>
+          
         </div>
       </div>
     </div>
 
     <div class="footer-actions">
-      <el-button class="btn-back" @click="goBack">取消並返回</el-button>
-      <el-button type="primary" color="#003060" class="btn-save" @click="saveChanges">儲存變更</el-button>
+      <el-button class="btn-back" @click="goBack">取消</el-button>
+      <el-button type="primary" color="#003060" class="btn-save">儲存變更</el-button>
     </div>
 
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref, onMounted} from 'vue'
 import { Edit } from '@element-plus/icons-vue' 
 import { useRouter, useRoute } from 'vue-router'
 
@@ -156,9 +150,10 @@ const route = useRoute()
 const router = useRouter()
 
 const currentOrderId = route.params.id
+const imgBase = import.meta.env.VITE_IMG_BASE;
 
-const OrderData = reactive({
-  orderId: '',
+const OrderData = ref({
+  orderId: 'currentOrderId',
   memberName: '',
   recipientNameZh: '',
   recipientNameEn: '',
@@ -175,11 +170,6 @@ const OrderData = reactive({
 
 const orderItems = ref([])
 
-const saveChanges = () => {
-  console.log('儲存變更:', formData)
-  alert('變更已儲存')
-}
-
 const goBack = () => {
   router.push('/admin/order-management') 
 }
@@ -190,6 +180,43 @@ const getStatusType = (status) => {
   if(status === '已完成') return 'success'
   return 'info'
 }
+
+const getOrderDetail = async () => {
+  if (!currentOrderId) return;
+  
+  const apiBase = import.meta.env.VITE_API_BASE;
+  const response = await fetch(`${apiBase}/getOrderDetail.php?id=${currentOrderId}`);
+  const data = await response.json();
+
+
+  OrderData.value = {
+    orderId:data.info.id,
+    memberName: data.info.name_en,
+    recipientNameZh: data.info.name_zh,
+    recipientNameEn: data.info.name_en,
+    phone: data.info.phone,
+    addressZh: data.info.address_zh,
+    addressEn: data.info.address_en,
+    paymentMethod: data.info.payment,
+    status: data.info.status,
+    createTime: data.info.date,
+    updateTime: new Date().toISOString().split('T')[0],
+    isCancel: false, 
+    cancelReason: data.info.remark
+  }
+
+  if (data.items) {
+      orderItems.value = data.items;
+  }
+
+}
+
+
+
+
+onMounted(() => {
+  getOrderDetail();
+});
 </script>
 
 <style scoped>
@@ -333,21 +360,6 @@ const getStatusType = (status) => {
 }
 .p-name { color: #333; margin-bottom: 4px; }
 .p-spec { color: #999; }
-
-/* 總結區 */
-.order-summary {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 20px;
-  border-top: 1px solid #f0f0f0;
-  margin-top: 10px;
-}
-.summary-row.total {
-  color: #003060;
-}
-.summary-row .amount {
-  margin-left: 20px;
-}
 
 /* 底部按鈕 */
 .footer-actions {
