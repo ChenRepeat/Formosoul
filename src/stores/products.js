@@ -647,7 +647,7 @@ export const useProductStore = defineStore('products', () =>{
         },
         {
           product_ID: 'VO2025110001',
-          type: 'Vouchers',
+          type: 'Voucher',
           price: '1200',
           stock: '50',
           status: 'Listed',
@@ -666,7 +666,7 @@ export const useProductStore = defineStore('products', () =>{
         },
         {
           product_ID: 'VO2025110002',
-          type: 'Vouchers',
+          type: 'Voucher',
           price: '350',
           stock: '100',
           status: 'Listed',
@@ -685,7 +685,7 @@ export const useProductStore = defineStore('products', () =>{
         },
         {
           product_ID: 'VO2025110003',
-          type: 'Vouchers',
+          type: 'Voucher',
           price: '800',
           stock: '30',
           status: 'Listed',
@@ -704,7 +704,7 @@ export const useProductStore = defineStore('products', () =>{
         },
         {
           product_ID: 'VO2025110004',
-          type: 'Vouchers',
+          type: 'Voucher',
           price: '1500',
           stock: '20',
           status: 'Listed',
@@ -723,7 +723,7 @@ export const useProductStore = defineStore('products', () =>{
         },
         {
           product_ID: 'VO2025110005',
-          type: 'Vouchers',
+          type: 'Voucher',
           price: '150',
           stock: '200',
           status: 'Listed',

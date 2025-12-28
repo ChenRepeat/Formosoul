@@ -258,7 +258,10 @@
     "folktoys": "童玩",
     "personalized":"客製化專區",
     "accessories":"飾品",
-    "voucher":"體驗券"
+    "voucher":"體驗券",
+    "newArrival": "最新上架",
+    "priceLow": "價格由低至高",
+    "priceHigh": "價格由高至低"
   },
   "shoppingcart":{
     "waringtext": "當商品通關時，當地海關將依規定收取稅金，相關稅金與費用將由當地海關計算並應由收件者負擔費用。很抱歉我們無法提供您有關於稅金的資訊，更進一步的細節規定，建議您可以向當地海關詢問，以便得到更完整的資訊。",

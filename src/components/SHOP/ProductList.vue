@@ -834,9 +834,22 @@ function pageMinus(){
 <template>
     <!-- 麵包屑 -->
     <h6 class="page-guide">
-        All Product
+        <span @click="productStore.typeBy='All'">{{ $t('productlist.all') }}</span>
+        <font-awesome-icon v-if="productStore.typeBy !== 'All'" icon="fa-solid fa-angle-right" />
+        <span v-if="productStore.typeBy !== 'All'" >{{ $t(`productlist.${productStore.typeBy.toLowerCase()}`) }}</span>
+        
+        
+        <!-- 原始寫法
+        <span v-if="productStore.typeBy == 'Folktoys'" @click="productStore.typeBy='Folktoys'">{{ $t('productlist.folktoys') }}</span>
+        <span v-if="productStore.typeBy == 'Personalized'" @click="productStore.typeBy='Personalized'">{{ $t('productlist.personalized') }}</span>
+        <span v-if="productStore.typeBy == 'Accessories'" @click="productStore.typeBy='Accessories'">{{ $t('productlist.accessories') }}</span>
+        <span v-if="productStore.typeBy == 'Voucher'" @click="productStore.typeBy='Voucher'">{{ $t('productlist.voucher') }}</span> 
+        -->
+        
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        New Arrivals
+        <span>{{ $t('productlist.newArrival') }}</span>
+        <span>{{ $t('productlist.priceLow') }}</span>
+        <span>{{ $t('productlist.newArrival') }}</span>
     </h6>
 
 
@@ -854,9 +867,9 @@ function pageMinus(){
         <nav class="nav-top-right">
             <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
             <select class="nav-list fw200">
-                <option class="list-option" selested>New Arrivals</option>
-                <option class="list-option">Price：Low to High</option>
-                <option class="list-option">Price：High to Low</option>
+                <option class="list-option" selested>{{ $t('productlist.newArrival') }}</option>
+                <option class="list-option">{{ $t('productlist.priceLow') }}</option>
+                <option class="list-option">{{ $t('productlist.priceHigh') }}</option>
             </select>
         </nav>
     </section> 
@@ -883,7 +896,7 @@ function pageMinus(){
             <li class="list-category-group" @click="productStore.typeBy='Personalized'">
                 <div class="list-dock">
                     <div class="list-liquidGlass">
-                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-box-open" />
+                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-cubes" />
                     </div>
                 </div>
                 <p class="list-name">{{$t('productlist.personalized')}}</p>
@@ -892,13 +905,13 @@ function pageMinus(){
             <li class="list-category-group" @click="productStore.typeBy='Accessories'">
                 <div class="list-dock">
                     <div class="list-liquidGlass">
-                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-ring" />
+                        <font-awesome-icon class="list-faIcon" icon="fa-solid fa-handcuffs" />
                     </div>
                 </div>
                 <p class="list-name">{{$t('productlist.accessories')}}</p>
             </li>
 
-            <li class="list-category-group" @click="productStore.typeBy='Vouchers'">
+            <li class="list-category-group" @click="productStore.typeBy='Voucher'">
                 <div class="list-dock">
                     <div class="list-liquidGlass">
                     <font-awesome-icon class="list-faIcon" icon="fa-solid fa-ticket" />
