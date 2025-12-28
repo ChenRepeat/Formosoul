@@ -45,22 +45,18 @@
     const isLoading = ref(false);
     const errorMessage = ref('');
 
-    async function forgetpasswordAPI(email) {
-        await new Promise(resolve => setTimeout(resolve, 1500));   
-
-        if(email == 'test@test.com'){
-            return{
-                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-                user: {
-                    id:1,
-                    name: '新註冊用戶',
-                    email: 'test@test.com'
-                },
-                message: '成功',
-            }
-        }else{
-            throw new Error('失敗');
-        }
+    function forgetpasswordAPI(eamil) {
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/forgetpassword.php`;
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                eamil
+            })
+        })
         
     }
 
@@ -82,7 +78,7 @@
             const response = await forgetpasswordAPI(email.value);
             authStore.setToken(response.token);
             authStore.setUser(response.user);
-            authStore.setloginView('loginpage');
+            authStore.setloginView('changepassword');
         }catch(error){
             errorMessage.value = error.message || 'Please enter a  email';
         }finally{

@@ -2,14 +2,15 @@
     <div class="changepassword">
         <h3>Change password</h3>
         <div class="contain">
-            <label for="oldpassword" ><h6>Current password：</h6></label>
+
+            <label for="oldpassword"><h6>OTP：</h6></label>
             <input
             class="input-text"
-            v-model="oldpassword"
+            v-model="changeotp"
             type="text" 
-            name="oldpassword" 
-            id="oldpassword"
-            placeholder="Current password"/>
+            name="changeotp" 
+            id="changeotp"
+            placeholder="One-Time Password (OTP)"/>
 
             <label for="Newpassword"><h6>New password：</h6></label>
             <input 
@@ -44,11 +45,33 @@
 import BasicButton from '@/components/BasicButton.vue';
 import { ref } from 'vue';
 
-const oldpassword = ref('');
+const changeotp = ref('');
 const Newpassword = ref('');
 const confirmpassword = ref('');
 const errorMessage = ref('');
 const isLoading = ref(false);
+const props = defineProps({
+    ismargin: {
+        type: Boolean,
+        default: false,
+    },
+    isotp: {
+        type: Boolean,
+        default: true,
+    },
+    isotptitle: {
+        type: Boolean,
+        default: true,   
+    },
+    ispasswordtitle: {
+        type: Boolean,
+        default: false,
+    },
+    ispassword: {
+        type: Boolean,
+        default: false,  
+    },
+})
 //  驗證新密碼格式
 const validateNewPassword  = () => {
     errorMessage.value = '';
@@ -70,14 +93,10 @@ const validateNewPassword  = () => {
         errorMessage.value = 'Passwords must contain uppercase letters, lowercase letters, and numbers.';
         return;
     }
-    // 只有當舊密碼有輸入，且新密碼等於舊密碼，才顯示錯誤 避免在用戶還沒輸入舊密碼時就顯示錯誤訊息 因為空字串是false
-    if(password === oldpassword.value && oldpassword.value){
-        errorMessage.value = 'New password must not be the same as the old password.';
-        return;
-    }
+
     // 當輸入確認密碼時才檢查
     if(confirmpassword.value && password !== confirmpassword.value){
-        errorMessage.value = 'New password cannot be the same as old password.';
+        errorMessage.value = 'Must be the same as the new password.';
     }else{
         errorMessage.value = '';
     }
@@ -94,7 +113,7 @@ const validateConfirmPassword = () => {
     }
 
     if (Newpassword.value !== confirmpassword.value) {
-        errorMessage.value = 'Must be the same as the new password.';
+        errorMessage.value = 'New password must be different from old password.';
     }
 
 };
@@ -105,11 +124,7 @@ const handleChangePassword  = async() => {
 
     errorMessage.value = '';
 
-
-
-
-
-    if(!oldpassword.value){
+    if(!changeotp.value){
         errorMessage.value = 'Please enter your old password.'
     }
 
@@ -125,7 +140,7 @@ const handleChangePassword  = async() => {
         }else if(!hasUppercase || !hasLowercase || !hasNumber){
             errorMessage.value = 'Passwords must contain uppercase letters, lowercase letters, and numbers.';
         }else if(Newpassword.value === oldpassword.value){
-            errorMessage.value = 'New password cannot be the same as old password.';
+            errorMessage.value = 'Must be the same as the new password.';
 
         }
     }
@@ -142,18 +157,15 @@ const handleChangePassword  = async() => {
     }
 
     try{
-        isLoading.value = true;
+        // isLoading.value = true;
         const response = await changeAPI(
-            oldpassword.value,
+            changeotp.value,
             Newpassword.value
         );
 
     errorMessage.value = response.message;
     }catch(error){
         errorMessage.value = error.message || 'changepassword failed, please try again';
-    }finally{
-        isLoading.value = false;
-
     }
 
 
@@ -162,19 +174,16 @@ const handleChangePassword  = async() => {
     // try { await api.changePassword(...) } catch...
 };
 
-function changeAPI(oldpassword, Newpassword){
+function changeAPI(){
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/changepassword.php`;
-    const storedUser = localStorage.getItem('user');
-    const { member_ID } = JSON.parse(storedUser);
     return fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            member_ID,
-            oldpassword,
+            changeotp,
             Newpassword
         })
     }).then( res => res.json());
@@ -198,9 +207,8 @@ function changeAPI(oldpassword, Newpassword){
 
     h3{
         text-align: center;
-        margin: 100px 0 100px 0;
+        margin: 36px 0 16px 0;
         color: $color-fsTitle;
-
     }
     .contain{
         width: 50%;
