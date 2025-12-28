@@ -9,8 +9,8 @@
       m.createdate,
       m.updatetime,
       m.pointscard,
-      w.magical_en,
-      w.magical_zh
+      w.name_en,
+      w.name_zh
     FROM member m
     LEFT JOIN wandcore w ON m.wandcore_ID = w.wandcore_ID
     WHERE m.member_ID = :member_ID;

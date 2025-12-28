@@ -137,9 +137,8 @@
         }
     }
 
-    async function hanldeForgetpassword(){
-        console.log('忘記了');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    function hanldeForgetpassword(){
+
         authStore.setloginView('forgetpassword');
 
     };

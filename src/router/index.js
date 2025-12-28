@@ -277,18 +277,17 @@ scrollBehavior(to, from, savedPosition) {
 })
 
 router.beforeEach((to, from, next) => {
-    // 從 Cookie 中讀取 token 與 userRole
+
     const isLogin = Cookies.get('token')
     // const isAdmin = Cookies.get('userRole') === 'admin'
 
-    // console.log(`從 ${from.path} 跳轉到 ${to.path}`)
+
     const authStore = useAuthStore();
     if (to.meta.requiresAuth && !isLogin) {
-        alert('請先登入')
-        // authStore.openLoginModal();
-        // authStore.setmemberView('login');
-        // authStore.setloginView('loginpage');
-        return next('/')
+        authStore.openLoginModal();
+        authStore.setmemberView('login');
+        authStore.setloginView('loginpage');
+        return next('');
     }
 
     // if (to.meta.requiresAdmin && !isAdmin) {
@@ -297,7 +296,7 @@ router.beforeEach((to, from, next) => {
     // }
 
     if (to.path === '/login' && isLogin) {
-        return next('/')
+        return next('');
     }
 
     next();

@@ -12,17 +12,16 @@
                         class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
 
                         <BasicButton 
-                        :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword'}"
+                        :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword' || authStore.loginView == 'changepassword'}"
                         @click="authStore.loginView = 'loginpage'"
                         class="btn-blue-fill"><h4>Login</h4></BasicButton>
                     </div>
                     <div class="pagecontain">
                         <div class="pagetop">
                             <Logincontain v-if="authStore.loginView == 'loginpage'"></Logincontain>
-
-
                             <Enrollment v-else-if="authStore.loginView == 'enrollment'"></Enrollment>
                             <Forgetpassword v-else-if="authStore.loginView == 'forgetpassword'"></Forgetpassword>
+                            <Loginchangepassword v-else-if="authStore.loginView == 'loginchangepassword'"></Loginchangepassword>
                         </div>
                         <template v-if="!isotherlogin">
                             <div class="otherlogin">
@@ -49,6 +48,8 @@
     import BasicButton from '@/components/BasicButton.vue';
     import Enrollment from '../Login/Enrollment.vue';
     import Forgetpassword from './forgetpassword.vue';
+import Changepassword from '../changepassword/changepassword.vue';
+import Loginchangepassword from '../changepassword/loginchangepassword.vue';
     const publicPath = import.meta.env.BASE_URL;
     const authStore = useAuthStore();
     const sharedEmail = ref('');
@@ -63,7 +64,7 @@
 
 
     const isotherlogin = computed(() => {
-            return  authStore.loginView == 'forgetpassword';
+            return  authStore.loginView == 'forgetpassword' || authStore.loginView == 'changepassword';
     });
 </script>
 
