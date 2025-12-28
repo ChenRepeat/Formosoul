@@ -27,17 +27,17 @@
     toPotionPage.value = 18;
     toDivitionPage.value = 20;
   }
-  const onEnter = (e , colorText , colorIcon) => {
+  const onEnter = (e) => {
     const chars = e.currentTarget.querySelectorAll('.char');
     const icons = e.currentTarget.querySelectorAll('.icon');
     gsap.killTweensOf(chars,icons); 
 
     gsap.to(chars, {
       keyframes: [
-        { x: 30,y:10, color: colorText, duration: 1,scale: 2,rotateX:0},
+        { x: 30,y:10, color: '#041426', duration: 0.8,scale: 2,rotateX:0},
         { x: 30, y:10, color: 'transparent', duration: 0.5,scale: 3,rotateX:360},
         { x: 0, y:0, color: 'transparent', duration: 0.3,scale: 3,rotateX:360},
-        { x: 0, y:0, color: colorText, duration: 0.7,scale: 1}
+        { x: 0, y:0, color: '#041426', duration: 0.7,scale: 1}
       ],
       force3D: true,
       overwrite: true,
@@ -78,12 +78,12 @@ const onLeave = (e) => {
 };
 //  書籤陣列
 const indexItems = ref([
-  { id: 'motor', text: 'classes.motorClass', icon: markRaw(IconHelmet), color:'#041426', flipPage:toMotorPage },
-  { id: 'animal', text: 'classes.animalTitle', icon: markRaw(IconFoot), color:'#ffcc46', flipPage:toAnimaPage },
-  { id: 'history', text: 'classes.historyTitle', icon: markRaw(IconHistory), color:'#ffcc46', flipPage:toHistoryPage },
-  { id: 'charm', text: 'classes.charmTitle', icon: markRaw(IconCharm), color:'#ffcc46', flipPage:toCharmPage },
-  { id: 'potion', text: 'classes.potionTitle', icon: markRaw(IconPotion), color:'#ffcc46', flipPage:toPotionPage },
-  { id: 'divination', text: 'classes.divinationTitle', icon: markRaw(IconBue), color:'#ffcc46', flipPage:toDivitionPage },
+  { id: 'motor', text: 'classes.motorClass', icon: markRaw(IconHelmet), flipPage:toMotorPage },
+  { id: 'animal', text: 'classes.animalTitle', icon: markRaw(IconFoot), flipPage:toAnimaPage },
+  { id: 'history', text: 'classes.historyTitle', icon: markRaw(IconHistory), flipPage:toHistoryPage },
+  { id: 'charm', text: 'classes.charmTitle', icon: markRaw(IconCharm), flipPage:toCharmPage },
+  { id: 'potion', text: 'classes.potionTitle', icon: markRaw(IconPotion), flipPage:toPotionPage },
+  { id: 'divination', text: 'classes.divinationTitle', icon: markRaw(IconBue), flipPage:toDivitionPage },
 ]);
 </script>
 
@@ -94,7 +94,7 @@ const indexItems = ref([
       @mousedown.stop
       @touchstart.stop
       @click="goToPage(item.flipPage)"
-      @mouseenter="onEnter($event,item.color,item.color)"
+      @mouseenter="onEnter"
       @mouseleave="onLeave">
       <component :is="item.icon" class="icon"/>
       <span class="text-wrapper">
