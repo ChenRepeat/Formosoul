@@ -528,7 +528,7 @@ const handleReceiveFrom = (url) => {
 <style lang="scss" scoped>
 .book-section {
   width: 100%; 
-  height: 950px;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

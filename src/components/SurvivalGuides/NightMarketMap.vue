@@ -26,7 +26,6 @@ const handleKey = (e) => {
         closeCurrentModal();
     }
 };
-
 const isShow = ref(-1);
 const animationWelcome = ref(false)
 const isGameLocked = ref(true);

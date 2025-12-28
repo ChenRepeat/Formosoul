@@ -143,7 +143,9 @@ onUnmounted(() => {
     <div 
     ref="headerRef"
     class="header-link liquidGlass-wrapper dp-flex-col" 
-    :class="{ open: isMenuOpen || isMemberMenuOpen ,'black': props.isBlackStyle }">
+    :class="{ open: isMenuOpen || isMemberMenuOpen ,'black': props.isBlackStyle }"
+    @mousedown.stop
+    @touchstart.stop>
 
       <!-- 玻璃效果層 -->
       <div class="liquidGlass-effect"></div>
@@ -168,6 +170,8 @@ onUnmounted(() => {
             <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"
               @click="toggleMenu"
+              @mousedown.stop
+              @touchstart.stop
               :class="{ 'active': isMenuOpen }">
             <div class="dot dot1 transition"></div>
             <div class="dot dot2 transition"></div>
@@ -249,7 +253,13 @@ onUnmounted(() => {
 
 img { object-fit: none; }
 
-.trigger-lang { color: $color-fsWhite; margin: 0; }
+.trigger-lang { 
+  color: $color-fsWhite;
+  margin: 0; 
+  @media screen and (max-width: 1200px){
+    font-size: 16px;
+  }
+}
 
 .header-lang-trigger {
   width: 85px;
@@ -263,10 +273,17 @@ img { object-fit: none; }
   cursor: pointer;
   background-color: unset;
   transition: all 1s 0.3s;
-}
-.header-lang-trigger.right{
+  &.right{
   border: 1px solid $color-fsTitle;
   background-color: $color-fsTitle;
+  }
+  @media screen and (max-width: 1200px){
+    width: 65px;
+    height: 30px;
+    justify-content: center;
+    gap: 4px;
+    padding:10px;
+  }
 }
 .header-lang-switcher{
   width: 30px;
@@ -278,11 +295,19 @@ img { object-fit: none; }
   top: 4px;
   left: 10px;
   transition: all 1s ease;
-}
-.header-lang-switcher.right{
+  &.right{
   left: 43px;
   background-color: $color-fsWhite;
-
+  }
+  @media screen and (max-width: 1200px){
+    width: 24px;
+    height: 24px;
+    top: 2px;
+    left: 6px;
+     &.right{
+      left: 32px;
+    }
+  }
 }
 .header-link {
   border-radius: 36px;
@@ -295,6 +320,15 @@ img { object-fit: none; }
   overflow: hidden;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: all;
+  @media screen and (max-width: 1200px){
+    border-radius: 18px;
+    padding: 6px 20px;
+    align-items: center;
+    height: auto; 
+    min-height: 50px; 
+    max-height: 90vh; 
+    overflow-y: auto;  
+  }
 }
 
 /* --- XXXXX 玻璃效果 勿動 XXXXX --- */
@@ -308,6 +342,15 @@ img { object-fit: none; }
     inset 0 2px 6px rgba(255,255,255,0.2),
     0 4px 10px rgba(0,0,0,0.2);
   backdrop-filter: blur(8px); 
+    @media screen and (max-width: 1200px){
+    border-radius: 18px;
+    padding: 6px 20px;
+    align-items: center;
+    height: auto; 
+    min-height: 50px; 
+    max-height: 90vh; 
+    overflow-y: auto;  
+  }
 }
 
 .liquidGlass-effect { position: absolute; inset: 0; backdrop-filter: blur(4px); filter: url(#glass-distortion); z-index: 0; }
@@ -427,18 +470,20 @@ img { object-fit: none; }
 }
 @media screen and (max-width: 1200px) {
   .header-link{
-    padding: 6px 20px;
-    align-items: center;
-    height: auto; 
-    min-height: 50px; 
-    max-height: 90vh; 
-    overflow-y: auto;  
+    
   }
   .header-icons-list{
     gap: 8px;
   }
   .header-icon{
-    font-size: 22px;
+    font-size: 24px;
+  }
+  h5{
+    font-size: 2.0rem;
+  }
+  h6{
+    font-size: 1.8rem;
+
   }
 }
 

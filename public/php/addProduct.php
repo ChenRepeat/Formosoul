@@ -45,7 +45,7 @@ try {
   ]);
 
   // 寫入product_images 
-  $uploadDir = 'uploads/';
+  $uploadDir = '../uploads/';
   //建立資料夾
   if (!file_exists($uploadDir)) {
       mkdir($uploadDir, 0777, true);

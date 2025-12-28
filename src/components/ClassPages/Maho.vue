@@ -9,16 +9,11 @@ onMounted(() => {
   const canvas = canvasRef.value;
   const container = containerRef.value;
   const context = canvas.getContext('2d');
-  setTimeout(() => {
-    
-  
   const updateSize = () => {
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
   };
 
-  updateSize();
-  window.addEventListener('resize', updateSize);
 
   const pi = x => { return x * Math.PI / 180 };
   const angle = 10;
@@ -53,17 +48,20 @@ onMounted(() => {
       context.lineJoin = 'round';
       context.stroke();
     }
-    
     animationId = requestAnimationFrame(drawing);
   }
-
-  drawing();
-
-  }, 300);
+  setTimeout(() => {
+    updateSize();
+    drawing();
+  }, 500);
+  window.addEventListener('resize', updateSize);
+  window.addEventListener('load', updateSize);
+  
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', () => {});
+  window.removeEventListener('load', () => {});
   cancelAnimationFrame(animationId);
 });
 </script>

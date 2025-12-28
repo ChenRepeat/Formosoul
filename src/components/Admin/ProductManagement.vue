@@ -26,9 +26,9 @@
   }
 
 const getImageUrl = (filename) => {
-  const apiBase = import.meta.env.VITE_API_BASE; // http://localhost/tjd103
+  const imgBase = import.meta.env.VITE_IMG_BASE; // http://localhost/tjd103
 
-  return `${apiBase}/uploads/${filename}`;
+  return `${imgBase}${filename}`;
 }
 
 

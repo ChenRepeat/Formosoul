@@ -1,6 +1,5 @@
   <?php
   require_once 'conn.php';
-  $member = json_decode(file_get_contents("php://input"), true);
 
  $sql = "
   select * from `order`

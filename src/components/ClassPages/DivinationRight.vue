@@ -17,11 +17,11 @@ import { ref } from 'vue';
   };
   const chouqianResult={
     1: {name:'大吉',text:'classes.stick1'},
-    2: {name:'中吉',text:'classes.stick1'},
-    3: {name:'小吉',text:'classes.stick1'},
-    4: {name:'吉',text:'classes.stick1'},
-    5: {name:'末吉',text:'classes.stick1'},
-    6: {name:'衰',text:'classes.stick1'},
+    2: {name:'中吉',text:'classes.stick2'},
+    3: {name:'小吉',text:'classes.stick3'},
+    4: {name:'吉',text:'classes.stick4'},
+    5: {name:'末吉',text:'classes.stick5'},
+    6: {name:'衰',text:'classes.stick6'},
   }
 
   function chouqian(){
@@ -49,7 +49,7 @@ const bue2Transform = ref('rotate(-90deg) rotateY(0deg)');
 const bue1Result = ref(1);
 const bue2Result = ref(1);
 const finalResult = ref('');
-
+const siannCount = ref(0)
 const buaBue = () => {
   if (isFlipping.value) return;
   
@@ -75,11 +75,21 @@ const buaBue = () => {
       bue2Result.value = isBue2Yin ? 1 : 0;
 
       if (isBue1Yin && isBue2Yin) {
-        finalResult.value = 'Chio-Bue';
+        finalResult.value = 'classes.bue2Name';
+        siannCount.value = 0;
       } else if (!isBue1Yin && !isBue2Yin) {
-        finalResult.value = 'Mo-Bue'; 
+        finalResult.value = 'classes.bue1Name'; 
+        siannCount.value = 0;
       } else {
-        finalResult.value = 'Xin-Bue'; 
+        finalResult.value = 'classes.bue3Name'; 
+        siannCount.value ++
+        if(siannCount.value == 3){
+          setTimeout(() => {
+            //  蓋印章動畫放這取代掉 alert()
+            alert();
+            siannCount.value = 0;
+          }, 500);
+        }
       }
       
     }, 1500);
@@ -171,7 +181,7 @@ const buaBue = () => {
       <img src="/Classes/bue-yang.png" alt="陽面">
     </div>
       <transition name="fade" mode="out-in">
-        <h3 :key="bue">{{ finalResult}}</h3>
+        <h3 :key="bue">{{ $t(finalResult)}}</h3>
       </transition>
     </div>
   </section>
