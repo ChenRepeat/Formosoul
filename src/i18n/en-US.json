@@ -258,10 +258,15 @@
     "backtoshop": "Back to Shop"
   },
   "productlist":{
+    "all": "All",
     "folktoys": "Folktoys",
     "personalized":"Personalized",
     "accessories":"Accessories",
-    "voucher":"Voucher"
+    "voucher":"Voucher",
+    "newArrival": "New Arrival",
+    "priceLow": "Price : Low to High",
+    "priceHigh": "Price : High to Low"
+
   },
   "shoppingcart":{
     "waringtext": "Import duties are charged once the parcel reaches its destination country. These charges must be paid by the recipient of the parcel. We have no control over these charges and we can’t tell you what the cost would be, as customs policies and import duties vary widely from country to country. It might be a good idea to contact your local customs office for more information on the current charges.",

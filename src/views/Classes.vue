@@ -16,8 +16,8 @@
     >
       <div class="page cover">
         <div class="page-content">
-          <img src="../assets/BookCover.png" alt="" class="book-cover">
-          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo" @load="loadImg">
+          <img src="../assets/BookCover.png" alt="" class="book-cover" @load="loadImg">
+          <img src="../assets/LOGO_whiteColor.svg" alt="" class="book-logo" >
         </div>
       </div>
       <div class="page">
@@ -324,7 +324,7 @@ const playIntroAnimation = async () => {
   try {
     await wait(800);
     if (!isIntroPlaying.value) return;
-    
+    sessionStorage.setItem("bookLoaded", 'true');
     isIntroPosition.value = false;
     await wait(1600);
     if (!isIntroPlaying.value) return;
@@ -357,7 +357,6 @@ const playIntroAnimation = async () => {
     isAnimating.value = false;
     updatePageNumber();
     cleanupAnimation();
-    sessionStorage.setItem("bookLoaded", "true");
   } catch (error) {
     console.error('Intro animation error:', error);
     cleanupAnimation();
@@ -465,7 +464,7 @@ const loadImg=async()=>{
   isAnimating.value = false;
   isIntroPlaying.value = false;
   isIntroPosition.value = false;
-  if(!sessionStorage.getItem("bookLoaded")){
+  if(sessionStorage.getItem("bookLoaded") != 'true'){
     playIntroAnimation();
     isIntroPlaying.value = true;
     isAnimating.value = true;
@@ -475,16 +474,18 @@ const loadImg=async()=>{
     const targetLogicalPage = classesStore.pageToTurn;
     const targetPhysicalIndex = getPhysicalIndex(targetLogicalPage);
     if (pageFlip && targetLogicalPage > 1) {
-       console.log(`Auto flipping to logical: ${targetLogicalPage}, physical: ${targetPhysicalIndex}`);
-       pageFlip.flip(targetPhysicalIndex);
-       updatePageNumber();
-       classesStore.setPage(1);
+      console.log(`Auto flipping to logical: ${targetLogicalPage}, physical: ${targetPhysicalIndex}`);
+      pageFlip.flip(0);
+      await wait(300);
+      pageFlip.flip(targetPhysicalIndex);
+      updatePageNumber();
+      classesStore.setPage(0);
     } else {
        if(pageFlip) {
         pageFlip.flip(0);
         await wait(300);
         pageFlip.flip(targetPhysicalIndex);
-        classesStore.setPage(1);
+        classesStore.setPage(0);
         updatePageNumber();
         }
     }
@@ -493,11 +494,11 @@ const loadImg=async()=>{
 watch(
   () => classesStore.pageToTurn, // 監聽目標
   (newPage) => {
-    if (newPage !== 1 && pageFlip) {
+    if (newPage !== 0 && pageFlip) {
       const targetPhysicalIndex = getPhysicalIndex(newPage);
       pageFlip.flip(targetPhysicalIndex);
       updatePageNumber();
-      classesStore.setPage(1);
+      classesStore.setPage(0);
     }
   }
 );

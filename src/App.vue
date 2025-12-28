@@ -9,6 +9,7 @@ import { useAuthStore } from './stores/autoStore';
 import DefaultLogo from '@/assets/logo_white.svg';
 import { useLangStore } from './stores/lang';
 import { gsap } from 'gsap';
+import Wave from './components/Wave.vue';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -57,12 +58,35 @@ const execLanguageChange = (changeAction) => {
   });
 };
 provide('execLanguageChange', execLanguageChange);
+const charRefs = ref([]);
+
+const startLoadingAnimation = () => {
+  if (charRefs.value.length === 0) return;
+
+  gsap.to(charRefs.value, {
+    keyframes: [
+      { x: 30, y: 10, duration: 0.7, scale: 3, rotateX: 0 },
+      { x: 0, y: 0, duration: 0.7, scale: 1, rotateX: 360 }
+    ],
+    force3D: true,
+    overwrite: true,
+    stagger: 0.08,
+    ease: "power2.out",
+    repeat: -1,
+  });
+};
 
 onMounted(async () => {
-  if(authStore.token){
-    await authStore.fetchUser();
+  await nextTick();
+  if(authStore.isLoading){
+
+    startLoadingAnimation();
   }
-});
+
+  if (authStore.token) {
+    await authStore.fetchUser();
+  } 
+})
 
 </script>
 
@@ -71,18 +95,23 @@ onMounted(async () => {
     <RouterView />
   </div>
   <div v-else class="wrapper dp-flex-col"
-  :class="currentBgClass"
+  :class="[currentBgClass,{'noScroll':authStore.isLoading}]"
   >
     <TheHeader :is-black-style="currentBgClass == 'white' || currentBgClass == 'transparent'"/>
     <main class="content">
       <RouterLink to="/" :style="{'display':currentLogoDP}" class=" no-i18n-anim">
         <img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" :class="{'dpn':hideLogoRWD}"/>
       </RouterLink>
-      <!-- 這個div是登入狀態測試 如果有做好的loading在跟這個交換 -->
-      <div v-if="authStore.isLoading" class="loading">
-        載入中...
+      <div v-if="authStore.isLoading" class="loading dp-flex">
+        <h1 v-for="(char, index) in 'Loading...'.split('')" 
+          :key="index" 
+          class="char"
+          :ref="(el) => { if(el) charRefs[index] = el }"
+        >
+          {{ char === ' ' ? '&nbsp;' : char }}</h1>
+          <Wave />
       </div>
-      <div v-else>
+      <div>
         <RouterView />
         <Popup></Popup>
       </div>
@@ -118,10 +147,29 @@ onMounted(async () => {
   position: relative;
 
 }
+.noScroll{
+  overflow: hidden;
+  height: 100vh;
+}
 .part-time{
   gap: 12px;
 }
-
+.loading{
+  color: $color-fsWhite;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  z-index: 9999;
+  background-color: #000;
+  position: fixed;
+  top: 0; left: 0;
+}
+.char {
+  display: inline-block; 
+  min-width: 0.3em;
+  transition: color 0.3s;
+}
 @media screen and (max-width: 1200px) {
   .dpn{
     display: none;

@@ -1,5 +1,5 @@
 <template>
-  <div id="home-container" ref="containerRef">
+  <div id="home-container" ref="containerRef" >
     <canvas id="home-canvas-back" ref="canvasBackRef"></canvas>
     
     <div id="home-logo-wrapper" ref="logoWrapperRef">
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
@@ -420,6 +420,7 @@ function onWindowResize() {
 }
 
 function animate() {
+
   animationId = requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
   const duration = 3.0; 
@@ -500,18 +501,32 @@ function animate() {
   snitches.forEach((s) => s.group.visible = s.isFront);
   rendererFront.render(scene, camera);
 }
-
+const startExperience = () => {
+  clock = new THREE.Clock(); 
+  clock.start();
+  animate();
+};
 // --- Initialization ---
 onMounted(() => {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  const textureLoader = new THREE.TextureLoader();
 
+  // 成功載入所有資源才會改變 loading 狀態
+  const manager = new THREE.LoadingManager();
+  manager.onLoad = () => {
+    setTimeout(() => {
+      authStore.isLoading = false; 
+    }, 500);
+  };
+  const textureLoader = new THREE.TextureLoader(manager);
+
+  // 初始化場景
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 100);
   camera.position.set(0, 0.8, 7);
   camera.lookAt(0, 0, 0);
 
+  // 初始化 Renderers
   rendererBack = new THREE.WebGLRenderer({
     canvas: canvasBackRef.value, antialias: true, alpha: true,
   });
@@ -527,6 +542,7 @@ onMounted(() => {
   rendererFront.setClearColor(0x000000, 0);
   rendererFront.autoClear = false;
 
+  // 燈光
   scene.add(new THREE.HemisphereLight(0xffffff, 0x444466, 0.9));
   const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
   dirLight.position.set(5, 8, 4);
@@ -534,12 +550,14 @@ onMounted(() => {
 
   initSnitches(textureLoader);
 
+  // 初始化互動與時鐘
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
   dragPlane = new THREE.Plane();
   dragOffset = new THREE.Vector3();
   clock = new THREE.Clock();
 
+  // 事件監聽
   window.addEventListener('mousedown', onDragStart);
   window.addEventListener('mousemove', onDragMove);
   window.addEventListener('mouseup', onDragEnd);
@@ -549,8 +567,14 @@ onMounted(() => {
   window.addEventListener('touchend', onDragEnd);
   window.addEventListener('resize', onWindowResize);
   window.addEventListener('mousemove', onMouseMoveHover);
-
-  animate();
+  watch(() => authStore.isLoading, (newVal) => {
+    if (newVal == false) {
+      startExperience();
+    }
+  });
+  if (authStore.isLoading == false) {
+    startExperience();
+  }
 });
 
 onUnmounted(() => {
