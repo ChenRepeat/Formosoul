@@ -268,13 +268,13 @@ const checkGamePass = () => {
       <div class="menu-box dp-flex-col">
         <h1 class="title">{{$t("nightmarket.items.ring-toss.title")}}</h1>
         <h5>{{$t("nightmarket.items.ring-toss.rule1")}}</h5>
-        <h6>{{$t("nightmarket.items.ring-toss.rule2")}}</h6>
+        <p>{{$t("nightmarket.items.ring-toss.rule2")}}</p>
         <h5>{{$t("nightmarket.items.ring-toss.rule3")}}</h5>
-        <h6>{{$t("nightmarket.items.ring-toss.rule4")}}</h6>
+        <p>{{$t("nightmarket.items.ring-toss.rule4")}}</p>
         <h5>{{$t("nightmarket.items.ring-toss.rule5")}}</h5>
-        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule6")}}</h6>
-        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule7")}}</h6>
-        <h6 class="score">{{$t("nightmarket.items.ring-toss.rule8")}}</h6>
+        <p class="score">{{$t("nightmarket.items.ring-toss.rule6")}}</p>
+        <p class="score">{{$t("nightmarket.items.ring-toss.rule7")}}</p>
+        <p class="score">{{$t("nightmarket.items.ring-toss.rule8")}}</p>
         <BasicButton @click="startGame" class="startBtn"><p>{{$t("nightmarket.items.ring-toss.buttonText")}}</p></BasicButton>
       </div>
     </div>
@@ -447,14 +447,20 @@ const checkGamePass = () => {
     align-items: center;
 
     
-    h5,h6{
+    h5,h6,:not(.startBtn)~p{
       text-align: left;
+      width: 100%;
     }
     h5{
-      padding: 16px 0;
+      padding: 24px 0 4px;
     }
-    h6{
+    h6,:not(.startBtn)~p{
       text-indent:32px;
+      font-weight: 200;
+    }
+    p.score{
+      text-indent:0;
+
     }
     .startBtn{
       align-self: center;

@@ -41,6 +41,7 @@ const router = createRouter({
       component: Home,
       meta:{ 
         display: 'none',
+        requireLoading: true,
       },
     },
     {
@@ -69,11 +70,15 @@ const router = createRouter({
       path: '/annualevent',
       name: 'AnnualEvent',
       component: AnnualEvent,
+
     },
     {
       path: '/annualevent/:slug',          
       name: 'FestivalDetail',              
       component: FestivalDetail,
+      meta:{ 
+        bgColor:'transparent',
+      },
     },
     {
       path: '/professorsintroduction',

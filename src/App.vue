@@ -10,6 +10,7 @@ import DefaultLogo from '@/assets/logo_white.svg';
 import { useLangStore } from './stores/lang';
 import { gsap } from 'gsap';
 import Wave from './components/Wave.vue';
+import router from './router';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -79,13 +80,20 @@ const startLoadingAnimation = () => {
 onMounted(async () => {
   await nextTick();
   if(authStore.isLoading){
-
     startLoadingAnimation();
   }
 
   if (authStore.token) {
     await authStore.fetchUser();
-  } 
+  }
+  watch(() => route.path, () => {
+  if (route.meta?.requireLoading) {
+    authStore.isLoading = true;
+    setTimeout(() => isLoading.value = false, 1500);
+  } else {
+    authStore.isLoading = false;
+  }
+}, { immediate: true }); 
 })
 
 </script>
