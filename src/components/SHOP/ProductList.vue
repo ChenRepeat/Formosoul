@@ -7,8 +7,7 @@ import TestProductCard from '@/components/TestProductCard.vue';
 
 // 所有商品 ----------------------------------------
 
-/*
-//原始方法，把資料放在 ProductedList
+/*  //原始方法，把資料放在 ProductedList
 const products = ref([
   {
     product_ID: 'FO2025110001',
@@ -767,15 +766,18 @@ const totalPages = computed(() =>
   Math.ceil ( productStore.displayProduct.length / itemsPerPage )
 );
 
+/* 其他寫法
 // 寫法二
-// const totalPages = computed(() => {
-//   return Math.ceil(products.value.length / itemsPerPage);
-// });
+const totalPages = computed(() => {
+  return Math.ceil(products.value.length / itemsPerPage);
+});
 
 // 寫法三
-// const totalPages = computed(function() {
-//   return Math.ceil(products.value.length / itemsPerPage);
-// });
+const totalPages = computed(function() {
+  return Math.ceil(products.value.length / itemsPerPage);
+});
+
+*/
 
 
 
@@ -836,8 +838,7 @@ function pageMinus(){
     <h6 class="page-guide">
         <span @click="productStore.typeBy='All'">{{ $t('productlist.all') }}</span>
         <font-awesome-icon v-if="productStore.typeBy !== 'All'" icon="fa-solid fa-angle-right" />
-        <span v-if="productStore.typeBy !== 'All'" >{{ $t(`productlist.${productStore.typeBy.toLowerCase()}`) }}</span>
-        
+        <span v-if="productStore.typeBy !== 'All'" >{{ $t(`productlist.${productStore.typeBy.toLowerCase()}`) }}</span>       
         
         <!-- 原始寫法
         <span v-if="productStore.typeBy == 'Folktoys'" @click="productStore.typeBy='Folktoys'">{{ $t('productlist.folktoys') }}</span>
@@ -847,9 +848,8 @@ function pageMinus(){
         -->
         
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        <span>{{ $t('productlist.newArrival') }}</span>
-        <span>{{ $t('productlist.priceLow') }}</span>
-        <span>{{ $t('productlist.newArrival') }}</span>
+        <span v-if="productStore.sortBy === 'newArrival'">{{ $t('productlist.newArrival') }}</span>
+        <span v-if="productStore.sortBy !== 'newArrival'">{{ $t(`productlist.${productStore.sortBy}`) }}</span>
     </h6>
 
 
@@ -866,10 +866,10 @@ function pageMinus(){
 
         <nav class="nav-top-right">
             <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-            <select class="nav-list fw200">
-                <option class="list-option" selested>{{ $t('productlist.newArrival') }}</option>
-                <option class="list-option">{{ $t('productlist.priceLow') }}</option>
-                <option class="list-option">{{ $t('productlist.priceHigh') }}</option>
+            <select class="nav-list fw200" v-model="productStore.sortBy">
+                <option class="list-option" value="newArrival" selected>{{ $t('productlist.newArrival') }}</option>
+                <option class="list-option" value="priceLow">{{ $t('productlist.priceLow') }}</option>
+                <option class="list-option" value="priceHigh">{{ $t('productlist.priceHigh') }}</option>
             </select>
         </nav>
     </section> 
