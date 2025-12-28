@@ -1,7 +1,8 @@
   export const potions = {
     1: {
-        name: 'Boba Milk Tea',
+        name: 'classes.potiongame.potionName1',
         intro: 'classes.potion1', 
+        resultIntro:'classes.potiongame.potion1',
         imgUrl:'Classes/potions/potion7.png',
         recipe:{
           1:{
@@ -19,8 +20,9 @@
         }
       },
     2: {
-        name: 'Aiyu Lemon Jelly Drink',
+        name: 'classes.potiongame.potionName2',
         intro: 'classes.potion2', 
+        resultIntro: 'classes.potiongame.potion2',
         imgUrl:'Classes/potions/potion2.png',
         recipe:{
           1:{
@@ -35,8 +37,9 @@
         }
       },
     3: {
-        name: 'No.1',
+        name: 'classes.potiongame.potionName3',
         intro: 'classes.potion3', 
+        resultIntro: 'classes.potiongame.potion3',
         imgUrl:'Classes/potions/potion11.png',
         recipe:{
           1:{
@@ -58,8 +61,9 @@
         }
       },
       4: {
-        name: 'Winter Melon Lemonade',
+        name: 'classes.potiongame.potionName4',
         intro: 'classes.potion4', 
+        resultIntro: 'classes.potiongame.potion4',
         imgUrl:'Classes/potions/potion3.png',
         recipe:{
           1:{
@@ -73,8 +77,9 @@
         }
       },
       5: {
-        name: 'Brown Sugar Boba',
+        name: 'classes.potiongame.potionName5',
         intro: 'classes.potion5', 
+        resultIntro: 'classes.potiongame.potion5',
         imgUrl:'Classes/potions/potion6.png',
         recipe:{
           1:{
@@ -96,8 +101,9 @@
         }
       },
       6: {
-        name: 'Winter Melon Drink with Grass Jelly',
+        name: 'classes.potiongame.potionName6',
         intro: 'classes.potion6', 
+        resultIntro: 'classes.potiongame.potion6',
         imgUrl:'Classes/potions/potion5.png',
         recipe:{
           1:{
@@ -115,8 +121,9 @@
         }
       },
       7: {
-        name: 'Cheese Foam Green Tea',
+        name: 'classes.potiongame.potionName7',
         intro: 'classes.potion7', 
+        resultIntro: 'classes.potiongame.potion7',
         imgUrl:'Classes/potions/potion1.png',
         recipe:{
           1:{
@@ -134,8 +141,9 @@
         }
       },
       8: {
-        name: 'Winter Melon Drink with Nata de Coco',
+        name: 'classes.potiongame.potionName8',
         intro: 'classes.potion8', 
+        resultIntro: 'classes.potiongame.potion8',
         imgUrl:'Classes/potions/potion9.png',
         recipe:{
           1:{

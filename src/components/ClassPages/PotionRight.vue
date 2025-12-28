@@ -10,21 +10,25 @@ import { potions } from '../ClassPages/potions'
 gsap.registerPlugin(Draggable)
 
 //Boolean
-const isShow = ref(true)
 const beforeStart = ref(true)
 const beforeCook = ref(false)
 const afterCook = ref(false)
+const hasContent = ref(false)
 
 // template 標籤 ref綁定 
 // const refIngredient = ref(null)
 // const refWrapper = ref(null)
 
 // variables
+const initialBigTitle = ref('classes.potionBigTitle1')
 const resultImg = ref('');
 const resultTitle = ref('');
 const resultIntro = ref('');
+const resultBigTitle = ref('classes.potionBigTitle2');
+
 let selectList = []
-let numCurrectList = []
+let correctList = []
+let resultIndex = null
 
 let ingredientList = [
           {
@@ -93,7 +97,7 @@ const initDraggable = () => { //清掉上回合的實體
       onDragEnd: e => {
        const instance = Draggable.get(e.target)
   
-       if (instance.hitTest('.potion-right-pot')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
+       if (instance.hitTest('.potion-right-pot','20%')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
         gsap.to(e.target, { scale: 0, duration: 0.3 });
         selectList.push(e.target.name)
         
@@ -101,50 +105,87 @@ const initDraggable = () => { //清掉上回合的實體
         gsap.to(e.target, { x: 0, y: 0, duration: 0.3 });
         // 未通過hitTest 判定為沒有進入鍋子
       }
-      console.log(selectList);
       }
     })
 }
 
 const start= async()=>{ // 暫定 retry 呼叫同一個 FUNCTION
-  isShow.value = false
   beforeStart.value = false
   beforeCook.value = true
   afterCook.value= false
-
+  
   await nextTick() // 等待DOM更新 直到beforeCook要呈現的標籤都存在 (還沒渲染 但這邊不影響)
   selectList = [] // 清空
+  correctList= [] 
+  resultIndex = null
   initDraggable()
 }
 
 const cook = () => {
-  isShow.value = true
+  
   beforeCook.value = false
   afterCook.value= true
 
-  // 食譜key 值從1 開始
   // 判斷食材屬於哪個食譜 (順序為目前計劃) 
+
   // 1.食材總數 == 飲料食材總數 
-  const selectNum = selectList.length 
-  
-  for(let i = 1; i= 8 ; i++){
-    let recipeNum = Object.values(potions[i].recipe).length
+  const selectNum = selectList.length // 儲存被選到的食材名稱
+  if(selectNum == 0){
+    resultBigTitle.value = 'classes.potionBigTitle1'
+    resultImg.value = "Classes/potions/glass.png"
+    hasContent.value = false
+  }else hasContent.value = true
+  for(let i = 1; i<= 8 ; i++){
+    if(!selectNum) return
+    let recipeNum = Object.values(potions[i].recipe).length 
+    // 一種飲料的食譜有多長(幾種原料)
     if(selectNum == recipeNum){
-      numCurrectList.push(i) // 儲存食材數量對的食譜 屬於幾號飲料
+      correctList.push(potions[i]) 
+      // correctList == 符合數量的完整食譜
+      // index 從 0 開始自動重編
     }
   }
-  console.log(numCurrectList.length);
-
   
-  // 2.食材name == potions[遍歷剩下的].recipe[遍歷].name 
-  // 3. result 才去抓那杯飲料的圖片&介紹 
-  // 4. 不符合食譜或數量大於五直接給怪怪飲料
-  // 
+  // 2.食材name == 食譜.recipe[遍歷].name 
+  for(let i = 0 ; i < correctList.length; i++){
+    if(!correctList.length) return
+    let recipe = correctList[i].recipe 
+    let recipeName = Object.values(recipe) 
+                           .map(item => item.name) // 化為陣列 // 物件不能 .length
+    let isMatch = true
+    for(let j = 0 ; j < selectList.length ; j++){ 
+      if(!recipeName.includes(selectList[j]) ) {
+        isMatch = false
+        break} // 一次false 就進入下一圈判斷
+    }
+    if(isMatch){
+      resultIndex = i;
+      break
+    }else resultIndex = -1 
+  }
+  
+  // 3. (有照食譜) result 才去抓那杯飲料的圖片&介紹 
+  if(Number.isInteger(resultIndex) && resultIndex != -1){
+    
+    resultImg.value = correctList[resultIndex].imgUrl
+    resultTitle.value = correctList[resultIndex].name
+    resultIntro.value = correctList[resultIndex].resultIntro
+  }
+  
+  // 4. (例外)不符合食譜或數量大於五直接給怪怪飲料
+  else{
+    
+    resultImg.value = 'Classes/potions/potion8.png'
+    resultTitle.value = 'classes.potiongame.potionNameFail'
+    resultIntro.value = 'classes.potiongame.potionFail'
+
+  }
 }
 
 
 
 onMounted(()=>{
+
 
 })
 
@@ -153,19 +194,19 @@ onMounted(()=>{
 </script>
 <template>
   <!-- 初始畫面 -->
-  <section class="potion-right-initial" v-show="isShow">
-    <h2 class="potion-right-title" v-show="isShow" style="margin-bottom: 40%;margin-top: 15%;">Your Own Potion</h2>
-     <div  style="margin-bottom: 15%;" v-if="beforeStart"><!-- -->
+  <section class="potion-right-initial dp-flex-col" v-if="beforeStart">
+    <h2 class="potion-right-title" >{{$t(initialBigTitle)}}</h2>
+    <div class="potion-right-glass" >
       <img src="/Classes/potions/glass.png">
     </div>
     <BasicButton class="potion-right-start btn-black " 
-    @click="start" style="width: max-content;" v-if="beforeStart"><!--  -->
+    @click="start" >
       START
     </BasicButton>
   </section>
 
   <!-- 選材料畫面 -->
-  <section v-if="beforeCook" class="potion-right-game" 
+  <section v-else-if="beforeCook" class="potion-right-game" 
           @mousedown.stop
           @touchstart.stop>
     <img src="/Classes/potions/eletricPotLid.png" alt="" class="potion-right-pot-lid"> 
@@ -173,9 +214,7 @@ onMounted(()=>{
       <img v-for="(item, index) in ingredientList" 
           :src="item.imgUrl" :name="item.name" :id="'img'+(index + 1)" alt="" 
           class="potion-right-ingredient" 
-        
           ref="refIngredient">
-          <!-- @dragstart="dragStart" @dragend="dragEnd" -->
     </div>
     <img src="/Classes/potions/eletricPot.png" alt=""  class="potion-right-pot" 
     @drop="dropped">
@@ -186,25 +225,36 @@ onMounted(()=>{
   </section>
 
 <!-- 結果畫面 -->
-  <section v-else-if="afterCook" class="potion-right-result">
-    <div>
-      <img :src='resultImg' alt="">
-      <h5 class="potion-right-result-title">{{ resultTitle }}</h5>
-      <p class="potion-right-result-intro">{{ resultIntro }}</p>
-    </div>
-    <BasicButton class="potion-right-retry btn-black" v-if="afterCook"
-    @click="start">
-      Retry
-    </BasicButton>
+  <section v-else-if="afterCook" class="potion-right-result dp-flex-col">
+      <h3 class="potion-right-result-bigtitle">{{$t(resultBigTitle)}}</h3>
+      <div class="potion-right-img-wrapper">
+        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'.potion-right-glass':!hasContent}">
+      </div>
+      <h5 class="potion-right-result-title" v-show="hasContent">{{ $t(resultTitle) }}</h5>
+      <p class="potion-right-result-intro" v-show="hasContent">{{ $t(resultIntro) }}</p>
+      <BasicButton class="potion-right-retry btn-black" 
+      @click="start">
+        Retry
+      </BasicButton>
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .potion-right-initial{
-  display: flex; 
-  flex-direction: column; 
+  width: 100%;
   align-items:center ;
   min-height: 100%;
+  .potion-right-glass{
+    margin-bottom: 20%;
+  }
+  .potion-right-start{
+    width: max-content;
+  }
+}
+.potion-right-title{
+  color: $color-fsTitle;
+  margin-bottom: 30%;
+
 }
 .potion-right-game{
   height: 100%;
@@ -212,12 +262,10 @@ onMounted(()=>{
   position: relative;
   .potion-right-pot-lid{
     width: 190px;
-
     position: absolute;
     top: -40px ;
     right: -20px;
   }
-  
   .potion-right-ingredient-wrapper{
     width: 100%;
     height: 100%;
@@ -237,20 +285,19 @@ onMounted(()=>{
           left: 7%;
         }
         &#img3{
-          top: 60%;
+          top: 63%;
           left: 50%;
         }
         &#img6{
           top: 10%;
           left: 55%;
         }
-      
       }
       &#img2, &#img10{
         width: 21%;
         &#img2{
-          top:20%;
-          left: 50%;
+          top:43%;
+          left: 45%;
         }
          &#img10{
           top:45%;
@@ -260,12 +307,12 @@ onMounted(()=>{
       &#img7,&#img4{
         width: 25%;
         &#img7{
-          top: 48%;
-          left: 70%;
+          top: 50%;
+          left: 73%;
         }
         &#img4{
           top: 22%;
-          right: 0;
+          right: 21%;
         }
       }
       &#img8{
@@ -305,14 +352,49 @@ onMounted(()=>{
   }
 }
 
+.potion-right-result{
+  align-items:center ;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  .potion-right-result-bigtitle, .potion-right-result-title{
+    color: $color-fsTitle;
+    margin-top: 5%;
+    flex-basis: 0;
+    &.potion-right-result-bigtitle{
+      // margin-bottom: 8%;
+      flex-grow: 2;
+    }
+    &.potion-right-result-title{
+      flex-grow: 1;
+    }
+    
+  }
+  .potion-right-img-wrapper{
+    flex-basis: 0;
+    flex-grow: 5;
+    .potion-right-result-img{
+      width: 100%;
+    }
+  }
+    .potion-right-result-intro{
+      color: $color-fsContent;
+      padding: 2% 10%;
+      min-height: 11%;
+      width: 100%;
+      text-align: center;
+      flex-basis: 0;
+      flex-grow: 2;
+    }
 
-.potion-right-retry{
-  width: max-content;
-
-  position: absolute;
-    bottom: 40px;
-    right: 0;left: 0;
-    margin: 0 auto ;
+    .potion-right-retry{
+      // width:;
+      // position: absolute;
+      // bottom: 5%;
+      flex-basis:  max-content;
+      flex-grow: 0;
+    }
+  
 }
 
 

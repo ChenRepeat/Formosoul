@@ -138,6 +138,8 @@
     "drawText1":"Draw Your Own !",
     "drawText2":"Make Your Product!",
 
+    "potionBigTitle1":"Make Your Own!",
+    "potionBigTitle2":"Your Own Potion",
     "potionTitle":"Potions",
     "potionIntro":"Taiwan’s herbal potions refresh, heal, and bring magical energy with natural herbs and soothing flavors.",
     "potion1":"Boba Milk Tea : A creamy blend of black tea and milk, featuring the signature, chewy tapioca.",
@@ -148,6 +150,27 @@
     "potion6":"Winter Melon Drink with Grass Jelly : Sweet winter melon juice perfectly paired with smooth, cooling herbal grass jelly cubes.",
     "potion7":"Cheese Foam Green Tea : Refreshing green tea topped with a thick, savory, and lightly salted cream foam.",
     "potion8":"Winter Melon Drink with Nata de Coco : Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).",
+    
+    "potiongame":{
+    "potionName1": "Boba Milk Tea", 
+    "potion1": "A creamy blend of black tea and milk, featuring the signature, chewy tapioca.", 
+    "potionName2": "Aiyu Lemon Jelly Drink", 
+    "potion2": "Zesty lemon drink featuring slippery, natural aiyu (fig) jelly—a perfect summer cooler.", 
+    "potionName3": "No.1", 
+    "potion3": "Lightly oxidized oolong tea customized with three chewy toppings: boba, pearls, and nata de coco.", 
+    "potionName4": "Winter Melon Lemonade", 
+    "potion4": "A perfectly balanced drink: sweet winter melon combined with the refreshing tartness of lemon.", 
+    "potionName5": "Brown Sugar Boba Milk", 
+    "potion5": "Warm, chewy pearls simmered in rich brown sugar syrup mixed with fresh milk.", 
+    "potionName6": "Winter Melon Drink with Grass Jelly", 
+    "potion6": "Sweet winter melon juice perfectly paired with smooth, cooling herbal grass jelly cubes.", 
+    "potionName7": "Cheese Foam Green Tea", 
+    "potion7": "Refreshing green tea topped with a thick, savory, and lightly salted cream foam.", 
+    "potionName8": "Winter Melon Drink with Nata de Coco", 
+    "potion8": "Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).",
+    "potionNameFail": "Alchemy's Rebellious Phase",
+    "potionFail": "Blue energy and purple matter clash chaotically in the dark liquid. Drinking this takes immense courage... and a good doctor."
+    },
 
     "divinationTitle":"Divination",
     "divinationIntro":"Taiwanese divination uses magical sticks and lot casting to seek guidance, predict luck, and explore mystical insights.",
