@@ -1,11 +1,23 @@
 <script setup>
 import siteLogo from '@/assets/LOGO_white_footer.svg'
+import router from '@/router';
 import { useclassesStore } from '@/stores/classes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const turnPage =(num)=>{
-  useclassesStore().setPage(num);
+  if(num == 0 && router.path == "/classes"){
+    useclassesStore().setPage(num);
+  }else{
+    if(sessionStorage.getItem("bookLoaded") == 'true' ){
+      useclassesStore().setPage(num);
+    }else{
+      sessionStorage.setItem("bookLoaded", 'true')
+      useclassesStore().setPage(num);
+      setTimeout(()=>sessionStorage.setItem("bookLoaded", 'false'),1200)
+    }
+  }
+
 }
 const vWidth = ref(0)
 const toMotorPage = ref(2);
@@ -108,7 +120,7 @@ const newVSize=()=>{
             </ul>
             <ul class="footer-classes-link dp-flex-col">
               <li class="footer-class-link-title">
-                <router-link to="/classes" @click="turnPage(0)"><h5>{{$t('nav.classes')}}</h5></router-link>
+                <router-link to="/classes" @click="turnPage(1)"><h5>{{$t('nav.classes')}}</h5></router-link>
               </li>
               <li>
                 <router-link to="/classes" @click="turnPage(toMotorPage)"><p>{{$t('classes.motorClass')}}</p></router-link>

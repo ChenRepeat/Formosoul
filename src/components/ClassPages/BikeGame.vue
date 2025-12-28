@@ -124,10 +124,10 @@ const update = (time, deltaTime) => {
   // 玩家移動
   const moveSpeed = 1000 * dt;
   let targetTilt = 0;
-  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 25; }
-  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -25; }
+  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 5; }
+  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -5; }
   
-  playerTilt.value = gsap.utils.interpolate(playerTilt.value, targetTilt, 0.1);
+  playerTilt.value = gsap.utils.interpolate(playerTilt.value, targetTilt, 0.3);
 
   // 【邊界鎖定】確保不跑出畫面
   const limit = (containerWidth.value / 2) - (BIKE_WIDTH / 2);

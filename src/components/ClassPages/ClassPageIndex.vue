@@ -34,20 +34,20 @@
 
     gsap.to(chars, {
       keyframes: [
-        { x: 30,y:10, color: colorText, duration: 0.1,scale: 3,rotateX:0},
-        { x: 0, y:0, color: colorText, duration: 0.3,scale: 1,rotateX:360}
+        { x: 30,y:10, color: colorText, duration: 0.7,scale: 3,rotateX:0},
+        { x: 0, y:0, color: colorText, duration: 0.7,scale: 1,rotateX:360}
       ],
       force3D: true,
       overwrite: true,
       stagger: 0.08,
-      ease: "power2.out"   // 這裡設 none，因為 ease 已經在 keyframes 裡個別設定了
+      ease: "power2.out" 
     });
     gsap.to(icons, {
       color: colorIcon, 
       duration: 0.1,
       force3D: true,
       overwrite: true,
-      ease: "bounse.out"   // 這裡設 none，因為 ease 已經在 keyframes 裡個別設定了
+      ease: "bounse.out" 
     });
 };
 const onLeave = (e) => {
@@ -60,7 +60,7 @@ const onLeave = (e) => {
     y:0,
     scale: 1,
     rotateX:360,
-    color: 'inherit',    // 恢復原本顏色
+    color: 'inherit',
     stagger: 0.02,
     duration: 0.3,
     ease: 'power2.out',
@@ -71,7 +71,7 @@ const onLeave = (e) => {
       duration: 0.1,
       force3D: true,
       overwrite: true,
-      ease: "bounse.out"   // 這裡設 none，因為 ease 已經在 keyframes 裡個別設定了
+      ease: "bounse.out"
   });
 };
 //  書籤陣列

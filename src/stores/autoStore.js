@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref(Cookies.get('token') || null);
 
     // 載入狀態避免畫面閃爍
-    const isLoading = ref(false);
+    const isLoading = ref(true);
     // 彈窗狀態
     const isLoginModalOpen = ref(false);
     const memberView = ref('coreselection');
