@@ -34,8 +34,10 @@
 
     gsap.to(chars, {
       keyframes: [
-        { x: 30,y:10, color: colorText, duration: 0.7,scale: 3,rotateX:0},
-        { x: 0, y:0, color: colorText, duration: 0.7,scale: 1,rotateX:360}
+        { x: 30,y:10, color: colorText, duration: 1,scale: 2,rotateX:0},
+        { x: 30, y:10, color: 'transparent', duration: 0.5,scale: 3,rotateX:360},
+        { x: 0, y:0, color: 'transparent', duration: 0.3,scale: 3,rotateX:360},
+        { x: 0, y:0, color: colorText, duration: 0.7,scale: 1}
       ],
       force3D: true,
       overwrite: true,
@@ -76,7 +78,7 @@ const onLeave = (e) => {
 };
 //  書籤陣列
 const indexItems = ref([
-  { id: 'motor', text: 'classes.motorClass', icon: markRaw(IconHelmet), color:'#ffcc46', flipPage:toMotorPage },
+  { id: 'motor', text: 'classes.motorClass', icon: markRaw(IconHelmet), color:'#041426', flipPage:toMotorPage },
   { id: 'animal', text: 'classes.animalTitle', icon: markRaw(IconFoot), color:'#ffcc46', flipPage:toAnimaPage },
   { id: 'history', text: 'classes.historyTitle', icon: markRaw(IconHistory), color:'#ffcc46', flipPage:toHistoryPage },
   { id: 'charm', text: 'classes.charmTitle', icon: markRaw(IconCharm), color:'#ffcc46', flipPage:toCharmPage },

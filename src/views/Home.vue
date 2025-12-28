@@ -515,7 +515,7 @@ onMounted(() => {
   const manager = new THREE.LoadingManager();
   manager.onLoad = () => {
     setTimeout(() => {
-      authStore.isLoading = false; 
+      authStore.isLoading = false;
     }, 500);
   };
   const textureLoader = new THREE.TextureLoader(manager);
