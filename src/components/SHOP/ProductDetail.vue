@@ -20,6 +20,8 @@ function goProductList(){
 
 // 商品資料動態載入------------------------------------
 // 之後要從資料庫抓跟整理成這個格式
+
+/* 假資料
 const productData = ref({
     product_ID: 'FO2025110001',
     type: 'Folktoys',
@@ -45,6 +47,8 @@ const productData = ref({
     use_zh: '纏繞繩子後向地甩出並收回繩索，使其平穩旋轉。', 
     isLike: false
   });
+
+*/
 
 
 

@@ -96,13 +96,14 @@ const router = createRouter({
       },
       children: [
         {
-          path: "productlist",
-          name: "ProductList",
+          path: 'productlist',
+          name: 'ProductList',
           component: ProductList,
         },
         {
-          path: "productdetail",
-          name: "ProductDetail",
+          // :id 代表變數，以便用這個參數叫出正確的 detail 頁面
+          path: 'productdetail/:id',
+          name: 'ProductDetail',
           component: ProductDetail,
         },
       ],
@@ -116,18 +117,18 @@ const router = createRouter({
       },
       children: [
         {
-          path: "",     // 預設顯示，網址不改變
-          name: "MyCart",
+          path: '',     // 預設顯示，網址不改變
+          name: 'MyCart',
           component: MyCart,
         },
         {
-          path: "checkout",
-          name: "CheckOut",
+          path: 'checkout',
+          name: 'CheckOut',
           component: CheckOut,
         },
         {
-          path: "ordersuccess",
-          name: "OrderSuccess",
+          path: 'ordersuccess',
+          name: 'OrderSuccess',
           component: OrderSuccess,
         },
       ],
