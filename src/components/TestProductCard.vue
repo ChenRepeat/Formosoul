@@ -8,7 +8,10 @@ const router = useRouter();
 
 // 設定路由功能
 function goProductDetail(id){
-  router.push('/shop/productdetail')
+  router.push({
+    name:'ProductDetail',
+    params: { id: id}
+  })
 };
 
 
