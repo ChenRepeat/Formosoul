@@ -37,7 +37,8 @@
 <script setup>
     import BasicButton from '@/components/BasicButton.vue';
     import { useAuthStore } from '@/stores/autoStore';
-    import { inject, ref } from 'vue';
+    import { ref } from 'vue';
+    import emailjs from '@emailjs/browser';
 
     const authStore = useAuthStore();
 
@@ -45,18 +46,19 @@
     const isLoading = ref(false);
     const errorMessage = ref('');
 
-    function forgetpasswordAPI(eamil) {
+    function forgetpasswordAPI(email) {
         const apiBase = import.meta.env.VITE_API_BASE;
-        const API_URL = `${apiBase}/forgetpassword.php`;
+        const API_URL = `${apiBase}/checkemail.php`;
         return fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                eamil
-            })
-        })
+                email
+            }),
+            credentials: 'include'
+        }).then( res => res.json());
         
     }
 
@@ -76,15 +78,31 @@
 
         try{
             const response = await forgetpasswordAPI(email.value);
-            authStore.setToken(response.token);
-            authStore.setUser(response.user);
-            authStore.setloginView('changepassword');
+            const decryptedOtp = atob(response.changeotp)
+            if(response.success){
+                // console.log(decryptedOtp);
+                const templateParams = {
+                    email: email.value,
+                    changeotp_code: decryptedOtp,
+                };
+                await emailjs.send(
+                    'service_3xw68ou',   // 替換為你的 Service ID
+                    'template_wd3b6dg',  // 替換為你的 Template ID
+                    templateParams, 
+                    'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
+                )
+                authStore.setloginView('loginchangepassword');
+            }else{
+                errorMessage.value = response.message;
+            }
         }catch(error){
             errorMessage.value = error.message || 'Please enter a  email';
         }finally{
             isLoading.value = false;
         }
     };
+
+
 
     function handleKeyDown( e ) {
         if(e.key == 'Enter' && !isLoading.value){

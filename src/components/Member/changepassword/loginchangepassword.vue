@@ -3,13 +3,14 @@
         <h3>Change password</h3>
         <div class="contain">
 
-            <label for="oldpassword"><h6>OTP：</h6></label>
+            <label><h6>OTP：</h6></label>
             <input
             class="input-text"
             v-model="changeotp"
             type="text" 
             name="changeotp" 
             id="changeotp"
+            @input="validatechangeotp"
             placeholder="One-Time Password (OTP)"/>
 
             <label for="Newpassword"><h6>New password：</h6></label>
@@ -43,6 +44,7 @@
 
 <script setup>
 import BasicButton from '@/components/BasicButton.vue';
+import { useAuthStore } from '@/stores/autoStore';
 import { ref } from 'vue';
 
 const changeotp = ref('');
@@ -50,28 +52,27 @@ const Newpassword = ref('');
 const confirmpassword = ref('');
 const errorMessage = ref('');
 const isLoading = ref(false);
-const props = defineProps({
-    ismargin: {
-        type: Boolean,
-        default: false,
-    },
-    isotp: {
-        type: Boolean,
-        default: true,
-    },
-    isotptitle: {
-        type: Boolean,
-        default: true,   
-    },
-    ispasswordtitle: {
-        type: Boolean,
-        default: false,
-    },
-    ispassword: {
-        type: Boolean,
-        default: false,  
-    },
-})
+const authStore = useAuthStore();
+
+const validatechangeotp = () => {
+    errorMessage.value = '';
+    if(!changeotp){
+        return;
+    }
+    const hasOnlyNumbers = /^\d+$/.test(changeotp.value);
+
+    if(changeotp.value.length > 6 && hasOnlyNumbers){
+        errorMessage.value = 'The changeotp consists of 6 numbers.';
+        return;
+    }
+
+    if(!hasOnlyNumbers){
+        errorMessage.value = 'The changeotp contains only numbers.';
+        return;
+    }
+
+
+}
 //  驗證新密碼格式
 const validateNewPassword  = () => {
     errorMessage.value = '';
@@ -139,9 +140,8 @@ const handleChangePassword  = async() => {
             errorMessage.value = 'Passwords must be at least 8 characters long';
         }else if(!hasUppercase || !hasLowercase || !hasNumber){
             errorMessage.value = 'Passwords must contain uppercase letters, lowercase letters, and numbers.';
-        }else if(Newpassword.value === oldpassword.value){
-            errorMessage.value = 'Must be the same as the new password.';
-
+        }else{
+            errorMessage.value = '';
         }
     }
 
@@ -163,6 +163,10 @@ const handleChangePassword  = async() => {
             Newpassword.value
         );
 
+        if(response.success){
+            authStore.setloginView('loginpage');
+        }
+
     errorMessage.value = response.message;
     }catch(error){
         errorMessage.value = error.message || 'changepassword failed, please try again';
@@ -174,9 +178,9 @@ const handleChangePassword  = async() => {
     // try { await api.changePassword(...) } catch...
 };
 
-function changeAPI(){
+function changeAPI(changeotp, Newpassword){
     const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/changepassword.php`;
+    const API_URL = `${apiBase}/loginchange.php`;
     return fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -185,7 +189,8 @@ function changeAPI(){
         body: JSON.stringify({
             changeotp,
             Newpassword
-        })
+        }),
+        credentials: 'include'
     }).then( res => res.json());
 };
 
