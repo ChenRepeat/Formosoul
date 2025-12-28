@@ -476,7 +476,10 @@ img { object-fit: none; }
   border-top: 1px solid $color-fsCaption;
 }
 @media screen and (max-width: 1200px) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> repeat
   .header-icons-list{
     gap: 8px;
   }
