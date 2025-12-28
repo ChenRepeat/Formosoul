@@ -58,6 +58,7 @@ const execLanguageChange = (changeAction) => {
     }
   });
 };
+
 provide('execLanguageChange', execLanguageChange);
 const charRefs = ref([]);
 
@@ -76,37 +77,45 @@ const startLoadingAnimation = () => {
     repeat: -1,
   });
 };
-//  Loading   畫面邏輯  vv
-const isLoading = ref(false);
-const showLoading = () => {
-  isLoading.value = true;
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2000);
+// --- Loading 畫面邏輯 vv ---
+const handleLoadingState = () => {
+  if (route.meta.requireLoading) {
+    authStore.isLoading = true;
+    nextTick(() => {
+      if (typeof startLoadingAnimation === 'function') {
+        startLoadingAnimation();
+      }
+    });
+  } else {
+    authStore.isLoading = false;
+  }
 };
 router.isReady().then(() => {
-  if (route.path === '/' || route.path === '/home') {
-    showLoading();
-  }
+  handleLoadingState();
 });
 watch(
   () => route.path,
-  (newPath, oldPath) => {
-    if (newPath === '/' || newPath === '/home') {
-      showLoading();
-    } else {
-      isLoading.value = false;
-    }
+  () => {
+    handleLoadingState();
   }
 );
-//  Loading   畫面邏輯  ^^
 
+// --- Loading 畫面邏輯 ^^ ---
+const innerH = ref(window.innerHeight).value
+const waveConfig = ref(
+  [
+    [innerH/2, 0.8, 50, 0.2, '#F0F7FF', '#000', 0.8, 2],
+    [innerH/2, 0.8, 80, 1, '#F0F7FF', '#000', 0, 1],
+    [innerH/2, 0.8, 20, 0.6, '#F0F7FF', '#000', 0, 3.5],
+    [innerH/2, 0.8, 110, 0, '#F0F7FF', '#000', 0, 0.2],
+  ])
 onMounted(async () => {
   await nextTick();
   if (authStore.token) {
     await authStore.fetchUser();
   }
-})
+}
+)
 
 </script>
 
@@ -129,7 +138,7 @@ onMounted(async () => {
           :ref="(el) => { if(el) charRefs[index] = el }"
         >
           {{ char === ' ' ? '&nbsp;' : char }}</h1>
-          <Wave />
+          <Wave :config=waveConfig :height=innerH />
       </div>
       <div>
         <RouterView />

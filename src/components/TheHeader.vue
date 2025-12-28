@@ -398,8 +398,7 @@ img { object-fit: none; }
 /* 漢堡按鈕 */
 .hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;overflow: hidden;}
 .transition { 
-  transition: 0.5s ease-out; 
-  transition: color 0s;
+  transition: 0.5s ease-out ,color 0s;
 }
 .dot{
   width: 5px;height: 5px;position: absolute;background-color: $color-fsWhite;
@@ -476,10 +475,6 @@ img { object-fit: none; }
   border-top: 1px solid $color-fsCaption;
 }
 @media screen and (max-width: 1200px) {
-<<<<<<< HEAD
-
-=======
->>>>>>> repeat
   .header-icons-list{
     gap: 8px;
   }

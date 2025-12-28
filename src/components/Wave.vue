@@ -5,8 +5,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+const props = defineProps({
+  config:{
+    type: Array,
+    default:()=>[
+      [650, 0.8, 50, 0.2, '#F0F7FF', '#000', 0.8, 2],
+      [650, 0.8, 80, 1, '#F0F7FF', '#000', 0, 1],
+      [650, 0.8, 20, 0.6, '#F0F7FF', '#000', 0, 3.5],
+      [650, 0.8, 110, 0, '#F0F7FF', '#000', 0, 0.2],
+    ]
+  },
+  height:{
+    type:Number,
+    default : 800
+  }
+})
 const canvasRef = ref(null);
 
 // baseY: 起始座標    speed: 速度   curveIntensity: 波動幅度    offset: 波動的相位偏移
@@ -14,13 +28,15 @@ const canvasRef = ref(null);
 // colorStart: 漸層起始   colorEnd: 漸層結束    gradientOffset: 漸層偏移    lineWidth: 線的粗細
 
 // 新增 line 格式: [baseY, speed, curveIntensity, offset, colorStart, colorEnd, gradientOffset, lineWidth]
-const line = [
+const line = computed(() => props.config);
+/*
+[
   [650, 0.8, 50, 0.2, '#F0F7FF', '#000', 0.8, 2],
   [650, 0.8, 80, 1, '#F0F7FF', '#000', 0, 1],
   [650, 0.8, 20, 0.6, '#F0F7FF', '#000', 0, 3.5],
   [650, 0.8, 110, 0, '#F0F7FF', '#000', 0, 0.2],
 ];
-
+*/
 
 const gradientSpeed = 0.0005;
 
@@ -31,7 +47,7 @@ onMounted(() => {
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     //  高度一定要小於起始座標 + 波動幅度，除非想要不完整的波段
-    canvas.height = 800;
+    canvas.height = props.height;
   }
   
   resizeCanvas();
@@ -98,12 +114,14 @@ onMounted(() => {
   }
 
   const lines = [];
-  for (let i = 0; i < line.length; i++) {
+  const lineData = line.value;
+  for (let i = 0; i < lineData.length; i++) {
     lines.push(new FlowingLine(
-      line[i][0],line[i][1],line[i][2],line[i][3],line[i][4],line[i][5],line[i][6],line[i][7],
+      lineData[i][0],lineData[i][1],lineData[i][2],lineData[i][3],lineData[i][4],lineData[i][5],lineData[i][6],lineData[i][7],
     ));
   }
-
+  console.log(lines);
+  
   let lastTime = 0;
   let animationId;
 
