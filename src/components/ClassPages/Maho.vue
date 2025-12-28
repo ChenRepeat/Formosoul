@@ -4,65 +4,77 @@ import { ref, onMounted, onUnmounted } from 'vue';
 const canvasRef = ref(null);
 const containerRef = ref(null);
 let animationId = null;
+let resizeObserver = null; 
+let lastTime = 0;
+const speed = 40; 
 
 onMounted(() => {
   const canvas = canvasRef.value;
   const container = containerRef.value;
   const context = canvas.getContext('2d');
+
   const updateSize = () => {
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
+    if (container && canvas) {
+      if (container.clientWidth > 0 && container.clientHeight > 0) {
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+      }
+    }
   };
-
-
+  resizeObserver = new ResizeObserver(() => {
+    updateSize();
+  });
+  resizeObserver.observe(container);
   const pi = x => { return x * Math.PI / 180 };
   const angle = 10;
   const deg = 360 / angle;
   let timer = 0;
 
-  function drawing() {
-    timer++;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    
-    const gradient = context.createLinearGradient(0, 0, 800, 0);
-    const offset = 0.6;
-    gradient.addColorStop(Math.max(0, offset - 0.5), '#041426');
-    gradient.addColorStop(Math.max(0, offset), '#F0F7FF');
-    gradient.addColorStop(Math.min(1, offset + 0.5), '#041426');
-    gradient.addColorStop(Math.min(1, offset + 1), '#F0F7FF');
+  function drawing(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+    if (canvas.width > 0 && canvas.height > 0) {
+      timer += (speed * deltaTime) / 1000;
 
-    let act = timer % 360;
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.beginPath();
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      const gradient = context.createLinearGradient(0, 0, 800, 0);
+      const offset = 0.6;
+      gradient.addColorStop(Math.max(0, offset - 0.5), '#041426');
+      gradient.addColorStop(Math.max(0, offset), '#F0F7FF');
+      gradient.addColorStop(Math.min(1, offset + 0.5), '#041426');
+      gradient.addColorStop(Math.min(1, offset + 1), '#F0F7FF');
 
-    for (let i = 0; i < angle; i++) {
-      context.arc(centerX, centerY, 150, pi((angle + i + 1) * deg + act), pi((angle + i + 1) * deg + act));
-      context.arc(centerX, centerY, 200, pi((angle + i + 1.5) * deg - act), pi((angle + i + 1.5) * deg + act));
-      context.arc(centerX, centerY, 150, pi((angle + i + 2) * deg - act), pi((angle + i + 2) * deg + act));
-      context.arc(centerX, centerY, 200, pi((angle + i + 2.5) * deg + act), pi((angle + i + 2.5) * deg - act));
+      let act = timer % 360;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.beginPath();
 
-      context.closePath();
-      context.strokeStyle = gradient;
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
-      context.stroke();
+      for (let i = 0; i < angle; i++) {
+        context.arc(centerX, centerY, 150, pi((angle + i + 1) * deg + act), pi((angle + i + 1) * deg + act));
+        context.arc(centerX, centerY, 200, pi((angle + i + 1.5) * deg - act), pi((angle + i + 1.5) * deg + act));
+        context.arc(centerX, centerY, 150, pi((angle + i + 2) * deg - act), pi((angle + i + 2) * deg + act));
+        context.arc(centerX, centerY, 200, pi((angle + i + 2.5) * deg + act), pi((angle + i + 2.5) * deg - act));
+
+        context.closePath();
+        context.strokeStyle = gradient;
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
+        context.stroke();
+      }
     }
+
     animationId = requestAnimationFrame(drawing);
   }
-  setTimeout(() => {
-    updateSize();
-    drawing();
-  }, 500);
-  window.addEventListener('resize', updateSize);
-  window.addEventListener('load', updateSize);
-  
+  animationId = requestAnimationFrame(drawing);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', () => {});
-  window.removeEventListener('load', () => {});
   cancelAnimationFrame(animationId);
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
 });
 </script>
 

@@ -13,6 +13,7 @@ import Wave from './components/Wave.vue';
 import router from './router';
 
 const route = useRoute();
+const langStore = useLangStore();
 const authStore = useAuthStore();
 
 const currentLogoSrc = computed(() => {
@@ -27,7 +28,6 @@ const currentLogoDP = computed(() => {
 const hideLogoRWD = computed(() => {
   return route.meta?.hideLogoRWD || false;
 });
-const langStore = useLangStore();
 
 const execLanguageChange = (changeAction) => {
   const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label",];
@@ -76,24 +76,36 @@ const startLoadingAnimation = () => {
     repeat: -1,
   });
 };
+//  Loading   畫面邏輯  vv
+const isLoading = ref(false);
+const showLoading = () => {
+  isLoading.value = true;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 2000);
+};
+router.isReady().then(() => {
+  if (route.path === '/' || route.path === '/home') {
+    showLoading();
+  }
+});
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (newPath === '/' || newPath === '/home') {
+      showLoading();
+    } else {
+      isLoading.value = false;
+    }
+  }
+);
+//  Loading   畫面邏輯  ^^
 
 onMounted(async () => {
   await nextTick();
-  if(authStore.isLoading){
-    startLoadingAnimation();
-  }
-
   if (authStore.token) {
     await authStore.fetchUser();
   }
-  watch(() => route.path, () => {
-  if (route.meta?.requireLoading) {
-    authStore.isLoading = true;
-    setTimeout(() => isLoading.value = false, 1500);
-  } else {
-    authStore.isLoading = false;
-  }
-}, { immediate: true }); 
 })
 
 </script>
