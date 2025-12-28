@@ -12,7 +12,7 @@
                         class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
 
                         <BasicButton 
-                        :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword' || authStore.loginView == 'changepassword'}"
+                        :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword' || authStore.loginView == 'loginchangepassword'}"
                         @click="authStore.loginView = 'loginpage'"
                         class="btn-blue-fill"><h4>Login</h4></BasicButton>
                     </div>
@@ -48,8 +48,7 @@
     import BasicButton from '@/components/BasicButton.vue';
     import Enrollment from '../Login/Enrollment.vue';
     import Forgetpassword from './forgetpassword.vue';
-import Changepassword from '../changepassword/changepassword.vue';
-import Loginchangepassword from '../changepassword/loginchangepassword.vue';
+    import Loginchangepassword from '../changepassword/loginchangepassword.vue';
     const publicPath = import.meta.env.BASE_URL;
     const authStore = useAuthStore();
     const sharedEmail = ref('');
@@ -64,7 +63,7 @@ import Loginchangepassword from '../changepassword/loginchangepassword.vue';
 
 
     const isotherlogin = computed(() => {
-            return  authStore.loginView == 'forgetpassword' || authStore.loginView == 'changepassword';
+            return  authStore.loginView == 'forgetpassword' || authStore.loginView == 'loginchangepassword';
     });
 </script>
 
