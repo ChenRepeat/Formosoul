@@ -69,7 +69,6 @@ const props = defineProps({
 
 const loadMemberData = async () => {
     const storedUser = localStorage.getItem('user');
-    // console.log(storedUser);
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/getMemberinformation.php`;
     if(!storedUser) return;
@@ -91,7 +90,7 @@ const loadMemberData = async () => {
             memberStore.memberData.tempName = dbData.name;
             memberStore.memberData.number = dbData.member_ID;
             memberStore.memberData.date =  dbData.createdate;
-            memberStore.memberData.wandcore = dbData.magical_en || 'Select Your WandCore';
+            memberStore.memberData.wandcore = dbData.name_en || 'Select Your WandCore';
         }else{
             console.error(result.message);
         }
