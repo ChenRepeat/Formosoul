@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 // 設定路由功能
-function goProductDetail(){
+function goProductDetail(id){
   router.push('/shop/productdetail')
 };
 
@@ -139,9 +139,9 @@ function likeHeart(product){
   <div class="product-case"  >
     <div 
       v-for="(product, index) in products" 
-      :key="product.id" 
+      :key="product.product_ID" 
       class="product-card dp-flex-col"
-      @click="goProductDetail"
+      @click="goProductDetail(product.product_ID)"
     >
     <!-- 從商品陣列中取出每一個物件及物件再陣列中的索引
          並且把物件的 id 紀錄為每個 div 的 key 值，讓每個 div 差異化，vue 才能透過 key 值分辨跟單獨處理他們

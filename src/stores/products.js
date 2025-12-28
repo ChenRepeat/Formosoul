@@ -788,8 +788,11 @@ export const useProductStore = defineStore('products', () =>{
         return finalDisplay;
     })
 
-
-
+    //step3 商品詳細頁的查詢功能
+    // const + 箭頭函式     *宣告後才能被使用   ＊因為是用 const，所以不怕被覆寫
+    const getProductByID = (id) => {
+        return productListed.value.find( p => p.product_ID === id)
+    }
 
 
 
@@ -800,7 +803,7 @@ export const useProductStore = defineStore('products', () =>{
         sortBy,
         typeBy,
         displayProduct,
-
+        getProductByID,
     };
 
 

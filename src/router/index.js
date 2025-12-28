@@ -101,7 +101,8 @@ const router = createRouter({
           component: ProductList,
         },
         {
-          path: "productdetail",
+          // :id 代表變數，以便用這個參數叫出正確的 detail 頁面
+          path: "productdetail/:id",
           name: "ProductDetail",
           component: ProductDetail,
         },
