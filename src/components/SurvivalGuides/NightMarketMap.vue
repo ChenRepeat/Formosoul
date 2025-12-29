@@ -346,6 +346,7 @@ function closeWelcomeFrame (){
     width: 13%;
     bottom: 25.3%;
     right: 13%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     cursor: pointer;
 
@@ -363,6 +364,7 @@ function closeWelcomeFrame (){
     width: 8.75%;
     top: 14.1%;
     right: 24.6%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
@@ -406,6 +408,7 @@ function closeWelcomeFrame (){
     width: 9.25%;
     top: 6.1%;
     left: 40.25%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
@@ -448,6 +451,7 @@ function closeWelcomeFrame (){
     width: 9.2%;
     top: 19%;
     left: 21.2%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
@@ -491,6 +495,7 @@ function closeWelcomeFrame (){
     width: 9.2%;
     top: 27.4%;
     left: 12.8%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
@@ -536,6 +541,7 @@ function closeWelcomeFrame (){
     width: 9.8%;
     top: 9%;
     right: 34%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
@@ -583,6 +589,7 @@ function closeWelcomeFrame (){
 
     // z-index: 100;  
     cursor: pointer;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
 
     &:hover {
@@ -658,6 +665,7 @@ function closeWelcomeFrame (){
     width: 18.1%;
     bottom: -1%;
     right: 27.3%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     z-index: 101;  
     cursor: pointer;
@@ -709,6 +717,7 @@ function closeWelcomeFrame (){
     width: 31.1%;
     bottom: 11%;
     left: 13.3%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
@@ -753,6 +762,7 @@ function closeWelcomeFrame (){
     width: 25.5%;
     bottom: 23.1%;
     left: 45.6%;    
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
     // z-index: 100;  
     cursor: pointer;
