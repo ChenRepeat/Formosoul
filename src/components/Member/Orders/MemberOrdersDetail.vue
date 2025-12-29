@@ -1,6 +1,6 @@
 <template>
         <div v-for="order in calorderpage" :key="order.id" class="orders-contain">
-            <p>{{ order.number }}</p> 
+            <p>{{ order.order_number }}</p> 
             <p>{{ order.date }}</p>
             <p>{{ order.prices }}</p>
             <p>{{ order.payment }}</p>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-    import { computed, ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
     import BasicButton from '@/components/BasicButton.vue';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
@@ -24,6 +24,42 @@
             default: 1
         }
     });
+    
+    const ordertest = ref([]);
+    
+    const get_order = () => {
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/getmemberorder.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser);
+        const { member_ID } = userData;
+        
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                member_ID
+            })
+        }
+        ).then( res => res.json()
+        ).then( order_data => {
+            const formattedData = Array.isArray(order_data) ? order_data : (order_data ? [order_data] : []);
+            localStorage.setItem('data', JSON.stringify(formattedData));
+            ordertest.value = formattedData || [];
+        });
+    };
+
+
+    onMounted(() => {
+        get_order().then( () => {
+            console.log(ordertest.value);
+
+        });
+        
+    })
     
     const orders = ref([
         {
@@ -131,11 +167,11 @@
     const calorderpage = computed(() => {
         const start = (props.currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        return orders.value.slice(start, end);
+        return ordertest.value.slice(start, end);
     });
-
+    
     const totalPages = computed(() =>{
-        return Math.ceil(orders.value.length / itemsPerPage);
+        return Math.ceil(ordertest.value.length / itemsPerPage);
     });
     // 用 expose 把數據暴露給父組件
     defineExpose({
