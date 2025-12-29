@@ -83,7 +83,9 @@ const getImageUrl = (filename) => {
         </template>
       </el-table-column>
       <el-table-column width="50">
-        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+        <router-link :to="{name:'ProductEdit'}">
+          <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+        </router-link>
       </el-table-column>
       <el-table-column width="50">
         <font-awesome-icon :icon="['fas', 'trash-can']" class="delete-icon" />
