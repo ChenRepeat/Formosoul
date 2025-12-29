@@ -1,27 +1,36 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useRouter } from "vue-router";     //使用路由功能
+import { ref, watch } from 'vue';
+import { useRouter, useRoute } from "vue-router";     //使用路由功能、抓取參數
 import BasicButton from '../BasicButton.vue';
-import { ref } from 'vue';
+import { useProductStore } from '@/stores/products';
+import { useI18n } from 'vue-i18n';       //因為 alert 需要使用
 
 
-// 按鈕 ------------------------------------
-// 宣告常數來接收 useRouter() ，方便後續使用
-const router = useRouter();
+// 宣告常數來接收，方便後續使用
+const router = useRouter();                // 按鈕 
+const route = useRoute();                  // 從網址抓商品需要的參數
+const productstore = useProductStore();    // 商品data 
+const { t } = useI18n();                   // 把翻譯功能 t 取出來
 
-// 設定路由功能
+
+
+// 設定按鈕路由功能 ------------------------------------
 function goCart(){
-    router.push('/shoppingcart')
+    router.push({
+        name: 'ShoppingCart',
+    })
 };
 function goProductList(){
-    router.push('/shop/productlist')
+    router.push({
+        name: 'ProductList',
+    })
 };
 
 
-// 商品資料動態載入------------------------------------
-// 之後要從資料庫抓跟整理成這個格式
-
+// 商品資料動態載入頁面 ------------------------------------
 /* 假資料
+// 之後要從資料庫抓跟整理成這個格式
 const productData = ref({
     product_ID: 'FO2025110001',
     type: 'Folktoys',
@@ -51,8 +60,74 @@ const productData = ref({
 */
 
 
+/* 用 onMounted 的寫法
+// 缺點 step3 不能合併進 step2 會有問題
+   1. computed 應該只負責 「計算並回傳數值」，而不應該去 「改變外面的世界」。
+   2. computed 有一個特性：「只有當畫面真的用到它時，它才會執行。」
+   3. 無限迴圈的風險
 
-const currentBigPic = ref(productData.value.images[0]);
+// 缺點 onMounted 只會掛載一次，如果之後詳細頁新增其他功能，例如可以點擊去其他推薦商品，他不會被觸發，頁面就不會更新
+// step1 先從網址抓到參數（product_ID）
+const showProductID = route.params.id;
+
+// step2 從資料庫查出對應的商品資料
+const showDetail = computed(() => {
+    return productstore.getProductById(showProductID);
+});
+
+// step3 防呆，如果找不到商品，跳回列表頁
+onMounted(() => {
+  if (!showDetail.value) {
+    alert('找不到此商品！');
+    router.push({ name: 'ProductList' }); // 假設你的列表頁叫做 ProductList
+  }
+});
+
+*/
+
+
+//用 watch 的寫法 *只要商品ID有變動，就會更新頁面
+
+const showDetail = ref(null);
+// 預設 null 的原因：會是 載入中，不會報錯或是卡頓
+// 接到資料後，自動變成資料本身的型態
+
+// 大圖預設照片 ------------------------------------
+//const currentBigPic = ref(showDetail.value.images[0]);
+const currentBigPic = ref('');
+
+watch(
+    // 監聽的資料
+    () => route.params.id, 
+
+    // 發生變動時要做的事情
+    (newID, oldID) => {
+        const result = productstore.getProductByID(newID);
+
+        if(result){
+            // 處理資料
+            // return showDetail;   
+            // return 在 watch 裡的回傳值是用來「手動停止監聽」用的，而不是給資料的。所以必須另外宣告一個變數來賦值
+            showDetail.value = result;
+
+            // 處理圖片
+            // currentBigPic.value = result.images[0];
+            // 避免沒讀到資料報錯，改用判斷式處理
+            if (result.images && result.images.length > 0) {
+                currentBigPic.value = result.images[0];
+            }
+        
+        }else{
+            alert(t('productdetail.noProduct'));    // 這邊不能使用 templete 的模板，要另外 import i18n
+            router.replace({                        //不用 push 的原因：不要記錄錯誤紀錄
+                name: 'ProductList',
+            });
+        }
+    },
+
+    //微調監聽的行為
+    { immediate: true }
+);
 
 
 // Tab 開關 ------------------------------------
@@ -64,7 +139,7 @@ const tabInfo = ref('story');
 //const isLike = ref(false);
 function likeHeart(){
     //isLike = !isLike;   因為是const，所以這樣寫無法改變值
-    productData.value.isLike = !productData.value.isLike;
+    showDetail.value.isLike = !showDetail.value.isLike;
 }
 
 
@@ -72,7 +147,7 @@ function likeHeart(){
 const productQty =ref(1);
 
 function qtyAdd(){
-    if( productQty.value < productData.value.stock ){      //之後庫存數量要從資料庫查詢
+    if( productQty.value < showDetail.value.stock ){      //之後庫存數量要從資料庫查詢
         productQty.value++;
     }
 }
@@ -87,14 +162,17 @@ function qtyMinus(){
 </script>
 
 <template>
+    <div v-if ="showDetail">
+
+    
     <!-- 麵包屑 -->
     
     <h6 class="page-guide">
         <RouterLink class="page-guide-text" to="/shop">All Product </RouterLink>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        {{ productData.type }}
+        {{ showDetail.type }}
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        {{ productData.name_en }}
+        {{ showDetail.name_en }}
     </h6>
 
         
@@ -106,14 +184,12 @@ function qtyMinus(){
     
             <div class="detail-pic dp-flex">
                 <ul class="detail-pic-small dp-flex-col">
-                    <li v-for="image in productData.images"
+                    <li v-for="image in showDetail.images"
                         :key="image"    
                         @click="currentBigPic = image">
 
-                        <img :src="image" alt="" :class="{currentpic: currentBigPic === image}">
+                        <img :src="`/tjd103/${image}`" alt="" :class="{currentpic: currentBigPic === image}">
                     </li>
-
-
 
                     <!-- 把 li 變成動態載入 -->
                     <!-- <li><img src="../../../public/Shop/2.png" alt=""></li>
@@ -123,12 +199,12 @@ function qtyMinus(){
                     <li><img src="../../../public/Shop/2-4.png" alt=""></li> -->
                 </ul>
                 <div class="detail-pic-big">
-                    <img :src="currentBigPic" alt="">
+                    <img :src="`/tjd103/${currentBigPic}`" alt="">
 
                     <!-- 把 大圖 變成動態載入 -->
                     <!-- <img src="../../../public/Shop/2.png" alt=""> -->
                     <div class="detail-pic-icon-dock" @click="likeHeart">
-                        <font-awesome-icon v-if="productData.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
+                        <font-awesome-icon v-if="showDetail.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
                         <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart"/>
                     </div>
                 </div>
@@ -136,10 +212,10 @@ function qtyMinus(){
     
             <div class="detail-text dp-flex-col">
                 <div>
-                    <p class="fw200 no-i18n-anim">{{ productData.product_ID }}</p>
-                    <h5>{{ productData.name_en }}</h5>
-                    <h4 class="no-i18n-anim">NT$ {{ productData.price }}</h4>
-                    <p class="fw200">{{ productData.description_en }}</p>
+                    <p class="fw200 no-i18n-anim">{{ showDetail.product_ID }}</p>
+                    <h5>{{ showDetail.name_en }}</h5>
+                    <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
+                    <p class="fw200">{{ showDetail.description_en }}</p>
                     <div class="share-icon">
                         <font-awesome-icon icon="fa-brands fa-square-facebook" />
                         <font-awesome-icon icon="fa-brands fa-instagram" />
@@ -186,11 +262,11 @@ function qtyMinus(){
             <hr>
 
             <p v-if="tabInfo === 'story'" class="fw200 story">
-                {{ productData.story_en }}
+                {{ showDetail.story_en }}
             </p>
 
             <p v-if="tabInfo === 'howtoplay'" class="fw200 howtoplay">
-                {{ productData.use_en }}
+                {{ showDetail.use_en }}
             </p>
 
             <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
@@ -217,6 +293,8 @@ function qtyMinus(){
         @click="goProductList()">    
         Back to Shop
     </BasicButton>
+
+    </div>
 
 
 

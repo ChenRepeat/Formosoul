@@ -255,7 +255,8 @@
     "paymentContent1": "A convenient payment option. When you choose online card payment, the process is secured with SSL encryption to protect your personal and private data.",
     "paymentTitle2": "Apple Pay",
     "paymentContent2": "Experience the ultimate convenience of seamless payment. No more searching for physical cards—simply use biometric authentication on your Apple device for a secure and swift authorization. Apple’s encryption technology ensures your transaction data remains protected throughout the process, making every payment as private as it is effortless.",
-    "backtoshop": "Back to Shop"
+    "backtoshop": "Back to Shop",
+    "noProduct":"Sorry, this item is currently unavailable."
   },
   "productlist":{
     "all": "All",
