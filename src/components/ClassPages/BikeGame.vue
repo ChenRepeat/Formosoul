@@ -49,14 +49,31 @@
           </div>
 
           <div v-if="gameState === 'result'" class="ui-panel result">
-            <h2 :class="lives > 0 ? 'text-win' : 'text-lose'">
-              {{ lives > 0 ? 'Back To School Savety' : `You're Crashed !!` }}
-            </h2>
+            <h5 :class="lives > 0 ? 'text-win' : 'text-lose'">
+              {{ lives > 0 ? $t('classes.motorText1') : $t('classes.motorText3') }}
+            </h5>
+            <p>{{ lives > 0 ? $t('classes.motorText2') : $t('classes.motorText4') }}</p>
             <div class="final-stats">
-              <div class="stat-row"><p>SURVIVAL{{ (30 - timeRemaining).toFixed(1) }}s</p></div>
-              <div class="stat-row"><p>LIFE{{ lives }}</p></div>
+              <div class="resultImg" v-if="lives > 0">
+                <div class="school-case">
+                  <img src="/public/Classes/school.png" alt="" class="school">
+                  <img src="/Classes/MotorGame/MotorPlayer.png" alt="PLAYER" class="bike-result">
+                </div>
+              </div>
+              <div class="resultImg" v-else>
+                <div class="ambulance-case">
+                  <div class="light-r light"></div>
+                  <div class="light-l light"></div>
+                  <img src="/public/Classes/ambulance.png" alt="" class="ambulance">
+                </div>
+                  
+              </div>
             </div>
-            <basic-button @click="gameState = 'start'" class="btn-white">RETRY</basic-button>
+            <div class="btn-case dp-flex">
+              <basic-button @click="startGame" class="btn-white">RETRY</basic-button>
+              <basic-button @click="gameState = 'start'" class="btn-white" v-if="!authStore.isLoggedIn">Login</basic-button>
+              <basic-button @click="gameState = 'start'" class="btn-white" v-else>DONE</basic-button>
+            </div>
           </div>
         </div>
       </transition>
@@ -65,10 +82,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
+import { ref, onMounted, onUnmounted, reactive, computed, watch, nextTick } from 'vue';
 import { gsap } from 'gsap';
 import BasicButton from '../BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useAuthStore } from '@/stores/autoStore';
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
+const authStore = useAuthStore();
 
 // --- 障礙物類型定義陣列 ---
 const obstacleConfigs = [
@@ -197,6 +218,80 @@ const updateSize = () => {
 const handleKeyDown = (e) => { keys[e.key] = true; };
 const handleKeyUp = (e) => { keys[e.key] = false; };
 
+
+watch(gameState, async (newVal) => {
+  if (newVal == 'result') {
+  await nextTick();
+  gsap.fromTo('.bike-result', 
+  { 
+    x: -180,
+    y:200,
+    scale:1
+  },
+  {
+    repeat: 0,
+    ease: "linear",
+    duration: 3,
+    keyframes: [
+      { y: 120,x: -210, duration: 0.375 ,scale:0.2,opacity:1},
+      { y: 100,x: -220, duration: 0.1 ,scale:0,opacity:0}
+    ]
+  }
+);
+  gsap.fromTo('.light-l', 
+  { 
+    rotationY: 0,
+    x: 150,
+    scale:1,
+    y:10
+  },
+  {
+    repeat: -1,
+    ease: "linear",
+    duration: 1.5,
+    keyframes: [
+      { x: 120, rotationY: 90, duration: 0.375 },
+      { x: 90, rotationY: 180, duration: 0.375 },
+      { x: 120, rotationY: 270, duration: 0.375 },
+      { x: 150, rotationY: 360, duration: 0.375 }
+    ]
+  }
+);
+gsap.fromTo('.light-r', 
+  { 
+    rotationY: 0,
+    x: 90,
+    scale:1,
+    y:10
+  },
+  {
+    repeat: -1,
+    ease: "linear",
+    duration: 1.5,
+    keyframes: [
+      { x: 120, rotationY: 90, duration: 0.375 },
+      { x: 150, rotationY: 180, duration: 0.375 },
+      { x: 120, rotationY: 270, duration: 0.375 },
+      { x: 90, rotationY: 360, duration: 0.375 }
+    ]
+  }
+);
+gsap.fromTo('.ambulance-case', 
+  { 
+    x: -550,
+  },
+  {
+    repeat: -1,
+    ease: "linear",
+    duration: 10,
+    keyframes: [
+      { x: 20,duration: 0.25 },
+      { x: 20,duration: 0.5 },
+      { x: 550,duration: 0.25 }
+    ]
+  }
+);
+}});
 onMounted(() => {
   window.addEventListener('resize', updateSize);
   window.addEventListener('keydown', handleKeyDown);
@@ -354,6 +449,54 @@ onUnmounted(() => {
   color: #fff;
   padding: 50px;
   border: 1px solid #333;
+  >p{
+    text-align: center;
+  }
 }
-
+.final-stats{
+  height: 80%;
+}
+.btn-case{
+  justify-content: center;
+  gap: 16px;
+}
+.resultImg{
+  // height: 50%;
+  position: relative;
+}
+.ambulance-case{
+  position: relative;
+}
+.ambulance{
+  width: 300px;
+  height: auto;
+}
+.light{
+  height: 20px;
+  width: 40%;
+  position: absolute;
+}
+.light-l{
+  border-top: 20px solid transparent;
+  border-right: 100px solid rgba(255, 0, 0, 0.8);
+  transform-origin: 50% 100%;
+}
+.light-r{
+  border-top: 20px solid transparent;
+  border-left: 100px solid rgba(255, 0, 0, 0.8);
+  transform-origin: 50% 0%;
+}
+.school-case{
+  position: relative;
+}
+.school{
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+.bike-result{
+  position: absolute;
+  height: 150px;
+  width: auto;
+}
 </style>

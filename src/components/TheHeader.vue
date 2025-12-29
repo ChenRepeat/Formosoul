@@ -178,15 +178,9 @@ onUnmounted(() => {
               @click="toggleMenu"
               @mousedown.stop
               @touchstart.stop
-              :class="{ 'active': isMenuOpen }">
-            <div class="dot dot1 transition"></div>
-            <div class="dot dot2 transition"></div>
-            <div class="dot dot3 transition"></div>
-            <div class="dot dot4 transition"></div>
-            <div class="dot dot5 transition"></div>
-            <div class="dot dot6 transition"></div>
+              :class="{ 'active': isMenuOpen}">
+            <div v-for="(index) in 6 " :class="`dot${index}`" class="dot transition"></div>
           </div>
-          <!-- <font-awesome-icon icon="fa-solid fa-grip-vertical" class="header-icon draggable-icon" @mosueDown="drag"/> -->
         </div>
       </div>
       <transition
@@ -225,14 +219,13 @@ onUnmounted(() => {
             <h6>{{ memberStore.memberData.tempName }}</h6>
           </div>
         </li>
-        <!-- <li><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li> -->
+        <hr class="memberhr">
         <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('nav.information')}}</h6></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('nav.changepassword')}}</h6></router-link></li>
         <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('nav.orderslist')}}</h6></router-link></li>
         <li><router-link to="/member/mycollections" @click="closeMenu"><h6>{{$t('nav.mycollections')}}</h6></router-link></li>
         <li><router-link to="/member/coupons" @click="closeMenu"><h6>{{$t('nav.coupons')}}</h6></router-link></li>
         <hr class="memberhr">
-        <!-- <li><basic-button class="btn-gray-fill" @click="handlelogout"><h5>logout</h5></basic-button></li> -->
         <li @click="handlelogout" class="logout"><h5>{{$t('nav.logout')}}</h5></li>
       </ul>
       </transition>
@@ -418,6 +411,7 @@ img { object-fit: none; }
   width: 100%;
   z-index: -2;
   transition: color 0s;
+  color: $color-fsWhite;
 
   h5{
     text-transform: capitalize;
@@ -485,6 +479,7 @@ img { object-fit: none; }
   .header-lang-switcher{background-color: $color-fsTitle;}
   .header-lang-switcher.right{background-color: $color-fsWhite;}
   .header-icon { color: $color-fsTitle;}
+  .burger-list{ color: $color-fsTitle;}
   .burger-list li a { color: $color-fsTitle;}
   .logout > h5 { color: $color-fsTitle;}
   .dot { background-color: $color-fsTitle;}
