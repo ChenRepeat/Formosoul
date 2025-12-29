@@ -6,6 +6,8 @@ import Swiper from 'swiper';
 import { Autoplay, FreeMode,EffectCoverflow  } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import { useAuthStore } from "@/stores/autoStore";
+const authStore = useAuthStore()
 
 
 // photo
@@ -96,6 +98,10 @@ const onMousemove = (e) => { // mousemove 1px 呼叫一次
 }
 const offPress =()=>{
   isPress.value = false
+}
+
+function loadSuccess(){
+  authStore.isLoading = false;
 }
 
 onMounted(() => { // DOM 生成後
@@ -194,8 +200,8 @@ onUnmounted(()=>{
       @mouseleave="InOrOut(index, false)">
       <img :src='photo' class="professor-photo "
       :class="{'mouse-enter':isIn[index]==true}" 
-      @click="openInfo(index)"
-      >
+      @click="openInfo(index)" @load="loadSuccess"
+       >
     </li>
   </ul>   
   </div>

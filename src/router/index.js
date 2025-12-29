@@ -84,6 +84,9 @@ const router = createRouter({
       path: '/professorsintroduction',
       name: 'ProfessorsIntroduction',
       component: ProfessorIntroduction,
+      meta:{ 
+        requireLoading: true,
+      },
     },
     {
       path: '/shop',
