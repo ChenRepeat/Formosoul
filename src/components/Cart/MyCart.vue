@@ -19,7 +19,7 @@ function goShopping(){
 // 沒有登入的 cookie token 就跳出登入頁
 function goPayment(){
     if(authStore.token){
-        router.push('/shoppingcart/checkout')
+        router.push('/shoppingcart/checkout');
     }else{
         authStore.openLoginModal();
         authStore.setmemberView('login');
