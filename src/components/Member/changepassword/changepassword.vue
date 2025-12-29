@@ -1,8 +1,8 @@
 <template>
     <div class="changepassword">
-        <h3>Change password</h3>
+        <h3>{{$t('member.PWChange')}}</h3>
         <div class="contain">
-            <label for="oldpassword" ><h6>Current password：</h6></label>
+            <label for="oldpassword" ><h6>{{$t('member.oldPW')}}</h6></label>
             <input
             class="input-text"
             v-model="oldpassword"
@@ -11,7 +11,7 @@
             id="oldpassword"
             placeholder="Current password"/>
 
-            <label for="Newpassword"><h6>New password：</h6></label>
+            <label for="Newpassword"><h6>{{$t('member.newPW')}}</h6></label>
             <input 
             v-model="Newpassword"
             type="text"
@@ -22,7 +22,7 @@
             placeholder="New password"/>
             
             
-            <label for="confirmpassword"><h6>Confirm new password：</h6></label>
+            <label for="confirmpassword"><h6>{{$t('member.newPWConf')}}</h6></label>
             <input 
             class="input-text"
             v-model="confirmpassword"
@@ -33,7 +33,7 @@
             placeholder="Confirm new password"/>
             
             <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
-            <p class="text">* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
+            <p class="text">{{$t('member.PWWarning')}}</p>
 
             <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword" :disabled="isLoading">{{ isLoading ? 'Loading...' : 'Save Change'}}</BasicButton>
         </div>  

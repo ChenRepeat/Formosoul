@@ -7,7 +7,12 @@ import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useLangStore } from '@/stores/lang';
 import { useMemberStore } from '@/stores/member';
+<<<<<<< HEAD
+=======
+
+>>>>>>> RepeatNB
 const execLanguageChange = inject('execLanguageChange');
+const memberStore = useMemberStore();
 
 const props = defineProps({
   isBlackStyle: {
@@ -217,8 +222,13 @@ onUnmounted(() => {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
+<<<<<<< HEAD
         <li v-if="isNameNull"><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li>
         <li v-else><router-link to="/member" @click="closeMenu"><h5>{{ memberStore.memberData.tempName }}</h5></router-link></li>
+=======
+        <li class="dp-flex member-data-case"><div class="head-shot-case"><img src="" alt=""></div><div><p>{{$t('nav.welcome')}}</p><h6>{{ memberStore.memberData.tempName }}</h6></div></li>
+        <!-- <li><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li> -->
+>>>>>>> RepeatNB
         <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('nav.information')}}</h6></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('nav.changepassword')}}</h6></router-link></li>
         <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('nav.orderslist')}}</h6></router-link></li>
@@ -256,8 +266,17 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
-
-
+.head-shot-case{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: aqua;
+}
+.member-data-case{
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
 img { object-fit: none; }
 
 .trigger-lang { 
@@ -399,7 +418,9 @@ img { object-fit: none; }
     text-indent: 1em;
   }
 }
-
+.member-data-case h6{
+    text-indent: unset;
+}
 .burger-list li a { color: $color-fsWhite; text-decoration: none; padding: 8px 12px; display: block; border-radius: 4px; transition: background-color 0.3s; }
 .burger-list li a:hover { background-color: rgba(255, 255, 255, 0.1); }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
