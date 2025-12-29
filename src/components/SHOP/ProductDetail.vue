@@ -171,9 +171,9 @@ function qtyMinus(){
         <h6 class="page-guide">
             <RouterLink class="page-guide-text" to="/shop">All Product </RouterLink>
             <font-awesome-icon icon="fa-solid fa-angle-right" />
-            {{ showDetail.type }}
+            <span>{{ showDetail.type }}</span>
             <font-awesome-icon icon="fa-solid fa-angle-right" />
-            {{ showDetail.name_en }}
+            <span>{{ showDetail.name_en }}</span>
         </h6>
 
         

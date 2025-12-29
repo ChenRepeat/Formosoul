@@ -1,10 +1,11 @@
 <script setup>
 import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '../BasicButton.vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';     //語系控制
 
 
-// 頁面串聯 - 前往註冊頁面
+// 頁面串聯 - 前往註冊頁面  -------------------------------------------------------
 const authStore = useAuthStore();
 
 function goToEnroll(){
@@ -13,7 +14,7 @@ function goToEnroll(){
 };
 
 
-// 頁面串聯 - 重新感應杖心
+// 頁面串聯 - 重新感應杖心  -------------------------------------------------------
 const emit = defineEmits(['restart-coregame']);
 
 function goToSensing(){
@@ -21,7 +22,7 @@ function goToSensing(){
 
 };
 
-// 魔杖杖心
+// 魔杖杖心 -------------------------------------------------------
 
 const wandCores = ref([
     {
@@ -419,6 +420,22 @@ const wandCores = ref([
 
 const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));   
 
+// 語系切換  -------------------------------------------------------
+const { locale } = useI18n();
+
+// 語系切換對照
+const langList = {
+    'en-US': 'En',
+    'zh-TW': 'Zh'
+};
+
+const lang = computed( () => {
+    return langList[locale.value] || 'En';
+});
+
+
+
+
 
 </script>
 <template>
@@ -436,10 +453,10 @@ const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));
             <div class="core-text">
 
                 <!-- <h6>{{wandCores.nameEn}}</h6>   因為wandCores是陣列，所以這樣無法直接取值，要加入索引 -->
-                <h6>{{wandCores[coreSelect].nameEn}}</h6>
-                <p>{{ $t('coreselection.coreshowSource')}}{{wandCores[coreSelect].sourceEn}}</p>
-                <p>{{ $t('coreselection.coreshowProperty')}}{{wandCores[coreSelect].propertyEn}}</p>
-                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCores[coreSelect].effectEn}}</p>
+                <h6>{{wandCores[coreSelect][`name${lang}`]}}</h6>
+                <p>{{ $t('coreselection.coreshowSource')}}{{wandCores[coreSelect][`source${lang}`]}}</p>
+                <p>{{ $t('coreselection.coreshowProperty')}}{{wandCores[coreSelect][`property${lang}`]}}</p>
+                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCores[coreSelect][`effect${lang}`]}}</p>
                 
                 <!-- <h6>Cornu Cervi Pantotrichum</h6>
                 <p>Source ：Young antler of Sika or Red Deer.</p>
@@ -457,8 +474,8 @@ const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));
                 </p>
 
                 <div class="btn-step dp-flex">
-                    <BasicButton class="btn-gray-fill" @click="goToSensing">Restart the Sensing Ritual</BasicButton>
-                    <BasicButton class="btn-yellow-fill" @click="goToEnroll">Enroll ＆ Claim Student Card!</BasicButton>
+                    <BasicButton class="btn-gray-fill" @click="goToSensing">{{ $t('coreselection.btnRestart')}}</BasicButton>
+                    <BasicButton class="btn-yellow-fill" @click="goToEnroll">{{ $t('coreselection.btnEnroll')}}</BasicButton>
                 </div>
 
             </div>
