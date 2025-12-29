@@ -10,6 +10,13 @@ import GameRingToss from "./GameRingToss.vue";
 import BasicButton from "../BasicButton.vue";
 import MapTWNightMarket from "./MapTWNightMarket.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useAuthStore } from "@/stores/autoStore";
+
+// 載入 loading 介面
+const authStore = useAuthStore()
+const isLoading = () => {
+    authStore.isLoading = false;
+}
 
 // ================ 鍵盤esc關閉 ================ 
 const closeCurrentModal = () => {
@@ -143,7 +150,7 @@ function closeWelcomeFrame (){
                     </RouterLink>
                 </div>
 
-                <img class='survival-night-market-case-map' src="/SurvivalGuide/night_market_map_bg-min-no-logo.png" alt="map-base">
+                <img class='survival-night-market-case-map' src="/SurvivalGuide/night_market_map_bg-min-no-logo.png" alt="map-base" @load="isLoading">
 
 <!------------------- 點入的歡迎頁面 ------------------->
                 <div v-if="isGameLocked" class="start-overlay"></div>

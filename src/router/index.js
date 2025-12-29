@@ -150,6 +150,9 @@ const router = createRouter({
           path: "nightmarketmap",
           name: "NightMarketMap",
           component: NightMarketMap,
+          // meta:{
+          //   requireLoading: true
+          // },
         },
         {
           path: "conveniencestore",
