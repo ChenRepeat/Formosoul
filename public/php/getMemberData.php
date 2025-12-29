@@ -15,6 +15,6 @@
     header('Content-Type: application/json; charset=utf-8');
 
     // 把 PHP 陣列 ($rows) 轉成 JSON 字串並傳到前端
-    echo json_encode($rows);
+    echo json_encode($rows, JSON_INVALID_UTF8_IGNORE);
 
   ?>

@@ -45,4 +45,7 @@ $options = [
 // 4. 建立連線
 $pdo = new PDO($dsn, $db_user, $db_pass, $options);
 
+//設定連線編碼為 utf8mb4
+$pdo->exec("SET NAMES utf8mb4");
+
 ?>
