@@ -43,8 +43,8 @@
       <transition name="fade">
         <div class="overlay dp-flex" v-if="gameState !== 'playing'">
           <div v-if="gameState === 'start'" class="ui-panel">
-            <h2>MOTO RUNNER</h2>
-            <p>text</p>
+            <h4>{{$t('classes.motorClass')}}</h4>
+            <br>
             <basic-button @click="startGame" class="btn-white">START</basic-button>
           </div>
 
@@ -145,8 +145,8 @@ const update = (time, deltaTime) => {
   // 玩家移動
   const moveSpeed = 1000 * dt;
   let targetTilt = 0;
-  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 5; }
-  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -5; }
+  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 15; }
+  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -15; }
   
   playerTilt.value = gsap.utils.interpolate(playerTilt.value, targetTilt, 0.3);
 
@@ -221,76 +221,52 @@ const handleKeyUp = (e) => { keys[e.key] = false; };
 
 watch(gameState, async (newVal) => {
   if (newVal == 'result') {
-  await nextTick();
-  gsap.fromTo('.bike-result', 
-  { 
-    x: -180,
-    y:200,
-    scale:1
-  },
-  {
-    repeat: 0,
-    ease: "linear",
-    duration: 3,
-    keyframes: [
-      { y: 120,x: -210, duration: 0.375 ,scale:0.2,opacity:1},
-      { y: 100,x: -220, duration: 0.1 ,scale:0,opacity:0}
-    ]
+  if(lives.value>0){
+    await nextTick();
+    gsap.fromTo('.bike-result', 
+      { x: -180,y:200,scale:1},
+      {repeat: 0, ease: "linear", duration: 3,
+        keyframes: [
+          { y: 120,x: -210, duration: 0.375 ,scale:0.2,opacity:1},
+          { y: 100,x: -220, duration: 0.1 ,scale:0,opacity:0}
+        ]
+      }
+    );
+  }else{
+    await nextTick();
+    gsap.fromTo('.light-l', 
+      { rotationY: 0, x: 120, scale:1,  y:10},
+      { repeat: -1, ease: "linear", duration: 1.5,
+        keyframes: [
+          { x: 95, rotationY: 90, duration: 0.375 },
+          { x: 70, rotationY: 180, duration: 0.375 },
+          { x: 95, rotationY: 270, duration: 0.375 },
+          { x: 120, rotationY: 360, duration: 0.375 }
+        ]
+      }
+    );
+    gsap.fromTo('.light-r', 
+      {  rotationY: 0, x: 70, scale:1, y:10},
+      { repeat: -1, ease: "linear", duration: 1.5,
+        keyframes: [
+          { x: 95, rotationY: -90, duration: 0.375 },
+          { x: 120, rotationY: -180, duration: 0.375 },
+          { x: 95, rotationY: -270, duration: 0.375 },
+          { x: 70, rotationY: -360, duration: 0.375 }
+        ]
+      }
+    );
+    gsap.fromTo('.ambulance-case', 
+      {  x: -550, },
+      { repeat: -1, ease: "linear", duration: 10,
+        keyframes: [
+          { x: 20,duration: 0.25 },
+          { x: 20,duration: 0.5 },
+          { x: 550,duration: 0.25 }
+        ]
+      }
+    );    
   }
-);
-  gsap.fromTo('.light-l', 
-  { 
-    rotationY: 0,
-    x: 150,
-    scale:1,
-    y:10
-  },
-  {
-    repeat: -1,
-    ease: "linear",
-    duration: 1.5,
-    keyframes: [
-      { x: 120, rotationY: 90, duration: 0.375 },
-      { x: 90, rotationY: 180, duration: 0.375 },
-      { x: 120, rotationY: 270, duration: 0.375 },
-      { x: 150, rotationY: 360, duration: 0.375 }
-    ]
-  }
-);
-gsap.fromTo('.light-r', 
-  { 
-    rotationY: 0,
-    x: 90,
-    scale:1,
-    y:10
-  },
-  {
-    repeat: -1,
-    ease: "linear",
-    duration: 1.5,
-    keyframes: [
-      { x: 120, rotationY: 90, duration: 0.375 },
-      { x: 150, rotationY: 180, duration: 0.375 },
-      { x: 120, rotationY: 270, duration: 0.375 },
-      { x: 90, rotationY: 360, duration: 0.375 }
-    ]
-  }
-);
-gsap.fromTo('.ambulance-case', 
-  { 
-    x: -550,
-  },
-  {
-    repeat: -1,
-    ease: "linear",
-    duration: 10,
-    keyframes: [
-      { x: 20,duration: 0.25 },
-      { x: 20,duration: 0.5 },
-      { x: 550,duration: 0.25 }
-    ]
-  }
-);
 }});
 onMounted(() => {
   window.addEventListener('resize', updateSize);
@@ -478,11 +454,13 @@ onUnmounted(() => {
 }
 .light-l{
   border-top: 20px solid transparent;
+  border-left: 10px solid transparent;
   border-right: 100px solid rgba(255, 0, 0, 0.8);
   transform-origin: 50% 100%;
 }
 .light-r{
   border-top: 20px solid transparent;
+  border-right: 10px solid transparent;
   border-left: 100px solid rgba(255, 0, 0, 0.8);
   transform-origin: 50% 0%;
 }
