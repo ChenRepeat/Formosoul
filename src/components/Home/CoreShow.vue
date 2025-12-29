@@ -1,9 +1,8 @@
 <script setup>
 import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '../BasicButton.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, defineEmits, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';     //語系控制
-
 
 // 頁面串聯 - 前往註冊頁面  -------------------------------------------------------
 const authStore = useAuthStore();
@@ -15,12 +14,20 @@ function goToEnroll(){
 
 
 // 頁面串聯 - 重新感應杖心  -------------------------------------------------------
-const emit = defineEmits(['restart-coregame']);
+const emit = defineEmits(['restart-coregame', 'wand-selected']);
 
 function goToSensing(){
     emit('restart-coregame');      //按下按鈕時，發送事件給父組件
 
 };
+
+function onResultFound() {
+    emit('wand-selected');
+}
+
+onMounted(() => {
+    onResultFound();
+});
 
 // 魔杖杖心 -------------------------------------------------------
 
