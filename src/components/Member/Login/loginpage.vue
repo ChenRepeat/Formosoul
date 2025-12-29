@@ -1,7 +1,7 @@
 <template>
     <!-- 處理版面會跑的問題 寫死高
       -->
-        
+
             <div class="Logincontain">
                     <!-- <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div> -->
 
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="otherlogin-icon">
                                     <img :src="`${publicPath}member/googleicon.png`" alt="1">
-                                    <img :src="`${publicPath}member/lineicon.png`" alt="2">
+                                    <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="LineLogin">
                                 </div>
                             </div>
                         </template>
@@ -65,6 +65,11 @@
     const isotherlogin = computed(() => {
             return  authStore.loginView == 'forgetpassword' || authStore.loginView == 'loginchangepassword';
     });
+
+    const LineLogin = () => {
+        window.location.href = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=http://localhost:5173/line-callback&state=12345abcde&scope=profile%20openid";
+    
+    }
 </script>
 
 <style lang="scss" scoped>

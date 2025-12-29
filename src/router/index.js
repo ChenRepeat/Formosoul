@@ -199,7 +199,12 @@ const router = createRouter({
         { path: 'orderscontain', component: MemberOrderscontain }
       ],
     },
-    
+
+    {
+          path: "/line-callback",
+          name: "LineCallback",
+          component: () => import ('@/components/Member/Login/LineCallback.vue')
+    },
     {
       path: '/policy',
       name: 'Policy',
