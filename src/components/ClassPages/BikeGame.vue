@@ -227,7 +227,7 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 1;
+  timeRemaining.value = 30;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
@@ -254,7 +254,7 @@ const endGame = () => {
           activeTriggers.value.bike = false;
         }, 600)
       }, 500)
-    }, 1000);
+    }, 2000);
   }
 
 };

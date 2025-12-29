@@ -146,5 +146,7 @@ const indexItems = ref([
     // transform: scaleX(0);
 
   }
-
+  .icon{
+    font-size: 48px;
+  }
 </style>

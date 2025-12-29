@@ -107,7 +107,7 @@ const buaBue = () => {
       } else {
         finalResult.value = 'classes.bue3Name'; 
         siannCount.value ++
-        if(siannCount.value == 1){
+        if(siannCount.value == 3){
           setTimeout(() => {
             showCardOverlay.value = true;
 

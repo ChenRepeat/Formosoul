@@ -23,13 +23,13 @@
 
       <div class="stamp-position bue">
         <stampSlot :isUnlocked="passedGames.bue" :trigger="activeTriggers.bue">
-          <IconBuecard class="ink-bue" />
+          <IconBuecard class="ink-bue" size='140'/>
         </stampSlot>
       </div>
 
       <div class="stamp-position bike">
         <stampSlot :isUnlocked="passedGames.bike" :trigger="activeTriggers.bike">
-          <IconHelmet class="ink-bike" />
+          <IconHelmet class="ink-bike" size='140'/>
         </stampSlot>
       </div>
 
