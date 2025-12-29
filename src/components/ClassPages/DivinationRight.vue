@@ -1,6 +1,29 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import MemberLedger from "@/components/Member/information/memberLedger.vue";
+
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+
+const handleCheckLedger = () => {
+    showCardOverlay.value = true;
+};
+
+onMounted(() => {
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        passedGames.value.shrimp = !!progress.shrimp;
+        passedGames.value.dice = !!progress.dice;
+        passedGames.value.ringtoss = !!progress.ringtoss;
+        passedGames.value.bue = !!progress.bue;
+        passedGames.value.bike = !!progress.bike;
+    }
+});
+
 
   const stickResult = ref(0);
   const chouqianFes= ref(0);
@@ -83,15 +106,24 @@ const buaBue = () => {
       } else {
         finalResult.value = 'classes.bue3Name'; 
         siannCount.value ++
-        if(siannCount.value == 3){
+        if(siannCount.value == 1){
           setTimeout(() => {
-            //  蓋印章動畫放這取代掉 alert()
-            alert();
+            showCardOverlay.value = true;
+
+            setTimeout(() => {
+                activeTriggers.value.bue = true;
+              setTimeout(() => {
+                passedGames.value.bue = true;
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.bue = true; 
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+                activeTriggers.value.bue = false;
+              }, 600); 
+            }, 500);
             siannCount.value = 0;
           }, 500);
         }
       }
-      
     }, 1500);
   }, 50);
 };
@@ -99,6 +131,19 @@ const buaBue = () => {
 
 <template>
   <section class="divination-right dp-flex-col">
+    <button class="btn-check-manual" @click="handleCheckLedger">
+      CHECK MY LEDGER
+    </button>
+
+    <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+        <div class="card-modal">
+            <MemberLedger
+                :passedGames="passedGames" 
+                :activeTriggers="activeTriggers"
+            />
+            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+        </div>
+    </div>
     <div class="stick-top dp-flex">
       <div class="left dp-flex-col">
         <div class="intro">
@@ -188,6 +233,53 @@ const buaBue = () => {
 </template>
   
 <style lang="scss" scoped>
+
+.ledger-overlay-in-game {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; 
+}
+
+.card-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 20px;
+    background-color: #ff6b81;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    &:hover { background-color: #ff4757; }
+}
+
+.btn-check-manual {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background: $color-fsGold;
+    color: white;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+
   .divination-right{width: 100%;height: 100%;gap: 60px;}
    p{
       color: $color-fsContent;

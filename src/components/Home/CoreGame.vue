@@ -2,6 +2,7 @@
     import { ref } from 'vue';
     import CoreShow from './CoreShow.vue';
 
+
     //設定目前顯示頁面
     const currentView = ref('game');
     function showCore(){
