@@ -298,7 +298,6 @@ router.beforeEach((to, from, next) => {
         authStore.setloginView('loginpage');
         return next('');
     }
-
     // if (to.meta.requiresAdmin && !isAdmin) {
     //     alert('權限不足')
     //     return next('/')

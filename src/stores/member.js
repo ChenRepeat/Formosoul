@@ -40,7 +40,11 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.number = dbData.member_ID;
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
-                imgURL.value = dbData.headshot
+                if(dbData.headshot === 'data:image\/jpeg;base64,'){
+                    imgURL.value = ''
+                }else{
+                    imgURL.value = dbData.headshot;
+                }
             }else{
                 console.error(result.message);
             }
