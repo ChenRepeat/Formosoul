@@ -43,20 +43,53 @@
       <transition name="fade">
         <div class="overlay dp-flex" v-if="gameState !== 'playing'">
           <div v-if="gameState === 'start'" class="ui-panel">
-            <h2>MOTO RUNNER</h2>
-            <p>text</p>
+            <h4>{{$t('classes.motorClass')}}</h4>
+            <br>
             <basic-button @click="startGame" class="btn-white">START</basic-button>
           </div>
 
           <div v-if="gameState === 'result'" class="ui-panel result">
-            <h2 :class="lives > 0 ? 'text-win' : 'text-lose'">
-              {{ lives > 0 ? 'Back To School Savety' : `You're Crashed !!` }}
-            </h2>
+            <h5 :class="lives > 0 ? 'text-win' : 'text-lose'">
+              {{ lives > 0 ? $t('classes.motorText1') : $t('classes.motorText3') }}
+            </h5>
+            <p>{{ lives > 0 ? $t('classes.motorText2') : $t('classes.motorText4') }}</p>
             <div class="final-stats">
-              <div class="stat-row"><p>SURVIVAL{{ (30 - timeRemaining).toFixed(1) }}s</p></div>
-              <div class="stat-row"><p>LIFE{{ lives }}</p></div>
+              <div class="resultImg" v-if="lives > 0">
+                <div class="school-case">
+                  <img src="/public/Classes/school.png" alt="" class="school">
+                  <img src="/Classes/MotorGame/MotorPlayer.png" alt="PLAYER" class="bike-result">
+                </div>
+              </div>
+              <div class="resultImg" v-else>
+                <div class="ambulance-case">
+                  <div class="light-r light"></div>
+                  <div class="light-l light"></div>
+                  <img src="/public/Classes/ambulance.png" alt="" class="ambulance">
+                </div>
+                  
+              </div>
             </div>
-            <basic-button @click="gameState = 'start'" class="btn-white">RETRY</basic-button>
+            <div class="btn-case dp-flex">
+              <basic-button @click="startGame" class="btn-white">RETRY</basic-button>
+              <basic-button @click="gameState = 'start'" class="btn-white" v-if="!authStore.isLoggedIn">Login</basic-button>
+              <basic-button @click="gameState = 'start'" class="btn-white" v-else>DONE</basic-button>
+            </div>
+            <div class="dp-flex" style="gap: 10px; justify-content: center;">
+              <basic-button @click="handleCheckLedger" class="btn-white" 
+              :style= "{backgroundCcolor: '$color-fsRed', marginTop: '20px' }"
+              >
+              CHECK MY LEDGER</basic-button>
+            </div>
+          </div>
+
+          <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+            <div class="card-modal">
+              <MemberLedger
+                :passedGames="passedGames" 
+                :activeTriggers="activeTriggers"
+              />
+            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+            </div>
           </div>
         </div>
       </transition>
@@ -65,10 +98,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
+import { ref, onMounted, onUnmounted, reactive, computed, watch, nextTick } from 'vue';
 import { gsap } from 'gsap';
 import BasicButton from '../BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useAuthStore } from '@/stores/autoStore';
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
+const authStore = useAuthStore();
+import MemberLedger from "@/components/Member/information/memberLedger.vue";
+
+
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+
+const handleCheckLedger = () => {
+    showCardOverlay.value = true;
+};
+
 
 // --- 障礙物類型定義陣列 ---
 const obstacleConfigs = [
@@ -124,8 +173,8 @@ const update = (time, deltaTime) => {
   // 玩家移動
   const moveSpeed = 1000 * dt;
   let targetTilt = 0;
-  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 5; }
-  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -5; }
+  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 15; }
+  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -15; }
   
   playerTilt.value = gsap.utils.interpolate(playerTilt.value, targetTilt, 0.3);
 
@@ -178,16 +227,37 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 30;
+  timeRemaining.value = 1;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
   lastSpawnTime = gsap.ticker.time;
   updateSize();
-
 };
 
-const endGame = () => { gameState.value = 'result'; };
+const endGame = () => { 
+  gameState.value = 'result'; 
+  if(lives.value > 0) {
+    setTimeout(()=>{
+      showCardOverlay.value = true;
+
+      setTimeout(()=>{
+        activeTriggers.value.bike = true
+
+        setTimeout(()=>{
+          passedGames.value.bike = true
+
+          const currentProgress = JSON.parse(localStorage.getItem('game_progress')||'{}')
+          currentProgress.bike = true
+          localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+          
+          activeTriggers.value.bike = false;
+        }, 600)
+      }, 500)
+    }, 1000);
+  }
+
+};
 
 const updateSize = () => {
   if (container.value) {containerWidth.value = container.value.getBoundingClientRect().width;}
@@ -197,11 +267,70 @@ const updateSize = () => {
 const handleKeyDown = (e) => { keys[e.key] = true; };
 const handleKeyUp = (e) => { keys[e.key] = false; };
 
+
+watch(gameState, async (newVal) => {
+  if (newVal == 'result') {
+  if(lives.value>0){
+    await nextTick();
+    gsap.fromTo('.bike-result', 
+      { x: -180,y:200,scale:1},
+      {repeat: 0, ease: "linear", duration: 3,
+        keyframes: [
+          { y: 120,x: -210, duration: 0.375 ,scale:0.2,opacity:1},
+          { y: 100,x: -220, duration: 0.1 ,scale:0,opacity:0}
+        ]
+      }
+    );
+  }else{
+    await nextTick();
+    gsap.fromTo('.light-l', 
+      { rotationY: 0, x: 120, scale:1,  y:10},
+      { repeat: -1, ease: "linear", duration: 1.5,
+        keyframes: [
+          { x: 95, rotationY: 90, duration: 0.375 },
+          { x: 70, rotationY: 180, duration: 0.375 },
+          { x: 95, rotationY: 270, duration: 0.375 },
+          { x: 120, rotationY: 360, duration: 0.375 }
+        ]
+      }
+    );
+    gsap.fromTo('.light-r', 
+      {  rotationY: 0, x: 70, scale:1, y:10},
+      { repeat: -1, ease: "linear", duration: 1.5,
+        keyframes: [
+          { x: 95, rotationY: -90, duration: 0.375 },
+          { x: 120, rotationY: -180, duration: 0.375 },
+          { x: 95, rotationY: -270, duration: 0.375 },
+          { x: 70, rotationY: -360, duration: 0.375 }
+        ]
+      }
+    );
+    gsap.fromTo('.ambulance-case', 
+      {  x: -550, },
+      { repeat: -1, ease: "linear", duration: 10,
+        keyframes: [
+          { x: 20,duration: 0.25 },
+          { x: 20,duration: 0.5 },
+          { x: 550,duration: 0.25 }
+        ]
+      }
+    );    
+  }
+}});
 onMounted(() => {
   window.addEventListener('resize', updateSize);
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
   gsap.ticker.add(update);
+  const saved = localStorage.getItem('game_progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        passedGames.value.shrimp = !!progress.shrimp;
+        passedGames.value.dice = !!progress.dice;
+        passedGames.value.ringtoss = !!progress.ringtoss;
+        passedGames.value.bue = !!progress.bue;
+        passedGames.value.bike = !!progress.bike;
+    }
 });
 
 onUnmounted(() => {
@@ -213,6 +342,40 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+
+.ledger-overlay-in-game {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.card-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 25px;
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    &:hover { transform: scale(1.1); }
+}
+
+.text-win { color: $color-fsGreen; }
+.text-lose { color: $color-fsRed; }
+
+
 .game-wrapper {
   width: 100%;
   height: 100%;
@@ -354,6 +517,56 @@ onUnmounted(() => {
   color: #fff;
   padding: 50px;
   border: 1px solid #333;
+  >p{
+    text-align: center;
+  }
 }
-
+.final-stats{
+  height: 80%;
+}
+.btn-case{
+  justify-content: center;
+  gap: 16px;
+}
+.resultImg{
+  // height: 50%;
+  position: relative;
+}
+.ambulance-case{
+  position: relative;
+}
+.ambulance{
+  width: 300px;
+  height: auto;
+}
+.light{
+  height: 20px;
+  width: 40%;
+  position: absolute;
+}
+.light-l{
+  border-top: 20px solid transparent;
+  border-left: 10px solid transparent;
+  border-right: 100px solid rgba(255, 0, 0, 0.8);
+  transform-origin: 50% 100%;
+}
+.light-r{
+  border-top: 20px solid transparent;
+  border-right: 10px solid transparent;
+  border-left: 100px solid rgba(255, 0, 0, 0.8);
+  transform-origin: 50% 0%;
+}
+.school-case{
+  position: relative;
+}
+.school{
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+.bike-result{
+  position: absolute;
+  height: 150px;
+  width: auto;
+}
 </style>

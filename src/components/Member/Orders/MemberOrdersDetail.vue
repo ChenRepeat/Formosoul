@@ -8,7 +8,16 @@
             <p>{{ order.shipping }}</p>
             <!-- 換成p -->
             <p>
-                <router-link to="/member/orderslist/orderscontain"><basic-button class="btn-yellow-fill"><p>Check</p></basic-button></router-link>
+                
+                <!-- <router-link :to="{ path: '/member/orderslist/orderscontain', query: { id: order.order_number } }"> -->
+                <router-link :to="`/member/orderslist/orderscontain/${order.order_number}`">
+                <basic-button 
+                    class="btn-yellow-fill" 
+                    @click="handleCheckOrder(order.order_number)"
+                >
+                    <p>Check</p>
+                </basic-button>
+                </router-link>
             </p>
         </div>
 
@@ -17,6 +26,8 @@
 <script setup>
     import { computed, onMounted, ref } from 'vue';
     import BasicButton from '@/components/BasicButton.vue';
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '@/stores/member';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
         currentPage: {
@@ -24,9 +35,9 @@
             default: 1
         }
     });
-    
+    const memberStore = useMemberStore();
+    const router = useRouter();
     const orders = ref([]);
-    
     const get_order = () => {
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -48,7 +59,7 @@
         ).then( order_response => {
             // 真正的陣列在 order_response.data 裡面
             const realArray = order_response.data || []; 
-            localStorage.setItem('data', JSON.stringify(realArray));
+            // localStorage.setItem('data', JSON.stringify(realArray));
             orders.value = realArray;
         });
     };
@@ -57,6 +68,11 @@
     onMounted(() => {
         get_order();        
     })
+
+    const handleCheckOrder = (orderNumber) => {
+        memberStore.setOrderNumber(orderNumber);
+        router.push('/member/orderslist/orderscontain');
+    }
     
     // const orders = ref([
     //     {

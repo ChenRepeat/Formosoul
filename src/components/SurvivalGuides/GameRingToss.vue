@@ -1,13 +1,13 @@
 <script setup>
   import { ref, reactive, onMounted, computed, nextTick, onUnmounted, defineEmits } from 'vue';
   import { gsap } from 'gsap';
-  import BasicButton from '../BasicButton.vue';
-  import MemberLedger from "../Member/information/memberLedger.vue";
+  import BasicButton from '@/components/BasicButton.vue';
+  import MemberLedger from "@/components/Member/information/memberLedger.vue";
 
 // 過關蓋章
 const showCardOverlay = ref(false);
-const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
-const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
 
 const handleCheckLedger = () => {
     showCardOverlay.value = true;
@@ -253,6 +253,8 @@ const checkGamePass = () => {
         passedGames.value.shrimp = !!progress.shrimp; 
         passedGames.value.dice = !!progress.dice;
         passedGames.value.ringtoss = !!progress.ringtoss;
+        passedGames.value.bue = !!progress.bue;
+        passedGames.value.bike = !!progress.bike;
     }
   });
   onUnmounted(() => {
@@ -294,7 +296,6 @@ const checkGamePass = () => {
     <div v-if="showCardOverlay" class="ledger-overlay-in-game">
         <div class="card-modal">
             <MemberLedger
-                :hasscale="false" 
                 :passedGames="passedGames" 
                 :activeTriggers="activeTriggers"
             />
