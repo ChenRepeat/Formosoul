@@ -1,10 +1,10 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useRouter, useRoute } from "vue-router";     //使用路由功能、抓取參數
-import BasicButton from '../BasicButton.vue';
 import { useProductStore } from '@/stores/products';
-import { useI18n } from 'vue-i18n';       //因為 alert 需要使用
+import { useI18n } from 'vue-i18n';       //因為 alert 跟 語系控制 需要使用
+import BasicButton from '../BasicButton.vue';
 
 
 // 宣告常數來接收，方便後續使用
@@ -12,6 +12,7 @@ const router = useRouter();                // 按鈕
 const route = useRoute();                  // 從網址抓商品需要的參數
 const productstore = useProductStore();    // 商品data 
 const { t } = useI18n();                   // 把翻譯功能 t 取出來
+const { locale } = useI18n();              // 讀取語系狀態
 
 
 
@@ -159,6 +160,18 @@ function qtyMinus(){
     }
 }
 
+// 語系切換  -------------------------------------------------------
+
+// 語系切換對照
+const langList = {
+    'en-US': 'en',
+    'zh-TW': 'zh'
+};
+
+const lang = computed( () => {
+    return langList[locale.value] || 'en';
+});
+
 
 </script>
 
@@ -169,11 +182,11 @@ function qtyMinus(){
         <!-- 麵包屑 -->
     
         <h6 class="page-guide">
-            <RouterLink class="page-guide-text" to="/shop">All Product </RouterLink>
+            <RouterLink class="page-guide-text" to="/shop">{{$t('productlist.all')}}</RouterLink>
             <font-awesome-icon icon="fa-solid fa-angle-right" />
-            <span>{{ showDetail.type }}</span>
+            <span>{{ showDetail[`type_${lang}`] }}</span>
             <font-awesome-icon icon="fa-solid fa-angle-right" />
-            <span>{{ showDetail.name_en }}</span>
+            <span>{{ showDetail[`name_${lang}`] }}</span>
         </h6>
 
         
@@ -214,9 +227,9 @@ function qtyMinus(){
                 <div class="detail-text dp-flex-col">
                     <div>
                         <p class="fw200 no-i18n-anim">{{ showDetail.product_ID }}</p>
-                        <h5>{{ showDetail.name_en }}</h5>
+                        <h5>{{ showDetail[`name_${lang}`] }}</h5>
                         <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
-                        <p class="fw200">{{ showDetail.description_en }}</p>
+                        <p class="fw200">{{ showDetail[`description_${lang}`]}}</p>
                         <div class="share-icon">
                             <font-awesome-icon icon="fa-brands fa-square-facebook" />
                             <font-awesome-icon icon="fa-brands fa-instagram" />
@@ -235,12 +248,12 @@ function qtyMinus(){
                             <BasicButton 
                             class="btn-yellow-fill btn-fix-width"
                             @click="goCart()">    
-                                Buy Now
+                                {{$t('productdetail.buynow')}}
                                 <font-awesome-icon icon="fa-solid fa-bag-shopping" />
                             </BasicButton>
                         
                             <BasicButton class="btn-gray-fill btn-fix-width">
-                                Add to Cart
+                                {{$t('productdetail.addtocart')}}
                                 <font-awesome-icon icon="fa-solid fa-cart-plus" />
                             </BasicButton>
                         </div>
@@ -263,11 +276,11 @@ function qtyMinus(){
                 <hr>
 
                 <p v-if="tabInfo === 'story'" class="fw200 story">
-                    {{ showDetail.story_en }}
+                    {{ showDetail[`story_${lang}`] }}
                 </p>
 
                 <p v-if="tabInfo === 'howtoplay'" class="fw200 howtoplay">
-                    {{ showDetail.use_en }}
+                    {{ showDetail[`use_${lang}`] }}
                 </p>
 
                 <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
@@ -292,7 +305,7 @@ function qtyMinus(){
         <BasicButton 
             class="btn-white" 
             @click="goProductList()">    
-            Back to Shop
+            Back
         </BasicButton>
 
     </div>
