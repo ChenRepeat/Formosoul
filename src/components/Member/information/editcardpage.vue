@@ -23,8 +23,11 @@ const memberStore = useMemberStore();
         const { member_ID } = userData;
         const originalName = userData.name;
         const tempName = memberStore.memberData.tempName;
+        if(!tempName){
+            alert('Please enter your name.');
+            return
+        }
         if (originalName == tempName) {
-            console.log('名字未變動，直接關閉');
             authStore.closeLoginModal();
             return; 
         }

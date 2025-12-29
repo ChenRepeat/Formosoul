@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 export const useMemberStore = defineStore('member', () => {
     const publicPath = import.meta.env.BASE_URL;
-    // const imgURL = ref(`${publicPath}member/photo.png`);
+    // const imgURL = ref(`${publicPath}member/googleicon.png`);
     const imgURL = ref('');
 
 

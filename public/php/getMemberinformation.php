@@ -6,9 +6,10 @@
     SELECT 
       m.name,
       m.member_ID,
-      m.createdate,
+      DATE_FORMAT(m.createdate, \'%Y-%m-%d\') AS createdate,
       m.updatetime,
       m.pointscard,
+      m.headshot,
       w.name_en,
       w.name_zh
     FROM member m
@@ -20,7 +21,8 @@
     $stmt->bindValue(':member_ID', $member['member_ID']);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($user_data) {
+    if ($user_data && $user_data['headshot']) {
+      $user_data['headshot'] = 'data:image/jpeg;base64,' . base64_encode($user_data['headshot']);
         echo json_encode([
         'success' => true,
         'data' => $user_data,

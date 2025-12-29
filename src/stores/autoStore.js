@@ -82,6 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
         memberStore.memberData.isEditing = false;
+
         if(memberView.value != 'coreselection'){
             setTimeout(() => {
                 memberView.value = 'coreselection';

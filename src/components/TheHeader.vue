@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/autoStore';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useLangStore } from '@/stores/lang';
+import { useMemberStore } from '@/stores/member';
 const execLanguageChange = inject('execLanguageChange');
 
 const props = defineProps({
@@ -16,7 +17,7 @@ const props = defineProps({
 });
 const router = useRouter();
 const authStore = useAuthStore();
-
+const memberStore = useMemberStore();
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
 
@@ -128,6 +129,13 @@ const handleClickOutside = (e) => {
   }
 };
 
+const isNameNull = computed(() => {
+  const username = localStorage.getItem('user');
+  if(!username) return true;
+  const nameobj = JSON.parse(username);
+  return !nameobj.name;
+})
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 });
@@ -211,7 +219,8 @@ onUnmounted(() => {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li>
+        <li v-if="isNameNull"><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li>
+        <li v-else><router-link to="/member" @click="closeMenu"><h5>{{ memberStore.memberData.tempName }}</h5></router-link></li>
         <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('nav.information')}}</h6></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('nav.changepassword')}}</h6></router-link></li>
         <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('nav.orderslist')}}</h6></router-link></li>
