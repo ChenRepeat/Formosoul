@@ -11,10 +11,12 @@ import { useLangStore } from './stores/lang';
 import { gsap } from 'gsap';
 import Wave from './components/Wave.vue';
 import router from './router';
+import { useMemberStore } from './stores/member';
 
 const route = useRoute();
 const langStore = useLangStore();
 const authStore = useAuthStore();
+const memberStore = useMemberStore();
 
 const currentLogoSrc = computed(() => {
   return route.meta?.logo || DefaultLogo;
@@ -117,6 +119,9 @@ onMounted(async () => {
 }
 )
 
+onMounted(() => {
+    memberStore.loadMemberData();
+});
 </script>
 
 <template>

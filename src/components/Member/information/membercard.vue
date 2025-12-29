@@ -67,38 +67,7 @@ const props = defineProps({
 });
 
 
-const loadMemberData = async () => {
-    const storedUser = localStorage.getItem('user');
-    const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getMemberinformation.php`;
-    if(!storedUser) return;
-    // 解構賦值也能讓解析出來的變數重新命名
-    const { name: loginName , member_ID} = JSON.parse(storedUser);
 
-    try{
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json; charset=utf-8'
-            },
-            // 這裡要對應 PHP 的接收格式
-            body: JSON.stringify({name: loginName, member_ID})
-        });
-        const result = await response.json();
-        if(result.success){
-            const dbData = result.data;
-            memberStore.memberData.tempName = dbData.name;
-            memberStore.memberData.number = dbData.member_ID;
-            memberStore.memberData.date =  dbData.createdate;
-            memberStore.memberData.wandcore = dbData.name_en || 'Select Your WandCore';
-            memberStore.imgURL = dbData.headshot
-        }else{
-            console.error(result.message);
-        }
-    }catch(error){
-        console.error("Fetch 發生錯誤:", error);
-    }
-};
 
 const isNameNull = computed(() => {
 
@@ -134,9 +103,7 @@ const saveName = () => {
 };
 
 
-onMounted(() => {
-    loadMemberData();
-});
+
 
 </script>
 
