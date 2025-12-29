@@ -74,6 +74,20 @@
               <basic-button @click="gameState = 'start'" class="btn-white" v-if="!authStore.isLoggedIn">Login</basic-button>
               <basic-button @click="gameState = 'start'" class="btn-white" v-else>DONE</basic-button>
             </div>
+            <div class="dp-flex" style="gap: 10px; justify-content: center;">
+              <basic-button @click="gameState = 'start'" class="btn-white">RETRY</basic-button>
+              <basic-button @click="handleCheckLedger" class="btn-white" style="background-color: #ff6b81;">CHECK MY LEDGER</basic-button>
+            </div>
+          </div>
+
+          <div v-if="showCardOverlay" class="ledger-overlay-in-game">
+            <div class="card-modal">
+              <MemberLedger
+                :passedGames="passedGames" 
+                :activeTriggers="activeTriggers"
+              />
+            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
+            </div>
           </div>
         </div>
       </transition>
@@ -90,6 +104,18 @@ import { useAuthStore } from '@/stores/autoStore';
 import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
 const authStore = useAuthStore();
+import MemberLedger from "@/components/Member/information/memberLedger.vue";
+
+
+// 過關蓋章
+const showCardOverlay = ref(false);
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+
+const handleCheckLedger = () => {
+    showCardOverlay.value = true;
+};
+
 
 // --- 障礙物類型定義陣列 ---
 const obstacleConfigs = [
@@ -199,16 +225,37 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 30;
+  timeRemaining.value = 1;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
   lastSpawnTime = gsap.ticker.time;
   updateSize();
-
 };
 
-const endGame = () => { gameState.value = 'result'; };
+const endGame = () => { 
+  gameState.value = 'result'; 
+  if(lives.value > 0) {
+    setTimeout(()=>{
+      showCardOverlay.value = true;
+
+      setTimeout(()=>{
+        activeTriggers.value.bike = true
+
+        setTimeout(()=>{
+          passedGames.value.bike = true
+
+          const currentProgress = JSON.parse(localStorage.getItem('game_progress')||'{}')
+          currentProgress.bike = true
+          localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+          
+          activeTriggers.value.bike = false;
+        }, 600)
+      }, 500)
+    }, 1000);
+  }
+
+};
 
 const updateSize = () => {
   if (container.value) {containerWidth.value = container.value.getBoundingClientRect().width;}
@@ -273,6 +320,15 @@ onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
   gsap.ticker.add(update);
+  const saved = localStorage.getItem('game_progress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        passedGames.value.shrimp = !!progress.shrimp;
+        passedGames.value.dice = !!progress.dice;
+        passedGames.value.ringtoss = !!progress.ringtoss;
+        passedGames.value.bue = !!progress.bue;
+        passedGames.value.bike = !!progress.bike;
+    }
 });
 
 onUnmounted(() => {
@@ -284,6 +340,40 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+
+.ledger-overlay-in-game {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.card-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-close-card {
+    padding: 10px 25px;
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    &:hover { transform: scale(1.1); }
+}
+
+.text-win { color: $color-fsGreen; }
+.text-lose { color: $color-fsRed; }
+
+
 .game-wrapper {
   width: 100%;
   height: 100%;

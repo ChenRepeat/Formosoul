@@ -1,7 +1,7 @@
 <script setup>    
 import { ref, onMounted, onUnmounted , defineEmits, defineProps, computed} from "vue";
 import gsap from "gsap";
-import MemberLedger from "../Member/information/memberLedger.vue";
+import MemberLedger from "@/components/Member/information/memberLedger.vue";
 // import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
 // 遊戲狀態 
@@ -18,8 +18,9 @@ const emit = defineEmits([
 ]);
 // 過關蓋章
 const showCardOverlay = ref(false);
-const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
-const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+
 
 // 圖片路徑打包
 const publicPath = import.meta.env.BASE_URL;
@@ -240,7 +241,6 @@ const gameOver = () => {
                 setTimeout(() => {
                 passedGames.value.shrimp = true;
 
-                // 儲存進度
                 const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
                 currentProgress.shrimp = true; 
                 localStorage.setItem('game_progress', JSON.stringify(currentProgress));
@@ -253,8 +253,7 @@ const gameOver = () => {
 }
 
 const handleCheckLedger = () => {
-    emit('open-ledger'); // 通知父層打開集點卡
-    emit('close-game');  // 關閉遊戲視窗
+    showCardOverlay.value = true;
 };
 
 
@@ -399,6 +398,8 @@ onMounted (()=>{
         passedGames.value.shrimp = !!progress.shrimp; 
         passedGames.value.dice = !!progress.dice;
         passedGames.value.ringtoss = !!progress.ringtoss;
+        passedGames.value.bue = !!progress.bue;
+        passedGames.value.bike = !!progress.bike;
     }
 
     initGame();
@@ -470,7 +471,6 @@ onUnmounted (()=> {
             <div v-if="showCardOverlay" class="ledger-overlay-in-game">
                 <div class="card-modal">
                     <MemberLedger
-                        :hasscale="false" 
                         :passedGames="passedGames" 
                         :activeTriggers="activeTriggers"
                     />
@@ -489,7 +489,7 @@ onUnmounted (()=> {
                     PLAY AGAIN ⟳
                 </button>
 
-                <button class="btn-action btn-check" @click.stop="handleCheckLedger">
+                <button class="btn-action btn-check" @click="handleCheckLedger">
                     CHECK YOUR LEDGER
                 </button>
             </div>
