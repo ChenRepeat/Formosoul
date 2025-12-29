@@ -75,8 +75,10 @@
               <basic-button @click="gameState = 'start'" class="btn-white" v-else>DONE</basic-button>
             </div>
             <div class="dp-flex" style="gap: 10px; justify-content: center;">
-              <basic-button @click="gameState = 'start'" class="btn-white">RETRY</basic-button>
-              <basic-button @click="handleCheckLedger" class="btn-white" style="background-color: #ff6b81;">CHECK MY LEDGER</basic-button>
+              <basic-button @click="handleCheckLedger" class="btn-white" 
+              :style= "{backgroundCcolor: '$color-fsRed', marginTop: '20px' }"
+              >
+              CHECK MY LEDGER</basic-button>
             </div>
           </div>
 
