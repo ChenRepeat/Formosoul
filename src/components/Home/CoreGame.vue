@@ -82,10 +82,10 @@
 
     @keyframes blink{
         0%, 100%{
-            filter: drop-shadow(0 0 20px $color-fsWhite); 
+            filter: drop-shadow(0 0 0px transparent);
         }
         50%{
-            filter: drop-shadow(0 0 0px transparent);
+            filter: drop-shadow(0 0 20px $color-fsWhite);
         }
     }
 

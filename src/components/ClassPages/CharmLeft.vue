@@ -1,9 +1,11 @@
 <script setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  import { computed , ref , Transition, watch } from 'vue';
+  import gsap from 'gsap';
+  import { computed , nextTick, onMounted, ref , Transition, watch } from 'vue';
   const rightArrow = ref(null);
   const clickCharm = ref('0');
   const showText = ref('0');
+  
   const props = defineProps(['sharedImage']);
   const charmsRow1 = ref({
     1: {
@@ -78,11 +80,48 @@
         imgUrl:'Classes/charms/charm14.png',
     },
   });
+const breathAnimate=()=>{
+      gsap.killTweensOf('.userDrowed .over-lay');
+      gsap.set('.userDrowed .over-lay', { '--active-blink': 0.8 });
 
-  function changeIntro(i){
-    clickCharm.value = String(i);
-    showText.value = String(i)
+      gsap.to('.userDrowed .over-lay', {
+        duration: 1,
+        repeat: -1,
+        ease: "none",
+        keyframes: {
+          "0%":   { "--active-blink": 0.8 },
+          "50%":   { "--active-blink": 0.4 },
+          "100%":  { "--active-blink": 0.8 },
+        }
+      });
+}
+const stopAnimate=()=>{
+  gsap.killTweensOf('.userDrowed .over-lay');
+  gsap.to('.userDrowed .over-lay', {
+      duration: 1,
+      repeat: -1,
+      ease: "none",
+      '--active-blink': 0, 
+      keyframes: {
+          "0%":   { "--active-blink": 0 },
+          "100%":  { "--active-blink": 0},
+      }})
+}
+function changeIntro(i) {
+  const previousCharm = clickCharm.value;
+  clickCharm.value = String(i);
+  showText.value = String(i);
+
+  if (clickCharm.value != '13') {
+    if (previousCharm == '13' || !gsap.isTweening('.userDrowed .over-lay')) {
+      breathAnimate();
+    }
+  } else {
+    gsap.killTweensOf('.userDrowed .over-lay');
+    gsap.set('.userDrowed .over-lay', { '--active-blink': 0 });
+    stopAnimate();
   }
+}
  const currentIntro = computed(() => {
     const selectedId = showText.value;
     if (charmsRow1.value[selectedId]) {
@@ -96,9 +135,23 @@ watch(() => props.sharedImage, (newVal) => {
   if (newVal != 'Classes/charms/charm13.png') {
     charmsRow2.value[13].imgUrl = newVal;
     clickCharm.value = '13';
+    changeIntro(13);
+    stopAnimate();
   }else{
     clickCharm.value = '0';
     charmsRow2.value[13].imgUrl = newVal;
+    changeIntro(0);
+    gsap.killTweensOf('.userDrowed .over-lay');
+    gsap.set('.userDrowed .over-lay', { '--active-blink': 0.8 });
+    breathAnimate();
+
+  
+}});
+onMounted(async () => {
+  await nextTick(); // 確保 DOM 渲染完畢
+  if (clickCharm.value != '13') {
+    breathAnimate();
+
   }
 });
 const buyWord = computed(() => {
@@ -146,7 +199,7 @@ const buyWord = computed(() => {
         @click="changeIntro(key)"
         @mousedown.stop
         @touchstart.stop
-        :class="{userDrowed:key==13}">
+        :class="{'userDrowed':key==13}">
         <img 
             :src="charm.imgUrl" 
             :alt="charm.name"
@@ -236,7 +289,6 @@ const buyWord = computed(() => {
     align-items: center;
     gap: 40px;
     img{
-      width: 70px;
       height: 140px;
     }
     p{
@@ -261,34 +313,51 @@ const buyWord = computed(() => {
     
   }
   .shadow-case{
+    height: 180px;
     position: relative;
+    &:hover .over-lay {
+      opacity: 0 !important;
+      transition: opacity 0.3s ease !important;
+    }
   }
+
   .over-lay{
+    --active-blink: 0.8;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 180px;
     background-color: black; 
     opacity: 0; 
     z-index: 10;
     transition: all 0.5s ease;
-    &:hover{
-      opacity: 0;
-    }
-}
-.show{
-    opacity: 0.8;
-}
-.userDraw{
-  margin-top: 5%;
-  text-align: right;
-}
-.userDrowed{
-  animation: changeShadow 1s ease infinite;
-}
+  }
+  .over-lay.show {
+    opacity: 0.8 !important;
+    transition: opacity 0.5s ease;
+  }
+  .userDrowed .over-lay {
+    opacity: var(--active-blink, 0) !important; 
+    transition: none !important;
+    height: 180px;
+    box-sizing: border-box;
+  }
+  .over-lay:not(.show) {
+    opacity: 0;
+  }
+  .userDrowed .over-lay:not(.show) {
+    opacity: var(--active-blink, 0) !important;
+    transition: none !important;
+  }
+
+  .userDrowed{
+    // animation: changeShadow 1s ease infinite;
+    height: 180px;
+    box-sizing: border-box;
+  }
 .rightArrow{
-  animation: changeColor 0.5s ease infinite;
+  // animation: changeColor 0.5s ease infinite;
 }
 @keyframes changeColor {
   0%{color:$color-fsGold}
@@ -307,4 +376,5 @@ const buyWord = computed(() => {
 .fade-enter-from,.fade-leave-to {
   opacity: 0;
 }
+
 </style>
