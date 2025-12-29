@@ -5,8 +5,11 @@ export const useMemberStore = defineStore('member', () => {
     const publicPath = import.meta.env.BASE_URL;
     // const imgURL = ref(`${publicPath}member/googleicon.png`);
     const imgURL = ref('');
-
-
+    
+    const orders = ref(null); 
+    const setOrderNumber = (orderNumber) => {
+        orders.value = orderNumber;
+    };
     const memberData = ref({
         name: 'Your Name',
         wandcore: 'Select Your WandCore',
@@ -96,5 +99,7 @@ export const useMemberStore = defineStore('member', () => {
         updatePhoto,
         data_uptime,
         loadMemberData,
+        orders,
+        setOrderNumber,
     };
 });
