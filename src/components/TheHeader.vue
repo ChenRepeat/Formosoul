@@ -217,7 +217,14 @@ onUnmounted(() => {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-        <li class="dp-flex member-data-case"><div class="head-shot-case"><img src="" alt=""></div><div><p>{{$t('nav.welcome')}}</p><h6>{{ memberStore.memberData.tempName }}</h6></div></li>
+        <li class="dp-flex member-data-case">
+          <div class="head-shot-case" v-if="memberStore.imgURL !=''"><img :src="memberStore.imgURL" alt=""></div>
+          <div class="head-shot-case" v-else><font-awesome-icon icon="fa-regular fa-circle-user" class="memberListIcon"/></div>
+          <div>
+            <p>{{$t('nav.welcome')}}</p>
+            <h6>{{ memberStore.memberData.tempName }}</h6>
+          </div>
+        </li>
         <!-- <li><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li> -->
         <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('nav.information')}}</h6></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('nav.changepassword')}}</h6></router-link></li>
@@ -260,12 +267,20 @@ onUnmounted(() => {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: aqua;
+  position: relative;
+  overflow: hidden;
+  img{
+    width: 100%;
+    height: auto;
+    inset: 0;
+    position: absolute;
+    object-fit: contain;
+  }
 }
 .member-data-case{
   gap: 12px;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
 }
 img { object-fit: none; }
 
@@ -368,7 +383,11 @@ img { object-fit: none; }
     overflow-y: auto;  
   }
 }
-
+.memberListIcon{
+  color: $color-fsTitle;
+  width: 100%;
+  height: 100%;
+}
 .liquidGlass-effect { position: absolute; inset: 0; backdrop-filter: blur(4px); filter: url(#glass-distortion); z-index: 0; }
 .liquidGlass-tint { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.28); z-index: 1; }
 .liquidGlass-shine { position: absolute; inset: 0; box-shadow: inset 2px 2px 1px rgba(255,255,255,0.4), inset -2px -2px 2px rgba(255,255,255,0.2); z-index: 2; }
