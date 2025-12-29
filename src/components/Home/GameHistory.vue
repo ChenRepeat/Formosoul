@@ -24,7 +24,7 @@ currentView.value = 'game';
             <p>{{ $t('coreselection.historyIntro')}}</p>
 
         </div>
-        <BasicButton class="btn-yellow-fill" @click="showGame">Begin the Core Sensing</BasicButton>
+        <BasicButton class="btn-yellow-fill" @click="showGame">{{ $t('coreselection.btngame')}}</BasicButton>
     </main>
     <CoreGame v-if="currentView === 'game'" class=""/>
 

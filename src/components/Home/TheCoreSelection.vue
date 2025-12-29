@@ -50,8 +50,8 @@ function showCore(){
                 </div>
             </main>
             <nav class="dp-flex">
-                <BasicButton class="btn-gray-fill" @click="showHistory">Uncover the Ritual's Origin</BasicButton>
-                <BasicButton class="btn-yellow-fill" @click="showGame">Begin the Core Sensing</BasicButton>
+                <BasicButton class="btn-gray-fill" @click="showHistory">{{ $t('coreselection.btnhistory')}}</BasicButton>
+                <BasicButton class="btn-yellow-fill" @click="showGame">{{ $t('coreselection.btngame')}}</BasicButton>
             </nav>
         </div>
 
