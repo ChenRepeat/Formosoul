@@ -170,10 +170,8 @@ onUnmounted(() => {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <router-link to="/shoppingcart" class="no-i18n-anim"><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon"
+          <router-link to="/shoppingcart" class="no-i18n-anim "><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
              @click="closeMenu"/></router-link>
-          <!-- <a href="/member"></a> -->
-         
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
             <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"
@@ -375,7 +373,11 @@ img { object-fit: none; }
   }
 }
 
-.header-icon { color: $color-fsWhite; font-size: 32px; cursor: pointer; }
+.header-icon { color: $color-fsWhite; font-size: 32px; cursor: pointer;
+&.cart-icon{
+
+  transform:scale(0.9) translateY(1px);
+} }
 .draggable-icon { cursor: move ; position: relative; z-index: 1001;}
 
 .burger-list {
@@ -387,6 +389,8 @@ img { object-fit: none; }
   border-radius: 12px;
   width: 100%;
   z-index: -2;
+  transition: color 0s;
+
   h5{
     text-transform: capitalize;
   }
@@ -402,16 +406,18 @@ img { object-fit: none; }
 
 /* 漢堡按鈕 */
 .hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;overflow: hidden;}
-.transition { transition: 0.5s ease-out; }
+.transition { 
+  transition: 0.5s ease-out ,color 0s;
+}
 .dot{
   width: 5px;height: 5px;position: absolute;background-color: $color-fsWhite;
 }
-.dot1{left: 2px;top: 0px;border-radius: 50%;}
-.dot2{right: 2px;top: 0px;}
-.dot3{left: 2px;bottom: 0px;border-radius: 50%}
-.dot4{right: 2px;bottom: 0px;}
-.dot5{left: 2px;top: 9px;}
-.dot6{right: 2px;top: 9px;border-radius: 50%}
+.dot1{left: 4px;top: 0px;border-radius: 50%;}
+.dot2{right: 4px;top: 0px;}
+.dot3{left: 4px;bottom: 0px;border-radius: 50%}
+.dot4{right: 4px;bottom: 0px;}
+.dot5{left: 4px;top: 9px;}
+.dot6{right: 4px;top: 9px;border-radius: 50%}
 .hamburger-btn.active{
   .dot{width: 38px;height: 3px;transform-origin:0 50%}
   .dot5,.dot6{width: 0;height: 0;opacity: 0;}
@@ -478,9 +484,6 @@ img { object-fit: none; }
   border-top: 1px solid $color-fsCaption;
 }
 @media screen and (max-width: 1200px) {
-  .header-link{
-    
-  }
   .header-icons-list{
     gap: 8px;
   }

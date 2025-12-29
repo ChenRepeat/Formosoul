@@ -272,8 +272,8 @@ onUnmounted(() => {
   position: absolute;
   bottom: 0px; 
   left: 50%;
-  width: 100px;
-  height: 100px;
+  width: auto;
+  height: 120px;
   transform-style: preserve-3d;
   z-index: 20;
 }
@@ -301,7 +301,7 @@ onUnmounted(() => {
   img{
     width: 100%;
     height: auto;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 .bike-inner{

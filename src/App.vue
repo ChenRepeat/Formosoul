@@ -10,8 +10,10 @@ import DefaultLogo from '@/assets/logo_white.svg';
 import { useLangStore } from './stores/lang';
 import { gsap } from 'gsap';
 import Wave from './components/Wave.vue';
+import router from './router';
 
 const route = useRoute();
+const langStore = useLangStore();
 const authStore = useAuthStore();
 
 const currentLogoSrc = computed(() => {
@@ -26,7 +28,6 @@ const currentLogoDP = computed(() => {
 const hideLogoRWD = computed(() => {
   return route.meta?.hideLogoRWD || false;
 });
-const langStore = useLangStore();
 
 const execLanguageChange = (changeAction) => {
   const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label",];
@@ -57,6 +58,7 @@ const execLanguageChange = (changeAction) => {
     }
   });
 };
+
 provide('execLanguageChange', execLanguageChange);
 const charRefs = ref([]);
 
@@ -75,18 +77,45 @@ const startLoadingAnimation = () => {
     repeat: -1,
   });
 };
+// --- Loading 畫面邏輯 vv ---
+const handleLoadingState = () => {
+  if (route.meta.requireLoading) {
+    authStore.isLoading = true;
+    nextTick(() => {
+      if (typeof startLoadingAnimation === 'function') {
+        startLoadingAnimation();
+      }
+    });
+  } else {
+    authStore.isLoading = false;
+  }
+};
+router.isReady().then(() => {
+  handleLoadingState();
+});
+watch(
+  () => route.path,
+  () => {
+    handleLoadingState();
+  }
+);
 
+// --- Loading 畫面邏輯 ^^ ---
+const innerH = ref(window.innerHeight).value
+const waveConfig = ref(
+  [
+    [innerH/2, 0.8, 50, 0.2, '#F0F7FF', '#000', 0.8, 2],
+    [innerH/2, 0.8, 80, 1, '#F0F7FF', '#000', 0, 1],
+    [innerH/2, 0.8, 20, 0.6, '#F0F7FF', '#000', 0, 3.5],
+    [innerH/2, 0.8, 110, 0, '#F0F7FF', '#000', 0, 0.2],
+  ])
 onMounted(async () => {
   await nextTick();
-  if(authStore.isLoading){
-
-    startLoadingAnimation();
-  }
-
   if (authStore.token) {
     await authStore.fetchUser();
-  } 
-})
+  }
+}
+)
 
 </script>
 
@@ -109,7 +138,7 @@ onMounted(async () => {
           :ref="(el) => { if(el) charRefs[index] = el }"
         >
           {{ char === ' ' ? '&nbsp;' : char }}</h1>
-          <Wave />
+          <Wave :config=waveConfig :height=innerH />
       </div>
       <div>
         <RouterView />

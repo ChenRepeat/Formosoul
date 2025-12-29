@@ -753,11 +753,12 @@ export const useProductStore = defineStore('products', () =>{
     // 一般的寫法，每一個按鈕就會寫一行過濾，但是這樣代表每一種排列組合都要寫一組 function，或是很多的判斷式
     // 另外一種作法，改用狀態來判斷
 
-    const sortBy = ref('default');   // 排序狀態，未選擇為預設
+    const sortBy = ref('newArrival');   // 排序狀態，預設為最新上架
     const typeBy = ref('All');       // 分類狀態，未選擇為所有商品
 
     const displayProduct = computed(() => {
 
+        // 分類功能
         let finalDisplay = [...productListed.value]; //預設為所有上架商品
                                                      //因為 productListed 為陣列，所以要.value拿，再用陣列來接
 
@@ -766,11 +767,32 @@ export const useProductStore = defineStore('products', () =>{
             finalDisplay = productListed.value.filter( p => p.type === typeBy.value);
         };
 
+
+        // 排序功能
+        switch(sortBy.value){
+            case 'newArrival':
+                // localeCompare 字串比較
+                finalDisplay = finalDisplay.sort((a, b) => b.update.localeCompare( a.update ));
+                break;
+            case 'priceLow':
+                //finalDisplay = finalDisplay.sort((a, b) => a.value - b.value);
+                // 因為資料中，價格為字串，所以需要轉成數字之後再比較
+                // 如果用字串比較，結果可能會不同
+                finalDisplay = finalDisplay.sort((a, b) => Number(a.price) - Number(b.price));
+                break;
+            case 'priceHigh':
+                finalDisplay = finalDisplay.sort((a, b) => Number(b.price) - Number(a.price)); 
+                break;
+        };
+
         return finalDisplay;
     })
 
-
-
+    //step3 商品詳細頁的查詢功能
+    // const + 箭頭函式     *宣告後才能被使用   ＊因為是用 const，所以不怕被覆寫
+    const getProductByID = (id) => {
+        return productListed.value.find( p => p.product_ID === id)
+    }
 
 
 
@@ -781,7 +803,7 @@ export const useProductStore = defineStore('products', () =>{
         sortBy,
         typeBy,
         displayProduct,
-
+        getProductByID,
     };
 
 

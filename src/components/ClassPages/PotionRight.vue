@@ -97,7 +97,7 @@ const initDraggable = () => { //清掉上回合的實體
       onDragEnd: e => {
        const instance = Draggable.get(e.target)
   
-       if (instance.hitTest('.potion-right-pot','20%')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
+       if (instance.hitTest('.potion-right-pot','15%')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
         gsap.to(e.target, { scale: 0, duration: 0.3 });
         selectList.push(e.target.name)
         
@@ -285,8 +285,8 @@ onMounted(()=>{
           left: 7%;
         }
         &#img3{
-          top: 63%;
-          left: 50%;
+          top: 40%;
+          left: 82%;
         }
         &#img6{
           top: 10%;
@@ -296,49 +296,49 @@ onMounted(()=>{
       &#img2, &#img10{
         width: 21%;
         &#img2{
-          top:43%;
-          left: 45%;
+          top: 32%;
+          left: 36%;
         }
          &#img10{
-          top:45%;
-          left: 10%;
+          top:47%;
+          left: 8%;
          }
       }
-      &#img7,&#img4{
+      &#img7{
         width: 25%;
         &#img7{
-          top: 50%;
+          top: 55%;
           left: 73%;
-        }
-        &#img4{
-          top: 22%;
-          right: 21%;
         }
       }
       &#img8{
         width: 23%;
-        top: 9%;
-        left: 22%;
+        top: 10%;
+        left: 23%;
       }
-      &#img9, &#img5{
-        width: 15%;
+      &#img9, &#img5,&#img4{
+        width: 16%;
+        &#img4{
+          top: 22%;
+          right: 21%;
+        }
         &#img9{
-          top: 20%;
-          left: 1%;
+          top: 25%;
+          left: 0%;
         } 
         &#img5{
-          top: 32%;
-          left: 30%;
+          top:51%;
+          left: 49%;
         }
       }
     }
   
   }
   .potion-right-pot{
-    width: 190px;
+    width: 35%;
   
     position:absolute;
-    bottom: 40px;
+    bottom: 10%;
     right: 0;left: 0;
     margin: auto ;
   }
