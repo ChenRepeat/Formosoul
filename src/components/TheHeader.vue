@@ -7,12 +7,6 @@ import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useLangStore } from '@/stores/lang';
 import { useMemberStore } from '@/stores/member';
-<<<<<<< HEAD
-=======
-
->>>>>>> RepeatNB
-const execLanguageChange = inject('execLanguageChange');
-const memberStore = useMemberStore();
 
 const props = defineProps({
   isBlackStyle: {
@@ -25,6 +19,7 @@ const authStore = useAuthStore();
 const memberStore = useMemberStore();
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
+const execLanguageChange = inject('execLanguageChange');
 
 gsap.registerPlugin(Draggable);
 
@@ -222,13 +217,8 @@ onUnmounted(() => {
       <ul v-if="isMemberMenuOpen && !isMenuOpen"
       class="burger-list member-list"
       :class="{ 'active': isMemberMenuOpen }">
-<<<<<<< HEAD
-        <li v-if="isNameNull"><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li>
-        <li v-else><router-link to="/member" @click="closeMenu"><h5>{{ memberStore.memberData.tempName }}</h5></router-link></li>
-=======
         <li class="dp-flex member-data-case"><div class="head-shot-case"><img src="" alt=""></div><div><p>{{$t('nav.welcome')}}</p><h6>{{ memberStore.memberData.tempName }}</h6></div></li>
         <!-- <li><router-link to="/member" @click="closeMenu"><h5>{{$t('nav.member')}}</h5></router-link></li> -->
->>>>>>> RepeatNB
         <li><router-link to="/member/information" @click="closeMenu"><h6>{{$t('nav.information')}}</h6></router-link></li>
         <li><router-link to="/member/changepassword" @click="closeMenu"><h6>{{$t('nav.changepassword')}}</h6></router-link></li>
         <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('nav.orderslist')}}</h6></router-link></li>
