@@ -8,7 +8,7 @@
             </div>
 
             <div class="memberinformation">
-                <p>Name: 
+                <p>{{ $t('member.memberName') }}
                     <button
                         class="edit-btn"
                         :class="{ 'without': withouteditbtn}"
@@ -27,13 +27,13 @@
                 </div> 
                 <h6 v-else-if="isNameNull" class="fw200">{{ memberStore.memberData.name }}</h6>
                 <h6 v-else class="fw200">{{ memberStore.memberData.tempName }}</h6>
-                <p>Wand Core:</p>
+                <p>{{ $t('member.wandCore') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.wandcore }}</h6>
 
-                <p>Enrollment Number:</p>
+                <p>{{ $t('member.enrollmentNo') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.number }}</h6>
 
-                <p>Enrollment Since:</p>
+                <p>{{ $t('member.enrollmentDate') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.date }}</h6>
             </div>
         </div>
