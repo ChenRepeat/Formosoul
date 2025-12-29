@@ -191,7 +191,7 @@ const router = createRouter({
         {
           path: 'orderslist', component: MemberOrders,
           children: [
-            { path: 'orderscontain', component: MemberOrderscontain },
+            { path: 'orderscontain/:id', component: MemberOrderscontain },
           ],
         },
         { path: 'mycollections', component: Mycollections },
