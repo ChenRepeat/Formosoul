@@ -60,6 +60,7 @@
     import { useAuthStore } from '@/stores/autoStore';
     import { inject, ref } from 'vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import { useMemberStore } from '@/stores/member';
 
     const authStore = useAuthStore();
     const sharedEmail = inject('sharedEmail');
@@ -68,7 +69,7 @@
     const isLoading = ref(false);
     const errorMessage = ref('');
     const showPassword = ref(false);
-
+    const memberStore = useMemberStore();
     function loginAPI(email, password, name) {
         const apiBase = import.meta.env.VITE_API_BASE;
         const API_URL = `${apiBase}/memberlogin.php`;
@@ -123,6 +124,7 @@
             }else if(response.success && !response.user.isFirstLogin){
                 authStore.setToken(response.token);
                 authStore.setUser(response.user);
+                memberStore.loadMemberData();
                 authStore.closeLoginModal();
                 // authStore.setmemberView('membercard');              
             }else{
