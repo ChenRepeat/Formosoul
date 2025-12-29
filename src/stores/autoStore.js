@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { computed, ref} from "vue";
 import Cookies from 'js-cookie';
 import { useMemberStore } from "./member";
+import { useRouter } from "vue-router";
 // 之後可能有封裝好的 axios
 // import axios from 'axios';
 export const useAuthStore = defineStore('auth', () => {
@@ -9,7 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref(JSON.parse(localStorage.getItem('user')) || null);
 
     const token = ref(Cookies.get('token') || null);
-
+    const router = useRouter();
     // 載入狀態避免畫面閃爍
     const isLoading = ref(true);
     // 彈窗狀態
@@ -82,6 +83,7 @@ export const useAuthStore = defineStore('auth', () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
         memberStore.memberData.isEditing = false;
+
         if(memberView.value != 'coreselection'){
             setTimeout(() => {
                 memberView.value = 'coreselection';

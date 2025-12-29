@@ -6,9 +6,10 @@
     SELECT 
       m.name,
       m.member_ID,
-      m.createdate,
+      DATE_FORMAT(m.createdate, \'%Y-%m-%d\') AS createdate,
       m.updatetime,
       m.pointscard,
+      m.headshot,
       w.name_en,
       w.name_zh
     FROM member m
@@ -21,9 +22,11 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($user_data) {
+      $user_data['headshot'] = 'data:image/jpeg;base64,' . base64_encode($user_data['headshot']);
         echo json_encode([
         'success' => true,
         'data' => $user_data,
+        'img' => $user_data['headshot']
       ]);
     } else {
         echo json_encode(['success' => false, 'message' => '找不到會員']);

@@ -2,18 +2,30 @@
 import { useRouter } from "vue-router";     //使用路由功能
 import BasicButton from '../../components/BasicButton.vue';
 import OrderList from "../OrderList.vue";
+import { useAuthStore } from "@/stores/autoStore";
 
 
 // 宣告常數來接收 useRouter() ，方便後續使用
 const router = useRouter();
-
+const authStore = useAuthStore();
 // 設定路由功能
 function goShopping(){
-    router.push('/shop/productList')
-}
+    
+        
+        router.push('/shop/productList')
 
+    
+}
+// 沒有登入的 cookie token 就跳出登入頁
 function goPayment(){
-    router.push('/shoppingcart/checkout')
+    if(authStore.token){
+        router.push('/shoppingcart/checkout');
+    }else{
+        authStore.openLoginModal();
+        authStore.setmemberView('login');
+        // router.push(''); 這句表示跳到這頁的最上面
+        
+    }
 }
 
 

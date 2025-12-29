@@ -3,17 +3,17 @@
     <div class="cardpage-wrapper" :class="{ 'with-padding': haspadding}">
         <div class="cardcontent" :class="{ 'with-gap': hasgap}">
             <div class="cardpage-left">
-                <h3 :class="{ 'fontcolor' : fontscolor}">Student Enrollment Card</h3>
-                <p :class="{ 'fontcolor' : fontscolor}">This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.</p>
+                <h3 :class="{ 'fontcolor' : fontscolor}">{{$t('member.studentCard')}}</h3>
+                <p :class="{ 'fontcolor' : fontscolor}">{{$t('member.cardIntro')}}</p>
             </div>
             <div class="cardpage-right">
                 <Membercard withouteditbtn></Membercard>
-                <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">Don't leave the Common Room without it!</h5>
+                <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">{{$t('member.cardWarning')}}</h5>
             </div>
         </div>        
         <div class="buttonarea" :class="{ 'hascenter': hascenter}">
-            <BasicButton class="btn-gray-fill" @click="editcard" :class="{ 'withedit': withedit}"><h6>Edit your membercard</h6></BasicButton>
-            <BasicButton class="btn-yellow-fill" @click="gotoledger"><h6>Check Your Ledger</h6></BasicButton>
+            <BasicButton class="btn-gray-fill" @click="editcard" :class="{ 'withedit': withedit}"><h6>{{$t('member.cardBTN1')}}</h6></BasicButton>
+            <BasicButton class="btn-yellow-fill" @click="gotoledger"><h6>{{$t('member.cardBTN2')}}</h6></BasicButton>
         </div>
         
     </div>

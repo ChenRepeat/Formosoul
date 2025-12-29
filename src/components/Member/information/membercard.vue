@@ -8,7 +8,7 @@
             </div>
 
             <div class="memberinformation">
-                <p>Name: 
+                <p>{{ $t('member.memberName') }}
                     <button
                         class="edit-btn"
                         :class="{ 'without': withouteditbtn}"
@@ -27,13 +27,13 @@
                 </div> 
                 <h6 v-else-if="isNameNull" class="fw200">{{ memberStore.memberData.name }}</h6>
                 <h6 v-else class="fw200">{{ memberStore.memberData.tempName }}</h6>
-                <p>Wand Core:</p>
+                <p>{{ $t('member.wandCore') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.wandcore }}</h6>
 
-                <p>Enrollment Number:</p>
+                <p>{{ $t('member.enrollmentNo') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.number }}</h6>
 
-                <p>Enrollment Since:</p>
+                <p>{{ $t('member.enrollmentDate') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.date }}</h6>
             </div>
         </div>
@@ -67,37 +67,7 @@ const props = defineProps({
 });
 
 
-const loadMemberData = async () => {
-    const storedUser = localStorage.getItem('user');
-    const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getMemberinformation.php`;
-    if(!storedUser) return;
-    // 解構賦值也能讓解析出來的變數重新命名
-    const { name: loginName , member_ID} = JSON.parse(storedUser);
 
-    try{
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json; charset=utf-8'
-            },
-            // 這裡要對應 PHP 的接收格式
-            body: JSON.stringify({name: loginName, member_ID})
-        });
-        const result = await response.json();
-        if(result.success){
-            const dbData = result.data;
-            memberStore.memberData.tempName = dbData.name;
-            memberStore.memberData.number = dbData.member_ID;
-            memberStore.memberData.date =  dbData.createdate;
-            memberStore.memberData.wandcore = dbData.name_en || 'Select Your WandCore';
-        }else{
-            console.error(result.message);
-        }
-    }catch(error){
-        console.error("Fetch 發生錯誤:", error);
-    }
-};
 
 const isNameNull = computed(() => {
 
@@ -133,9 +103,7 @@ const saveName = () => {
 };
 
 
-onMounted(() => {
-    loadMemberData();
-});
+
 
 </script>
 
@@ -151,9 +119,9 @@ onMounted(() => {
         padding-top: 16px;
         padding-left: 16px;
         padding-right: 16px;
-        justify-content: center;
+        justify-content: space-between;
         position: relative;
-                &.hasscale{
+        &.hasscale{
             transform: scale(1.3);
         }
     }
@@ -179,20 +147,25 @@ onMounted(() => {
         z-index: 10;
     }
     .membercard{
+        width: 100%;
+        height: 100%;
+        // display: flex;
+        // justify-content: space-between;
         display: grid;
-        grid-template-columns: 0.8fr 1.3fr;
-        gap: 24px;
+        grid-template-columns: 1fr 1.1fr;
+        gap: 36px;
         align-items: start;
     }
 
     .memberphoto{
-        width: 140px;
-        height: 180px;
+        width: 100%;
+        height: 100%;
         display: flex;
         position: relative;
-        top: 30%;  
-        left: 50%;
-        transform: translate(-50%, -30%);
+        // justify-content: start;
+        // top: 50%;  
+        // left: 50%;
+        // transform: translate(-50%, -50%);
         
     }
 
@@ -200,13 +173,16 @@ onMounted(() => {
         height: 100%;
         width: 100%;
         object-fit: contain;
+        padding-left: 16px;
+        padding-bottom: 32px;
     }
     .thefile{
         width: 100%;
         height: 100%;
         position: absolute;
-        top: 0;
-        left: 0;    
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);  
         opacity: 0;
 
     }
@@ -231,5 +207,6 @@ onMounted(() => {
         left: 50%;
         position: absolute;
         transform: translate(-50%, -50%);
+        padding-bottom: 48px;
     }
 </style>

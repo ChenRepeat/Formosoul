@@ -150,6 +150,9 @@ const router = createRouter({
           path: "nightmarketmap",
           name: "NightMarketMap",
           component: NightMarketMap,
+          // meta:{
+          //   requireLoading: true
+          // },
         },
         {
           path: "conveniencestore",
@@ -196,7 +199,12 @@ const router = createRouter({
         { path: 'orderscontain', component: MemberOrderscontain }
       ],
     },
-    
+
+    {
+          path: "/line-callback",
+          name: "LineCallback",
+          component: () => import ('@/components/Member/Login/LineCallback.vue')
+    },
     {
       path: '/policy',
       name: 'Policy',
@@ -295,7 +303,6 @@ router.beforeEach((to, from, next) => {
         authStore.setloginView('loginpage');
         return next('');
     }
-
     // if (to.meta.requiresAdmin && !isAdmin) {
     //     alert('權限不足')
     //     return next('/')

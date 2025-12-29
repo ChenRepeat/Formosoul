@@ -22,12 +22,18 @@ const memberStore = useMemberStore();
         const userData = JSON.parse(storedUser);
         const { member_ID } = userData;
         const originalName = userData.name;
+        const originalimg = userData.headshot;
         const tempName = memberStore.memberData.tempName;
-        if (originalName == tempName) {
-            console.log('名字未變動，直接關閉');
+        const tempimg = memberStore.imgURL;
+        if(!tempName){
+            alert('Please enter your name.');
+            return
+        }
+        if (originalName === tempName && originalimg === tempimg) {
             authStore.closeLoginModal();
             return; 
         }
+
         if(memberStore.memberData.isEditing == true){
             userData.name = tempName;
         };
@@ -38,12 +44,13 @@ const memberStore = useMemberStore();
                 headers:{
                     'Content-Type': 'application/json; charset=utf-8'
                 },
-                body: JSON.stringify({name: tempName, member_ID})
+                body: JSON.stringify({name: tempName, member_ID, tempimg: tempimg})
             });
 
             const result = await response.json();
             if(result.success){
                 userData.name = tempName;
+                userData.headshot = tempimg;
                 // tempName = newName;
                 localStorage.setItem('user', JSON.stringify(userData));
                 await upload();

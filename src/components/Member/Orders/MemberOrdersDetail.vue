@@ -1,8 +1,8 @@
 <template>
-        <div v-for="order in calorderpage" :key="order.id" class="orders-contain">
-            <p>{{ order.number }}</p> 
+        <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
+            <p>{{ order.order_number }}</p> 
             <p>{{ order.date }}</p>
-            <p>{{ order.prices }}</p>
+            <p>{{ order.price }}</p>
             <p>{{ order.payment }}</p>
             <p>{{ order.status }}</p>
             <p>{{ order.shipping }}</p>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-    import { computed, ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
     import BasicButton from '@/components/BasicButton.vue';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
@@ -25,106 +25,139 @@
         }
     });
     
-    const orders = ref([
-        {
-            number: 'OD20250001',
-            date: '2025-01-01',
-            prices: '$1,000',
-            payment: 'Credit card',
-            status: 'Paid',
-            shipping: 'Home delivery',
+    const orders = ref([]);
+    
+    const get_order = () => {
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/getmemberorder.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser);
+        const { member_ID } = userData;
+        
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                member_ID
+            })
+        }
+        ).then( res => res.json()
+        ).then( order_response => {
+            // 真正的陣列在 order_response.data 裡面
+            const realArray = order_response.data || []; 
+            localStorage.setItem('data', JSON.stringify(realArray));
+            orders.value = realArray;
+        });
+    };
 
-        },
-        {
-            number: 'OD20250002',
-            date: '2025-01-02',
-            prices: '$2,500',
-            payment: 'APPLE PAY',
-            status: 'Paid',
-            shipping: 'Home delivery',
 
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$800',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$80d0',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-        {
-            number: 'OD20250003',
-            date: '2025-01-03',
-            prices: '$8d00',
-            payment: 'APPLE PAY',
-            status: 'Pending',
-            shipping: 'Home delivery',
-        },
-    ]);
+    onMounted(() => {
+        get_order();        
+    })
+    
+    // const orders = ref([
+    //     {
+    //         number: 'OD20250001',
+    //         date: '2025-01-01',
+    //         prices: '$1,000',
+    //         payment: 'Credit card',
+    //         status: 'Paid',
+    //         shipping: 'Home delivery',
+
+    //     },
+    //     {
+    //         number: 'OD20250002',
+    //         date: '2025-01-02',
+    //         prices: '$2,500',
+    //         payment: 'APPLE PAY',
+    //         status: 'Paid',
+    //         shipping: 'Home delivery',
+
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$800',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$80d0',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    //     {
+    //         number: 'OD20250003',
+    //         date: '2025-01-03',
+    //         prices: '$8d00',
+    //         payment: 'APPLE PAY',
+    //         status: 'Pending',
+    //         shipping: 'Home delivery',
+    //     },
+    // ]);
 
     const itemsPerPage = 5;
 
@@ -133,7 +166,7 @@
         const end = start + itemsPerPage;
         return orders.value.slice(start, end);
     });
-
+    
     const totalPages = computed(() =>{
         return Math.ceil(orders.value.length / itemsPerPage);
     });

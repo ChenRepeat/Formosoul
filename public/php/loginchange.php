@@ -37,7 +37,6 @@ if ((string)$_SESSION['otp'] !== (string)$member['changeotp']) {
         SET password = :password
         WHERE email = :email;
     ';
-
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':password', $member['Newpassword']);
     $stmt->bindValue(':email', $_SESSION['otp_email']);

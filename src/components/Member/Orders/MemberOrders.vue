@@ -5,13 +5,13 @@
             </div>
             <div class="orders">
                 <div class="title-orders">
-                    <p>Number</p>
-                    <p>Date</p>
-                    <p>Prices</p>
-                    <p>Payment</p>
-                    <p>Status</p>
-                    <p>Shipping</p>
-                    <p>Detail</p>
+                    <p>{{$t('shoppingcart.orderNO')}}</p>
+                    <p>{{$t('shoppingcart.orderDate')}}</p>
+                    <p>{{$t('shoppingcart.price')}}</p>
+                    <p>{{$t('shoppingcart.payment')}}</p>
+                    <p>{{$t('shoppingcart.orderStatus')}}</p>
+                    <p>{{$t('shoppingcart.shipping')}}</p>
+                    <p>{{$t('shoppingcart.orderDetailTab')}}</p>
                 </div>
                 <hr class="title-orders-line">
                 

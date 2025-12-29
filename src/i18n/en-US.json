@@ -21,7 +21,9 @@
     "Payment":"Payment",
     "Delivery":"Delivery",
     "Returns":"Returns",
-    "privacyPolicy":"privacy Policy"
+    "privacyPolicy":"privacy Policy",
+    "welcome":"Hi, Welcome Back ~"
+
   },
   "classes":{
     "escTip":"Press Esc To Skip and Stop",
@@ -311,7 +313,13 @@
     "order":"ORDER",
     "ordersuccess":"Your order has been received !",
     "orderText1":"To check your order, please visit the",
-    "orderText2":"Member Center"
+    "orderText2":"Member Center",
+    "shipping":"Shipping",
+    "orderDetailTab":"Detail",
+    "orderStatus":"Status",
+    "orderDate":"Date",
+    "orderNO":"Number"
+
   },
   "coreselection":{
     "thecoreselection": "The Core Selection",
@@ -418,5 +426,26 @@
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
     }
   }
+  },
+  "member": {
+    "wandCore":"Wand Core:",
+    "enrollmentNo":"Enrollment Number:",
+    "enrollmentDate":"Enrollment Since:",
+    "memberName":"Name:",
+    "studentCard":"Student Enrollment Card",
+    "cardIntro":"This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.",
+    "cardWarning":"Don't leave the Common Room without it!",
+    "cardBTN1":"Edit your membercard",
+    "cardBTN2":"Check Your Ledger",
+    "memberInfo":"Member information",
+    "PWChange":"Change password",
+    "myOrders":"Query Orders",
+    "myCollect":"My Collections",
+    "coupons":"Coupons",
+    "oldPW":"Current password：",
+    "newPW":"New password：",
+    "newPWConf":"Confirm new password：",
+    "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
   }
+
 }
