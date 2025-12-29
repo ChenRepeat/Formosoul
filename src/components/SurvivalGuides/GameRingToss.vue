@@ -6,8 +6,8 @@
 
 // 過關蓋章
 const showCardOverlay = ref(false);
-const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
-const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue:false, bike:false });
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
 
 const handleCheckLedger = () => {
     showCardOverlay.value = true;
@@ -255,6 +255,7 @@ const checkGamePass = () => {
         passedGames.value.ringtoss = !!progress.ringtoss;
         passedGames.value.bue = !!progress.bue;
         passedGames.value.bike = !!progress.bike;
+        passedGames.value.wand = !!progress.wand;
     }
   });
   onUnmounted(() => {

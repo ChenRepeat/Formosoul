@@ -119,9 +119,12 @@ const props = defineProps({
     transform: scaleX(-1) rotate(-10deg);
   }
 
-  // &.wand{
-
-  // }
+  &.wand{
+    width: 40%;
+    height: 38%;
+    top: 14.9%;
+    left: 34.1%;
+  }
 
 }
 
