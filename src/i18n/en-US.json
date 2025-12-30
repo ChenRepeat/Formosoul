@@ -394,7 +394,7 @@
     "chicken": {
         "title": "Fried Chicken Cutlet",
         "subTitle":"(Taiwanese Fried Chicken)",
-        "popupDesc": "Food: \n Scallion pancake",
+        "popupDesc": "Food: \n Fried Chicken Cutlet",
         "fullText":"Famous for its massive size—often bigger than a human face—the Taiwanese Fried Chicken Cutlet is the king of night market snacks. The chicken breast is flattened, battered, and deep-fried to golden perfection. Seasoned generously with salt, pepper, and five-spice powder, it creates a crispy outer shell while keeping the meat incredibly juicy and tender inside."
     },
     "dice": {
@@ -411,6 +411,9 @@
         "fullText":"Ready to test your luck? 'Si-Ba-La' is the loudest and most exciting game in the night market! The rules are simple: throw three dice into the bowl and try to beat the stall owner's score. If your points are higher, you win a delicious sausage! But watch out—competition is fierce. Are you ready to challenge the boss?",
         "buttonText": "START GAME"
     },
+    "map-weather": {
+      "popupDesc": "Night Market Location & \n Weather"
+   }, 
     "ring-toss": {
         "title": "Ring Toss",
         "subTitle":"(Hoop Toss)",
@@ -425,12 +428,8 @@
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
+     }
     },
-   "map-weather": {
-      "popupDesc": "Night Market Location & \n Weather"
-   } 
-  }
-  },
   "member": {
     "wandCore":"Wand Core:",
     "enrollmentNo":"Enrollment Number:",
@@ -451,5 +450,5 @@
     "newPWConf":"Confirm new password：",
     "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
   }
-
+}
 }

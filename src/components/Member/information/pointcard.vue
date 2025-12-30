@@ -2,24 +2,24 @@
     <div class="membercard-wrapper">
         <div class="membercard">
             <!-- 多做hover後可以有資訊讓使用者觀看 -->
-                <div class="helmetcolor" :class="{ active: activeIcons.helmet}" @click="toggleIcon('helmet') ">
+                <div class="helmetcolor" >
                     <IconHelmet size="143" />
                 </div>
-                <div class="buecolor" :class="{ active: activeIcons.bue}" @click="toggleIcon('bue') ">
+                <div class="buecolor"  >
                     <!-- 改用figma -->
                     <IconBuecard size="137"/>
                 </div>
-                <div class="potioncolor" :class="{ active: activeIcons.potion}" @click="toggleIcon('potion') ">
+                <div class="potioncolor" >
                     <!-- 改用figma -->
                     <IconButton size="74"/>
                 </div>
-                <div class="dicecolor" :class="{ active: activeIcons.dice}" @click="toggleIcon('dice') ">
+                <div class="dicecolor">
                     <IconDice />
                 </div>
-                <div class="shrimpcolor" :class="{ active: activeIcons.shrimp}" @click="toggleIcon('shrimp') ">
+                <div class="shrimpcolor" >
                     <IconShrimp />
                 </div>
-                <div class="wandcorecolor" :class="{ active: activeIcons.wandcore}" @click="toggleIcon('wandcore') ">
+                <div class="wandcorecolor">
                     <IconWandCore />
                 </div>
         </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
 import IconDice from '@/components/icons/SVG/IconDice.vue';
@@ -37,9 +37,6 @@ import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
 import IconButton from '@/components/icons/SVG/IconButton.vue';
 
 
-    onMounted(() => {
-        get_order();
-    })
 
 
 const props = defineProps({
@@ -49,19 +46,52 @@ const props = defineProps({
     }
 });
 
+// const activeIcons = ref({
+//     helmet: false,
+//     bue: false,
+//     potion: false,
+//     dice: false,
+//     shrimp: false,
+//     wandcore: false,
+// });
 
-const activeIcons = ref({
-    helmet: false,
-    bue: false,
-    potion: false,
-    dice: false,
-    shrimp: false,
-    wandcore: false,
-});
+// function toggleIcon(key){
+//     activeIcons.value[key] = !activeIcons.value[key]; 
+// };
 
-function toggleIcon(key){
-    activeIcons.value[key] = !activeIcons.value[key]; 
+
+const get_pointscard = () => {
+        const storedUser = localStorage.getItem('user'); 
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/getPointsCard.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser);
+        const { member_ID } = userData;
+        // 這邊的member_ID 解構賦值 就只是拿資料而已
+
+        return fetch(API_URL, {
+            method: 'POST', // 通常都用POST
+            headers: { // 這邊是固定的
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                member_ID
+            })} // 讓member_id字串化
+        ).then( res => res.json() // 固定這樣寫，res 回傳json，這時候還沒拿到資料！
+        ).then( pointscard_res => { // 這邊就是要把資料拿出來用
+            console.log(pointscard_res)
+            if(pointscard_res.data.dice == 1){
+                console.log('骰子完成')
+                // 讓他上色
+            }
+        }
+        );
 };
+
+onMounted (()=>{
+    get_pointscard();
+})
+
 
 </script>
 
@@ -159,7 +189,7 @@ function toggleIcon(key){
         color: #B0B0B0;
 
         &.active {
-            color: #041426;
+            color: $color-fsRed;
         }
     }
 

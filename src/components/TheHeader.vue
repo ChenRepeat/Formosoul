@@ -448,7 +448,16 @@ img { object-fit: none; }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
 
 /* 漢堡按鈕 */
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;overflow: hidden;}
+.hamburger-btn { 
+  justify-content: center; 
+  gap: 8px;
+  align-items: end;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  overflow: hidden;
+}
 .transition { 
   transition: 0.5s ease-out ,color 0s;
 }
