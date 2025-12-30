@@ -5,8 +5,8 @@
             <!-- <p>{{ order.price }}</p> -->
             <p>{{ order.total }}</p>
             <p>{{ order.payment }}</p>
-            <p>{{ order.status }}</p>
-            <p>{{ order.shipping }}</p>
+            <p>{{ order.statuscode }}</p>
+            <p>{{ order.shippingcode }}</p>
             <!-- 換成p -->
             <p>
                 
@@ -37,7 +37,6 @@
         }
     });
 
-    console.log(props);
     const memberStore = useMemberStore();
     const router = useRouter();
     const orders = ref([]);
@@ -63,26 +62,35 @@
             const countArray = order_response.coupon || [];
             const realArray = order_response.data || []; 
             // localStorage.setItem('data', JSON.stringify(realArray));
-            // 使用 map 將兩個陣列的資料合併
             orders.value = realArray.map((order, index) => {
                     const couponInfo = countArray[index] || {};
                     const subtotalInfo = realArray[index] || {};
-                    // 1. 取得正確的原始金額欄位 (修正 subtotal -> total)
+
                     const count = parseInt(subtotalInfo.subtotal)|| 0;
                     const discount = parseInt(couponInfo.discount) || 0;
                     
-                    // 2. 運費判斷
                     const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
+                    const shippingMap = {
+                        '宅配' : 'Delivery',
 
+                    }
+                    // 物件映射
+                    const statusMap = {
+                        0: 'Shipped',
+                        1: 'Not Shipped',
+                        2: 'Completed'
+                    };
                     const finalTotal =  count + shippingFee - discount; 
 
                     return {
-                        ...order, // 自動帶入 order_number, date, status 等
-                        total: finalTotal, // 這裡會正確顯示 4467 而不是 -31
+                        ...order, 
+                        total: finalTotal,
+                        statuscode: statusMap[order.status] || 'unknown',
+                        shippingcode: shippingMap[order.shipping] || 'unknown'
                     };
                 });
             // orders.value = combinedOrders;
-            console.log(orders.value);
+            // console.log(orders.value);
         });
     };
 
