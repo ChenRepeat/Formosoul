@@ -131,10 +131,15 @@ const cook = () => {
   // 1.食材總數 == 飲料食材總數 
   const selectNum = selectList.length // 儲存被選到的食材名稱
   if(selectNum == 0){
-    resultBigTitle.value = 'classes.potionBigTitle1'
-    resultImg.value = "Classes/potions/glass.png"
+    resultBigTitle.value = 'classes.potionBigTitle0'
+    resultImg.value = "Classes/potions/eletricPot.png"
     hasContent.value = false
-  }else hasContent.value = true
+    
+  }else {
+    hasContent.value = true
+    resultBigTitle.value = 'classes.potionBigTitle2'
+
+  }
   for(let i = 1; i<= 8 ; i++){
     if(!selectNum) return
     let recipeNum = Object.values(potions[i].recipe).length 
@@ -227,8 +232,8 @@ onMounted(()=>{
 <!-- 結果畫面 -->
   <section v-else-if="afterCook" class="potion-right-result dp-flex-col">
       <h3 class="potion-right-result-bigtitle">{{$t(resultBigTitle)}}</h3>
-      <div class="potion-right-img-wrapper">
-        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'.potion-right-glass':!hasContent}">
+      <div class="potion-right-img-wrapper" :class="{'no-content':!hasContent}">
+        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'potion-right-glass':!hasContent}">
       </div>
       <h5 class="potion-right-result-title" v-show="hasContent">{{ $t(resultTitle) }}</h5>
       <p class="potion-right-result-intro" v-show="hasContent">{{ $t(resultIntro) }}</p>
@@ -372,7 +377,12 @@ onMounted(()=>{
   }
   .potion-right-img-wrapper{
     flex-basis: 0;
-    flex-grow: 5;
+    flex-grow: 4;
+    &.no-content{
+      flex-grow: 6;
+      padding: 14%;
+    }
+
     .potion-right-result-img{
       width: 100%;
     }

@@ -393,4 +393,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 //   backdrop-filter: blur(30px);  
 // }
 
+// RWD 1200 
+@media screen and (max-width:1200px) {
+    .food-introduction-frame{
+        // height: 60px;
+        margin-bottom: 100px;
+    }
+}
+
 </style>

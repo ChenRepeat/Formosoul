@@ -140,6 +140,7 @@
     "drawText1":"Draw Your Own !",
     "drawText2":"Make Your Product!",
 
+    "potionBigTitle0":"You will ruin your pot!",
     "potionBigTitle1":"Make Your Own!",
     "potionBigTitle2":"Your Own Potion",
     "potionTitle":"Potions",
@@ -424,7 +425,10 @@
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
-    }
+    },
+   "map-weather": {
+      "popupDesc": "Night Market Location & \n Weather"
+   } 
   }
   },
   "member": {
