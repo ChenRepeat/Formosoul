@@ -5,7 +5,7 @@
             <div class="coupon-left coupon-click left-used">
                 <p class="fw600">MAGIC FUN</p>
             </div>
-            <div class="coupon-center center-used">
+            <div v-if="coupondiscount" class="coupon-center center-used">
                 <div>
                 <h4 class="coupon-content content-used">$100 OFF</h4>
                 <h4>COUPON</h4>
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="coupon dp-flex">
+        <!-- <div class="coupon dp-flex">
             <div class="coupon-left coupon-click">
                 <p class="fw600">MAGIC FUN</p>
             </div>
@@ -33,8 +33,8 @@
             <div class="coupon-right">
                 <div><img src="../../../assets/LOGO_blackColor_coupon.svg" alt=""></div>
             </div>
-        </div>
-
+        </div> -->
+<!-- 
         <div class="coupon dp-flex">
             <div class="coupon-left">
                 <p class="fw600">MAGIC FUN</p>
@@ -50,12 +50,31 @@
             <div class="coupon-right">
                 <div><img src="../../../assets/LOGO_blackColor_coupon.svg" alt=""></div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script setup>
-    
+import { ref } from 'vue';
+    // const orders = ref([
+    //     {
+    //         number: 'OD20250001',
+    //         date: '2025-01-01',
+    //         status: 'Deliverd',
+    //         name: 'Irene',
+    //         shipping: 'Home delivery',
+    //         pieces: 'two',
+    //         address: '238 No. 31, Lane 45, Section 2, Baoan Street, Shulin District, New Taipei City',
+    //         remark: 'Please leave it with the security guard / front desk.',
+    //         notice: 'To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.',
+    //     },
+    // ]);
+    const coupondiscount = ref([
+        {
+            discount: 50,
+            Date: '2026-02-28',
+        }
+    ]);
 </script>
 
 <style scoped lang="scss">
