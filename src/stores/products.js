@@ -792,7 +792,7 @@ export const useProductStore = defineStore('products', () =>{
 
         // 如果使用者點選分類按鈕，那 typeBy 傳入值可能就不是 All
         if( typeBy.value !== 'All'){
-            finalDisplay = productListed.value.filter( p => p.type === typeBy.value);
+            finalDisplay = productListed.value.filter( p => p.type_en === typeBy.value);
         };
 
 
