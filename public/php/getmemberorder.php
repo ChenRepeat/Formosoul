@@ -3,16 +3,15 @@
   $member = json_decode(file_get_contents("php://input"), true);
 
   $sql = '
-        SELECT 
-        o.order_number,
-        o.date,
-        o.payment,
-        o.status,
-        o.shipping,
-        d.price
-        FROM formosoul.order o
-        LEFT JOIN order_detail d ON o.order_ID = d.order_ID
-        WHERE o.member_ID = :member_ID;
+      SELECT
+          order_number,
+          date,
+          payment,
+          status,
+          name_en,
+          shipping
+        FROM formosoul.order
+        WHERE member_ID = :member_ID;s
   ';
 
     $stmt = $pdo->prepare($sql);
