@@ -367,6 +367,7 @@ img { object-fit: none; }
     0 4px 10px rgba(0,0,0,0.2);
   backdrop-filter: blur(8px); 
     @media screen and (max-width: 1200px){
+      justify-content: center;
     border-radius: 18px;
     padding: 6px 20px;
     align-items: center;
@@ -429,7 +430,16 @@ img { object-fit: none; }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
 
 /* 漢堡按鈕 */
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;overflow: hidden;}
+.hamburger-btn { 
+  justify-content: center; 
+  gap: 8px;
+  align-items: end;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  overflow: hidden;
+}
 .transition { 
   transition: 0.5s ease-out ,color 0s;
 }

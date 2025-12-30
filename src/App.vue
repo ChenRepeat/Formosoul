@@ -137,12 +137,12 @@ onMounted(() => {
         <img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" :class="{'dpn':hideLogoRWD}"/>
       </RouterLink>
       <div v-if="authStore.isLoading" class="loading dp-flex">
-        <h1 v-for="(char, index) in 'Loading...'.split('')" 
+        <h3 v-for="(char, index) in 'Loading...'.split('')" 
           :key="index" 
           class="char"
           :ref="(el) => { if(el) charRefs[index] = el }"
         >
-          {{ char === ' ' ? '&nbsp;' : char }}</h1>
+          {{ char === ' ' ? '&nbsp;' : char }}</h3>
           <Wave :config=waveConfig :height=innerH />
       </div>
       <div>
@@ -177,7 +177,6 @@ onMounted(() => {
   flex-grow: 1;
   overflow: hidden;
   min-height: 1px;
-  // padding-top: 100px;
   position: relative;
 
 }
