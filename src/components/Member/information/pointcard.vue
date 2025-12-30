@@ -58,6 +58,41 @@ const props = defineProps({
 // function toggleIcon(key){
 //     activeIcons.value[key] = !activeIcons.value[key]; 
 // };
+
+
+const get_pointscard = () => {
+        const storedUser = localStorage.getItem('user'); 
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/getPointsCard.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser);
+        const { member_ID } = userData;
+        // 這邊的member_ID 解構賦值 就只是拿資料而已
+
+        return fetch(API_URL, {
+            method: 'POST', // 通常都用POST
+            headers: { // 這邊是固定的
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                member_ID
+            })} // 讓member_id字串化
+        ).then( res => res.json() // 固定這樣寫，res 回傳json，這時候還沒拿到資料！
+        ).then( pointscard_res => { // 這邊就是要把資料拿出來用
+            console.log(pointscard_res)
+            if(pointscard_res.data.dice == 1){
+                console.log('骰子完成')
+                // 讓他上色
+            }
+        }
+        );
+};
+
+onMounted (()=>{
+    get_pointscard();
+})
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -154,7 +189,7 @@ const props = defineProps({
         color: #B0B0B0;
 
         &.active {
-            color: #CC202B;
+            color: $color-fsRed;
         }
     }
 
