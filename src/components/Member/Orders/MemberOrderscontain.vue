@@ -25,10 +25,10 @@
         <div class="detailbar">
             <p>Products Information</p>
         </div>
-        <div v-for="product in products" class="orders-product">
-            <img :src="product.images" :alt="1">
-            <span><p>{{ product.name }}</p></span>
-            <span><p> {{ product.pieces }} item(s)</p></span>
+        <div v-for="product in productlist"  class="orders-product">
+            <img :src="product.url" :alt="1">
+            <span><p>{{ product.name_en }}</p></span>
+            <span><p> {{ product.quantity }} item(s)</p></span>
             <span><p>NT$ {{ product.price }}</p></span>
         </div>
         <div v-if="totallist" class="total">
@@ -53,7 +53,7 @@ import { useMemberStore } from '@/stores/member';
     const totallist = ref(null);
     const memberStore = useMemberStore();
     const route = useRoute();
-
+    const productlist = ref(null);
     // if(route.params && route.params.id){
     //     
 
@@ -118,32 +118,54 @@ import { useMemberStore } from '@/stores/member';
             totallist.value.total = subtotal.value;
         })
     }
+    function order_product(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/getorderproduct.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser); 
+        const order_number = route.params.id;
+        const { member_ID } = userData;
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                member_ID, 
+                order_number
+            })
+        }
+        ).then( res => res.json()
+        ).then( product_res => {
+            const productArray = product_res.data || [];
+            productlist.value = productArray.map((product, index) => {
+                const productInfo = productArray[index] || {};
+                const productid = productInfo.product_ID || 0;
+                const productprice = productInfo.price || 0;
+                const productpieces = productInfo.quantity || 0;
+                const product_total = productprice * productpieces;
+                const imgageurl = `${import.meta.env.BASE_URL}uploads/${productInfo.url}` || '';
 
+                // console.log(product_total);
+
+                return{
+                    ...product,
+                    product_ID: productid,
+                    price: product_total,
+                    url: imgageurl
+                }
+            })
+            // console.log(productArray);
+        })
+    };
 
     onMounted(() => {
         orderinformation();
+        order_product();
     });
 
-    const products = ref([
-        {
-            images: `${import.meta.env.BASE_URL}product/PelletDrum.jpg`,
-            name: 'PelletDrum',
-            spec: 'large',
-            pieces: '1',
-            price: '200',
-
-        },
-        {
-            images: `${import.meta.env.BASE_URL}product/PelletDrum.jpg`,
-            name: 'PelletDrum',
-            spec: 'large',
-            pieces: '1',
-            price: '99',
-
-        },
-
-
-    ]);
 
 
 </script>
@@ -198,8 +220,10 @@ import { useMemberStore } from '@/stores/member';
 
 
     .orders-product{
-        display: flex;
-        justify-content: space-between;
+        // display: flex;
+        // justify-content: space-between;
+        display: grid;
+        grid-template-columns: 0.8fr 1.8fr 1.2fr 0.8fr;
         margin: 0 32px;
         padding: 32px;
         border-bottom: 1px solid $color-fsCaption;
