@@ -150,7 +150,7 @@ function closeWelcomeFrame (){
             <div class="survival-night-market-case-wrapper-outer">
             <div class="survival-night-market-case-wrapper" :class="{ 'locked': !isMapReady }" >
 <!---------------------------------------- back btn -------------------------------------------->          
-                <div v-show="!isGameModalOpen">
+                <div v-show="!isGameModalOpen && !currentInfoData">
                     <RouterLink :to="{
                         name:'SurvivalGuide'
                     }">
@@ -183,13 +183,16 @@ function closeWelcomeFrame (){
                 </SurvivalTextFrame>
 <!---------------------------------------- v-for -------------------------------------------->
                 <div v-for="(item, index) in nmFrames" :key="index"
-                @mouseenter="isHover = item.id" 
+                @mouseenter="!currentInfoData && (isHover = item.id)"
                 @mouseleave="isHover = null" 
                 @click="openModal(index)"
                 :class="[{'nm-is-active': isHover == item.id,}, item.class ]">
                 <img :class="item.imgclass" :src="item.imgurl" :alt="item.imgalt">
                     
-                    <SurvivalTextFrame :class="`text-frame-${item.id}`"          :description="$t(item.description)"
+                    <SurvivalTextFrame
+                     v-if="!currentInfoData"
+                        :class="`text-frame-${item.id}`"          
+                        :description="$t(item.description)"
                         :width="item.width" 
                         :height="item.height"
                         tag="h5"
@@ -679,7 +682,7 @@ function closeWelcomeFrame (){
     position: absolute;
     z-index: 101;
     left: 25%;
-    bottom: -70%;
+    bottom: -30%;
     transform: translateX(-50%) translateY(-50%);
     margin-bottom: 10px;
     text-align: center;
@@ -724,7 +727,7 @@ function closeWelcomeFrame (){
     position: absolute;
     z-index: 101;
     left: 38%;
-    bottom: -60%;
+    bottom: -20%;
     transform: translateX(-50%) translateY(-50%);
     margin-bottom: 10px;
     text-align: center;

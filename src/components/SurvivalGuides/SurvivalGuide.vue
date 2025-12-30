@@ -132,7 +132,6 @@ const rightFrame = computed(()=> frames.value[1])
 
           <div class="survival-heropics-left-case"
           @mouseenter="isHover = 'left'"
-          @mouseleave="isHover = null"
           @click="isHover === null ? isHover = 'left' : isHover = null"
           :class="{
             'img-is-active': isHover == 'left',
@@ -160,7 +159,6 @@ const rightFrame = computed(()=> frames.value[1])
 
           <div class="survival-heropics-right-case" 
           @mouseenter="isHover = 'right'"
-          @mouseleave="isHover = null"
           @click="isHover === null ? isHover = 'right' : isHover = null"
           :class="{
             'img-is-active': isHover =='right',
@@ -243,11 +241,6 @@ const rightFrame = computed(()=> frames.value[1])
   color: $color-fsWhite;
 }
 
-// .survival-headline-inner1-case {
-//   // font-weight: bold;
-//   // border: 1px solid red;
-// }
-
 .survival-headline-case p {
   text-align: center;
 }
@@ -256,7 +249,7 @@ const rightFrame = computed(()=> frames.value[1])
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 100px;
+  gap: 120px;
   position: relative;
   height: 500px;
 }
@@ -293,17 +286,17 @@ const rightFrame = computed(()=> frames.value[1])
 // ============================= left part area ============================= 
 .survival-heropics-left-case {
   padding-top: 60px;
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   color: $color-fsWhite;
   text-align: center;
-  transition: all 1s ease;
+  transition: all 0.8s ease;
   cursor: pointer;
   position: relative;
 
   img {
-   width: 500px;
+    width: 500px;
     height: 380px;
     margin: 0 auto;
     z-index: 20;
@@ -313,7 +306,6 @@ const rightFrame = computed(()=> frames.value[1])
 .survival-heropics-left-case.img-is-active {
     z-index: 20;
     transform: translateX(200px) scale(1.3);
-    
   }
 
 .survival-heropics-left-case.img-is-inactive {
@@ -325,10 +317,10 @@ const rightFrame = computed(()=> frames.value[1])
 .survival-heropics-left-case h4.text-is-active {
   text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 30;
-  transform: translate(230px, -450px);
+  transform: translate(230px, -500px);
 }
 
-.survival-heropics-left-case:hover h4{
+.survival-heropics-left-case.img-is-active h4{
   font-size: 5.2rem;
 }
 
@@ -345,10 +337,6 @@ const rightFrame = computed(()=> frames.value[1])
   display: block;
 }
 
-// .survival-heropics-left-case:hover .fc-img {
-//   opacity: 1;
-//   display: block;
-// }
 
 .survival-heropics-left-case .tofu-img {
   object-fit: contain;
@@ -361,10 +349,6 @@ const rightFrame = computed(()=> frames.value[1])
   transition: all 1.2s ease-in-out;
 }
 
-// .survival-heropics-left-case:hover .tofu-img {
-//   opacity: 1;
-//   display: block;
-// }
 
 .survival-heropics-left-pics-group-case {
   position: relative;
@@ -401,14 +385,14 @@ const rightFrame = computed(()=> frames.value[1])
 
 // ============================= right part area ============================= 
 .survival-heropics-right-case {
-  width: 50%;
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   padding-top: 50px;
   color: $color-fsWhite;
   text-align: center;
-  transition: all 1s ease;
+  transition: all 0.8s ease;
   cursor: pointer;
   position: relative;
 
@@ -434,11 +418,11 @@ const rightFrame = computed(()=> frames.value[1])
   h4.text-is-active {
   text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 30;
-  transform: translate(-200px, -500px);
+  transform: translate(-300px, -500px);
   } 
 }
 
-.survival-heropics-right-case:hover h4{
+.survival-heropics-right-case.img-is-active h4{
   font-size: 5.2rem;
 }
 
