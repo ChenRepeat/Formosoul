@@ -19,7 +19,7 @@ const emit = defineEmits(['click'])
 
 
 <template>
-<div class="survival-text-frame" :style="{ width: props.width, height: props.height }">
+<div class="survival-text-frame" :style="{ width: props.width, maxWidth: '100%', height: props.height }">
 
   <template v-if="props.description">
     <h4 class="text-content title-style" :style="{textAlign: props.align}">

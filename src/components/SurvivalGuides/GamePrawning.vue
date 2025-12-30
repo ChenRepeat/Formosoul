@@ -61,10 +61,8 @@ const isGameReady = ref(true);
 const items = ref([]);
 
 // 隨機生成物品種類
-const generateRandomItems = (count) => {
+const generateRandomItems = (count, cWidth = 1000, cHeight = 800) => {
     const newItems = [];
-
-
     const imageLibrary = {
         shrimp: ['shrimp1.png', 'shrimp2.png', 'shrimp3.png'],
         trash:  ['bag.png', 'shoes.png', 'tire.png', 'can.png'],
@@ -127,14 +125,17 @@ const generateRandomItems = (count) => {
         let isOverlapping = true;
         let attempts = 0;
 
+        const margin = 10;
+        const startY = cHeight * 0.5;
+
         // 嘗試找位置，最多試 100 次，找不到就直接開始
         while (isOverlapping && attempts < 100) {
             attempts++;
             isOverlapping = false; // 先假設沒重疊
 
             // 隨機座標
-            x = Math.floor(Math.random() * 950) + 50; 
-            y = Math.floor(Math.random() * 250) + 400;
+            x = Math.floor(Math.random() * (cWidth - width - margin * 2)) + margin; 
+            y = Math.floor(Math.random() * (cHeight - height - startY - margin)) + startY;
 
             // 檢查跟「已經生成好」的物品有沒有太近
             for (const existingItem of newItems) {
@@ -153,9 +154,7 @@ const generateRandomItems = (count) => {
         
         newItems.push({
             id: index + 1,
-            type,
-            x, y,
-            width, height,
+            type, x, y, width, height,
             score: itemScore,
             caught: false,
             src: fullSrc
@@ -188,7 +187,10 @@ const initGame = () => {
     if(shootBetween) shootBetween.kill();
     isShooting = false;
 
-    items.value = generateRandomItems(20);
+    const cWidth = gameArea.value?.clientWidth || 1000;
+    const cHeight = gameArea.value?.clientHeight || 800;
+
+    items.value = generateRandomItems(20, cWidth, cHeight);
     
     gsap.set(gameHook.value, {rotation: 0});
     gsap.set(gameLine.value, {height: '50px'});
@@ -557,7 +559,7 @@ onUnmounted (()=> {
 .ui-mute {
     position: absolute;
     top: 20px;
-    left: 16%;
+    left: 18%;
     right:auto;
     
     font-size: 30px;
@@ -778,6 +780,17 @@ onUnmounted (()=> {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+}
+
+// RWD 1200 
+@media screen and (max-width:1200px) {
+    .ui-timer {
+        right: 18%;
+    }
+
+    .ui-mute{
+        left: 20%;
+    }
 }
 
 </style>

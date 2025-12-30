@@ -57,9 +57,17 @@ const currentInfoData = ref(null);
 // 只要傳入 index (第幾個食物)，它就會自動去抓上面的資料
 // 你給我一個號碼（index），我就去倉庫（nmfFrames）把對應的資料拿出來，放到電視螢幕（currentInfoData）上播放
 const openModal = (index) => {
+    const item = nmFrames.value[index];
+    
+    // 如果點到的是地圖，就開地圖遊戲
+    if (item.id === 'map-weather') {
+        openTaiwanMap();
+        return;
+    }
+
+    // 否則正常開啟食物介紹
     if (nmfFrames.value[index]) {
         currentInfoData.value = nmfFrames.value[index];
-        // 左邊current這變數是接收到物件
     }
 }
 
@@ -173,12 +181,6 @@ function closeWelcomeFrame (){
                     {{ $t("survivalguide.startbutton") }}
                 </template>
                 </SurvivalTextFrame>
-<!-------------------------------------- map 連API用 區塊 -------------------------------------------->
-                <div class="map-api-wrapper"
-                @click="openTaiwanMap"
-                >
-                    <img class='map-api' src="/SurvivalGuide/map_api.png" alt="map-api">
-                </div>
 <!---------------------------------------- v-for -------------------------------------------->
                 <div v-for="(item, index) in nmFrames" :key="index"
                 @mouseenter="isHover = item.id" 
@@ -340,24 +342,6 @@ function closeWelcomeFrame (){
     // z-index: 0;
 }
 
-// =====================    map api 的區塊 ===================
-.map-api-wrapper {
-    position: absolute;
-    width: 13%;
-    bottom: 25.3%;
-    right: 13%;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
-
-    cursor: pointer;
-
-        &:hover {
-        .map-api {
-            transform: scale(1.025);
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
-        }
-    }
-}
-
 // ===================== 滷肉飯 攤位的區塊 ===================== 
 .stall-wrapper-pork-rice {
     position: absolute;
@@ -427,7 +411,7 @@ function closeWelcomeFrame (){
 .text-frame-bubble {
     opacity: 0;
     position: absolute;
-    z-index: 101;
+    z-index: 102;
     left: 38%;
     bottom: -60%;
     transform: translateX(-40%) translateY(10px);
@@ -663,7 +647,7 @@ function closeWelcomeFrame (){
 .game-wrapper-dice {
     position: absolute;
     width: 18.1%;
-    bottom: -1%;
+    bottom: 2%;
     right: 27.3%;
     filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
 
@@ -801,6 +785,46 @@ function closeWelcomeFrame (){
     outline-offset: -10px;
 }
 
+// ===================== MAP & WEATHER API 的區塊 ======================
+.map-weather {
+    position: absolute;
+    width: 13%;
+    bottom: 25.3%;
+    right: 13%;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+
+    cursor: pointer;
+
+        &:hover {
+        .map-api {
+            transform: scale(1.025);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+        }
+    }
+}
+
+.text-frame-map-weather {
+    opacity: 0;
+    position: absolute;
+    z-index: 101;
+    left: 40%;
+    bottom: -60%;
+    transform: translateX(-50%) translateY(-50%);
+    margin-bottom: 10px;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.map-weather:hover .text-frame-map-weather{
+    opacity: 1;     
+    pointer-events: auto; 
+    transform: translate(40%, -120%);
+    outline: 1px solid $color-fsTitle;
+    outline-offset: -10px;
+}
+
+
 // ===================== 遊戲 Modal 的區塊 =================
 .game-modal-overlay {
     position: fixed;
@@ -826,6 +850,7 @@ function closeWelcomeFrame (){
     overflow: hidden;
     box-shadow: 0 0 50px rgba(0,0,0,0.8);
     border-radius: 7px;
+    margin-top: 40px;
 }
 .close-game-btn{
     position: absolute;
@@ -879,8 +904,25 @@ function closeWelcomeFrame (){
         
 }
 
-
 .locked {
     pointer-events: none;
 }
+
+.nm-is-active {
+    z-index: 998;
+}
+
+// RWD 1200 
+@media screen and (max-width:1200px) {
+    .btn-blue-fill {
+        bottom: 2%;
+    }
+
+    .game-content-modal{
+        height: 80vh;
+    }
+    
+}
+
+
 </style>
