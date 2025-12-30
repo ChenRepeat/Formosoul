@@ -37,6 +37,10 @@ import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
 import IconButton from '@/components/icons/SVG/IconButton.vue';
 
 
+    onMounted(() => {
+        get_order();
+    })
+
 
 const props = defineProps({
     withouteditbtn:{

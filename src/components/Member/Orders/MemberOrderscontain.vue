@@ -3,7 +3,7 @@
         <h3>Orders Detail</h3>
         <div class="detailbar">
             <p>Orders Information</p>
-            {{ $route.params.id }}
+            <!-- {{ $route.params.id }} -->
         </div>
         <div v-if="order" class="orders-information notice">
             <p>Order Number： <span>{{ order.order_number }}</span></p>
@@ -11,7 +11,7 @@
             <p>Order Status： {{ order.status }}</p>
             <p>Recipient's Name： {{ order.name_en }}</p>
             <p>Delivery method： {{ order.shipping }}</p>
-            <p>pieces： {{ order.quantity }}</p>
+            <p>pieces： {{ order.total_quantity }}</p>
             <p>address： {{ order.address_en }}</p>
             <p>Remark： {{ order.remark }}</p>
             <p>* Notice *<br>To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.</p>
@@ -31,11 +31,11 @@
             <span><p> {{ product.pieces }} item(s)</p></span>
             <span><p>NT$ {{ product.price }}</p></span>
         </div>
-        <div v-if="totals" class="total">
-            <span><p>Subtotal：</p><p>NT$ {{ totals.subtotal }}</p></span>
-            <span><p>Discount：</p><p>NT$ -{{ totals.discount }}</p></span>
-            <span><p>Shipping Fee：</p><p>NT$ {{ totals.fee }}</p></span>
-            <span><p>Total：</p><p>NT$ {{ totals.total }}</p></span>
+        <div v-if="totallist" class="total">
+            <span><p>Subtotal：</p><p>NT$ {{ totallist.totalPrice }}</p></span>
+            <span><p>Discount：</p><p>NT$ -{{ totallist.discount }}</p></span>
+            <span><p>Shipping Fee：</p><p>NT$ {{ totallist.fee }}</p></span>
+            <span><p>Total：</p><p>NT$ {{ totallist.total }}</p></span>
         </div>
 
         <div class="back-to-member">
@@ -44,18 +44,19 @@
     </div>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '@/components/BasicButton.vue';
 import { useMemberStore } from '@/stores/member';
-
     const order = ref(null);
+    const totallist = ref(null);
     const memberStore = useMemberStore();
     const route = useRoute();
-    console.log(route.params.id);
-    // if(route.query && route.query.id){
-        // 防網址
+
+    // if(route.params && route.params.id){
+    //     
+
     // }
     
     function orderinformation(){
@@ -72,6 +73,7 @@ import { useMemberStore } from '@/stores/member';
             headers: {
                 'Content-Type' : 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({
                 member_ID, 
                 order_number
@@ -80,12 +82,40 @@ import { useMemberStore } from '@/stores/member';
         ).then( res => res.json()
         ).then( information_response => {
             // localStorage.setItem(order_information, JSON.stringify(information_response));
+            const countArray = information_response.count || [];
             const realArray = information_response.data || [];
+            const totalQuantity = countArray.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = countArray.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const discountAmount = realArray.discount;
+            // console.log(totalQuantity);
+            // console.log(totalPrice);
+            // console.log(countArray);
+            realArray.total_quantity = totalQuantity;
+            countArray.totalPrice = totalPrice;
+            countArray.discount = discountAmount;
+
             order.value = realArray;
-            // console.log(order.value.payment);
+            totallist.value = countArray;
+
             if(order.value.payment === 'Credit Card'){
-                order.value.payment = 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB'
+                order.value.payment = 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB';
             }
+
+            // 修改成英文後 需改變判斷式
+            if(order.value.shipping === '宅配'){
+                const shippingfee = 80;
+                countArray.fee = shippingfee;
+            }else{
+                const shippingfee = 60;
+                countArray.fee = shippingfee; 
+            }
+        }
+        ).then( () => {
+            const subtotal = computed(() => {
+                const { discount, fee, totalPrice } = totallist.value;
+                return  fee + totalPrice - discount; 
+            });
+            totallist.value.total = subtotal.value;
         })
     }
 
@@ -93,20 +123,6 @@ import { useMemberStore } from '@/stores/member';
     onMounted(() => {
         orderinformation();
     });
-
-    // const orders = ref([
-    //     {
-    //         number: 'OD20250001',
-    //         date: '2025-01-01',
-    //         status: 'Deliverd',
-    //         name: 'Irene',
-    //         shipping: 'Home delivery',
-    //         pieces: 'two',
-    //         address: '238 No. 31, Lane 45, Section 2, Baoan Street, Shulin District, New Taipei City',
-    //         remark: 'Please leave it with the security guard / front desk.',
-    //         notice: 'To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.',
-    //     },
-    // ]);
 
     const products = ref([
         {
@@ -128,14 +144,8 @@ import { useMemberStore } from '@/stores/member';
 
 
     ]);
-    const totals = ref(
-        {
-            subtotal: '299',
-            discount: '9',
-            fee: '80',
-            total: '370',
-        }
-    );
+
+
 </script>
 
 <style lang="scss" scoped>

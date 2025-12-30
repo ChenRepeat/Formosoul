@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';     //語系控制
 
 // 宣告常數來接收 useRouter() ，方便後續使用 ----------------------------------------------
 const router = useRouter();
@@ -10,11 +11,11 @@ const router = useRouter();
 function goProductDetail(id){
   router.push({
     name:'ProductDetail',
-    params: { id: id}
+    params: { id: id }
   })
 };
 
-
+/* 假資料
 // 圖片陣列 ----------------------------------------------
 const cards = ref([
   { id: 1, img: 'Shop/1.png', isLike: false },
@@ -24,6 +25,7 @@ const cards = ref([
   { id: 5, img: 'Shop/5.png', isLike: false },
   { id: 6, img: 'Shop/6.png', isLike: false },
 ])
+*/
 
 // 接收商品陣列 ＊要放在 canvas 之前，程式才能讀得到 ----------------------------------------------
 const props = defineProps({
@@ -135,6 +137,20 @@ function likeHeart(product){
 }
 
 
+// 語系切換  -------------------------------------------------------
+const { locale } = useI18n();
+
+// 語系切換對照
+const langList = {
+    'en-US': 'en',
+    'zh-TW': 'zh'
+};
+
+const lang = computed( () => {
+    return langList[locale.value] || 'en';
+});
+
+
 
 </script>
 
@@ -174,9 +190,9 @@ function likeHeart(product){
         <font-awesome-icon icon="fa-solid fa-cart-shopping" />
       </div>
   
-      <h6 class="product-name" >{{product.name_en}}</h6>
+      <h6 class="product-name" >{{product[`name_${lang}`]}}</h6>
       <div class="product-content dp-flex" >
-        <p class="product-tag">#{{product.type}}</p>
+        <p class="product-tag">#{{product[`type_${lang}`]}}</p>
         <h6 class="product-price">NT {{product.price}}</h6>
       </div>
       <!-- <h6 class="product-name" >Bamboo Helicopter</h6>

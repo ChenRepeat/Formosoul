@@ -2,10 +2,11 @@
         <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
             <p>{{ order.order_number }}</p> 
             <p>{{ order.date }}</p>
-            <p>{{ order.price }}</p>
+            <!-- <p>{{ order.price }}</p> -->
+            <p>{{ order.total }}</p>
             <p>{{ order.payment }}</p>
-            <p>{{ order.status }}</p>
-            <p>{{ order.shipping }}</p>
+            <p>{{ order.statuscode }}</p>
+            <p>{{ order.shippingcode }}</p>
             <!-- 換成p -->
             <p>
                 
@@ -26,8 +27,8 @@
 <script setup>
     import { computed, onMounted, ref } from 'vue';
     import BasicButton from '@/components/BasicButton.vue';
-import { useRouter } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
+    import { useRouter } from 'vue-router';
+    import { useMemberStore } from '@/stores/member';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
         currentPage: {
@@ -35,6 +36,7 @@ import { useMemberStore } from '@/stores/member';
             default: 1
         }
     });
+
     const memberStore = useMemberStore();
     const router = useRouter();
     const orders = ref([]);
@@ -57,10 +59,38 @@ import { useMemberStore } from '@/stores/member';
         }
         ).then( res => res.json()
         ).then( order_response => {
-            // 真正的陣列在 order_response.data 裡面
+            const countArray = order_response.coupon || [];
             const realArray = order_response.data || []; 
             // localStorage.setItem('data', JSON.stringify(realArray));
-            orders.value = realArray;
+            orders.value = realArray.map((order, index) => {
+                    const couponInfo = countArray[index] || {};
+                    const subtotalInfo = realArray[index] || {};
+
+                    const count = parseInt(subtotalInfo.subtotal)|| 0;
+                    const discount = parseInt(couponInfo.discount) || 0;
+                    
+                    const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
+                    const shippingMap = {
+                        '宅配' : 'Delivery',
+
+                    }
+                    // 物件映射
+                    const statusMap = {
+                        0: 'Shipped',
+                        1: 'Not Shipped',
+                        2: 'Completed'
+                    };
+                    const finalTotal =  count + shippingFee - discount; 
+
+                    return {
+                        ...order, 
+                        total: finalTotal,
+                        statuscode: statusMap[order.status] || 'unknown',
+                        shippingcode: shippingMap[order.shipping] || 'unknown'
+                    };
+                });
+            // orders.value = combinedOrders;
+            // console.log(orders.value);
         });
     };
 
@@ -71,109 +101,9 @@ import { useMemberStore } from '@/stores/member';
 
     const handleCheckOrder = (orderNumber) => {
         memberStore.setOrderNumber(orderNumber);
-        router.push('/member/orderslist/orderscontain');
+        router.push(`/member/orderslist/orderscontain/${orderNumber}`);
     }
     
-    // const orders = ref([
-    //     {
-    //         number: 'OD20250001',
-    //         date: '2025-01-01',
-    //         prices: '$1,000',
-    //         payment: 'Credit card',
-    //         status: 'Paid',
-    //         shipping: 'Home delivery',
-
-    //     },
-    //     {
-    //         number: 'OD20250002',
-    //         date: '2025-01-02',
-    //         prices: '$2,500',
-    //         payment: 'APPLE PAY',
-    //         status: 'Paid',
-    //         shipping: 'Home delivery',
-
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$80d0',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$8d00',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    // ]);
 
     const itemsPerPage = 5;
 

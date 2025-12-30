@@ -20,8 +20,25 @@
           <IconButton class="ink-ringtoss" />
         </stampSlot>
       </div>
-            
-      <div class="stamp-position helmet"></div>
+
+      <div class="stamp-position bue">
+        <stampSlot :isUnlocked="passedGames.bue" :trigger="activeTriggers.bue">
+          <IconBuecard class="ink-bue" size='140'/>
+        </stampSlot>
+      </div>
+
+      <div class="stamp-position bike">
+        <stampSlot :isUnlocked="passedGames.bike" :trigger="activeTriggers.bike">
+          <IconHelmet class="ink-bike" size='140'/>
+        </stampSlot>
+      </div>
+
+      <div class="stamp-position wand">
+        <stampSlot :isUnlocked="passedGames.wand" :trigger="activeTriggers.wand">
+          <IconWandCore class="ink-wand" />
+        </stampSlot>
+      </div>
+
     </div>
   </div>
 </template>
@@ -30,6 +47,9 @@
 import IconButton from '@/components/icons/SVG/IconButton.vue';
 import stampSlot from './stampSlot.vue'
 import IconShrimp from '@/components/icons/SVG/IconShrimp.vue';
+import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
+import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
+import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
 
 const props = defineProps({
   passedGames: Object,
@@ -83,11 +103,37 @@ const props = defineProps({
     bottom: 13.1%;
     left: 16%;
   }
+
+  &.bue{
+    width: 25%;
+    height: 38%;
+    bottom: 4.1%;
+    left: 1.2%;
+  }
+
+  &.bike{
+    width: 29%;
+    height: 38%;
+    top: 9.1%;
+    left: 2.1%;
+    transform: scaleX(-1) rotate(-10deg);
+  }
+
+  &.wand{
+    width: 40%;
+    height: 38%;
+    top: 14.9%;
+    left: 34.1%;
+  }
+
 }
 
 .ink-shrimp,
 .ink-dice,
-.ink-ringtoss {
+.ink-ringtoss,
+.ink-bue,
+.ink-bike,
+.ink-wand {
   width: 100%;
   height: 100%;
 }

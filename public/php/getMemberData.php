@@ -1,6 +1,5 @@
   <?php
-  require_once 'conn.php';
-  $member = json_decode(file_get_contents("php://input"), true);
+  require_once 'conn.php'; 
 
   $sql = '
     select * from member

@@ -1,10 +1,10 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useRouter, useRoute } from "vue-router";     //使用路由功能、抓取參數
-import BasicButton from '../BasicButton.vue';
 import { useProductStore } from '@/stores/products';
-import { useI18n } from 'vue-i18n';       //因為 alert 需要使用
+import { useI18n } from 'vue-i18n';       //因為 alert 跟 語系控制 需要使用
+import BasicButton from '../BasicButton.vue';
 
 
 // 宣告常數來接收，方便後續使用
@@ -12,6 +12,7 @@ const router = useRouter();                // 按鈕
 const route = useRoute();                  // 從網址抓商品需要的參數
 const productstore = useProductStore();    // 商品data 
 const { t } = useI18n();                   // 把翻譯功能 t 取出來
+const { locale } = useI18n();              // 讀取語系狀態
 
 
 
@@ -93,7 +94,8 @@ const showDetail = ref(null);
 // 接到資料後，自動變成資料本身的型態
 
 // 大圖預設照片 ------------------------------------
-//const currentBigPic = ref(showDetail.value.images[0]);
+// const currentBigPic = ref(showDetail.value.images[0]);
+// 需要跟 watch 合併的原因：獨立處理且寫在下方的話，發生 else 時，讀取時會出錯造成 bug，跑不動
 const currentBigPic = ref('');
 
 watch(
@@ -158,145 +160,155 @@ function qtyMinus(){
     }
 }
 
+// 語系切換  -------------------------------------------------------
+
+// 語系切換對照
+const langList = {
+    'en-US': 'en',
+    'zh-TW': 'zh'
+};
+
+const lang = computed( () => {
+    return langList[locale.value] || 'en';
+});
+
 
 </script>
 
 <template>
-    <div v-if ="showDetail">
+    <div v-if ="showDetail">  <!-- 避免找不到商品時，產生白屏 -->
 
     
-    <!-- 麵包屑 -->
+        <!-- 麵包屑 -->
     
-    <h6 class="page-guide">
-        <RouterLink class="page-guide-text" to="/shop">All Product </RouterLink>
-        <font-awesome-icon icon="fa-solid fa-angle-right" />
-        {{ showDetail.type }}
-        <font-awesome-icon icon="fa-solid fa-angle-right" />
-        {{ showDetail.name_en }}
-    </h6>
+        <h6 class="page-guide">
+            <RouterLink class="page-guide-text" to="/shop">{{$t('productlist.all')}}</RouterLink>
+            <font-awesome-icon icon="fa-solid fa-angle-right" />
+            <span>{{ showDetail[`type_${lang}`] }}</span>
+            <font-awesome-icon icon="fa-solid fa-angle-right" />
+            <span>{{ showDetail[`name_${lang}`] }}</span>
+        </h6>
 
         
     
-    <div class="detail-dock">
+        <div class="detail-dock">
 
-        <!-- 主要內容 -->
-        <section class="detail-main dp-flex">
+            <!-- 主要內容 -->
+            <section class="detail-main dp-flex">
     
-            <div class="detail-pic dp-flex">
-                <ul class="detail-pic-small dp-flex-col">
-                    <li v-for="image in showDetail.images"
-                        :key="image"    
-                        @click="currentBigPic = image">
+                <div class="detail-pic dp-flex">
+                    <ul class="detail-pic-small dp-flex-col">
+                        <li v-for="image in showDetail.images"
+                            :key="image"    
+                            @click="currentBigPic = image">
 
-                        <img :src="`/tjd103/${image}`" alt="" :class="{currentpic: currentBigPic === image}">
-                    </li>
+                            <img :src="`/tjd103/${image}`" alt="" :class="{currentpic: currentBigPic === image}">
+                        </li>
 
-                    <!-- 把 li 變成動態載入 -->
-                    <!-- <li><img src="../../../public/Shop/2.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2-2.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2-1.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2-3.png" alt=""></li>
-                    <li><img src="../../../public/Shop/2-4.png" alt=""></li> -->
+                        <!-- 把 li 變成動態載入 -->
+                        <!-- <li><img src="../../../public/Shop/2.png" alt=""></li>
+                        <li><img src="../../../public/Shop/2-2.png" alt=""></li>
+                        <li><img src="../../../public/Shop/2-1.png" alt=""></li>
+                        <li><img src="../../../public/Shop/2-3.png" alt=""></li>
+                        <li><img src="../../../public/Shop/2-4.png" alt=""></li> -->
+                    </ul>
+                    <div class="detail-pic-big">
+                        <img :src="`/tjd103/${currentBigPic}`" alt="">
+
+                        <!-- 把 大圖 變成動態載入 -->
+                        <!-- <img src="../../../public/Shop/2.png" alt=""> -->
+                        <div class="detail-pic-icon-dock" @click="likeHeart">
+                            <font-awesome-icon v-if="showDetail.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
+                            <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart"/>
+                        </div>
+                    </div>
+                </div> 
+    
+                <div class="detail-text dp-flex-col">
+                    <div>
+                        <p class="fw200 no-i18n-anim">{{ showDetail.product_ID }}</p>
+                        <h5>{{ showDetail[`name_${lang}`] }}</h5>
+                        <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
+                        <p class="fw200">{{ showDetail[`description_${lang}`]}}</p>
+                        <div class="share-icon">
+                            <font-awesome-icon icon="fa-brands fa-square-facebook" />
+                            <font-awesome-icon icon="fa-brands fa-instagram" />
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <div class="qty dp-flex">
+                            <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
+                            <h6 class="no-i18n-anim">{{ productQty }}</h6>
+                            <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
+                        </div>
+                    
+                        <div class="btn-shopping dp-flex-col">
+                            <BasicButton 
+                            class="btn-yellow-fill btn-fix-width"
+                            @click="goCart()">    
+                                {{$t('productdetail.buynow')}}
+                                <font-awesome-icon icon="fa-solid fa-bag-shopping" />
+                            </BasicButton>
+                        
+                            <BasicButton class="btn-gray-fill btn-fix-width">
+                                {{$t('productdetail.addtocart')}}
+                                <font-awesome-icon icon="fa-solid fa-cart-plus" />
+                            </BasicButton>
+                        </div>
+
+                    </div>
+
+
+                
+                </div>
+            </section>
+        
+            <section class="detail-secondary">
+                <ul class="detail-tab dp-flex">
+                    <li :class="{show: tabInfo === 'story'}" @click="tabInfo = 'story'"><span>{{$t('productdetail.story')}}</span></li>
+                    <li :class="{show: tabInfo === 'howtoplay'}" @click="tabInfo = 'howtoplay'"><span>{{$t('productdetail.howtouse')}}</span></li>
+                    <li :class="{show: tabInfo === 'shipping'}" @click="tabInfo = 'shipping'"><span>{{$t('productdetail.shipping')}}</span></li>
+                    <li :class="{show: tabInfo === 'payment'}" @click="tabInfo = 'payment'"><span>{{$t('productdetail.payment')}}</span></li>
                 </ul>
-                <div class="detail-pic-big">
-                    <img :src="`/tjd103/${currentBigPic}`" alt="">
+            
+                <hr>
 
-                    <!-- 把 大圖 變成動態載入 -->
-                    <!-- <img src="../../../public/Shop/2.png" alt=""> -->
-                    <div class="detail-pic-icon-dock" @click="likeHeart">
-                        <font-awesome-icon v-if="showDetail.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
-                        <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart"/>
-                    </div>
-                </div>
-            </div> 
-    
-            <div class="detail-text dp-flex-col">
-                <div>
-                    <p class="fw200 no-i18n-anim">{{ showDetail.product_ID }}</p>
-                    <h5>{{ showDetail.name_en }}</h5>
-                    <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
-                    <p class="fw200">{{ showDetail.description_en }}</p>
-                    <div class="share-icon">
-                        <font-awesome-icon icon="fa-brands fa-square-facebook" />
-                        <font-awesome-icon icon="fa-brands fa-instagram" />
-                    </div>
-                </div>
-                
-                <div>
+                <p v-if="tabInfo === 'story'" class="fw200 story">
+                    {{ showDetail[`story_${lang}`] }}
+                </p>
 
-                    <div class="qty dp-flex">
-                        <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
-                        <h6 class="no-i18n-anim">{{ productQty }}</h6>
-                        <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
-                    </div>
-    
-                    <div class="btn-shopping dp-flex-col">
-                        <BasicButton 
-                        class="btn-yellow-fill btn-fix-width"
-                        @click="goCart()">    
-                            Buy Now
-                            <font-awesome-icon icon="fa-solid fa-bag-shopping" />
-                        </BasicButton>
-        
-                        <BasicButton class="btn-gray-fill btn-fix-width">
-                            Add to Cart
-                            <font-awesome-icon icon="fa-solid fa-cart-plus" />
-                        </BasicButton>
-                    </div>
+                <p v-if="tabInfo === 'howtoplay'" class="fw200 howtoplay">
+                    {{ showDetail[`use_${lang}`] }}
+                </p>
 
-                </div>
+                <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
+                    {{$t('productdetail.shippingTitle')}} <br>
+                    <br>
+                    {{$t('productdetail.shippingContent')}}
+                </p>
+            
+                <p v-if="tabInfo === 'payment'" class="fw200 payment">
+                    {{$t('productdetail.paymentTitle1')}} <br>
+                    <br>
+                    {{$t('productdetail.paymentContent1')}} <br>
+                    <br><br>
+                    {{$t('productdetail.paymentTitle2')}} <br>
+                    <br>
+                    {{$t('productdetail.paymentContent2')}}
+                </p>    
+            
+            </section>
+        </div>
 
-                
-    
-            </div>
-        </section>
-    
-        <section class="detail-secondary">
-            <ul class="detail-tab dp-flex">
-                <li :class="{show: tabInfo === 'story'}" @click="tabInfo = 'story'"><span>{{$t('productdetail.story')}}</span></li>
-                <li :class="{show: tabInfo === 'howtoplay'}" @click="tabInfo = 'howtoplay'"><span>{{$t('productdetail.howtouse')}}</span></li>
-                <li :class="{show: tabInfo === 'shipping'}" @click="tabInfo = 'shipping'"><span>{{$t('productdetail.shipping')}}</span></li>
-                <li :class="{show: tabInfo === 'payment'}" @click="tabInfo = 'payment'"><span>{{$t('productdetail.payment')}}</span></li>
-            </ul>
-    
-            <hr>
-
-            <p v-if="tabInfo === 'story'" class="fw200 story">
-                {{ showDetail.story_en }}
-            </p>
-
-            <p v-if="tabInfo === 'howtoplay'" class="fw200 howtoplay">
-                {{ showDetail.use_en }}
-            </p>
-
-            <p v-if="tabInfo === 'shipping'" class="fw200 shipping">
-                {{$t('productdetail.shippingTitle')}} <br>
-                <br>
-                {{$t('productdetail.shippingContent')}}
-            </p>
-    
-            <p v-if="tabInfo === 'payment'" class="fw200 payment">
-                {{$t('productdetail.paymentTitle1')}} <br>
-                <br>
-                {{$t('productdetail.paymentContent1')}} <br>
-                <br><br>
-                {{$t('productdetail.paymentTitle2')}} <br>
-                <br>
-                {{$t('productdetail.paymentContent2')}}
-            </p>    
-    
-        </section>
-    </div>
-
-    <BasicButton 
-        class="btn-white" 
-        @click="goProductList()">    
-        Back to Shop
-    </BasicButton>
+        <BasicButton 
+            class="btn-white" 
+            @click="goProductList()">    
+            Back
+        </BasicButton>
 
     </div>
-
-
 
 </template>
 

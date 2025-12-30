@@ -3,8 +3,7 @@
     
     <div class="page-header">
       <div class="header-content">
-        <h6 class="title">商品新增</h6>
-        <p class="sub-title">建立新的商品資料，儲存後預設為下架狀態。</p>
+        <h6 class="title">商品編輯</h6>
       </div>
       <el-button @click="goBack" class="add-btn" round>返回列表</el-button>
     </div>
@@ -52,7 +51,6 @@
               />
             </el-form-item>
           </el-col>
-
           <el-col :span="12">
             <el-form-item label="Product Type" required>
               <el-select v-model="addProductForm.typeEn" placeholder="Please select a type" style="width: 100%">
@@ -212,21 +210,22 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, ref, onMounted } from 'vue'
+import { useRouter,useRoute } from 'vue-router'
 import { Plus, UploadFilled } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
 
 const router = useRouter()
+const route = useRoute()
 const loading = ref(false)
+const productID = route.params.id
 
-// 表單資料模型
+// 表單資料
 const addProductForm = reactive({
   nameZh: '',
   nameEn: '',
   id: '', 
+  typeEn: '',
   typeZh: '',
-  typeEn:'',
   price: undefined, // 改為 undefined 讓 input-number 顯示為空
   stock: undefined,
   createDate: '', 
@@ -247,56 +246,53 @@ const goBack = () => {
   router.push('/admin/product-management') 
 }
 
-const submitForm = async () => {
-  loading.value = true;
-  
-  // 簡單驗證
-  if(!addProductForm.nameZh || !addProductForm.price) {
-      ElMessage.warning('請填寫必填欄位 (名稱、價格)');
+  const fetchProductDetails = async (id) => {
+    const apiBase = import.meta.env.VITE_API_BASE
+    const apiURL = `${apiBase}/getProductData.php?id=${id}`
+    try{
+      loading.value = true;
+      const response = await fetch(apiURL)
+      const data = await response.json()
+      console.log('抓回來的資料:',data)
+
+      if(data && data.length >0){
+        addProductForm.nameZh = data.name_zh;
+        addProductForm.nameEn = data.name_en;
+        addProductForm.id = data.product_ID;
+        addProductForm.typeEn = data.type_en;
+        addProductForm.typeZh = data.type_zh;
+        addProductForm.createDate = data.createdate;
+        addProductForm.descriptionZh = data.description_zh;
+        addProductForm.descriptionEn = data.description_en;
+        addProductForm.storyZh = data.story_zh;
+        addProductForm.storyEn = data.story_en;
+        addProductForm.useZh = data.use_zh;
+        addProductForm.useEn = data.use_en;
+      }
+      if (data.main_image) {
+        
+        // 把網址包裝成 Element Plus 看得懂的格式
+        mainImage.value = [
+          {
+            name: 'image.png',  // 顯示用，可任意取名
+            url: data.main_image // 這裡才是重點！要把後端的網址填進來
+          }
+        ];
+        
+      }
+
+    }catch (error) {
+    console.error(error);
+    } finally {
       loading.value = false;
-      return;
-  }
-
-  const apiBase = import.meta.env.VITE_API_BASE;
-  const API_URL = `${apiBase}/addProduct.php`;
-
-  const fd = new FormData();
-
-  for (const [key, value] of Object.entries(addProductForm)) {
-    // 處理 undefined 或 null 轉空字串
-    fd.append(key, value === undefined || value === null ? '' : value);
-  }
-
-  if (mainImage.value.length > 0) {
-    fd.append('mainImage', mainImage.value[0].raw);
-  }
-
-  subImages.value.forEach((file) => {
-    fd.append('subImages[]', file.raw);
-  });
-
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      body: fd        
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      ElMessage.success('商品新增成功！');
-      router.push('/admin/product-management');
-    } else {
-      ElMessage.error('新增失敗：' + data.message);
     }
-
-  } catch (error) {
-    console.error('Network error:', error);
-    ElMessage.error('系統發生錯誤，無法連線到伺服器');
-  } finally {
-    loading.value = false;
   }
-}
+
+  onMounted (() =>{
+    if (productID) {
+    fetchProductDetails(productID)
+  }
+  })
 </script>
 
 <style scoped>
@@ -315,10 +311,6 @@ const submitForm = async () => {
 .title {
   color: #1a1a1a;
   margin: 0 0 8px 0;
-}
-.sub-title {
-  color: #666;
-  margin: 0;
 }
 
 /* 通用卡片樣式 */

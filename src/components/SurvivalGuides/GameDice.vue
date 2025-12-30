@@ -4,14 +4,14 @@ import Dice from './Dice.vue';
 import Hand from './Hand.vue';
 import HandBack from './HandBack.vue';
 import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
-import MemberLedger from "../Member/information/memberLedger.vue";
+import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import IconDice from '@/components/icons/SVG/IconDice.vue';
     
 
 // 過關蓋章
 const showCardOverlay = ref(false);
-const passedGames = ref({ shrimp: false, dice: false, ringtoss: false });
-const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false });
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
+const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
 
 // ================ 鍵盤esc關閉 ================ 
 const emit = defineEmits(['close-game']);
@@ -321,6 +321,9 @@ onMounted(()=>{
     passedGames.value.shrimp = !!progress.shrimp;
     passedGames.value.dice = !!progress.dice;
     passedGames.value.ringtoss = !!progress.ringtoss;
+    passedGames.value.bue = !!progress.bue;
+    passedGames.value.bike = !!progress.bike;
+    passedGames.value.wand = !!progress.wand;
   }
 })
 
@@ -420,7 +423,8 @@ onUnmounted (() => {
                 </div>
                 <div class="result-btn-wrapper">
                     <button class=".btn-action btn-retry" @click="resetGame">PLAY AGAIN</button>
-                    <button class="btn-action btn-check">
+                    
+                    <button class="btn-action btn-check" @click="showCardOverlay = true">
                         CHECK YOUR LEDGER
                     </button>
                 </div>
@@ -428,7 +432,6 @@ onUnmounted (() => {
                 <div v-if="showCardOverlay" class="ledger-overlay-in-game">
                     <div class="card-modal">
                         <MemberLedger
-                            :hasscale="false" 
                             :passedGames="passedGames" 
                             :activeTriggers="activeTriggers"
                         />

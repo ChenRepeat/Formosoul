@@ -1,5 +1,6 @@
 <script setup>
   import { computed, ref, Transition } from 'vue';
+import FireworkTest from '../icons/SVG/fireworkTest.vue';
 
   const zi10 = ref(1);
   const dialogs = {
