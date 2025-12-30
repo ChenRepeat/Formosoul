@@ -134,18 +134,6 @@ const indexItems = ref([
     min-width: 0.3em;
     transition: color 0.3s;
   }
-  .page-index::after{
-    content: '';
-    width: 0;
-    height: 1px;
-    transition: all 0.3s;
-    background-color: $color-fsBlue;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    // transform: scaleX(0);
-
-  }
   .icon{
     font-size: 48px;
   }

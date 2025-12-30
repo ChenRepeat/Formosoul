@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import BasicButton from '../BasicButton.vue';
-
+import { useclassesStore } from '@/stores/classes';
+const classStore = useclassesStore();
 
 const canvasRef = ref(null);
 const context = ref(null);
@@ -37,20 +38,18 @@ const draw = (e) => {
   context.value.lineTo(offsetX, offsetY);
   context.value.stroke();
   const dataUrl = canvasRef.value.toDataURL();
-  emit('save-image', dataUrl);
+  classStore.imgShare(dataUrl);
 };
-const emit = defineEmits(['save-image']);
 const stopDrawing = () => {
   isDrawing.value = false;
   context.value.closePath();
-
 };
 
 const clearCanvas = () => {
   context.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
   context.value.fillStyle = "#FFFCC2";
   context.value.fillRect(0,0,canvasRef.value.width, canvasRef.value.height);
-  emit('save-image', 'Classes/charms/charm13.png');
+  classStore.imgShare('Classes/charms/charm13.png');
 };
 
 
