@@ -2,7 +2,8 @@
         <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
             <p>{{ order.order_number }}</p> 
             <p>{{ order.date }}</p>
-            <p>{{ order.price }}</p>
+            <!-- <p>{{ order.price }}</p> -->
+            <p>111</p>
             <p>{{ order.payment }}</p>
             <p>{{ order.status }}</p>
             <p>{{ order.shipping }}</p>

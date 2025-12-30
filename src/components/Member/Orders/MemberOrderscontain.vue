@@ -3,7 +3,7 @@
         <h3>Orders Detail</h3>
         <div class="detailbar">
             <p>Orders Information</p>
-            {{ $route.params.id }}
+            <!-- {{ $route.params.id }} -->
         </div>
         <div v-if="order" class="orders-information notice">
             <p>Order Number： <span>{{ order.order_number }}</span></p>
@@ -31,9 +31,9 @@
             <span><p> {{ product.pieces }} item(s)</p></span>
             <span><p>NT$ {{ product.price }}</p></span>
         </div>
-        <div v-if="totals" class="total">
+        <div v-if="order" class="total">
             <span><p>Subtotal：</p><p>NT$ {{ totals.subtotal }}</p></span>
-            <span><p>Discount：</p><p>NT$ -{{ totals.discount }}</p></span>
+            <span><p>Discount：</p><p>NT$ -{{ order.discount }}</p></span>
             <span><p>Shipping Fee：</p><p>NT$ {{ totals.fee }}</p></span>
             <span><p>Total：</p><p>NT$ {{ totals.total }}</p></span>
         </div>
@@ -128,14 +128,14 @@ import { useMemberStore } from '@/stores/member';
 
 
     ]);
-    const totals = ref(
-        {
-            subtotal: '299',
-            discount: '9',
-            fee: '80',
-            total: '370',
-        }
-    );
+    // const totals = ref(
+    //     {
+    //         subtotal: '299',
+    //         discount: '9',
+    //         fee: '80',
+    //         total: '370',
+    //     }
+    // );
 </script>
 
 <style lang="scss" scoped>

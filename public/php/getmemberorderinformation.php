@@ -1,9 +1,8 @@
   <?php
-  require_once 'conn.php';
-  $member = json_decode(file_get_contents("php://input"), true);
+  
 
   $sql = '
-    SELECT
+      SELECT
         o.order_number,
         o.date,
         o.payment,
@@ -13,9 +12,14 @@
         o.address_en,
         o.remark,
         d.quantity,
-        d.price
+        c.name AS coupon_name,      
+        c.discount,
+        p.name_en,
+        p.price
       FROM formosoul.order o
       LEFT JOIN order_detail d ON o.order_ID = d.order_ID
+      LEFT JOIN coupons c ON o.coupons_ID = c.coupons_ID
+      LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
   ';
 
