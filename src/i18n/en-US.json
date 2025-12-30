@@ -424,7 +424,10 @@
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
-    }
+    },
+   "map-weather": {
+      "popupDesc": "Night Market Location & \n Weather"
+   } 
   }
   },
   "member": {
