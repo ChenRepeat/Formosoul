@@ -6,5 +6,9 @@ export const useclassesStore = defineStore('classes', () => {
   const setPage = (num)=>{
     pageToTurn.value = num;
   }
-  return { pageToTurn , setPage }
+  const imgUrl = ref(null)
+  const imgShare = (data)=>{
+    imgUrl.value = data
+  }
+  return { pageToTurn , setPage, imgShare,imgUrl}
 })

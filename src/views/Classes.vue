@@ -109,12 +109,12 @@
       </div>
       <div class="page">
         <div class="page-content">
-          <CharmLeft @flip="goToPage" :shared-image="sharedImage"/>
+          <CharmLeft @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
         <div class="page-content">
-          <CharmRight  @flip="goToPage" @save-image="handleReceiveFrom"/>
+          <CharmRight  @flip="goToPage"/>
         </div>
       </div>
       <div class="page">
@@ -519,11 +519,6 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown);
   window.removeEventListener('resize', handleResize);
 });
-const sharedImage = ref('');
-
-const handleReceiveFrom = (url) => {
-  sharedImage.value = url;
-};
 </script>
 
 <style lang="scss" scoped>
