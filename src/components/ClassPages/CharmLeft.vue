@@ -2,11 +2,11 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import gsap from 'gsap';
   import { computed , nextTick, onMounted, ref , Transition, watch } from 'vue';
+  import { useclassesStore } from '@/stores/classes';
+  const classStore = useclassesStore();
   const rightArrow = ref(null);
   const clickCharm = ref('0');
   const showText = ref('0');
-  
-  const props = defineProps(['sharedImage']);
   const charmsRow1 = ref({
     1: {
         name: 'classes.charmName1',
@@ -131,22 +131,24 @@ function changeIntro(i) {
       return charmsRow2.value[selectedId];
     }
 });
-watch(() => props.sharedImage, (newVal) => {
-  if (newVal != 'Classes/charms/charm13.png') {
-    charmsRow2.value[13].imgUrl = newVal;
+watch(
+  () => classStore.imgUrl, // 監聽目標
+  (imgURL) => {
+    if (imgURL != 'Classes/charms/charm13.png') {
+    charmsRow2.value[13].imgUrl = imgURL;
     clickCharm.value = '13';
     changeIntro(13);
     stopAnimate();
   }else{
     clickCharm.value = '0';
-    charmsRow2.value[13].imgUrl = newVal;
+    charmsRow2.value[13].imgUrl = imgURL;
     changeIntro(0);
     gsap.killTweensOf('.userDrowed .over-lay');
     gsap.set('.userDrowed .over-lay', { '--active-blink': 0.8 });
-    breathAnimate();
-
-  
-}});
+    breathAnimate(); 
+}
+}
+);
 onMounted(async () => {
   await nextTick(); // 確保 DOM 渲染完畢
   if (clickCharm.value != '13') {
@@ -352,23 +354,18 @@ const buyWord = computed(() => {
   }
 
   .userDrowed{
-    // animation: changeShadow 1s ease infinite;
     height: 180px;
     box-sizing: border-box;
   }
 .rightArrow{
-  // animation: changeColor 0.5s ease infinite;
+  animation: changeColor 0.5s ease infinite;
 }
 @keyframes changeColor {
   0%{color:$color-fsGold}
   50%{color: $color-fsTitle;}
   100%{color:$color-fsGold}
 }
-@keyframes changeShadow {
-  0%{box-shadow: 0px 0px 18px $color-fsRed;}
-  50%{box-shadow: 0px 0px 6px $color-fsGold;}
-  100%{box-shadow: 0px 0px 18px $color-fsRed;}
-}
+
 .fade-enter-active,.fade-leave-active {
   transition: opacity 0.5s ease;
 }

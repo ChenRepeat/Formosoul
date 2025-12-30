@@ -1,7 +1,7 @@
 import './assets/style.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
+import vue3GoogleLogin from 'vue3-google-login';
 import App from './App.vue'
 import router from './router'
 
@@ -22,7 +22,7 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 import i18n from './i18n'; // 引用i18N 切換語系
 
 /* 4. 將圖示加入 Library */
-library.add(fas,fab,far)
+library.add(fas, fab, far)
 
 const app = createApp(App)
 
@@ -34,7 +34,11 @@ const langStore = useLangStore()
 langStore.setLanguage(langStore.locale)
 app.use(router)
 app.use(i18n)
-
+app.use(vue3GoogleLogin, {
+  clientId: '561502890556-apker4f72nuiip88t3in35lcpklgaitg.apps.googleusercontent.com',
+})
+// import.meta.env.VITE_GOOGLE_CLIENT_ID
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')
+

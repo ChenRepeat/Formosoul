@@ -31,7 +31,10 @@
                                     <hr>
                                 </div>
                                 <div class="otherlogin-icon">
-                                    <img :src="`${publicPath}member/googleicon.png`" alt="1">
+                                    <!-- <img :src="`${publicPath}member/googleicon.png`" alt="1"> -->
+                                    <GoogleLogin >
+
+                                    </GoogleLogin>
                                     <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="LineLogin">
                                 </div>
                             </div>
@@ -49,6 +52,7 @@
     import Enrollment from '../Login/Enrollment.vue';
     import Forgetpassword from './forgetpassword.vue';
     import Loginchangepassword from '../changepassword/loginchangepassword.vue';
+    import GoogleLogin from '@/components/Member/Login/googleLogin.vue'
     const publicPath = import.meta.env.BASE_URL;
     const authStore = useAuthStore();
     const sharedEmail = ref('');

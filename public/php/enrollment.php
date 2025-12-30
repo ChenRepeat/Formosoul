@@ -50,7 +50,6 @@
     $stmt->bindValue(':email', $member['email']);
     $stmt->bindValue(':password', $member['password']);
     $stmt->execute();
-    header('Content-Type: application/json; charset=utf-8');
     unset($_SESSION['otp']);
     unset($_SESSION['otp_email']);
     echo json_encode(['success' => true]);

@@ -215,7 +215,7 @@ const rightFrame = computed(()=> frames.value[1])
 
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 4px;
   padding-top: 130px;
   padding-bottom: 100px;
   position: relative;
