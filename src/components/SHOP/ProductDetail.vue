@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, watch, computed } from 'vue';
 import { useRouter, useRoute } from "vue-router";     //使用路由功能、抓取參數
 import { useProductStore } from '@/stores/products';
+import { useCartStore } from '@/stores/cart';
 import { useI18n } from 'vue-i18n';       //因為 alert 跟 語系控制 需要使用
 import BasicButton from '../BasicButton.vue';
 
@@ -10,7 +11,8 @@ import BasicButton from '../BasicButton.vue';
 // 宣告常數來接收，方便後續使用
 const router = useRouter();                // 按鈕 
 const route = useRoute();                  // 從網址抓商品需要的參數
-const productstore = useProductStore();    // 商品data 
+const productstore = useProductStore();    // 商品 data 
+const cartstore = useCartStore();          // 購物車 data
 const { t } = useI18n();                   // 把翻譯功能 t 取出來
 const { locale } = useI18n();              // 讀取語系狀態
 
@@ -177,7 +179,6 @@ const lang = computed( () => {
 
 <template>
     <div v-if ="showDetail">  <!-- 避免找不到商品時，產生白屏 -->
-
     
         <!-- 麵包屑 -->
     
@@ -189,8 +190,6 @@ const lang = computed( () => {
             <span>{{ showDetail[`name_${lang}`] }}</span>
         </h6>
 
-        
-    
         <div class="detail-dock">
 
             <!-- 主要內容 -->
@@ -246,13 +245,15 @@ const lang = computed( () => {
                     
                         <div class="btn-shopping dp-flex-col">
                             <BasicButton 
-                            class="btn-yellow-fill btn-fix-width"
-                            @click="goCart()">    
+                                class="btn-yellow-fill btn-fix-width"
+                                @click="goCart()">    
                                 {{$t('productdetail.buynow')}}
                                 <font-awesome-icon icon="fa-solid fa-bag-shopping" />
                             </BasicButton>
                         
-                            <BasicButton class="btn-gray-fill btn-fix-width">
+                            <BasicButton 
+                                class="btn-gray-fill btn-fix-width"
+                                @click="cartstore.addToCart( showDetail, productQty)">
                                 {{$t('productdetail.addtocart')}}
                                 <font-awesome-icon icon="fa-solid fa-cart-plus" />
                             </BasicButton>

@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useLangStore } from '@/stores/lang';
 import { useMemberStore } from '@/stores/member';
+import { useCartStore } from '@/stores/cart';
 
 const props = defineProps({
   isBlackStyle: {
@@ -17,6 +18,7 @@ const props = defineProps({
 const router = useRouter();
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
+const cartstore = useCartStore();          // 購物車 data
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
 const execLanguageChange = inject('execLanguageChange');
