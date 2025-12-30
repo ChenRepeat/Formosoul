@@ -352,23 +352,18 @@ const buyWord = computed(() => {
   }
 
   .userDrowed{
-    // animation: changeShadow 1s ease infinite;
     height: 180px;
     box-sizing: border-box;
   }
 .rightArrow{
-  // animation: changeColor 0.5s ease infinite;
+  animation: changeColor 0.5s ease infinite;
 }
 @keyframes changeColor {
   0%{color:$color-fsGold}
   50%{color: $color-fsTitle;}
   100%{color:$color-fsGold}
 }
-@keyframes changeShadow {
-  0%{box-shadow: 0px 0px 18px $color-fsRed;}
-  50%{box-shadow: 0px 0px 6px $color-fsGold;}
-  100%{box-shadow: 0px 0px 18px $color-fsRed;}
-}
+
 .fade-enter-active,.fade-leave-active {
   transition: opacity 0.5s ease;
 }
