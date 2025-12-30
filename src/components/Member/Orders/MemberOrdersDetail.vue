@@ -3,7 +3,7 @@
             <p>{{ order.order_number }}</p> 
             <p>{{ order.date }}</p>
             <!-- <p>{{ order.price }}</p> -->
-            <p>111</p>
+            <p>{{ order.total }}</p>
             <p>{{ order.payment }}</p>
             <p>{{ order.status }}</p>
             <p>{{ order.shipping }}</p>
@@ -27,8 +27,8 @@
 <script setup>
     import { computed, onMounted, ref } from 'vue';
     import BasicButton from '@/components/BasicButton.vue';
-import { useRouter } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
+    import { useRouter } from 'vue-router';
+    import { useMemberStore } from '@/stores/member';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
         currentPage: {
@@ -36,6 +36,8 @@ import { useMemberStore } from '@/stores/member';
             default: 1
         }
     });
+
+    console.log(props);
     const memberStore = useMemberStore();
     const router = useRouter();
     const orders = ref([]);
@@ -58,10 +60,29 @@ import { useMemberStore } from '@/stores/member';
         }
         ).then( res => res.json()
         ).then( order_response => {
-            // 真正的陣列在 order_response.data 裡面
+            const countArray = order_response.coupon || [];
             const realArray = order_response.data || []; 
             // localStorage.setItem('data', JSON.stringify(realArray));
-            orders.value = realArray;
+            // 使用 map 將兩個陣列的資料合併
+            orders.value = realArray.map((order, index) => {
+                    const couponInfo = countArray[index] || {};
+                    const subtotalInfo = realArray[index] || {};
+                    // 1. 取得正確的原始金額欄位 (修正 subtotal -> total)
+                    const count = parseInt(subtotalInfo.subtotal)|| 0;
+                    const discount = parseInt(couponInfo.discount) || 0;
+                    
+                    // 2. 運費判斷
+                    const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
+
+                    const finalTotal =  count + shippingFee - discount; 
+
+                    return {
+                        ...order, // 自動帶入 order_number, date, status 等
+                        total: finalTotal, // 這裡會正確顯示 4467 而不是 -31
+                    };
+                });
+            // orders.value = combinedOrders;
+            console.log(orders.value);
         });
     };
 
@@ -72,109 +93,9 @@ import { useMemberStore } from '@/stores/member';
 
     const handleCheckOrder = (orderNumber) => {
         memberStore.setOrderNumber(orderNumber);
-        router.push('/member/orderslist/orderscontain');
+        router.push(`/member/orderslist/orderscontain/${orderNumber}`);
     }
     
-    // const orders = ref([
-    //     {
-    //         number: 'OD20250001',
-    //         date: '2025-01-01',
-    //         prices: '$1,000',
-    //         payment: 'Credit card',
-    //         status: 'Paid',
-    //         shipping: 'Home delivery',
-
-    //     },
-    //     {
-    //         number: 'OD20250002',
-    //         date: '2025-01-02',
-    //         prices: '$2,500',
-    //         payment: 'APPLE PAY',
-    //         status: 'Paid',
-    //         shipping: 'Home delivery',
-
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$800',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$80d0',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    //     {
-    //         number: 'OD20250003',
-    //         date: '2025-01-03',
-    //         prices: '$8d00',
-    //         payment: 'APPLE PAY',
-    //         status: 'Pending',
-    //         shipping: 'Home delivery',
-    //     },
-    // ]);
 
     const itemsPerPage = 5;
 
