@@ -144,7 +144,10 @@ const rightFrame = computed(()=> frames.value[1])
           </div>
             <img class="fc-img" :class="{ 'show-deco': isHover == 'left' }" src="/SurvivalGuide/friedChicken_br.png" alt="">
             <img class="tofu-img" :class="{ 'show-deco': isHover == 'left' }" src="/SurvivalGuide/tofu_image.png" alt="">
-            <h4 :class="{'text-is-active': isHover == 'left',}" >{{$t("survivalguide.nightmarket")}}</h4>
+            <div :class="{'text-is-active': isHover == 'left',}" >
+
+              <h4>{{$t("survivalguide.nightmarket")}}</h4>
+            </div>
             
             <!-- "$t(leftFrame.text)" 等於 $t("survivalguide.leftframetext") -->
             <SurvivalTextFrame class='text-frame-left' 
@@ -171,9 +174,9 @@ const rightFrame = computed(()=> frames.value[1])
           </div>
             <img class="bubble-img" :class="{ 'show-deco': isHover == 'right' }" src="/SurvivalGuide/bubble_tea.png" alt="">
             <img class="lantern-img" :class="{ 'show-deco': isHover == 'right' }" src="/SurvivalGuide/lantern_image.png" alt="">
-            <h4 :class="{
-                'text-is-active': isHover == 'right',
-            }">{{ $t("survivalguide.conveniencestore") }}</h4>
+            <div :class="{'text-is-active': isHover == 'right',}">
+              <h4>{{ $t("survivalguide.conveniencestore") }}</h4>
+            </div>
 
             <SurvivalTextFrame class='text-frame-right' 
             v-show="isHover == 'right'" 
@@ -314,8 +317,10 @@ const rightFrame = computed(()=> frames.value[1])
     transform: scale(0.9);
   }
 
-.survival-heropics-left-case h4.text-is-active {
-  text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+.survival-heropics-left-case .text-is-active{
+  h4{
+    text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+  }
   z-index: 30;
   transform: translate(230px, -500px);
 }
@@ -415,8 +420,10 @@ const rightFrame = computed(()=> frames.value[1])
     transform: scale(0.9);
   }
 
-  h4.text-is-active {
-  text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+  .text-is-active {
+    h4{
+      text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
+    }
   z-index: 30;
   transform: translate(-300px, -500px);
   } 
@@ -580,10 +587,10 @@ const rightFrame = computed(()=> frames.value[1])
   .survival-heropics-right-case {
     flex: 1; 
   }
-  .survival-heropics-left-case h4.text-is-active {
+  .survival-heropics-left-case .text-is-active {
     transform: translate(150px, -400px); 
   }
-  .survival-heropics-right-case h4.text-is-active {
+  .survival-heropics-right-case .text-is-active {
     transform: translate(-150px, -400px);
   }
 }
