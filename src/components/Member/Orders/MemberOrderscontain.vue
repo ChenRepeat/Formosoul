@@ -73,7 +73,7 @@ import { useMemberStore } from '@/stores/member';
             headers: {
                 'Content-Type' : 'application/json'
             },
-            credentials: 'include',
+            // credentials: 'include',
             body: JSON.stringify({
                 member_ID, 
                 order_number
@@ -223,7 +223,7 @@ import { useMemberStore } from '@/stores/member';
         // display: flex;
         // justify-content: space-between;
         display: grid;
-        grid-template-columns: 0.8fr 1.8fr 1.2fr 0.8fr;
+        grid-template-columns: 1fr 1fr 1.5fr 0.5fr;
         margin: 0 32px;
         padding: 32px;
         border-bottom: 1px solid $color-fsCaption;

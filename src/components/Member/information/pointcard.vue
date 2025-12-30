@@ -2,24 +2,24 @@
     <div class="membercard-wrapper">
         <div class="membercard">
             <!-- 多做hover後可以有資訊讓使用者觀看 -->
-                <div class="helmetcolor" :class="{ active: activeIcons.helmet}" @click="toggleIcon('helmet') ">
+                <div class="helmetcolor" >
                     <IconHelmet size="143" />
                 </div>
-                <div class="buecolor" :class="{ active: activeIcons.bue}" @click="toggleIcon('bue') ">
+                <div class="buecolor"  >
                     <!-- 改用figma -->
                     <IconBuecard size="137"/>
                 </div>
-                <div class="potioncolor" :class="{ active: activeIcons.potion}" @click="toggleIcon('potion') ">
+                <div class="potioncolor" >
                     <!-- 改用figma -->
                     <IconButton size="74"/>
                 </div>
-                <div class="dicecolor" :class="{ active: activeIcons.dice}" @click="toggleIcon('dice') ">
+                <div class="dicecolor">
                     <IconDice />
                 </div>
-                <div class="shrimpcolor" :class="{ active: activeIcons.shrimp}" @click="toggleIcon('shrimp') ">
+                <div class="shrimpcolor" >
                     <IconShrimp />
                 </div>
-                <div class="wandcorecolor" :class="{ active: activeIcons.wandcore}" @click="toggleIcon('wandcore') ">
+                <div class="wandcorecolor">
                     <IconWandCore />
                 </div>
         </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
 import IconDice from '@/components/icons/SVG/IconDice.vue';
@@ -37,9 +37,6 @@ import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
 import IconButton from '@/components/icons/SVG/IconButton.vue';
 
 
-    onMounted(() => {
-        get_order();
-    })
 
 
 const props = defineProps({
@@ -49,20 +46,18 @@ const props = defineProps({
     }
 });
 
+// const activeIcons = ref({
+//     helmet: false,
+//     bue: false,
+//     potion: false,
+//     dice: false,
+//     shrimp: false,
+//     wandcore: false,
+// });
 
-const activeIcons = ref({
-    helmet: false,
-    bue: false,
-    potion: false,
-    dice: false,
-    shrimp: false,
-    wandcore: false,
-});
-
-function toggleIcon(key){
-    activeIcons.value[key] = !activeIcons.value[key]; 
-};
-
+// function toggleIcon(key){
+//     activeIcons.value[key] = !activeIcons.value[key]; 
+// };
 </script>
 
 <style lang="scss" scoped>
@@ -159,7 +154,7 @@ function toggleIcon(key){
         color: #B0B0B0;
 
         &.active {
-            color: #041426;
+            color: #CC202B;
         }
     }
 
