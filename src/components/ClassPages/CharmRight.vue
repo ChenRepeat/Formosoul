@@ -2,7 +2,9 @@
 import { ref, onMounted } from 'vue';
 import BasicButton from '../BasicButton.vue';
 import { useclassesStore } from '@/stores/classes';
+import { useMemberStore } from '@/stores/member';
 const classStore = useclassesStore();
+const memberStore = useMemberStore();
 
 const canvasRef = ref(null);
 const context = ref(null);
@@ -55,6 +57,9 @@ const clearCanvas = () => {
 
 const save = () => {
   const finalData = canvasRef.value.toDataURL();
+  memberStore.saveGameResult('charm',{img:finalData});
+  memberStore.gameData.charm.img = finalData;
+  console.log("圖片長度:", memberStore.gameData.charm.img.length);
 };
 // 可以用 context.drawImage(Image, dX, dY, dWidth, dHeight); 把base64寫回canvas
 

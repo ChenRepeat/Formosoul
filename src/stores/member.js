@@ -16,9 +16,17 @@ export const useMemberStore = defineStore('member', () => {
         number: 'Your Number',
         date: 'Enrollment Date',
         isEditing: false, 
-        tempName: '' 
+        tempName: '',
+        pointscard_ID:'',
     });
-
+    const gameData = ref({
+        bue: { count: 0, pass: 0 },
+        charm: { img: null },
+        dice: { count: 0, pass: 0 },
+        motor: { count: 0, score: 0, pass: 0 },
+        ring: { count: 0, score: 0, pass: 0 },
+        shrimp: { count: 0, score: 0, pass: 0 },
+    });
     const loadMemberData = async () => {
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -46,7 +54,35 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.number = dbData.member_ID;
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
+                memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
                 imgURL.value = dbData.headshot || '';
+                gameData.value.bue = { 
+                    count: dbData.buegame_count, 
+                    pass: dbData.buegame_pass 
+                };
+                gameData.value.charm = {
+                    img: dbData.charmgame_img1, 
+                };
+                gameData.value.dice = {
+                    count: dbData.dicegame_count, 
+                    pass: dbData.dicegame_pass 
+                };
+                gameData.value.motor = {
+                    count: dbData.motorcyclegame_count, 
+                    pass: dbData.motorcyclegame_pass 
+                };
+                gameData.value.ring = {
+                    count: dbData.ringgame_count, 
+                    pass: dbData.ringgame_pass,
+                    score: dbData.ringgame_score,
+                };
+                gameData.value.shrimp = {
+                    count: dbData.shrimpgame_count, 
+                    pass: dbData.shrimpgame_pass,
+                    score: dbData.shrimpgame_score,
+                };
+                console.log(dbData);
+                
             }else{
                 console.error(result.message);
             }
@@ -83,6 +119,47 @@ export const useMemberStore = defineStore('member', () => {
 
     // 之後把會員資料丟到這邊 比較好讓其他遊戲進行管理
 
+    //  遊戲資料存檔
+    const saveGameResult = async (gameType, gamePayload) => {
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/saveGameData.php`;
+        if (!memberData.value.pointscard_ID) {
+            console.error("錯誤：找不到集點卡 ID，無法存檔 (請確認是否已登入)");
+            return;
+        }
+        try {
+            const payload = {
+                pointscard_ID: memberData.value.pointscard_ID,
+                member_ID: memberData.value.number,
+                gameType: gameType,
+                score: gamePayload.score || 0,
+                pass: gamePayload.pass || 0,
+                img: gamePayload.img || ''
+            };
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers:{'Content-Type': 'application/json; charset=utf-8'},
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            if(result.success){
+                console.log(`[${gameType}] 存檔成功:`, result.message);
+                if(gameData.value[gameType]){
+                    const currentData = gameData.value[gameType];
+                    currentData.pass = Math.max(currentData.pass, payload.pass);
+                    if (payload.score) {
+                        currentData.score = Math.max(currentData.score, payload.score);
+                    }
+                    currentData.count = (currentData.count || 0) + 1;
+                }
+            } else {
+                console.error('後端存檔失敗:', result.message);
+            }
+        } catch (error) {
+            console.error('API 連線錯誤:', error);
+        }
+    };
+
     const updateName = (newName) => {
         memberData.value.name = newName;
     };
@@ -100,5 +177,7 @@ export const useMemberStore = defineStore('member', () => {
         loadMemberData,
         orders,
         setOrderNumber,
+        saveGameResult,
+        gameData,
     };
 });

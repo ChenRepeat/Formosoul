@@ -3,6 +3,9 @@
   import gsap from 'gsap';
   import { computed , nextTick, onMounted, ref , Transition, watch } from 'vue';
   import { useclassesStore } from '@/stores/classes';
+  import { useMemberStore } from '@/stores/member';
+
+  const memberStore = useMemberStore();
   const classStore = useclassesStore();
   const rightArrow = ref(null);
   const clickCharm = ref('0');
@@ -72,7 +75,7 @@
     13: {
         name: 'classes.charmName13',
         intro: 'classes.charmText13', 
-        imgUrl:'Classes/charms/charm13.png',
+        imgUrl: 'Classes/charms/charm13.png'
     },
     14: {
         name: 'classes.charmName14',
@@ -149,8 +152,19 @@ watch(
 }
 }
 );
+watch(
+  () => memberStore.gameData.charm.img, 
+  (newImg) => {
+    if (newImg && newImg !== '0') {
+      charmsRow2.value[13].imgUrl = newImg;
+    }
+  },
+);
 onMounted(async () => {
   await nextTick(); // 確保 DOM 渲染完畢
+  const userDraw = memberStore.gameData.charm.img;
+  if (userDraw && userDraw !== '0') {charmsRow2.value[13].imgUrl = userDraw;}
+  
   if (clickCharm.value != '13') {
     breathAnimate();
 
