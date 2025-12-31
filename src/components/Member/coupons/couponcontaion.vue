@@ -104,9 +104,10 @@ import { useRoute } from 'vue-router';
         }
         ).then( res => res.json()
         ).then( coupon_information => {
+            console.log(coupon_information);
             const coupon_Array = coupon_information.data || [];
-            if( coupon_Array == []){
-                return 'No';
+            if(!coupon_Array.success){
+                console.log('NO');
             }
             get_coupon_information.value = coupon_Array.map((coupon, index) => {
                 const couponInfo = coupon_Array[index] || {};

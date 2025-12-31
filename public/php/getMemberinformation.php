@@ -1,4 +1,4 @@
-  <?php
+<?php
   require_once 'conn.php';
   $member = json_decode(file_get_contents("php://input"), true);
 
@@ -6,10 +6,11 @@
     SELECT 
       m.name,
       m.member_ID,
-      DATE_FORMAT(m.createdate, \'%Y-%m-%d\') AS createdate,
+      DATE_FORMAT(m.createdate, "%Y-%m-%d") AS createdate,
       m.updatetime,
       m.pointscard,
       m.headshot,
+      p.pointscard_ID,
       w.name_en,
       w.name_zh,
       bg.buegame_count,
@@ -53,8 +54,7 @@
         }
         echo json_encode([
         'success' => true,
-        'data' => $user_data,
-        'img' => $rawHeadshot
+        'data' => $user_data
       ]);
     } else {
         echo json_encode(['success' => false, 'message' => '找不到會員']);
