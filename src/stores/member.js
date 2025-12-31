@@ -41,7 +41,8 @@ export const useMemberStore = defineStore('member', () => {
             const result = await response.json();
             if(result.success){
                 const dbData = result.data;
-
+                console.log(dbData);
+                
                 // === 修正後的圖片處理邏輯 ===
                 let rawHeadshot = dbData.headshot;
 
