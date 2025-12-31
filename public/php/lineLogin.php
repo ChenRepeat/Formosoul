@@ -99,7 +99,7 @@ if ($member) {
     // ===【情況 B：是新會員】===
     // 建立新資料時，就只存 Email 和基本資料
     $insertStmt = $pdo->prepare("INSERT INTO member (member_ID, email, `name`, headshot, createdate, `status`, pointscard, updatetime, `role`) 
-    VALUES (NULL,?, ?, ?, NOW(), 0, 0, NOW(), 0)");
+    VALUES (NULL,?, ?, ?, NOW(), 1, 0, NOW(), 0)");
     $insertStmt->execute([$user_email, $user_name, $user_avatar]);
     
     $newUserId = $pdo->lastInsertId();
