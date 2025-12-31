@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useLangStore } from '@/stores/lang';
 import { useMemberStore } from '@/stores/member';
+import { useCartStore } from '@/stores/cart';
 
 const props = defineProps({
   isBlackStyle: {
@@ -17,6 +18,7 @@ const props = defineProps({
 const router = useRouter();
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
+const cartstore = useCartStore();          // 購物車 data
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
 const execLanguageChange = inject('execLanguageChange');
@@ -170,8 +172,11 @@ onUnmounted(() => {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <router-link to="/shoppingcart" class="no-i18n-anim "><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
-             @click="closeMenu"/></router-link>
+          <router-link to="/shoppingcart" class="no-i18n-anim ">
+          <font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
+          @click="closeMenu"/>
+          <span v-if=" cartstore.totalQty > 0 " class="cart-qty">{{ cartstore.totalQty }}</span>
+        </router-link>
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
             <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"
@@ -367,6 +372,7 @@ img { object-fit: none; }
     0 4px 10px rgba(0,0,0,0.2);
   backdrop-filter: blur(8px); 
     @media screen and (max-width: 1200px){
+    justify-content: center;
     border-radius: 18px;
     padding: 6px 20px;
     align-items: center;
@@ -388,9 +394,24 @@ img { object-fit: none; }
 .liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; }
 
 .header-icons-list { gap: 20px; align-items: center; 
+  position: relative;
   > button{ 
   background-color: transparent; 
   border: 0;
+  }
+
+  & .cart-qty{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    text-align: center;
+    line-height: 14px;
+    font-size: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 22px;
   }
 }
 
@@ -429,7 +450,16 @@ img { object-fit: none; }
 .burger-list.active { opacity: 1; transform: translateY(0); z-index: 11;height: auto;}
 
 /* 漢堡按鈕 */
-.hamburger-btn { justify-content: center; gap: 8px; align-items: end; cursor: pointer; height: 24px;width: 24px;position: relative;overflow: hidden;}
+.hamburger-btn { 
+  justify-content: center; 
+  gap: 8px;
+  align-items: end;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  overflow: hidden;
+}
 .transition { 
   transition: 0.5s ease-out ,color 0s;
 }
@@ -521,6 +551,12 @@ img { object-fit: none; }
   h6{
     font-size: 1.8rem;
 
+  }
+
+  .header-icons-list {  
+    & .cartqty{
+      left: 18px;
+    }
   }
 }
 

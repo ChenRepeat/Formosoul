@@ -16,7 +16,7 @@
     $couponsql->bindValue(':member_ID', $member['member_ID']);
     $couponsql->execute();
     $coupon_discount = $couponsql->fetchAll(PDO::FETCH_ASSOC);
-
+  // COALESCE(SUM(p.price * d.quantity), 0) COALESCE(a, b) 如果a是null 就回傳b 
   $sql = '
       SELECT
           o.order_number,

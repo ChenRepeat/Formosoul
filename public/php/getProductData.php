@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
     ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$_GET['id']]);
-    //PDO::FETCH_ASSOC=>取消撈出來為索引的陣列
+    //PDO::FETCH_ASSOC=>過濾掉索引陣列
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($product) {

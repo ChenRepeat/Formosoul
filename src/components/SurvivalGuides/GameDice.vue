@@ -61,7 +61,7 @@ const updateMouse = (e) => {
 
 const diceOrigins = [
     {left: 0.8, top: 0.4},
-    {left: 0.1, top: 0.2},
+    {left: 0.2, top: 0},
     {left: 0.15, top: 0.75},
 
 ]
@@ -489,8 +489,8 @@ onUnmounted (() => {
     
     .dice-container {
         position: relative;
-        width: 500px;
-        height: 500px;
+        width: 50%;
+        height: 50%;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);    
@@ -527,7 +527,7 @@ onUnmounted (() => {
 
     .bankerbox,
     .playerbox{
-        width: 200px;
+        width: 15%;
         height: auto;
         text-align: center;
         border: 5px solid $color-fsGold;

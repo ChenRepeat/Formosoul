@@ -33,9 +33,12 @@ export const useMemberStore = defineStore('member', () => {
                 headers:{
                     'Content-Type': 'application/json; charset=utf-8'
                 },
+                credentials: 'include',
                 // 這裡要對應 PHP 的接收格式
                 body: JSON.stringify({name: loginName, member_ID})
             });
+
+            
             const result = await response.json();
             if(result.success){
                 const dbData = result.data;
@@ -43,11 +46,7 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.number = dbData.member_ID;
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
-                if(dbData.headshot === 'data:image\/jpeg;base64,'){
-                    imgURL.value = ''
-                }else{
-                    imgURL.value = dbData.headshot;
-                }
+                imgURL.value = dbData.headshot || '';
             }else{
                 console.error(result.message);
             }

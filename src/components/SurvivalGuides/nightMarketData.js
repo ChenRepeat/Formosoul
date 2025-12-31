@@ -89,6 +89,16 @@ export const popupFrames = [
         imgurl:'/tjd103/SurvivalGuide/ring-toss-mask-group.png',
         imgalt:'game-ring-toss',
     },
+    {
+        id: 'map-weather',
+        description: 'nightmarket.items.map-weather.popupDesc',
+        width: '200px',
+        height: 'auto',
+        class: 'map-weather',
+        imgclass:'map-api',
+        imgurl:'/tjd103/SurvivalGuide/map_api.png',
+        imgalt:'',
+    },
 ]
 
 
@@ -198,4 +208,16 @@ export const infoFrames = [
     //     subImg3: '/tjd103/SurvivalGuide/tw_south.png',
     //     subImg4: '/tjd103/SurvivalGuide/tw_east.png',
     // },
+        {
+        id: 'map-weather',
+        mainImg: '',
+        title: '',
+        subTitle: '',
+        text: "",
+        subImg1: '',
+        subImg2: '',
+        buttonText: ''
+    },
+
+
 ]
