@@ -17,7 +17,8 @@ try {
   $stmtProduct->execute([
       $_POST['nameZh'],
       $_POST['nameEn'],
-      $_POST['type'],
+      $_POST['typeZh'],
+      $_POST['typeEn'],
       $_POST['price'],
       $_POST['stock'],
       $_POST['status']

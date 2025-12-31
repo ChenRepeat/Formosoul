@@ -246,47 +246,107 @@ const goBack = () => {
   router.push('/admin/product-management') 
 }
 
-  const fetchProductDetails = async (id) => {
-    const apiBase = import.meta.env.VITE_API_BASE
-    const apiURL = `${apiBase}/getProductData.php?id=${id}`
-    try{
-      loading.value = true;
-      const response = await fetch(apiURL)
-      const data = await response.json()
-      console.log('抓回來的資料:',data)
+  // const fetchProductDetails = async (id) => {
+  //   const apiBase = import.meta.env.VITE_API_BASE
+  //   const apiURL = `${apiBase}/getProductData.php?id=${id}`
+  //   try{
+  //     loading.value = true;
+  //     const response = await fetch(apiURL)
+  //     const data = await response.json()
+  //     console.log('抓回來的資料:',data)
 
-      if(data && data.length >0){
-        addProductForm.nameZh = data.name_zh;
-        addProductForm.nameEn = data.name_en;
-        addProductForm.id = data.product_ID;
-        addProductForm.typeEn = data.type_en;
-        addProductForm.typeZh = data.type_zh;
-        addProductForm.createDate = data.createdate;
-        addProductForm.descriptionZh = data.description_zh;
-        addProductForm.descriptionEn = data.description_en;
-        addProductForm.storyZh = data.story_zh;
-        addProductForm.storyEn = data.story_en;
-        addProductForm.useZh = data.use_zh;
-        addProductForm.useEn = data.use_en;
-      }
+  //     if(data && data.length >0){
+  //       addProductForm.nameZh = data.name_zh;
+  //       addProductForm.nameEn = data.name_en;
+  //       addProductForm.id = data.product_ID;
+  //       addProductForm.typeEn = data.type_en;
+  //       addProductForm.typeZh = data.type_zh;
+  //       addProductForm.createDate = data.createdate;
+  //       addProductForm.descriptionZh = data.description_zh;
+  //       addProductForm.descriptionEn = data.description_en;
+  //       addProductForm.storyZh = data.story_zh;
+  //       addProductForm.storyEn = data.story_en;
+  //       addProductForm.useZh = data.use_zh;
+  //       addProductForm.useEn = data.use_en;
+  //     }
+  //     if (data.main_image) {
+        
+  //       // 把網址包裝成 Element Plus 看得懂的格式
+  //       mainImage.value = [
+  //         {
+  //           name: 'image.png',  // 顯示用，可任意取名
+  //           url: data.main_image // 這裡才是重點！要把後端的網址填進來
+  //         }
+  //       ];
+        
+  //     }
+
+  //   }catch (error) {
+  //   console.error(error);
+  //   } finally {
+  //     loading.value = false;
+  //   }
+  // }
+
+const fetchProductDetails = async (id) => {
+  const apiBase = import.meta.env.VITE_API_BASE
+  const apiURL = `${apiBase}/getProductData.php?id=${id}`
+
+  try {
+    loading.value = true
+    const response = await fetch(apiURL)
+    const resData = await response.json()
+
+    // 根據上一段對話的 PHP 結構，資料應該包在 resData.data 裡面
+    // 如果你的 PHP 直接回傳資料陣列，請改用 const data = resData;
+    if (resData.status && resData.data) {
+      const data = resData.data
+      
+      console.log('抓回來的商品資料:', data)
+
+      addProductForm.nameZh = data.name_zh
+      addProductForm.nameEn = data.name_en
+      addProductForm.id = data.product_ID
+      addProductForm.typeEn = data.type_en
+      addProductForm.typeZh = data.type_zh
+      addProductForm.createDate = data.createdate
+      addProductForm.descriptionZh = data.description_zh
+      addProductForm.descriptionEn = data.description_en
+      addProductForm.storyZh = data.story_zh
+      addProductForm.storyEn = data.story_en
+      addProductForm.useZh = data.use_zh
+      addProductForm.useEn = data.use_en
+      // 小心數字與狀態 (轉型確保型態為數字)
+      addProductForm.price = Number(data.price)
+      addProductForm.stock = Number(data.stock)
+      addProductForm.status = Number(data.status)
+      // 主圖
       if (data.main_image) {
-        
-        // 把網址包裝成 Element Plus 看得懂的格式
-        mainImage.value = [
-          {
-            name: 'image.png',  // 顯示用，可任意取名
-            url: data.main_image // 這裡才是重點！要把後端的網址填進來
-          }
-        ];
-        
+        mainImage.value = [{
+          name: 'current_main.png',//任意名
+          url: data.main_image
+        }]
       }
 
-    }catch (error) {
-    console.error(error);
-    } finally {
-      loading.value = false;
+      // 副圖
+      // data.sub_images是陣列
+      if (data.sub_images && data.sub_images.length > 0) {
+        subImages.value = data.sub_images.map(img => ({
+          name: `sub_${img.id}.png`,
+          url: img.url,
+          id: img.id
+        }))
+      }
+    } else {
+      console.error('API 回傳狀態不正確或查無資料')
     }
+  } catch (error) {
+    console.error('發生錯誤:', error)
+  } finally {
+    loading.value = false
   }
+}
+
 
   onMounted (() =>{
     if (productID) {
