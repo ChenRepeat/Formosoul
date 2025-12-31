@@ -447,27 +447,6 @@
           "rule8":"高級魔力藥水 (第三排) : 300分"
       }
     },
-<<<<<<< HEAD
-  "member":{
-    "wandCore":"魔杖杖心:",
-    "enrollmentNo":"學生證號碼:",
-    "enrollmentDate":"註冊日期:",
-    "memberName":"姓名:",
-    "studentCard":"學生證",
-    "cardIntro":"這張卡是您在我們的魔法社群中身份的證明。它確認了您作為 Formosoul 學院註冊會員的身份地位。您將需要這張身份證明來進入限制區域、查看特權內容，並參加學院的官方活動。",
-    "cardWarning":"離開公共休息室時請務必攜帶！",
-    "cardBTN1":"修改基本資料",
-    "cardBTN2":"查看學分登記卡",
-    "memberInfo":"會員資料",
-    "PWChange":"更改密碼",
-    "myOrders":"查詢訂單",
-    "myCollect":"我的收藏",
-    "coupons":"我的酷碰",
-    "oldPW":"請輸入舊密碼",
-    "newPW":"請輸入新密碼",
-    "newPWConf":"請確認新密碼",
-    "PWWarning":"＊ 密碼設定時，長度應為 8 至 16 字元，並包含英文大小寫及數字"
-=======
     "bubble": {
         "title": "珍珠奶茶",
         "subTitle":"(波霸奶茶)",
@@ -546,6 +525,4 @@
         "hours":"每日 17:00 - 00:00",
         "famous":"阿男麻油雞、來來水餃、玉米家烤玉米"
       }
->>>>>>> Timings
   }
-}

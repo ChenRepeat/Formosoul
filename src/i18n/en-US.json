@@ -429,9 +429,6 @@
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
-<<<<<<< HEAD
-     }
-=======
       },
       "Shilin Night Market": {
         "name":"Shilin Night Market",
@@ -458,7 +455,6 @@
         "hours":"Daily 17:00 - 00:00",
         "famous":"A Nan Sesame Oil Chicken, Lai Lai Dumplings, Yu Mi Jia Grilled Corn"
       }
->>>>>>> Timings
     }
   },
   "member": {
@@ -481,8 +477,4 @@
     "newPWConf":"Confirm new password：",
     "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Timings
