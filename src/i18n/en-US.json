@@ -429,7 +429,36 @@
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
+<<<<<<< HEAD
      }
+=======
+      },
+      "Shilin Night Market": {
+        "name":"Shilin Night Market",
+        "hours":"Daily 16:00 - 00:00",
+        "famous":"Large Fried Chicken, Large Sausage"
+      },
+      "Raohe Street Night Market": {
+        "name":"Raohe Street Night Market",
+        "hours":"Daily 17:00 - 00:00",
+        "famous":"Fuzhou Ancestor Pepper Bun, Chen Dong Pork Ribs Medical Soup, Dong Fa Hao Oil Rice"
+      },
+      "Ningxia Night Market": {
+        "name":"Ningxia Night Market",
+        "hours":"Daily 17:00 - 01:00",
+        "famous":"Yuan Huan Bian Oyster Omelet, Liu Yu Zi Fried Taro Ball, Zhu Gan Rong Pig's Liver Soup"
+      },
+      "Linjiang Street Night Market (Tonghua)": {
+        "name":"Linjiang Street Night Market (Tonghua)",
+        "hours":"Daily 18:00 - 00:00",
+        "famous":"Yu Pin Yuan Iced and Hot Tangyuan, Red Flower Spicy Salted Chicken, Luo Ji Xiao Chao"
+      },
+      "Nanjichang Night Market": {
+        "name":"Nanjichang Night Market",
+        "hours":"Daily 17:00 - 00:00",
+        "famous":"A Nan Sesame Oil Chicken, Lai Lai Dumplings, Yu Mi Jia Grilled Corn"
+      }
+>>>>>>> Timings
     }
   },
   "member": {
@@ -452,4 +481,8 @@
     "newPWConf":"Confirm new password：",
     "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Timings
