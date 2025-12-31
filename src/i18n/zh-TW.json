@@ -494,6 +494,13 @@
     "oldPW":"請輸入舊密碼",
     "newPW":"請輸入新密碼",
     "newPWConf":"請確認新密碼",
-    "PWWarning":"＊ 密碼設定時，長度應為 8 至 16 字元，並包含英文大小寫及數字"
+    "PWWarning":"＊ 密碼設定時，長度應為 8 至 16 字元，並包含英文大小寫及數字",
+    "pointCardName":"學分登記卡",
+    "pointGetInfoTitle":"如何賺取學分：",
+    "pointGetInfoText":"積分會獎勵給完成魔法體驗以及通過網站挑戰（如測驗、迷你遊戲和考驗）的會員。",
+    "howToUseInfoTitle":"兌換：",
+    "howToUseInfoText":"一旦您在登記冊中累積了所需的積分，您可以前往兌換櫃台，將您的積分兌換成獨家魔法獎勵和特權，例如限量物品或特殊功能！",
+    "cardText":"每個行動都計入學院盃！",
+    "backToMemberCard":"回到學生證"
   }
 }

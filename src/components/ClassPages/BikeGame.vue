@@ -227,7 +227,7 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 30;
+  timeRemaining.value = 1;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
@@ -237,6 +237,8 @@ const startGame = () => {
 
 const endGame = () => { 
   gameState.value = 'result'; 
+  memberStore.saveGameResult('motor',{pass: 1,score: 0});
+
   if(lives.value > 0) {
     setTimeout(()=>{
       showCardOverlay.value = true;
