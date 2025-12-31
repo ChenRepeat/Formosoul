@@ -1,10 +1,6 @@
 <script setup>
-<<<<<<< HEAD
-import { onMounted, shallowRef, onUnmounted, ref } from 'vue';
-=======
 import { onMounted, shallowRef, onUnmounted, ref, watch } from 'vue';
 import axios from 'axios';
->>>>>>> Timings
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useI18n } from 'vue-i18n';
