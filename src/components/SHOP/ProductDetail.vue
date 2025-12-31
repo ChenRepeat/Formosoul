@@ -4,7 +4,7 @@ import { ref, watch, computed } from 'vue';
 import { useRouter, useRoute } from "vue-router";     //使用路由功能、抓取參數
 import { useProductStore } from '@/stores/products';
 import { useCartStore } from '@/stores/cart';
-import { useI18n } from 'vue-i18n';       //因為 alert 跟 語系控制 需要使用
+import { useI18n } from 'vue-i18n';       // 語系控制使用
 import BasicButton from '../BasicButton.vue';
 
 
