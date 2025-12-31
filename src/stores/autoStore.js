@@ -36,9 +36,10 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = null;
         token.value = null;
 
-    localStorage.removeItem('token');
+        localStorage.removeItem('token');
 
         Cookies.remove('token');
+        Cookies.remove('user_name');
         localStorage.removeItem('user');
     };
     const setmemberView = (viewName) => {
