@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     // 認證狀態
     const user = ref(JSON.parse(localStorage.getItem('user')) || null);
 
-    const token = ref(Cookies.get('token') || null);
+   const token = ref(localStorage.getItem('token') || Cookies.get('token') || null);
     const router = useRouter();
     // 載入狀態避免畫面閃爍
     const isLoading = ref(true);
@@ -35,6 +35,9 @@ export const useAuthStore = defineStore('auth', () => {
     const logout = () =>{
         user.value = null;
         token.value = null;
+
+    localStorage.removeItem('token');
+
         Cookies.remove('token');
         localStorage.removeItem('user');
     };
@@ -103,6 +106,31 @@ export const useAuthStore = defineStore('auth', () => {
         }
     };
 
+    // === 新增：專門處理 LINE 登入的 Action ===
+    const loginWithLine = (base64Data) => {
+        try {
+            // 1. 解碼
+            const jsonString = atob(base64Data);
+            const userData = JSON.parse(jsonString);
+            
+            // 2. 存入狀態 (呼叫你原本寫好的 setUser)
+            setUser(userData);
+            
+            // 3. 設定 Token (呼叫你原本寫好的 setToken)
+            // 因為我們沒有真的 JWT，用這串 base64 當作 token 來代替 isLoggedIn 的檢查
+            setToken(base64Data); 
+            
+            // 4. 關閉彈窗
+            closeLoginModal();
+            
+            console.log("LINE 登入成功，使用者：", userData);
+            return true;
+        } catch (error) {
+            console.error("LINE Login 解析失敗", error);
+            return false;
+        }
+    };
+
     return{
         // 新增
         user,
@@ -122,5 +150,6 @@ export const useAuthStore = defineStore('auth', () => {
         setloginView,
         informationView,
         setinformationView,
+        loginWithLine,
     }
 });

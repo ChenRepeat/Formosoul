@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, shallowRef, onUnmounted } from 'vue';
+import { onMounted, shallowRef, onUnmounted, ref } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -54,20 +54,20 @@ const tasks = [
     hours: '每日 17:00 - 00:00', 
     note: '阿男麻油雞、來來水餃、玉米家烤玉米' 
   },
-  { 
-    name: '大龍峒夜市', 
-    lat: 25.0734, 
-    lng: 121.5165, 
-    hours: '每日 16:00 - 00:00', 
-    note: '大龍峒肉羹、郭記大塊肉羹、紅茶屋' 
-  },
-  { 
-    name: '延三夜市', 
-    lat: 25.0664, 
-    lng: 121.5126, 
-    hours: '每日 18:00 - 00:00', 
-    note: '施家鮮肉湯圓、大橋頭老牌筒仔米糕、高麗菜飯' 
-  },
+  // { 
+  //   name: '大龍峒夜市', 
+  //   lat: 25.0734, 
+  //   lng: 121.5165, 
+  //   hours: '每日 16:00 - 00:00', 
+  //   note: '大龍峒肉羹、郭記大塊肉羹、紅茶屋' 
+  // },
+  // { 
+  //   name: '延三夜市', 
+  //   lat: 25.0664, 
+  //   lng: 121.5126, 
+  //   hours: '每日 18:00 - 00:00', 
+  //   note: '施家鮮肉湯圓、大橋頭老牌筒仔米糕、高麗菜飯' 
+  // },
   { name: '台中逢甲夜市', lat: 24.1802, lng: 120.6450, hours: '每日 16:00 - 02:00', note: '明倫蛋餅、日船章魚小丸子' },
   { name: '花蓮東大門夜市', lat: 23.9745, lng: 121.6115, hours: '每日 17:00 - 00:00', note: '第一家烤肉、林記燒番麥' },
   { name: '高雄瑞豐夜市', lat: 22.6661, lng: 120.2998, hours: '週二、四、五、六、日 17:00 - 01:00', note: '🛑 週一、三公休！<br>天使雞排、萬國牛排' }
@@ -192,10 +192,26 @@ onUnmounted(() => {
 <template>
   <div class="map-container">
     <div ref="mapContainer" class="map"></div>
+    <div class="map-weather-left-frame">
+
+    </div>
   </div>
+
 </template>
 
+
+
 <style scoped>
+
+.map-weather-left-frame {
+    width: 35%;
+    height: 100%;
+    border: 1px solid red;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+
 .map-container {
   width: 100%;
   height: 100vh;
