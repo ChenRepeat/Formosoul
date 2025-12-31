@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     // 認證狀態
     const user = ref(JSON.parse(localStorage.getItem('user')) || null);
 
-   const token = ref(localStorage.getItem('token') || Cookies.get('token') || null);
+    const token = ref(localStorage.getItem('token') || Cookies.get('token') || null);
     const router = useRouter();
     // 載入狀態避免畫面閃爍
     const isLoading = ref(true);

@@ -120,8 +120,7 @@ onMounted(() => {
       lineData[i][0],lineData[i][1],lineData[i][2],lineData[i][3],lineData[i][4],lineData[i][5],lineData[i][6],lineData[i][7],
     ));
   }
-  console.log(lines);
-  
+    
   let lastTime = 0;
   let animationId;
 
