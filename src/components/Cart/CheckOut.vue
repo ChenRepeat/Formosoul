@@ -1,25 +1,33 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import BasicButton from '../../components/BasicButton.vue';
-import { useRouter } from 'vue-router';
-import OrderList from '../OrderList.vue';
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/cart';
+import BasicButton from '../../components/BasicButton.vue';
+import OrderList from '../OrderList.vue';
 
 const router = useRouter();
+const cartstore = useCartStore();
 
+
+// 確認訂單 ---------------------------
 function goOrder(){
-    router.push('/shoppingcart/ordersuccess');
+    router.push({
+        name: 'OrderSucess',
+        });
 }
 
-// 信用卡填完跳轉下一格
+
+// 付款總金額計算 --------------------------------
+
+// 信用卡填完跳轉下一格 ---------------------------
 const cardNum = ref([]);
 const cardMonth = ref(null);
 const cardYear = ref(null);
 const cardCode = ref(null);
 const cardName = ref(null);
 
-/*
-//這個寫法要寫好幾個function來進行跳轉
+/* 這個寫法要寫好幾個function來進行跳轉
 function nextInput( e, index ){
     //檢查內容是否為數字
 
@@ -142,7 +150,7 @@ function goBack(e, previousOne){
                 <div class="check-total-dock">
                     <div class="check-price dp-flex">
                         <p>{{$t('shoppingcart.price')}}：</p>
-                        <p>NT$ 380</p>
+                        <p>NT$ {{cartstore.totalPrice}}</p>
                     </div>
                     <div class="check-discount dp-flex">
                         <p>{{$t('shoppingcart.discount')}}：</p>

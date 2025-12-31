@@ -1,9 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 import { useCartStore } from "@/stores/cart";
+import { useI18n } from 'vue-i18n';       //語系控制使用
 
 // 宣告常數接收，方便後續使用
 const cartstore = useCartStore();
+const { locale } = useI18n();              // 讀取語系狀態
 
 /* 商品陣列 假資料
 const orderitems =ref([
@@ -91,24 +93,17 @@ defineProps({
 
 })
 
-// // 商品數量增減.  ＊改用 pinia 管理
-// const qty = ref(1);
+// 語系切換  -------------------------------------------------------
 
-// function qtyMinus(){
-//     if( qty.value > 1 ){
-//         qty.value--;
-//     }
-// };
+// 語系切換對照
+const langList = {
+    'en-US': 'en',
+    'zh-TW': 'zh'
+};
 
-// function qtyPlus(product_ID){
-//     if( qty.value < orderitems.value.product_ID.stock ){
-//         qty.value++;
-//     }
-// };
-
-
-
-// 商品刪除
+const lang = computed( () => {
+    return langList[locale.value] || 'en';
+});
 
 </script>
 
@@ -163,7 +158,7 @@ defineProps({
                     <img v-if="showCart" :src="item.images[0]" alt="">
                     <img v-if="showCheck" :src="`/tjd103/${item.images[0]}`" alt="">
                 </div>
-                <h6 class="item-name">{{item.name_en}}</h6>
+                <h6 class="item-name">{{item[`name_${lang}`]}}</h6>
                 <div v-if="showCart" class="item-qty dp-flex">
                     <p v-if="item.qty >= item.stock" class="fw200">{{$t('shoppingcart.overStock')}}</p>
                     <p v-if="item.qty < item.stock" class="fw200">{{$t('shoppingcart.stock')}}：{{item.stock}}</p>
@@ -324,7 +319,7 @@ defineProps({
 
     >p{
         position: absolute;
-        top: 0;
+        bottom: 0;
         font-size: 12px;
         color: $color-fsGold;
     }
