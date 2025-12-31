@@ -22,11 +22,18 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($user_data) {
-      $user_data['headshot'] = 'data:image/jpeg;base64,' . base64_encode($user_data['headshot']);
+      $rawHeadshot = $user_data['headshot'];
+        if (filter_var($rawHeadshot, FILTER_VALIDATE_URL)) {
+            $user_data['headshot'] = $rawHeadshot;
+        } elseif (!empty($rawHeadshot)) {
+            $user_data['headshot'] = 'data:image/png;base64,' . base64_encode($rawHeadshot);
+        } else {
+            $user_data['headshot'] = '';
+        }
         echo json_encode([
         'success' => true,
         'data' => $user_data,
-        'img' => $user_data['headshot']
+        'img' => $rawHeadshot
       ]);
     } else {
         echo json_encode(['success' => false, 'message' => '找不到會員']);
