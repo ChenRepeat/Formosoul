@@ -475,6 +475,13 @@
     "oldPW":"Current password：",
     "newPW":"New password：",
     "newPWConf":"Confirm new password：",
-    "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
+    "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.",
+    "pointCardName":"House Point Ledger",
+    "pointGetInfoTitle":"How to Earn Points:",
+    "pointGetInfoText":"Points are awarded for completing magical experiences and passing challenges (quizzes, mini-games, and tests) across the site.",
+    "howToUseInfoTitle":"Redemption:",
+    "howToUseInfoText":"Once you accumulate the required amount of points in your Ledger, you may visit the Redemption Counter to exchange your points for exclusive magical rewards and perks, such as limited-edition items or special features!",
+    "cardText":"Every action counts toward the House Cup!",
+    "backToMemberCard":"Back To Enrollment Card"
   }
 }

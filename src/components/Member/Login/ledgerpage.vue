@@ -3,24 +3,24 @@
     <div class="cardpage-wrapper" :class="{ 'with-padding': haspadding}">
         <div class="cardcontent" :class="{ 'with-gap': hasgap}">
             <div class="cardpage-left">
-                <h3 :class="{ 'fontcolor' : fontscolor}">House Point Ledger</h3>
+                <h3 :class="{ 'fontcolor' : fontscolor}">{{$t('member.pointCardName')}}</h3>
                 <div class="pcontenttop">
-                    <p :class="{ 'fontcolor' : fontscolor}">How to Earn Points:</p>
-                    <p :class="{ 'fontcolor' : fontscolor}">Points are awarded for completing magical experiences and passing challenges (quizzes, mini-games, and tests) across the site.</p>
+                    <p :class="{ 'fontcolor' : fontscolor}">{{$t('member.pointGetInfoTitle')}}</p>
+                    <p :class="{ 'fontcolor' : fontscolor}">{{$t('member.pointGetInfoText')}}</p>
                 </div>
                 <div class="pcontentbottom">
-                    <p :class="{ 'fontcolor' : fontscolor}">Redemption:</p>
-                    <p :class="{ 'fontcolor' : fontscolor}">Once you accumulate the required amount of points in your Ledger, you may visit the Redemption Counter to exchange your points for exclusive magical rewards and perks, such as limited-edition items or special features!</p>
+                    <p :class="{ 'fontcolor' : fontscolor}">{{$t('member.howToUseInfoTitle')}}</p>
+                    <p :class="{ 'fontcolor' : fontscolor}">{{$t('member.howToUseInfoText')}}</p>
                 </div>
             </div>
             <div class="cardpage-right">
-                <Pointcard></Pointcard>
-                <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">Every action counts toward the House Cup!</h5>
+                <Pointcard />
+                <h5 class="fw200" :class="{ 'fontcolor' : fontscolor}">{{$t('member.cardText')}}</h5>
             </div>
         </div>
         <div class="buttonarea" :class="{ 'hascenter': hascenter}">
-            <BasicButton class="btn-gray-fill" @click="goback"><h6>Go to Edit your membercard</h6></BasicButton>
-            <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}"><h6>Embark on the Formosoul Adventure</h6></BasicButton>
+            <BasicButton class="btn-gray-fill" @click="goback"><h6>{{$t('member.backToMemberCard')}}</h6></BasicButton>
+            <BasicButton class="btn-yellow-fill" @click="handleEmbark" :class="{ 'without': withoutbtn}"><h6>{{$t('member.cardWarning')}}</h6></BasicButton>
         </div>
     </div>
 </template>
