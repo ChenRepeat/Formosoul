@@ -33,6 +33,7 @@ export const useMemberStore = defineStore('member', () => {
                 headers:{
                     'Content-Type': 'application/json; charset=utf-8'
                 },
+                credentials: 'include',
                 // 這裡要對應 PHP 的接收格式
                 body: JSON.stringify({name: loginName, member_ID})
             });
@@ -41,30 +42,11 @@ export const useMemberStore = defineStore('member', () => {
             const result = await response.json();
             if(result.success){
                 const dbData = result.data;
-
-                // === 修正後的圖片處理邏輯 ===
-                let rawHeadshot = dbData.headshot;
-
                 memberData.value.tempName = dbData.name;
                 memberData.value.number = dbData.member_ID;
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
-                if (rawHeadshot && rawHeadshot.startsWith('data:image/jpeg;base64,')) {
-                        // 如果發現被包成了 Base64，就把後面的網址解出來
-                        const base64Content = rawHeadshot.replace('data:image/jpeg;base64,', '');
-                        try {
-                            // atob 將 Base64 轉回 URL 字串
-                            imgURL.value = atob(base64Content);
-                        } catch (e) {
-                            console.error("圖片解碼失敗", e);
-                            imgURL.value = '';
-                        }
-                    } else if (rawHeadshot) {
-                        // 如果已經是正常的 URL (http...)，就直接賦值
-                        imgURL.value = rawHeadshot;
-                    } else {
-                        imgURL.value = ''; // 預設空值
-                    }
+                imgURL.value = dbData.headshot || '';
             }else{
                 console.error(result.message);
             }

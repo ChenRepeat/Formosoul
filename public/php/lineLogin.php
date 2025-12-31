@@ -72,7 +72,19 @@ if (isset($result['access_token'])) {
     $user_name = $profile['displayName'];
     $user_avatar = $profile['pictureUrl'];
 
-    $stmt = $pdo->prepare("SELECT * FROM member WHERE email = ?");
+    $stmt = $pdo->prepare('       
+            select 
+                m.email, 
+                m.password, 
+                m.name, 
+                m.createdate, 
+                m.updatetime, 
+                m.member_ID,
+                p.pointscard_ID
+                from formosoul.member m
+                left join formosoul.pointscard p on p.member_ID = m.member_ID 
+            WHERE email = ?
+    ');
     $stmt->execute([$user_email]);
     $member = $stmt->fetch();
 
@@ -94,12 +106,32 @@ if ($member) {
       $_SESSION['name'] = $member['name'];
       $_SESSION['email'] = $member['email'];
       $_SESSION['role'] = $member['role'];
-
+      $_SESSION['pointscard_ID'] = $member['pointscard_ID'];
 } else {
     // ===【情況 B：是新會員】===
     // 建立新資料時，就只存 Email 和基本資料
-    $insertStmt = $pdo->prepare("INSERT INTO member (member_ID, email, `name`, headshot, createdate, `status`, pointscard, updatetime, `role`) 
-    VALUES (NULL,?, ?, ?, NOW(), 1, 0, NOW(), 0)");
+    $insertStmt = $pdo->prepare('
+    START TRANSACTION;
+        INSERT INTO formosoul.member(email, password, status, role, pointscard, createdate, updatetime)
+        VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
+        SET @USER_ID = LAST_INSERT_ID();
+        INSERT INTO formosoul.pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
+            VALUES (@USER_ID,0,0,0,0,0,0,0);
+        SET @CARD_ID = LAST_INSERT_ID();
+        INSERT INTO formosoul.buegame (buegame_count, pointscard_ID, buegame_pass)
+            VALUES (0,@CARD_ID,0);
+        INSERT INTO formosoul.charmgame (member_ID, charmgame_img1, charmgame_count)
+            VALUES (@USER_ID,0,0);
+        INSERT INTO formosoul.dicegame (pointscard_ID, dicegame_count, dicegame_pass)
+            VALUES (@CARD_ID,0,0);
+        INSERT INTO formosoul.motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
+            VALUES (@CARD_ID,0,0,0);
+        INSERT INTO formosoul.ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
+            VALUES (@CARD_ID,0,0,0);
+        INSERT INTO formosoul.shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
+            VALUES (@CARD_ID,0,0,0);
+    COMMIT;  
+    ');
     $insertStmt->execute([$user_email, $user_name, $user_avatar]);
     
     $newUserId = $pdo->lastInsertId();
@@ -116,7 +148,8 @@ if ($member) {
 $loginData = [
     'member_ID' => $_SESSION['member_ID'],
     'name'      => $_SESSION['name'],
-    'role'      => $_SESSION['role']
+    'role'      => $_SESSION['role'],
+    'pointscard_ID'      => $_SESSION['pointscard_ID'],
 ];
 
 // 2. 編碼資料 (JSON -> Base64)
