@@ -105,6 +105,9 @@ import { useRoute } from 'vue-router';
         ).then( res => res.json()
         ).then( coupon_information => {
             const coupon_Array = coupon_information.data || [];
+            if( coupon_Array == []){
+                return 'No';
+            }
             get_coupon_information.value = coupon_Array.map((coupon, index) => {
                 const couponInfo = coupon_Array[index] || {};
                 const discount = parseInt(couponInfo.discount) || 0;
