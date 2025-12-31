@@ -266,6 +266,7 @@
   "productdetail":{
     "buynow": "立即購買",
     "addtocart":"加入購物車",
+    "addSuccess":"商品成功加入購物車",
     "story":"商品故事",
     "howtouse":"如何使用",
     "shipping":"運送方式",

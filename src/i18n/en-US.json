@@ -248,6 +248,7 @@
   "productdetail":{
     "buynow": "Buy Now",
     "addtocart":"Add to Cart",
+    "addSuccess":"Added to cart！",
     "story":"Story",
     "howtouse":"How to Play / Use",
     "shipping":"Shipping",

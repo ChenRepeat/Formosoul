@@ -19,11 +19,28 @@ const { locale } = useI18n();              // 讀取語系狀態
 
 
 // 設定按鈕路由功能 ------------------------------------
+/* buynow - 只有路由功能
 function goCart(){
     router.push({
         name: 'ShoppingCart',
     })
 };
+*/
+
+// buynow - 結合加入購物車功能
+function isBuyNow( buynow = false ){
+    cartstore.addToCart( showDetail.value, productQty.value);
+
+    if( buynow ){
+        router.push({
+        name: 'ShoppingCart',
+        });
+    }else{
+        alert(t('productdetail.addSuccess'));
+    }
+}
+
+// back
 function goProductList(){
     router.push({
         name: 'ProductList',
@@ -246,14 +263,14 @@ const lang = computed( () => {
                         <div class="btn-shopping dp-flex-col">
                             <BasicButton 
                                 class="btn-yellow-fill btn-fix-width"
-                                @click="goCart()">    
+                                @click="isBuyNow(true)">    
                                 {{$t('productdetail.buynow')}}
                                 <font-awesome-icon icon="fa-solid fa-bag-shopping" />
                             </BasicButton>
                         
                             <BasicButton 
                                 class="btn-gray-fill btn-fix-width"
-                                @click="cartstore.addToCart( showDetail, productQty)">
+                                @click="isBuyNow()">
                                 {{$t('productdetail.addtocart')}}
                                 <font-awesome-icon icon="fa-solid fa-cart-plus" />
                             </BasicButton>
