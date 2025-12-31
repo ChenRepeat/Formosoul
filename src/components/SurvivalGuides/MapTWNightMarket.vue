@@ -1,7 +1,16 @@
 <script setup>
-import { onMounted, shallowRef, onUnmounted } from 'vue';
+import { onMounted, shallowRef, onUnmounted, ref, watch } from 'vue';
+import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useI18n } from 'vue-i18n';
+
+const { locale } = useI18n();
+const markersGroup = L.layerGroup();
+
+// 抓取GOOGLE SHEET 資料
+const sheetData = ref([]);
+const API_URL = 'https://script.google.com/macros/s/AKfycbxt1vzoKcxBwO0jE-uV1hvHBTU5FuKoxQgB3Nbr76Wxqk-GX2tAVfIYNJ2ffyGmShw/exec'
 
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
@@ -17,61 +26,79 @@ const MAP_BOUNDS = [
 const MAX_BOUNDS = L.latLngBounds(MAP_BOUNDS).pad(1.0);
 
 // 夜市資料
-const tasks = [
-  { name: '台北士林夜市', lat: 25.0878, lng: 121.5241, hours: '每日 16:00 - 00:00', note: '豪大大雞排、士林大香腸' },
-  { 
-    name: '饒河街觀光夜市', 
-    lat: 25.0501, 
-    lng: 121.5777, 
-    hours: '每日 17:00 - 00:00', 
-    note: '福州世祖胡椒餅、陳董藥燉排骨、東發號油飯' 
-  },  
-  { 
-    name: '寧夏觀光夜市', 
-    lat: 25.0560, 
-    lng: 121.5153, 
-    hours: '每日 17:00 - 01:00', 
-    note: '圓環邊蚵仔煎、劉芋仔蛋黃芋餅、豬肝榮仔' 
-  },
-  { 
-    name: '臨江街夜市 (通化)', 
-    lat: 25.0306, 
-    lng: 121.5543, 
-    hours: '每日 18:00 - 00:00', 
-    note: '御品元冰火湯圓、紅花麻辣鹽水雞、駱記小炒' 
-  },
-  { 
-    name: '萬華華西街夜市', 
-    lat: 25.0368, 
-    lng: 121.4996, 
-    hours: '每日 16:00 - 00:00', 
-    note: '阿義魯肉飯、小王煮瓜(清湯瓜仔肉)、蛇肉湯' 
-  },
-  { 
-    name: '南機場夜市', 
-    lat: 25.0239, 
-    lng: 121.5052, 
-    hours: '每日 17:00 - 00:00', 
-    note: '阿男麻油雞、來來水餃、玉米家烤玉米' 
-  },
-  { 
-    name: '大龍峒夜市', 
-    lat: 25.0734, 
-    lng: 121.5165, 
-    hours: '每日 16:00 - 00:00', 
-    note: '大龍峒肉羹、郭記大塊肉羹、紅茶屋' 
-  },
-  { 
-    name: '延三夜市', 
-    lat: 25.0664, 
-    lng: 121.5126, 
-    hours: '每日 18:00 - 00:00', 
-    note: '施家鮮肉湯圓、大橋頭老牌筒仔米糕、高麗菜飯' 
-  },
-  { name: '台中逢甲夜市', lat: 24.1802, lng: 120.6450, hours: '每日 16:00 - 02:00', note: '明倫蛋餅、日船章魚小丸子' },
-  { name: '花蓮東大門夜市', lat: 23.9745, lng: 121.6115, hours: '每日 17:00 - 00:00', note: '第一家烤肉、林記燒番麥' },
-  { name: '高雄瑞豐夜市', lat: 22.6661, lng: 120.2998, hours: '週二、四、五、六、日 17:00 - 01:00', note: '🛑 週一、三公休！<br>天使雞排、萬國牛排' }
-];
+// const tasks = ref(nightMarketInfo)
+  
+const renderMarkers = () => {
+  if (!map.value || sheetData.value.length === 0) return;
+
+  // 每次重畫前，先清除舊的地標，避免重疊
+  markersGroup.clearLayers();
+
+      sheetData.value.forEach(item => {
+      const marker = L.circleMarker([item.lat, item.lng], {
+        radius: 8,
+        fillColor: '#ff4757',
+        color: '#fff',
+        weight: 2,
+        fillOpacity: 1,
+        zIndexOffset: 1000
+      });
+
+      marker.on('click', function(e) {
+        L.DomEvent.stopPropagation(e); 
+        map.value.flyTo([item.lat, item.lng], 9, {
+          animate: true,
+          duration: 1.2,
+          noMoveStart: true
+      });
+
+      console.log("當前語系代碼:", locale.value);
+
+      const isZh = locale.value.toLowerCase().includes('zh');
+
+      const displayName = isZh ? item.name : item.name_en;
+      const displayHours = isZh ? item.hours : item.hours_en;
+      const displayFamous = isZh ? item.famous : item.famous_en;
+
+      L.popup({
+        autoPan: false,
+        offset: [0, -10],
+        closeButton: false,
+        className: 'custom-popup'
+      })
+        .setLatLng([item.lat, item.lng])
+        .setContent(`
+          <div style="text-align: center; min-width: 150px;">
+            <h3 style="margin: 0 0 5px 0; color: #d63031;">${displayName}</h3>
+            <div style="font-size: 13px; color: #333; margin-bottom: 5px;">
+              <strong>🕒 ${displayHours}</strong>
+            </div>
+            <div style="font-size: 12px; color: #636e72;">
+              ${displayFamous}
+            </div>
+          </div>
+        `)
+        .openOn(map.value);
+    });
+    markersGroup.addLayer(marker);
+  });
+  markersGroup.addTo(map.value);
+};
+
+watch(locale, () => {
+  renderMarkers(); // 語系一換，就重新畫點
+});
+
+const fetchData = async () => {
+  try{
+    const response = await axios.get(API_URL);
+    console.log("資料讀取成功：", response.data);
+    sheetData.value = response.data
+    renderMarkers();
+  } catch (err) {
+    console.log('API 讀取失敗', err);
+  } 
+};
 
 onMounted(async () => {
   if (!mapContainer.value) return;
@@ -138,47 +165,7 @@ onMounted(async () => {
   } catch (e) {
     console.error("GeoJSON error", e);
   }
-
-  // 4. 加入夜市 Marker
-  tasks.forEach(task => {
-    const marker = L.circleMarker([task.lat, task.lng], {
-      radius: 8,
-      fillColor: '#ff4757',
-      color: '#fff',
-      weight: 2,
-      fillOpacity: 1,
-      zIndexOffset: 1000
-    }).addTo(map.value);
-
-    marker.on('click', function(e) {
-      L.DomEvent.stopPropagation(e); 
-      map.value.flyTo([task.lat, task.lng], 9, {
-        animate: true,
-        duration: 1.2,
-        noMoveStart: true
-      });
-
-      L.popup({
-        autoPan: false,
-        offset: [0, -10],
-        closeButton: false,
-        className: 'custom-popup'
-      })
-        .setLatLng([task.lat, task.lng])
-        .setContent(`
-          <div style="text-align: center; min-width: 150px;">
-            <h3 style="margin: 0 0 5px 0; color: #d63031;">${task.name}</h3>
-            <div style="font-size: 13px; color: #333; margin-bottom: 5px;">
-              <strong>🕒 ${task.hours}</strong>
-            </div>
-            <div style="font-size: 12px; color: #636e72;">
-              ${task.note}
-            </div>
-          </div>
-        `)
-        .openOn(map.value);
-    });
-  });
+  fetchData();
 });
 
 onUnmounted(() => {
@@ -192,6 +179,27 @@ onUnmounted(() => {
 <template>
   <div class="map-container">
     <div ref="mapContainer" class="map"></div>
+  </div>
+  <div class="container">
+    <h2>資料顯示</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>名稱</th>
+          <th>經緯度</th>
+          <th>營業時間</th>
+          <th>特色小吃</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in sheetData" :key="index">
+          <td>{{ $i18n.locale.includes('zh') ? item.name : item.name_en }}</td>
+          <td>{{ item.lat }}, {{ item.lng }}</td>
+          <td>{{ $i18n.locale.includes('zh') ? item.hours : item.hours_en }}</td>
+          <td>{{ $i18n.locale.includes('zh') ? item.famous : item.famous_en }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 

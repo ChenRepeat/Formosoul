@@ -406,7 +406,32 @@
         "rule6":"初階補給品 (第一排) : 100分",
         "rule7":"中級咒物 (第二排) : 200分",
         "rule8":"高級魔力藥水 (第三排) : 300分"
-    }
+    },
+      "Shilin Night Market": {
+        "name":"士林夜市",
+        "hours":"每日 16:00 - 00:00",
+        "famous":"豪大大雞排、士林大香腸"
+      },
+      "Raohe Street Night Market": {
+        "name":"饒河街觀光夜市",
+        "hours":"每日 17:00 - 00:00",
+        "famous":"福州世祖胡椒餅、陳董藥燉排骨、東發號油飯"
+      },
+      "Ningxia Night Market": {
+        "name":"寧夏觀光夜市",
+        "hours":"每日 17:00 - 01:00",
+        "famous":"圓環邊蚵仔煎、劉芋仔蛋黃芋餅、豬肝榮仔"
+      },
+      "Linjiang Street Night Market (Tonghua)": {
+        "name":"臨江街夜市 (通化)",
+        "hours":"每日 18:00 - 00:00",
+        "famous":"御品元冰火湯圓、紅花麻辣鹽水雞、駱記小炒"
+      },
+      "Nanjichang Night Market": {
+        "name":"南機場夜市",
+        "hours":"每日 17:00 - 00:00",
+        "famous":"阿男麻油雞、來來水餃、玉米家烤玉米"
+      }
   }
 }
 }
