@@ -26,14 +26,14 @@
             <p>Products Information</p>
         </div>
         <div v-for="product in productlist"  class="orders-product">
-            <img :src="product.url" :alt="1">
-            <span><p>{{ product.name_en }}</p></span>
-            <span><p> {{ product.quantity }} item(s)</p></span>
-            <span><p>NT$ {{ product.price }}</p></span>
+            <img :src="product.image" :alt="1">
+            <p>{{ product.name_en }}</p>
+            <p> {{ product.quantity }} item(s)</p>
+            <p>NT$ {{ product.price }}</p>
         </div>
         <div v-if="totallist" class="total">
             <span><p>Subtotal：</p><p>NT$ {{ totallist.totalPrice }}</p></span>
-            <span><p>Discount：</p><p>NT$ -{{ totallist.discount }}</p></span>
+            <span><p>Discount：</p><p>NT$ {{ totallist.discount }}</p></span>
             <span><p>Shipping Fee：</p><p>NT$ {{ totallist.fee }}</p></span>
             <span><p>Total：</p><p>NT$ {{ totallist.total }}</p></span>
         </div>
@@ -100,7 +100,6 @@ import { useMemberStore } from '@/stores/member';
             if(order.value.payment === 'Credit Card'){
                 order.value.payment = 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB';
             }
-
             // 修改成英文後 需改變判斷式
             if(order.value.shipping === '宅配'){
                 const shippingfee = 80;
@@ -116,6 +115,12 @@ import { useMemberStore } from '@/stores/member';
                 return  fee + totalPrice - discount; 
             });
             totallist.value.total = subtotal.value;
+        }).then( () => {
+            if(totallist.value.discount > 0){
+                totallist.value.discount = `-${totallist.value.discount}`;
+            }else{
+                totallist.value.discount = 0;
+            }
         })
     }
     function order_product(){
@@ -146,7 +151,7 @@ import { useMemberStore } from '@/stores/member';
                 const productprice = productInfo.price || 0;
                 const productpieces = productInfo.quantity || 0;
                 const product_total = productprice * productpieces;
-                const imgageurl = `${import.meta.env.BASE_URL}uploads/${productInfo.url}` || '';
+                const imgageurl = `${import.meta.env.BASE_URL}${productInfo.image}` || '';
 
                 // console.log(product_total);
 
@@ -154,7 +159,7 @@ import { useMemberStore } from '@/stores/member';
                     ...product,
                     product_ID: productid,
                     price: product_total,
-                    url: imgageurl
+                    image: imgageurl
                 }
             })
             // console.log(productArray);
@@ -236,14 +241,14 @@ import { useMemberStore } from '@/stores/member';
         border-radius: 10px;
         border: 1px solid $color-fsCaption;
     }
-    
-    .orders-product > span{
+
+    .orders-product  > p{
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         gap: 16px;
-        color: $color-fsTitle;   
+        color: $color-fsTitle;  
     }
 
 
