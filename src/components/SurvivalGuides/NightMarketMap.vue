@@ -229,8 +229,8 @@ function closeWelcomeFrame (){
                 <div class="game-content-modal">
                     <button class="close-game-btn"
                     :class="{ 'is-x-style': activeGame === 'taiwan-map' }"
-                     @click="isGameModalOpen = false">
-                        <template v-if="activeGame === 'taiwan-map'">
+                    @click="isGameModalOpen = false">
+                    <template v-if="activeGame === 'taiwan-map'">                            
                             <font-awesome-icon @click="close" icon="fa-solid fa-xmark"  style="font-size:32px;"/>
                         </template> 
                         <template v-else>
@@ -843,9 +843,9 @@ function closeWelcomeFrame (){
     align-items: center;
 }
 .game-content-modal {
-    width: 85vw;
+    width: 90vw;
     height: 85vh;
-    max-width: 1200px;
+    max-width: 1400px;
     background-color: #fff;
     border: 10px solid $color-fsBlue50;
     background-repeat: 7px;
@@ -914,6 +914,8 @@ function closeWelcomeFrame (){
 .nm-is-active {
     z-index: 998;
 }
+
+
 
 // RWD 1200 
 @media screen and (max-width:1200px) {

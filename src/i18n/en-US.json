@@ -429,7 +429,8 @@
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
      }
-    },
+    }
+  },
   "member": {
     "wandCore":"Wand Core:",
     "enrollmentNo":"Enrollment Number:",
@@ -450,5 +451,4 @@
     "newPWConf":"Confirm new password：",
     "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
   }
-}
 }
