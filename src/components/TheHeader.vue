@@ -172,9 +172,11 @@ onUnmounted(() => {
         </div>
 
         <div class="header-icons-list dp-flex">
-          <router-link to="/shoppingcart" class="no-i18n-anim "><font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
-             @click="closeMenu"/></router-link>
+          <router-link to="/shoppingcart" class="no-i18n-anim ">
+          <font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
+          @click="closeMenu"/>
           <span v-if=" cartstore.totalQty > 0 " class="cart-qty">{{ cartstore.totalQty }}</span>
+        </router-link>
             <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
             <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"

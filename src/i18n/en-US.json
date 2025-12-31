@@ -450,5 +450,25 @@
     "newPWConf":"Confirm new password：",
     "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
   }
-}
+},
+"member": {
+    "wandCore":"Wand Core:",
+    "enrollmentNo":"Enrollment Number:",
+    "enrollmentDate":"Enrollment Since:",
+    "memberName":"Name:",
+    "studentCard":"Student Enrollment Card",
+    "cardIntro":"This card is your Proof of Identity within our magical community. It confirms your status as a registered member of the Formosoul Academy. You will need this identification to access restricted areas, view privileged content, and participate in official Academy events.",
+    "cardWarning":"Don't leave the Common Room without it!",
+    "cardBTN1":"Edit your membercard",
+    "cardBTN2":"Check Your Ledger",
+    "memberInfo":"Member information",
+    "PWChange":"Change password",
+    "myOrders":"Query Orders",
+    "myCollect":"My Collections",
+    "coupons":"Coupons",
+    "oldPW":"Current password：",
+    "newPW":"New password：",
+    "newPWConf":"Confirm new password：",
+    "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers."
+  }
 }
