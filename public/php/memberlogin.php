@@ -6,9 +6,17 @@
   
   
   $sql = '
-    select email, password, name, createdate, updatetime, member_ID
-    from member
-    where email = :email and password = :pwd
+        select 
+            m.email, 
+            m.password, 
+            m.name, 
+            m.createdate, 
+            m.updatetime, 
+            m.member_ID,
+            p.pointscard_ID
+            from formosoul.member m
+            left join formosoul.pointscard p on p.member_ID = m.member_ID
+        where email = :email and password = :pwd;
     ';
 
     $stmt = $pdo->prepare($sql);
@@ -32,6 +40,7 @@
                 // 'email' => $user['email']
                 'name' => $user['name'],
                 'member_ID' => $user['member_ID'],
+                'pointscard_ID' => $user['pointscard_ID'],
                 'isFirstLogin' => $isFirstLogin,
                 'message' => $isFirstLogin ? '第一次登入' : '登入成功',
             ];
@@ -55,7 +64,7 @@
             );
         }else{
             $resbody['success'] = false;
-            $resbody['message'] = '帳號或密碼錯誤，請重新輸入。';
+            $resbody['message'] = 'Incorrect username or password, Please enter again。';
         }
         
 
