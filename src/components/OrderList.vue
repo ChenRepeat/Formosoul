@@ -1,7 +1,11 @@
 <script setup>
 import { ref } from "vue";
+import { useCartStore } from "@/stores/cart";
 
-//商品陣列
+// 宣告常數接收，方便後續使用
+const cartstore = useCartStore();
+
+/* 商品陣列 假資料
 const orderitems =ref([
     {
     product_ID: 'PE2025100010',
@@ -60,7 +64,9 @@ const orderitems =ref([
     use_zh: '掛在鑰匙或背包。進出危險區域時輕拍虎頭三次，能獲得短暫的腳步輕盈與保護。',
     isLike: false
   },
-]);    
+]);  
+*/ 
+
 
 // 接收父層相關設定
 const props =
@@ -85,21 +91,20 @@ defineProps({
 
 })
 
-// 商品數量增減.  ＊改用 pinia 管理
-const qty = ref(1);
+// // 商品數量增減.  ＊改用 pinia 管理
+// const qty = ref(1);
 
-function qtyMinus(){
-    if( qty.value > 1 ){
-        qty.value--;
-    }
-};
+// function qtyMinus(){
+//     if( qty.value > 1 ){
+//         qty.value--;
+//     }
+// };
 
-function qtyPlus(product_ID){
-    if( qty.value < orderitems.value.product_ID.stock ){
-        qty.value++;
-    }
-};
-
+// function qtyPlus(product_ID){
+//     if( qty.value < orderitems.value.product_ID.stock ){
+//         qty.value++;
+//     }
+// };
 
 
 
@@ -121,11 +126,11 @@ function qtyPlus(product_ID){
             >
             <div class="total-price dp-flex fw200">
                 <h6>{{$t('shoppingcart.price')}}：</h6>
-                <h6>NT$ 380</h6>
+                <h6>NT$ {{cartstore.totalPrice}}</h6>
             </div>
             <div class="total-qty dp-flex fw200">
                 <h6>{{$t('shoppingcart.quantity')}}：</h6>
-                <h6>{{orderitems.length}}</h6>
+                <h6>{{cartstore.totalQty}}</h6>
                 <h6>{{$t('shoppingcart.items')}}</h6>
             </div>
         </div>
@@ -149,30 +154,33 @@ function qtyPlus(product_ID){
 
         <!-- 一般內容組件 ＊有 item-bar -->
         <div 
-            v-for="(item, index) in orderitems"
+            v-for="(item, index) in cartstore.cartList"
             :key="item.product_ID" 
             >
             <div class="orderlist-body dp-flex">
 
                 <div class="item-image">
-                    <img :src="item.images[0]" alt="">
+                    <img v-if="showCart" :src="item.images[0]" alt="">
+                    <img v-if="showCheck" :src="`/tjd103/${item.images[0]}`" alt="">
                 </div>
                 <h6 class="item-name">{{item.name_en}}</h6>
                 <div v-if="showCart" class="item-qty dp-flex">
-                    <font-awesome-icon class="item-qty-icon" icon="fa-regular fa-square-minus"/>
-                    <h6 class="no-i18n-anim">1</h6>
-                    <font-awesome-icon class="item-qty-icon fw200" icon="fa-regular fa-square-plus"/>
+                    <p v-if="item.qty >= item.stock" class="fw200">{{$t('shoppingcart.overStock')}}</p>
+                    <p v-if="item.qty < item.stock" class="fw200">{{$t('shoppingcart.stock')}}：{{item.stock}}</p>
+                    <font-awesome-icon class="item-qty-icon" icon="fa-regular fa-square-minus" @click="cartstore.qtyMinus(item)"/>
+                    <h6 class="no-i18n-anim">{{item.qty}}</h6>
+                    <font-awesome-icon class="item-qty-icon fw200" icon="fa-regular fa-square-plus" @click="cartstore.qtyPlus(item)"/>
                 </div>
                 <div v-if="showCheck" class="item-qty-check dp-flex">
-                    <h6>1</h6>
+                    <h6>{{item.qty}}</h6>
                     <h6>{{$t('shoppingcart.items')}}</h6>
                 </div>
-                <h6 v-if="showCart" class="item-price no-i18n-anim">NT$ 190</h6>
-                <h6 v-if="showCheck" class="item-price-check">NT$ 190</h6>
-                <font-awesome-icon v-if="showCart" class="item-icon-delete" icon="fa-regular fa-trash-can" />
+                <h6 v-if="showCart" class="item-price no-i18n-anim">NT$ {{cartstore.unitPrice(item)}}</h6><!-- 因為 unitPrice 的本質為呼叫另一個函式，所以需要傳參數-->
+                <h6 v-if="showCheck" class="item-price-check">NT$ {{cartstore.unitPrice(item)}}</h6>
+                <font-awesome-icon v-if="showCart" class="item-icon-delete" icon="fa-regular fa-trash-can" @click="cartstore.removeItem(item.product_ID)"/>
             
             </div>
-            <hr v-if="index < ( orderitems.length -1 )" class="item-bar">
+            <hr v-if="index < ( cartstore.cartList.length -1 )" class="item-bar">
             <!-- 無法用 css 來抓最後一個<hr>，所以改用 index 來處理 -->
 
         </div>
@@ -187,7 +195,7 @@ function qtyPlus(product_ID){
             <h5>{{$t('shoppingcart.total')}}</h5>
             <div class="item-dollar dp-flex">
                 <h5 class="no-i18n-anim">NT$ </h5>
-                <h3 class="no-i18n-anim">190</h3>
+                <h3 class="no-i18n-anim">{{cartstore.totalPrice}}</h3>
             </div>
         </div>
 
@@ -196,7 +204,8 @@ function qtyPlus(product_ID){
             v-if="showCheck"
             class="warning-text fw200"
             >
-            {{$t('shoppingcart.waringtext')}}</p>
+            {{$t('shoppingcart.waringtext')}}
+        </p>
 
 
     </section>
@@ -267,6 +276,10 @@ function qtyPlus(product_ID){
 .itemhead-price-check{flex-basis: 0; flex-grow: 2;}
 .itemhead-icon-delete{flex-basis: 0; flex-grow: 1;}
 
+.itemhead-name{
+    padding: 0 8px;
+}
+
 
 //內容組件 ------------------------------------------
 
@@ -291,16 +304,29 @@ function qtyPlus(product_ID){
     }
 }
 
+.item-name{
+    padding: 0 8px;
+}
+
 .item-qty{
     justify-content: center;
     align-items: center;
+    position: relative;
+    height: 100px;
 
-    & >h6{
+    >h6{
         border-radius: 10px;
         border: 0.5px solid $color-fsWhite;
         width: 70px;
         text-align: center;
         margin: 0 20px;
+    }
+
+    >p{
+        position: absolute;
+        top: 0;
+        font-size: 12px;
+        color: $color-fsGold;
     }
 }
 

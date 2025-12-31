@@ -69,8 +69,6 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
 
     <RouterView></RouterView>
 
-    <!-- <OrderList></OrderList> -->
-
     <Backgroundaction></Backgroundaction>
 
 </main>

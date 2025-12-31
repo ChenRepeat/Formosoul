@@ -32,9 +32,12 @@ function isBuyNow( buynow = false ){
     cartstore.addToCart( showDetail.value, productQty.value);
 
     if( buynow ){
+        //寫法一
         router.push({
-        name: 'ShoppingCart',
+        name: 'MyCart',
         });
+        //寫法二
+        // router.push('/shoppingcart');
     }
 }
 
@@ -238,8 +241,8 @@ const lang = computed( () => {
                     </div>
                 </div> 
     
-                <div class="detail-text dp-flex-col">
-                    <div>
+                <div class="detail-content dp-flex-col">
+                    <div class="detail-text">
                         <p class="fw200 no-i18n-anim">{{ showDetail.product_ID }}</p>
                         <h5>{{ showDetail[`name_${lang}`] }}</h5>
                         <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
@@ -251,11 +254,13 @@ const lang = computed( () => {
                     </div>
 
                     <div>
-
-                        <div class="qty dp-flex">
-                            <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
-                            <h6 class="no-i18n-anim">{{ productQty }}</h6>
-                            <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
+                        <div class="qty dp-flex-col">
+                            <div class=" qty-select dp-flex">
+                                <font-awesome-icon class="qty-icon" icon="fa-regular fa-square-minus" @click="qtyMinus"/>
+                                <h6 class="no-i18n-anim">{{ productQty }}</h6>
+                                <font-awesome-icon class="qty-icon fw200" icon="fa-regular fa-square-plus" @click="qtyAdd"/>
+                            </div>
+                            <p class="qty-stock fw200">{{$t('shoppingcart.stock')}}：{{ showDetail.stock }}</p>
                         </div>
                     
                         <div class="btn-shopping dp-flex-col">
@@ -355,13 +360,13 @@ const lang = computed( () => {
 
 .detail-main{
     gap: 60px;
+    padding-bottom: 60px;
 }
 
 //商品照
 
 .detail-pic{
     gap: 20px;
-    padding-bottom: 60px;
 }
 
 .detail-pic-small{
@@ -439,19 +444,30 @@ const lang = computed( () => {
     background-color: $color-fsContent;
     display: inline-block;
     padding: 0 8px;
+    margin-bottom: 8px;
     border-radius: 10px;
     color: $color-fsTitle;
 }
 
-.detail-text div p:nth-of-type(2){
+.detail-text p:nth-of-type(2){
     padding: 40px 0;
 }
 
 
 .qty{
-    padding-top: 60px;
-    justify-content: center;
+    //padding-top: 60px;
     align-items: center;
+
+    & .qty-stock{
+        color: $color-fsGold;
+        background-color: none;
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
+    & .qty-select{
+        align-items: center;
+    }
 
     & h6{
         border-radius: 10px;

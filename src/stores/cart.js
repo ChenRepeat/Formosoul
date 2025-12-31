@@ -11,7 +11,7 @@ export const useCartStore = defineStore('cart', () => {
     const cartList = ref([]);
 
 
-    // step2 購物車的加入、移除、清空
+    // step2 購物車的加入、移除、清空、數量加減
 
     const addToCart = ( selectItem, itemQty = 1 ) => {
         // 預設加入購物車時，detail 頁面會傳來這個商品的整包資料 selectItem，以及使用者當下設定的購買數量 itemQty
@@ -37,22 +37,50 @@ export const useCartStore = defineStore('cart', () => {
 
     
     const removeItem = ( deleteItemID ) => {
-        const itemIndex = cartList.value.findIndex(item => item.product_ID === deleteItemID)
-        
-        // 因為 findIndex 的規則中，如果找不到，會回傳 -1
-        // 這跟 splice 的規則會有衝突，因為 -1 的索引代表倒數第一個，如果刪除的過程有遇到使用者重複點選刪除鍵等情況，可能會出現刪錯資料的情形
-        // 所以需要多寫一個判斷式
-        if( itemIndex > -1 ){
-            cartList.value.splice(itemIndex, 1)     // 從 itemIndex 開始，刪除一個
-            // *用 splice 不用 filter 的原因是因為效能
-            // splice 修改原陣列，filter 創造新陣列
-        };
+
+        // alert(t('shoppingcart.deleteItem')); 不用 alert 是因為使用者只能按確定，沒有選擇權
+        // 改用 window.confirm
+        const hasDelete = window.confirm(t('shoppingcart.deleteItem'));
+
+        if( hasDelete ){
+
+            const itemIndex = cartList.value.findIndex(item => item.product_ID === deleteItemID)
+            
+            // 因為 findIndex 的規則中，如果找不到，會回傳 -1
+            // 這跟 splice 的規則會有衝突，因為 -1 的索引代表倒數第一個，如果刪除的過程有遇到使用者重複點選刪除鍵等情況，可能會出現刪錯資料的情形
+            // 所以需要多寫一個判斷式
+            if( itemIndex > -1 ){
+                cartList.value.splice(itemIndex, 1)     // 從 itemIndex 開始，刪除一個
+                // *用 splice 不用 filter 的原因是因為效能
+                // splice 修改原陣列，filter 創造新陣列
+            };
+        }
     };
 
 
     const clearCart = () => {
         cartList.value = [];
     };
+
+
+    const qtyPlus = (thisItem) => {
+        if( thisItem.qty < thisItem.stock ){
+            thisItem.qty++;
+        }
+    };
+
+
+    const qtyMinus = (thisItem) => {
+        if( thisItem.qty > 1 ){
+            thisItem.qty--;
+        }else{
+            
+            removeItem( thisItem.product_ID );
+
+        };
+    };
+
+
     
     
     // step3 購物車商品數量及價格計算
@@ -63,7 +91,22 @@ export const useCartStore = defineStore('cart', () => {
     });
 
 
-    //價格計算
+    //單項商品總價計算
+    /* 寫法一
+    const unitPrice = computed( () => {
+        return function(item) {
+            return item.price * item.qty;
+        }; 
+    });
+    */
+
+    //寫法二
+    const unitPrice = computed( () => (thisItem) => {
+        return thisItem.price * thisItem.qty;
+    });
+
+
+    //總價計算
     const totalPrice = computed( () => {
         return cartList.value.reduce((priceSum, item) => priceSum + item.qty *item.price ,0);
     });
@@ -76,7 +119,10 @@ export const useCartStore = defineStore('cart', () => {
         addToCart,
         removeItem,
         clearCart,
+        qtyPlus,
+        qtyMinus,
         totalQty,
+        unitPrice,
         totalPrice,
 
     };

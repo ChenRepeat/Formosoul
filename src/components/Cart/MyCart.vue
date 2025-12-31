@@ -1,25 +1,29 @@
 <script setup>
-import { useRouter } from "vue-router";     //使用路由功能
+import { useRouter } from "vue-router";                  //使用路由功能
+import { useAuthStore } from "@/stores/autoStore";       //確認登入狀態
+import { useCartStore } from "@/stores/cart";            //使用 pinia - cart.js
 import BasicButton from '../../components/BasicButton.vue';
 import OrderList from "../OrderList.vue";
-import { useAuthStore } from "@/stores/autoStore";
 
 
-// 宣告常數來接收 useRouter() ，方便後續使用
+// 宣告常數接收，方便後續使用
 const router = useRouter();
 const authStore = useAuthStore();
-// 設定路由功能
-function goShopping(){
-    
-        
-        router.push('/shop/productList')
+const cartstore = useCartStore();
 
-    
+
+// 設定路由功能 ---------------------------------------------
+function goShopping(){        
+    router.push({
+        name: 'ProductList',
+        })    
 }
 // 沒有登入的 cookie token 就跳出登入頁
 function goPayment(){
     if(authStore.token){
-        router.push('/shoppingcart/checkout');
+        router.push({
+        name: 'CheckOut',
+        });
     }else{
         authStore.openLoginModal();
         authStore.setmemberView('login');
@@ -50,6 +54,7 @@ function goPayment(){
             <BasicButton 
                 class="btn-yellow-fill btn-fix-width"
                 @click="goPayment"
+                v-if="cartstore.totalQty !== 0"
             >
                 NEXT
                 <font-awesome-icon icon="fa-solid fa-angle-right" />
