@@ -8,8 +8,9 @@ export const useCartStore = defineStore('cart', () => {
     const { t } = useI18n(); 
 
     // step1 建立資料儲存區(購物車清單)
-    // const cartList = ref([]);
-
+    // const cartList = ref([]);    未存 localStorage 
+    // 購物車留下紀錄：存 localStorage 
+    // storage 只收字串，所以要經過轉型打包跟還原
     const cartList = ref(
         JSON.parse(localStorage.getItem('MyCart')) || [] 
     );
