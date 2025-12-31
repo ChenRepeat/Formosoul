@@ -35,8 +35,6 @@ function isBuyNow( buynow = false ){
         router.push({
         name: 'ShoppingCart',
         });
-    }else{
-        alert(t('productdetail.addSuccess'));
     }
 }
 

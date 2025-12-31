@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 // 建立 Store ID 'cart' 給 pinia 辨識
 export const useCartStore = defineStore('cart', () => {
+
+    const { t } = useI18n(); 
 
     // step1 建立資料儲存區(購物車清單)
     const cartList = ref([]);
@@ -28,6 +31,8 @@ export const useCartStore = defineStore('cart', () => {
             // 情況二 商品已加入，只要增加數量
             hasItem.qty += itemQty;
         };
+
+        alert(t('productdetail.addSuccess'));
     };
 
     

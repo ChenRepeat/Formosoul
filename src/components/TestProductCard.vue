@@ -3,6 +3,7 @@ import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';     //語系控制
+import { useCartStore } from '@/stores/cart';   //加入購物車按鈕
 
 // 宣告常數來接收 useRouter() ，方便後續使用 ----------------------------------------------
 const router = useRouter();
@@ -136,6 +137,10 @@ function likeHeart(product){
   
 }
 
+//加入購物車按鈕 --------------------------------------------
+const cartstore = useCartStore();
+
+
 
 // 語系切換  -------------------------------------------------------
 const { locale } = useI18n();
@@ -187,7 +192,7 @@ const lang = computed( () => {
           <font-awesome-icon v-if="product.isLike" class="detail-pic-icon" icon="fa-solid fa-heart" />
           <font-awesome-icon v-else class="detail-pic-icon" icon="fa-regular fa-heart" />
         </div>
-        <font-awesome-icon icon="fa-solid fa-cart-shopping" />
+        <font-awesome-icon icon="fa-solid fa-cart-shopping" @click.stop="cartstore.addToCart(product)"/>
       </div>
   
       <h6 class="product-name" >{{product[`name_${lang}`]}}</h6>
