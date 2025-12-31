@@ -54,7 +54,7 @@
         echo json_encode([
         'success' => true,
         'data' => $user_data,
-        'img' => $rawHeadshot
+        // 'img' => $rawHeadshot
       ]);
     } else {
         echo json_encode(['success' => false, 'message' => '找不到會員']);
