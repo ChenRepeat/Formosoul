@@ -1,12 +1,14 @@
 <script setup>
-import { onMounted, shallowRef, onUnmounted, ref, watch } from 'vue';
+import { onMounted, shallowRef, onUnmounted, ref, watch, computed, nextTick } from 'vue';
 import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useI18n } from 'vue-i18n';
+import { useLangStore } from '@/stores/lang';
 
-const { locale } = useI18n();
-const markersGroup = L.layerGroup();
+const langStore = useLangStore();
+const { locale } = useI18n({ useScope: 'global' });
+const markersGroup = L.layerGroup(); // 放紅點用
 
 // 抓取GOOGLE SHEET 資料
 const sheetData = ref([]);
@@ -14,6 +16,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxt1vzoKcxBwO0jE-uV1hvH
 
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
+const currentSelectedMarket = ref(null);
 
 const IMAGE_URL = '/tjd103/SurvivalGuide/taiwan_image2_nobg.png';
 const GEOJSON_URL = 'https://raw.githubusercontent.com/ronnywang/twgeojson/master/twcounty2010.4.json';
@@ -31,10 +34,12 @@ const MAX_BOUNDS = L.latLngBounds(MAP_BOUNDS).pad(1.0);
 const renderMarkers = () => {
   if (!map.value || sheetData.value.length === 0) return;
 
-  // 每次重畫前，先清除舊的地標，避免重疊
+  console.log("正在重畫地標，當前語系:", langStore.locale);
+
+  // 先把舊的紅點全部清掉
   markersGroup.clearLayers();
 
-      sheetData.value.forEach(item => {
+  sheetData.value.forEach(item => {
       const marker = L.circleMarker([item.lat, item.lng], {
         radius: 8,
         fillColor: '#ff4757',
@@ -44,26 +49,16 @@ const renderMarkers = () => {
         zIndexOffset: 1000
       });
 
-      marker.on('click', function(e) {
-        L.DomEvent.stopPropagation(e); 
-        map.value.flyTo([item.lat, item.lng], 9, {
-          animate: true,
-          duration: 1.2,
-          noMoveStart: true
-      });
-
-      console.log("當前語系代碼:", locale.value);
-
-      const isZh = locale.value.toLowerCase().includes('zh');
-
-      const displayName = isZh ? item.name : item.name_en;
-      const displayHours = isZh ? item.hours : item.hours_en;
-      const displayFamous = isZh ? item.famous : item.famous_en;
+  const openMyPopup = () => {
+      const isZh = langStore.locale.toLowerCase().includes('zh');
+      const displayName = isZh ? item.name : (item.name_en || item.name);
+      const displayHours = isZh ? item.hours : (item.hours_en || item.hours);
+      const displayFamous = isZh ? item.famous : (item.famous_en || item.famous);
 
       L.popup({
         autoPan: false,
         offset: [0, -10],
-        closeButton: false,
+        closeButton: true,
         className: 'custom-popup'
       })
         .setLatLng([item.lat, item.lng])
@@ -79,24 +74,49 @@ const renderMarkers = () => {
           </div>
         `)
         .openOn(map.value);
-    });
+    };
+
+    marker.on('click', function(e) {
+        L.DomEvent.stopPropagation(e);
+        currentSelectedMarket.value = item.name; 
+        map.value.flyTo([item.lat, item.lng], 9, {
+          animate: true,
+          duration: 1.2,
+          noMoveStart: true
+      });
+        openMyPopup();
+      });
+
     markersGroup.addLayer(marker);
+
+    if (currentSelectedMarket.value === item.name) {
+      openMyPopup();
+    }
   });
-  markersGroup.addTo(map.value);
 };
 
-watch(locale, () => {
-  renderMarkers(); // 語系一換，就重新畫點
+watch(() => langStore.locale, (newVal, oldVal) => {
+  if (map.value && newVal !== oldVal) {
+    renderMarkers();
+  }
 });
+
+watch(sheetData, () => {
+  renderMarkers();
+}, { deep: true });
 
 const fetchData = async () => {
   try{
     const response = await axios.get(API_URL);
-    console.log("資料讀取成功：", response.data);
-    sheetData.value = response.data
-    renderMarkers();
+    if (response.data && response.data.length > 0){
+      console.log("資料讀取成功：", response.data);
+      sheetData.value = response.data
+    } else {
+      throw new Error("API 回傳資料為空");
+    }
   } catch (err) {
-    console.log('API 讀取失敗', err);
+    console.warn('API 讀取失敗或異常，自動切換至本地靜態備援資料', err);
+    sheetData.value = nightMarketInfo;
   } 
 };
 
@@ -118,8 +138,11 @@ onMounted(async () => {
     fadeAnimation: false, 
     markerZoomAnimation: true,
     wheelDebounceTime: 60,
-    wheelPxPerZoomLevel: 120
+    wheelPxPerZoomLevel: 120,
+    closePopupOnClick: false
   });
+
+  markersGroup.addTo(map.value);
 
   // 2. 貼上美術圖
   L.imageOverlay(IMAGE_URL, MAP_BOUNDS, {
@@ -183,9 +206,6 @@ onUnmounted(() => {
 
     </div>
   </div>
-<<<<<<< HEAD
-
-=======
   <div class="container">
     <h2>資料顯示</h2>
     <table border="1">
@@ -199,15 +219,14 @@ onUnmounted(() => {
       </thead>
       <tbody>
         <tr v-for="(item, index) in sheetData" :key="index">
-          <td>{{ $i18n.locale.includes('zh') ? item.name : item.name_en }}</td>
+          <td>{{ locale.includes('zh') ? item.name : item.name_en }}</td>
           <td>{{ item.lat }}, {{ item.lng }}</td>
-          <td>{{ $i18n.locale.includes('zh') ? item.hours : item.hours_en }}</td>
-          <td>{{ $i18n.locale.includes('zh') ? item.famous : item.famous_en }}</td>
+          <td>{{ locale.includes('zh') ? item.hours : item.hours_en }}</td>
+          <td>{{ locale.includes('zh') ? item.famous : item.famous_en }}</td>
         </tr>
       </tbody>
     </table>
   </div>
->>>>>>> Timings
 </template>
 
 
@@ -217,7 +236,6 @@ onUnmounted(() => {
 .map-weather-left-frame {
     width: 35%;
     height: 100%;
-    border: 1px solid red;
     position: absolute;
     top: 0%;
     left: 0%;
