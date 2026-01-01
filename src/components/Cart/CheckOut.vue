@@ -104,6 +104,17 @@ function goBack(e, previousOne){
 const paymentInfo = ref('creditCard');
 
 
+// 電話號碼檢核 ----------------------------------------------
+function checkNumber(e){
+    const val = e.target.value
+        .replace(/[^0-9+\-]/g, '')   // step1. 過濾非數字、+、-
+        .replace(/(?!^)\+/g, '')     // step2. 過濾非開頭 (?!^) 的 +
+        .replace(/-{2,}/g, '-');     // step3. 過濾連續出現2次或以上 -{2,} 的 -
+
+    e.target.value = val;
+};
+
+
 // 地址下拉選單  ----------------------------------------------
 const selectCity = ref('');
 const selectDist = ref('');
@@ -113,8 +124,7 @@ const currentDist = computed(() => {
     //如果使用者還沒選城市，就不用先跑一遍
     //if(!selectCity){return []};
     if( !selectCity.value ) return [];
-
-
+    //找出對應的 dist
     const city = addrstore.addrTaiwan.find((thiscity) => thiscity.name_zh === selectCity.value);
     //return city;  這樣回傳的是一整個物件，不是 districts
     return city ? city.districts : [];
@@ -301,7 +311,7 @@ watch ( selectCity, () => {
                         </div>
                         <div class="received-phone">
                             <p>{{$t('shoppingcart.phoneNumber')}}</p>
-                            <input class="input-text" type="text" required>
+                            <input class="input-text" type="text" @input="checkNumber" required>
                         </div>
                     </div>
                     <div class="received-address">
