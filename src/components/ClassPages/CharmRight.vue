@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useclassesStore } from '@/stores/classes';
 import { useMemberStore } from '@/stores/member';
+import BasicButton from '../BasicButton.vue';
 
 const classStore = useclassesStore();
 const memberStore = useMemberStore();
@@ -106,10 +107,7 @@ const save = () => {
   imgObj.src = finalData; 
 };
 
-// --- Lifecycle ---
-
 onMounted(() => {
-  // 【需求 2：呼叫封裝好的函式】
   initCanvas();
 });
 
