@@ -306,6 +306,8 @@
     "name":"Name",
     "phoneNumber":"Phone Number",
     "address":"Address",
+    "city":"Select City",
+    "dist":"Select District",
     "record":"Remember delivery address.",
     "remark":"Please leave a note here for any special requests regarding your purchase.",
     "shoppingCart":"Shopping Cart",

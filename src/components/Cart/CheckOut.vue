@@ -1,20 +1,24 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cart';
+import { useI18n } from 'vue-i18n';
+import { useAddressStore } from '@/stores/addressStore';
 import BasicButton from '../../components/BasicButton.vue';
 import OrderList from '../OrderList.vue';
 
 const router = useRouter();
 const cartstore = useCartStore();
+const addrstore = useAddressStore();
+const { locale } = useI18n();     // 讀取語系狀態
 
 
 // 確認訂單 ---------------------------
 function goOrder(){
     router.push({
         name: 'OrderSucess',
-        });
+    });
 }
 
 
@@ -96,10 +100,42 @@ function goBack(e, previousOne){
     }
 }
 
-// 信用卡資訊
+// 信用卡資訊 ----------------------------------------------
 const paymentInfo = ref('creditCard');
 
-// 運費
+
+// 地址下拉選單  ----------------------------------------------
+const selectCity = ref('');
+const selectDist = ref('');
+
+// 依照城市選區域
+const currentDist = computed(() => {
+    //如果使用者還沒選城市，就不用先跑一遍
+    //if(!selectCity){return []};
+    if( !selectCity.value ) return [];
+
+
+    const city = addrstore.addrTaiwan.find((thiscity) => thiscity.name_zh === selectCity.value);
+    //return city;  這樣回傳的是一整個物件，不是 districts
+    return city ? city.districts : [];
+});
+
+
+//如果城市改變，區域就清空
+watch ( selectCity, () => {
+  selectDist.value = '';
+});
+
+
+// 語系切換  ----------------------------------------------
+    const langList ={
+        'en-US': 'en',
+        'zh-TW': 'zh'
+    };
+
+    const lang = computed( () => {
+        return langList[locale.value] || 'en';
+    });
 
 
 
@@ -274,14 +310,25 @@ const paymentInfo = ref('creditCard');
                             <input class="input-text" type="text" required>
                         </div>
 
-                        <div v-else class="country-taiwan dp-flex">
-                            <div>
-                                <p>{{$t('shoppingcart.address')}}</p>
-                                <input class="input-text" placeholder="Country" type="text" required>
+                        <div v-else class="country-taiwan ">
+                            <p>{{$t('shoppingcart.address')}}</p>
+                            <div class="nav-addr-dock dp-flex">
+                                <nav class="nav-addr">
+                                    <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
+                                    <select class="nav-list fw200" v-model="selectCity">
+                                        <option disabled value="">{{$t('shoppingcart.city')}}</option>
+                                        <option v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
+                                    </select>
+                                </nav>
+                                <nav class="nav-addr">
+                                    <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
+                                    <select class="nav-list fw200" v-model="selectDist">
+                                        <option disabled value="">{{$t('shoppingcart.dist')}}</option>
+                                        <option v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
+                                    </select>
+                                </nav>
                             </div>
-                            <div>
-                                <input class="input-text" type="text" placeholder="City" required>
-                            </div>
+                            
                             <input class="input-text" type="text" required>
                         </div>
                     </div>
@@ -510,9 +557,15 @@ const paymentInfo = ref('creditCard');
     .received-address{
         padding-top: 20px;
 
-        & .country-taiwan{
-            align-items: end;
-             gap: 20px;
+        & .nav-addr-dock{
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        & .nav-addr{
+            width: 50%;
+            position: relative;
+            
         }
     }
 
