@@ -106,7 +106,7 @@ watch(sheetData, () => {
 }, { deep: true });
 
 const fetchData = async () => {
-  try{
+  try{ // 單純抓取資料，所以用get就好，不用用到post
     const response = await axios.get(API_URL);
     if (response.data && response.data.length > 0){
       console.log("資料讀取成功：", response.data);

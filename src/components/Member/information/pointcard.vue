@@ -38,6 +38,7 @@ import IconShrimp from '@/components/icons/SVG/IconShrimp.vue';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
 import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
 import IconButton from '@/components/icons/SVG/IconButton.vue';
+import axios from 'axios';
 
 
 const props = defineProps({
@@ -96,6 +97,26 @@ const get_pointscard = () => {
         }
     );
 };
+
+// async await, axios 寫法:
+// const get_pointscard = async ()=> {
+//     const storeUser = localStorage.getItem('user');
+//     const apiBase = import.meta.env.VITE_API_BASE;
+//     const API_URL = `{apiBase}/getPointsCard.php`
+//     if(!storeUser) return; 
+//     const userData = JSON.parse(storeUser);
+//     const { member_ID } = userData;
+//     try {
+//         const response = await axios.post(API_URL, { member_ID});
+//         const pointscard_res = response.data;
+//         console.log('取得學分登記卡資料：', pointscard_res);
+//         if(pointscard_res.success && pointscard_res.data){
+//             pointsSatus.value = pointscard_res.data
+//         }
+//     }catch(error){
+//         console.error('學分登記卡 API 讀取失敗:', error)      
+//     }
+// };
 
 onMounted (()=>{
     get_pointscard();
