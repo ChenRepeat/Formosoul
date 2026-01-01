@@ -7,6 +7,7 @@ import { useI18n } from 'vue-i18n';
 import { useAddressStore } from '@/stores/addressStore';
 import BasicButton from '../../components/BasicButton.vue';
 import OrderList from '../OrderList.vue';
+import Couponcontaion from '../Member/coupons/couponcontaion.vue';
 
 const router = useRouter();
 const cartstore = useCartStore();
@@ -20,6 +21,9 @@ function goOrder(){
         name: 'OrderSucess',
     });
 }
+
+// coupon -------------------------------------
+const hasCoupon = ref(false);
 
 
 // 付款總金額計算 --------------------------------
@@ -218,9 +222,19 @@ watch ( selectCity, () => {
                         <h5>NT$ {{cartstore.finalPrice}}</h5>
                     </div>
                 </div>
-                <BasicButton class="btn-blue-fill btn-fix-width btn-coupon">
+                <BasicButton class="btn-blue-fill btn-fix-width btn-coupon" @click="hasCoupon = true">
                     {{$t('shoppingcart.btn-selectCoupon')}}
                 </BasicButton>
+                <Teleport v-if="hasCoupon" to="body">
+
+                    <div class="coupon-overlay dp-flex" @click.self="hasCoupon = false">
+    
+                        <div class="coupon-dock">
+                            <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="hasCoupon = false"/>
+                            <Couponcontaion></Couponcontaion>
+                        </div>
+                    </div>
+                </Teleport>
 
             </div>
         </section>
@@ -290,7 +304,6 @@ watch ( selectCity, () => {
                                     @input="goNext($event, 0, )"
                                     @keydown.delete="goBack($event, cardCode)">
                         </div>
-
                         
                     </div>
 
@@ -472,6 +485,38 @@ watch ( selectCity, () => {
         left: 0;
         right: 0;
         margin: auto;   
+    }
+
+    .coupon-overlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+        backdrop-filter: blur(1.5px); 
+        justify-content: center;
+        align-items: center;
+    }
+
+    .coupon-dock{
+        position: relative;
+        width: 30vw;
+        background-color: $color-fsBlue50;
+        border-radius: 10px;
+        outline: 10px solid $color-fsBlue50;
+        border: 1px solid $color-fsTitle;
+        box-shadow: 0 0 50px;
+        padding: 20px;
+
+        & .coupon-close{
+            color: $color-fsTitle;
+            font-size: 20px;
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            cursor: pointer;
+        }
     }
 
 
