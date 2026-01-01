@@ -260,7 +260,7 @@
     "paymentTitle2": "Apple Pay",
     "paymentContent2": "Experience the ultimate convenience of seamless payment. No more searching for physical cards—simply use biometric authentication on your Apple device for a secure and swift authorization. Apple’s encryption technology ensures your transaction data remains protected throughout the process, making every payment as private as it is effortless.",
     "backtoshop": "Back to Shop",
-    "noProduct":"Sorry, this item is currently unavailable."
+    "noProduct":"Sorry, this item is unavailable for summoning."
   },
   "productlist":{
     "all": "All",

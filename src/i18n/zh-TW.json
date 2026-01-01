@@ -278,7 +278,7 @@
     "paymentTitle2": "－ Apple Pay 行動支付",
     "paymentContent2": "體驗無感支付的極致便利。無需翻找實體卡片，結帳時只需透過您的 Apple 裝置進行生物辨識驗證，即可安全、快速地完成授權。Apple 加密技術將確保您的交易資訊全程受密鑰保護，讓支付過程既隱密又高效。",
     "backtoshop": "回斜角巷",
-    "noProduct":"抱歉，此商品目前無庫存!"
+    "noProduct":"抱歉，此商品目前無法召喚!"
   },
   "productlist":{
     "all": "所有商品",
@@ -308,7 +308,7 @@
     "totalDetails":"付款詳情",
     "discount":"折扣",
     "shippingFee":"運費",
-    "btn-selectCoupon":"選擇優惠卷",
+    "btn-selectCoupon":"選擇優惠券",
     "creditCard":"信用卡資訊",
     "cardNumber":"信用卡號",
     "expirationDate":"有效期限",

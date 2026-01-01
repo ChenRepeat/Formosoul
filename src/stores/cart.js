@@ -114,17 +114,43 @@ export const useCartStore = defineStore('cart', () => {
     });
     */
 
-    //寫法二
+    // 寫法二
     const unitPrice = computed( () => (thisItem) => {
         return thisItem.price * thisItem.qty;
     });
 
 
-    //總價計算
+    // 小計計算
     const totalPrice = computed( () => {
         return cartList.value.reduce((priceSum, item) => priceSum + item.qty *item.price ,0);
     });
 
+
+    // 運費
+    const shippingFeeList = {
+        taiwan: 80,
+        japan: 120,
+        singapore: 150,
+        netherlands: 270,
+        ireland: 490,
+    };
+
+    const selectCountry = ref('taiwan');
+    
+    //const shippingFee = ref(shippingFeeList.value || 80);  這樣寫代表 會查到整張表，並不是裡面的某個 key 值
+
+    const shippingFee = computed(() => {
+        return shippingFeeList[ selectCountry.value ]
+    });
+    
+
+    // 優惠券折扣
+    const discount = ref(0);
+
+    // 最後付款總額
+    const finalPrice = computed(() => 
+        totalPrice.value + shippingFee.value - discount.value
+    );
 
 
     //需要 export 給組件使用的
@@ -138,7 +164,11 @@ export const useCartStore = defineStore('cart', () => {
         totalQty,
         unitPrice,
         totalPrice,
-
+        //shippingFeeList,
+        selectCountry,
+        shippingFee,
+        discount,
+        finalPrice,
     };
 
 });

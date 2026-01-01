@@ -96,6 +96,12 @@ function goBack(e, previousOne){
     }
 }
 
+// 信用卡資訊
+const paymentInfo = ref('creditCard');
+
+// 運費
+
+
 
 </script>
 
@@ -119,12 +125,12 @@ function goBack(e, previousOne){
                 <p>{{$t('shoppingcart.country')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                    <select class="nav-list fw200">
-                        <option class="list-option">{{$t('shoppingcart.taiwan')}}</option>
-                        <option class="list-option">{{$t('shoppingcart.japan')}}</option>
-                        <option class="list-option">{{$t('shoppingcart.singapore')}}</option>
-                        <option class="list-option">{{$t('shoppingcart.netherlands')}}</option>
-                        <option class="list-option">{{$t('shoppingcart.ireland')}}</option>
+                    <select class="nav-list fw200" v-model="cartstore.selectCountry"> <!-- 因為 option 的 value 讀到的為字串，所以要 .number 變成數字，加法才不會出問題-->
+                        <option class="list-option" value="taiwan">{{$t('shoppingcart.taiwan')}}</option>
+                        <option class="list-option" value="japan">{{$t('shoppingcart.japan')}}</option>
+                        <option class="list-option" value="singapore">{{$t('shoppingcart.singapore')}}</option>
+                        <option class="list-option" value="netherlands">{{$t('shoppingcart.netherlands')}}</option>
+                        <option class="list-option" value="ireland">{{$t('shoppingcart.ireland')}}</option>
                     </select>
                 </nav>
                 <p>{{$t('shoppingcart.delivery')}}</p>
@@ -137,9 +143,9 @@ function goBack(e, previousOne){
                 <p>{{$t('shoppingcart.payment')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                    <select class="nav-list fw200">
-                        <option class="list-option">{{$t('shoppingcart.card')}}</option>
-                        <option class="list-option">{{$t('shoppingcart.applePAY')}}</option>
+                    <select class="nav-list fw200" v-model="paymentInfo">
+                        <option class="list-option" value="creditCard">{{$t('shoppingcart.card')}}</option>
+                        <option class="list-option" value="applePay">{{$t('shoppingcart.applePAY')}}</option>
                     </select>
                 </nav>
             </div>
@@ -154,16 +160,16 @@ function goBack(e, previousOne){
                     </div>
                     <div class="check-discount dp-flex">
                         <p>{{$t('shoppingcart.discount')}}：</p>
-                        <p>－ NT$ 60</p>
+                        <p>－ NT$ {{cartstore.discount}}</p>
                     </div>
                     <div class="check-shippingfee dp-flex">
                         <p>{{$t('shoppingcart.shippingFee')}}：</p>
-                        <p>NT$ 80</p>
+                        <p>NT$ {{cartstore.shippingFee}}</p>
                     </div>
                     <hr>
                     <div class="check-total-payment dp-flex">
                         <h5>{{$t('shoppingcart.total')}}：</h5>
-                        <h5>NT$ 400</h5>
+                        <h5>NT$ {{cartstore.finalPrice}}</h5>
                     </div>
                 </div>
                 <BasicButton class="btn-blue-fill btn-fix-width btn-coupon">
@@ -179,7 +185,7 @@ function goBack(e, previousOne){
             <!-- @submit.prevent="goOrder" 阻止預設行為並且執行goOrder -->
             
             <!-- 信用卡資料 -->
-            <section class="creditcard-info">
+            <section v-if="paymentInfo === 'creditCard'" class="creditcard-info">
                 <h5>{{$t('shoppingcart.creditCard')}}<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
                 <hr>  
                 <div class="card-dock dp-flex">
@@ -262,15 +268,22 @@ function goBack(e, previousOne){
                             <input class="input-text" type="text" required>
                         </div>
                     </div>
-                    <div class="received-address dp-flex">
-                        <div>
+                    <div class="received-address">
+                        <div v-if="cartstore.selectCountry !== 'taiwan'">
                             <p>{{$t('shoppingcart.address')}}</p>
-                            <input class="input-text" placeholder="Country" type="text" required>
+                            <input class="input-text" type="text" required>
                         </div>
-                        <div>
-                            <input class="input-text" type="text" placeholder="City" required>
+
+                        <div v-else class="country-taiwan dp-flex">
+                            <div>
+                                <p>{{$t('shoppingcart.address')}}</p>
+                                <input class="input-text" placeholder="Country" type="text" required>
+                            </div>
+                            <div>
+                                <input class="input-text" type="text" placeholder="City" required>
+                            </div>
+                            <input class="input-text" type="text" required>
                         </div>
-                        <input class="input-text" type="text" required>
                     </div>
 
                     <label class="checkbox-dock dp-flex">
@@ -495,9 +508,12 @@ function goBack(e, previousOne){
     }
 
     .received-address{
-        align-items: end;
-        gap: 20px;
         padding-top: 20px;
+
+        & .country-taiwan{
+            align-items: end;
+             gap: 20px;
+        }
     }
 
     .received-address>input:last-of-type{
