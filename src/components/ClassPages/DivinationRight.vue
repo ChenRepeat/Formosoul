@@ -2,7 +2,8 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, onMounted } from 'vue';
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
-
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
 // 過關蓋章
 const showCardOverlay = ref(false);
 const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
@@ -97,6 +98,8 @@ const buaBue = () => {
 
       bue1Result.value = isBue1Yin ? 1 : 0;
       bue2Result.value = isBue2Yin ? 1 : 0;
+      memberStore.gameData.bue.pass += 0;
+      memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
 
       if (isBue1Yin && isBue2Yin) {
         finalResult.value = 'classes.bue2Name';
@@ -108,6 +111,8 @@ const buaBue = () => {
         finalResult.value = 'classes.bue3Name'; 
         siannCount.value ++
         if(siannCount.value == 3){
+          memberStore.gameData.bue.pass +=1
+          memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
           setTimeout(() => {
             showCardOverlay.value = true;
 
