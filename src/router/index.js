@@ -215,7 +215,7 @@ const router = createRouter({
     {
       path: '/policy',
       name: 'Policy',
-      redirect: '/policy/delivery',
+      redirect: '/policy/payment',
       component: Policy,
       meta:{ 
         logo: BlackLogo,

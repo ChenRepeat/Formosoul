@@ -117,7 +117,10 @@ onMounted(() => {
   <div class="canvas-container dp-flex-col"
       @mousedown.stop
       @touchstart.stop>
-      <h5>{{$t('classes.drawText1')}}</h5>
+      <div class="title-case dp-flex">
+        <h5>{{$t('classes.drawText1')}}</h5>
+        <div class="game-info"><p>?</p></div>
+      </div>
     <canvas
       ref="canvasRef"
       @mousedown="startDrawing"
@@ -161,6 +164,21 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
   width: 80%;
+  position: relative;
+  .title-case{
+    width: 100%;
+    justify-content: center;
+    align-items: end;
+    gap: 12px;
+    p{
+      text-align: center;
+      border: 3px solid $color-fsRed;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      border-radius: 50%;
+    }
+  }
 }
 canvas {
   cursor: crosshair;
@@ -174,7 +192,7 @@ canvas {
 }
 .tool-case{
   width: 100%;
-  gap: 16px;
+  gap: 8px;
   justify-content: center;
   div{
     gap: 8px;
@@ -185,7 +203,7 @@ canvas {
     display: inline-block;
   }
   input{
-    width: 30%;
+    width: 40%;
   }
 }
 .btn-case{
