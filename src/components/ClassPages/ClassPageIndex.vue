@@ -45,11 +45,15 @@
       ease: "power2.out" 
     });
     gsap.to(icons, {
-      color: colorIcon, 
-      duration: 0.1,
+      keyframes: [
+        { x: 30,y:10, color: '#041426', duration: 0.8,scale: 2,rotateX:0},
+        { x: 30, y:10, color: 'transparent', duration: 0.5,scale: 3,rotateX:360},
+        { x: 0, y:0, color: 'transparent', duration: 0.3,scale: 3,rotateX:360},
+        { x: 0, y:0, color: '#041426', duration: 0.7,scale: 1}
+      ], 
       force3D: true,
       overwrite: true,
-      ease: "bounse.out" 
+      ease: "power2.out" 
     });
 };
 const onLeave = (e) => {
@@ -69,11 +73,15 @@ const onLeave = (e) => {
     overwrite: true,
   });
   gsap.to(icons, {
-      color: 'inherit', 
-      duration: 0.1,
-      force3D: true,
-      overwrite: true,
-      ease: "bounse.out"
+    x:0,
+    y:0,
+    scale: 1,
+    rotateX:360,
+    color: 'inherit', 
+    duration: 0.1,
+    force3D: true,
+    overwrite: true,
+    ease: "bounse.out"
   });
 };
 //  書籤陣列

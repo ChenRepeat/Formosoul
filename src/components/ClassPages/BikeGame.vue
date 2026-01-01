@@ -143,7 +143,7 @@ const playerX = ref(0);
 const playerTilt = ref(0);
 const roadOffset = ref(0);
 const obstacles = reactive([]);
-
+const passTimes = ref(memberStore.gameData.motor.pass)
 let lastSpawnTime = 0;
 let obstacleId = 0;
 const keys = { ArrowLeft: false, ArrowRight: false };
@@ -237,9 +237,9 @@ const startGame = () => {
 
 const endGame = () => { 
   gameState.value = 'result'; 
-  memberStore.saveGameResult('motor',{pass: 1,score: 0});
-
+  
   if(lives.value > 0) {
+    passTimes.value += 1
     setTimeout(()=>{
       showCardOverlay.value = true;
 
@@ -258,6 +258,7 @@ const endGame = () => {
       }, 500)
     }, 2000);
   }
+  memberStore.saveGameResult('motorcycle',{pass: passTimes.value,score: 0});
 
 };
 
