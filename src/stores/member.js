@@ -18,6 +18,7 @@ export const useMemberStore = defineStore('member', () => {
         isEditing: false, 
         tempName: '',
         pointscard_ID:'',
+        charmImg:''
     });
     const gameData = ref({
         bue: { count: 0, pass: 0 },
@@ -56,6 +57,7 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
                 imgURL.value = dbData.headshot || '';
+                memberData.value.charmImg = dbData.charmgame_img1 || '';
                 gameData.value.bue = { 
                     count: dbData.buegame_count, 
                     pass: dbData.buegame_pass 

@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import BasicButton from '../BasicButton.vue';
 import { useclassesStore } from '@/stores/classes';
 import { useMemberStore } from '@/stores/member';
+
 const classStore = useclassesStore();
 const memberStore = useMemberStore();
 
@@ -12,36 +12,66 @@ const isDrawing = ref(false);
 const brushColor = ref('#FF9010');
 const brushSize = ref(5);
 
-onMounted(() => {
+const imgObj = new Image();
+const initialImgSrc = ref('');
+
+const initCanvas = () => {
   const canvas = canvasRef.value;
+  if (!canvas) return;
   context.value = canvas.getContext('2d');
   canvas.width = 150;
   canvas.height = 540;
   context.value.lineCap = 'round';
   context.value.lineJoin = 'round';
   context.value.fillStyle = "#FFFCC2";
-  context.value.fillRect(0,0,canvasRef.value.width, canvasRef.value.height);
-  
-});
+  const savedImg = memberStore.memberData.charmImg;
+  initialImgSrc.value = savedImg; 
+  if (savedImg) {
+    imgObj.onload = () => {
+      context.value.fillRect(0, 0, canvas.width, canvas.height);
+      context.value.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
+    };
+
+    imgObj.onerror = (err) => {
+      console.error("圖片載入失敗", err);
+      context.value.fillRect(0, 0, canvas.width, canvas.height);
+    };
+    imgObj.src = savedImg;
+  }
+};
+
+
+const getPos = (e) => {
+  const canvas = canvasRef.value;
+  if (e.touches && e.touches.length > 0) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top
+    };
+  }
+  return { x: e.offsetX, y: e.offsetY };
+};
 
 const startDrawing = (e) => {
   isDrawing.value = true;
-  const { offsetX, offsetY } = e;
+  const { x, y } = getPos(e);
   context.value.beginPath();
-  context.value.moveTo(offsetX, offsetY);
+  context.value.moveTo(x, y);
 };
 
 const draw = (e) => {
   if (!isDrawing.value) return;
 
-  const { offsetX, offsetY } = e;
+  const { x, y } = getPos(e);
   context.value.lineWidth = brushSize.value;
   context.value.strokeStyle = brushColor.value;
-  context.value.lineTo(offsetX, offsetY);
+  context.value.lineTo(x, y);
   context.value.stroke();
   const dataUrl = canvasRef.value.toDataURL();
   classStore.imgShare(dataUrl);
 };
+
 const stopDrawing = () => {
   isDrawing.value = false;
   context.value.closePath();
@@ -50,18 +80,38 @@ const stopDrawing = () => {
 const clearCanvas = () => {
   context.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
   context.value.fillStyle = "#FFFCC2";
-  context.value.fillRect(0,0,canvasRef.value.width, canvasRef.value.height);
+  context.value.fillRect(0, 0, canvasRef.value.width, canvasRef.value.height);
   classStore.imgShare('Classes/charms/charm13.png');
 };
 
+const resetCanvas = () => {
+  context.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
+  context.value.fillStyle = "#FFFCC2";
+  context.value.fillRect(0, 0, canvasRef.value.width, canvasRef.value.height);
+
+  if (initialImgSrc.value) {
+    context.value.drawImage(imgObj, 0, 0, canvasRef.value.width, canvasRef.value.height);
+    classStore.imgShare(initialImgSrc.value);
+  } else {
+    classStore.imgShare('');
+  }
+};
 
 const save = () => {
   const finalData = canvasRef.value.toDataURL();
-  memberStore.saveGameResult('charm',{img:finalData});
+  memberStore.saveGameResult('charm', { img: finalData });
   memberStore.gameData.charm.img = finalData;
-  console.log("圖片長度:", memberStore.gameData.charm.img.length);
+  memberStore.memberData.charmImg = finalData;
+  initialImgSrc.value = finalData;
+  imgObj.src = finalData; 
 };
-// 可以用 context.drawImage(Image, dX, dY, dWidth, dHeight); 把base64寫回canvas
+
+// --- Lifecycle ---
+
+onMounted(() => {
+  // 【需求 2：呼叫封裝好的函式】
+  initCanvas();
+});
 
 </script>
 
@@ -76,25 +126,32 @@ const save = () => {
       @mousemove="draw"
       @mouseup="stopDrawing"
       @mouseleave="stopDrawing"
+      @touchstart="startDrawing"
+      @touchmove="draw"
+      @touchend="stopDrawing"
     ></canvas>
     <div class="toolbar dp-flex-col">
       <div class="dp-flex tool-case">
         <div class="dp-flex">
-          <p>Width</p><input type="range" min="1" max="20" v-model="brushSize" />
+          <p>{{$t('classes.charmInput1')}}</p><input type="range" min="1" max="20" v-model="brushSize" />
         </div>
         <div class="dp-flex">
-          <p>Color</p><input type="color" v-model="brushColor" />
+          <p>{{$t('classes.charmInput2')}}</p><input type="color" v-model="brushColor" />
         </div>
       </div>
       <div class="dp-flex btn-case">
         <BasicButton
           @click="clearCanvas"
-          class="btn-black"
-        >Clear</BasicButton>
+          class="btn-black i18n-anim"
+        >{{$t('classes.charmBtn1')}}</BasicButton>
+        <BasicButton
+          @click="resetCanvas"
+          class="btn-black i18n-anim"
+        >{{$t('classes.charmBtn2')}}</BasicButton>
         <BasicButton  
           @click="save"
-          class="btn-black"
-        >Save</BasicButton>
+          class="btn-black i18n-anim"
+        >{{$t('classes.charmBtn3')}}</BasicButton>
       </div>
     </div>
   </div>
@@ -124,12 +181,13 @@ canvas {
   div{
     gap: 8px;
     width: 45%;
+    justify-content: center;
   }
   p{
     display: inline-block;
   }
   input{
-    width: 80%;
+    width: 30%;
   }
 }
 .btn-case{

@@ -32,7 +32,7 @@ const hideLogoRWD = computed(() => {
 });
 
 const execLanguageChange = (changeAction) => {
-  const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label",];
+  const baseTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "span", "a", "label", ".i18n-anim"];
   const excludes = [
     ":not(.no-i18n-anim)",
     ":not(.trigger-lang)"
