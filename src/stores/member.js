@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import axios from 'axios';
 
 export const useMemberStore = defineStore('member', () => {
+    const apiBase = import.meta.env.VITE_API_BASE;
     const publicPath = import.meta.env.BASE_URL;
     // const imgURL = ref(`${publicPath}member/googleicon.png`);
     const imgURL = ref('');
@@ -19,6 +21,14 @@ export const useMemberStore = defineStore('member', () => {
         tempName: '',
         pointscard_ID:'',
         charmImg:''
+    });
+    const pointsStatus = ref({
+        dice: 0, 
+        shrimp: 0, 
+        ring: 0, 
+        bue: 0, 
+        mot: 0, 
+        member_wandcore: 0
     });
     const gameData = ref({
         bue: { count: 0, pass: 0 },
@@ -57,6 +67,17 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
                 imgURL.value = dbData.headshot || '';
+
+                pointsSatus.value = {
+                    mot: dbData.motorcyclegame_pass,
+                    shrimp: dbData.shrimpgame_pass,
+                    dice: dbData.dicegame_pass,
+                    bue: dbData.buegame_pass,
+                    ring: dbData.ringgame_pass,
+                    member_wandcore: dbData.member_wandcore || 0
+                };
+                console.log("資料加載成功", pointsSatus.value);
+
                 memberData.value.charmImg = dbData.charmgame_img1 || '';
                 gameData.value.bue = { 
                     count: dbData.buegame_count, 
@@ -92,6 +113,30 @@ export const useMemberStore = defineStore('member', () => {
             console.error("Fetch 發生錯誤:", error);
         }
     };
+
+    const stampOnepoint = async (columnName) => {
+        if(!memberData.value.number){
+            console.error('找不到會員，請先登入!')
+            return
+        }
+        const API_URL = `${apiBase}/stampOnePoint.php`;
+        
+        try{
+            const response = await axios.post(API_URL, {
+                member_ID : memberData.value.number,
+                column : columnName
+            });
+
+            if(response.data.success){
+                pointsStatus.value[columnName] = 1;
+                console.log(`[${columnName}]蓋章成功`)
+            } else {
+                console.error('蓋章失敗', response.data.message);
+            }
+        } catch(error){
+            console.error("API 連線錯誤:", error);
+        }
+    }
 
     const data_uptime = async() => {
         const storedUser = localStorage.getItem('user');
@@ -181,5 +226,7 @@ export const useMemberStore = defineStore('member', () => {
         setOrderNumber,
         saveGameResult,
         gameData,
+        pointsSatus,
+        stampOnepoint,
     };
 });

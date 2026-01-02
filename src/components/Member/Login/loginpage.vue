@@ -71,7 +71,7 @@
     const LineLogin = () => {
         window.location.href = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=http%3A%2F%2Flocalhost%2FFormosoul%2Fpublic%2Fphp%2FlineLogin.php&state=12345&scope=profile%20openid%20email";
     
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -126,7 +126,7 @@
         height: 90%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;  
+        justify-content: center;  
 
     }
     .btn-blue-fill{
