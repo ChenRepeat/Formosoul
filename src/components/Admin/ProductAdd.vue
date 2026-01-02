@@ -24,7 +24,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="Product Name (English)">
+            <el-form-item label="Product Name (English)" required>
               <el-input v-model="addProductForm.nameEn" placeholder="Enter product name" />
             </el-form-item>
           </el-col>
@@ -76,10 +76,10 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="初始上下架狀態">
+            <el-form-item label="上下架狀態" required>
               <el-radio-group v-model="addProductForm.status">
-                <el-radio-button :label="1">立即上架</el-radio-button>
-                <el-radio-button :label="0">暫時下架</el-radio-button>
+                <el-radio-button :label="1">上架</el-radio-button>
+                <el-radio-button :label="0">下架</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>

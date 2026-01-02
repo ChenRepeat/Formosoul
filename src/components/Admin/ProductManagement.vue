@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import ListLayout from './ListLayout.vue'
+  import { ElMessage, ElMessageBox } from 'element-plus'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
@@ -31,6 +32,39 @@ const getImageUrl = (filename) => {
   return `${imgBase}${filename}`;
 }
 
+const handleDelete = async (id) => {
+  // 1. 使用瀏覽器原生的 confirm 彈窗 (簡單、不會跑版)
+  const isConfirmed = confirm('確定要永久刪除這項商品嗎？此動作無法復原。');
+
+  // 2. 如果使用者按「取消」，就直接結束，什麼都不做
+  if (!isConfirmed) {
+    return;
+  }
+
+  // 3. 如果使用者按「確定」，執行 API 刪除邏輯
+  try {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/deleteProduct.php`;
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      ElMessage.success('刪除成功');
+      getProductData();
+    } else {
+      ElMessage.error(data.message || '刪除失敗');
+    }
+  } catch (error) {
+    console.error(error);
+    ElMessage.error('系統錯誤，無法刪除');
+  }
+}
 
 
   
@@ -53,7 +87,7 @@ const getImageUrl = (filename) => {
   </template>
 
   <el-table :data="pagedData" stripe>
-          <el-table-column label="商品主圖" width="120px">
+    <el-table-column label="商品主圖" width="100px">
       <template #default="scope">
         <div v-if="scope.row.main_image" style="display: flex; align-items: center; height: 100%;">
           <img 
@@ -67,12 +101,12 @@ const getImageUrl = (filename) => {
         </div>
       </template>
     </el-table-column>
-      <el-table-column label="商品編號" prop="product_ID"></el-table-column>
-      <el-table-column label="商品名稱" prop="name_zh"></el-table-column>
-      <el-table-column label="分類" prop="type"></el-table-column>
-      <el-table-column label="價格" prop="price"></el-table-column>
-      <el-table-column label="庫存" prop="stock"></el-table-column>
-      <el-table-column label="狀態" prop="status">
+      <el-table-column label="商品編號" prop="product_ID" width="150px"></el-table-column>
+      <el-table-column label="商品名稱" prop="name_zh" width="250px"></el-table-column>
+      <el-table-column label="分類" prop="type_zh" width="90px"></el-table-column>
+      <el-table-column label="價格" prop="price" width="80px"></el-table-column>
+      <el-table-column label="庫存" prop="stock" width="80px"></el-table-column>
+      <el-table-column label="狀態" prop="status" width="80px">
         <template #default="scope">
           <span v-if="scope.row.status === 1">
             上架中
@@ -83,12 +117,20 @@ const getImageUrl = (filename) => {
         </template>
       </el-table-column>
       <el-table-column width="50">
-        <router-link :to="{name:'ProductEdit'}">
-          <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
-        </router-link>
+        <template #default="scope">
+          <router-link :to="{name:'ProductEdit', params: { id: scope.row.product_ID }}">
+<font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" /></router-link>
+        </template>
       </el-table-column>
       <el-table-column width="50">
-        <font-awesome-icon :icon="['fas', 'trash-can']" class="delete-icon" />
+        <template #default="scope">
+          <font-awesome-icon 
+            :icon="['fas', 'trash-can']" 
+            class="delete-icon" 
+            @click="handleDelete(scope.row.product_ID)"
+            style="cursor: pointer;" 
+          />
+        </template>
       </el-table-column>
     </el-table>
 
