@@ -47,8 +47,8 @@
 	  INSERT INTO member(email, password, status, role, createdate, updatetime)
       VALUES (:email, :password , 1, 0, NOW(), NOW());
     SET @USER_ID = LAST_INSERT_ID();
-	  INSERT INTO pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
-	    VALUES (@USER_ID,0,0,0,0,0,0,0);
+	  INSERT INTO pointscard (member_ID,mot,shrimp,dice,ring,bue,member_wandcore)
+	    VALUES (@USER_ID,0,0,0,0,0,0);
     SET @CARD_ID = LAST_INSERT_ID();
     INSERT INTO buegame (buegame_count, pointscard_ID, buegame_pass)
 	    VALUES (0,@CARD_ID,0);
