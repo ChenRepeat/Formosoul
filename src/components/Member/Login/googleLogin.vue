@@ -101,6 +101,15 @@ onMounted(async ()=>{
   .google-login-btn-container{
     display: inline-flex;
     align-self: center;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
   }
+  .g_id_signin{
+    transform: scale(2);
 
+  }
 </style>
