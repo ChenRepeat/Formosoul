@@ -768,7 +768,7 @@ export const useProductStore = defineStore('products', () =>{
     use_zh: '在各縣市交通轉運站出示，登上漆有學院圖騰的接駁車。車內配有抗暈魔法，確保旅途舒適。',
     isLike: false
   }
-]);
+    ]);
 
     //過濾出所有已上架商品
     const productListed = computed(()=>{
