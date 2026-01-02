@@ -7,7 +7,9 @@ export const nightMarketInfo = [
     famous: "豪大大雞排、士林大香腸",
     famous_en: "Large Fried Chicken",
     lat: 25.0878,
-    lng: 121.5241
+    lng: 121.5241,
+    cityName: "臺北市",      // 用來縮小查詢範圍
+    locationName: "士林區", // 用來對應氣象局 API
   },
   {
     name: "饒河街觀光夜市",
@@ -17,7 +19,9 @@ export const nightMarketInfo = [
     famous: "福州世祖胡椒餅、陳董藥燉排骨、東發號油飯",
     famous_en: "Fuzhou Ancestor Pepper Bun, Chen Dong Pork Ribs Medical Soup, Dong Fa Hao Oil Rice",
     lat: 25.0501,
-    lng: 121.5777
+    lng: 121.5777,
+    cityName: "臺北市",      
+    locationName: "松山區",
   },
   {
     name: "寧夏觀光夜市",
@@ -27,7 +31,9 @@ export const nightMarketInfo = [
     famous: "圓環邊蚵仔煎、劉芋仔蛋黃芋餅、豬肝榮仔",
     famous_en: "Yuan Huan Bian Oyster Omelet, Liu Yu Zi Fried Taro Ball, Zhu Gan Rong Pig's Liver Soup",
     lat: 25.056,
-    lng: 121.5153
+    lng: 121.5153,
+    cityName: "臺北市",      
+    locationName: "大同區",
   },
   {
     name: "臨江街夜市 (通化)",
@@ -37,7 +43,9 @@ export const nightMarketInfo = [
     famous: "御品元冰火湯圓、紅花麻辣鹽水雞、駱記小炒",
     famous_en: "Yu Pin Yuan Iced and Hot Tangyuan, Red Flower Spicy Salted Chicken, Luo Ji Xiao Chao",
     lat: 25.0306,
-    lng: 121.5543
+    lng: 121.5543,
+    cityName: "臺北市",      
+    locationName: "大安區",
   },
   {
     name: "南機場夜市",
@@ -47,7 +55,9 @@ export const nightMarketInfo = [
     famous: "阿男麻油雞、來來水餃、玉米家烤玉米",
     famous_en: "A Nan Sesame Oil Chicken, Lai Lai Dumplings, Yu Mi Jia Grilled Corn",
     lat: 25.0239,
-    lng: 121.5052
+    lng: 121.5052,
+    cityName: "臺北市",      
+    locationName: "中正區",
   },
   {
     name: "台中逢甲夜市",
@@ -57,7 +67,9 @@ export const nightMarketInfo = [
     famous: "明倫蛋餅、日船章魚小丸子",
     famous_en: "Ming Lun Egg Pancake, Ri Chuan Takoyaki",
     lat: 24.1802,
-    lng: 120.645
+    lng: 120.645,
+    cityName: "臺中市",      
+    locationName: "西屯區",
   },
   {
     name: "花蓮東大門夜市",
@@ -67,7 +79,9 @@ export const nightMarketInfo = [
     famous: "第一家烤肉、林記燒番麥",
     famous_en: "First BBQ, Lin Ji Roasted Corn",
     lat: 23.9745,
-    lng: 121.6115
+    lng: 121.6115,
+    cityName: "花蓮縣",      
+    locationName: "花蓮市",
   },
   {
     name: "高雄瑞豐夜市",
@@ -77,7 +91,9 @@ export const nightMarketInfo = [
     famous: "天使雞排、萬國牛排",
     famous_en: "Angel Fried Chicken, Wan Guo Steak",
     lat: 22.6661,
-    lng: 120.2998
+    lng: 120.2998,
+    cityName: "高雄市",      
+    locationName: "鼓山區",
   },
   {
     name: "台中旱溪夜市",
@@ -87,7 +103,9 @@ export const nightMarketInfo = [
     famous: "鳳梨冰、波蘭保羅爸爸手工蛋糕",
     famous_en: "Pineapple Ice, Paul's Polish Cake",
     lat: 24.1374,
-    lng: 120.7013
+    lng: 120.7013,
+    cityName: "臺中市",      
+    locationName: "東區",
   },
   {
     name: "嘉義文化路夜市",
@@ -97,7 +115,9 @@ export const nightMarketInfo = [
     famous: "林聰明沙鍋魚頭、嘉義豆奶攤",
     famous_en: "Smart Fish, Chiayi Soy Milk Stand",
     lat: 23.4791,
-    lng: 120.4497
+    lng: 120.4497,
+    cityName: "嘉義市",      
+    locationName: "東區",
   },
   {
     name: "台南花園夜市",
@@ -107,7 +127,9 @@ export const nightMarketInfo = [
     famous: "二師兄古早味滷味、阿美芭樂",
     famous_en: "Master Ni's Braised Food, A-Mei Guava",
     lat: 23.0107,
-    lng: 120.1997
+    lng: 120.1997,
+    cityName: "臺南市",      
+    locationName: "北區",
   },
   {
     name: "台南大東夜市",
@@ -117,7 +139,9 @@ export const nightMarketInfo = [
     famous: "地瓜球、延記臭豆腐",
     famous_en: "Sweet Potato Balls, Yan Ji Stinky Tofu",
     lat: 22.9818,
-    lng: 120.2223
+    lng: 120.2223,
+    cityName: "臺南市",      
+    locationName: "東區",
   },
   {
     name: "高雄六合夜市",
@@ -127,7 +151,9 @@ export const nightMarketInfo = [
     famous: "鄭老牌木瓜牛奶、莊記海產粥",
     famous_en: "Zheng's Papaya Milk, Zhuang's Seafood Congee",
     lat: 22.6336,
-    lng: 120.3016
+    lng: 120.3016,
+    cityName: "高雄市",      
+    locationName: "新興區",
   },
   {
     name: "屏東墾丁大街",
@@ -137,6 +163,8 @@ export const nightMarketInfo = [
     famous: "烤地瓜球、泰式炸香蕉",
     famous_en: "Roasted Sweet Potato Balls, Thai Fried Bananas",
     lat: 21.9448,
-    lng: 120.7971
+    lng: 120.7971,
+    cityName: "屏東縣",      
+    locationName: "恆春鎮",
   }
 ];

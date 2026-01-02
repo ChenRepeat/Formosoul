@@ -447,6 +447,19 @@
       "map-weather": {
           "popupDesc": "夜市位置 & \n 天氣"
       }, 
+      "map": {
+        "sidebarTitle": "夜市地點搜尋",
+        "filterRegion": "地區",
+        "searchPlaceholder": "輸入夜市或小吃名稱...",
+        "noResultFound": "沒有符合的夜市 🌙",
+        "regions": {
+          "all": "全台",
+          "north": "北部",
+          "central": "中部",
+          "south": "南部",
+          "east": "東部"
+        }
+      }, 
       "ring-toss": {
           "title": "套圈圈",
           "subTitle":"",
