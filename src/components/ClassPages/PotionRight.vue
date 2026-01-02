@@ -26,6 +26,8 @@ const resultTitle = ref('');
 const resultIntro = ref('');
 const resultBigTitle = ref('classes.potionBigTitle2');
 
+const container = ref(null);
+
 let selectList = []
 let correctList = []
 let resultIndex = null
@@ -72,7 +74,7 @@ let ingredientList = [
             imgUrl:'Classes/potions/recipeCoconut.png',
           },
 ]
-  // potions 改用外部引入
+  // potions 外部引入
 
 //functions
 function shuffle(arr) {
@@ -93,16 +95,31 @@ const initDraggable = () => { //清掉上回合的實體
     }
     Draggable.create( '.potion-right-ingredient', {
       type:'x, y', // == default 允許平面上下左右移動
-  
+
+      bounds:{left:-40, top:-40, width: 600, height: 800}, // 應該要抓到確切的組件寬高..但先這樣
+      onDrag: function(e){
+
+        const [left , right, top, bottom] = [-40, 560, -40, 760]
+          // 更改key 對應的value to bounds values
+        // console.log(e.x, e.y); // 這是相對螢幕左上角的座標
+        if(e.x < left){//
+          this.endDrag()
+        // gsap.to(this.target, { x: 0, y: 0, duration: 0.3, overwrite: true });
+        }
+
+      },
       onDragEnd: e => {
-       const instance = Draggable.get(e.target)
-  
-       if (instance.hitTest('.potion-right-pot','15%')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
+        const instance = Draggable.get(e.target)
+        if(!instance ) return
+        console.log('dragend');
+        gsap.to(e.target, { x: 0, y: 0, duration: 0.3 });
+      if (instance.hitTest('.potion-right-pot','15%')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
         gsap.to(e.target, { scale: 0, duration: 0.3 });
         selectList.push(e.target.name)
         
       }else{      
         gsap.to(e.target, { x: 0, y: 0, duration: 0.3 });
+
         // 未通過hitTest 判定為沒有進入鍋子
       }
       }
@@ -215,7 +232,7 @@ onMounted(()=>{
           @mousedown.stop
           @touchstart.stop>
     <img src="/Classes/potions/eletricPotLid.png" alt="" class="potion-right-pot-lid"> 
-    <div class="potion-right-ingredient-wrapper" ref="refWrapper">
+    <div class="potion-right-ingredient-wrapper" ref="container">
       <img v-for="(item, index) in ingredientList" 
           :src="item.imgUrl" :name="item.name" :id="'img'+(index + 1)" alt="" 
           class="potion-right-ingredient" 
@@ -275,7 +292,7 @@ onMounted(()=>{
     width: 100%;
     height: 100%;
     position: relative;
-    
+    // margin: -40px;
     .potion-right-ingredient{
       border-radius: 50%;
       position:absolute;
