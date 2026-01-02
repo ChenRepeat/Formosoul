@@ -93,7 +93,7 @@ const handleDelete = async (id) => {
           <img 
             :src="getImageUrl(scope.row.main_image)" 
             alt="主圖"
-            style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;"
+            style="width: 30px; height: 30px; object-fit: cover;"
           />
         </div>
         <div v-else>
@@ -102,7 +102,7 @@ const handleDelete = async (id) => {
       </template>
     </el-table-column>
       <el-table-column label="商品編號" prop="product_ID" width="150px"></el-table-column>
-      <el-table-column label="商品名稱" prop="name_zh" width="250px"></el-table-column>
+      <el-table-column label="商品名稱" prop="name_zh" width="220px"></el-table-column>
       <el-table-column label="分類" prop="type_zh" width="90px"></el-table-column>
       <el-table-column label="價格" prop="price" width="80px"></el-table-column>
       <el-table-column label="庫存" prop="stock" width="80px"></el-table-column>
@@ -135,9 +135,6 @@ const handleDelete = async (id) => {
     </el-table>
 
     <template #footer>
-      <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
-      </div>
       <el-pagination 
         v-model:current-page="currentPage"
         :total="total"
@@ -145,6 +142,9 @@ const handleDelete = async (id) => {
         background
         class="pagination-btn"
       />
+            <div class="pagination-text">
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
+      </div>
     </template>
 
   </ListLayout>
@@ -178,12 +178,16 @@ const handleDelete = async (id) => {
 }
 
 .pagination-text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -50px;
+  text-align: center; 
   color: #606266;
-  margin: 0;
   white-space: nowrap;
+}
+:deep(.el-table__row) {
+  min_height:30px; 
+}
+/* 下方分頁區塊樣式 */
+.pagination-layout {
+  display: flex;
+  justify-content: center;
 }
 </style>

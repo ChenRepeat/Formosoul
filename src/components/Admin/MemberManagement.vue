@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import ListLayout from './ListLayout.vue'
+  import { useRouter } from 'vue-router'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
@@ -8,6 +9,8 @@
 
   const memberSearch = ref('')
   const memberData = ref([])
+
+  const router = useRouter()
 
   const pagedData = computed( () => {
     return memberData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
@@ -25,7 +28,9 @@
     total.value = data.length;
   }
 
-
+   const addMember = () => {
+    router.push('/admin/member-add')
+   }
 
 
 
@@ -39,15 +44,17 @@
 
   <template #title>
     <h6>會員列表</h6>
-    <p>檢視目前系統的所有會員資料。</p>
+    <p class="subtitle">檢視目前系統的所有會員資料。</p>
   </template>
 
   <template #controls>
-    <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input>
-    <el-button class="add-btn" round>新增會員</el-button>
+    <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input> 
+    <el-button type="primary"  @click="addMember" class="add-btn" round>
+        新增會員
+    </el-button>
   </template>
 
-  <el-table :data="pagedData" stripe>
+  <el-table :data="pagedData" stripe style="position: absolute; width: 100%; height: 100%;">
       <el-table-column label="會員編號" prop="member_ID"  width="90px"></el-table-column>
       <el-table-column label="姓名" prop="name" width="180px"></el-table-column>
       <el-table-column label="Email" prop="email"></el-table-column>
@@ -105,6 +112,8 @@
 }
 .add-btn{
   background-color: #F0F7FF;
+  font-weight: normal;
+  color: black;
   width: 140px;
 }
 .edit-icon{
@@ -132,4 +141,13 @@
 .pagination-btn{
   margin-bottom: 48px;
 }
+.subtitle{
+  min-height: 20px;
+}
+/* 下方分頁區塊樣式 */
+.pagination-layout {
+  display: flex;
+  justify-content: center;
+}
+
 </style>
