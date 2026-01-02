@@ -38,3 +38,4 @@ __screenshots__/
 
 .env
 db_config.php
+public/php/vendor/autoload.php.rej
