@@ -6,7 +6,9 @@ import HandBack from './HandBack.vue';
 import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import IconDice from '@/components/icons/SVG/IconDice.vue';
-    
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
+const passTimes = ref(memberStore.gameData.dice.pass)
 
 // 過關蓋章
 const showCardOverlay = ref(false);
@@ -60,9 +62,9 @@ const updateMouse = (e) => {
 }
 
 const diceOrigins = [
-    {left: 0.8, top: 0.4},
+    {left: 0.75, top: 0.4},
     {left: 0.2, top: 0},
-    {left: 0.15, top: 0.75},
+    {left: 0.18, top: 0.75},
 
 ]
 
@@ -268,6 +270,8 @@ const checkWinner = () => {
 
   finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
   if (isWin) {
+    memberStore.stampOnepoint('dice').catch(err => console.error("骰子蓋章 API 失敗:", err));
+
     setTimeout(() => {
         showCardOverlay.value = true;
         
@@ -285,6 +289,7 @@ const checkWinner = () => {
             }, 600);
         }, 500);
     }, 1000);
+    memberStore.saveGameResult('dice', { pass: passTimes.value, score: pScore });
   }
 }
 
@@ -310,20 +315,33 @@ const resetGame = () => {
 onMounted(()=>{
   document.body.style.overflow = 'hidden';
   document.documentElement.style.overflow = 'hidden';
+
   window.addEventListener('mousemove', updateMouse)
   window.addEventListener('mousedown', handleMouseDown)
   window.addEventListener('mouseup', handleMouseUp)
   window.addEventListener('keydown', handleKey);
 
-  const saved = localStorage.getItem('game_progress');
-  if (saved) {
-    const progress = JSON.parse(saved);
-    passedGames.value.shrimp = !!progress.shrimp;
-    passedGames.value.dice = !!progress.dice;
-    passedGames.value.ringtoss = !!progress.ringtoss;
-    passedGames.value.bue = !!progress.bue;
-    passedGames.value.bike = !!progress.bike;
-    passedGames.value.wand = !!progress.wand;
+  const status = memberStore.pointsStatus || {};
+  passedGames.value.shrimp   = status.shrimp >= 1;
+  passedGames.value.dice     = status.dice >= 1;
+  passedGames.value.ringtoss = status.ring >= 1; 
+  passedGames.value.bue      = status.bue >= 1;
+  passedGames.value.bike     = status.mot >= 1;     
+  passedGames.value.wand     = status.member_wandcore >= 1;
+
+
+  const allEmpty = Object.values(status).every(v => v === 0 || v === false);
+  if (allEmpty) {
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      passedGames.value.shrimp   ||= !!progress.shrimp;
+      passedGames.value.dice     ||= !!progress.dice;
+      passedGames.value.ringtoss ||= !!progress.ringtoss;
+      passedGames.value.bue      ||= !!progress.bue;
+      passedGames.value.bike     ||= !!progress.bike;
+      passedGames.value.wand     ||= !!progress.wand;
+    }
   }
 })
 

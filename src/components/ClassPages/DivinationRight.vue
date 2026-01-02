@@ -4,6 +4,8 @@ import { ref, onMounted } from 'vue';
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
+const passTimes = ref(memberStore.gameData.bue.pass)
+
 // 過關蓋章
 const showCardOverlay = ref(false);
 const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
@@ -14,15 +16,29 @@ const handleCheckLedger = () => {
 };
 
 onMounted(() => {
+
+    const status = memberStore.pointsStatus || {};
+
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1; 
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;     
+    passedGames.value.wand     = status.member_wandcore >= 1;
+
     const saved = localStorage.getItem('game_progress');
-    if (saved) {
-        const progress = JSON.parse(saved);
-        passedGames.value.shrimp = !!progress.shrimp;
-        passedGames.value.dice = !!progress.dice;
-        passedGames.value.ringtoss = !!progress.ringtoss;
-        passedGames.value.bue = !!progress.bue;
-        passedGames.value.bike = !!progress.bike;
-        passedGames.value.wand = !!progress.wand;
+    const allEmpty = Object.values(status).every(v => v === 0 || v === false);
+    if (allEmpty) {
+        const saved = localStorage.getItem('game_progress');
+        if (saved) {
+            const progress = JSON.parse(saved);
+            passedGames.value.shrimp   ||= !!progress.shrimp; 
+            passedGames.value.dice     ||= !!progress.dice;
+            passedGames.value.ringtoss ||= !!progress.ringtoss;
+            passedGames.value.bue      ||= !!progress.bue;
+            passedGames.value.bike     ||= !!progress.bike;
+            passedGames.value.wand     ||= !!progress.wand;
+        }
     }
 });
 
@@ -111,6 +127,7 @@ const buaBue = () => {
         finalResult.value = 'classes.bue3Name'; 
         siannCount.value ++
         if(siannCount.value == 3){
+          memberStore.stampOnepoint('bue').catch(err => console.error("擲筊蓋章失敗:", err));
           memberStore.gameData.bue.pass +=1
           memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
           setTimeout(() => {
@@ -120,9 +137,11 @@ const buaBue = () => {
                 activeTriggers.value.bue = true;
               setTimeout(() => {
                 passedGames.value.bue = true;
+
                 const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
                 currentProgress.bue = true; 
                 localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+
                 activeTriggers.value.bue = false;
               }, 600); 
             }, 500);
@@ -130,6 +149,7 @@ const buaBue = () => {
           }, 500);
         }
       }
+      memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass });
     }, 1500);
   }, 50);
 };
