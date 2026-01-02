@@ -16,21 +16,21 @@ const isPortkeyVisible = ref(false);
 let observer;
 
 const airports = ref([
-  { id: 1, name: 'Taipei Songshan Airport', code: 'TSA', top: 75, left: 93 }, 
-  { id: 2, name: 'Taiwan Taoyuan Int. Airport', code: 'TPE', top: 53, left: 85 },
-  { id: 3, name: 'Taichung Int. Airport', code: 'RMQ', top: 20, left: 59 },
-  { id: 4, name: 'Kaohsiung Int. Airport', code: 'KHH', top: 12, left: 31 },
+  { id: 1, name: 'about.aboutPort1', code: 'TSA', top: 75, left: 93 }, 
+  { id: 2, name: 'about.aboutPort2', code: 'TPE', top: 53, left: 85 },
+  { id: 3, name: 'about.aboutPort3', code: 'RMQ', top: 20, left: 59 },
+  { id: 4, name: 'about.aboutPort4', code: 'KHH', top: 12, left: 31 },
 ]);
 
 // 港口位置
 const shipLocations = ref([
-  { id: 1, name: 'Wuling', lat: '24.1372° N', lng: '121.2757° E', style: { top: '30%', left: '0%' } },
-  { id: 2, name: 'Sizihwan', lat: '22.625809° N', lng: '120.264044° E', style: { top: '12%', left: '20%' } },
-  { id: 3, name: 'Xiaoliuqiu', lat: '22.338644° N', lng: '120.369817° E', style: { top: '0%', left: '50%' } },
-  { id: 4, name: 'Calligraphy Greenway', lat: '24.151290° N', lng: '120.663210° E', style: { top: '8%', right: '20%' } },
-  { id: 5, name: 'Luye Highland', lat: '22.913389° N', lng: '121.119611° E', style: { bottom: '15%', left: '10%' } },
-  { id: 6, name: 'Ci Sing Tan', lat: '24.032889° N', lng: '121.627944° E', style: { bottom: '0%', left: '37%' } },
-  { id: 7, name: 'Kinmen', lat: '24.44° N', lng: '118.33° E', style: { bottom: '40%', right: '0%' } },
+  { id: 1, name: 'about.aboutCity1', lat: '24.1372° N', lng: '121.2757° E', style: { top: '30%', left: '0%' } },
+  { id: 2, name: 'about.aboutCity2', lat: '22.625809° N', lng: '120.264044° E', style: { top: '12%', left: '20%' } },
+  { id: 3, name: 'about.aboutCity3', lat: '22.338644° N', lng: '120.369817° E', style: { top: '0%', left: '50%' } },
+  { id: 4, name: 'about.aboutCity4', lat: '24.151290° N', lng: '120.663210° E', style: { top: '8%', right: '20%' } },
+  { id: 5, name: 'about.aboutCity5', lat: '22.913389° N', lng: '121.119611° E', style: { bottom: '15%', left: '10%' } },
+  { id: 6, name: 'about.aboutCity6', lat: '24.032889° N', lng: '121.627944° E', style: { bottom: '0%', left: '37%' } },
+  { id: 7, name: 'about.aboutCity7', lat: '24.44° N', lng: '118.33° E', style: { bottom: '40%', right: '0%' } },
 ]);
 
 const islandRef = ref(null);
@@ -82,14 +82,14 @@ onUnmounted(() => {
   <div class="about-container">
 
     <div class="island-text">
-      <h4>About</h4>
+      <h4>{{$t("about.aboutTitle")}}</h4>
       <h1>Formosoul</h1>
-      <h6 class="fw200">— A magical nexus weaving through diverse civilizations.</h6>
+      <h6 class="fw200">{{$t("about.aboutIntro")}}</h6>
       <br>
       <p class="lore-text fw200">
-        Hidden within the clouds ten thousand feet above Taiwan, the Academy is a modern floating island suspended in the heavens. Guarded by powerful illusions and invisible to the naked eye, only the chosen ones holding an "Enrolment Letter" may pierce the veil of mist to enter this sanctuary of magic.
+        {{$t("about.aboutText1")}}
         <br>
-        We are dedicated to exploring the ultimate equilibrium of magic: intertwining the ancient, natural spiritual energies preserved within the island of Taiwan with the precise and rigorous spellcasting techniques of the West. At Formosoul, we do not merely teach magic; within the intertwining and resonance of diverse systems, we manifest the most balanced and formidable magical framework of the modern era.
+        {{$t("about.aboutText2")}}
       </p>
     </div>
     
@@ -101,7 +101,7 @@ onUnmounted(() => {
     >
     
     <div class="location-container" ref="mapSectionRef" :class="{ 'active': isMapVisible }">
-      <h2>Location</h2>
+      <h2>{{$t("about.aboutLocation")}}</h2>
       <div class="map-container">
         <img src="/public/About/world-map.png" alt="#">
         <span class="pin-point">
@@ -111,8 +111,8 @@ onUnmounted(() => {
     </div>
 
     <div class="travel-modes">
-      <h2>Modes of Travel</h2>
-      <p class="fw200">Please ensure you have all necessary travel permits from the Ministry of Magic. For Muggle visitors, we recommend the 'By Air' option.</p>
+      <h2>{{$t("about.aboutTitle2")}}</h2>
+      <p class="fw200">{{$t("about.aboutIntro2")}}</p>
     </div>
 
     <div class="by-air">
@@ -123,7 +123,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-      <h5>By Air<br><span class="fw200">(For everyone)</span></h5>
+      <h5>{{$t("about.aboutByAir")}}<br><span class="fw200">{{$t("about.aboutAnyone")}}</span></h5>
     </div>
 
     <div class="air-map-section" ref="airMapRef">
@@ -147,7 +147,7 @@ onUnmounted(() => {
           
           <div class="popup-content">
               <div class="dashed-line"></div>
-              <p class="label-text">{{ point.name }} <span class="code">({{ point.code }})</span></p>
+              <p class="label-text">{{ $t(point.name) }} <span class="code">({{ point.code }})</span></p>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ onUnmounted(() => {
         class="ship-location-card"
         :style="[item.style, { '--delay': index * 0.15 + 's' }]" 
       >
-        <h3>{{ item.name }}</h3>
+        <h3>{{ $t(item.name) }}</h3>
         <div class="divider"></div> 
         <p class="coords">
           {{ item.lat }} <br>
@@ -178,8 +178,8 @@ onUnmounted(() => {
           </div>
         </div>
         <div>
-          <h5>Portkey<br><span class="fw200">(For magical partners)</span></h5>
-          <p class="fw200">Ensure your target coordinates are precise to prevent accidental misdirection.</p>
+          <h5>{{$t("about.aboutTitle3")}}<br><span class="fw200">{{$t("about.aboutTitle4")}}</span></h5>
+          <p class="fw200">{{$t("about.aboutIntro3")}}</p>
         </div>
       </div>
     </div>
