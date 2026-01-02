@@ -27,8 +27,8 @@ if($payload){
     // 先讀google 的名字進去
     $sql = " 
     START TRANSACTION;
-      INSERT INTO formosoul.member(email, password, status, role, pointscard_ID, createdate, updatetime)
-      VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
+      INSERT INTO formosoul.member(email, name, status, role, createdate, updatetime)
+      VALUES (:email, :name, 1, 0, NOW(), NOW());
       SET @USER_ID = LAST_INSERT_ID();
       INSERT INTO formosoul.pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
       VALUES (@USER_ID,0,0,0,0,0,0);
