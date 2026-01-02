@@ -19,7 +19,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 header('Access-Control-Allow-Credentials: true');
 
 // 設定回傳內容為 JSON 格式
-header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: application/json; charset=utf8mb4');
 
 // 處理 "預檢請求" (Preflight Request)
 // 當 Vue 發送複雜請求時，瀏覽器會先送一個 OPTIONS 請求，這裡直接回傳 OK 結束，不進入資料庫連線
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 //建立資料庫連線物件
-$dsn = "mysql:host=".$db_host.";port=".$db_port.";dbname=".$db_select.";charset=utf8";
+$dsn = "mysql:host=".$db_host.";port=".$db_port.";dbname=".$db_select.";charset=utf8mb4";
 
 $options = [
     //有錯誤即顯示

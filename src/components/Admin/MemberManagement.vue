@@ -51,7 +51,7 @@
       <el-table-column label="會員編號" prop="member_ID"  width="90px"></el-table-column>
       <el-table-column label="姓名" prop="name" width="180px"></el-table-column>
       <el-table-column label="Email" prop="email"></el-table-column>
-      <el-table-column label="集點卡" prop="pointscard" width="70px"></el-table-column>
+      <!-- <el-table-column label="集點卡" prop="pointscard_ID" width="80px"></el-table-column> -->
       <el-table-column label="註冊日期" width="110px">
         <template #default="scope">
           {{ scope.row.createdate?.split(' ')[0] }}

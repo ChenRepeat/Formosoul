@@ -27,8 +27,8 @@ if($payload){
     // 先讀google 的名字進去
     $sql = " 
     START TRANSACTION;
-      INSERT INTO formosoul.member(email, name,  status, role,  createdate, updatetime)
-      VALUES (:email, :name , 1, 0, , NOW(), NOW());
+      INSERT INTO formosoul.member(email, name, status, role, createdate, updatetime)
+      VALUES (:email, :name, 1, 0, NOW(), NOW());
       SET @USER_ID = LAST_INSERT_ID();
       INSERT INTO formosoul.pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
       VALUES (@USER_ID,0,0,0,0,0,0);
@@ -46,7 +46,7 @@ if($payload){
         INSERT INTO formosoul.shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
         VALUES (@CARD_ID,0,0,0);
         COMMIT; 
-        ";
+    ";
     $stmt= $pdo->prepare($sql);
     $stmt->bindValue(':email', $payload['email']);
     $stmt->bindValue(':name', $payload['name']);
