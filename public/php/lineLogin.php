@@ -25,9 +25,6 @@ $response = curl_exec($ch);
 curl_close($ch);
 
 $result = json_decode($response, true);
-// echo "<pre>";
-// print_r($result);
-// echo "</pre>";
 
 //檢查有沒有成功拿到 Access Token
 if (isset($result['access_token'])) {
@@ -48,11 +45,6 @@ if (isset($result['access_token'])) {
     curl_close($ch);
     
     $profile = json_decode($profile_response, true);
-    
-    // echo "<h2>使用者資料：</h2>";
-    // echo "<pre>";
-    // print_r($profile); //userId, displayName, pictureUrl
-    // echo "</pre>";
 
 }
 
@@ -63,8 +55,6 @@ if (isset($result['access_token'])) {
         $payload = explode('.', $id_token)[1]; 
         // 因為它是用 Base64 編碼的，我們要解開它
         $data = json_decode(base64_decode($payload), true);
-
-        // echo "您的 Email 是：" . $data['email'];
     }
 
 
@@ -87,13 +77,6 @@ if (isset($result['access_token'])) {
     ');
     $stmt->execute([$user_email]);
     $member = $stmt->fetch();
-
-//         // 【請暫時加入這段偵錯代碼】
-// echo "<h1>偵錯模式</h1>";
-// echo "Email: "; var_dump($user_email); // 檢查是不是 NULL
-// echo "<br>Name: "; var_dump($user_name);
-// echo "<br><pre>"; print_r($result); echo "</pre>"; // 檢查 LINE 到底回傳了什麼
-// exit; // 強制停止，不讓它往下跑資料庫
 
 if ($member) {
     // ===【情況 A：是舊會員】===

@@ -23,7 +23,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="Product Name (English)">
+            <el-form-item label="Product Name (English)" required>
               <el-input v-model="addProductForm.nameEn" placeholder="Enter product name" />
             </el-form-item>
           </el-col>
@@ -74,10 +74,10 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="初始上下架狀態">
+            <el-form-item label="上下架狀態" required>
               <el-radio-group v-model="addProductForm.status">
-                <el-radio-button :label="1">立即上架</el-radio-button>
-                <el-radio-button :label="0">暫時下架</el-radio-button>
+                <el-radio-button :label="1">上架</el-radio-button>
+                <el-radio-button :label="0">下架</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -199,9 +199,9 @@
       </div>
 
       <div class="footer-actions">
-        <el-button @click="goBack" size="large">取消新增</el-button>
+        <el-button @click="goBack" size="large">取消編輯</el-button>
         <el-button type="primary" color="#003060" @click="submitForm" size="large" :loading="loading">
-          新增商品
+          更新商品
         </el-button>
       </div>
 
@@ -213,6 +213,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter,useRoute } from 'vue-router'
 import { Plus, UploadFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
@@ -290,17 +291,16 @@ const goBack = () => {
 
 const fetchProductDetails = async (id) => {
   const apiBase = import.meta.env.VITE_API_BASE
+  const imgBase = import.meta.env.VITE_IMG_BASE;
   const apiURL = `${apiBase}/getProductData.php?id=${id}`
 
   try {
     loading.value = true
     const response = await fetch(apiURL)
-    const resData = await response.json()
+    const data = await response.json()
 
-    // 根據上一段對話的 PHP 結構，資料應該包在 resData.data 裡面
-    // 如果你的 PHP 直接回傳資料陣列，請改用 const data = resData;
-    if (resData.status && resData.data) {
-      const data = resData.data
+
+    if (data && data.product_ID) {
       
       console.log('抓回來的商品資料:', data)
 
@@ -309,33 +309,36 @@ const fetchProductDetails = async (id) => {
       addProductForm.id = data.product_ID
       addProductForm.typeEn = data.type_en
       addProductForm.typeZh = data.type_zh
-      addProductForm.createDate = data.createdate
-      addProductForm.descriptionZh = data.description_zh
-      addProductForm.descriptionEn = data.description_en
-      addProductForm.storyZh = data.story_zh
-      addProductForm.storyEn = data.story_en
-      addProductForm.useZh = data.use_zh
-      addProductForm.useEn = data.use_en
+      addProductForm.createDate = data.create_at
+      addProductForm.descriptionZh = data.details[0].description_zh
+      addProductForm.descriptionEn = data.details[0].description_en
+      addProductForm.storyZh = data.details[0].story_zh
+      addProductForm.storyEn = data.details[0].story_en
+      addProductForm.useZh = data.details[0].use_zh
+      addProductForm.useEn = data.details[0].use_en
       // 小心數字與狀態 (轉型確保型態為數字)
       addProductForm.price = Number(data.price)
       addProductForm.stock = Number(data.stock)
-      addProductForm.status = Number(data.status)
-      // 主圖
-      if (data.main_image) {
+      addProductForm.status = Number(data.product_status)
+
+// 1. 主圖
+if (data.main_image) {
         mainImage.value = [{
-          name: 'current_main.png',//任意名
-          url: data.main_image
-        }]
+          name: 'current_main.png',
+          // 【修正點 2】必須加上 imgBase 路徑，不然圖片預覽會破圖
+          url: `${imgBase}${data.main_image}` 
+        }];
       }
 
-      // 副圖
-      // data.sub_images是陣列
-      if (data.sub_images && data.sub_images.length > 0) {
-        subImages.value = data.sub_images.map(img => ({
-          name: `sub_${img.id}.png`,
-          url: img.url,
-          id: img.id
-        }))
+      // 2. 副圖
+      // 【修正點 3】PHP 回傳的是 ['img1.jpg', 'img2.jpg'] 字串陣列
+      // 不能用 img.url，因為 img 本身就是字串
+      if (data.sub_images && Array.isArray(data.sub_images) && data.sub_images.length > 0) {
+        subImages.value = data.sub_images.map((filename, index) => ({
+          name: `sub_${index}.png`,
+          url: `${imgBase}${filename}`, // 組合完整路徑
+          rawName: filename // (選填) 之後送出表單可能用到
+        }));
       }
     } else {
       console.error('API 回傳狀態不正確或查無資料')
@@ -347,6 +350,68 @@ const fetchProductDetails = async (id) => {
   }
 }
 
+const submitForm = async () => {
+  loading.value = true;
+  
+  if(!addProductForm.nameZh || !addProductForm.price) {
+      ElMessage.warning('請填寫必填欄位 (名稱、價格)');
+      loading.value = false;
+      return;
+  }
+
+  const apiBase = import.meta.env.VITE_API_BASE;
+  const API_URL = `${apiBase}/editProduct.php`;
+
+  // 準備 FormData
+  const fd = new FormData();
+  
+  // 【關鍵】一定要傳 ID 給 PHP，不然它不知道要更新哪一筆
+  fd.append('product_ID', addProductForm.id);
+
+  // 將表單文字資料塞入
+  for (const [key, value] of Object.entries(addProductForm)) {
+    // 避免傳 undefined 變成字串 "undefined"
+    fd.append(key, value === undefined || value === null ? '' : value);
+  }
+
+  // 圖片上傳
+  
+  // (A) 主圖：只有當使用者選了"新圖片" (有 raw 屬性) 才傳送
+  // 如果是舊圖 (只有 url 屬性)，代表使用者沒改圖，就不傳，PHP 會保留原圖
+  if (mainImage.value.length > 0 && mainImage.value[0].raw) {
+    fd.append('mainImage', mainImage.value[0].raw);
+  }
+
+  // (B) 副圖：只傳送"新增加"的圖片
+  subImages.value.forEach((file) => {
+    if (file.raw) {
+       fd.append('subImages[]', file.raw);
+    }
+  });
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: fd        
+    });
+    
+    const data = await response.json();
+
+    if (data.success) {
+      ElMessage.success('商品更新成功！');
+      // 更新成功後，跳轉回列表頁
+      router.push('/admin/product-management');
+    } else {
+      ElMessage.error('更新失敗：' + (data.message || '未知錯誤'));
+    }
+
+  } catch (error) {
+    console.error('Network error:', error);
+    ElMessage.error('系統發生錯誤，無法連線到伺服器');
+  } finally {
+    loading.value = false;
+  }
+}
 
   onMounted (() =>{
     if (productID) {
