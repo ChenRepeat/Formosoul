@@ -61,7 +61,7 @@ const props = defineProps({
 //     activeIcons.value[key] = !activeIcons.value[key]; 
 // };
 
-const pointsSatus = ref({
+const pointsStatus = ref({
     dice: 0, 
     shrimp: 0, 
     ring: 0, 
