@@ -164,7 +164,7 @@
         height: 50%;
         margin: 0 auto;
         // padding-top: 80px;
-        padding-bottom: 80px;
+        padding-bottom: 40px;
         
     }
 
@@ -227,8 +227,14 @@
     }
     @media screen and (min-width: 1400px) {
         .login-form{
-        padding-top: 40px;
+            padding-top: 40px;
         }
 
+    }
+    @media screen and (max-width: 1200px) {
+        .login-form{
+            margin-top: 80px;
+        }
+        
     }
 </style>

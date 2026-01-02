@@ -342,7 +342,6 @@ img { object-fit: none; }
   border-radius: 36px;
   padding: 12px 45px;
   height: auto;
-  min-height: 50px;
   gap: 16px;
   position: absolute;
   flex-direction: column; 
@@ -354,9 +353,11 @@ img { object-fit: none; }
     padding: 6px 20px;
     align-items: center;
     height: auto; 
-    min-height: 50px; 
     max-height: 90vh; 
-    overflow-y: auto;  
+    overflow-y: auto; 
+    &.open{
+      padding-top: 6px;
+    } 
   }
 }
 
@@ -377,7 +378,6 @@ img { object-fit: none; }
     padding: 6px 20px;
     align-items: center;
     height: auto; 
-    min-height: 50px; 
     max-height: 90vh; 
     overflow-y: auto;  
   }
@@ -459,6 +459,9 @@ img { object-fit: none; }
   width: 24px;
   position: relative;
   overflow: hidden;
+  @media screen and (max-width: 1200px) {
+    transform: scale(0.75);
+  }
 }
 .transition { 
   transition: 0.5s ease-out ,color 0s;

@@ -8,9 +8,9 @@ try {
 
   //寫入product ?為預處理 接收execute傳的值
   $sqlProduct = "INSERT INTO product (
-      name_zh, name_en, `type`, price, stock, create_at, `update_at`, `status`
+      name_zh, name_en, `type_zh`, `type_en`, price, stock, create_at, `update_at`, `status`
   ) VALUES (
-      ?, ?, ?, ?, ?, NOW(), NOW(), ?
+      ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?
   )";
 
   $stmtProduct = $pdo->prepare($sqlProduct);

@@ -5,21 +5,32 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useI18n } from 'vue-i18n';
 import { useLangStore } from '@/stores/lang';
+// 本地備援資料
 import { nightMarketInfo } from '@/components/SurvivalGuides/MapTWNightMarketLocation.js'
 
 const langStore = useLangStore();
 const { locale } = useI18n({ useScope: 'global' });
-const markersGroup = L.layerGroup(); // 放紅點用
 
-// 抓取GOOGLE SHEET 資料
-const sheetData = ref([]);
-const API_URL = 'https://script.google.com/macros/s/AKfycbxt1vzoKcxBwO0jE-uV1hvHBTU5FuKoxQgB3Nbr76Wxqk-GX2tAVfIYNJ2ffyGmShw/exec'
-
-
-// --- 2. 狀態變數 ---
+// --- 狀態變數 ---
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
+const markersGroup = L.layerGroup(); // 放紅點用
+
 const currentSelectedMarket = ref(null);
+const searchKeyword = ref('');
+const selectedRegion = ref('all');
+const regions = ['all', 'north', 'central', 'south', 'east'];
+const sheetRegionMapping = {
+  north: 'North',
+  central: 'Central',
+  south: 'South',
+  east: 'East'
+};
+
+// 抓取GOOGLE SHEET 資料
+const sheetData = ref([]); // 原始資料
+const API_URL = 'https://script.google.com/macros/s/AKfycbxt1vzoKcxBwO0jE-uV1hvHBTU5FuKoxQgB3Nbr76Wxqk-GX2tAVfIYNJ2ffyGmShw/exec'
+
 
 // --- 3. 設定檔 ---
 const IMAGE_URL = '/tjd103/SurvivalGuide/taiwan_image2_nobg.png';
@@ -27,9 +38,66 @@ const GEOJSON_URL = 'https://raw.githubusercontent.com/ronnywang/twgeojson/maste
 const MAP_BOUNDS = [[21.525, 119.459655], [25.615, 122.490]];
 const MAX_BOUNDS = L.latLngBounds(MAP_BOUNDS).pad(1.0);
 
-// 夜市資料
-// const tasks = ref(nightMarketInfo)
+const filteredMarket = computed(()=>{
+  return sheetData.value.filter( item => {
+    const isZh = locale.value.includes('zh');
+    const name = isZh ? item.name : (item.name_en || item.name);
+    const famous = isZh ? item.famous : (item.famous_en || item.famous);
+
+    const targetRegionValue = sheetRegionMapping[selectedRegion.value];
+    const matchRegion = selectedRegion.value === 'all' || item.region === targetRegionValue;
+
+    const matchKeyword = name.includes(searchKeyword.value) || famous.includes(searchKeyword.value);
+    
+    return matchRegion && matchKeyword;
+  });
+});
+
+const openMyPopup = (item) => {
+  const isZh = locale.value.toLowerCase().includes('zh');
+  const displayName = isZh ? item.name : (item.name_en || item.name);
+  const displayHours = isZh ? item.hours : (item.hours_en || item.hours);
+  const displayFamous = isZh ? item.famous : (item.famous_en || item.famous);
+
+  L.popup({
+    autoPan: false,
+    offset: [0, -10],
+    closeButton: true,
+    className: 'custom-popup'
+  })
+    .setLatLng([item.lat, item.lng])
+    .setContent(`
+      <div style="text-align: center; min-width: 150px;">
+        <h3 style="margin: 0 0 5px 0; color: #d63031;">${displayName}</h3>
+        <div style="font-size: 13px; color: #333; margin-bottom: 5px;">
+          <strong>🕒 ${displayHours}</strong>
+        </div>
+        <div style="font-size: 12px; color: #636e72;">${displayFamous}</div>
+      </div>
+    `)
+    .openOn(map.value);
+};
+
+const selectMarket = (item) => {
+  currentSelectedMarket.value = item.name;
+
+  map.value.flyTo([item.lat, item.lng], 9, {
+    animate: true,
+    duration: 1.2,
+    noMoveStart: true
+  });
   
+  openMyPopup(item);
+
+  // 自動捲動側邊欄列表
+  nextTick(() => {
+    const target = document.getElementById(`market-card-${item.name}`);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+};
+
 const renderMarkers = () => {
   if (!map.value || sheetData.value.length === 0) return;
 
@@ -38,7 +106,7 @@ const renderMarkers = () => {
   // 先把舊的紅點全部清掉
   markersGroup.clearLayers();
 
-  sheetData.value.forEach(item => {
+  filteredMarket.value.forEach(item => {
       const marker = L.circleMarker([item.lat, item.lng], {
         radius: 8,
         fillColor: '#ff4757',
@@ -48,60 +116,21 @@ const renderMarkers = () => {
         zIndexOffset: 1000
       });
 
-  const openMyPopup = () => {
-      const isZh = langStore.locale.toLowerCase().includes('zh');
-      const displayName = isZh ? item.name : (item.name_en || item.name);
-      const displayHours = isZh ? item.hours : (item.hours_en || item.hours);
-      const displayFamous = isZh ? item.famous : (item.famous_en || item.famous);
-
-      L.popup({
-        autoPan: false,
-        offset: [0, -10],
-        closeButton: true,
-        className: 'custom-popup'
-      })
-        .setLatLng([item.lat, item.lng])
-        .setContent(`
-          <div style="text-align: center; min-width: 150px;">
-            <h3 style="margin: 0 0 5px 0; color: #d63031;">${displayName}</h3>
-            <div style="font-size: 13px; color: #333; margin-bottom: 5px;">
-              <strong>🕒 ${displayHours}</strong>
-            </div>
-            <div style="font-size: 12px; color: #636e72;">
-              ${displayFamous}
-            </div>
-          </div>
-        `)
-        .openOn(map.value);
-    };
-
-    marker.on('click', function(e) {
+      marker.on('click', function(e) {
         L.DomEvent.stopPropagation(e);
-        currentSelectedMarket.value = item.name; 
-        map.value.flyTo([item.lat, item.lng], 9, {
-          animate: true,
-          duration: 1.2,
-          noMoveStart: true
-      });
-        openMyPopup();
+        selectMarket(item);
       });
 
-    markersGroup.addLayer(marker);
+      markersGroup.addLayer(marker);
 
-    if (currentSelectedMarket.value === item.name) {
-      openMyPopup();
-    }
+      if (currentSelectedMarket.value === item.name) {
+        openMyPopup(item);
+      }
   });
 };
 
-watch(() => langStore.locale, (newVal, oldVal) => {
-  if (map.value && newVal !== oldVal) {
+watch([() => langStore.locale, filteredMarket], () => {
     renderMarkers();
-  }
-});
-
-watch(sheetData, () => {
-  renderMarkers();
 }, { deep: true });
 
 const fetchData = async () => {
@@ -119,8 +148,14 @@ const fetchData = async () => {
   } 
 };
 
+const zoomIn = () => map.value?.zoomIn();
+const zoomOut = () => map.value?.zoomOut();
+
 onMounted(async () => {
   if (!mapContainer.value) return;
+
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
 
   // 1. 初始化地圖
   map.value = L.map(mapContainer.value, {
@@ -184,72 +219,100 @@ onMounted(async () => {
         layer.on('mouseout', () => layer.setStyle({ color: 'transparent', opacity: 0, weight: 1 }));
       }
     }).addTo(map.value);
-  } catch (e) {
-    console.error("GeoJSON error", e);
-  }
-  fetchData();
+  } catch (e) {console.error("GeoJSON error", e);}
+  await fetchData();
+  renderMarkers();
+  window.addEventListener('keydown', handleKey);
 });
 
+const handleKey = (e) => {
+  if (e.code === 'Escape') currentSelectedMarket.value = null;
+};
+
 onUnmounted(() => {
-  if (map.value) {
-    map.value.remove();
-    map.value = null;
-  }
+
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
+  
+  if (map.value) map.value.remove();
+  window.removeEventListener('keydown', handleKey);
 });
+
 </script>
 
 <template>
-  <div class="map-container">
-    <div ref="mapContainer" class="map"></div>
-    <div class="map-weather-left-frame">
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>{{ $t('nightmarket.items.map.sidebarTitle') }}</h2>
 
+        <div class="filter-group">
+          <label>{{ $t('nightmarket.items.map.filterRegion') }}</label>
+          <div class="pills">
+            <button 
+            v-for="key in regions" 
+            :key="key" 
+            :class="{ active: selectedRegion === key}"
+            @click="selectedRegion = key"
+            >  
+            <span v-if="selectedRegion === key" class="dot">●</span>
+            {{ $t(`nightmarket.items.map.regions.${ key }`) }}
+            </button>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <input type="text" v-model="searchKeyword" :placeholder="$t('nightmarket.items.map.searchPlaceholder')">
+          <span class="search-icon">🔍</span>
+        </div>
+      </div>
+      <div class="sidebar-content">
+        <div v-if="filteredMarket.length === 0" class="no-result">{{ $t('nightmarket.items.map.noResultFound') }}</div>
+
+        <div v-for="item in filteredMarket" 
+        :key="item.name"
+        :id="`market-card-${item.name}`"
+        class="market-card"
+        :class="{ 'active': currentSelectedMarket === item.name }"
+        @click="selectMarket(item)"
+        >
+        <div class="card-header">
+            <span class="region-badge" v-if="item.region">{{ $t(`nightmarket.items.map.regions.${item.region.toLowerCase()}`) }}</span>
+            <h3>{{ locale.includes('zh') ? item.name : (item.name_en || item.name) }}</h3>
+          </div>
+          <div class="card-body">
+            <p class="hours">🕒 {{ locale.includes('zh') ? item.hours : (item.hours_en || item.hours) }}</p>
+            <p class="note">🍴 {{ locale.includes('zh') ? item.famous : (item.famous_en || item.famous) }}</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  <div class="map-wrapper">
+      <div ref="mapContainer" class="map"></div>
+      
+      <div class="custom-zoom-control">
+        <button @click="zoomIn" class="zoom-btn">+</button>
+        <button @click="zoomOut" class="zoom-btn">−</button>
+      </div>
     </div>
   </div>
-  <div class="container">
-    <h2>資料顯示</h2>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>名稱</th>
-          <th>經緯度</th>
-          <th>營業時間</th>
-          <th>特色小吃</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in sheetData" :key="index">
-          <td>{{ locale.includes('zh') ? item.name : item.name_en }}</td>
-          <td>{{ item.lat }}, {{ item.lng }}</td>
-          <td>{{ locale.includes('zh') ? item.hours : item.hours_en }}</td>
-          <td>{{ locale.includes('zh') ? item.famous : item.famous_en }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+
 </template>
 
 
 
-<style scoped>
-
-.map-weather-left-frame {
-    width: 35%;
-    height: 100%;
-    position: absolute;
-    top: 0%;
-    left: 0%;
-}
-
-.map-container {
+<style scoped lang="scss">
+/* 佈局設定 */
+.main-layout {
+  display: flex;
   width: 100%;
   height: 100vh;
-  background-color: #0f1020;
+  background-color: #1A1A1A;
   font-family: 'Microsoft JhengHei', sans-serif;
-  color: white;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
-/* --- 左側 Sidebar --- */
 .sidebar {
   width: 360px;
   background: #191b31;
@@ -257,186 +320,55 @@ onUnmounted(() => {
   flex-direction: column;
   box-shadow: 4px 0 15px rgba(0,0,0,0.4);
   z-index: 10;
-  height: 100vh; 
 }
 
 .sidebar-header {
   padding: 20px;
   background: #202442;
   border-bottom: 1px solid #2f3455;
-  flex-shrink: 0; 
 }
 
-.sidebar-header h2 {
-  font-size: 1.2rem;
-  margin: 0 0 15px 0;
-  color: #fff;
-}
+.sidebar-header h2 { font-size: 1.2rem; color: #fff; margin-bottom: 15px; }
 
-.filter-group { margin-bottom: 15px; }
-.filter-group label {
-  font-size: 0.9rem;
-  color: #a0aec0;
-  margin-right: 10px;
-}
-
-.pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 5px;
-}
+.filter-group label { color: #a0aec0; font-size: 0.9rem; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; margin-bottom: 15px; }
 .pills button {
-  background: transparent;
-  border: 1px solid #4a5568;
-  color: #cbd5e0;
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  background: transparent; border: 1px solid #4a5568; color: #cbd5e0;
+  border-radius: 20px; padding: 4px 12px; cursor: pointer; transition: 0.3s;
 }
-.pills button:hover { border-color: #63b3ed; color: white; }
-.pills button.active {
-  background: #fff;
-  color: #1a202c;
-  border-color: #fff;
-  font-weight: bold;
-}
-.dot { font-size: 0.6rem; color: #3182ce; }
+.pills button.active { background: #fff; color: #1a202c; border-color: #fff; font-weight: bold; }
+.dot { font-size: 0.6rem; color: #3182ce; margin-right: 4px; }
 
 .search-box { position: relative; }
 .search-box input {
-  width: 100%;
-  padding: 10px 35px 10px 15px;
-  border-radius: 8px;
-  border: 1px solid #4a5568;
-  background: #2d3748;
-  color: white;
-  outline: none;
-  box-sizing: border-box;
+  width: 100%; padding: 10px 15px; border-radius: 8px;
+  background: #2d3748; border: 1px solid #4a5568; color: white;
 }
-.search-box input:focus { border-color: #63b3ed; }
-.search-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #a0aec0;
-}
+.search-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
 
-.sidebar-content {
-  flex: 1; 
-  overflow-y: auto; 
-  padding: 15px;
-  padding-bottom: 120px; /* 預留底部空間防止遮擋 */
-  position: relative; 
-  min-height: 0; 
-}
-
+.sidebar-content { flex: 1; overflow-y: auto; padding: 15px; scroll-behavior: smooth; }
 .sidebar-content::-webkit-scrollbar { width: 6px; }
 .sidebar-content::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 3px; }
-.sidebar-content::-webkit-scrollbar-track { background: transparent; }
-
-.no-result { text-align: center; color: #718096; margin-top: 30px; }
 
 .market-card {
-  background: white;
-  color: #333;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-  cursor: pointer;
+  background: white; color: #333; border-radius: 10px; padding: 15px;
+  margin-bottom: 15px; cursor: pointer; border-left: 5px solid transparent;
   transition: transform 0.2s;
-  position: relative;
-  border-left: 5px solid transparent;
 }
-.market-card:hover { transform: translateY(-3px); }
-.market-card.active {
-  border-left: 5px solid #ff4757;
-  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
-}
+.market-card:hover { transform: translateX(5px); }
+.market-card.active { border-left-color: #ff4757; background: #fff5f5; box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4); }
 
-.card-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.card-header h3 { margin: 0 0 0 8px; font-size: 1.1rem; font-weight: bold; }
-.region-badge {
-  background: #3182ce;
-  color: white;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.hours { font-size: 0.85rem; color: #555; margin: 4px 0; }
-.note { font-size: 0.85rem; color: #718096; margin: 0; line-height: 1.4; }
+.card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.card-header h3 { margin: 0; font-size: 1.1rem; }
+.region-badge { background: #3182ce; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; }
 
-/* --- 地圖區域 --- */
 .map-wrapper { flex: 1; position: relative; }
-.map { width: 100%; height: 100%; background: #0f1020; }
+.map { width: 100%; height: 100%; }
+.custom-zoom-control { position: absolute; top: 20px; left: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; }
+.zoom-btn { width: 40px; height: 40px; background: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.5rem; }
 
-.custom-zoom-control {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  border-radius: 4px;
-  overflow: hidden;
+.no-result {
+  color: $color-fsWhite;
 }
 
-.zoom-btn {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border: none;
-  font-size: 1.5rem;
-  color: #4a5568;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background 0.2s;
-}
-.zoom-btn:first-child { border-bottom: 1px solid #e2e8f0; }
-.zoom-btn:hover { background: #f7fafc; color: #000; }
-.zoom-btn:active { background: #edf2f7; }
-
-/* --- ★★★ 關鍵 CSS 修改：防跑版與動畫優化 ★★★ --- */
-
-/* 1. 禁止圖片層的自動過渡，防止縮放時底圖飄移 */
-:deep(.leaflet-image-layer),
-:deep(.leaflet-zoom-animated) {
-  transition: none !important;
-  will-change: transform;
-}
-
-/* 2. 優化圖片渲染 */
-:deep(.fixed-image-layer) {
-  image-rendering: -webkit-optimize-contrast;
-}
-
-/* 3. Popup 樣式優化 */
-:deep(.leaflet-popup-content-wrapper) {
-  border-radius: 8px;
-  padding: 5px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-}
-
-:deep(.county-label) {
-  background: transparent; border: none; box-shadow: none;
-  color: #fff; font-weight: bold; font-size: 14px; text-shadow: 1px 1px 2px #000;
-}
-
-:deep(.leaflet-marker-icon),
-:deep(.leaflet-popup) {
-  will-change: transform;
-}
 </style>

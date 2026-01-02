@@ -53,7 +53,6 @@
                 :icon="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
                 style="font-size: 24px;"
                 />
-                    <!-- {{ showPassword ? '隱藏' : '顯示'}} -->
                 </button>
             </div>
         </div>
@@ -155,7 +154,7 @@ async function sendOTPAPI(emailValue) {
         }else{
             throw new Error('Invalid email');
         }
-}
+};
 
 
 function enrollmentAPI(email, password, otp) {
@@ -173,7 +172,7 @@ function enrollmentAPI(email, password, otp) {
         })
     }).then( res => res.json());
 
-}
+};
 
 
 async function startCountdown() {

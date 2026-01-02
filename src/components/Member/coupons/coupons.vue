@@ -1,10 +1,16 @@
 <template>
-    <h3>Coupons</h3>
-    <Couponcontaion></Couponcontaion>
+    <h3 v-if="havecoupon">Coupons</h3>
+    <!-- <h3 >Coupons</h3>    -->
+    <Couponcontaion @no-coupon-found="handleNoCoupon"></Couponcontaion>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import Couponcontaion from './couponcontaion.vue';
+    const havecoupon = ref(true);
+    const handleNoCoupon = (errorMessage) => {
+        havecoupon.value = false;
+    };
 
 </script>
 

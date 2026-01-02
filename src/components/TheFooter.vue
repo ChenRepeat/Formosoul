@@ -171,8 +171,8 @@ const newVSize=()=>{
       </div>
     </section>
     <div class="tibame-policy">
-      本網站為緯育TibaMe_前端工程師班第97期學員專題成果作品，本平台僅供學習、展示之用。<br />若有抵觸有關著作權，或有第三人主張侵害智慧財產權等情事，均由學員負法律上責任，緯育公司概不負責。若有侵權疑慮，您可以私訊「<a
-        href=""
+      本網站為緯育TibaMe_前端工程師班第97期學員專題成果作品，本平台僅供學習、展示之用。<br/>若有抵觸有關著作權，或有第三人主張侵害智慧財產權等情事，均由學員負法律上責任，緯育公司概不負責。若有侵權疑慮，您可以私訊「<a
+        href="https://www.facebook.com/TibaMe"
         >緯育TibaMe</a
       >」，後續會由專人協助處理。
     </div>
@@ -202,6 +202,9 @@ hr {
 .footer-link-corner {
   gap: 120px;
   width: 60%;
+  @media screen and (max-width: 1200px) {
+    gap: 180px;
+  }
 }
 .footer-case {
   background-color: #041426;
@@ -225,10 +228,12 @@ hr {
   gap: 100px;
   justify-content: center;
   @media screen and (max-width: 1200px) {
+    width: 95%;
     display: flex;
     flex-direction: column-reverse;
-    gap: 32px;
+    gap: 60px;
     align-items: center;
+  
   }
 }
 .footer-inner-case {
@@ -278,6 +283,9 @@ hr {
   margin-top: 60px;
   a{
     transition: all 0.3s ease;
+    &:link{
+      color: $color-fsCaption;
+    }
     &:visited {
       color: $color-fsCaption;
     }
@@ -318,21 +326,15 @@ hr{
 }
 
 @media screen and (max-width: 1200px) {
-  .footer-outer-case {
-    width: 95%;
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 32px;
-    align-items: center;
-  }
+
   .footer-inner-case{
     gap: 30px;
   }
   .footer-link-corner {
-    flex-direction: column;
     width: max-content;
     margin: 0 50px;
     box-sizing: border-box;
+    margin-right: 0;
   }
   .footer-page-link a {
     font-size: 20px;
@@ -349,7 +351,7 @@ hr{
     gap: 8px;
   }
   .trim-case-link {
-    width: 397px;
+    width: 354px;
   }
   .trim-case-policy {
     width: 212px;

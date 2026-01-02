@@ -155,9 +155,14 @@
     "drawText2":"製作專屬客製化商品!",
     "charmInput1":"毛筆寬度",
     "charmInput2":"墨水顏色",
-    "charmBtn1":"清空符文",
-    "charmBtn2":"重置符文",
-    "charmBtn3":"儲存符文",
+    "charmBtn1":"清空",
+    "charmBtn2":"重置",
+    "charmBtn3":"儲存",
+    "charmIntroText1":"設定你喜歡的毛筆寬度",
+    "charmIntroText2":"設定你想要的墨水顏色",
+    "charmIntroText3":"把符文清空",
+    "charmIntroText4":"把符文還原到上個儲存點",
+    "charmIntroText5":"就是儲存符文",
 
 
     "potionBigTitle0":"你的電鍋會乾燒！",
@@ -441,6 +446,19 @@
       },
       "map-weather": {
           "popupDesc": "夜市位置 & \n 天氣"
+      }, 
+      "map": {
+        "sidebarTitle": "夜市地點搜尋",
+        "filterRegion": "地區",
+        "searchPlaceholder": "輸入夜市或小吃名稱...",
+        "noResultFound": "沒有符合的夜市 🌙",
+        "regions": {
+          "all": "全台",
+          "north": "北部",
+          "central": "中部",
+          "south": "南部",
+          "east": "東部"
+        }
       }, 
       "ring-toss": {
           "title": "套圈圈",

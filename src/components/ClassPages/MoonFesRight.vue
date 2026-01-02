@@ -66,6 +66,7 @@
   .moonfes-contain-left{
     position: relative;
     width: 68%;
+    height: 325px;
     p:not(:first-child){
       width: 84%;  
     }

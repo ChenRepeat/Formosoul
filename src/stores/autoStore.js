@@ -91,7 +91,7 @@ export const useAuthStore = defineStore('auth', () => {
         if(memberView.value != 'coreselection'){
             setTimeout(() => {
                 memberView.value = 'coreselection';
-            }, 500);
+            }, 1500);
         }
 
         if(loginView.value != 'loginpage'){
