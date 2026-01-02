@@ -68,7 +68,7 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
                 imgURL.value = dbData.headshot || '';
 
-                pointsSatus.value = {
+                pointsStatus.value = {
                     mot: dbData.motorcyclegame_pass,
                     shrimp: dbData.shrimpgame_pass,
                     dice: dbData.dicegame_pass,
@@ -226,7 +226,7 @@ export const useMemberStore = defineStore('member', () => {
         setOrderNumber,
         saveGameResult,
         gameData,
-        pointsSatus,
+        pointsStatus,
         stampOnepoint,
     };
 });
