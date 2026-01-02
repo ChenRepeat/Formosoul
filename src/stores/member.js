@@ -7,7 +7,6 @@ export const useMemberStore = defineStore('member', () => {
     const publicPath = import.meta.env.BASE_URL;
     // const imgURL = ref(`${publicPath}member/googleicon.png`);
     const imgURL = ref('');
-    
     const orders = ref(null); 
     const setOrderNumber = (orderNumber) => {
         orders.value = orderNumber;
@@ -76,7 +75,7 @@ export const useMemberStore = defineStore('member', () => {
                     ring: dbData.ringgame_pass,
                     member_wandcore: dbData.member_wandcore || 0
                 };
-                console.log("資料加載成功", pointsSatus.value);
+                console.log("資料加載成功", pointsStatus.value);
 
                 memberData.value.charmImg = dbData.charmgame_img1 || '';
                 gameData.value.bue = { 
