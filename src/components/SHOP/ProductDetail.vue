@@ -48,6 +48,14 @@ function goProductList(){
     })
 };
 
+// back to ProductList of Type
+function goTypeList(){
+    productstore.typeBy = showDetail.value.type_en;
+    router.push({
+        name: 'ProductList',
+    });
+}
+
 
 // 商品資料動態載入頁面 ------------------------------------
 /* 假資料
@@ -123,7 +131,14 @@ watch(
     () => route.params.id, 
 
     // 發生變動時要做的事情
-    (newID, oldID) => {
+    // 處理重新整理後，showDetail 被清空的情況，加入 async 跟 await
+    async(newID, oldID) => {
+
+        if(productstore.allProduct.length === 0){
+            await productstore.fetchProducts();
+        }
+
+
         const result = productstore.getProductByID(newID);
 
         if(result){
@@ -201,9 +216,9 @@ const lang = computed( () => {
         <!-- 麵包屑 -->
     
         <h6 class="page-guide">
-            <RouterLink class="page-guide-text" to="/shop">{{$t('productlist.all')}}</RouterLink>
+            <RouterLink class="btn-alltypelist" to="/shop">{{$t('productlist.all')}}</RouterLink>
             <font-awesome-icon icon="fa-solid fa-angle-right" />
-            <span>{{ showDetail[`type_${lang}`] }}</span>
+            <span class="btn-typelist" @click="goTypeList">{{ showDetail[`type_${lang}`] }}</span>
             <font-awesome-icon icon="fa-solid fa-angle-right" />
             <span>{{ showDetail[`name_${lang}`] }}</span>
         </h6>
@@ -339,12 +354,17 @@ const lang = computed( () => {
 // 麵包屑
 .page-guide{
   padding-bottom: 60px;
-}
 
-.page-guide-text{
+  & .btn-alltypelist{
     color: $color-fsWhite;
     text-decoration: none;
     border-bottom: 1px solid $color-fsWhite;
+    }
+
+  & .btn-typelist{
+    border-bottom: 1px solid $color-fsWhite;
+    cursor: pointer;
+  }
 }
 
 .detail-dock{

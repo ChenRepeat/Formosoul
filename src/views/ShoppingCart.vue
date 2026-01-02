@@ -1,9 +1,8 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { RouterView, useRoute } from 'vue-router';    //因為computed需要使用到useRoute
+import { RouterView, useRoute, RouterLink } from 'vue-router';    //因為computed需要使用到useRoute
 import Backgroundaction from '@/components/backgroundaction.vue';
 import { computed } from 'vue'; //使用computed的功能，未傳參數但是有傳回值，因為route已經改變
-import OrderList from '@/components/OrderList.vue';
 
 
 // 步驟切換
@@ -48,8 +47,10 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
             <li 
             class="cart-dock-block"
             :class="{nowblock: currentStep === 1}">
-                <h1 class="cart-step fw200" :class="{nowstep: currentStep === 1}">1</h1>
-                <h6 class="cart-step-text" :class="{nowtext: currentStep === 1}">{{$t('shoppingcart.step1')}}</h6>
+                <RouterLink to="/shoppingcart" class="btn-step">
+                    <h1 class="cart-step fw200" :class="{nowstep: currentStep === 1}">1</h1>
+                    <h6 class="cart-step-text" :class="{nowtext: currentStep === 1}">{{$t('shoppingcart.step1')}}</h6>
+                </RouterLink>
             </li>
             <li 
             class="cart-dock-block"
@@ -107,6 +108,10 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
     flex-grow: 1;
     border-bottom: 2.5px solid transparent;
     margin-top: 100px;
+
+    & .btn-step{
+        text-decoration: none;
+    }
 }
 
 .nowblock{
