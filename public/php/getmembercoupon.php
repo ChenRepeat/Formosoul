@@ -15,10 +15,10 @@
           c.discount,
           DATE_FORMAT(c.enddate, "%Y-%m-%d") AS end_date,
           c.threshold
-      FROM formosoul.user_coupons uc
-      LEFT JOIN formosoul.game_coupon_rewards r ON r.coupons_id = uc.coupons_ID
-      LEFT JOIN formosoul.pointscard p ON p.pointscard_ID = uc.pointscard_ID
-      LEFT JOIN formosoul.coupons c ON c.coupons_ID = uc.coupons_ID
+      FROM user_coupons uc
+      LEFT JOIN game_coupon_rewards r ON r.coupons_id = uc.coupons_ID
+      LEFT JOIN pointscard p ON p.pointscard_ID = uc.pointscard_ID
+      LEFT JOIN coupons c ON c.coupons_ID = uc.coupons_ID
       WHERE p.member_ID = :member_ID AND p.pointscard_ID = :pointscard_ID;
   ';
 

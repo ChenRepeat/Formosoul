@@ -26,15 +26,15 @@
       sg.shrimpgame_count,
       sg.shrimpgame_score,
       sg.shrimpgame_pass
-    FROM formosoul.member m
-    LEFT JOIN formosoul.wandcore w ON m.wandcore_ID = w.wandcore_ID
-    LEFT JOIN formosoul.pointscard p ON p.member_ID = m.member_ID
-    LEFT JOIN formosoul.buegame bg ON bg.pointscard_ID = p.pointscard_ID
-    LEFT JOIN formosoul.charmgame cg ON cg.member_ID = m.member_ID
-    LEFT JOIN formosoul.dicegame dg ON dg.pointscard_ID = p.pointscard_ID
-    LEFT JOIN formosoul.motorcyclegame mg ON mg.pointscard_ID = p.pointscard_ID
-    LEFT JOIN formosoul.ringgame rg ON rg.pointscard_ID = p.pointscard_ID
-    LEFT JOIN formosoul.shrimpgame sg ON sg.pointscard_ID = p.pointscard_ID
+    FROM member m
+    LEFT JOIN wandcore w ON m.wandcore_ID = w.wandcore_ID
+    LEFT JOIN pointscard p ON p.member_ID = m.member_ID
+    LEFT JOIN buegame bg ON bg.pointscard_ID = p.pointscard_ID
+    LEFT JOIN charmgame cg ON cg.member_ID = m.member_ID
+    LEFT JOIN dicegame dg ON dg.pointscard_ID = p.pointscard_ID
+    LEFT JOIN motorcyclegame mg ON mg.pointscard_ID = p.pointscard_ID
+    LEFT JOIN ringgame rg ON rg.pointscard_ID = p.pointscard_ID
+    LEFT JOIN shrimpgame sg ON sg.pointscard_ID = p.pointscard_ID
     WHERE m.member_ID = :member_ID;
   ';
 

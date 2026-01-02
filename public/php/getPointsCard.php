@@ -12,7 +12,7 @@ $sql = '
       ring, 
       bue, 
       member_wandcore 
-	  from formosoul.pointscard 
+	  from pointscard 
 	  where member_ID = :member_ID; 
 '; // :member_ID 就是從前端拿到的資料
 
