@@ -3,6 +3,9 @@
   import { gsap } from 'gsap';
   import BasicButton from '@/components/BasicButton.vue';
   import MemberLedger from "@/components/Member/information/memberLedger.vue";
+  import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
+const passTimes = ref(memberStore.gameData.ring.pass)
 
 // 過關蓋章
 const showCardOverlay = ref(false);
@@ -14,15 +17,19 @@ const handleCheckLedger = () => {
 };
 
 const checkGamePass = () => {
+    memberStore.stampOnepoint('ring').catch(err => console.error("套圈圈蓋章失敗:", err));
+
     setTimeout(() => {
         showCardOverlay.value = true;
         setTimeout(() => {
             activeTriggers.value.ringtoss = true;
             setTimeout(() => {
                 passedGames.value.ringtoss = true;
+
                 const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
                 currentProgress.ringtoss = true; 
                 localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+
                 activeTriggers.value.ringtoss = false; 
             }, 600);
         }, 500);
@@ -247,20 +254,33 @@ const checkGamePass = () => {
     window.addEventListener('resize', updateSize);
     window.addEventListener('keydown', handleKey);
 
+    const status = memberStore.pointsStatus || {};
+    
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1; 
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;     
+    passedGames.value.wand     = status.member_wandcore >= 1;
+
     const saved = localStorage.getItem('game_progress');
-    if (saved) {
-        const progress = JSON.parse(saved);
-        passedGames.value.shrimp = !!progress.shrimp; 
-        passedGames.value.dice = !!progress.dice;
-        passedGames.value.ringtoss = !!progress.ringtoss;
-        passedGames.value.bue = !!progress.bue;
-        passedGames.value.bike = !!progress.bike;
-        passedGames.value.wand = !!progress.wand;
+    const allEmpty = Object.values(status).every(v => v === 0 || v === false);
+    if (allEmpty) {
+        const saved = localStorage.getItem('game_progress');
+        if (saved) {
+            const progress = JSON.parse(saved);
+            passedGames.value.shrimp   ||= !!progress.shrimp; 
+            passedGames.value.dice     ||= !!progress.dice;
+            passedGames.value.ringtoss ||= !!progress.ringtoss;
+            passedGames.value.bue      ||= !!progress.bue;
+            passedGames.value.bike     ||= !!progress.bike;
+            passedGames.value.wand     ||= !!progress.wand;
+        }
     }
   });
   onUnmounted(() => {
     window.removeEventListener('resize', updateSize);
-    window.addEventListener('keydown', handleKey);
+    window.removeEventListener('keydown', handleKey);
   });
 </script>
 <template>
@@ -285,7 +305,7 @@ const checkGamePass = () => {
     <div v-else-if="isGameOver" class="overlay dp-flex">
       <div class="menu-box result-box">
         <h2 v-if="score < 100" class="result-title">Game Over</h2>
-        <h2 v-if="score >= 100" class="result-title">Congraduations !!</h2>
+        <h2 v-if="score >= 100" class="result-title">Congradulations !!</h2>
         <h6 class="result-title">Score: {{ score }}</h6>
         <div class="btn-group-row dp-flex">
           <BasicButton @click="startGame" class="btn-white"><p>Try Again</p></BasicButton>

@@ -239,6 +239,7 @@ const endGame = () => {
   gameState.value = 'result'; 
   
   if(lives.value > 0) {
+    memberStore.stampOnepoint('mot').catch(err => console.error("機車蓋章 API 失敗:", err));
     passTimes.value += 1
     setTimeout(()=>{
       showCardOverlay.value = true;
@@ -325,16 +326,29 @@ onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
   gsap.ticker.add(update);
-  const saved = localStorage.getItem('game_progress');
+
+  const status = memberStore.pointsStatus || {};
+
+  passedGames.value.shrimp   = status.shrimp >= 1;
+  passedGames.value.dice     = status.dice >= 1;
+  passedGames.value.ringtoss = status.ring >= 1; 
+  passedGames.value.bue      = status.bue >= 1;
+  passedGames.value.bike     = status.mot >= 1;     
+  passedGames.value.wand     = status.member_wandcore >= 1;
+
+  const allEmpty = Object.values(status).every(v => v === 0 || v === false);
+  if (allEmpty) {
+    const saved = localStorage.getItem('game_progress');
     if (saved) {
-        const progress = JSON.parse(saved);
-        passedGames.value.shrimp = !!progress.shrimp;
-        passedGames.value.dice = !!progress.dice;
-        passedGames.value.ringtoss = !!progress.ringtoss;
-        passedGames.value.bue = !!progress.bue;
-        passedGames.value.bike = !!progress.bike;
-        passedGames.value.wand = !!progress.wand;
+      const progress = JSON.parse(saved);
+      passedGames.value.shrimp   ||= !!progress.shrimp;
+      passedGames.value.dice     ||= !!progress.dice;
+      passedGames.value.ringtoss ||= !!progress.ringtoss;
+      passedGames.value.bue      ||= !!progress.bue;
+      passedGames.value.bike     ||= !!progress.bike;
+      passedGames.value.wand     ||= !!progress.wand;
     }
+  }
 });
 
 onUnmounted(() => {

@@ -181,7 +181,7 @@ let timerInterval = null;
 const initGame = () => {
     // 重置資料數據
     score.value = 0;
-    timeLeft.value = 10;
+    timeLeft.value = 30;
     isGameOver.value = false;
     isGameReady.value = true;
 
@@ -239,26 +239,27 @@ const gameOver = async () => {
     }
 
     if(score.value >= 500) {
-        memberStore.stampOnepoint('shrimp').catch(e => console.error(e));
-
+        memberStore.stampOnepoint('shrimp').catch(err => console.error("蓋章失敗:", err));
+3
         passTimes.value += 1;
 
-        setTimeout(() => {
+        
             showCardOverlay.value = true;
+            
             setTimeout(() => {
                 activeTriggers.value.shrimp = true;
 
                 setTimeout(() => {
                 passedGames.value.shrimp = true;
 
-                // const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                // currentProgress.shrimp = true; 
-                // localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.shrimp = true; 
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
 
                 activeTriggers.value.shrimp = false;
             }, 600);
         }, 500);   
-    }, 1000);
+    
     memberStore.saveGameResult('shrimp',{pass: passTimes.value,score: score.value});
 }
 }
@@ -335,6 +336,7 @@ const comeBack = (caughtItem) => {
 
 // 4 碰撞偵測：檢查有沒有撞到 (HIT)
 const checkHit = () => {
+    if (!gameClaw.value || !gameArea.value) return;
     // 鉤子頭現在在畫面上的位置 , 找鉤子頭的位置 跟 遊戲區的位置
     const clawRect = gameClaw.value.getBoundingClientRect();
     const gameRect = gameArea.value.getBoundingClientRect();
@@ -363,6 +365,7 @@ const checkHit = () => {
 }
 // 5 更新物品位置 (讓它黏在鉤子上)
 const updateItemPosition = (item) => {
+    if (!gameClaw.value || !gameArea.value) return;
     const clawRect = gameClaw.value.getBoundingClientRect();
     const gameRect = gameArea.value.getBoundingClientRect();
     // 強制把物品座標 = 鉤子座標
@@ -403,28 +406,30 @@ onMounted (()=>{
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
-    const status = memberStore.pointsSatus;
+    const status = memberStore.pointsStatus || {};
 
-    passedGames.value.shrimp = status.shrimp === 1;
-    passedGames.value.dice = status.dice === 1;
-    passedGames.value.ringtoss = status.ring === 1; 
-    passedGames.value.bue = status.bue === 1;
-    passedGames.value.bike = status.mot === 1;     
-    passedGames.value.wand = status.member_wandcore === 1;
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1; 
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;     
+    passedGames.value.wand     = status.member_wandcore >= 1;
 
+    // 備用, local storage
     const allEmpty = Object.values(status).every(v => v === 0 || v === false);
     if (allEmpty) {
         const saved = localStorage.getItem('game_progress');
         if (saved) {
             const progress = JSON.parse(saved);
-            passedGames.value.shrimp = !!progress.shrimp; 
-            passedGames.value.dice = !!progress.dice;
-            passedGames.value.ringtoss = !!progress.ringtoss;
-            passedGames.value.bue = !!progress.bue;
-            passedGames.value.bike = !!progress.bike;
-            passedGames.value.wand = !!progress.wand;
-         }
+            passedGames.value.shrimp   ||= !!progress.shrimp;
+            passedGames.value.dice     ||= !!progress.dice;
+            passedGames.value.ringtoss ||= !!progress.ringtoss;
+            passedGames.value.bue      ||= !!progress.bue;
+            passedGames.value.bike     ||= !!progress.bike;
+            passedGames.value.wand     ||= !!progress.wand;
+        }
     }
+
     initGame();
     window.addEventListener('keydown', handleKey);
 });
