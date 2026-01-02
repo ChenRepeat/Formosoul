@@ -291,7 +291,7 @@ const goBack = () => {
 
 const fetchProductDetails = async (id) => {
   const apiBase = import.meta.env.VITE_API_BASE
-  const imgBase = import.meta.env.VITE_IMG_BASE;
+  const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE;
   const apiURL = `${apiBase}/getProductData.php?id=${id}`
 
   try {
