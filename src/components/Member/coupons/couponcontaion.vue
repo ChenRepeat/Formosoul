@@ -18,7 +18,7 @@
             </div>
         </div>  -->
 
-         <div class="coupon dp-flex">
+         <!-- <div class="coupon dp-flex">
             <div class="coupon-left coupon-click">
                 <p class="fw600">MAGIC FUN</p>
             </div>
@@ -33,32 +33,32 @@
             <div class="coupon-right">
                 <div><img src="../../../assets/LOGO_blackColor_coupon.svg" alt=""></div>
             </div>
-        </div>
+        </div> -->
 <!-- 以這個為主 -->
- <!-- 完全撕掉才變灰色 -->
         <!-- 要寫一單只能用一個 -->
         <div v-for="coupon in sortedCoupons" :key="coupon.id" class="coupon dp-flex"  @click="handleCouponClick(coupon)">
             <div
+            class="coupon-left"
             :class="{
-                'tear-animation': coupon.status === 0 || coupon.isTearing,
-                'coupon-left': coupon.status === 1 && !coupon.isTearing, 
-                'coupon-left coupon-click left-used': coupon.status === 0 || coupon.isTearing,
-
-            }"  
+                    'tear-animation': coupon.status === 1 || coupon.isTearing, 
+                    'coupon-left': coupon.status >= 1 || coupon.isTearing, 
+                    'coupon-click': coupon.status < 2 || coupon.isTearing, 
+                    'left-used': coupon.status === 0 
+                }"
             >
                 <p class="fw600">MAGIC FUN</p>
             </div>
             <div class="coupon-center"
                 :class="{ 
-                    'center-used': coupon.status === 0 || coupon.isTearing,
-
-                }"  
-            
+                    'tear-animation': coupon.status === 1 || coupon.isTearing,
+                    'center-used': coupon.status == 0 ,
+                }"
             >
                 <div>
                 <h4 class="coupon-content"
                 :class="{ 
-                    'content-used': coupon.status === 0 || coupon.isTearing,
+                    'tear-animation': coupon.status === 1 || coupon.isTearing, 
+                    'content-used': coupon.status == 0,
                 }"  
                 >${{ coupon.discount }}</h4>
                 <h4>COUPON</h4>
@@ -82,7 +82,7 @@ import { useRoute } from 'vue-router';
             type: Boolean,
             default: false,
         },
-    })
+    });
     const nocoupon = ref('');
     const emit = defineEmits(['no-coupon-found', 'coupon-updated']);
     const get_coupon_information = ref(null);
@@ -137,8 +137,6 @@ import { useRoute } from 'vue-router';
                     enddate,
                     status
                 }
-                
-            
             })
         })
     };
@@ -170,20 +168,19 @@ import { useRoute } from 'vue-router';
         // if (route.path.includes('/member/coupons')) {
         //     return;
         // }
-        
-
-        if (coupon.status === 0) return;    
+        coupon.isTearing = true;
+        if (coupon.status !== 2) return;    
         change_coupon(coupon).then(result => {
             if (result.success) {
-                coupon.isTearing = true;
+                coupon.status = 1; 
                 setTimeout(() => {
                     coupon.status = 0;
                     coupon.isTearing = false;
-                }, 1000);           
+                }, 700);           
             }
         });
 
-    }
+    };
 
     onMounted(() => {
         get_coupon();
