@@ -424,7 +424,20 @@
     },
     "map-weather": {
       "popupDesc": "Night Market Location & \n Weather"
-   }, 
+   },
+    "map": {
+      "sidebarTitle": "Search Night Market Locations",
+      "filterRegion": "Region",
+      "searchPlaceholder": "Enter night market or food name...",
+      "noResultFound": "No matching night markets found 🌙",
+      "regions": {
+        "all": "All",
+        "north": "North",
+        "central": "Central",
+        "south": "South",
+        "east": "East"
+      }
+    }, 
     "ring-toss": {
         "title": "Ring Toss",
         "subTitle":"(Hoop Toss)",

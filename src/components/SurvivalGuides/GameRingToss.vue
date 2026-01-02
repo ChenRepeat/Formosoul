@@ -250,6 +250,8 @@ const checkGamePass = () => {
   };
 
   onMounted(() => {
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
     updateSize();
     window.addEventListener('resize', updateSize);
     window.addEventListener('keydown', handleKey);
@@ -279,6 +281,9 @@ const checkGamePass = () => {
     }
   });
   onUnmounted(() => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+
     window.removeEventListener('resize', updateSize);
     window.removeEventListener('keydown', handleKey);
   });
