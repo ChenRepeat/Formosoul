@@ -284,6 +284,11 @@ const router = createRouter({
           component: () => import ('@/components/Admin/OrderDetails.vue'),
           props: true
         },
+                        {
+          path: "member-add",
+          name: "MemberAdd",
+          component: () => import ('@/components/Admin/MemberAdd.vue')
+        },
       ],
     },
   ],
