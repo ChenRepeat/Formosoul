@@ -162,7 +162,8 @@
         width: 70%;
         height: 50%;
         margin: 0 auto;
-        padding-top: 80px;
+        // padding-top: 80px;
+        
     }
 
     .form-group{
