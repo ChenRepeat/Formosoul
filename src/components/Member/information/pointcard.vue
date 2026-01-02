@@ -2,23 +2,23 @@
     <div class="membercard-wrapper">
         <div class="membercard">
             <!-- 多做hover後可以有資訊讓使用者觀看 -->
-                <div class="helmetcolor" :class="{'active':pointsSatus.mot == 1}">
+                <div class="helmetcolor" :class="{'active':pointsStatus.mot == 1}">
                     <IconHelmet size="143" />
                 </div>
-                <div class="buecolor" :class="{'active':pointsSatus.bue == 1}">
+                <div class="buecolor" :class="{'active':pointsStatus.bue == 1}">
                     <!-- 改用figma -->
                     <IconBuecard size="137"/>
                 </div>
-                <div class="dicecolor" :class="{'active':pointsSatus.dice == 1}">
+                <div class="dicecolor" :class="{'active':pointsStatus.dice == 1}">
                     <IconDice />
                 </div>
-                <div class="shrimpcolor" :class="{'active':pointsSatus.shrimp == 1}" >
+                <div class="shrimpcolor" :class="{'active':pointsStatus.shrimp == 1}" >
                     <IconShrimp />
                 </div>
-                <div class="wandcorecolor" :class="{'active':pointsSatus.member_wandcore == 1}" >
+                <div class="wandcorecolor" :class="{'active':pointsStatus.member_wandcore == 1}" >
                     <IconWandCore />
                 </div>
-                <div class="ringcolor" :class="{'active':pointsSatus.ring == 1}" >
+                <div class="ringcolor" :class="{'active':pointsStatus.ring == 1}" >
                     <IconButton />
                 </div>
                 <!-- <div class="potioncolor" >
@@ -61,7 +61,7 @@ const props = defineProps({
 //     activeIcons.value[key] = !activeIcons.value[key]; 
 // };
 
-const pointsSatus = ref({
+const pointsStatus = ref({
     dice: 0, 
     shrimp: 0, 
     ring: 0, 
@@ -92,7 +92,7 @@ const get_pointscard = () => {
             console.log(pointscard_res)
             if(pointscard_res.success && pointscard_res.data){
                 // console.log('骰子完成')
-                pointsSatus.value = pointscard_res.data
+                pointsStatus.value = pointscard_res.data
             }
         }
     );
@@ -111,7 +111,7 @@ const get_pointscard = () => {
 //         const pointscard_res = response.data;
 //         console.log('取得學分登記卡資料：', pointscard_res);
 //         if(pointscard_res.success && pointscard_res.data){
-//             pointsSatus.value = pointscard_res.data
+//             pointsStatus.value = pointscard_res.data
 //         }
 //     }catch(error){
 //         console.error('學分登記卡 API 讀取失敗:', error)      
