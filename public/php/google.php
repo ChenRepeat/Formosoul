@@ -20,9 +20,11 @@ if($payload){
   $statement->execute();
   $user = $statement->fetch();
 
-  $resData=[];
+  $resData=[];// 儲存回傳到前端的DATA
+
   if(!$user){ // 新會員 註冊
-    // google登入讀不到使用者密碼 所以沒有存密碼
+    // google登入讀不到使用者密碼 所以沒有存密碼 
+    // 先讀google 的名字進去
     $sql = " 
     START TRANSACTION;
       INSERT INTO formosoul.member(email, name,  status, role,  createdate, updatetime)
@@ -47,7 +49,7 @@ if($payload){
         ";
     $stmt= $pdo->prepare($sql);
     $stmt->bindValue(':email', $payload['email']);
-    $stmt->bindValue(':email', $payload['name']);
+    $stmt->bindValue(':name', $payload['name']);
     $stmt->execute();
 
     $sqlExamine = "SELECT * FROM member 

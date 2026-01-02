@@ -35,20 +35,6 @@ function decodeJWT(token) { // 解碼 JWT
 }
 
 function handleCredential(response) { // 取需要的 JWT Json Web Token
-
-  console.log("Encoded JWT ID token: " + response.credential);
-
-  // 在前端解碼只是先確定讀到的實際內容 預計改成只在php解碼
-  const responsePayload = decodeJWT(response.credential);
-  console.log(responsePayload );
-  console.log("Decoded JWT ID token fields:");
-  console.log("  Full Name: " + responsePayload.name); // 存這個 
-  console.log("  Given Name: " + responsePayload.given_name);
-  console.log("  Family Name: " + responsePayload.family_name);
-  console.log("  Unique ID: " + responsePayload.sub); // 
-  console.log("  Profile image URL: " + responsePayload.picture); // 大頭貼先不存
-  console.log("  Email: " + responsePayload.email);
-
   
   const apiBase = import.meta.env.VITE_API_BASE
   fetch(`${apiBase}/google.php`,{
