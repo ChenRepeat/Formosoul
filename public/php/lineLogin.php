@@ -81,8 +81,8 @@ if (isset($result['access_token'])) {
                 m.updatetime, 
                 m.member_ID,
                 p.pointscard_ID
-                from formosoul.member m
-                left join formosoul.pointscard p on p.member_ID = m.member_ID 
+                from member m
+                left join pointscard p on p.member_ID = m.member_ID 
             WHERE email = ?
     ');
     $stmt->execute([$user_email]);
@@ -112,23 +112,23 @@ if ($member) {
     // 建立新資料時，就只存 Email 和基本資料
     $insertStmt = $pdo->prepare('
     START TRANSACTION;
-        INSERT INTO formosoul.member(email, password, status, role, pointscard, createdate, updatetime)
+        INSERT INTO member(email, password, status, role, pointscard, createdate, updatetime)
         VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
         SET @USER_ID = LAST_INSERT_ID();
-        INSERT INTO formosoul.pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
+        INSERT INTO pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
             VALUES (@USER_ID,0,0,0,0,0,0,0);
         SET @CARD_ID = LAST_INSERT_ID();
-        INSERT INTO formosoul.buegame (buegame_count, pointscard_ID, buegame_pass)
+        INSERT INTO buegame (buegame_count, pointscard_ID, buegame_pass)
             VALUES (0,@CARD_ID,0);
-        INSERT INTO formosoul.charmgame (member_ID, charmgame_img1, charmgame_count)
+        INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count)
             VALUES (@USER_ID,0,0);
-        INSERT INTO formosoul.dicegame (pointscard_ID, dicegame_count, dicegame_pass)
+        INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass)
             VALUES (@CARD_ID,0,0);
-        INSERT INTO formosoul.motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
+        INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
             VALUES (@CARD_ID,0,0,0);
-        INSERT INTO formosoul.ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
+        INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
             VALUES (@CARD_ID,0,0,0);
-        INSERT INTO formosoul.shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
+        INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
             VALUES (@CARD_ID,0,0,0);
     COMMIT;  
     ');

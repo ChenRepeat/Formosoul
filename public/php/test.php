@@ -12,7 +12,7 @@ $sql = '
           status,
           name_en,
           shipping
-        FROM formosoul.order
+        FROM order
         WHERE member_ID = :member_ID;         
   '; // :後面，一定要對到SQL的column名稱 WHERE member_ID = :member_ID and email = :email; 
 
