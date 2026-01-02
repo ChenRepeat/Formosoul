@@ -93,39 +93,73 @@ if ($member) {
 } else {
     // ===【情況 B：是新會員】===
     // 建立新資料時，就只存 Email 和基本資料
-    $insertStmt = $pdo->prepare('
-    START TRANSACTION;
-        INSERT INTO member(email, password, status, role, pointscard, createdate, updatetime)
-        VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
-        SET @USER_ID = LAST_INSERT_ID();
-        INSERT INTO pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
-            VALUES (@USER_ID,0,0,0,0,0,0,0);
-        SET @CARD_ID = LAST_INSERT_ID();
-        INSERT INTO buegame (buegame_count, pointscard_ID, buegame_pass)
-            VALUES (0,@CARD_ID,0);
-        INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count)
-            VALUES (@USER_ID,0,0);
-        INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass)
-            VALUES (@CARD_ID,0,0);
-        INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
-            VALUES (@CARD_ID,0,0,0);
-        INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
-            VALUES (@CARD_ID,0,0,0);
-        INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
-            VALUES (@CARD_ID,0,0,0);
-    COMMIT;  
-    ');
-    $insertStmt->execute([$user_email, $user_name, $user_avatar]);
-    
-    $newUserId = $pdo->lastInsertId();
 
-    // 2. 【關鍵】寫入 Session (發通行證)
-    // 確保檔案最上方有寫 session_start();
-    $_SESSION['member_ID'] = $newUserId; // 存 ID (最重要)
-    $_SESSION['name'] = $user_name;      // 存名字 (方便顯示 "你好, XXX")
-    $_SESSION['email'] = $user_email;    // 存 Email (如果有需要)
-    $_SESSION['role'] = 0;               // 存權限 (方便前端判斷顯示內容)
+    // 因為是用 LINE 登入，資料庫的 password 欄位給一個隨機亂碼即可
+    $randomPassword = bin2hex(random_bytes(6));
+
+    try {
+        // 1. 啟動交易 (確保下面動作要嘛全成功，要嘛全失敗)
+        $pdo->beginTransaction();
+
+        // 2. 新增會員 (Member)
+        // 注意：我幫你補上了 name 欄位，不然你的 $user_name 沒地方存
+        $sql_member = "INSERT INTO member (email, password, name, status, role, createdate, updatetime) 
+                       VALUES (?, ?, ?, 1, 0, NOW(), NOW())";
         
+        $stmt = $pdo->prepare($sql_member);
+        // 這裡順序要對應上面的問號：email, password, name
+        $stmt->execute([$user_email, $randomPassword, $user_name]);
+        
+        // ★ 拿到剛產生的 會員ID
+        $newUserId = $pdo->lastInsertId();
+
+        // 3. 新增集點卡 (PointsCard)
+        $sql_card = "INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore) 
+                     VALUES (?, 0, 0, 0, 0, 0, 0)";
+        
+        $stmt = $pdo->prepare($sql_card);
+        $stmt->execute([$newUserId]); // 傳入剛剛拿到的會員ID
+        
+        // ★ 拿到剛產生的 集點卡ID
+        $newCardId = $pdo->lastInsertId();
+
+        // 4. 初始化所有遊戲 (用剛剛拿到的 ID)
+        // Charmgame 用 user_ID
+        $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, 0)")
+            ->execute([$newUserId]);
+
+        // 其他遊戲用 card_ID
+        $pdo->prepare("INSERT INTO buegame (pointscard_ID, buegame_count, buegame_pass) VALUES (?, 0, 0)")
+            ->execute([$newCardId]);
+            
+        $pdo->prepare("INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass) VALUES (?, 0, 0)")
+            ->execute([$newCardId]);
+            
+        $pdo->prepare("INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass) VALUES (?, 0, 0, 0)")
+            ->execute([$newCardId]);
+            
+        $pdo->prepare("INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass) VALUES (?, 0, 0, 0)")
+            ->execute([$newCardId]);
+            
+        $pdo->prepare("INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass) VALUES (?, 0, 0, 0)")
+            ->execute([$newCardId]);
+
+        // 5. 全部成功，提交確認！
+        $pdo->commit();
+
+        // 6. 設定 Session (讓系統知道他登入了)
+        $_SESSION['member_ID'] = $newUserId;
+        $_SESSION['name']      = $user_name;
+        $_SESSION['email']     = $user_email;
+        $_SESSION['role']      = 0;
+        $_SESSION['pointscard_ID'] = $newCardId;
+
+    } catch (Exception $e) {
+        // 如果中間出錯，全部取消 (Rollback)
+        $pdo->rollBack();
+        // 為了除錯，先印出錯誤訊息 (上線後可拿掉)
+        die("註冊失敗，錯誤代碼：" . $e->getMessage());
+    }
 }
 // 1. 準備要傳給前端的資料
 $loginData = [
@@ -139,7 +173,6 @@ $loginData = [
 $dataToken = base64_encode(json_encode($loginData));
 
 // 3. 【關鍵修改】
-//   A. 改成導向首頁 (避免直接去會員頁被擋)
 //   B. 加上 ?loginData=... (把資料帶過去)
 header("Location: http://localhost:5173/tjd103/?loginData=" . $dataToken);
 exit;
