@@ -6,9 +6,10 @@ session_start();
 require_once 'vendor/autoload.php';
 
 $googleToken = $member['google_token'];
+$clientId = $member['client_id'];
 
 // 驗證
-$client = new Google_Client(['client_id'=>'561502890556-apker4f72nuiip88t3in35lcpklgaitg.apps.googleusercontent.com']);
+$client = new Google_Client(['client_id'=>$clientId]);
 $payload = $client->verifyIdToken($googleToken); // 成功傳值 失敗傳false
 
 if($payload){
@@ -77,12 +78,12 @@ if($payload){
     $statement->execute();
     $user = $statement->fetch();
 
-    $memberId = $pdo->lastInsertId();
+    // $memberId = $pdo->lastInsertId();
 
 }
 
   // 新會員& 舊會員 登入--------------------------------------
-  $isFirstLogin = ($user['createdate'] === $user['updatetime']);//
+  $isFirstLogin = ($user['createdate'] === $user['updatetime']);
   $resData['token']= $googleToken;
   $resData['success']= true;
   $resData['user']=[
@@ -107,7 +108,7 @@ if($payload){
   setcookie(
       "user_name", // cookie name
       $user['name'], // cookie value
-      ['expires' =>time() + 600,  
+      ['expires' =>time() + 600,  // 我把它包成跟上面一樣
       'path' => "/"]            
   );
 

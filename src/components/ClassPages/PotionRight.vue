@@ -28,6 +28,8 @@ const resultBigTitle = ref('classes.potionBigTitle2');
 
 const container = ref(null);
 
+let containerWidth
+let containerHeight
 let selectList = []
 let correctList = []
 let resultIndex = null
@@ -85,8 +87,14 @@ function shuffle(arr) {
 }
 shuffle(ingredientList) // 會直接改動原始陣列
 
+const updateSize = () => {
+  if (container.value) {
+    containerWidth = container.value.getBoundingClientRect().width;
+    containerHeight = container.value.getBoundingClientRect().height;
+  }
+    
+};
 const initDraggable = () => { //清掉上回合的實體
-
     const oldInstances = Draggable.get('.potion-right-ingredient')
     if(oldInstances){
       if(Array.isArray(oldInstances)){
@@ -96,23 +104,21 @@ const initDraggable = () => { //清掉上回合的實體
     Draggable.create( '.potion-right-ingredient', {
       type:'x, y', // == default 允許平面上下左右移動
 
-      bounds:{left:-40, top:-40, width: 600, height: 800}, // 應該要抓到確切的組件寬高..但先這樣
-      onDrag: function(e){
+      bounds:{left:-40, top:-40, width: containerWidth + 80, height: containerHeight + 80}, // 應該要抓到確切的組件寬高..但先這樣
+      // onDrag: function(e){
 
-        const [left , right, top, bottom] = [-40, 560, -40, 760]
-          // 更改key 對應的value to bounds values
-        // console.log(e.x, e.y); // 這是相對螢幕左上角的座標
-        if(e.x < left){//
-          this.endDrag()
-        // gsap.to(this.target, { x: 0, y: 0, duration: 0.3, overwrite: true });
-        }
+      //   // const [left , right, top, bottom] = [-40, 560, -40, 760]
+      //     // 更改key 對應的value to bounds values
+      //   // console.log(e.x, e.y); // 這是相對螢幕左上角的座標
+      //   // if(e.x < left){//
+      //     // this.endDrag()
+      //   // gsap.to(this.target, { x: 0, y: 0, duration: 0.3, overwrite: true });
+      //   // }
 
-      },
+      // },
       onDragEnd: e => {
         const instance = Draggable.get(e.target)
         if(!instance ) return
-        console.log('dragend');
-        gsap.to(e.target, { x: 0, y: 0, duration: 0.3 });
       if (instance.hitTest('.potion-right-pot','15%')){ // default == 0 , 可設定物件跟鍋子重疊 % 加強判定嚴謹程度 
         gsap.to(e.target, { scale: 0, duration: 0.3 });
         selectList.push(e.target.name)
@@ -135,6 +141,7 @@ const start= async()=>{ // 暫定 retry 呼叫同一個 FUNCTION
   selectList = [] // 清空
   correctList= [] 
   resultIndex = null
+  updateSize()
   initDraggable()
 }
 

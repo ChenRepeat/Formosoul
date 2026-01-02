@@ -182,8 +182,8 @@
 
     }
     .otherlogin-icon > img{
-        height: 48px;
-        width: 48px;
+        height: 40px;
+        width: 40px;
         cursor: pointer;
 
     }
