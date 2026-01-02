@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper dp-flex-col" :class="{'en': isEnglish}">
         <div class="chinesedelivery">
             <p>▌運費計算方式</p>
             <hr>
@@ -39,7 +39,13 @@
 </template>
 
 <script setup>
+    import { useLangStore } from '@/stores/lang';
+    import { computed} from 'vue';
     
+    const langStore = useLangStore();
+    const isEnglish = computed(() => {
+        return langStore.locale === 'en-US'; 
+    });
 </script>
 
 <style lang="scss" scoped>
@@ -47,9 +53,10 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 60px 40px 100px 40px;
-    }
-    .chinesedelivery{
-        padding-bottom: 60px;
+        gap: 60px;
+        &.en{
+            flex-direction: column-reverse;
+        }
     }
     .chinesedelivery > hr,
     .engdelivery > hr{

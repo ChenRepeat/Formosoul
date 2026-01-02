@@ -1,12 +1,11 @@
 <template>
     <div class="member-page-button">
-            <button class="policypage-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/policy/payment">Payment</router-link></button>
-            <button class="policypage-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/policy/delivery">Delivery</router-link></button>
-            <button class="policypage-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/policy/returns">Returns</router-link></button>
-            <button class="policypage-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/policy/privacypolicy">Privacy Policy</router-link></button>
+            <button class="policypage-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/policy/payment">{{$t('nav.Payment')}}</router-link></button>
+            <button class="policypage-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/policy/delivery">{{$t('nav.Delivery')}}</router-link></button>
+            <button class="policypage-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/policy/returns">{{$t('nav.Returns')}}</router-link></button>
+            <button class="policypage-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/policy/privacypolicy">{{$t('nav.privacyPolicy')}}</router-link></button>
     </div>
     <Pagelinebar :linebarposition="300" :activeIndex="activeIndex" />
-      <router-view></router-view>
 </template>
 
 <script setup>
