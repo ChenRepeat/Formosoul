@@ -86,7 +86,7 @@ function drawProductImage(){
   // 使用 nextTick 確保 DOM 已經更新完成
   nextTick(() => {
     canvasRefs.value.forEach((canvasEl, index) => {
-    const imageUrl = props.products[index].images[0];
+    const imageUrl = props.products[index].image[0];
     const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
     draw(canvasEl, 230, 70, 32, finalImageUrl);
     })
