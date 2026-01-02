@@ -2,6 +2,8 @@
 import { ref, onMounted, onUnmounted , defineEmits, defineProps, computed} from "vue";
 import gsap from "gsap";
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
 // import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
 // 遊戲狀態 
@@ -10,6 +12,8 @@ import MemberLedger from "@/components/Member/information/memberLedger.vue";
 會發射：按空白鍵或點擊，鉤子射出去。
 會抓東西：碰到蝦子會抓回來加分。
 */
+
+const passTimes = ref(memberStore.gameData.shrimp.pass)
 
 const emit = defineEmits([
     'close-game', 
@@ -224,7 +228,7 @@ const startTimer = () => {
     }, 1000);
 }
 
-const gameOver = () => {
+const gameOver = async () => {
     isGameOver.value = true;
     clearInterval(timerInterval); // stop 計時
 
@@ -235,6 +239,10 @@ const gameOver = () => {
     }
 
     if(score.value >= 500) {
+        memberStore.stampOnepoint('shrimp').catch(e => console.error(e));
+
+        passTimes.value += 1;
+
         setTimeout(() => {
             showCardOverlay.value = true;
             setTimeout(() => {
@@ -243,14 +251,15 @@ const gameOver = () => {
                 setTimeout(() => {
                 passedGames.value.shrimp = true;
 
-                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                currentProgress.shrimp = true; 
-                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+                // const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                // currentProgress.shrimp = true; 
+                // localStorage.setItem('game_progress', JSON.stringify(currentProgress));
 
                 activeTriggers.value.shrimp = false;
             }, 600);
         }, 500);   
     }, 1000);
+    memberStore.saveGameResult('shrimp',{pass: passTimes.value,score: score.value});
 }
 }
 
@@ -394,17 +403,28 @@ onMounted (()=>{
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
-    const saved = localStorage.getItem('game_progress');
-    if (saved) {
-        const progress = JSON.parse(saved);
-        passedGames.value.shrimp = !!progress.shrimp; 
-        passedGames.value.dice = !!progress.dice;
-        passedGames.value.ringtoss = !!progress.ringtoss;
-        passedGames.value.bue = !!progress.bue;
-        passedGames.value.bike = !!progress.bike;
-        passedGames.value.wand = !!progress.wand;
-    }
+    const status = memberStore.pointsSatus;
 
+    passedGames.value.shrimp = status.shrimp === 1;
+    passedGames.value.dice = status.dice === 1;
+    passedGames.value.ringtoss = status.ring === 1; 
+    passedGames.value.bue = status.bue === 1;
+    passedGames.value.bike = status.mot === 1;     
+    passedGames.value.wand = status.member_wandcore === 1;
+
+    const allEmpty = Object.values(status).every(v => v === 0 || v === false);
+    if (allEmpty) {
+        const saved = localStorage.getItem('game_progress');
+        if (saved) {
+            const progress = JSON.parse(saved);
+            passedGames.value.shrimp = !!progress.shrimp; 
+            passedGames.value.dice = !!progress.dice;
+            passedGames.value.ringtoss = !!progress.ringtoss;
+            passedGames.value.bue = !!progress.bue;
+            passedGames.value.bike = !!progress.bike;
+            passedGames.value.wand = !!progress.wand;
+         }
+    }
     initGame();
     window.addEventListener('keydown', handleKey);
 });
@@ -416,7 +436,7 @@ onUnmounted (()=> {
     clearInterval(timerInterval);
     if(swingBetween) swingBetween.kill();
     if(shootBetween) shootBetween.kill();
-    window.addEventListener('keydown', handleKey);
+    window.removeEventListener('keydown', handleKey);
     if(bgmAudio.value) {
         bgmAudio.value.pause();
     }
