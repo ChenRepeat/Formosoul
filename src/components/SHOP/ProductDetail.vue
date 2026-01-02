@@ -133,10 +133,10 @@ watch(
             showDetail.value = result;
 
             // 處理圖片
-            // currentBigPic.value = result.images[0];
+            // currentBigPic.value = result.image[0];
             // 避免沒讀到資料報錯，改用判斷式處理
-            if (result.images && result.images.length > 0) {
-                currentBigPic.value = result.images[0];
+            if (result.image && result.image.length > 0) {
+                currentBigPic.value = result.image[0];
             }
         
         }else{
@@ -215,11 +215,12 @@ const lang = computed( () => {
     
                 <div class="detail-pic dp-flex">
                     <ul class="detail-pic-small dp-flex-col">
-                        <li v-for="image in showDetail.images"
+                        <li v-for="image in showDetail.image"
                             :key="image"    
                             @click="currentBigPic = image">
 
                             <img :src="`/tjd103/${image}`" alt="" :class="{currentpic: currentBigPic === image}">
+                            <!-- <img :src="image" alt="" :class="{currentpic: currentBigPic === image}"> -->
                         </li>
 
                         <!-- 把 li 變成動態載入 -->

@@ -1,6 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useProductStore } from '@/stores/products';
 import TestProductCard from '@/components/TestProductCard.vue';
 
@@ -750,7 +750,12 @@ products.value.filter( p => p.status ==='Listed')
 */
 
 //改成從 pinia 拿
-const productStore = useProductStore();   //下方可以開始從 pinia 拿資料
+const productStore = useProductStore();   // 下方可以開始從 pinia 拿資料
+
+// 網頁掛載時，先從資料庫拿資料
+onMounted(() => {
+  productStore.fetchProducts();
+});
 
 
 // 分頁功能 ----------------------------------------
