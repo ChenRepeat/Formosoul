@@ -153,12 +153,15 @@ onMounted(() => {
         <img :src="currentLogoSrc" alt="SiteLogo" class="site-logo" :class="{'dpn':hideLogoRWD}"/>
       </RouterLink>
       <div v-if="authStore.isLoading" class="loading dp-flex">
-        <h3 v-for="(char, index) in 'Loading...'.split('')" 
-          :key="index" 
-          class="char"
-          :ref="(el) => { if(el) charRefs[index] = el }"
-        >
-          {{ char === ' ' ? '&nbsp;' : char }}</h3>
+        <div class="loadin-text dp-flex">
+          <h3>Loading</h3>
+          <h3 v-for="(char, index) in '....'.split('')" 
+            :key="index" 
+            class="char"
+            :ref="(el) => { if(el) charRefs[index] = el }"
+          >
+            {{ char === ' ' ? '&nbsp;' : char }}</h3>
+        </div>
           <Wave :config=waveConfig :height=innerH />
       </div>
       <div>
@@ -213,6 +216,9 @@ onMounted(() => {
   background-color: #000;
   position: fixed;
   top: 0; left: 0;
+  .loadin-text{
+    padding-top: 10%;
+  }
 }
 .char {
   display: inline-block; 
