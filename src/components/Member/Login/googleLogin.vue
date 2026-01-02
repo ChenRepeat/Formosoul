@@ -2,8 +2,11 @@
 import { onMounted, defineEmits, nextTick } from 'vue'
 import {GoogleLogin as GoogleLoginBtn} from 'vue3-google-login'
 import { useAuthStore } from '@/stores/autoStore';
+import { useMemberStore } from '@/stores/member';
+
 
 const authStore = useAuthStore();
+const memberStore = useMemberStore();
 
 // const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 // console.log("目前的 Client ID:", clientId); // <--- 檢查這裡是不是 undefined
@@ -18,21 +21,21 @@ const btnLook = {
   type : "icon" //
 }
 
-function decodeJWT(token) { // 解碼 JWT
+// function decodeJWT(token) { // 解碼 JWT
 
-  let base64Url = token.split(".")[1]; // 去除前綴字
-  let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  let jsonPayload = decodeURIComponent( 
-    atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
+//   let base64Url = token.split(".")[1]; // 去除前綴字
+//   let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+//   let jsonPayload = decodeURIComponent( 
+//     atob(base64)
+//       .split("")
+//       .map(function (c) {
+//         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+//       })
+//       .join("")
 
-  );
-  return JSON.parse(jsonPayload) ; // 化為 JS 物件
-}
+//   );
+//   return JSON.parse(jsonPayload) ; // 化為 JS 物件
+// }
 
 function handleCredential(response) { // 取需要的 JWT Json Web Token
   
@@ -49,13 +52,25 @@ function handleCredential(response) { // 取需要的 JWT Json Web Token
       'google_token' : response.credential
     })
   })
-  .then(res => res.json())
-  .then(memberData =>{
-    if(memberData){
+  .then(res => res.json()) // -- ↓開始處理 php 回傳值↓ --
+  .then(resData =>{
+    if(resData.success){ // 登入成功
+      authStore.setToken(resData.token) // 傳 token給 pinia 
+      authStore.setUser(resData.user)
+
+      if(resData.user.isFirstLogin){ // 是否出次登入
+        authStore.setmemberView('membercard')
+      }else{
+        authStore.closeLoginModal()
+        memberStore.loadMemberData()
+      }
+    }
+    else{
+      console.log(resData.message);
       
-      // 傳 token給 pinia 
-      authStore.setToken(response.credential) // 名字可以自己取?
-    }}
+    }
+  }
+    
   )
 }
 
