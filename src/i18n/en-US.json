@@ -486,5 +486,30 @@
     "howToUseInfoText":"Once you accumulate the required amount of points in your Ledger, you may visit the Redemption Counter to exchange your points for exclusive magical rewards and perks, such as limited-edition items or special features!",
     "cardText":"Every action counts toward the House Cup!",
     "backToMemberCard":"Back To Enrollment Card"
+  },
+  "about":{
+    "aboutTitle":"About",
+    "aboutIntro":"— A magical nexus weaving through diverse civilizations.",
+    "aboutText1":"Hidden within the clouds ten thousand feet above Taiwan, the Academy is a modern floating island suspended in the heavens. Guarded by powerful illusions and invisible to the naked eye, only the chosen ones holding an \"Enrolment Letter\" may pierce the veil of mist to enter this sanctuary of magic.",
+    "aboutText2":"We are dedicated to exploring the ultimate equilibrium of magic: intertwining the ancient, natural spiritual energies preserved within the island of Taiwan with the precise and rigorous spellcasting techniques of the West. At Formosoul, we do not merely teach magic; within the intertwining and resonance of diverse systems, we manifest the most balanced and formidable magical framework of the modern era.",
+    "aboutPort1":"Taipei Songshan Airport",
+    "aboutPort2":"Taiwan Taoyuan Int. Airport",
+    "aboutPort3":"Taichung Int. Airport",
+    "aboutPort4":"Kaohsiung Int. Airport",
+    "aboutCity1":"Wuling",
+    "aboutCity2":"Sizihwan",
+    "aboutCity3":"Xiaoliuqiu",
+    "aboutCity4":"Calligraphy Greenway",
+    "aboutCity5":"Luye Highland",
+    "aboutCity6":"Ci Sing Tan",
+    "aboutCity7":"Kinmen",
+    "aboutLocation":"Location",
+    "aboutTitle2":"Modes of Travel",
+    "aboutIntro2":"Please ensure you have all necessary travel permits from the Ministry of Magic. For Muggle visitors, we recommend the 'By Air' option.",
+    "aboutByAir":"By Air",
+    "aboutAnyone":"(For everyone)",
+    "aboutTitle3":"Portkey",
+    "aboutTitle4":"(For magical partners)",
+    "aboutIntro3":"Ensure your target coordinates are precise to prevent accidental misdirection."
   }
 }
