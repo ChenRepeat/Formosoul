@@ -56,8 +56,8 @@ if($payload){
         VALUES (@CARD_ID,0,0,0);
         COMMIT; 
         ";
-        $stmt= $pdo->prepare($sql);
-        $stmt->bindValue(':email', $payload['email']);
+    $stmt= $pdo->prepare($sql);
+    $stmt->bindValue(':email', $payload['email']);
     $stmt->bindValue(':name', $payload['name']);
     $stmt->execute();
 
@@ -93,7 +93,7 @@ if($payload){
     'message' => $isFirstLogin ? '第一次登入' : '登入成功',
   ];
 
-  setcookie("token", $token, [
+  setcookie("token", $googleToken, [
     'expires' => time() + 600,
     'path' => '/',
     // 哪些網域也能使用這個cookie, 之後加入偉育的網址

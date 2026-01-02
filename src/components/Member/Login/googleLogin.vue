@@ -11,7 +11,7 @@ const memberStore = useMemberStore();
 // const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 // console.log("目前的 Client ID:", clientId); // <--- 檢查這裡是不是 undefined
 
-const emit = defineEmits(['login-success'])
+const emit = defineEmits(['login-success']) // 這好像是多的
 
 const btnLook = {
   theme:"outline",
