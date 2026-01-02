@@ -459,6 +459,9 @@ img { object-fit: none; }
   width: 24px;
   position: relative;
   overflow: hidden;
+  @media screen and (max-width: 1200px) {
+    transform: scale(0.75);
+  }
 }
 .transition { 
   transition: 0.5s ease-out ,color 0s;

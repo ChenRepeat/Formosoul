@@ -114,6 +114,9 @@
       top: -25%;
       left: -10%;
       transform: rotate(10deg);
+      @media screen and (max-width: 1200px) {
+        top: 0%;
+      }
     }
     .blue-bird{
       top: 15%;

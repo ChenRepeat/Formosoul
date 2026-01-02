@@ -96,6 +96,9 @@
     height: 100%;
     gap: 20%;
     padding-top: 10%;
+    @media screen and (max-width: 1200px) {
+      gap: 30%;
+    }
   }
   .newyear-right-photo-case{
     height: 40%;
@@ -143,11 +146,17 @@
      >.over-lay{
     background-color: rgba(0, 0, 0, 0.6); 
   }
+    @media screen and (max-width: 1200px) {
+      left: -20%;
+    }
   }
   .right-2{
     top: 10%;left: 20%;
     z-index: 7;
     transform: rotate(5deg);
+    @media screen and (max-width: 1200px) {
+      left: 0%;
+    }
 
   }
   .right-3{
@@ -156,6 +165,9 @@
     z-index: 6;
     >.over-lay{
     background-color: rgba(0, 0, 0, 0.6); 
+    }
+    @media screen and (max-width: 1200px) {
+      left: 20%;
     }
   }
 
