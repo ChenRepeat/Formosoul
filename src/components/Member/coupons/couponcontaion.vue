@@ -1,6 +1,6 @@
 <template>
     <div v-if="nocoupon" class="nocoupon"><h3>{{ nocoupon }}</h3></div>
-    <div class="coupon-list">  
+    <div v-else class="coupon-list">  
         <!-- <div class="coupon dp-flex ">
             <div class="coupon-left coupon-click left-used">
                 <p class="fw600">MAGIC FUN</p>
@@ -37,7 +37,7 @@
 <!-- 以這個為主 -->
  <!-- 完全撕掉才變灰色 -->
         
-        <div v-for="coupon in get_coupon_information" class="coupon dp-flex" @click="handleCouponClick(coupon)">
+        <div v-for="coupon in get_coupon_information" class="coupon dp-flex" :class="{ 'isrows' : isrows}" @click="handleCouponClick(coupon)">
             <div
             :class="{
                 'tear-animation': coupon.status === 0,
@@ -75,6 +75,12 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+    const props = defineProps({
+        isrows: {
+            type: Boolean,
+            default: false,
+        }
+    })
     const nocoupon = ref('');
     const coupondiscount = ref([
         {
@@ -176,6 +182,8 @@ import { useRoute } from 'vue-router';
     h3{
         margin-top: 100px;
         text-align: center;
+        margin-bottom: 100px;
+
     }
     .nocoupon{
         width: 100%;
@@ -187,6 +195,13 @@ import { useRoute } from 'vue-router';
         grid-template-columns: 1fr 1fr;
         row-gap: 32px;
         column-gap: 80px;
+        
+        &.isrows{
+            grid-template-rows: 1fr;
+            row-gap: 32px;
+            column-gap: 80px;
+
+        }
     }
 
 
