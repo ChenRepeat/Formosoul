@@ -94,7 +94,7 @@
         border: 0;
         border-radius: 8px;
         // padding: 40px;
-        width: 50%;
+        width: 70%;
         height: 80vh;
         margin: 0 auto;       
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -187,4 +187,18 @@
         cursor: pointer;
 
     }
+    @media screen and (min-width: 1400px) {
+        .Logincontain{
+            width: 50%;
+
+        }
+
+    }
+    // @media screen and (max-width: 1200px) {
+    //     .Logincontain{
+    //         width: 70%;
+    //         height: 80vh;
+    //     }
+
+    // }
 </style>

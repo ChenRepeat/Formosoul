@@ -121,6 +121,7 @@
                 authStore.setUser(response.user);
                 // authStore.closeLoginModal();
                 authStore.setmemberView('membercard');
+                memberStore.loadMemberData();
             }else if(response.success && !response.user.isFirstLogin){
                 authStore.setToken(response.token);
                 authStore.setUser(response.user);
@@ -163,6 +164,7 @@
         height: 50%;
         margin: 0 auto;
         // padding-top: 80px;
+        padding-bottom: 80px;
         
     }
 
@@ -222,5 +224,11 @@
     .error-message > p{
         color: $color-fsRed;
         margin-bottom: 24px;
+    }
+    @media screen and (min-width: 1400px) {
+        .login-form{
+        padding-top: 40px;
+        }
+
     }
 </style>

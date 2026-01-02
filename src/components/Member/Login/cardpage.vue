@@ -64,6 +64,9 @@ import { useMemberStore } from '@/stores/member';
     
 
     function editcard(){
+        setTimeout(() => {
+            memberStore.memberData.isEditing = true;
+        }, 300);
         authStore.openLoginModal();
         authStore.setmemberView('cardcontain');
     };

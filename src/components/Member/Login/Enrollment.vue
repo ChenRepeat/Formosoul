@@ -346,6 +346,7 @@ const gotoService = () => {
         // left: 50%;
         // top: 50%;
         // transform: translate(-50%, -50%); 
+        padding-top: 40px;
     }
 
     .form-group{
@@ -464,5 +465,12 @@ const gotoService = () => {
 
     .login-bottom> p{
         font-size: 1.2rem;
+    }
+
+    @media screen and (min-width: 1400px) {
+        .login-form{
+            padding-top: 40px;
+        }
+
     }
 </style>

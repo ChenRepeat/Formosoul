@@ -4,18 +4,21 @@
             <div class="memberphoto">
                 <div v-if="!memberStore.imgURL" class="add">+</div>
                 <img v-else-if="memberStore.imgURL" :src="memberStore.imgURL" alt="會員頭像">
+                <div class="mask" v-if="authStore.memberView == 'cardcontain' || route.path == 'member/information'">
+                    <font-awesome-icon icon="fa-solid fa-pen" style="font-size: 20px; "/>
+                </div>
                 <input type="file" class="thefile" @change="fileChange" :disabled="authStore.memberView !== 'cardcontain' || route.path == 'member/information'">
             </div>
 
             <div class="memberinformation">
                 <p>{{ $t('member.memberName') }}
-                    <button
+                    <!-- <button
                         class="edit-btn"
                         :class="{ 'without': withouteditbtn}"
                         @click="memberStore.memberData.isEditing = !memberStore.memberData.isEditing"
                     >
                         <font-awesome-icon icon="fa-solid fa-pen-to-square" style="font-size: 20px;" />
-                    </button>
+                    </button> -->
                 </p>
                 
                 <div v-if="memberStore.memberData.isEditing">
@@ -116,7 +119,6 @@ const saveName = () => {
         border-radius: 8px;
         margin: 0 auto;
         display: flex;
-        padding-top: 16px;
         padding-left: 16px;
         padding-right: 16px;
         justify-content: space-between;
@@ -146,6 +148,10 @@ const saveName = () => {
         top: 150px;
         z-index: 10;
     }
+
+    // .memberphoto > img:hover{
+    //     transform: scale(1.2);
+    // }
     .membercard{
         width: 100%;
         height: 100%;
@@ -153,7 +159,7 @@ const saveName = () => {
         // justify-content: space-between;
         display: grid;
         grid-template-columns: 1fr 1.1fr;
-        gap: 36px;
+        gap: 24px;
         align-items: start;
     }
 
@@ -170,12 +176,15 @@ const saveName = () => {
     }
 
     .memberphoto > img{
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
-        padding-left: 16px;
-        padding-bottom: 32px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        position: absolute;
+        top: 30%;  
+        left: 50%;
+        transform: translate(-50%, -30%);
     }
+
     .thefile{
         width: 100%;
         height: 100%;
@@ -186,6 +195,30 @@ const saveName = () => {
         opacity: 0;
 
     }
+
+
+    .mask {
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        top: 30%;  
+        left: 50%;
+        transform: translate(-50%, -30%);
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .memberphoto:hover .mask {
+        opacity: 1;
+
+    }
+
     .edit-btn{
         background-color: transparent;
         border: 0;
@@ -208,5 +241,9 @@ const saveName = () => {
         position: absolute;
         transform: translate(-50%, -50%);
         padding-bottom: 48px;
+    }
+
+    .memberinformation{
+        align-self: center;
     }
 </style>

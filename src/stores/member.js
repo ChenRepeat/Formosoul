@@ -152,11 +152,8 @@ export const useMemberStore = defineStore('member', () => {
             body: JSON.stringify({name, member_ID})
             });
         const result = await response.json();
-            if(result.success){
-                
-            }else{
+            if(!result.success){
                 console.log('沒改到');
-
             }
         }catch(error){
             console.error('沒改到');
