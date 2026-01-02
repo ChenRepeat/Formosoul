@@ -25,8 +25,8 @@ if($payload){
     // google登入讀不到使用者密碼 所以沒有存密碼
     $sql = " 
     START TRANSACTION;
-      INSERT INTO formosoul.member(email, name,  status, role,  createdate, updatetime)
-      VALUES (:email, :name , 1, 0, , NOW(), NOW());
+      INSERT INTO formosoul.member(email, password, status, role, pointscard_ID, createdate, updatetime)
+      VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
       SET @USER_ID = LAST_INSERT_ID();
       INSERT INTO formosoul.pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
       VALUES (@USER_ID,0,0,0,0,0,0);
@@ -44,7 +44,7 @@ if($payload){
         INSERT INTO formosoul.shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
         VALUES (@CARD_ID,0,0,0);
         COMMIT; 
-        ";
+    ";
     $stmt= $pdo->prepare($sql);
     $stmt->bindValue(':email', $payload['email']);
     $stmt->bindValue(':email', $payload['name']);
