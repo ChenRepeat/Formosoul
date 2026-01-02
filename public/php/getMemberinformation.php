@@ -8,7 +8,6 @@
       m.member_ID,
       DATE_FORMAT(m.createdate, "%Y-%m-%d") AS createdate,
       m.updatetime,
-      m.pointscard,
       m.headshot,
       p.pointscard_ID,
       w.name_en,
