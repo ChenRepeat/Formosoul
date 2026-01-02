@@ -1,6 +1,6 @@
 <template>
     <div v-if="nocoupon" class="nocoupon"><h3>{{ nocoupon }}</h3></div>
-    <div v-else class="coupon-list">  
+    <div v-else class="coupon-list" :class="{ 'isrows' : isrows }">  
         <!-- <div class="coupon dp-flex ">
             <div class="coupon-left coupon-click left-used">
                 <p class="fw600">MAGIC FUN</p>
@@ -12,13 +12,13 @@
                     <p class="coupon-valid">VAILD UNTIL DEC 25, 2026</p>
                 </div>
             </div>
-            
+
             <div class="coupon-right">
                 <div><img src="../../../assets/LOGO_blackColor_coupon.svg" alt=""></div>
             </div>
-        </div> -->
+        </div>  -->
 
-        <!-- <div class="coupon dp-flex">
+         <div class="coupon dp-flex">
             <div class="coupon-left coupon-click">
                 <p class="fw600">MAGIC FUN</p>
             </div>
@@ -29,34 +29,36 @@
                 <p class="coupon-valid">VAILD UNTIL DEC 25, 2026</p>
                 </div>
             </div>
-            
+
             <div class="coupon-right">
                 <div><img src="../../../assets/LOGO_blackColor_coupon.svg" alt=""></div>
             </div>
-        </div> -->
+        </div>
 <!-- 以這個為主 -->
  <!-- 完全撕掉才變灰色 -->
-        
-        <div v-for="coupon in get_coupon_information" class="coupon dp-flex" :class="{ 'isrows' : isrows}" @click="handleCouponClick(coupon)">
+        <!-- 要寫一單只能用一個 -->
+        <div v-for="coupon in sortedCoupons" :key="coupon.id" class="coupon dp-flex"  @click="handleCouponClick(coupon)">
             <div
             :class="{
-                'tear-animation': coupon.status === 0,
-                'coupon-left': coupon.status === 1, 
-                'coupon-left coupon-click left-used':   coupon.status === 0
+                'tear-animation': coupon.status === 0 || coupon.isTearing,
+                'coupon-left': coupon.status === 1 && !coupon.isTearing, 
+                'coupon-left coupon-click left-used': coupon.status === 0 || coupon.isTearing,
+
             }"  
             >
                 <p class="fw600">MAGIC FUN</p>
             </div>
             <div class="coupon-center"
                 :class="{ 
-                    'center-used': coupon.status === 0
+                    'center-used': coupon.status === 0 || coupon.isTearing,
+
                 }"  
             
             >
                 <div>
                 <h4 class="coupon-content"
                 :class="{ 
-                    'content-used': coupon.status === 0
+                    'content-used': coupon.status === 0 || coupon.isTearing,
                 }"  
                 >${{ coupon.discount }}</h4>
                 <h4>COUPON</h4>
@@ -73,25 +75,26 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
     const props = defineProps({
         isrows: {
             type: Boolean,
             default: false,
-        }
+        },
     })
     const nocoupon = ref('');
-    const coupondiscount = ref([
-        {
-            discount: `50%`,
-            Date: '2026-02-28',
-            threshold: '50'
-        }
-    ]);
-
+    const emit = defineEmits(['no-coupon-found', 'coupon-updated']);
     const get_coupon_information = ref(null);
     const route = useRoute();
+
+    const sortedCoupons = computed(() => {
+        if (!get_coupon_information.value || get_coupon_information.value.length == 0) {
+            return null;
+        }
+        return [...get_coupon_information.value].sort((a, b) => b.status - a.status);
+    });
+    
     function get_coupon(){
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -99,7 +102,6 @@ import { useRoute } from 'vue-router';
         if(!storedUser) return;
         const userData = JSON.parse(storedUser); 
         const { member_ID, pointscard_ID } = userData;
-
 
         return fetch(API_URL, {
             method: 'POST',
@@ -115,15 +117,19 @@ import { useRoute } from 'vue-router';
         ).then( res => res.json()
         ).then( coupon_information => {
             const coupon_Array = coupon_information.data || [];
-            if(!coupon_Array.success){
+            if(!coupon_information.havecoupon){
                 nocoupon.value = coupon_information.message;
+                emit('no-coupon-found', coupon_information.havecoupon);
+                return;
             }
             get_coupon_information.value = coupon_Array.map((coupon, index) => {
                 const couponInfo = coupon_Array[index] || {};
                 const discount = parseInt(couponInfo.discount) || 0;
                 const threshold = parseInt(couponInfo.threshold) || 0;
                 const status = parseInt(couponInfo.status) || 0;
-                const enddate = couponInfo.end_date || 0;
+                const enddate = couponInfo.end_date || 'N/A';
+                emit('coupon-updated', get_coupon_information.value);
+                
                 return{
                     ...coupon,
                     discount,
@@ -131,6 +137,7 @@ import { useRoute } from 'vue-router';
                     enddate,
                     status
                 }
+                
             
             })
         })
@@ -160,13 +167,19 @@ import { useRoute } from 'vue-router';
         ).then( res => res.json())};
 
     function handleCouponClick(coupon) {
-        if (route.path.includes('/member/coupons')) {
-            return;
-        }
+        // if (route.path.includes('/member/coupons')) {
+        //     return;
+        // }
+        
+
         if (coupon.status === 0) return;    
         change_coupon(coupon).then(result => {
             if (result.success) {
-                coupon.status = 0; 
+                coupon.isTearing = true;
+                setTimeout(() => {
+                    coupon.status = 0;
+                    coupon.isTearing = false;
+                }, 1000);           
             }
         });
 
@@ -197,14 +210,23 @@ import { useRoute } from 'vue-router';
         column-gap: 80px;
         
         &.isrows{
+            grid-template-columns: 1fr;
             grid-template-rows: 1fr;
-            row-gap: 32px;
-            column-gap: 80px;
-
+            row-gap: 48px;
+            max-height: 500px;
+        // 控制當內容的高度「超過」容器設定的高度時會讓瀏覽器自動判斷是否要顯示「垂直捲軸」。 
+            overflow-y: auto;
+            padding: 80px 100px;
         }
     }
 
-
+        .isrows::-webkit-scrollbar {
+            width: 8px;
+        }
+        .isrows::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
     .coupon {
         min-width: 400px;
         width: 100%;
@@ -303,5 +325,5 @@ import { useRoute } from 'vue-router';
     .tear-animation {
         transition: all 0.5s ease;
     }
-    
+
 </style>

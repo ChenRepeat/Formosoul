@@ -97,9 +97,9 @@
         width: 70%;
         height: 80vh;
         margin: 0 auto;       
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        // box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         animation: slideUp 0.3s ease;
-        position: relative;
+        // position: relative;
 
         @keyframes slideUp {
             from {
@@ -194,11 +194,11 @@
         }
 
     }
-    // @media screen and (max-width: 1200px) {
-    //     .Logincontain{
-    //         width: 70%;
-    //         height: 80vh;
-    //     }
-
-    // }
+    @media screen and (max-width: 1200px) {
+        .Logincontain{
+            height: auto;
+            padding: 40px;
+        }
+        
+    }
 </style>
