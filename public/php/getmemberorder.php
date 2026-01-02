@@ -6,7 +6,7 @@
       SELECT
         o.order_number,
         o.shipping,
-        c.name AS coupon_name,      
+        c.name AS coupon_name,
         c.discount
       FROM order o
       LEFT JOIN coupons c ON o.coupons_ID = c.coupons_ID
