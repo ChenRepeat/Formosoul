@@ -8,7 +8,7 @@ try {
 
   //寫入product ?為預處理 接收execute傳的值
   $sqlProduct = "INSERT INTO product (
-      name_zh, name_en, `type`, price, stock, createdate, `update`, `status`
+      name_zh, name_en, `type`, price, stock, create_at, `update_at`, `status`
   ) VALUES (
       ?, ?, ?, ?, ?, NOW(), NOW(), ?
   )";
