@@ -95,25 +95,25 @@ if ($member) {
     // 建立新資料時，就只存 Email 和基本資料
     $insertStmt = $pdo->prepare('
     START TRANSACTION;
-        INSERT INTO formosoul.member(email, password, status, role, pointscard, createdate, updatetime)
-        VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
+        INSERT INTO formosoul.member (email, password, status, role, createdate, updatetime)
+        VALUES (:email, :password, 1, 0, NOW(), NOW());
         SET @USER_ID = LAST_INSERT_ID();
-        INSERT INTO formosoul.pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
-            VALUES (@USER_ID,0,0,0,0,0,0,0);
+        INSERT INTO formosoul.pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
+        VALUES (@USER_ID, 0, 0, 0, 0, 0, 0);
         SET @CARD_ID = LAST_INSERT_ID();
-        INSERT INTO formosoul.buegame (buegame_count, pointscard_ID, buegame_pass)
-            VALUES (0,@CARD_ID,0);
+        INSERT INTO formosoul.buegame (pointscard_ID, buegame_count, buegame_pass)
+        VALUES (@CARD_ID, 0, 0);
         INSERT INTO formosoul.charmgame (member_ID, charmgame_img1, charmgame_count)
-            VALUES (@USER_ID,0,0);
+        VALUES (@USER_ID, 0, 0);
         INSERT INTO formosoul.dicegame (pointscard_ID, dicegame_count, dicegame_pass)
-            VALUES (@CARD_ID,0,0);
+        VALUES (@CARD_ID, 0, 0);
         INSERT INTO formosoul.motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
-            VALUES (@CARD_ID,0,0,0);
+        VALUES (@CARD_ID, 0, 0, 0);
         INSERT INTO formosoul.ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
-            VALUES (@CARD_ID,0,0,0);
+        VALUES (@CARD_ID, 0, 0, 0);
         INSERT INTO formosoul.shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
-            VALUES (@CARD_ID,0,0,0);
-    COMMIT;  
+        VALUES (@CARD_ID, 0, 0, 0);
+    COMMIT;
     ');
     $insertStmt->execute([$user_email, $user_name, $user_avatar]);
     
