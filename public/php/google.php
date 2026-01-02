@@ -53,6 +53,7 @@ if($payload){
     $stmt->execute();
 
     $sqlExamine = "SELECT * FROM member 
+                  -- LEFT JOIN member m AND pointscard p 
                   WHERE email = :email";
     $statement = $pdo->prepare($sqlExamine);
     $statement->bindValue(':email', $payload['email']);
@@ -67,7 +68,11 @@ if($payload){
   $isFirstLogin = ($user['createdate'] === $user['updatetime']);
   $resData['token']= $googleToken;
   $resData['success']= true;
-  
+  $resData['user']=[
+    'name'=>$user['name'],
+    'wand_core'=>$user[''],
+    'message'=>$isFirstLogin? '初次登入':'歡迎再次登入',
+  ];
 
 }else{
   $resData['success']=false;
