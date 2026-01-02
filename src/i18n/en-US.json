@@ -144,6 +144,11 @@
     "charmBtn1":"Clear",
     "charmBtn2":"Reset",
     "charmBtn3":"Save",
+    "charmIntroText1":"Set Your Brush Width What You Want.",
+    "charmIntroText2":"Set Your Brush Color Which You Like.",
+    "charmIntroText3":"Clean The Charm To Empty.",
+    "charmIntroText4":"Clean The Char To Your Last Saved.",
+    "charmIntroText5":"Save The Charm.",
 
     "potionBigTitle0":"You will ruin your pot!",
     "potionBigTitle1":"Make Your Own!",

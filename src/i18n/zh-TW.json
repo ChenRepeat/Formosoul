@@ -155,9 +155,14 @@
     "drawText2":"製作專屬客製化商品!",
     "charmInput1":"毛筆寬度",
     "charmInput2":"墨水顏色",
-    "charmBtn1":"清空符文",
-    "charmBtn2":"重置符文",
-    "charmBtn3":"儲存符文",
+    "charmBtn1":"清空",
+    "charmBtn2":"重置",
+    "charmBtn3":"儲存",
+    "charmIntroText1":"設定你喜歡的毛筆寬度",
+    "charmIntroText2":"設定你想要的墨水顏色",
+    "charmIntroText3":"把符文清空",
+    "charmIntroText4":"把符文還原到上個儲存點",
+    "charmIntroText5":"就是儲存符文",
 
 
     "potionBigTitle0":"你的電鍋會乾燒！",

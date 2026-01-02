@@ -32,7 +32,6 @@
 
 <template>
   <div class="motor-left-main">
-    <div class="red"></div>
     <div class="motor-contain dp-flex-col">
       <div class="motor-photo-case">
       <div class="motor-locate-case left-1"
@@ -96,15 +95,6 @@
     height: 100%;
     position: relative;
   }
-  .red{
-    width: 100px;
-    height: 100px;
-    background-color: #fff;
-    position: absolute;
-    top: -50px;
-    transition: opacity 0.3s ease;
-    z-index: -10;
-  }
   .op .red{
     opacity: 0;
   }
@@ -121,6 +111,10 @@
     height: 280px;
     position: absolute;
     transition: transform 0.3s ease, z-index 0.3s, box-shadow 0.3s;
+    @media screen and (max-width: 1200px) {
+      width: 240px;
+      height: 240px;
+    }
   }
 
   .motor-photo{
@@ -154,17 +148,23 @@
     top: 10%;left: -10%;
     transform: rotate(8.9deg);
     z-index: 8;
+    
   }
   .left-2{
     top: 20%;left: 35%;
     z-index: 7;
     transform: rotate(-13.9deg);
-
+    @media screen and (max-width: 1200px) {
+      left: 25%;
+    }
   }
   .left-3{
     top: 10%; left: 320px;
     transform: rotate(-4.1deg);
     z-index: 6;
+    @media screen and (max-width: 1200px) {
+      left: 240px;
+    }
   }
   .motor-text{
     gap: 40px;

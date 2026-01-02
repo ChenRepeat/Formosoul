@@ -113,6 +113,7 @@ const buaBue = () => {
         if(siannCount.value == 3){
           memberStore.gameData.bue.pass +=1
           memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
+          siannCount.value = 0;
           setTimeout(() => {
             showCardOverlay.value = true;
 
@@ -137,9 +138,7 @@ const buaBue = () => {
 
 <template>
   <section class="divination-right dp-flex-col">
-    <button class="btn-check-manual" @click="handleCheckLedger">
-      CHECK MY LEDGER
-    </button>
+    <!-- <button class="btn-check-manual" @click="handleCheckLedger">CHECK MY LEDGER</button> -->
 
     <div v-if="showCardOverlay" class="ledger-overlay-in-game">
         <div class="card-modal">
@@ -286,7 +285,11 @@ const buaBue = () => {
 
 
 
-  .divination-right{width: 100%;height: 100%;gap: 60px;}
+  .divination-right{width: 100%;height: 100%;gap: 60px;
+    @media screen and (max-width: 1200px) {
+        gap: 30px;
+      }
+  }
    p{
       color: $color-fsContent;
     }
@@ -456,6 +459,10 @@ const buaBue = () => {
       position: absolute;
       transform-style: preserve-3d;
       transition: transform 0.1s;
+      @media screen and (max-width: 1200px) {
+        width: 220px;
+        height: 220px;;
+      }
   }
   .bue-l {
     top: 10%;

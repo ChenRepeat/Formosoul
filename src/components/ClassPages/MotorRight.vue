@@ -102,6 +102,10 @@
     width: 500px;
     transform: translateX(40px);
     justify-content: space-between;
+    @media screen and (max-width: 1200px) {
+      justify-content: start;
+      gap: 20px;
+    }
   }
   .motor-right-iamge-case{
     width: 180px;

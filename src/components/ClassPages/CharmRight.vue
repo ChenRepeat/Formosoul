@@ -15,6 +15,7 @@ const brushSize = ref(5);
 
 const imgObj = new Image();
 const initialImgSrc = ref('');
+const isTipsOpen = ref(true)
 
 const initCanvas = () => {
   const canvas = canvasRef.value;
@@ -27,7 +28,7 @@ const initCanvas = () => {
   context.value.fillStyle = "#FFFCC2";
   const savedImg = memberStore.memberData.charmImg;
   initialImgSrc.value = savedImg; 
-  if (savedImg) {
+  if (savedImg != '0') {
     imgObj.onload = () => {
       context.value.fillRect(0, 0, canvas.width, canvas.height);
       context.value.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
@@ -90,11 +91,11 @@ const resetCanvas = () => {
   context.value.fillStyle = "#FFFCC2";
   context.value.fillRect(0, 0, canvasRef.value.width, canvasRef.value.height);
 
-  if (initialImgSrc.value) {
+  if (initialImgSrc.value && initialImgSrc.value !='0') {
     context.value.drawImage(imgObj, 0, 0, canvasRef.value.width, canvasRef.value.height);
     classStore.imgShare(initialImgSrc.value);
   } else {
-    classStore.imgShare('');
+    classStore.imgShare('Classes/charms/charm13.png');
   }
 };
 
@@ -106,7 +107,9 @@ const save = () => {
   initialImgSrc.value = finalData;
   imgObj.src = finalData; 
 };
-
+const closeTips = ()=>{
+  isTipsOpen.value = !isTipsOpen.value
+}
 onMounted(() => {
   initCanvas();
 });
@@ -117,10 +120,33 @@ onMounted(() => {
   <div class="canvas-container dp-flex-col"
       @mousedown.stop
       @touchstart.stop>
-      <div class="title-case dp-flex">
-        <h5>{{$t('classes.drawText1')}}</h5>
-        <div class="game-info"><p>?</p></div>
+      <transition name="fade" mode="out-in">
+      <div class="charm-intro"
+        @mousedown.stop
+        @touchstart.stop
+        v-if="isTipsOpen">
+        <div class="intro-case"
+        @mousedown.stop
+        @touchstart.stop>
+          <div class="title-case dp-flex">
+            <h5>{{$t('classes.drawText1')}}</h5>
+          </div>
+          <h5 class="close" @click="closeTips">X</h5>
+          <h5>Tips</h5>
+          <h6>{{$t('classes.charmInput1')}}：</h6>
+          <p>{{$t('classes.charmIntroText1')}}</p>
+          <h6>{{$t('classes.charmInput2')}}：</h6>
+          <p>{{$t('classes.charmIntroText2')}}</p>
+          <h6>{{$t('classes.charmBtn1')}}：</h6>
+          <p>{{$t('classes.charmIntroText3')}}</p>
+          <h6>{{$t('classes.charmBtn2')}}：</h6>
+          <p>{{$t('classes.charmIntroText4')}}</p>
+          <h6>{{$t('classes.charmBtn3')}}：</h6>
+          <p>{{$t('classes.charmIntroText5')}}</p>
+          <BasicButton class="btn-black i18n-anim" @click="closeTips">Close</BasicButton>
+        </div>
       </div>
+      </transition>    
     <canvas
       ref="canvasRef"
       @mousedown="startDrawing"
@@ -133,12 +159,14 @@ onMounted(() => {
     ></canvas>
     <div class="toolbar dp-flex-col">
       <div class="dp-flex tool-case">
+        <div class="dp-flex game-info" @click="closeTips"><p>?</p></div>
         <div class="dp-flex">
           <p>{{$t('classes.charmInput1')}}</p><input type="range" min="1" max="20" v-model="brushSize" />
         </div>
         <div class="dp-flex">
           <p>{{$t('classes.charmInput2')}}</p><input type="color" v-model="brushColor" />
         </div>
+
       </div>
       <div class="dp-flex btn-case">
         <BasicButton
@@ -161,10 +189,12 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .canvas-container {
+  padding-top: 30px;
+  width: 100%;
   align-items: center;
   gap: 10px;
-  width: 80%;
   position: relative;
+  justify-content: end;
   .title-case{
     width: 100%;
     justify-content: center;
@@ -172,11 +202,34 @@ onMounted(() => {
     gap: 12px;
     p{
       text-align: center;
-      border: 3px solid $color-fsRed;
+      border: 1px solid $color-fsRed;
       width: 18px;
-      height: 18px;
-      line-height: 18px;
+      height: 18px;line-height: 1;
       border-radius: 50%;
+      line-height: 18px;
+    }
+  }
+  .charm-intro{
+    position: absolute;
+    z-index: 11;
+    top: 10%;
+    width: 80%;
+  }
+  .intro-case{
+    padding: 8px 24px;
+    background-color: #fff;
+    border-radius: 4px;
+    h6{
+      text-align: left;
+      margin-top: 4px;
+    }
+    .close{
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      line-height: 1;
+      font-weight: 900;
+      cursor: pointer;
     }
   }
 }
@@ -186,9 +239,10 @@ canvas {
   outline-offset: -10px;
 }
 .toolbar {
-  gap: 10px;
+  justify-content: space-between;
   padding: 10px;
   width: 100%;
+  gap: 8px;
 }
 .tool-case{
   width: 100%;
@@ -205,9 +259,31 @@ canvas {
   input{
     width: 40%;
   }
+  .game-info{
+    width: 18px;
+    padding: 0;
+    cursor: pointer;
+    p{
+      line-height: 18px;
+      height: 18px;
+      align-self: center;
+      width: 18px;
+      border: 1px solid $color-fsRed;
+      text-align: center;
+      border-radius: 50%;
+    }
+  }
 }
 .btn-case{
   gap: 16px;
   justify-content: center;
+}
+.fade-enter-active,.fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.fade-enter-from,.fade-leave-to {
+  opacity: 0;
+  z-index: -11;
 }
 </style>
