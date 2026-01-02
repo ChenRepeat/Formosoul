@@ -76,7 +76,7 @@ export const useMemberStore = defineStore('member', () => {
                     ring: dbData.ringgame_pass,
                     member_wandcore: dbData.member_wandcore || 0
                 };
-                console.log("資料加載成功", pointsSatus.value);
+                console.log("資料加載成功", pointsStatus.value);
 
                 memberData.value.charmImg = dbData.charmgame_img1 || '';
                 gameData.value.bue = { 
