@@ -311,7 +311,7 @@ z-index: 80;
     height: max-content;
     width: max-content;//寬暫時值
     padding: 40px 72px;
-
+    padding-left: 48px;
     border-radius: 8px;
     position: relative;
     top: 0;bottom: 0;
@@ -348,35 +348,7 @@ z-index: 80;
 .professor-info.active{
   display: flex; 
 }
-@media (max-width: 992px){
-  .professor-info{
-    max-width: 100vw;
-    // height: calc(100vh + 120vw);
-    padding: 3%;
-    margin-top: 80px;
-    position: absolute;
-    
-    .professor-big-photo-frame{
-      // max-height: calc(90vw * 4 / 3);
-      // max-width: 90vw;
-      height: calc(90vw * 4 / 3); 
-      width: 90vw;
 
-    }
-    &.active{
-      flex-direction: column;
-    }
-    .professor-text{
-      // width: 95vw;
-      max-width: 95vw;
-      
-      padding: 8%;
-      overflow: visible;
-      
-    }
-  }
-
-}
  // ------------------------大卡片↑-----------------------------
 
 .professor-page-wrapper{
@@ -384,15 +356,7 @@ z-index: 80;
   padding-top: 80px;
   height:100vh;
 }
-@media (max-width: 992px){
-  .professor-page-wrapper{
-    min-height:100vh;
-    .professor-info.active{
-  flex-direction: column-reverse; 
 
-}
-  }
-}
 // non-CAROUSEL styles↑-------------
 
 /* CAROUSEL */
@@ -453,6 +417,55 @@ z-index: 80;
     }
   }
 }
+@media (max-width: 1200px){
+.professor-info{
+  padding: 80px 30px;
+  .professor-big-photo-frame{
+    height: 560px;
+    width: 420px;
+  }
+}
+}
+@media (max-width: 992px){
+.professor-page-wrapper{
+  min-height: calc(100vw * 3/2);
+  .professor-info.active{
+    flex-direction: column-reverse; 
+    
+  }
+  .professor-info{
+    max-width: 100vw;
+    // height: calc(100vh + 120vw);
+    padding: 3%;
+    margin-top: 80px;
+    position: absolute;
+    min-height:100vh;
+      
+      .professor-big-photo-frame{
+        height: calc(70vw * 4 / 3);
+        width: 70vw;
+
+        max-height: calc(95vw * 4 / 3); 
+        max-width: 95vw;
+  
+      }
+      // &.active{
+      //   // flex-direction: column;
+      // }
+      .professor-text{
+        // width: 95vw;
+        max-width: 95vw;
+        
+        padding: 8%;
+        overflow: visible;
+        
+      }
+    }
+
+}
+
+}
+
 </style>
 
 
