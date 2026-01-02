@@ -14,8 +14,8 @@
             m.updatetime, 
             m.member_ID,
             p.pointscard_ID
-            from formosoul.member m
-            left join formosoul.pointscard p on p.member_ID = m.member_ID
+            from member m
+            left join pointscard p on p.member_ID = m.member_ID
         where email = :email and password = :pwd;
     ';
 
