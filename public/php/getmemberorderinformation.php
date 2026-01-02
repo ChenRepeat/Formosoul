@@ -8,7 +8,7 @@
         d.quantity,
         p.name_en,
         p.price
-      FROM formosoul.order o
+      FROM order o
       LEFT JOIN order_detail d ON o.order_ID = d.order_ID
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
@@ -31,7 +31,7 @@
         o.remark,
         c.name AS coupon_name,      
         c.discount
-      FROM formosoul.order o
+      FROM order o
       LEFT JOIN order_detail d ON o.order_ID = d.order_ID
       LEFT JOIN coupons c ON o.coupons_ID = c.coupons_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;

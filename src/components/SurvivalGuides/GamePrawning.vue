@@ -2,6 +2,10 @@
 import { ref, onMounted, onUnmounted , defineEmits, defineProps, computed} from "vue";
 import gsap from "gsap";
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
+const passTimes = ref(memberStore.gameData.shrimp.pass)
+
 // import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
 // 遊戲狀態 
@@ -251,6 +255,8 @@ const gameOver = () => {
             }, 600);
         }, 500);   
     }, 1000);
+    memberStore.saveGameResult('shrimp',{pass: passTimes.value,score: 0});
+
 }
 }
 

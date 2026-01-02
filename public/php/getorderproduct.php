@@ -11,9 +11,9 @@
         p.price,
         p.name_en,
         p.image
-	  FROM formosoul.order_detail d
-    LEFT JOIN formosoul.product p ON p.product_ID = d.product_ID
-    LEFT JOIN formosoul.order o ON o.order_ID = d.order_ID
+	  FROM order_detail d
+    LEFT JOIN product p ON p.product_ID = d.product_ID
+    LEFT JOIN order o ON o.order_ID = d.order_ID
     WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
   ';
 

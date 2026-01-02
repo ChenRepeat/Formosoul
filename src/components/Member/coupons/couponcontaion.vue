@@ -1,4 +1,5 @@
 <template>
+    <div v-if="nocoupon" class="nocoupon"><h3>{{ nocoupon }}</h3></div>
     <div class="coupon-list">  
         <!-- <div class="coupon dp-flex ">
             <div class="coupon-left coupon-click left-used">
@@ -34,6 +35,8 @@
             </div>
         </div> -->
 <!-- 以這個為主 -->
+ <!-- 完全撕掉才變灰色 -->
+        
         <div v-for="coupon in get_coupon_information" class="coupon dp-flex" @click="handleCouponClick(coupon)">
             <div
             :class="{
@@ -72,6 +75,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+    const nocoupon = ref('');
     const coupondiscount = ref([
         {
             discount: `50%`,
@@ -104,10 +108,9 @@ import { useRoute } from 'vue-router';
         }
         ).then( res => res.json()
         ).then( coupon_information => {
-            console.log(coupon_information);
             const coupon_Array = coupon_information.data || [];
             if(!coupon_Array.success){
-                console.log('NO');
+                nocoupon.value = coupon_information.message;
             }
             get_coupon_information.value = coupon_Array.map((coupon, index) => {
                 const couponInfo = coupon_Array[index] || {};
@@ -170,7 +173,14 @@ import { useRoute } from 'vue-router';
 </script>
 
 <style scoped lang="scss">
-
+    h3{
+        margin-top: 100px;
+        text-align: center;
+    }
+    .nocoupon{
+        width: 100%;
+        margin: 0 auto;
+    }
     .coupon-list{
         padding: 100px 120px;
         display: grid;

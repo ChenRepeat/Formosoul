@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper dp-flex-col">
+    <div class="wrapper dp-flex-col" :class="{'en': isEnglish}">
         <div class="chinesedelivery">
             <p>隱私權政策</p>
             <p>本隱私權政策旨在說明我們如何蒐集、使用、保護及處理您在使用本服務時所提供的個人資料。請您務必詳細閱讀，當您使用本服務即表示您同意本政策內容。</p>
@@ -108,7 +108,13 @@
 </template>
 
 <script setup>
+    import { useLangStore } from '@/stores/lang';
+    import { computed} from 'vue';
     
+    const langStore = useLangStore();
+    const isEnglish = computed(() => {
+        return langStore.locale === 'en-US'; 
+    });
 </script>
 
 <style lang="scss" scoped>
@@ -116,9 +122,10 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 60px 40px 100px 40px;
-    }
-    .chinesedelivery{
-        padding-bottom: 60px;
+        gap: 60px;
+        &.en{
+            flex-direction: column-reverse;
+        }
     }
     .chinesedelivery > hr,
     .engdelivery > hr{

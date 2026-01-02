@@ -2,7 +2,7 @@
     require_once 'conn.php';
     $member = json_decode(file_get_contents("php://input"), true);
     $sql = '
-        UPDATE formosoul.user_coupons 
+        UPDATE user_coupons 
         SET status = 0
         WHERE pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID;
     ';

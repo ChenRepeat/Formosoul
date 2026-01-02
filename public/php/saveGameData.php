@@ -43,13 +43,13 @@
     if ($gameType === 'charm') {
         if (empty($img)) throw new Exception("缺少 img");
         if (empty($mid)) throw new Exception("缺少 member_ID");
-        $sql = "UPDATE formosoul.charmgame SET charmgame_img1 = :img WHERE member_ID = :mid";
+        $sql = "UPDATE charmgame SET charmgame_img1 = :img WHERE member_ID = :mid";
     } 
     // 通用SQL
     elseif (isset($validGames[$gameType])) {
         //  判斷score欄位
         $hasScore = $validGames[$gameType]; 
-        $sql = "UPDATE formosoul.{$gameType}game SET ";
+        $sql = "UPDATE {$gameType}game SET ";
         if ($hasScore) {
             $sql .= "{$gameType}game_score = GREATEST({$gameType}game_score, :score), ";
         }
