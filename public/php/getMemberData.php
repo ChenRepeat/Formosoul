@@ -6,7 +6,6 @@
   member_ID, 
   `name`, 
   email, 
-  pointscard, 
   createdate, 
   `role`, 
   `status` 
