@@ -501,7 +501,7 @@ watch ( selectCity, () => {
 
     .coupon-dock{
         position: relative;
-        width: 30vw;
+        width: 50vw;
         background-color: $color-fsBlue50;
         border-radius: 10px;
         outline: 10px solid $color-fsBlue50;

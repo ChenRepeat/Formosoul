@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper dp-flex-col" :class="{'en': isEnglish}">
         <div class="chinesedelivery">
             <p>▌ 查詢線上購物之相關問題</p>
             <p>- 請利用客服信箱：service@formosoul.com 與我們聯繫</p>
@@ -156,7 +156,13 @@
 </template>
 
 <script setup>
+    import { useLangStore } from '@/stores/lang';
+    import { computed} from 'vue';
     
+    const langStore = useLangStore();
+    const isEnglish = computed(() => {
+        return langStore.locale === 'en-US'; 
+    });
 </script>
 
 <style lang="scss" scoped>
@@ -164,9 +170,10 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 60px 40px 100px 40px;
-    }
-    .chinesedelivery{
-        padding-bottom: 60px;
+        gap: 60px;
+        &.en{
+            flex-direction: column-reverse;
+        }
     }
     .chinesedelivery > hr,
     .engdelivery > hr{

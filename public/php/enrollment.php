@@ -44,8 +44,8 @@
   $sql = 
   '
   START TRANSACTION;
-	  INSERT INTO member(email, password, status, role, pointscard, createdate, updatetime)
-      VALUES (:email, :password , 1, 0, 0, NOW(), NOW());
+	  INSERT INTO member(email, password, status, role, createdate, updatetime)
+      VALUES (:email, :password , 1, 0, NOW(), NOW());
     SET @USER_ID = LAST_INSERT_ID();
 	  INSERT INTO pointscard (member_ID,count,mot,shrimp,dice,ring,bue,member_wandcore)
 	    VALUES (@USER_ID,0,0,0,0,0,0,0);

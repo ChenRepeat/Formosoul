@@ -36,7 +36,7 @@
         echo json_encode([
         'success' => true,
         'data' => $member_coupon,
-        'message' => '找不到pointscard_ID'
+        'message' => 'No coupons'
       ]);
     } 
     else {
