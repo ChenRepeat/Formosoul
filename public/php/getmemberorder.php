@@ -8,7 +8,7 @@
         o.shipping,
         c.name AS coupon_name,
         c.discount
-      FROM order o
+      FROM `order` o
       LEFT JOIN coupons c ON o.coupons_ID = c.coupons_ID
       WHERE o.member_ID = :member_ID;
   ';
@@ -26,7 +26,7 @@
           o.name_en,
           o.shipping,
           COALESCE(SUM(p.price * d.quantity), 0) as subtotal
-      FROM order o
+      FROM `order` o
       LEFT JOIN order_detail d ON o.order_id = d.order_id
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE member_ID = :member_ID

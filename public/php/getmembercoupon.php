@@ -5,6 +5,7 @@
 
   $sql = '
       SELECT 
+          uc.id,
           uc.coupons_ID,
           uc.status,
           uc.used_at,
@@ -30,12 +31,14 @@
     if ($member_coupon) {
         echo json_encode([
         'success' => true,
+        'havecoupon' => true,
         'data' => $member_coupon,
       ]);
     }elseif($member['pointscard_ID']){
         echo json_encode([
         'success' => true,
         'data' => $member_coupon,
+        'havecoupon' => false,
         'message' => 'No coupons'
       ]);
     } 

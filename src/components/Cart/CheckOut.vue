@@ -24,8 +24,16 @@ function goOrder(){
 
 // coupon -------------------------------------
 const hasCoupon = ref(false);
-
-
+function couponclose(){
+    hasCoupon.value = false;
+    document.body.style.overflow = '' ;
+    document.documentElement.style.overflow = '';
+}
+function couponopen(){
+    hasCoupon.value = true;
+    document.documentElement.style.overflow = 'hidden';
+document.body.style.overflow = 'hidden';
+}
 // 付款總金額計算 --------------------------------
 
 // 信用卡填完跳轉下一格 ---------------------------
@@ -222,16 +230,15 @@ watch ( selectCity, () => {
                         <h5>NT$ {{cartstore.finalPrice}}</h5>
                     </div>
                 </div>
-                <BasicButton class="btn-blue-fill btn-fix-width btn-coupon" @click="hasCoupon = true">
+                <BasicButton class="btn-blue-fill btn-fix-width btn-coupon" @click="couponopen">
                     {{$t('shoppingcart.btn-selectCoupon')}}
                 </BasicButton>
                 <Teleport v-if="hasCoupon" to="body">
 
-                    <div class="coupon-overlay dp-flex" @click.self="hasCoupon = false">
-    
+                    <div class="coupon-overlay dp-flex" @click.self="couponclose">
                         <div class="coupon-dock">
-                            <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="hasCoupon = false"/>
-                            <Couponcontaion></Couponcontaion>
+                            <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="couponclose"/>
+                            <Couponcontaion isrows></Couponcontaion>
                         </div>
                     </div>
                 </Teleport>
@@ -507,7 +514,8 @@ watch ( selectCity, () => {
         outline: 10px solid $color-fsBlue50;
         border: 1px solid $color-fsTitle;
         box-shadow: 0 0 50px;
-        padding: 20px;
+        // padding: 20px;
+        padding: 36px 20px 20px 20px;
 
         & .coupon-close{
             color: $color-fsTitle;
