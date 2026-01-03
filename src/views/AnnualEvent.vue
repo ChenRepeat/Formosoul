@@ -2,6 +2,7 @@
 import { useEventData } from "@/stores/event";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
+const baseUrl = import.meta.env.BASE_URL;
 
 const eventData = useEventData();
 const router = useRouter();
@@ -177,7 +178,7 @@ onBeforeUnmount(() => {
                   <img
                     class="slide-image"
                     :class="{ 'is-hidden': isPlaying(visibleIndex, item) }"
-                    :src="item.pic"
+                    :src="`${baseUrl}${item.pic}`"
                     :alt="item.title_en"
                   />
 
