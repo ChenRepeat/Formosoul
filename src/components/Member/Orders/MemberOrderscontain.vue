@@ -7,7 +7,7 @@
         </div>
         <div v-if="order" class="orders-information notice">
             <p>Order Number： <span>{{ order.order_number }}</span></p>
-            <p>Order Date： {{ order.date }}</p>
+            <p>Order Date： {{ order.orderdate }}</p>
             <p>Order Status： {{ order.status }}</p>
             <p>Recipient's Name： {{ order.name_en }}</p>
             <p>Delivery method： {{ order.shipping }}</p>

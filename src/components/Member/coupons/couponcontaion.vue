@@ -200,7 +200,9 @@ import { useRoute } from 'vue-router';
         margin: 0 auto;
     }
     .coupon-list{
-        padding: 100px 120px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 100px 0px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         row-gap: 32px;
@@ -322,5 +324,11 @@ import { useRoute } from 'vue-router';
     .tear-animation {
         transition: all 0.5s ease;
     }
-
+        
+    @media screen and (max-width: 1300px) {
+        .coupon-list{
+            padding: 100px 48px;
+        }
+        
+    }
 </style>
