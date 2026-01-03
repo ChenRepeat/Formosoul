@@ -244,6 +244,7 @@ const gameOver = async () => {
         passTimes.value += 1;
 
         
+        setTimeout(() => {
             showCardOverlay.value = true;
             
             setTimeout(() => {
@@ -259,9 +260,9 @@ const gameOver = async () => {
                 activeTriggers.value.shrimp = false;
             }, 600);
         }, 500);   
-    
+    }, 1000);
     memberStore.saveGameResult('shrimp',{pass: passTimes.value,score: score.value});
-}
+  }
 }
 
 const handleCheckLedger = () => {

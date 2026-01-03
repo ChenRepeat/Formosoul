@@ -226,7 +226,8 @@ function closeWelcomeFrame (){
             </div>
 <!---------------------------------------- 遊戲 Modal 視窗 -------------------------------------------->
             <div v-if="isGameModalOpen" class="game-modal-overlay">
-                <div class="game-content-modal">
+                <div class="modal-relative-wrapper"> <!-- 多包的隱形層，用來定位close btn-->
+
                     <button class="close-game-btn"
                     :class="{ 'is-x-style': activeGame === 'taiwan-map' }"
                     @click="isGameModalOpen = false">
@@ -237,10 +238,13 @@ function closeWelcomeFrame (){
                             EXIT GAME
                         </template>
                     </button>
-                    <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
-                    <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
-                    <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
-                    <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" />
+
+                    <div class="game-content-modal">
+                        <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
+                        <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
+                        <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
+                        <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" />
+                    </div>
                 </div>
             </div>
          </div>
@@ -842,10 +846,20 @@ function closeWelcomeFrame (){
     justify-content: center;
     align-items: center;
 }
-.game-content-modal {
+
+.modal-relative-wrapper {
+    position: relative; // 按鈕參考這一層定位
     width: 90vw;
     height: 85vh;
     max-width: 1400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+.game-content-modal {
+    width: 100%;
+    height: 100%;
     background-color: #fff;
     border: 10px solid $color-fsBlue50;
     background-repeat: 7px;
@@ -853,12 +867,11 @@ function closeWelcomeFrame (){
     overflow: hidden;
     box-shadow: 0 0 50px rgba(0,0,0,0.8);
     border-radius: 7px;
-    margin-top: 40px;
 }
 .close-game-btn{
     position: absolute;
-    top: 15px;
-    right: 20px;
+    top: 24px;
+    right: 24px;
     padding: 10px 24px;
     background-color: $color-fsGold300;
     color: $color-fsTitle;
@@ -867,7 +880,7 @@ function closeWelcomeFrame (){
     border: 2px solid white;
     border-radius: 30px;
     cursor: pointer;
-    z-index: 4000; 
+    z-index: 9999; 
     transition: transform 0.5s;
 
     &:hover {
@@ -887,8 +900,8 @@ function closeWelcomeFrame (){
     height: 36px;
     cursor: pointer;
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 24px;
+    right: 24px;
     transition: all 0.5s ease;
 
     display: flex;
@@ -923,8 +936,8 @@ function closeWelcomeFrame (){
         bottom: 2%;
     }
 
-    .game-content-modal{
-        height: 80vh;
+    .modal-relative-wrapper {
+    height: 80vh;
     }
     
 }
