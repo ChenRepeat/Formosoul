@@ -20,12 +20,12 @@
   $sql = '
       SELECT
           o.order_number,
-          o.date,
+          DATE_FORMAT(o.date, "%Y-%m-%d") AS orderdate,
           o.payment,
           o.status,
           o.name_en,
           o.shipping,
-          COALESCE(SUM(p.price * d.quantity), 0) as subtotal
+          COALESCE(SUM(d.price * d.quantity), 0) as subtotal
       FROM `order` o
       LEFT JOIN order_detail d ON o.order_id = d.order_id
       LEFT JOIN product p ON p.product_ID = d.product_ID

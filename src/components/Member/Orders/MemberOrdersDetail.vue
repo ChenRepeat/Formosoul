@@ -1,7 +1,7 @@
 <template>
         <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
             <p>{{ order.order_number }}</p> 
-            <p>{{ order.date }}</p>
+            <p>{{ order.orderdate }}</p>
             <!-- <p>{{ order.price }}</p> -->
             <p>{{ order.total }}</p>
             <p>{{ order.payment }}</p>
@@ -78,7 +78,10 @@
                     const statusMap = {
                         0: 'Shipped',
                         1: 'Not Shipped',
-                        2: 'Completed'
+                        2: 'Completed',
+                        3: "Paid",
+                        4: "Payment Failed",
+                        5: "Pending Payment"
                     };
                     const finalTotal =  count + shippingFee - discount; 
 

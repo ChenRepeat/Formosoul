@@ -6,14 +6,15 @@
             <button class="memberpage-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/member/mycollections">{{$t('member.myCollect')}}</router-link></button>
             <button class="memberpage-button" @click="activeIndex = 4" :class="{ active: activeIndex === 4 }"><router-link to="/member/coupons">{{$t('member.coupons')}}</router-link></button>
     </div>
-    <Pagelinebar :linebarposition="240" :activeIndex="activeIndex" />
+    <Pagelinebar :linebarposition="linebar" :activeIndex="activeIndex" />
       <router-view></router-view>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import Pagelinebar from './Pagelinebar.vue';
 import { useRoute } from 'vue-router';
+import { onMounted } from 'vue';
 
 const props = defineProps({
   page:{
@@ -22,9 +23,26 @@ const props = defineProps({
   },
 });
 
+
 const activeIndex = ref(props.page);
 const route = useRoute();
+const windowWidth = ref(window.innerWidth);
 
+const linebar = computed(() => {
+  return windowWidth.value <= 1300 ? 180 : 240;
+});
+
+const updateWidth = () => {
+  windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateWidth);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWidth);
+});
 
 const getcurrentpage = (path) => {
   if (path.includes('information')) return 0;
@@ -74,5 +92,13 @@ watch(
 
     .memberpage-button.active > a{
         color: $color-fsTitle;
+    }
+    @media screen and (max-width: 1300px) {
+        .members-page-button{
+            width: 900px;
+        }
+        .memberpage-button{
+            width: 180px;
+        }
     }
 </style>

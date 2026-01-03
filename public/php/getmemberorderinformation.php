@@ -6,9 +6,9 @@
       SELECT
         o.order_number,
         d.quantity,
-        p.name_en,
-        p.price
-      FROM order o
+		    d.price,
+        p.name_en
+      FROM `order` o
       LEFT JOIN order_detail d ON o.order_ID = d.order_ID
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
@@ -22,7 +22,7 @@
   $sql = '
       SELECT
         o.order_number,
-        o.date,
+        DATE_FORMAT(o.date, "%Y-%m-%d") AS orderdate,
         o.payment,
         o.status,
         o.name_en,
@@ -31,7 +31,7 @@
         o.remark,
         c.name AS coupon_name,      
         c.discount
-      FROM order o
+      FROM `order` o
       LEFT JOIN order_detail d ON o.order_ID = d.order_ID
       LEFT JOIN coupons c ON o.coupons_ID = c.coupons_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;

@@ -5,13 +5,14 @@
             <button class="policypage-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/policy/returns">{{$t('nav.Returns')}}</router-link></button>
             <button class="policypage-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/policy/privacypolicy">{{$t('nav.privacyPolicy')}}</router-link></button>
     </div>
-    <Pagelinebar :linebarposition="300" :activeIndex="activeIndex" />
+    <Pagelinebar :linebarposition="linebar" :activeIndex="activeIndex" />
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Pagelinebar from '../Member/Pagelinebar.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   page:{
@@ -23,6 +24,23 @@ const props = defineProps({
 const activeIndex = ref(props.page);
 const route = useRoute();
 
+const windowWidth = ref(window.innerWidth);
+
+const linebar = computed(() => {
+  return windowWidth.value <= 1300 ? 225 : 300;
+});
+
+const updateWidth = () => {
+  windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateWidth);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWidth);
+});
 
 const getcurrentpage = (path) => {
   if (path.includes('payment')) return 0;
@@ -71,5 +89,13 @@ watch(
 
     .policypage-button.active > a{
         color: $color-fsTitle;
+    }
+    @media screen and (max-width: 1300px) {
+        .member-page-button{
+            width: 900px;
+        }
+        .policypage-button{
+            width: 225px;
+        }
     }
 </style>

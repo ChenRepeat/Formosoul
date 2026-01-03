@@ -48,12 +48,17 @@ const linerbarlength = computed(() => {
         position: relative;
     }
     .line-bar{
-
         height: 4px;
         border: 0;
         /* border-radius: 999px; */
         background-color: #0D3B66;
         position: absolute;
         transition: left 0.3s ease;
+    }
+
+    @media screen and (max-width: 1300px) {
+        .page-line-bar{
+            width: 900px;
+        }
     }
 </style>
