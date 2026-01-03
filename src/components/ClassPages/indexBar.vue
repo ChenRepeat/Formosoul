@@ -90,17 +90,17 @@ onMounted(async () => {
 
 });
 watch(() => classesStore.currentPage, (newPage) => {
- if(newPage == 3){
+ if(newPage >= 3 && newPage < 7){
   clickItem(0)
- }else if(newPage == 7){
+ }else if(newPage >= 7 && newPage < 9){
   clickItem(1)
- }else if(newPage == 9){
+ }else if(newPage >= 9 && newPage < 17){
   clickItem(2)
- }else if(newPage == 17){
+ }else if(newPage >= 17 && newPage < 19){
   clickItem(3)
- }else if(newPage == 19){
+ }else if(newPage >= 19 && newPage < 21){
   clickItem(4)
- }else if(newPage == 21){
+ }else if(newPage >= 21){
   clickItem(5)
  }
 });
@@ -151,6 +151,8 @@ onUnmounted(() => {
   position: absolute;
   align-items: center;
   left: 0;
+    z-index: 100;
+
 }
 .menu.vertical {
   width: 8em;
@@ -164,6 +166,9 @@ onUnmounted(() => {
   gap: 16px;
   left: -7em;
   transition: left 1s ease;
+  @media screen and (max-width: 1200px) {
+    left: -7.5em;
+  }
   &.menu-open{
     left: 0em;
   }
