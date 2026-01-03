@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IndexBar from '@/components/ClassPages/indexBar.vue';
 import Policybutton from '@/components/policy/policybutton.vue';
 
 
@@ -9,9 +10,8 @@ import Policybutton from '@/components/policy/policybutton.vue';
 </script>
 
 <template>
-<Policybutton />
-<router-view />
-
+  <Policybutton />
+  <router-view />
 </template>
 
 <style>

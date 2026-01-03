@@ -3,12 +3,17 @@ import { defineStore } from 'pinia'
 
 export const useclassesStore = defineStore('classes', () => {
   const pageToTurn = ref(1)
+  const currentPage = ref(0)
+  const imgUrl = ref(null)
   const setPage = (num)=>{
     pageToTurn.value = num;
+    currentPage.value = num;
   }
-  const imgUrl = ref(null)
   const imgShare = (data)=>{
     imgUrl.value = data
   }
-  return { pageToTurn , setPage, imgShare,imgUrl}
+  const changeIndex = (num)=>{
+    currentPage.value = num;
+  }
+  return { pageToTurn , setPage, imgShare,imgUrl,currentPage,changeIndex}
 })

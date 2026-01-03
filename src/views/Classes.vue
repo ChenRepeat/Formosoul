@@ -1,10 +1,10 @@
 <template>
   <div class="book-section">
+    <IndexBar class="index-bar" />
     <div v-if="isAnimating" class="blocking-overlay" 
     :class="{ 
         'unload': !isLoad 
-      }"><h4>{{$t('classes.escTip')}}</h4></div>
-
+      }"><h4 v-if="isIntroPlaying">{{$t('classes.escTip')}}</h4></div>
     <div 
       class="book" 
       ref="bookRef"
@@ -176,6 +176,7 @@ import CharmRight from '@/components/ClassPages/CharmRight.vue';
 import Maho from '@/components/ClassPages/Maho.vue';
 import BikeGame from '@/components/ClassPages/BikeGame.vue';
 import { useclassesStore } from '@/stores/classes';
+import IndexBar from '@/components/ClassPages/indexBar.vue';
 const classesStore = useclassesStore();
 const bookRef = ref(null);
 const isAnimating = ref(true);
@@ -268,6 +269,9 @@ const updatePageNumber = () => {
   
   currentPage.value = getLogicalPage(pageFlip.getCurrentPageIndex());
   totalPages.value = pageFlip.getPageCount();
+  console.log(pageFlip.getCurrentPageIndex());
+  
+  classesStore.changeIndex(pageFlip.getCurrentPageIndex())
 };
 
 // --- Resize 處理 ---
@@ -523,7 +527,7 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .book-section {
-  width: 100%; 
+  width: 100vw; 
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -531,6 +535,7 @@ onUnmounted(() => {
   // background-color: $color-fsTitle;
   overflow: hidden; 
   user-select: none; 
+  position: relative;
 }
 
 .book {

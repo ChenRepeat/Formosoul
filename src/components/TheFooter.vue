@@ -17,7 +17,6 @@ const turnPage =(num)=>{
       setTimeout(()=>sessionStorage.setItem("bookLoaded", 'false'),1200)
     }
   }
-
 }
 const vWidth = ref(0)
 const toMotorPage = ref(2);
@@ -44,8 +43,6 @@ const newVSize=()=>{
     toDivitionPage.value = 11;
   }
 }
-
-
   onMounted(()=>{
     newVSize();
     window.addEventListener('resize', newVSize);
