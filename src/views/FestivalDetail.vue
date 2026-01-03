@@ -1,60 +1,45 @@
+
 <script setup>
-import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+  import { computed, onMounted } from "vue";
+  import { useRoute, useRouter } from "vue-router";
+  import { useEventData } from "@/stores/event";
+  import { storeToRefs } from "pinia";
 
-const route = useRoute();
-const router = useRouter();
+  const eventData = useEventData();
+  const { eventDatas } = storeToRefs(eventData);
 
-// 和 AnnualEvent.vue 一樣的資料結構（之後可以抽到共用檔）
-const items = [
-  {
-    id: 1,
-    slug: "yanshui-beehive-fireworks-festival",
-    title: "Yanshui Beehive Fireworks Festival",
-    date: "2026.03.03",
-    image: "/tjd103/festivals/TaiwanLanternFestival.png",
-  },
-  {
-    id: 2,
-    slug: "dajia-matsu-pilgrimage-departure",
-    title: "Dajia Matsu Pilgrimage Departure",
-    date: "2026.04.10",
-    image: "/tjd103/festivals/DajiaMatsuPilgrimageDeparture.png",
-  },
-  {
-    id: 3,
-    slug: "taiwan-lantern-festival",
-    title: "Taiwan Lantern Festival",
-    date: "2026.02",
-    image: "/tjd103/festivals/TouchengPole-ClimbingGhostFestival.png",
-  },
-  {
-    id: 4,
-    slug: "dragon-boat-festival-races",
-    title: "Dragon Boat Festival Races",
-    date: "2026.06.19",
-    image: "/tjd103/festivals/DragonBoatFestivalRaces.png",
-  },
-];
+  const items = computed(() => eventDatas.value || []);
 
-const currentSlug = computed(() => route.params.slug);
+  const route = useRoute();
+  const router = useRouter();
 
-const currentFestival = computed(() => {
-  return items.find((item) => item.slug === currentSlug.value) ?? items[0];
-});
+  const currentSlug = computed(() => route.params.slug);
 
-function goBack() {
-  // 回到上一頁；如果沒有上一頁，就回 AnnualEvent
-  if (window.history.length > 1) {
-    router.back();
-  } else {
-    router.push({ name: "AnnualEvent" });
+  const currentFestival = computed(() => {
+    if (items.value.length === 0) return null;
+    const found = items.value.find((item) => {
+      return item.title_en_s?.join("-") === currentSlug.value;
+    });
+    return found || items.value[0];
+  });
+  function goBack() {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push({ name: "AnnualEvent" });
+    }
   }
-}
-
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
+  const formattedIntro = computed(() => {
+  const text = currentFestival.value?.introL_en;
+  if (!text) return "";
+  return text.replace(/\n/g, '<br />');
+});
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  onMounted(() => {
+    eventData.loadeventData();
+  });
 </script>
 
 <template>
@@ -63,7 +48,7 @@ function scrollToTop() {
       <!-- Hero 圖片 -->
       <div class="hero-media">
         <img
-          :src="currentFestival.image"
+          :src="currentFestival.pic"
           :alt="currentFestival.title"
         />
       </div>
@@ -71,39 +56,19 @@ function scrollToTop() {
       <!-- 文字內容 -->
       <article class="detail-content">
         <p class="breadcrumb">
-          Annual Event · {{ currentFestival.title }}
+          Annual Event · {{ currentFestival.title_en }}
         </p>
 
         <h1 class="detail-title">
-          {{ currentFestival.title }}
+          {{ currentFestival.title_en }}
         </h1>
 
         <p class="detail-date">
-          {{ currentFestival.date }}
+          {{ currentFestival.launchDate }}
         </p>
 
         <div class="detail-body">
-          <!-- 這裡文字你可以之後改成真正介紹，我先放 placeholder 給你位置 -->
-          <p>
-            The {{ currentFestival.title }} is one of Taiwan&apos;s most
-            iconic festivals, blending local folk beliefs, history, and
-            community spirit. On this night, the entire town transforms into
-            an open-air stage filled with light, sound, and ritual energy.
-          </p>
-          <p>
-            Visitors can experience traditional performances, follow the
-            procession route, and taste regional street food: from grilled
-            snacks and handmade desserts to temple-front vendors selling
-            incense and offerings. It&apos;s not only a religious event, but
-            also a living museum of Taiwanese culture.
-          </p>
-          <p>
-            For international travelers, this festival offers a rare chance to
-            observe how modern city life coexists with centuries-old ritual
-            practices. Remember to prepare ear protection and follow local
-            safety instructions if you plan to join the most intense
-            activities up close.
-          </p>
+          <p>{{ currentFestival.introL_en }}</p>
         </div>
 
         <!-- 底部按鈕 -->
@@ -185,8 +150,7 @@ function scrollToTop() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  font-size: 15px;
-  line-height: 1.8;
+  white-space: pre-wrap;
 }
 
 /* 底部「返回上一頁」按鈕 */

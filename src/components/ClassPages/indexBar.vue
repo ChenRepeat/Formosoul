@@ -64,7 +64,6 @@ const offsetMenuBorder = () => {
 const clickItem = (index) => {
   activeIndex.value = index;
   offsetMenuBorder();
-  bgcolor.value=menuData.value[index].itemBg;
  
 };
 
@@ -107,6 +106,8 @@ watch(() => classesStore.currentPage, (newPage) => {
   clickItem(4)
  }else if(newPage >= 21){
   clickItem(5)
+ }else{
+  clickItem(-1)
  }
 });
 onUnmounted(() => {

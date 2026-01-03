@@ -127,17 +127,12 @@ const waveConfig = ref(
     [innerH/2, 0.8, 110, 0, '#F0F7FF', '#000', 0, 0.2],
   ])
 onMounted(async () => {
-  
   await nextTick();
   if (authStore.token) {
     await authStore.fetchUser();
-  }
-}
-)
-
-onMounted(() => {
     memberStore.loadMemberData();
-});
+  }
+})
 </script>
 
 <template>

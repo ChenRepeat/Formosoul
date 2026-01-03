@@ -1,51 +1,11 @@
 <script setup>
+import { useEventData } from "@/stores/event";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
+const eventData = useEventData();
 const router = useRouter();
-
-const items = ref([
-  {
-    id: 1,
-    slug: "yanshui-beehive-fireworks-festival",
-    titleLines: ["Yanshui", "Beehive", "Fireworks", "Festival"],
-    date: "2026.03.03",
-    image: "festivals/TaiwanLanternFestival.png",
-    youtube: "https://www.youtube.com/watch?v=3sV3BTumzDg",
-  },
-  {
-    id: 2,
-    slug: "dajia-matsu-pilgrimage-departure",
-    titleLines: ["Dajia", "Matsu", "Pilgrimage", "Departure"],
-    date: "2026.04.10",
-    image: "festivals/DajiaMatsuPilgrimageDeparture.png",
-    youtube: "https://www.youtube.com/watch?v=nAAapURnWjw",
-  },
-  {
-    id: 3,
-    slug: "taiwan-lantern-festival",
-    titleLines: ["Taiwan", "Lantern", "Festival"],
-    date: "2026.02",
-    image: "festivals/TouchengPole-ClimbingGhostFestival.png",
-    youtube: "https://www.youtube.com/watch?v=zbiP-ndTUW0",
-  },
-  {
-    id: 4,
-    slug: "dragon-boat-festival-races",
-    titleLines: ["Dragon", "Boat", "Festival", "Races"],
-    date: "2026.06.19",
-    image: "festivals/DragonBoatFestivalRaces.png",
-    youtube: "https://www.youtube.com/watch?v=ucIr3GvImE4",
-  },
-    {
-    id: 5,
-    slug: "Yanshui Beehive Fireworks Festival",
-    titleLines: ["Yanshui", "Beehive", "Fireworks", "Festival"],
-    date: "2026.06.19",
-    image: "festivals/YanshuiBeehiveFireworksFestival.png",
-    youtube: "https://www.youtube.com/watch?v=LXCtJDd-qpw",
-  },
-]);
+const items = computed(() => eventData.eventDatas || [])
 
 const VISIBLE_COUNT = 4;
 const currentIndex = ref(0);
@@ -58,7 +18,7 @@ const DOT_COUNT = 4;
 //  16 筆資料 → 4 組 → 4 顆點
 const totalPages = computed(() => Math.ceil(items.value.length / VISIBLE_COUNT)); // 16/4=4
 const currentPage = computed(() =>
-  Math.floor(currentIndex.value / VISIBLE_COUNT) % totalPages.value
+  Math.ceil(currentIndex.value / VISIBLE_COUNT) % totalPages.value
 );
 
 //  點點點擊：跳到那一組的第一張（0/4/8/12）
@@ -109,14 +69,14 @@ function handleMouseLeave() {
 
 // 有 youtube 且 hover 到才播放
 function isPlaying(visibleIdx, item) {
-  return hoveredIndex.value === visibleIdx && !!item.youtube;
+  return hoveredIndex.value === visibleIdx && !!item.video;
 }
 
 // 點擊 → 詳細頁
 function openDetail(item) {
   router.push({
     name: "FestivalDetail",
-    params: { slug: item.slug },
+    params: { slug: item.title_en_s.join("-") },
   });
 }
 
@@ -132,11 +92,13 @@ function getYouTubeId(url) {
   // youtu.be/xxxx
   const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
   if (shortMatch) return shortMatch[1];
+  const shortsMatch = url.match(/\/shorts\/([a-zA-Z0-9_-]{6,})/);
+  if (shortsMatch) return shortsMatch[1];
   return "";
 }
 
 function getYouTubeSrc(item) {
-  const id = getYouTubeId(item.youtube);
+  const id = getYouTubeId(item.video);
   if (!id) return "";
   return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&playsinline=1&rel=0`;
 }
@@ -168,6 +130,7 @@ onMounted(() => {
   updateIsMobile();
   window.addEventListener("resize", updateIsMobile);
   startAutoSlide();
+  eventData.loadeventData();
 });
 
 onBeforeUnmount(() => {
@@ -187,7 +150,6 @@ onBeforeUnmount(() => {
           <div class="carousel-track">
             <div
               v-for="(item, visibleIndex) in visibleItems"
-              :key="item.id"
               class="slide"
               :class="{ 'is-hovered': hoveredIndex === visibleIndex }"
               @mouseenter="handleMouseEnter(visibleIndex)"
@@ -198,7 +160,7 @@ onBeforeUnmount(() => {
                 <div class="media-wrapper">
                   <!-- 底層：YouTube 影片（只在 hover 時顯示 iframe） -->
                   <div
-                    v-if="item.youtube"
+                    v-if="item.video"
                     class="slide-video-wrapper"
                     :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
                   >
@@ -215,8 +177,8 @@ onBeforeUnmount(() => {
                   <img
                     class="slide-image"
                     :class="{ 'is-hidden': isPlaying(visibleIndex, item) }"
-                    :src="item.image"
-                    :alt="item.titleLines.join(' ')"
+                    :src="item.pic"
+                    :alt="item.title_en"
                   />
 
                   <!-- 最上層：遮罩＋文字（未 hover 時顯示，hover 時淡出） -->
@@ -227,12 +189,12 @@ onBeforeUnmount(() => {
                     <div class="slide-text">
                       <p
                         class="slide-title-line"
-                        v-for="(line, i) in item.titleLines"
+                        v-for="(line, i) in item.title_en_s"
                         :key="i"
                       >
                         {{ line }}
                       </p>
-                      <p class="slide-date">{{ item.date }}</p>
+                      <p class="slide-date">{{ item.launchDate }}</p>
                     </div>
                   </div>
                 </div>
