@@ -4,6 +4,7 @@
   import { useRoute, useRouter } from "vue-router";
   import { useEventData } from "@/stores/event";
   import { storeToRefs } from "pinia";
+  const baseUrl = import.meta.env.BASE_URL;
 
   const eventData = useEventData();
   const { eventDatas } = storeToRefs(eventData);
@@ -48,7 +49,7 @@
       <!-- Hero 圖片 -->
       <div class="hero-media">
         <img
-          :src="currentFestival.pic"
+          :src="`${baseUrl}${currentFestival.pic}`"
           :alt="currentFestival.title"
         />
       </div>

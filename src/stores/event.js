@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 export const useEventData = defineStore('eventData', () =>{
+  const baseUrl = import.meta.env.VITE_API_BASE
   const splitTextToRawArray = (text) => {
     if (!text) return [];
     const rawWords = text.split(" "); 
@@ -17,8 +18,7 @@ export const useEventData = defineStore('eventData', () =>{
   const eventDatas = ref([]);
   eventDatas.value = [{}];
   const loadeventData = async () => {
-    const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getAnnualEventInfo.php`;
+    const API_URL = `${baseUrl}/getAnnualEventInfo.php`;
     try{
       const response = await fetch(API_URL, {
         method: 'POST',
