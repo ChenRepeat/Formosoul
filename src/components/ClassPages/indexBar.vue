@@ -24,6 +24,7 @@ const toCharmPage = ref(9);
 const toPotionPage = ref(10);
 const toDivitionPage = ref(11);
 const isHover = ref(false);
+const bgcolor = ref('#1d1d27');
 const newVSize=()=>{
  vWidth.value = window.innerWidth;
    if(vWidth.value < 770){
@@ -63,6 +64,8 @@ const offsetMenuBorder = () => {
 const clickItem = (index) => {
   activeIndex.value = index;
   offsetMenuBorder();
+  bgcolor.value=menuData.value[index].itemBg;
+ 
 };
 
 
@@ -81,6 +84,8 @@ const turnPage =(num)=>{
 }
 const onHover = ()=>{
   isHover.value = !isHover.value
+  bgcolor.value = '#1d1d27';
+
 }
 onMounted(async () => {
   await nextTick();
@@ -111,11 +116,12 @@ onUnmounted(() => {
 
 <template>
   <div class="menu-case dp-flex">
-    <menu class="menu vertical" ref="menuRef" :style="{ '--timeOut': isResizing ? 'none' : '' }"
+    <menu class="menu vertical" ref="menuRef" 
+    :style="{ '--timeOut': isResizing ? 'none' : '','--bgColorItem':bgcolor}"
     :class="{'menu-open':isHover}"
     @mouseenter="onHover"
     @mouseleave="onHover">
-    >
+    
       <button
         v-for="(item, index) in menuData"
         :key="index"
@@ -130,7 +136,7 @@ onUnmounted(() => {
 
       <div 
         class="menu__border" 
-        :style="{ transform: `translate3d(0, ${borderY}px, 0) rotate(90deg)` }"
+        :style="{ transform: `translate3d(0, ${borderY}px, 0) rotate(90deg)`,'--bgColorItem':bgcolor }"
       ></div>
     </menu>
   </div>
@@ -151,7 +157,7 @@ onUnmounted(() => {
   position: absolute;
   align-items: center;
   left: 0;
-    z-index: 100;
+  z-index: 100;
 
 }
 .menu.vertical {
@@ -161,11 +167,14 @@ onUnmounted(() => {
   display: flex;
   padding: 6em 0;
   position: relative;
-  background-color: #1d1d27;
+  background-color: var(--bgColorItem);
   justify-content: center;
   gap: 16px;
   left: -7em;
   transition: left 1s ease;
+  &:not(.menu-open){
+    background-color: #1d1d27;
+  }
   @media screen and (max-width: 1200px) {
     left: -7.5em;
   }
@@ -213,7 +222,7 @@ onUnmounted(() => {
     top: 0;
     width: 150px;
     height: 30px;
-    background-color: #1d1d27;
+    background-color: var(--bgColorItem);
     clip-path: url(#menu);
     will-change: transform;
     transition: transform var(--timeOut, 0.7s);

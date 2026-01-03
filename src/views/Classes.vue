@@ -266,11 +266,8 @@ const handleKeydown = (event) => {
 
 const updatePageNumber = () => {
   if (!pageFlip) return;
-  
   currentPage.value = getLogicalPage(pageFlip.getCurrentPageIndex());
-  totalPages.value = pageFlip.getPageCount();
-  console.log(pageFlip.getCurrentPageIndex());
-  
+  totalPages.value = pageFlip.getPageCount();  
   classesStore.changeIndex(pageFlip.getCurrentPageIndex())
 };
 
