@@ -172,9 +172,10 @@ const router = createRouter({
     {
       path: '/classes',
       name: 'Classes',
-      component: Classes,
+      component: () =>import('@/views/Classes.vue'),
       meta:{ 
         hideLogoRWD: true,
+        requireLoading: true,
       },
     },
     

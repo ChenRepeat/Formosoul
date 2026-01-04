@@ -102,7 +102,7 @@
   max-width: 1200px;
   margin: 0 auto;
   background: #0b1724;
-  border-radius: 16px;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }

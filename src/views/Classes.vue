@@ -177,6 +177,7 @@ import Maho from '@/components/ClassPages/Maho.vue';
 import BikeGame from '@/components/ClassPages/BikeGame.vue';
 import { useclassesStore } from '@/stores/classes';
 import IndexBar from '@/components/ClassPages/indexBar.vue';
+import { useAuthStore } from '@/stores/autoStore';
 const classesStore = useclassesStore();
 const bookRef = ref(null);
 const isAnimating = ref(true);
@@ -417,8 +418,10 @@ const physicalDistance = Math.abs(targetPhysicalIndex - currentPhysicalIndex);
     isAnimating.value = false;
   }
 };
-
-
+const authStore = useAuthStore();
+function loadSuccess(){
+  authStore.isLoading = false;
+}
 const initPageFlip = () => {
   if (!bookRef.value) return;
   
@@ -462,6 +465,7 @@ watch(isDoublePage, (newVal, oldVal) => {
 const loadImg=async()=>{
   isLoad.value = true;
   initPageFlip();
+  loadSuccess();
   isAnimating.value = false;
   isIntroPlaying.value = false;
   isIntroPosition.value = false;
