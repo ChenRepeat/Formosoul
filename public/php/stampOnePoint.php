@@ -1,15 +1,5 @@
 <?php
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header('Access-Control-Allow-Credentials: true');
-header('Content-Type: application/json; charset=utf-8');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit;
-}
-
 require_once 'conn.php';
 
 $input = json_decode(file_get_contents("php://input"), true);
@@ -28,7 +18,6 @@ try {
     // 修正重點：使用雙引號才能正確解析 $column 變數
     $sql = "UPDATE formosoul.pointscard SET $column = 1 WHERE member_ID = :member_ID";
     $stmt = $pdo->prepare($sql);
-    
     $stmt->bindValue(':member_ID', $member_ID, PDO::PARAM_INT);
     $stmt->execute();
 

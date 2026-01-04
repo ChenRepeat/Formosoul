@@ -52,18 +52,26 @@ const displayStatus = computed(() => {
     }
 });
 
+const shouldAnimate = computed(() => {
+    if (!isFromGame.value) return {}; // 會員中心不需要動畫
+    
+    return {
+        shrimp: props.activeTriggers?.shrimp,
+        dice: props.activeTriggers?.dice,
+        ringtoss: props.activeTriggers?.ringtoss,
+        bue: props.activeTriggers?.bue,
+        bike: props.activeTriggers?.bike,
+        wand: props.activeTriggers?.wand 
+    };
+});
+
 onMounted(async () => {
-    // 如果不是從遊戲傳入，才需要自己載入
-    if (!isFromGame.value) {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            await memberStore.fetchPointsStatus();
-            internalPointsStatus.value = memberStore.pointsStatus;
-            console.log('[MemberLedger] 從 store 載入:', internalPointsStatus.value);
-        } else {
-            // 訪客用原本的 fetch
-            get_pointscard();
-        }
+    // 不管是遊戲內還是會員中心，都先載入資料
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        await memberStore.fetchPointsStatus();
+        internalPointsStatus.value = memberStore.pointsStatus;
+        console.log('[MemberLedger] 載入狀態:', internalPointsStatus.value);
     }
 });
 </script>
@@ -74,38 +82,38 @@ onMounted(async () => {
     
     <div class="stamps-layer">
       <div class="stamp-position shrimp">
-        <stampSlot :isUnlocked="passedGames.shrimp" :trigger="activeTriggers.shrimp">
+        <stampSlot :isUnlocked="displayStatus.shrimp" :trigger="shouldAnimate.shrimp">
           <IconShrimp class="ink-shrimp" />
         </stampSlot>
       </div>
 
       <div class="stamp-position dice">
-        <stampSlot :isUnlocked="passedGames.dice" :trigger="activeTriggers.dice">
+        <stampSlot :isUnlocked="displayStatus.dice" :trigger="shouldAnimate.dice">
           <IconDice class="ink-dice" />
         </stampSlot>
       </div>
 
       <div class="stamp-position ringtoss">
-        <stampSlot :isUnlocked="passedGames.ringtoss" :trigger="activeTriggers.ringtoss">
+        <stampSlot :isUnlocked="displayStatus.ringtoss" :trigger="shouldAnimate.ringtoss">
           <IconButton class="ink-ringtoss" />
         </stampSlot>
       </div>
 
       <div class="stamp-position bue">
-        <stampSlot :isUnlocked="passedGames.bue" :trigger="activeTriggers.bue">
+        <stampSlot :isUnlocked="displayStatus.bue" :trigger="shouldAnimate.bue">
           <IconBuecard class="ink-bue" size='140'/>
         </stampSlot>
       </div>
 
       <div class="stamp-position bike">
-        <stampSlot :isUnlocked="passedGames.bike" :trigger="activeTriggers.bike">
+        <stampSlot :isUnlocked="displayStatus.bike" :trigger="shouldAnimate.bike">
           <IconHelmet class="ink-bike" size='140'/>
         </stampSlot>
       </div>
 
       <div class="stamp-position wand">
-        <stampSlot :isUnlocked="passedGames.wand" :trigger="activeTriggers.wand">
-          <IconWandCore class="ink-wand" />
+        <stampSlot :isUnlocked="displayStatus.wand" :trigger="shouldAnimate.wand">
+          <IconWandCore class="ink-wand"/>
         </stampSlot>
       </div>
 
@@ -192,5 +200,6 @@ onMounted(async () => {
 .ink-wand {
   width: 100%;
   height: 100%;
+  transition: color 0.3s ease;
 }
 </style>

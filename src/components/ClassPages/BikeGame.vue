@@ -104,10 +104,11 @@ import BasicButton from '../BasicButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from '@/stores/autoStore';
 import { useMemberStore } from '@/stores/member';
+import MemberLedger from "@/components/Member/information/memberLedger.vue";
 const memberStore = useMemberStore();
 const authStore = useAuthStore();
-import MemberLedger from "@/components/Member/information/memberLedger.vue";
 
+const isLoggedIn = computed(() => authStore.isLoggedIn || !!localStorage.getItem('user'));
 
 // 過關蓋章
 const showCardOverlay = ref(false);
@@ -239,28 +240,43 @@ const endGame = () => {
   gameState.value = 'result'; 
   
   if(lives.value > 0) {
-    memberStore.stampOnepoint('mot').catch(err => console.error("機車蓋章 API 失敗:", err));
-    passTimes.value += 1
+    const isFirstPass = !passedGames.value.bike;
+
+    passedGames.value.bike = true;
+    passTimes.value += 1;
+
     setTimeout(()=>{
-      showCardOverlay.value = true;
+      showCardOverlay.value = true;    
 
-      setTimeout(()=>{
-        activeTriggers.value.bike = true
-
+      if(isFirstPass) {
         setTimeout(()=>{
-          passedGames.value.bike = true
+        activeTriggers.value.bike = true
+        setTimeout(()=>{
+          activeTriggers.value.bike = false;
+        }, 600)
+      }, 500);
+    } else{
+      console.log('[動畫] 已經過關過，跳過蓋章動畫');
+    }
+    }, 1000);
+      
 
+    (async()=>{
+      try{
+        if(authStore.isLoggedIn){
+          await memberStore.stampOnepoint('mot');
+        } else {
           const currentProgress = JSON.parse(localStorage.getItem('game_progress')||'{}')
           currentProgress.bike = true
           localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-          
-          activeTriggers.value.bike = false;
-        }, 600)
-      }, 500)
-    }, 2000);
-  }
-  memberStore.saveGameResult('motorcycle',{pass: passTimes.value,score: 0});
+        }
 
+        await memberStore.saveGameResult('motorcycle',{pass: passTimes.value,score: 0});
+      } catch(err){
+        console.error("[背景] 機車遊戲儲存失敗:", err);
+      }
+    })();
+  }
 };
 
 const updateSize = () => {
@@ -321,34 +337,44 @@ watch(gameState, async (newVal) => {
     );    
   }
 }});
-onMounted(() => {
+
+const initGameStatus = () => {
+  const status = memberStore.pointsStatus || {};
+  
+  if (isLoggedIn.value) {
+    // 會員：從資料庫讀取
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1;
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;
+    passedGames.value.wand     = status.member_wandcore >= 1;
+  } else {
+    // 訪客：從 localStorage 讀取
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      passedGames.value.shrimp   = !!progress.shrimp;
+      passedGames.value.dice     = !!progress.dice;
+      passedGames.value.ringtoss = !!progress.ringtoss;
+      passedGames.value.bue      = !!progress.bue;
+      passedGames.value.bike     = !!progress.bike;
+      passedGames.value.wand     = !!progress.wand;
+    }
+  }
+};
+
+onMounted( async () => {
   window.addEventListener('resize', updateSize);
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
   gsap.ticker.add(update);
 
-  const status = memberStore.pointsStatus || {};
-
-  passedGames.value.shrimp   = status.shrimp >= 1;
-  passedGames.value.dice     = status.dice >= 1;
-  passedGames.value.ringtoss = status.ring >= 1; 
-  passedGames.value.bue      = status.bue >= 1;
-  passedGames.value.bike     = status.mot >= 1;     
-  passedGames.value.wand     = status.member_wandcore >= 1;
-
-  const allEmpty = Object.values(status).every(v => v === 0 || v === false);
-  if (allEmpty) {
-    const saved = localStorage.getItem('game_progress');
-    if (saved) {
-      const progress = JSON.parse(saved);
-      passedGames.value.shrimp   ||= !!progress.shrimp;
-      passedGames.value.dice     ||= !!progress.dice;
-      passedGames.value.ringtoss ||= !!progress.ringtoss;
-      passedGames.value.bue      ||= !!progress.bue;
-      passedGames.value.bike     ||= !!progress.bike;
-      passedGames.value.wand     ||= !!progress.wand;
-    }
+  if (isLoggedIn.value) {
+    await memberStore.fetchPointsStatus();
   }
+    
+  initGameStatus();
 });
 
 onUnmounted(() => {

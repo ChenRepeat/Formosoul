@@ -16,10 +16,12 @@ const passTimes = ref(memberStore.gameData.shrimp.pass)
 */
 
 const isLoggedIn = computed(() => {
-  const user = localStorage.getItem('user');
+    // 從 localStorage 讀取 'user'
+    const user = localStorage.getItem('user');
   return !!user;
+  // !!： 把任何值強制轉換成 true 或 false
 });
-
+console.log(isLoggedIn.value); // true 或 false
 
 const emit = defineEmits([
     'close-game', 
@@ -60,7 +62,7 @@ const gameLine = ref(null); // 繩子;魚線
 const gameClaw = ref(null); // 鉤子頭
 
 // 加入時間，倒數計時
-const timeLeft = ref(30);
+const timeLeft = ref(10);
 // 加入 遊戲結束
 const isGameOver = ref(false);
 // 加入 遊戲準備畫面
@@ -247,29 +249,11 @@ const gameOver = async () => {
     if(score.value >= 500) {
         const isFirstPass = !passedGames.value.shrimp;
 
-        if (isLoggedIn.value) {
-            // 會員：更新資料庫
-            await memberStore.stampOnepoint('shrimp').catch(err => 
-                console.error("蓋章失敗:", err)
-            );
-        } else {
-            // 訪客：更新 localStorage
-            const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-            currentProgress.shrimp = true;
-            localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-        }
-
-        // 更新本地狀態
+        // 先立即更新本地狀態
         passedGames.value.shrimp = true;
         passTimes.value += 1;
 
-        // 存遊戲成績
-        await memberStore.saveGameResult('shrimp', {
-            pass: passTimes.value,
-            score: score.value
-        });
-
-        // 顯示集點卡
+                // 顯示集點卡
         setTimeout(() => {
             showCardOverlay.value = true;
             
@@ -285,7 +269,31 @@ const gameOver = async () => {
             } else {
                 console.log('[動畫] 已經過關過，跳過蓋章動畫');
             }
-        }, 1000);
+        }, 300);
+
+        // 背景執行，不等待(背景處理資料庫) 
+        (async ()=> {
+            try{
+                if (isLoggedIn.value) {
+                    // 會員：更新資料庫
+                    await memberStore.stampOnepoint('shrimp').catch(err => 
+                        console.error("蓋章失敗:", err)
+                    );
+                } else {
+                    // 訪客：更新 localStorage
+                    const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                    currentProgress.shrimp = true;
+                    localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+                }
+                // 存遊戲成績
+                await memberStore.saveGameResult('shrimp', {
+                    pass: passTimes.value,
+                    score: score.value
+                });
+            } catch (err) {
+                console.error("[背景] 儲存失敗:", err);
+            }
+        })(); // () 立即執行，但不 await 它
     }
 };
 
