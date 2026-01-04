@@ -1,10 +1,15 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.bue.pass)
+
+const isLoggedIn = computed(() => {
+  const user = localStorage.getItem('user');
+  return !!user;
+});
 
 // 過關蓋章
 const showCardOverlay = ref(false);
@@ -15,7 +20,12 @@ const handleCheckLedger = () => {
     showCardOverlay.value = true;
 };
 
-onMounted(() => {
+
+onMounted( async () => {
+
+    if (isLoggedIn.value) {
+      await memberStore.fetchPointsStatus();
+    }
 
     const status = memberStore.pointsStatus || {};
 
@@ -25,6 +35,8 @@ onMounted(() => {
     passedGames.value.bue      = status.bue >= 1;
     passedGames.value.bike     = status.mot >= 1;     
     passedGames.value.wand     = status.member_wandcore >= 1;
+
+    console.log('[初始化] passedGames:', passedGames.value);
 
     const saved = localStorage.getItem('game_progress');
     const allEmpty = Object.values(status).every(v => v === 0 || v === false);
@@ -114,8 +126,8 @@ const buaBue = () => {
 
       bue1Result.value = isBue1Yin ? 1 : 0;
       bue2Result.value = isBue2Yin ? 1 : 0;
-      memberStore.gameData.bue.pass += 0;
-      memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
+      // memberStore.gameData.bue.pass += 0;
+      // memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
 
       if (isBue1Yin && isBue2Yin) {
         finalResult.value = 'classes.bue2Name';
@@ -126,31 +138,59 @@ const buaBue = () => {
       } else {
         finalResult.value = 'classes.bue3Name'; 
         siannCount.value ++
+
         if(siannCount.value == 3){
-          memberStore.stampOnepoint('bue').catch(err => console.error("擲筊蓋章失敗:", err));
-          memberStore.gameData.bue.pass +=1
-          memberStore.saveGameResult('bue',{pass: memberStore.gameData.bue.pass});
+          const isFirstPass = !passedGames.value.bue;
+
+          console.log('[擲筊] 過關！第一次過關？', isFirstPass);
+
+          passedGames.value.bue = true;
+          memberStore.gameData.bue.pass += 1;
           siannCount.value = 0;
+
           setTimeout(() => {
             showCardOverlay.value = true;
 
-            setTimeout(() => {
-                activeTriggers.value.bue = true;
+            if(isFirstPass){
               setTimeout(() => {
-                passedGames.value.bue = true;
-
-                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                currentProgress.bue = true; 
-                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-
-                activeTriggers.value.bue = false;
-              }, 600); 
-            }, 500);
-            siannCount.value = 0;
+                activeTriggers.value.bue = true;
+                setTimeout(() => {
+                  activeTriggers.value.bue = false;
+            }, 600); 
           }, 500);
+        } else {
+          console.log('[動畫] 已經過關過，跳過蓋章動畫');
         }
-      }
-      memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass });
+      }, 500);
+
+      (async()=>{
+        try{
+          if (isLoggedIn.value) {
+                // 會員：更新資料庫
+                await memberStore.stampOnepoint('bue');
+              } else {
+                // 訪客：更新 localStorage
+                const currentProgress = JSON.parse(
+                  localStorage.getItem('game_progress') || '{}'
+                );
+                currentProgress.bue = true;
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+              }
+              
+              // 儲存成績
+              await memberStore.saveGameResult('bue', {
+                pass: memberStore.gameData.bue.pass
+              });
+              
+              console.log('[背景] 擲筊遊戲資料儲存完成');
+        } catch (err) {
+            console.error("[背景] 擲筊遊戲儲存失敗:", err);
+        }
+      })();
+    }
+  }
+         
+      memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass }).catch(err => console.error("儲存進度失敗:", err));
     }, 1500);
   }, 50);
 };

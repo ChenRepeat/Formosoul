@@ -10,6 +10,11 @@ import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.dice.pass)
 
+const isLoggedIn = computed(() => {
+  const user = localStorage.getItem('user');
+  return !!user;
+});
+
 // 過關蓋章
 const showCardOverlay = ref(false);
 const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
@@ -269,29 +274,53 @@ const checkWinner = () => {
   }
 
   finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
+
   if (isWin) {
-    memberStore.stampOnepoint('dice').catch(err => console.error("骰子蓋章 API 失敗:", err));
+    const isFirstPass = !passedGames.value.dice;
+    passedGames.value.dice = true;
+    passTimes.value += 1;
 
     setTimeout(() => {
         showCardOverlay.value = true;
-        
-        setTimeout(() => {
-            activeTriggers.value.dice = true;
 
+        if(isFirstPass) {
             setTimeout(() => {
-                passedGames.value.dice = true;
-
-                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                currentProgress.dice = true; 
-                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-
-                activeTriggers.value.dice = false;
-            }, 600);
+                activeTriggers.value.dice = true;
+                setTimeout(() => {
+                    activeTriggers.value.dice = false;
+                }, 600);
         }, 500);
-    }, 1000);
-    memberStore.saveGameResult('dice', { pass: passTimes.value, score: pScore });
+        } else{
+            console.log('已通關過，跳過蓋章動畫')
+        }
+    }, 800);
+
+        // 背景處理 
+        (async()=>{
+            try{
+                const isLoggedIn = !!localStorage.getItem('user');
+                if (isLoggedIn) {
+                // 會員：更新資料庫
+                await memberStore.stampOnepoint('dice');
+            } else {
+                // 訪客：更新 localStorage
+                const currentProgress = JSON.parse(
+                    localStorage.getItem('game_progress') || '{}'
+                );
+                currentProgress.dice = true;
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+            }
+
+            // 儲存成績
+            await memberStore.saveGameResult('dice', { pass: passTimes.value, score: pScore });
+
+            } catch(err){
+                console.error("[背景] 骰子遊戲儲存失敗:", err);
+            }
+        })();
+     }
   }
-}
+
 
 const handleCheckLedger = () => {
     showCardOverlay.value = true;
@@ -310,9 +339,34 @@ const resetGame = () => {
   bankerDicelist.value.forEach(d => d.score = '_');
 }
 
+const initGameStatus = () => {
+  const status = memberStore.pointsStatus || {};
+  
+  if (isLoggedIn.value) {
+    // 會員：從資料庫讀取
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1;
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;
+    passedGames.value.wand     = status.member_wandcore >= 1;
+  } else {
+    // 訪客：從 localStorage 讀取
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      passedGames.value.shrimp   = !!progress.shrimp;
+      passedGames.value.dice     = !!progress.dice;
+      passedGames.value.ringtoss = !!progress.ringtoss;
+      passedGames.value.bue      = !!progress.bue;
+      passedGames.value.bike     = !!progress.bike;
+      passedGames.value.wand     = !!progress.wand;
+    }
+  }
+};
 
 // ================ 生命週期 ================ 
-onMounted(()=>{
+onMounted( async ()=>{
   document.body.style.overflow = 'hidden';
   document.documentElement.style.overflow = 'hidden';
 
@@ -321,29 +375,14 @@ onMounted(()=>{
   window.addEventListener('mouseup', handleMouseUp)
   window.addEventListener('keydown', handleKey);
 
-  const status = memberStore.pointsStatus || {};
-  passedGames.value.shrimp   = status.shrimp >= 1;
-  passedGames.value.dice     = status.dice >= 1;
-  passedGames.value.ringtoss = status.ring >= 1; 
-  passedGames.value.bue      = status.bue >= 1;
-  passedGames.value.bike     = status.mot >= 1;     
-  passedGames.value.wand     = status.member_wandcore >= 1;
-
-
-  const allEmpty = Object.values(status).every(v => v === 0 || v === false);
-  if (allEmpty) {
-    const saved = localStorage.getItem('game_progress');
-    if (saved) {
-      const progress = JSON.parse(saved);
-      passedGames.value.shrimp   ||= !!progress.shrimp;
-      passedGames.value.dice     ||= !!progress.dice;
-      passedGames.value.ringtoss ||= !!progress.ringtoss;
-      passedGames.value.bue      ||= !!progress.bue;
-      passedGames.value.bike     ||= !!progress.bike;
-      passedGames.value.wand     ||= !!progress.wand;
-    }
+    // 先載入集點卡狀態（如果是會員）
+  if (isLoggedIn.value) {
+    await memberStore.fetchPointsStatus();
   }
-})
+  
+  // 初始化遊戲狀態
+  initGameStatus();
+});
 
 onUnmounted (() => {
   document.body.style.overflow = '';
@@ -359,7 +398,7 @@ onUnmounted (() => {
 <template>
     <!-- <img src="SurvivalGuide/Group 604.svg" alt=""> -->
         <div class="playerbox">
-            <h4>Player {{ result }}</h4>
+            <h4>Player</h4>
             <div class="scorebox">
                 <h3>Score</h3>
                 <h2 class="scores" :class="{ 'score-up': totalscore >= 10 }">{{ totalscore }}</h2>

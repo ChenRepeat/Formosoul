@@ -1,54 +1,105 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import CoreShow from './CoreShow.vue';
     import MemberLedger from "@/components/Member/information/memberLedger.vue";
+    import { useMemberStore } from '@/stores/member';
+    // import { ca } from 'element-plus/es/locale';
+    const memberStore = useMemberStore();
+    const passTimes = ref(memberStore.gameData?.wand?.pass || 0);
 
+    const isLoggedIn = computed(() => {
+    const user = localStorage.getItem('user');
+        return !!user;
+    });
 
     //設定目前顯示頁面
     const currentView = ref('game');
 
     // 蓋章
     const showCardOverlay = ref(false);
-    const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
+    const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
     const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
 
-    onMounted(() => {
-    const saved = localStorage.getItem('game_progress');
-    if (saved) {
-        const progress = JSON.parse(saved);
-        passedGames.value.shrimp = !!progress.shrimp; 
-        passedGames.value.dice = !!progress.dice;
-        passedGames.value.ringtoss = !!progress.ringtoss;
-        passedGames.value.bue = !!progress.bue;
-        passedGames.value.bike = !!progress.bike;
-        passedGames.value.wand = !!progress.wand;
-    }
-});
+    const initGameStatus = () => {
+        const status = memberStore.pointsStatus || {};
+    
+        if (isLoggedIn.value) {
+            // 會員：從資料庫讀取
+            passedGames.value.shrimp   = status.shrimp >= 1;
+            passedGames.value.dice     = status.dice >= 1;
+            passedGames.value.ringtoss = status.ring >= 1;
+            passedGames.value.bue      = status.bue >= 1;
+            passedGames.value.bike     = status.mot >= 1;
+            passedGames.value.wand     = status.member_wandcore >= 1;
+            console.log('檢查魔杖是否已過關:', passedGames.value.wand);
+            console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
+        } else {
+            // 訪客：從 localStorage 讀取
+            const saved = localStorage.getItem('game_progress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                passedGames.value.shrimp   = !!progress.shrimp;
+                passedGames.value.dice     = !!progress.dice;
+                passedGames.value.ringtoss = !!progress.ringtoss;
+                passedGames.value.bue      = !!progress.bue;
+                passedGames.value.bike     = !!progress.bike;
+                passedGames.value.wand     = !!progress.wand;
+            }
+            
+            console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
+        }
+    };
 
-function handleCoreSelected() {
-    // if (passedGames.value.wand) {
-    //     showCardOverlay.value = true;
-    // } else {
+async function handleCoreSelected() {
+    console.log('[魔杖點擊] 瞬間狀態:', {
+        local: passedGames.value.wand,
+        store: memberStore.pointsStatus.member_wandcore
+    });
+
+    const isAlreadyPassed = passedGames.value.wand || memberStore.pointsStatus.member_wandcore >= 1;
+    const isFirstPass = !isAlreadyPassed;
+    console.log('[魔杖] 是否第一次通關:', isFirstPass);
+    
+    passedGames.value = { 
+        ...passedGames.value, 
+        wand: true 
+    };
+    passTimes.value += 1;
+
         setTimeout(() => {
             showCardOverlay.value = true; 
-
-            setTimeout(() => {
-                activeTriggers.value.wand = true; 
-
+            if (isFirstPass) {
+                console.log('%c[魔杖動畫] 觸發蓋章動畫', 'color: red; font-weight: bold');
                 setTimeout(() => {
-                    passedGames.value.wand = true;
-
-                    const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                    currentProgress.wand = true;
-                    localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-                    activeTriggers.value.wand = false;
-                }, 600); 
-            }, 500);
+                    activeTriggers.value.wand = true; 
+                    setTimeout(() => {
+                        activeTriggers.value.wand = false;
+                    }, 600); 
+                }, 500);
+            } else {
+                console.log('[魔杖動畫] 已經過關過，跳過蓋章動畫');
+            }
         }, 300);
+        
+        (async ()=> {
+            try{
+                if (isLoggedIn.value) {
+                // 會員：更新資料庫
+                await memberStore.stampOnepoint('member_wandcore').catch(err => 
+                    console.error("[魔杖] 蓋章失敗:", err)
+                );
+            } else {
+                // 訪客：更新 localStorage
+                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+                currentProgress.wand = true;
+                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+            }
+        } catch (err) {
+            console.error("[魔杖背景] 儲存失敗:", err);
+        }
+        })();
     }
-// }
-
-
+                    
     function showCore(){
         currentView.value = 'core';
     }
@@ -58,7 +109,20 @@ function handleCoreSelected() {
         currentView.value = 'game';
     }
 
+onMounted(() => {
+    if (isLoggedIn.value) {
+        // 兩個 API 同時發出去，誰快誰先跑 init
+        memberStore.fetchPointsStatus().then(() => {
+            initGameStatus();
+        });
 
+        memberStore.loadMemberData().then(() => {
+            initGameStatus();
+        });
+    } else {
+        initGameStatus();
+    }
+});
 
 </script>
 

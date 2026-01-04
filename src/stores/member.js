@@ -44,6 +44,7 @@ export const useMemberStore = defineStore('member', () => {
         bue: { count: 0, pass: 0 },
         charm: { img: null },
         dice: { count: 0, pass: 0 },
+        wand: { count:0, pass: 0},
         motor: { count: 0, score: 0, pass: 0 },
         ring: { count: 0, score: 0, pass: 0 },
         shrimp: { count: 0, score: 0, pass: 0 },
@@ -82,14 +83,12 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
                 imgURL.value = dbData.headshot || '';
 
-                pointsStatus.value = {
-                    mot: dbData.motorcyclegame_pass,
-                    shrimp: dbData.shrimpgame_pass,
-                    dice: dbData.dicegame_pass,
-                    bue: dbData.buegame_pass,
-                    ring: dbData.ringgame_pass,
-                    member_wandcore: dbData.member_wandcore || 0
-                };
+                if (Number(dbData.motorcyclegame_pass) >= 1) pointsStatus.value.mot = 1;
+if (Number(dbData.shrimpgame_pass) >= 1) pointsStatus.value.shrimp = 1;
+if (Number(dbData.dicegame_pass) >= 1) pointsStatus.value.dice = 1;
+if (Number(dbData.buegame_pass) >= 1) pointsStatus.value.bue = 1;
+if (Number(dbData.ringgame_pass) >= 1) pointsStatus.value.ring = 1;
+if (Number(dbData.wandcore_pass) >= 1) pointsStatus.value.member_wandcore = 1;
                 console.log("資料加載成功", pointsStatus.value);
 
                 memberData.value.charmImg = dbData.charmgame_img1 || '';
@@ -107,6 +106,10 @@ export const useMemberStore = defineStore('member', () => {
                 gameData.value.motor = {
                     count: dbData.motorcyclegame_count, 
                     pass: dbData.motorcyclegame_pass 
+                };
+                gameData.value.wand = {
+                    count: dbData.wandcore_count, 
+                    pass: dbData.wandcore_pass 
                 };
                 gameData.value.ring = {
                     count: dbData.ringgame_count, 
@@ -187,6 +190,16 @@ export const useMemberStore = defineStore('member', () => {
             console.error("錯誤：找不到集點卡 ID，無法存檔 (請確認是否已登入)");
             return;
         }
+        const gameTypeMapping = {
+        'wandcore': 'wand',
+        'mot': 'motor',
+        'ring': 'ring',
+        'shrimp': 'shrimp',
+        'dice': 'dice',
+        'bue': 'bue'
+        };
+        const gameDataKey = gameTypeMapping[gameType] || gameType;
+
         try {
             const payload = {
                 pointscard_ID: memberData.value.pointscard_ID,
@@ -204,8 +217,9 @@ export const useMemberStore = defineStore('member', () => {
             const result = await response.json();
             if(result.success){
                 console.log(`[${gameType}] 存檔成功:`, result.message);
-                if(gameData.value[gameType]){
-                    const currentData = gameData.value[gameType];
+
+                if(gameData.value[gameDataKey]){
+                    const currentData = gameData.value[gameDataKey];
                     currentData.pass = Math.max(currentData.pass, payload.pass);
                     if (payload.score) {
                         currentData.score = Math.max(currentData.score, payload.score);
@@ -255,7 +269,7 @@ export const useMemberStore = defineStore('member', () => {
                 dice: result.data.dice || 0,
                 bue: result.data.bue || 0,
                 ring: result.data.ring || 0,
-                member_wandcore: result.data.member_wandcore || 0
+                member_wandcore: Number(result.data.member_wandcore) || 0
             };
             console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
         } else {
