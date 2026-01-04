@@ -153,6 +153,37 @@ export const useCartStore = defineStore('cart', () => {
     );
 
 
+    // 其他功能 - 取得會員ＩＤ
+    const memberID = ref(null);
+
+    const getMemberID = () => {
+        const localData = localStorage.getItem('user');     //讀取 localstorage 的資料
+
+        if(localData){
+            //return JSON.parse(localData);   //把 localData 轉回原本的格式
+
+            //因為使用 JSON.parse，為了避免 user 裡存的資料可能被修改，或著不是JSON，多補上 try..catch 保護程式
+            try{
+                const userData = JSON.parse(localData);
+                memberID.value = userData.member_ID || null;     // ||null是為了避免出現意外，變成 undifined
+               }catch($e){        // 因為在 JS，所以不用有型別名稱，JS會自動把抓到的錯誤塞給變數，也因為在JS，所以變數名稱不用加上$
+                console.error('user資料壞掉');            //用 console.error 的原因是，這行會變紅色，比較容易看到   
+                memberID.value = null;
+               }   
+        }else{
+            memberID.value = null;
+        }
+    };
+
+    // <初始化 cart.js 時，先執行一次取得會員ＩＤ 的動作>
+    getMemberID();
+
+
+
+    // 其他功能 - 取得折價券ＩＤ
+
+
+
     //需要 export 給組件使用的
     return{
         cartList,
@@ -164,11 +195,13 @@ export const useCartStore = defineStore('cart', () => {
         totalQty,
         unitPrice,
         totalPrice,
-        //shippingFeeList,
+        shippingFeeList,
         selectCountry,
         shippingFee,
         discount,
         finalPrice,
+        memberID,
+        getMemberID,
     };
 
 });

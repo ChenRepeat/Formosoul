@@ -26,7 +26,7 @@ function goOrder(){
 const hasCoupon = ref(false);
 function couponclose(){
     hasCoupon.value = false;
-    document.body.style.overflow = '' ;
+ document.body.style.overflow = '' ;
     document.documentElement.style.overflow = '';
 }
 function couponopen(){
@@ -34,7 +34,7 @@ function couponopen(){
     document.documentElement.style.overflow = 'hidden';
 document.body.style.overflow = 'hidden';
 }
-// 付款總金額計算 --------------------------------
+
 
 // 信用卡填完跳轉下一格 ---------------------------
 const cardNum = ref([]);
