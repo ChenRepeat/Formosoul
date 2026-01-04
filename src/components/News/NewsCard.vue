@@ -1,5 +1,7 @@
 <!-- 20251202：首次與Michael完成組件，以茲紀念 -->
 <script setup>
+const baseUrl = import.meta.env.BASE_URL;
+
 defineProps({
   data: {
     type: Object,
@@ -15,10 +17,10 @@ defineProps({
 <template>
   <router-link :to="link" class="newscard-container">
       <div class="newscard-container-info">
-        <img class="newscard-container-pics" :src="data.image" alt="" />
+        <img class="newscard-container-pics" :src="`${ baseUrl }${ data.pic }`" alt="" />
         <div class="newscard-container-text">
-          <h4>{{ data.title }}</h4>
-          <h5>{{ data.date }}</h5>
+          <h4>{{ data.title_en }}</h4>
+          <h5>{{ data.update }}</h5>
         </div>
       </div>
   
