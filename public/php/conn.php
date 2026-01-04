@@ -38,8 +38,8 @@ $options = [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     //雲端資料庫加密
     // __DIR__ 代表目前這個 conn.php 所在的資料夾
-    // PDO::MYSQL_ATTR_SSL_CA => __DIR__ . '/isrgrootx1.pem',
-    // PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+    PDO::MYSQL_ATTR_SSL_CA => __DIR__ . '/isrgrootx1.pem',
+    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
 ];
 
 // 4. 建立連線
