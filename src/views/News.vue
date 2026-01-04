@@ -299,6 +299,9 @@ onUnmounted(() => {
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
         <h5 class="news-main-text">I solemnly swear that I am up to no good.</h5>
+        <div class="scroll-tip" >
+          <div class="tip-dot"></div>
+        </div>
       </div>
 
       <div class="news-cards-container">
@@ -360,7 +363,32 @@ onUnmounted(() => {
   align-items: center;
   z-index: 10;
   pointer-events: none;
+  .scroll-tip{
+    width: 5px;
+    height: 35%;
+    position: absolute;
+    bottom: 10%;
+    overflow: hidden;
+    .tip-dot{
+      position: absolute;
+      width: 100%;
+      top: -10%;
+      height: 100%;
+      animation: run 2s infinite ease-in-out;
+      background-image: linear-gradient(to top,white 0%,transparent 100%);
+    }
+  }
 }
+@keyframes run{  
+  0% {
+  top: 0%;
+  transform: scaleY(0);
+} 
+100% {
+  top: 100%;
+  transform: scaleY(1);
+} }
+
 
 .news-main-text {
   line-height: 1.1;
@@ -434,17 +462,16 @@ onUnmounted(() => {
 .news-updates-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
   gap: 48px;
   max-width: 1176px;
   margin: 0 auto;
+  padding: 20px;
+  justify-content: center;
 }
 
 /* 響應式 */
 @media (max-width: 768px) {
-  .news-updates-grid {
-    grid-template-columns: 1fr;
-  }
   .news-parallax-section {
     height: 450vh;
   }

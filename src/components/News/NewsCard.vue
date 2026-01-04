@@ -30,8 +30,8 @@ defineProps({
 
 <style scoped lang="scss">
 .newscard-container {
-  width: 360px;
-  height: 360px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 7px;
   position: relative;
   overflow: hidden;
