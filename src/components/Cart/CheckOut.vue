@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cart';
 import { useI18n } from 'vue-i18n';
 import { useAddressStore } from '@/stores/addressStore';
+import axios from 'axios';
 import BasicButton from '../../components/BasicButton.vue';
 import OrderList from '../OrderList.vue';
 import Couponcontaion from '../Member/coupons/couponcontaion.vue';
@@ -14,13 +15,6 @@ const cartstore = useCartStore();
 const addrstore = useAddressStore();
 const { locale } = useI18n();     // 讀取語系狀態
 
-
-// 確認訂單 ---------------------------
-function goOrder(){
-    router.push({
-        name: 'OrderSucess',
-    });
-}
 
 // coupon -------------------------------------
 const hasCoupon = ref(false);
@@ -148,9 +142,43 @@ watch ( selectCity, () => {
   selectDist.value = '';
 });
 
+//需要存進orderList的資料  ----------------------------------------------
+const receiptName = ref('');
+const receiptPhone = ref('');
+const receiptAddr = ref('');         //只記錄使用者填寫的部分，完整的地址需要組合下拉選單
+const receiptRemark = ref('');
+const saveAddr = ref(false);         // 是否儲存為常用地址
+
+// 完整地址需要組合
+
+const finalAddr = computed(()=>{
+
+    if(cartstore.selectCountry.value !=='taiwan'){
+        // 國外：國家＋地址 
+        return `${cartstore.selectCountry.value}-${receiptAddr.value||''}`;  
+        // 因為${}是JS，所以如果是 undefined 或 null 會被同步呈現出來，所以要用||''來取代。
+        // {{}} 是 vue，就不會有${}的問題，所以不用寫   
+    }else{
+        // 台灣：國家＋城市＋區域＋地址
+        const city = selectCity.value || '';
+        const dist = selectDist.value || '';
+        const detail = receiptAddr.value || '';
+        return `${city}${dist}${detail}`;
+    }
+})
+
+
+// 確認訂單 ---------------------------
+function goOrder(){
+    router.push({
+        name: 'OrderSucess',
+    });
+}
+
+
 
 // 語系切換  ----------------------------------------------
-    const langList ={
+    const langList = {
         'en-US': 'en',
         'zh-TW': 'zh'
     };
@@ -327,17 +355,17 @@ watch ( selectCity, () => {
                     <div class="received-name-phone dp-flex">
                         <div class="received-name">
                             <p>{{$t('shoppingcart.name')}}</p>
-                            <input class="input-text" type="text" required>
+                            <input v-model="receiptName" class="input-text" type="text" required>
                         </div>
                         <div class="received-phone">
                             <p>{{$t('shoppingcart.phoneNumber')}}</p>
-                            <input class="input-text" type="text" @input="checkNumber" required>
+                            <input v-model="receiptPhone" class="input-text" type="text" @input="checkNumber" required>
                         </div>
                     </div>
                     <div class="received-address">
                         <div v-if="cartstore.selectCountry !== 'taiwan'">
                             <p>{{$t('shoppingcart.address')}}</p>
-                            <input class="input-text" type="text" required>
+                            <input v-model="receiptAddr" class="input-text" type="text" required>
                         </div>
 
                         <div v-else class="country-taiwan ">
@@ -359,16 +387,17 @@ watch ( selectCity, () => {
                                 </nav>
                             </div>
                             
-                            <input class="input-text" type="text" required>
+                            <input v-model="receiptAddr" class="input-text" type="text" required>
                         </div>
                     </div>
 
                     <label class="checkbox-dock dp-flex">
-                        <input class="input-checkbox" type="checkbox" name="" id="">
+                        <input v-model="saveAddr" class="input-checkbox" type="checkbox" name="" id="">
                         <span>{{$t('shoppingcart.record')}}</span>
                     </label>
 
-                    <textarea 
+                    <textarea
+                    v-model="receiptRemark" 
                     class="input-text input-textarea " 
                     :placeholder="$t('shoppingcart.remark')" 
                     type="textarea"
