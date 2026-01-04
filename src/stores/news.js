@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-export const useNewsData = defineStore('newsData', () => { const baseUrl = import.meta.env.VITE_API_BASE
+
+export const useNewsData = 
+defineStore('newsData', () => { const baseUrl = import.meta.env.VITE_API_BASE
   
+// 處理日期格式
+const formatDate = (i) => {
+  if(!i) return;
+  return i.split(' ')[0];
+}
+
   const allNewsData = ref([]);
-  allNewsData.value = [{}];
+  // allNewsData.value = [{}];
 
   const get_newsinfo = async () => {
   console.log('所有的環境變數：', import.meta.env);
@@ -39,7 +47,7 @@ export const useNewsData = defineStore('newsData', () => { const baseUrl = impor
       intro_en: item.intro_en,
       status: item.status,
       createdate: item.createdate,
-      update: item.update,
+      update: formatDate(item.update),
       pic: item.pic,
       })); 
       console.log(allNewsData.value);
