@@ -6,7 +6,7 @@ require_once 'db_config.php';
 // 設定 CORS 與 標頭
 // ---------------------------------------------------------
 
-允許來自任何網域的請求 (開發階段方便，正式上線建議改成前端網址 'http://localhost:5173')
+//允許來自任何網域的請求 (開發階段方便，正式上線建議改成前端網址 'http://localhost:5173')
 header("Access-Control-Allow-Origin: http://localhost:5173");
 
 // 允許的請求方法 (GET, POST, OPTIONS, PUT, DELETE)
@@ -38,8 +38,8 @@ $options = [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     //雲端資料庫加密
     // __DIR__ 代表目前這個 conn.php 所在的資料夾
-    PDO::MYSQL_ATTR_SSL_CA => __DIR__ . '/isrgrootx1.pem',
-    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+    // PDO::MYSQL_ATTR_SSL_CA => __DIR__ . '/isrgrootx1.pem',
+    // PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
 ];
 
 // 4. 建立連線
