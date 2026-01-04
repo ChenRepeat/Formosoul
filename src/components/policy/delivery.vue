@@ -66,4 +66,9 @@
     .big{
         margin: 24px;
     }
+    @media screen and (max-width: 1300px) {
+        .wrapper{
+            max-width: 900px;
+        }
+    }
 </style>
