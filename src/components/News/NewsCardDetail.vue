@@ -7,148 +7,148 @@ const route = useRoute()
 const router = useRouter()
 
 
-const allNewsData = [
- {
-    id: 1,
-    title: "ABia Zhenlan",
-    date: '2025.2.5',
-    image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+// const allNewsData = [
+//  {
+//     id: 1,
+//     title: "ABia Zhenlan",
+//     date: '2025.2.5',
+//     image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 2,
-    title: "Ervjia kwifoan",
-    date: '2025.6.20',
-    image: "https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 2,
+//     title: "Ervjia kwifoan",
+//     date: '2025.6.20',
+//     image: "https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 3,
-    title: "hgtha Zhenlan",
-    date: '2025.7.18',
-    image: "https://www.travel.taipei/image/90806/?r=1515479579958",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 3,
+//     title: "hgtha Zhenlan",
+//     date: '2025.7.18',
+//     image: "https://www.travel.taipei/image/90806/?r=1515479579958",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 4,
-    title: "Eajiae Zhenlan",
-    date: '2025.2.5',
-    image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 4,
+//     title: "Eajiae Zhenlan",
+//     date: '2025.2.5',
+//     image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 5,
-    title: "ajiafe Zhenlan",
-    date: '2025.6.20',
-    image: "https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 5,
+//     title: "ajiafe Zhenlan",
+//     date: '2025.6.20',
+//     image: "https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 6,
-    title: "HGajia Zhenlan",
-    date: '2025.7.18',
-    image: "https://www.travel.taipei/image/90806/?r=1515479579958",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 6,
+//     title: "HGajia Zhenlan",
+//     date: '2025.7.18',
+//     image: "https://www.travel.taipei/image/90806/?r=1515479579958",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 7,
-    title: "Dajia Zhnrfrfan",
-    date: '2025.2.5',
-    image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 7,
+//     title: "Dajia Zhnrfrfan",
+//     date: '2025.2.5',
+//     image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-    {
-    id: 8,
-    title: "Djgajia kroipen",
-    date: '2025.6.20',
-    image: "https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//     {
+//     id: 8,
+//     title: "Djgajia kroipen",
+//     date: '2025.6.20',
+//     image: "https://images.pexels.com/photos/4095421/pexels-photo-4095421.jpeg",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-  {
-    id: 9,
-    title: "HITM Zehenlan",
-    date: '2025.7.18',
-    image: "https://www.travel.taipei/image/90806/?r=1515479579958",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//   {
+//     id: 9,
+//     title: "HITM Zehenlan",
+//     date: '2025.7.18',
+//     image: "https://www.travel.taipei/image/90806/?r=1515479579958",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-    {
-    id: 10,
-    title: "Taiwan’s AI-driven Taiwan’s AI-driven",
-    date: '2025.2.5',
-    image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
-    content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+//     {
+//     id: 10,
+//     title: "Taiwan’s AI-driven Taiwan’s AI-driven",
+//     date: '2025.2.5',
+//     image: "https://cyberisland.teldap.tw/S/JQjyuytdcMmyblySsltwmTSleH",
+//     content: `The Dajia Matsu Pilgrimage is one of Taiwan’s largest and most iconic religious events, often recognized as one of the “world’s three major religious festivals.” Taking place each lunar March, the nine-day, eight-night journey begins at Dajia Jenn Lann Temple and covers around 300 kilometers across multiple counties. It attracts over a million devotees and visitors every year.
 
-    The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
+//     The departure ceremony is one of the festival’s most electrifying highlights. As the palanquin carrying Matsu is lifted from the temple gate amid drums, firecrackers, and cheering crowds, the atmosphere reaches an emotional peak. Devotees rush to crawl under the palanquin—a ritual believed to cleanse misfortune and bring divine protection. Along the route, traditional performance troupes, lion dances, musicians, and folk arts teams create a rich cultural landscape.
 
-    The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
+//     The pilgrimage emphasizes blessings, peace, and companionship. Thousands walk alongside the deity day and night, journeying through cities, towns, and countryside. Residents provide free food, drinks, and resting areas known as “pilgrim hotels,” reflecting the generosity and communal spirit deeply rooted in Taiwanese culture.
 
-    For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
-    `
-  },
-]
+//     For international visitors, the Dajia Matsu Pilgrimage offers an extraordinary opportunity to witness Taiwan’s living traditions. The combination of faith, emotion, music, and community support makes it one of the most immersive cultural experiences in Asia.
+//     `
+//   },
+// ]
 
 const currentArticle = computed(() => {
   return allNewsData.find(item => item.id == route.params.id)

@@ -7,9 +7,15 @@ import NewsCard from "@/components/News/NewsCard.vue";
 // 1. 記得引入 onBeforeRouteLeave
 import { onBeforeRouteLeave } from 'vue-router'
 import Backgroundaction from "@/components/backgroundaction.vue";
+import { useNewsData } from "@/stores/news";
 
 // 連接 php
 const baseUrl = import.meta.env.BASE_URL;
+
+
+const newsData = useNewsData();
+
+
 
 const newsStatus = ref([]);
 // const allNewsData = ref([
