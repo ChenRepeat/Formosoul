@@ -3,7 +3,9 @@
         <div class="membercard">
             <div class="memberphoto">
                 <div v-if="!memberStore.imgURL" class="add">+</div>
-                <img v-else-if="memberStore.imgURL" :src="memberStore.imgURL" alt="會員頭像">
+                    <div v-else-if="memberStore.imgURL" class="fiximg">
+                        <img :src="memberStore.imgURL" alt="會員頭像">
+                    </div>
                 <div class="mask" v-if="authStore.memberView == 'cardcontain' || route.path == 'member/information'">
                     <font-awesome-icon icon="fa-solid fa-pen" style="font-size: 20px; "/>
                 </div>
@@ -142,7 +144,7 @@ const saveName = () => {
     .membercard-wrapper > img{
         height: 240px;
         width: 240px;
-        object-fit: contain;
+        object-fit: cover;
         position: absolute;
         left: 380px;
         top: 150px;
@@ -174,15 +176,22 @@ const saveName = () => {
         // transform: translate(-50%, -50%);
         
     }
-
-    .memberphoto > img{
+    .memberphoto > .fiximg{
         width: 160px;
         height: 160px;
-        border-radius: 50%;
-        position: absolute;
+        position: relative;
         top: 30%;  
         left: 50%;
         transform: translate(-50%, -30%);
+
+    }
+    .fiximg > img{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        position: absolute;
+
     }
 
     .thefile{

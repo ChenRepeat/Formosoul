@@ -17,7 +17,7 @@
                 </div>
                 <hr class="title-orders-line">
                 
-                <MemberOrdersDetail @update-order-status="setOrderStatus" ref="detailComponent" :currentPage="currentPage" />
+                <MemberOrdersDetail @no-order-found="setOrderStatus" ref="detailComponent" :currentPage="currentPage" />
                 <div class="orderspage-btn">
                     
                     <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>

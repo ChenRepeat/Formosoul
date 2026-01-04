@@ -2,15 +2,13 @@
         <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
             <p>{{ order.order_number }}</p> 
             <p>{{ order.orderdate }}</p>
-            <!-- <p>{{ order.price }}</p> -->
             <p>{{ order.total }}</p>
             <p>{{ order.payment }}</p>
             <p>{{ order.statuscode }}</p>
             <p>{{ order.shippingcode }}</p>
-            <!-- 換成p -->
+
             <p>
                 
-                <!-- <router-link :to="{ path: '/member/orderslist/orderscontain', query: { id: order.order_number } }"> -->
                 <router-link :to="`/member/orderslist/orderscontain/${order.order_number}`">
                 <basic-button 
                     class="btn-yellow-fill" 
@@ -40,7 +38,8 @@
     const memberStore = useMemberStore();
     const router = useRouter();
     const orders = ref([]);
-    const emit = defineEmits(['update-order-status'])
+    // 也可以 order-status 然後回傳 true or false
+    const emit = defineEmits(['no-order-found', 'order-updated'])
     const get_order = () => {
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -64,7 +63,7 @@
             const realArray = order_response.data || []; 
             // localStorage.setItem('data', JSON.stringify(realArray));
             if(!order_response.success || realArray.length === 0){
-                emit('update-order-status', false);
+                emit('no-order-found', order_response.success);
                 console.log('false');
                 return;
             }
@@ -90,7 +89,7 @@
                         5: "Pending Payment"
                     };
                     const finalTotal =  count + shippingFee - discount; 
-                    emit('update-order-status', true);
+                    emit('order-updated', order_response.success);
                     return {
                         ...order, 
                         total: finalTotal,
