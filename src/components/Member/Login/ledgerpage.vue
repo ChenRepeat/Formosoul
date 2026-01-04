@@ -163,5 +163,9 @@ import { useMemberStore } from '@/stores/member';
             justify-content: center;    
         }
     }
-
+    @media screen and (max-width: 1300px) {
+        .cardcontent{
+            grid-template-columns: 1fr;
+        }
+    }
 </style>

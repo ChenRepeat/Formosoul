@@ -27,4 +27,10 @@
         margin: 0 auto;
         padding: 48px 8px 16px 8px;
     }
+    @media screen and (max-width: 1300px) {
+        .information-wrapper{
+            width: 900px;
+
+        }
+    }
 </style>

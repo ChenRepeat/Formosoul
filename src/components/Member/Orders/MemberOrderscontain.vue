@@ -295,4 +295,10 @@ import { useMemberStore } from '@/stores/member';
         text-decoration: none;
     }
 
+    @media screen and (max-width: 1300px) {
+        .detail{
+            max-width: 900px;
+
+        }
+    }
 </style>

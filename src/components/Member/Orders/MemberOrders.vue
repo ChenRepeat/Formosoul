@@ -140,4 +140,14 @@ const goToPage = (pageNumber) => {
     .noborder{
         border: 0;
     }
+    @media screen and (max-width: 1300px) {
+        .member-orders{
+            width: 900px;
+
+        }
+        .orders{
+            width: 900px;
+
+        }
+    }
 </style>
