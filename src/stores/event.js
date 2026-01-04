@@ -54,8 +54,6 @@ export const useEventData = defineStore('eventData', () =>{
       console.error("Fetch 發生錯誤:", error);
     }
   };
-
-   
   return{
     loadeventData,eventDatas
   };
