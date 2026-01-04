@@ -176,7 +176,7 @@ import { useRoute } from 'vue-router';
                 setTimeout(() => {
                     coupon.status = 0;
                     coupon.isTearing = false;
-                }, 700);           
+                }, 300);           
             }
         });
 
@@ -322,7 +322,7 @@ import { useRoute } from 'vue-router';
         color: $color-fsContent;
     }
     .tear-animation {
-        transition: all 0.5s ease;
+        transition: all 0.3s ease;
     }
         
     @media screen and (max-width: 1300px) {
