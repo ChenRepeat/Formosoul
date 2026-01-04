@@ -55,8 +55,8 @@ function showCore(){
             </nav>
         </div>
 
-        <GameHistory v-else-if="currentView === 'history'" class=""/>
-        <CoreGame v-else-if="currentView === 'game'" class=""/>
+        <GameHistory v-else-if="currentView === 'history'" />
+        <CoreGame v-else-if="currentView === 'game'"/>
         
 
     </div>

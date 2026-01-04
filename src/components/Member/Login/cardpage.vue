@@ -68,7 +68,8 @@ import { useMemberStore } from '@/stores/member';
             memberStore.memberData.isEditing = true;
         }, 300);
         authStore.openLoginModal();
-        authStore.setmemberView('cardcontain');
+        // authStore.setmemberView('cardcontain');
+        authStore.setmemberView('coreselection');
     };
 </script>
 
