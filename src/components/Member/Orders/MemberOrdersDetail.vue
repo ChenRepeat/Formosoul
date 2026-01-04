@@ -64,7 +64,6 @@
             // localStorage.setItem('data', JSON.stringify(realArray));
             if(!order_response.success || realArray.length === 0){
                 emit('no-order-found', order_response.success);
-                console.log('false');
                 return;
             }
             orders.value = realArray.map((order, index) => {

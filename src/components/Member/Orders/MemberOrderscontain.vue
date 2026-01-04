@@ -151,9 +151,18 @@ import { useMemberStore } from '@/stores/member';
                 const productprice = productInfo.price || 0;
                 const productpieces = productInfo.quantity || 0;
                 const product_total = productprice * productpieces;
-                const imgageurl = `${import.meta.env.BASE_URL}${productInfo.image}` || '';
+                const imglist = productInfo.image || {};
+                let  finalpath = '';
+                if(imglist.includes('|')){
+                    const splitimg = imglist.split('|');
+                    finalpath = splitimg[0];
+                }else{
+                    finalpath = imglist;
+                }
 
-                // console.log(product_total);
+                const imgageurl = `${import.meta.env.BASE_URL}${finalpath}`;
+
+
 
                 return{
                     ...product,

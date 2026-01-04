@@ -1,8 +1,19 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import axios from 'axios';
+import { useI18n } from "vue-i18n";
 
 export const useMemberStore = defineStore('member', () => {
+    const { locale } = useI18n();
+
+    // 語系切換對照
+    const langList = {
+        'en-US': 'En',
+        'zh-TW': 'Zh'
+    };
+    const lang = computed( () => {
+        return langList[locale.value] || 'En';
+    });
     const apiBase = import.meta.env.VITE_API_BASE;
     const publicPath = import.meta.env.BASE_URL;
     // const imgURL = ref(`${publicPath}member/googleicon.png`);
@@ -60,10 +71,14 @@ export const useMemberStore = defineStore('member', () => {
             const result = await response.json();
             if(result.success){
                 const dbData = result.data;
+                const wandcoreKey = computed(() => {
+                    const langKey = `name${lang.value}`
+                    return dbData[langKey] || 'Select Your WandCore';
+                })
                 memberData.value.tempName = dbData.name;
                 memberData.value.number = dbData.member_ID;
                 memberData.value.date =  dbData.createdate;
-                memberData.value.wandcore = dbData.name_en || 'Select Your WandCore';
+                memberData.value.wandcore = wandcoreKey;
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
                 imgURL.value = dbData.headshot || '';
 

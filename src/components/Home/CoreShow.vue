@@ -11,7 +11,7 @@ function goToEnroll(){
     authStore.setmemberView('login');
     authStore.setloginView('enrollment');
 };
-
+// 不能再重抽
 
 // 頁面串聯 - 重新感應杖心  -------------------------------------------------------
 const emit = defineEmits(['restart-coregame', 'wand-selected']);
@@ -24,10 +24,6 @@ function goToSensing(){
 function onResultFound() {
     emit('wand-selected');
 }
-
-onMounted(() => {
-    onResultFound();
-});
 
 // 魔杖杖心 -------------------------------------------------------
 
@@ -425,7 +421,31 @@ const wandCores = ref([
 //因為要能讀到 wandCores ，所以需要把宣告的位置放到 wandCores 後
 //因為 wandCores 為陣列，用 ref 時，要用 .value 來讀
 
-const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));   
+const wandCore_list = ref([]);
+
+// const coreSelect = ref(Math.trunc(Math.random() * wandCores.value.length));  
+
+const corenumber = ref(0);
+function wandcore(){
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/getcore.php`;
+    return fetch(API_URL, {
+        method: 'POST', 
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        }
+        ).then( res => res.json()
+        ).then( core_res => {
+            const coreArray = core_res.data || [];
+            const Arraylength = core_res.length || 0;
+            const coreSelectNo = Math.trunc(Math.random() * Arraylength);
+            wandCore_list.value = coreArray[coreSelectNo];
+            corenumber.value = coreSelectNo;
+            // console.log(wandCore_list.value.name_en);
+            // console.log(corenumber.value);
+        })
+    }
 
 // 語系切換  -------------------------------------------------------
 const { locale } = useI18n();
@@ -440,10 +460,24 @@ const lang = computed( () => {
     return langList[locale.value] || 'En';
 });
 
+// const finalpath = wandCores.value[corenumber.value].pic;
+// const imgageurl = `${import.meta.env.BASE_URL}${finalpath}`;
+
+const finalpath = computed(() => {
+    return wandCores.value[corenumber.value].pic;
+})
 
 
+const imgageurl = computed(() => {
+    console.log(corenumber.value);
+    return `${import.meta.env.BASE_URL}${finalpath.value}`;
+})
 
 
+onMounted(() => {
+    wandcore();
+    onResultFound();
+});
 </script>
 <template>
 
@@ -452,19 +486,22 @@ const lang = computed( () => {
         <div class="coregame-top dp-flex">
             <div>
                 <div class="core-pic dp-flex">
-                    <img :src="wandCores[coreSelect].pic" alt="">
+                    <img :src="imgageurl" alt="" v-if="corenumber">
                     <!-- <img :src="{{wandCores[coreSelect].pic}}" alt="">    因為是網址，不能寫{{ }}  -->
                     <!-- <img src="../../../public/Home/game/Cornu Cervi Pantotrichum.png" alt=""> -->
                 </div>
             </div>
-            <div class="core-text">
+            <div class="core-text" v-if="wandCore_list">
 
                 <!-- <h6>{{wandCores.nameEn}}</h6>   因為wandCores是陣列，所以這樣無法直接取值，要加入索引 -->
-                <h6>{{wandCores[coreSelect][`name${lang}`]}}</h6>
+                <!-- <h6>{{wandCores[coreSelect][`name${lang}`]}}</h6>
                 <p>{{ $t('coreselection.coreshowSource')}}{{wandCores[coreSelect][`source${lang}`]}}</p>
                 <p>{{ $t('coreselection.coreshowProperty')}}{{wandCores[coreSelect][`property${lang}`]}}</p>
-                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCores[coreSelect][`effect${lang}`]}}</p>
-                
+                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCores[coreSelect][`effect${lang}`]}}</p> -->
+                <h6>{{wandCore_list[`name${lang}`]}}</h6>
+                <p>{{ $t('coreselection.coreshowSource')}}{{wandCore_list[`source${lang}`]}}</p>
+                <p>{{ $t('coreselection.coreshowProperty')}}{{wandCore_list[`property${lang}`]}}</p>
+                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCore_list[`effect${lang}`]}}</p>               
                 <!-- <h6>Cornu Cervi Pantotrichum</h6>
                 <p>Source ：Young antler of Sika or Red Deer.</p>
                 <p>Property ：Extreme Vitality, Rapid Regeneration.</p>
