@@ -1,7 +1,8 @@
 <script setup>
-import { computed, nextTick, watch } from 'vue'
+import { computed, nextTick, watch, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Backgroundaction from "@/components/backgroundaction.vue";
+import { useNewsData } from "@/stores/news";
 
 const route = useRoute()
 const router = useRouter()
@@ -149,11 +150,18 @@ const router = useRouter()
 //     `
 //   },
 // ]
-
-const currentArticle = computed(() => {
-  return allNewsData.find(item => item.id == route.params.id)
+const baseUrl = import.meta.env.BASE_URL;
+const newsDataStore = useNewsData(); // 吃pinia
+const allNewsData = ref([]) 
+allNewsData.value = computed(()=>{
+  return newsDataStore.allNewsData;
 })
+console.log(allNewsData)
 
+
+// const currentArticle = computed(() => {
+//   return allNewsData.find(item => item.id == route.params.id)
+// })
 
 // ★★★ 新增：自訂時間的平滑滾動函式 ★★★
 // duration = 毫秒 (例如 1000 = 1秒)
@@ -195,6 +203,11 @@ watch(
     });
   }
 );
+
+onMounted( async () => {
+  newsDataStore.get_newsinfo();
+  await nextTick();
+})
 </script>
 
 <template>

@@ -30,11 +30,20 @@ export const useNewsData = defineStore('newsData', () => { const baseUrl = impor
     console.log('News:', news_res);
     if(news_res.success && news_res.data?.length) {
       allNewsData.value = news_res.data.map(item => ({
-      id: item.newsID
-      })) 
+      id: item.newsID,
+      title_zh: item.title_zh,
+      title_en: item.title_en,
+      content_zh: item.content_zh,
+      intro_zh: item.intro_zh,
+      content_en: item.content_en,
+      intro_en: item.intro_en,
+      status: item.status,
+      createdate: item.createdate,
+      update: item.update,
+      pic: item.pic,
+      })); 
       console.log(allNewsData.value);
 
-      // return news_res.data;  
     } else {
       console.warn('No news ', news_res.message);
       return [];
@@ -45,8 +54,8 @@ export const useNewsData = defineStore('newsData', () => { const baseUrl = impor
   }  
 };
 
-
   return {
     allNewsData,
+    get_newsinfo
   }
 })

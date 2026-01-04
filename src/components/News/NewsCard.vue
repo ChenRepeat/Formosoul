@@ -2,6 +2,7 @@
 <script setup>
 const baseUrl = import.meta.env.BASE_URL;
 
+// define 一定寫在子層，子層沒有要求父層做動作就不用emit
 defineProps({
   data: {
     type: Object,
