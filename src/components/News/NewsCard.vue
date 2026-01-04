@@ -16,11 +16,11 @@ defineProps({
 </script>
 
 <template>
-  <router-link :to="link" class="newscard-container">
+  <router-link :to="`/news/${link}`" class="newscard-container">
       <div class="newscard-container-info">
         <img class="newscard-container-pics" :src="`${ baseUrl }${ data.pic }`" alt="" />
         <div class="newscard-container-text">
-          <h4>{{ data.title_en }}</h4>
+          <h5>{{ data.title_en }}</h5>
           <h5>{{ data.update }}</h5>
         </div>
       </div>
