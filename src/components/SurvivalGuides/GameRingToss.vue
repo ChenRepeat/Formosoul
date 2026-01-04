@@ -17,23 +17,32 @@ const handleCheckLedger = () => {
 };
 
 const checkGamePass = () => {
+    const isAlreadyPassed = (memberStore.pointsStatus?.ring >= 1) || passedGames.value.ringtoss;
+    console.log('檢查是否已過關：', isAlreadyPassed);    
     memberStore.stampOnepoint('ring').catch(err => console.error("套圈圈蓋章失敗:", err));
-
-    setTimeout(() => {
+  
+    if(!isAlreadyPassed){
+      console.log('第一次過關，播放動畫');
+      setTimeout(() => {
         showCardOverlay.value = true;
         setTimeout(() => {
             activeTriggers.value.ringtoss = true;
             setTimeout(() => {
                 passedGames.value.ringtoss = true;
+                activeTriggers.value.ringtoss = false; 
 
                 const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
                 currentProgress.ringtoss = true; 
                 localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-
-                activeTriggers.value.ringtoss = false; 
             }, 600);
         }, 500);
     }, 1000); 
+} else {
+    console.log('跳過動畫，直接顯示');
+    passedGames.value.ringtoss = true; // 強制設為 true 確保章是紅色的
+    activeTriggers.value.ringtoss = false; // 強制設為 false 確保章不亂動
+    showCardOverlay.value = true;
+  }
 };
 
 // ================ 鍵盤esc關閉 ================ 
@@ -43,7 +52,7 @@ const checkGamePass = () => {
 
   // 物件設定
   const config = {
-    startRings:10,      // 圈圈數
+    startRings:3,      // 圈圈數
     ringRadius: 50,     // 圈圈半徑
     targetRadius: 50,   // 物件半徑
     objWidth: 110,      // 物件寬
