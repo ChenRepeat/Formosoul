@@ -196,7 +196,7 @@ onUnmounted(() => {
       </div>
 
       <div class="news-updates-grid">
-        <NewsCard v-for="item in allNewsData" :key="item.newsID" :data="item" :link="`/news/${item.newsID}`"/>
+        <NewsCard v-for="item in allNewsData" :key="item.id" :data="item" :link="item.id"/>
       </div>
     </section>
   </div>

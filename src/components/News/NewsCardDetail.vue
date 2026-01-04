@@ -152,16 +152,12 @@ const router = useRouter()
 // ]
 const baseUrl = import.meta.env.BASE_URL;
 const newsDataStore = useNewsData(); // 吃pinia
-const allNewsData = ref([]) 
-allNewsData.value = computed(()=>{
-  return newsDataStore.allNewsData;
-})
-console.log(allNewsData)
 
+const allNewsData = computed(() => newsDataStore.allNewsData);
 
-// const currentArticle = computed(() => {
-//   return allNewsData.find(item => item.id == route.params.id)
-// })
+const currentArticle = computed(() => {
+  return allNewsData.value.find(item => item.id == route.params.id);
+});
 
 // ★★★ 新增：自訂時間的平滑滾動函式 ★★★
 // duration = 毫秒 (例如 1000 = 1秒)
@@ -217,16 +213,16 @@ onMounted( async () => {
     <h6 class="page-guide">
         <router-link to="/news">News</router-link>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        {{ currentArticle?.title }}
+        {{ currentArticle?.title_en }}
     </h6>
     <div class="content-container">
       <aside>
         <ul>
-          <li v-for="item in allNewsData" :key="item.id">
+          <li v-for="(item,key) in allNewsData" :key="key">
             <router-link :to="`/news/${item.id}`" replace>
               <div>
-                <h5>{{ item.title }}</h5>
-                <p>{{ item.date }}</p>
+                <h5>{{ item.title_en }}</h5>
+                <p>{{ item.update }}</p>
               </div>
               <span><font-awesome-icon :icon="['fas', 'caret-down']" size="3x" class="arrow-icon"/></span>
             </router-link>
@@ -237,11 +233,11 @@ onMounted( async () => {
         <Transition name="fade" mode="out-in">
           
           <div v-if="currentArticle" :key="currentArticle.id">
-            <img :src="currentArticle.image" alt="#">
+            <img :src="`${baseUrl}${currentArticle.pic}`" alt="#">
             <div class="text-area">
-              <h3>{{ currentArticle.title }}</h3>
-              <h5>{{ currentArticle.date }}</h5>
-              <p>{{ currentArticle.content }}</p>
+              <h3>{{ currentArticle.title_en }}</h3>
+              <h5>{{ currentArticle.update }}</h5>
+              <p>{{ currentArticle.content_en }}</p>
             </div>
           </div>
 
