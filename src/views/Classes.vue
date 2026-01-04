@@ -141,7 +141,7 @@
         <div class="page-content">
           <img src="../assets/BookCover.png" alt="" class="book-cover book-end">
           <img  
-            src="/public/About/about-island.png" 
+            src="/SurvivalGuide/taiwan_image2_nobg.png" 
             class="island-img" 
             alt="#"
           >
@@ -615,6 +615,8 @@ onUnmounted(() => {
 }
 .island-img{
   z-index: 100;
+  width: 50%;
+  height: auto;
 }
 .book-logo {
   position: absolute;

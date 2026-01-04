@@ -171,7 +171,7 @@ onUnmounted(() => {
   background-color: var(--bgColorItem);
   justify-content: center;
   gap: 16px;
-  left: -7em;
+  left: 0;
   transition: left 1s ease;
   &:not(.menu-open){
     background-color: #1d1d27;
@@ -180,7 +180,7 @@ onUnmounted(() => {
     left: -7.5em;
   }
   &.menu-open{
-    left: 0em;
+    left: 0;
   }
   border-radius: 0 20px 20px 0;
   
