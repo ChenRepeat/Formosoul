@@ -159,8 +159,27 @@ onUnmounted(() => {
   align-items: center;
   left: 0;
   z-index: 100;
-
+  animation: shining 3s 0.5s ease infinite;
+  @media (max-width: 1200px) {
+    animation: shiningD 3s 0.5s ease infinite;
+  }
 }
+@keyframes shining {
+    0%,30%,100%{
+      filter: drop-shadow(0px 0px 0px $color-fsWhite);
+    }
+    20%,80% {
+      filter: drop-shadow(0px 0px 5px $color-fsWhite);
+    }
+  }
+@keyframes shiningD {
+    0%,30%,100%{
+      filter: drop-shadow(0px 0px 0px $color-fsTitle);
+    }
+    20%,80% {
+      filter: drop-shadow(0px 0px 5px $color-fsTitle);
+    }
+  }
 .menu.vertical {
   width: 8em;
   height: fit-content;
@@ -232,12 +251,12 @@ onUnmounted(() => {
 
 .icon {
   stroke: transparent;
-  color: $color-fsWhite;
+  color: $color-fsGold;
   stroke-width: 1.2pt;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 400; 
-  stroke-dashoffset: 400;
+  stroke-dashoffset: 0;
 }
 .menu__item.active .icon {
   animation: strokeL 3s 0.5s ease forwards;
@@ -246,13 +265,13 @@ onUnmounted(() => {
 @keyframes strokeL {
     0%{
       stroke-dashoffset: 400;
-      stroke: $color-fsGold;
-      color: $color-fsWhite;
+      stroke: $color-fsWhite;
+      color: $color-fsGold;
     }
     100% {
       stroke-dashoffset: 0;
-      stroke: $color-fsGold;
-      color: $color-fsGold;
+      stroke: $color-fsWhite;
+      color: transparent;
 
     }
 

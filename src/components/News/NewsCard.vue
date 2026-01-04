@@ -1,7 +1,10 @@
 <!-- 20251202：首次與Michael完成組件，以茲紀念 -->
 <script setup>
-const baseUrl = import.meta.env.BASE_URL;
+import { useLangStore } from '@/stores/lang';
+import { computed, onMounted } from 'vue';
 
+const baseUrl = import.meta.env.BASE_URL;
+const langStore = useLangStore();
 // define 一定寫在子層，子層沒有要求父層做動作就不用emit
 defineProps({
   data: {
@@ -13,14 +16,19 @@ defineProps({
     required: true
   }
 })
+const isEnglish = computed(() => {
+  return langStore.locale === 'en-US'; 
+});
+
 </script>
 
 <template>
   <router-link :to="`/news/${link}`" class="newscard-container">
       <div class="newscard-container-info">
-        <img class="newscard-container-pics" :src="`${ baseUrl }${ data.pic }`" alt="" />
+        <img class="newscard-container-pics no-i18n-anim" :src="`${ baseUrl }${ data.pic }`" alt="" />
         <div class="newscard-container-text">
-          <h5>{{ data.title_en }}</h5>
+          <h5 v-if="isEnglish">{{ data.title_en }}</h5>
+          <h5 v-else>{{ data.title_zh }}</h5>
           <h5>{{ data.update }}</h5>
         </div>
       </div>

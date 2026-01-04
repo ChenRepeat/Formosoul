@@ -22,8 +22,9 @@
     "Delivery":"Delivery",
     "Returns":"Returns",
     "privacyPolicy":"privacy Policy",
-    "welcome":"Hi, Welcome Back ~"
-
+    "welcome":"Hi, Welcome Back ~",
+    "backPrepage":"Back to previous page",
+    "newsIntro":"I hereby pledge my malevolent intent to unseal the clandestine mechanisms of this Marauder’s parchment."
   },
   "classes":{
     "escTip":"Press Esc To Skip and Stop",

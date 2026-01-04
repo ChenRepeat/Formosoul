@@ -167,7 +167,7 @@ onUnmounted(() => {
 
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
-        <h5 class="news-main-text">I solemnly swear that I am up to no good.</h5>
+        <h5 class="news-main-text">－－{{$t("nav.newsIntro")}}－－</h5>
         <div class="scroll-tip" >
           <div class="tip-dot"></div>
         </div>
