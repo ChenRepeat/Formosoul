@@ -22,7 +22,9 @@
     "Delivery":"運送方式",
     "Returns":"退貨方式",
     "privacyPolicy":"隱私權條款",
-    "welcome":"嗨 ~ 歡迎回來 ~"
+    "welcome":"嗨 ~ 歡迎回來 ~",
+    "backPrepage":"回到上一頁",
+    "newsIntro":"我特此宣誓我那隱秘的不軌企圖，以開啟這份「劫盜地圖」中深奧的機關。"
   },
   "login":{
     "accept": "接受條款並入學",

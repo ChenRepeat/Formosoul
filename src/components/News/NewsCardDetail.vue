@@ -3,9 +3,11 @@ import { computed, nextTick, watch, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Backgroundaction from "@/components/backgroundaction.vue";
 import { useNewsData } from "@/stores/news";
+import { useLangStore } from '@/stores/lang';
 
 const route = useRoute()
 const router = useRouter()
+const langStore = useLangStore();
 
 
 
@@ -49,7 +51,9 @@ const goBack = () => {
     router.push('/news'); // 沒上一頁 -> 回列表
   }
 }
-
+const isEnglish = computed(() => {
+  return langStore.locale === 'en-US'; 
+});
 watch(
   () => route.params.id,
   () => {
@@ -70,9 +74,10 @@ onMounted( async () => {
     <Backgroundaction class="bg-wrapper"></Backgroundaction>
         <!-- 麵包屑 -->
     <h6 class="page-guide">
-        <router-link to="/news">News</router-link>
+        <router-link to="/news">{{$t('nav.news')}}</router-link>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        {{ currentArticle?.title_en }}
+        <h6 v-if="isEnglish">{{ currentArticle?.title_en }}</h6>
+        <h6 v-else>{{ currentArticle?.title_zh }}</h6>
     </h6>
     <div class="content-container">
       <aside>
@@ -80,7 +85,8 @@ onMounted( async () => {
           <li v-for="(item,key) in allNewsData" :key="key">
             <router-link :to="`/news/${item.id}`" replace>
               <div>
-                <h5>{{ item.title_en }}</h5>
+                <h5 v-if="isEnglish">{{ item.title_en }}</h5>
+                <h5 v-else>{{ item.title_zh }}</h5>
                 <p>{{ item.update }}</p>
               </div>
               <span><font-awesome-icon :icon="['fas', 'caret-down']" size="3x" class="arrow-icon"/></span>
@@ -94,9 +100,11 @@ onMounted( async () => {
           <div v-if="currentArticle" :key="currentArticle.id">
             <img :src="`${ baseUrl }${currentArticle.pic}`" alt="#">
             <div class="text-area">
-              <h3>{{ currentArticle.title_en }}</h3>
+              <h3 v-if="isEnglish">{{ currentArticle.title_en }}</h3>
+              <h3 v-else>{{ currentArticle.title_zh }}</h3>
               <h5>{{ currentArticle.update }}</h5>
-              <p>{{ currentArticle.content_en }}</p>
+              <p v-if="isEnglish">{{ currentArticle.content_en }}</p>
+              <p v-else>{{ currentArticle.content_zh }}</p>
             </div>
           </div>
 
@@ -106,7 +114,7 @@ onMounted( async () => {
     <div class="btn-back-layout">
           <a href="#" class="back-to-news" @click.prevent="goBack">
           <font-awesome-icon :icon="['fas', 'arrow-left']" class="back-icon" />
-          <p>Back to previous page</p> 
+          <p> {{$t('nav.backPrepage')}}</p> 
       </a>
     </div>
   </div>
@@ -134,6 +142,9 @@ onMounted( async () => {
 .page-guide{
     padding-bottom: 100px;
       margin-left: -40px;
+    h6{
+      display: inline-block;
+    }
 }
 .content-container, .page-guide {
   position: relative;
@@ -275,10 +286,12 @@ onMounted( async () => {
     width: 24px;
     height: 24px;
     transition: all 0.3s ease;
+    margin-right: 8px;
   }
   .btn-back-layout{
     display: flex;
     justify-content: flex-end;
+    gap: 8px;
   }
 
 .page-guide a{

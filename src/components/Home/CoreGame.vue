@@ -68,7 +68,7 @@ function handleCoreSelected() {
     class="coregame-dock dp-flex">
         <div class="coregame-left dp-flex">
             <img   
-            src="../../../public/Home/game/poking lottery.png"
+            src="/Home/game/poking lottery.png"
             alt="感應杖心"
             @click="showCore">
         </div>

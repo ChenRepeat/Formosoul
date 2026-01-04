@@ -20,10 +20,10 @@ const formatDate = (i) => {
   const apiUrl = import.meta.env.VITE_API_BASE;
   const NEWS_URL = `${apiUrl}/getNewsInfo.php`;
 
-  if(!storedUser) {
-    console.warn('No user data');
-    return null;
-  }
+  // if(!storedUser) {
+  //   console.warn('No user data');
+  //   return null;
+  // }
 
   const userData = JSON.parse(storedUser);
 

@@ -56,7 +56,7 @@
             <div class="final-stats">
               <div class="resultImg" v-if="lives > 0">
                 <div class="school-case">
-                  <img src="/public/Classes/school.png" alt="" class="school">
+                  <img src="/Classes/school.png" alt="" class="school">
                   <img src="/Classes/MotorGame/MotorPlayer.png" alt="PLAYER" class="bike-result">
                 </div>
               </div>
@@ -64,7 +64,7 @@
                 <div class="ambulance-case">
                   <div class="light-r light"></div>
                   <div class="light-l light"></div>
-                  <img src="/public/Classes/ambulance.png" alt="" class="ambulance">
+                  <img src="/Classes/ambulance.png" alt="" class="ambulance">
                 </div>
                   
               </div>

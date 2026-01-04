@@ -46,7 +46,7 @@ function showCore(){
         
                 </div>
                 <div class="coregame-right dp-flex">
-                    <img src="../../../public/Home/game/poking lottery.png" alt="">
+                    <img src="/Home/game/poking lottery.png" alt="">
                 </div>
             </main>
             <nav class="dp-flex">
