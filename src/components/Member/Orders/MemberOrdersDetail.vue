@@ -40,6 +40,7 @@
     const memberStore = useMemberStore();
     const router = useRouter();
     const orders = ref([]);
+    const emit = defineEmits(['update-order-status'])
     const get_order = () => {
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -62,6 +63,11 @@
             const countArray = order_response.coupon || [];
             const realArray = order_response.data || []; 
             // localStorage.setItem('data', JSON.stringify(realArray));
+            if(!order_response.success || realArray.length === 0){
+                emit('update-order-status', false);
+                console.log('false');
+                return;
+            }
             orders.value = realArray.map((order, index) => {
                     const couponInfo = countArray[index] || {};
                     const subtotalInfo = realArray[index] || {};
@@ -84,7 +90,7 @@
                         5: "Pending Payment"
                     };
                     const finalTotal =  count + shippingFee - discount; 
-
+                    emit('update-order-status', true);
                     return {
                         ...order, 
                         total: finalTotal,

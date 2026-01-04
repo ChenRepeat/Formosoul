@@ -1,5 +1,7 @@
 <template>
-    <template v-if="!hasChildRoute">
+    
+    <h3 v-if="!hasOrders">No Orders</h3>
+    <template v-else-if="!hasChildRoute">
             <div class="member-orders">
                 <h3>Query Orders</h3>
             </div>
@@ -15,7 +17,7 @@
                 </div>
                 <hr class="title-orders-line">
                 
-                <MemberOrdersDetail ref="detailComponent" :currentPage="currentPage" />
+                <MemberOrdersDetail @update-order-status="setOrderStatus" ref="detailComponent" :currentPage="currentPage" />
                 <div class="orderspage-btn">
                     
                     <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>
@@ -44,12 +46,17 @@ const currentPage = ref(1);
 const itemsPerPage = 5;
 
 const detailComponent = ref(null);
-
+const hasOrders = ref(true);
+const setOrderStatus = (status) =>{
+    hasOrders.value = status
+}
 const route = useRoute();
 
 const hasChildRoute = computed(() => {
-    // route.matched => 返回所有匹配的路由陣列 | includes('path的名稱')
-    return route.matched.some(r => r.path.includes('orderscontain'));
+    // route.matched => 返回所有匹配的路由陣列 | includes('path的名稱')  
+    return route.matched.some(r => 
+        r.path.includes('orderscontain')
+    );
 })
 
 const totalPages = computed(() =>{
@@ -72,6 +79,7 @@ const nextPage = () => {
 
 const goToPage = (pageNumber) => {
     currentPage.value = pageNumber;
+    
 };
 
 </script>
