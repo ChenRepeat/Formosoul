@@ -1,3 +1,73 @@
+<script setup>
+import IconButton from '@/components/icons/SVG/IconButton.vue';
+import stampSlot from './stampSlot.vue'
+import IconShrimp from '@/components/icons/SVG/IconShrimp.vue';
+import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
+import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
+import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
+import { ref, onMounted, computed } from 'vue';
+import { useMemberStore } from '@/stores/member';
+const memberStore = useMemberStore();
+
+const props = defineProps({
+  passedGames: Object,
+  activeTriggers: Object
+});
+
+// 內部狀態（會員中心使用）
+const internalPointsStatus = ref({
+    dice: 0, 
+    shrimp: 0, 
+    ring: 0, 
+    bue: 0, 
+    mot: 0, 
+    member_wandcore: 0
+});
+
+// 判斷是否從 props 傳入（遊戲內）還是自己載入（會員中心）
+const isFromGame = computed(() => !!props.passedGames);
+
+// 最終顯示的狀態
+const displayStatus = computed(() => {
+    if (isFromGame.value) {
+        // 遊戲內：使用傳入的 props
+        return {
+            shrimp: props.passedGames.shrimp,
+            dice: props.passedGames.dice,
+            ringtoss: props.passedGames.ringtoss,
+            bue: props.passedGames.bue,
+            bike: props.passedGames.bike,
+            wand: props.passedGames.wand
+        };
+    } else {
+        // 會員中心：使用內部狀態
+        return {
+            shrimp: internalPointsStatus.value.shrimp >= 1,
+            dice: internalPointsStatus.value.dice >= 1,
+            ringtoss: internalPointsStatus.value.ring >= 1,
+            bue: internalPointsStatus.value.bue >= 1,
+            bike: internalPointsStatus.value.mot >= 1,
+            wand: internalPointsStatus.value.member_wandcore >= 1
+        };
+    }
+});
+
+onMounted(async () => {
+    // 如果不是從遊戲傳入，才需要自己載入
+    if (!isFromGame.value) {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            await memberStore.fetchPointsStatus();
+            internalPointsStatus.value = memberStore.pointsStatus;
+            console.log('[MemberLedger] 從 store 載入:', internalPointsStatus.value);
+        } else {
+            // 訪客用原本的 fetch
+            get_pointscard();
+        }
+    }
+});
+</script>
+
 <template>
   <div class="ledger-container">
     <img src="/member/ledgercard_back.png" class="ledger-bg" alt="Ledger Background">
@@ -42,20 +112,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import IconButton from '@/components/icons/SVG/IconButton.vue';
-import stampSlot from './stampSlot.vue'
-import IconShrimp from '@/components/icons/SVG/IconShrimp.vue';
-import IconBuecard from '@/components/icons/SVG/IconBuecard.vue';
-import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
-import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
-
-const props = defineProps({
-  passedGames: Object,
-  activeTriggers: Object
-});
-</script>
 
 <style scoped lang="scss">
 .ledger-container {

@@ -15,6 +15,12 @@ const passTimes = ref(memberStore.gameData.shrimp.pass)
 會抓東西：碰到蝦子會抓回來加分。
 */
 
+const isLoggedIn = computed(() => {
+  const user = localStorage.getItem('user');
+  return !!user;
+});
+
+
 const emit = defineEmits([
     'close-game', 
     'pass-game',   
@@ -181,7 +187,7 @@ let timerInterval = null;
 const initGame = () => {
     // 重置資料數據
     score.value = 0;
-    timeLeft.value = 30;
+    timeLeft.value = 10;
     isGameOver.value = false;
     isGameReady.value = true;
 
@@ -239,31 +245,49 @@ const gameOver = async () => {
     }
 
     if(score.value >= 500) {
-        memberStore.stampOnepoint('shrimp').catch(err => console.error("蓋章失敗:", err));
-3
+        const isFirstPass = !passedGames.value.shrimp;
+
+        if (isLoggedIn.value) {
+            // 會員：更新資料庫
+            await memberStore.stampOnepoint('shrimp').catch(err => 
+                console.error("蓋章失敗:", err)
+            );
+        } else {
+            // 訪客：更新 localStorage
+            const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+            currentProgress.shrimp = true;
+            localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+        }
+
+        // 更新本地狀態
+        passedGames.value.shrimp = true;
         passTimes.value += 1;
 
-        
+        // 存遊戲成績
+        await memberStore.saveGameResult('shrimp', {
+            pass: passTimes.value,
+            score: score.value
+        });
+
+        // 顯示集點卡
         setTimeout(() => {
             showCardOverlay.value = true;
             
-            setTimeout(() => {
-                activeTriggers.value.shrimp = true;
-
+            // 只有第一次過關才播動畫
+            if (isFirstPass) {
+                console.log('[動畫] 第一次過關，播放蓋章動畫');
                 setTimeout(() => {
-                passedGames.value.shrimp = true;
-
-                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                currentProgress.shrimp = true; 
-                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-
-                activeTriggers.value.shrimp = false;
-            }, 600);
-        }, 500);   
-    }, 1000);
-    memberStore.saveGameResult('shrimp',{pass: passTimes.value,score: score.value});
-  }
-}
+                    activeTriggers.value.shrimp = true;
+                    setTimeout(() => {
+                        activeTriggers.value.shrimp = false;
+                    }, 600);
+                }, 500);
+            } else {
+                console.log('[動畫] 已經過關過，跳過蓋章動畫');
+            }
+        }, 1000);
+    }
+};
 
 const handleCheckLedger = () => {
     showCardOverlay.value = true;
@@ -401,35 +425,48 @@ const handleKey = (e) => {
     }
 };
 
+const initGameStatus = () => {
+  const status = memberStore.pointsStatus || {};
+  
+  if (isLoggedIn.value) {
+    // 會員：從資料庫讀取
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1;
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;
+    passedGames.value.wand     = status.member_wandcore >= 1;
+    
+    console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
+  } else {
+    // 訪客：從 localStorage 讀取
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      passedGames.value.shrimp   = !!progress.shrimp;
+      passedGames.value.dice     = !!progress.dice;
+      passedGames.value.ringtoss = !!progress.ringtoss;
+      passedGames.value.bue      = !!progress.bue;
+      passedGames.value.bike     = !!progress.bike;
+      passedGames.value.wand     = !!progress.wand;
+    }
+    
+    console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
+  }
+};
 
 // 生命週期 , 開始 modal 鎖住scroll
-onMounted (()=>{
+onMounted(async () => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
-    const status = memberStore.pointsStatus || {};
-
-    passedGames.value.shrimp   = status.shrimp >= 1;
-    passedGames.value.dice     = status.dice >= 1;
-    passedGames.value.ringtoss = status.ring >= 1; 
-    passedGames.value.bue      = status.bue >= 1;
-    passedGames.value.bike     = status.mot >= 1;     
-    passedGames.value.wand     = status.member_wandcore >= 1;
-
-    // 備用, local storage
-    const allEmpty = Object.values(status).every(v => v === 0 || v === false);
-    if (allEmpty) {
-        const saved = localStorage.getItem('game_progress');
-        if (saved) {
-            const progress = JSON.parse(saved);
-            passedGames.value.shrimp   ||= !!progress.shrimp;
-            passedGames.value.dice     ||= !!progress.dice;
-            passedGames.value.ringtoss ||= !!progress.ringtoss;
-            passedGames.value.bue      ||= !!progress.bue;
-            passedGames.value.bike     ||= !!progress.bike;
-            passedGames.value.wand     ||= !!progress.wand;
-        }
+    // 先載入集點卡狀態
+    if (isLoggedIn.value) {
+        await memberStore.fetchPointsStatus();
     }
+    
+    // 再初始化遊戲狀態
+    initGameStatus();
 
     initGame();
     window.addEventListener('keydown', handleKey);

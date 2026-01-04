@@ -16,33 +16,40 @@ const handleCheckLedger = () => {
     showCardOverlay.value = true;
 };
 
+// 修正 - 判斷是否第一次過關
 const checkGamePass = () => {
-    const isAlreadyPassed = (memberStore.pointsStatus?.ring >= 1) || passedGames.value.ringtoss;
-    console.log('檢查是否已過關：', isAlreadyPassed);    
-    memberStore.stampOnepoint('ring').catch(err => console.error("套圈圈蓋章失敗:", err));
-  
-    if(!isAlreadyPassed){
-      console.log('第一次過關，播放動畫');
-      setTimeout(() => {
-        showCardOverlay.value = true;
-        setTimeout(() => {
-            activeTriggers.value.ringtoss = true;
-            setTimeout(() => {
-                passedGames.value.ringtoss = true;
-                activeTriggers.value.ringtoss = false; 
+    const isFirstPass = !passedGames.value.ringtoss;
 
-                const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-                currentProgress.ringtoss = true; 
-                localStorage.setItem('game_progress', JSON.stringify(currentProgress));
-            }, 600);
-        }, 500);
-    }, 1000); 
-} else {
-    console.log('跳過動畫，直接顯示');
-    passedGames.value.ringtoss = true; // 強制設為 true 確保章是紅色的
-    activeTriggers.value.ringtoss = false; // 強制設為 false 確保章不亂動
-    showCardOverlay.value = true;
+    if (isLoggedIn.value) {
+      memberStore.stampOnepoint('ring').catch(err => {
+      console.error("套圈圈蓋章失敗:", err);
+    });
+    } else {
+      // 訪客：更新 localStorage
+      const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+      currentProgress.ringtoss = true;
+      localStorage.setItem('game_progress', JSON.stringify(currentProgress));
   }
+
+  // 更新本地狀態
+  passedGames.value.ringtoss = true;
+
+  setTimeout(() => {
+    showCardOverlay.value = true;
+    
+    // ← 只有第一次過關才播放動畫！
+    if (isFirstPass) {
+      console.log('[動畫] 第一次過關，播放蓋章動畫');
+      setTimeout(() => {
+        activeTriggers.value.ringtoss = true;
+        setTimeout(() => {
+          activeTriggers.value.ringtoss = false;
+        }, 600);
+      }, 500);
+    } else {
+      console.log('[動畫] 已經過關過，跳過蓋章動畫');
+    }
+  }, 1000);
 };
 
 // ================ 鍵盤esc關閉 ================ 
@@ -258,37 +265,57 @@ const checkGamePass = () => {
     }
   };
 
-  onMounted(() => {
+// 260104修改
+// 判斷是否為會員
+const isLoggedIn = computed(() => {
+  const user = localStorage.getItem('user');
+  return !!user;
+});
+// 初始化遊戲狀態
+const initGameStatus = () => {
+  const status = memberStore.pointsStatus || {};
+  
+  if (isLoggedIn.value) {
+    // === 會員：只從資料庫讀取 ===
+    passedGames.value.shrimp   = status.shrimp >= 1;
+    passedGames.value.dice     = status.dice >= 1;
+    passedGames.value.ringtoss = status.ring >= 1;
+    passedGames.value.bue      = status.bue >= 1;
+    passedGames.value.bike     = status.mot >= 1;
+    passedGames.value.wand     = status.member_wandcore >= 1;
+    
+    console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
+  } else {
+    // === 訪客：只從 localStorage 讀取 ===
+    const saved = localStorage.getItem('game_progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      passedGames.value.shrimp   = !!progress.shrimp;
+      passedGames.value.dice     = !!progress.dice;
+      passedGames.value.ringtoss = !!progress.ringtoss;
+      passedGames.value.bue      = !!progress.bue;
+      passedGames.value.bike     = !!progress.bike;
+      passedGames.value.wand     = !!progress.wand;
+    }
+    
+    console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
+  }
+};
+
+  onMounted( async () => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
     updateSize();
     window.addEventListener('resize', updateSize);
     window.addEventListener('keydown', handleKey);
 
-    const status = memberStore.pointsStatus || {};
-    
-    passedGames.value.shrimp   = status.shrimp >= 1;
-    passedGames.value.dice     = status.dice >= 1;
-    passedGames.value.ringtoss = status.ring >= 1; 
-    passedGames.value.bue      = status.bue >= 1;
-    passedGames.value.bike     = status.mot >= 1;     
-    passedGames.value.wand     = status.member_wandcore >= 1;
+    if (isLoggedIn.value) {
+    await memberStore.fetchPointsStatus();
+  }
 
-    const saved = localStorage.getItem('game_progress');
-    const allEmpty = Object.values(status).every(v => v === 0 || v === false);
-    if (allEmpty) {
-        const saved = localStorage.getItem('game_progress');
-        if (saved) {
-            const progress = JSON.parse(saved);
-            passedGames.value.shrimp   ||= !!progress.shrimp; 
-            passedGames.value.dice     ||= !!progress.dice;
-            passedGames.value.ringtoss ||= !!progress.ringtoss;
-            passedGames.value.bue      ||= !!progress.bue;
-            passedGames.value.bike     ||= !!progress.bike;
-            passedGames.value.wand     ||= !!progress.wand;
-        }
-    }
+    initGameStatus();
   });
+
   onUnmounted(() => {
     document.body.style.overflow = '';
     document.documentElement.style.overflow = '';

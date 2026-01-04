@@ -144,6 +144,8 @@ export const useMemberStore = defineStore('member', () => {
             if(response.data.success){
                 pointsStatus.value[columnName] = 1;
                 console.log(`[${columnName}]蓋章成功`)
+
+                await fetchPointsStatus();
             } else {
                 console.error('蓋章失敗', response.data.message);
             }
@@ -226,6 +228,43 @@ export const useMemberStore = defineStore('member', () => {
         imgURL.value = newBase64;
     };
 
+    const fetchPointsStatus = async () => {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+        console.log('[Store] 未登入，跳過載入集點卡');
+        return;
+    }
+
+    const API_URL = `${apiBase}/getPointsCard.php`;
+    const { member_ID } = JSON.parse(storedUser);
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ member_ID })
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // 更新 store 的 pointsStatus
+            pointsStatus.value = {
+                mot: result.data.mot || 0,
+                shrimp: result.data.shrimp || 0,
+                dice: result.data.dice || 0,
+                bue: result.data.bue || 0,
+                ring: result.data.ring || 0,
+                member_wandcore: result.data.member_wandcore || 0
+            };
+            console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
+        } else {
+            console.error('[Store] 載入集點卡失敗:', result.message);
+        }
+    } catch (error) {
+        console.error('[Store] API 連線錯誤:', error);
+    }
+};
     return {
         imgURL,
         memberData,
@@ -233,6 +272,7 @@ export const useMemberStore = defineStore('member', () => {
         updatePhoto,
         data_uptime,
         loadMemberData,
+        fetchPointsStatus,
         orders,
         setOrderNumber,
         saveGameResult,
