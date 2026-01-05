@@ -417,7 +417,7 @@ img { object-fit: none; }
     font-size: 10px;
     position: absolute;
     top: 50%;
-    left: 18px;
+    left: 24px;
   }
 }
 
@@ -565,7 +565,7 @@ img { object-fit: none; }
 
   .header-icons-list {  
     & .cartqty{
-      left: 18px;
+      left: 4px;
     }
   }
 }
