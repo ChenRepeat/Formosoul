@@ -3,11 +3,57 @@ import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '../BasicButton.vue';
 import CoreGame from './CoreGame.vue';
 import GameHistory from './GameHistory.vue';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import axios from 'axios';
 
 const currentView = ref('intro')
 
 const authStore = useAuthStore();
+
+// 1 判斷是否登入 要先搶先一步判斷這個集點卡到底有無蓋章過
+const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
+
+//把資料從 getPointsCard.php 拿出來用
+    const getMemberInfo = () => {
+        const storedUser = localStorage.getItem('user');
+        const storeGuest = sessionStorage.getItem('guest')
+        if(storedUser) {
+            console.log('找到USER')
+            const get_pointscard = async ()=> {
+            const apiBase = import.meta.env.VITE_API_BASE;
+            const API_URL = `${apiBase}/getPointsCard.php`
+            if(!storedUser) return; 
+            const userData = JSON.parse(storedUser);
+            const { member_ID } = userData;
+            try {
+                const response = await axios.post(API_URL, { member_ID});
+                const pointscard_res = response.data;
+                console.log('取得學分登記卡資料：', pointscard_res);
+                if(pointscard_res.success && pointscard_res.data){
+                    passedGames.value.wand = Number(pointscard_res.data.member_wandcore) >= 1;
+                    console.log('魔杖是否已過關:', passedGames.value.wand)
+                }
+            }catch(error){
+                console.error('學分登記卡 API 讀取失敗:', error)      
+            }
+        };
+        get_pointscard();
+        } else if (!storedUser && storeGuest) {
+            console.log('沒登入但有魔杖')
+            const saved = localStorage.getItem('game_progress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                passedGames.value.wand = !!progress.wand;
+        } else {
+            console.log('沒登入也沒有魔杖')
+            
+        }
+    }
+}
+
+onMounted (()=> {
+    getMemberInfo();
+})
 
 watch(
     () => authStore.isLoginModalOpen,
@@ -63,8 +109,10 @@ function showCore(){
         </div>
 
         <GameHistory v-else-if="currentView === 'history'" />
-        <CoreGame v-else-if="currentView === 'game'"/>
-        
+        <CoreGame 
+  v-else-if="currentView === 'game'"
+  :wand-passed="passedGames.wand"
+/>        
 
     </div>
 
