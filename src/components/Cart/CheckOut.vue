@@ -180,30 +180,32 @@ function goOrder(){
     // step2 把資料打包
     const orderData = {
         //查詢用ID
-        member_ID = cartstore.memberID.value,
-        coupons_ID = 0,   //預設，還沒抓
+        member_ID : cartstore.memberID.value,
+        coupons_ID : cartstore.coupon_ID.value,   //預設，還沒抓
 
         //運費跟折扣
-        shipping = , //
-        country = cartstore.selectCountry.value,
-        coupon = 0,
+        shipping : cartstore.shippingFee.value, //
+        country : cartstore.selectCountry.value,
+        coupon : 0,
 
         //購物車內容
-        product_ID = ,//
-        quantity = ,//
+        cartItem : cartstore.cartList.map( item => ({
+            product_ID : item.product_ID,
+            quantity : item.qty,
+        })),
 
         //收件資訊
-        phone = receiptPhone.value,
-        address_en = finalAddr.value,
-        name_en = receiptName.value,
-        remark = receiptRemark.value,
+        phone : receiptPhone.value,
+        address_en : finalAddr.value,
+        name_en : receiptName.value,
+        remark : receiptRemark.value,
 
         //付款方式
-        payment = paymentInfo.value,
+        payment : paymentInfo.value,
 
         //前端計算的總額（只是為了參考，實際還是會用後端查詢到的資訊來計算）
-        frontend_total = cartstore.finalPrice.value,
-    }
+        frontend_total : cartstore.finalPrice.value,
+    };
 
 
     // step3 送給後端（發送請求）
