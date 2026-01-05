@@ -30,7 +30,7 @@
             passedGames.value.ringtoss = status.ring >= 1;
             passedGames.value.bue      = status.bue >= 1;
             passedGames.value.bike     = status.mot >= 1;
-            passedGames.value.wand     = status.member_wandcore >= 1;
+            if (!passedGames.value.wand)   passedGames.value.wand   = status.member_wandcore >= 1;            
             console.log('檢查魔杖是否已過關:', passedGames.value.wand);
             console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
         } else {
@@ -51,19 +51,10 @@
     };
 
 async function handleCoreSelected() {
-    console.log('[魔杖點擊] 瞬間狀態:', {
-        local: passedGames.value.wand,
-        store: memberStore.pointsStatus.member_wandcore
-    });
+    const isFirstPass = !passedGames.value.wand;
 
-    const isAlreadyPassed = passedGames.value.wand || memberStore.pointsStatus.member_wandcore >= 1;
-    const isFirstPass = !isAlreadyPassed;
-    console.log('[魔杖] 是否第一次通關:', isFirstPass);
-    
-    passedGames.value = { 
-        ...passedGames.value, 
-        wand: true 
-    };
+    console.log('[魔杖] 第一次通關判斷:', isFirstPass);
+    passedGames.value.wand = true;
     passTimes.value += 1;
 
         setTimeout(() => {
@@ -85,9 +76,9 @@ async function handleCoreSelected() {
             try{
                 if (isLoggedIn.value) {
                 // 會員：更新資料庫
-                await memberStore.stampOnepoint('member_wandcore').catch(err => 
-                    console.error("[魔杖] 蓋章失敗:", err)
-                );
+                await memberStore.stampOnepoint('member_wandcore');
+                // 儲存成功後更新 store，但不影響當前的 passedGames
+                await memberStore.fetchPointsStatus();
             } else {
                 // 訪客：更新 localStorage
                 const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
@@ -109,19 +100,16 @@ async function handleCoreSelected() {
         currentView.value = 'game';
     }
 
-onMounted(() => {
+onMounted(async () => {
     if (isLoggedIn.value) {
-        // 兩個 API 同時發出去，誰快誰先跑 init
-        memberStore.fetchPointsStatus().then(() => {
-            initGameStatus();
-        });
-
-        memberStore.loadMemberData().then(() => {
-            initGameStatus();
-        });
+        // 只需要確保「點數狀態」抓回來就好
+        await memberStore.fetchPointsStatus(); 
+        initGameStatus();
     } else {
         initGameStatus();
     }
+    initGame();
+    window.addEventListener('keydown', handleKey);
 });
 
 </script>
