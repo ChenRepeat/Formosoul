@@ -775,10 +775,13 @@ export const useProductStore = defineStore('products', () =>{
     const allProduct = ref([]);
 
     // 改從資料庫拿資料
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const apiRUL = `${apiBase}/getProductList.php`;
     const fetchProducts = async () => {
         try {
             // 發出請求
-            const response = await axios.get('http://localhost/Formosoul/public/php/getProductList.php');
+            // const response = await axios.get('http://localhost/Formosoul/public/php/getProductList.php');
+            const response = await axios.get(apiRUL);
             
             // 將後端回傳的資料放入 allProduct
             allProduct.value = response.data;

@@ -2,13 +2,21 @@
   <div class="page-container">
     
     <div class="header-layout">
-      <div class="header-section">
+      
+      <div class="header-row-title">
         <slot name="title"></slot>
       </div>
 
-      <div class="search-add-container">
-        <slot name="controls"></slot>
+      <div class="header-row-toolbar">
+        <div class="toolbar-left">
+          <slot name="filters"></slot>
+        </div>
+
+        <div class="toolbar-right">
+          <slot name="controls"></slot>
+        </div>
       </div>
+      
     </div>
 
     <div class="table-section">
@@ -23,55 +31,82 @@
 </template>
 
 <style lang="scss" scoped>
-
 .page-container {
   position: relative;
   min-height: calc(100vh - 80px);
   overflow: hidden;
-  display: flex;          /* 啟用 Flex 排版 */
-  flex-direction: column; /* 設定為「由上到下」排列 */
-}
-
-.header-layout {
-  flex-shrink: 0; /* 防止上方區塊被壓縮 */
-}
-
-
-:deep(h6) {
-  margin: 0;
-  font-size: 2rem;
-}
-
-:deep(p) {
-  color: #B0B0B0;
-  margin-bottom: 8px;
-}
-
-.search-add-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 24px;
 }
 
-/* 中間表格區塊樣式 */
+/* --- Header 排版修改 --- */
+.header-layout {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column; /* 垂直排列：標題在上，工具列在下 */
+  gap: 16px;              /* 標題與工具列的間距 */
+  margin-bottom: 16px;    /* Header 與表格的間距 */
+}
+
+/* 第一行：標題樣式 */
+.header-row-title :deep(h6) {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+/* 隱藏原本可能存在的 p 標籤 margin，或是你已經刪掉了 */
+.header-row-title :deep(p) {
+  margin: 0;
+}
+
+/* 第二行：工具列樣式 */
+.header-row-toolbar {
+  display: flex;
+  justify-content: space-between; /* 關鍵：左右推開 */
+  align-items: center;            /* 垂直置中 */
+  flex-wrap: wrap;                /* 防止小螢幕破版 */
+  gap: 16px;                      /* 當螢幕太小變成兩行時的間距 */
+  min-height: 32px;               /* 確保就算沒內容也有基本高度 */
+}
+
+/* 左側篩選區塊的內部排版 */
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* 搜尋框跟篩選框之間的距離 */
+}
+
+/* 右側按鈕區塊的內部排版 */
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* 按鈕之間的距離 */
+  margin-left: auto; /* 確保一定靠右 (雙重保險) */
+}
+/* ------------------------ */
+
+/* 中間表格區塊樣式 (維持不變) */
 .table-section {
-  flex-grow: 1;    /* 關鍵 2：讓這個區塊自動填滿所有剩餘空間 */
-  overflow: hidden; /* 隱藏溢出，交給內部的 el-table 處理捲軸 */
-  background-color: #fff; /* 可以加個背景色 */
-  border-radius: 8px; /* 圓角 */
-  border: solid 1px pink;
-  /* ▼▼▼ 加入這行！非常重要 ▼▼▼ */
+  flex-grow: 1;
+  overflow: hidden; 
+  background-color: #fff; 
+  border-radius: 8px; 
   position: relative;
-  margin-top: 12px;
-   min-height: 0; /* ← 加入這行 */
+  min-height: 0;
 }
 
-/* 下方分頁區塊樣式 */
+/* 下方分頁區塊樣式 (維持不變) */
 .pagination-layout {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+  flex-shrink: 0;
 }
 
 :deep(.el-table__row) {
-  height: 30px !important; 
+  height: 35px !important;
 }
 </style>

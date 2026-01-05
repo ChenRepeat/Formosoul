@@ -22,14 +22,16 @@ function goToEnroll(){
             authStore.closeLoginModal();
         }
     }else{
-        if(!coreData.core){
-            wandcore_store_guest();
-            authStore.setmemberView('login');
-            authStore.setloginView('enrollment');
-        }else{
-            authStore.setmemberView('login');
-            authStore.setloginView('enrollment');            
-        }
+
+        authStore.setmemberView('login');
+        authStore.setloginView('enrollment');  
+        // if(!coreData.core){
+        //     wandcore_store_guest();
+        //     authStore.setmemberView('login');
+        //     authStore.setloginView('enrollment');
+        // }else{
+          
+        // }
     }
 
 };
@@ -37,26 +39,27 @@ function goToEnroll(){
 
 // 頁面串聯 - 重新感應杖心  -------------------------------------------------------
 const emit = defineEmits(['restart-coregame', 'wand-selected']);
-
 function goToSensing(){
-    if(storedUser && userData.member_ID){
-        if(userData.wandcore_ID){
-            authStore.closeLoginModal();    
-        }else{
-            wandcore_store_member(userData.member_ID, corenumber.value);
-            authStore.closeLoginModal();
-        }
-    }else{
-        if(!coreData.core){
-            wandcore_store_guest();
-            emit('restart-coregame');      //按下按鈕時，發送事件給父組件
-        }else{
-            emit('restart-coregame');      //按下按鈕時，發送事件給父組件
-            
-        }
-    }
+    emit('restart-coregame');
 
 };
+// function goToSensing(){
+//     if(storedUser && userData.member_ID){
+//         if(userData.wandcore_ID){
+//             authStore.closeLoginModal();    
+//         }else{
+//             wandcore_store_member(userData.member_ID, corenumber.value);
+//             authStore.closeLoginModal();
+//         }
+//     }else{
+//         if(!coreData?.core){
+//             emit('restart-coregame');      //按下按鈕時，發送事件給父組件
+//         }else{
+//             emit('restart-coregame');      //按下按鈕時，發送事件給父組件
+//         }
+//     }
+
+// };
 
 function onResultFound() {
     emit('wand-selected');
@@ -479,8 +482,10 @@ function wandcore(){
             const coreSelectNo = Math.trunc(Math.random() * Arraylength);
             wandCore_list.value = coreArray[coreSelectNo];
             corenumber.value = coreSelectNo;
-                    // const user_core = localStorage.setItem('core', JSON.stringify(corenumber.value));
-        // console.log(user_core);
+            // const user_core = localStorage.setItem('core', JSON.stringify(corenumber.value));
+            // console.log(user_core);
+            wandcore_store_guest();
+
         })
     };
 
@@ -508,13 +513,14 @@ function wandcore(){
     };
 
     function wandcore_store_guest(){
-        const guestData = {
-            core: corenumber.value
-        };
-        sessionStorage.setItem('guest', JSON.stringify(guestData));
-        const storedGuest = sessionStorage.getItem('guest');
-        const userData = JSON.parse(storedGuest);
-        console.log(userData);
+        if(!coreData.core){
+            const guestData = {
+                core: corenumber.value
+            };
+            sessionStorage.setItem('guest', JSON.stringify(guestData));
+            const storedGuest = sessionStorage.getItem('guest');
+            const userData = JSON.parse(storedGuest);
+        }
     }
 // 語系切換  -------------------------------------------------------
 const { locale } = useI18n();

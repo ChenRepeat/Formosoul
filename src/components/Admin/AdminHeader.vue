@@ -7,7 +7,7 @@
     </div>
 
     <div class="header-right">
-      <el-tooltip content="前往前台" placement="bottom">
+      <el-tooltip content="去前台" placement="bottom">
         <a href="/tjd103/" target="_blank">
           <el-icon class="action-icon" size="20"><HomeFilled /></el-icon>
         </a>
@@ -26,7 +26,7 @@
         
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>個人設定</el-dropdown-item>
+            <!-- <el-dropdown-item></el-dropdown-item> -->
             <el-dropdown-item divided>登出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
