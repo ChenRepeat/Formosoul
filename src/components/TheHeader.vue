@@ -564,8 +564,8 @@ img { object-fit: none; }
   }
 
   .header-icons-list {  
-    & .cartqty{
-      left: 4px;
+    & .cart-qty{
+      left: 16px;
     }
   }
 }
