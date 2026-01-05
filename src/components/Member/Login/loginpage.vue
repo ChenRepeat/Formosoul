@@ -51,12 +51,14 @@
     import Forgetpassword from './forgetpassword.vue';
     import Loginchangepassword from '../changepassword/loginchangepassword.vue';
     import GoogleLogin from '@/components/Member/Login/googleLogin.vue'
+    import { useRoute } from 'vue-router';
     const publicPath = import.meta.env.BASE_URL;
     const authStore = useAuthStore();
     const sharedEmail = ref('');
     const setEnrollmentEmail = (email) => {
         sharedEmail.value = email;
     }
+
 
 
     provide('sharedEmail', sharedEmail);
@@ -68,7 +70,9 @@
             return  authStore.loginView == 'forgetpassword' || authStore.loginView == 'loginchangepassword';
     });
 
+    const route = useRoute();
     const LineLogin = () => {
+        localStorage.setItem('line_return_url', route.fullPath);
         window.location.href = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=http%3A%2F%2Flocalhost%2FFormosoul%2Fpublic%2Fphp%2FlineLogin.php&state=12345&scope=profile%20openid%20email";
     
     };
