@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';       //語系控制使用
 // 宣告常數接收，方便後續使用
 const cartstore = useCartStore();
 const { locale } = useI18n();              // 讀取語系狀態
+const baseUrl = import.meta.env.BASE_URL
 
 /* 商品陣列 假資料
 const orderitems =ref([
@@ -155,8 +156,8 @@ const lang = computed( () => {
             <div class="orderlist-body dp-flex">
 
                 <div class="item-image">
-                    <img v-if="showCart" :src="item.images[0]" alt="">
-                    <img v-if="showCheck" :src="`/tjd103/${item.images[0]}`" alt="">
+                    <img v-if="showCart" :src="item.image?.[0]" alt="">
+                    <img v-if="showCheck" :src="`/tjd103/${item.image?.[0]}`" alt="">
                 </div>
                 <h6 class="item-name">{{item[`name_${lang}`]}}</h6>
                 <div v-if="showCart" class="item-qty dp-flex">
