@@ -308,6 +308,9 @@ function goOrder(){
                         <div class="coupon-dock">
                             <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="couponclose"/>
                             <Couponcontaion isrows></Couponcontaion>
+                            <BasicButton class="btn-yellow-fill btn-coupon-use" >
+                                {{$t('shoppingcart.couponuse')}}
+                            </BasicButton>
                         </div>
                     </div>
                 </Teleport>
@@ -579,6 +582,7 @@ function goOrder(){
     .coupon-dock{
         position: relative;
         width: 50vw;
+        //height: 80vh;
         background-color: $color-fsBlue50;
         border-radius: 10px;
         outline: 10px solid $color-fsBlue50;
@@ -594,6 +598,11 @@ function goOrder(){
             right: 12px;
             top: 12px;
             cursor: pointer;
+        }
+
+        & .btn-coupon-use{
+            display: block;
+            margin: 20px auto 0;
         }
     }
 
