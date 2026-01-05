@@ -10,7 +10,9 @@ export const useCartStore = defineStore('cart', () => {
     // const cartList = ref([]);    未存 localStorage 
     // 購物車留下紀錄：存 localStorage 
     // storage 只收字串，所以要經過轉型打包跟還原
-    const coupon_ID = ref(null);
+
+    
+
     const cartList = ref(
         JSON.parse(localStorage.getItem('MyCart')) || [] 
     );
@@ -144,7 +146,9 @@ export const useCartStore = defineStore('cart', () => {
     });
     
 
-    // 優惠券折扣
+    // coupon 
+    const coupon_ID = ref(null);
+
     const discount = ref(0);
 
     // 最後付款總額
@@ -198,11 +202,11 @@ export const useCartStore = defineStore('cart', () => {
         shippingFeeList,
         selectCountry,
         shippingFee,
+        coupon_ID,
         discount,
         finalPrice,
         memberID,
         getMemberID,
-        coupon_ID,
     };
 
 });
