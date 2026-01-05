@@ -1,6 +1,6 @@
 <script setup>
 import { useEventData } from "@/stores/event";
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRouter } from "vue-router";
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -127,11 +127,12 @@ function stopAutoSlide() {
 }
 
 
-onMounted(() => {
+onMounted(async() => {
+  await eventData.loadeventData();
+  nextTick();
   updateIsMobile();
   window.addEventListener("resize", updateIsMobile);
   startAutoSlide();
-  eventData.loadeventData();
 });
 
 onBeforeUnmount(() => {
