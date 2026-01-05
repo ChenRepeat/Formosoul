@@ -148,7 +148,6 @@ const receiptPhone = ref('');
 const receiptAddr = ref('');         //只記錄使用者填寫的部分，完整的地址需要組合下拉選單
 const receiptRemark = ref('');
 const saveAddr = ref(false);         // 是否儲存為常用地址
-const paid = ref('');
 
 // 完整地址需要組合
 
@@ -171,7 +170,7 @@ const finalAddr = computed(()=>{
 
 // 確認訂單 ---------------------------
 // 訂單寫入資料庫、寫入後將資料傳給綠界、沒問題後在前往訂單完成頁
-function goOrder(){
+async function goOrder(){
     // step1 再次檢查購物車有沒有商品
     if(cartstore.cartList.length === 0){
         return alert(t('shoppingcart.cartEmpty'));      //return 是為了讓程式停在這，不要繼續往下跑，才不會報錯或是送出一張空的訂單
@@ -183,10 +182,8 @@ function goOrder(){
         member_ID : cartstore.memberID.value,
         coupons_ID : cartstore.coupon_ID.value,   //預設，還沒抓
 
-        //運費跟折扣
-        shipping : cartstore.shippingFee.value, //
-        country : cartstore.selectCountry.value,
-        coupon : 0,
+        //運費
+        country : cartstore.selectCountry.value,  //後端會用國家重新查一次
 
         //購物車內容
         cartItem : cartstore.cartList.map( item => ({
