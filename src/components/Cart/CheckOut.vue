@@ -199,7 +199,7 @@ function goOrder(){
         remark = receiptRemark.value,
 
         //付款方式
-        payment = ,//
+        payment = paymentInfo.value,
 
         //前端計算的總額（只是為了參考，實際還是會用後端查詢到的資訊來計算）
         frontend_total = cartstore.finalPrice.value,
