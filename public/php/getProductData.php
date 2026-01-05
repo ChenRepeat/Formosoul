@@ -16,31 +16,29 @@ if (isset($_GET['id'])) {
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($product) {
-      // --- 處理圖片 (原本的邏輯) ---
+     //如果 image 欄位是 NULL，就給空字串，避免程式報錯
       $imageString = $product['image'] ?? ''; 
       
       if (!empty($imageString)) {
+        //切割字串：把 "img1.jpg|img2.jpg|img3.jpg" 炸開變成陣列
           $images = explode('|', $imageString);
+          //取出主圖：陣列第 0 個位置就是主圖
           $product['main_image'] = $images[0];
+          // 取出副圖：意思是「從第 1 個位置開始切到最後」
+          // 剛好把第 0 個的主圖排除掉了
           $product['sub_images'] = array_slice($images, 1);
       } else {
           $product['main_image'] = null;
           $product['sub_images'] = [];
       }
 
-      // ==========================================
-      // STEP 2: 查詢商品詳細資料 (Product Detail)
-      // ==========================================
-      // 假設兩張表是用 product_ID 關聯
       $sql_detail = "SELECT * FROM product_detail WHERE product_ID = ?";
       $stmt_detail = $pdo->prepare($sql_detail);
       $stmt_detail->execute([$id]);
-      
-      // 使用 fetchAll 抓取所有相關的詳細資料 (例如: S號, M號, L號)
-      // 如果你的詳細資料只有一筆，這會回傳一個只有一項的陣列，前端也好處理
+
       $details = $stmt_detail->fetchAll(PDO::FETCH_ASSOC);
 
-      // 將詳細資料掛載到 product 物件下的一個新屬性，例如 'specs' 或 'details'
+      // 將詳細資料掛載到 product 物件下的一個新屬性，'details'
       $product['details'] = $details;
 
       $result = $product;

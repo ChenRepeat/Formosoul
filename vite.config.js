@@ -31,7 +31,11 @@ export default defineConfig({
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       // 'Cross-Origin-Embedder-Policy': 'require-corp' // 加了google 圖示會不見
-    }
+    },
+    watch: {
+            // 告訴 Vite：這些資料夾的變動你不要管，忽略它們
+            ignored: ['**/vendor/**', '**/node_modules/**'],
+    },
   },
   resolve: {
     alias: {
