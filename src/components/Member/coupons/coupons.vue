@@ -1,5 +1,5 @@
 <template>
-    <h3 v-if="havecoupon">Coupons</h3>
+    <h3 v-if="havecoupon">{{$t('member.coupons')}}</h3>
     <!-- <h3 >Coupons</h3>    -->
     <Couponcontaion @no-coupon-found="handleNoCoupon"></Couponcontaion>
 </template>

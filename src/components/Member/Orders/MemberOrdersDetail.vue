@@ -82,44 +82,21 @@
                     const count = parseInt(subtotalInfo.subtotal)|| 0;
                     const discount = parseInt(couponInfo.discount) || 0;
                     const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
-                    const shippingMapByLang = {
-                        en: {
-                            '宅配': 'delivery',
-                            '超商取貨': 'pickup'
-                        },
-                        zh: {
-                            '宅配': '宅配',
-                            '超商取貨': '超商取貨'
-                        }
-                    };
-                    const currentLang = lang.value ?? 'zh'; // ⭐ 關鍵
-                    console.log(langList.value);
-                    const shippingMap = shippingMapByLang[langList.value] ?? {};
-                    // 物件映射
-                    const statusMap = {
-                        0: 'Shipped',
-                        1: 'Not Shipped',
-                        2: 'Completed',
-                        3: "Paid",
-                        4: "Payment Failed",
-                        5: "Pending Payment"
-                    };
+
                     const finalTotal =  count + shippingFee - discount; 
                     emit('order-updated', order_response.success);
                     return {
                         ...order, 
                         total: finalTotal,
-                        statuscode: statusMap[order.status] || 'unknown',
-                        shippingcode: order.shipping || 'unknown'
+                        
                     };
                 });
 
         });
     };
 
-
     onMounted(() => {
-        get_order();        
+        get_order();      
     })
 
     const handleCheckOrder = (orderNumber) => {
@@ -131,11 +108,33 @@
     const itemsPerPage = 5;
 
     const calorderpage = computed(() => {
+        // console.log(lang.value);
         const start = (props.currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        return orders.value.slice(start, end);
+        const pagedOrders = orders.value.slice(start, end);
+        return pagedOrders.map(order => {
+        const statusMapByLang = {
+            en: { 0: 'Shipped', 1: 'Not Shipped', 2: 'Completed', 3: "Paid", 4: "Payment Failed", 5: "Pending Payment" },
+            zh: { 0: '已出貨', 1: '未出貨', 2: '已完成', 3: "已付款", 4: "付款失敗", 5: "等待付款" }
+        };
+        const shippingMapByLang = {
+            en: { '宅配': 'Delivery', '超商取貨': 'Pickup' },
+            zh: { '宅配': '宅配', '超商取貨': '超商取貨' }
+        };
+        const paymentMapByLang = {
+            en: { 'Credit Card': 'Credit Card', 'Apple Pay': 'Apple Pay' },
+            zh: { 'Credit Card': '信用卡', 'Apple Pay': 'Apple Pay' }
+        };
+        const currentLang = lang.value;
+        // console.log(statusMapByLang[currentLang][order.status]);
+        return {
+            ...order,
+            statuscode: statusMapByLang[currentLang][order.status] || 'unknown',
+            shippingcode: shippingMapByLang[currentLang][order.shipping] || 'unknown',
+            payment: paymentMapByLang[currentLang][order.payment] || 'unknown',
+        };
     });
-    
+    });
     const totalPages = computed(() =>{
         return Math.ceil(orders.value.length / itemsPerPage);
     });

@@ -1,6 +1,6 @@
 <template>
     <div class="collections">
-        <h3>My collections</h3>
+        <h3>{{$t('member.myCollect')}}</h3>
         <section class="list-all">
             <ProductCard :images="calcollectionspage" :currentPage="currentPage" withwhite></ProductCard>
         </section>

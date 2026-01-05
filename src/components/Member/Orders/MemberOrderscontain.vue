@@ -5,22 +5,22 @@
             <p>Orders Information</p>
             <!-- {{ $route.params.id }} -->
         </div>
-        <div v-if="order" class="orders-information notice">
-            <p>Order Number： <span>{{ order.order_number }}</span></p>
-            <p>Order Date： {{ order.orderdate }}</p>
-            <p>Order Status： {{ order.status }}</p>
-            <p>Recipient's Name： {{ order.name_en }}</p>
-            <p>Delivery method： {{ order.shipping }}</p>
-            <p>pieces： {{ order.total_quantity }}</p>
-            <p>address： {{ order.address_en }}</p>
-            <p>Remark： {{ order.remark }}</p>
+        <div v-if="orderlang" class="orders-information notice">
+            <p>Order Number： <span>{{ orderlang.order_number }}</span></p>
+            <p>Order Date： {{ orderlang.orderdate }}</p>
+            <p>Order Status： {{ orderlang.statuscode }}</p>
+            <p>Recipient's Name： {{ orderlang.name_en }}</p>
+            <p>Delivery method： {{ orderlang.shippingcode }}</p>
+            <p>pieces： {{ orderlang.total_quantity }}</p>
+            <p>address： {{ orderlang.address_en }}</p>
+            <p>Remark： {{ orderlang.remark }}</p>
             <p>* Notice *<br>To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.</p>
         </div>
         <div class="detailbar">
             <p>Payment Information</p>
         </div>
-        <div v-if="order" class="orders-information">
-            <p>Payment Method： {{ order.payment }}</p>
+        <div v-if="orderlang" class="orders-information">
+            <p>{{$t('shoppingcart.payment')}}： {{ orderlang.payment }}</p>
         </div>
         <div class="detailbar">
             <p>Products Information</p>
@@ -28,14 +28,14 @@
         <div v-for="product in productlist"  class="orders-product">
             <img :src="product.image" :alt="1">
             <p>{{ product[`name_${lang}`]}}</p>
-            <p> {{ product.quantity }} item(s)</p>
+            <p> {{ product.quantity }} {{$t('shoppingcart.items')}}</p>
             <p>NT$ {{ product.price }}</p>
         </div>
         <div v-if="totallist" class="total">
-            <span><p>Subtotal：</p><p>NT$ {{ totallist.totalPrice }}</p></span>
-            <span><p>Discount：</p><p>NT$ {{ totallist.discount }}</p></span>
-            <span><p>Shipping Fee：</p><p>NT$ {{ totallist.fee }}</p></span>
-            <span><p>Total：</p><p>NT$ {{ totallist.total }}</p></span>
+            <span><p>{{$t('shoppingcart.price')}}：</p><p>NT$ {{ totallist.totalPrice }}</p></span>
+            <span><p>{{$t('shoppingcart.discount')}}：</p><p>NT$ {{ totallist.discount }}</p></span>
+            <span><p>{{$t('shoppingcart.shippingFee')}}：</p><p>NT$ {{ totallist.fee }}</p></span>
+            <span><p>{{$t('shoppingcart.total')}}：</p><p>NT$ {{ totallist.total }}</p></span>
         </div>
 
         <div class="back-to-member">
@@ -107,9 +107,9 @@ import { useI18n } from 'vue-i18n';
             order.value = realArray;
             totallist.value = countArray;
 
-            if(order.value.payment === 'Credit Card'){
-                order.value.payment = 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB';
-            }
+            // if(order.value.payment === 'Credit Card'){
+            //     order.value.payment = 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB';
+            // }
             // 修改成英文後 需改變判斷式
             if(order.value.shipping === '宅配'){
                 const shippingfee = 80;
@@ -133,6 +133,30 @@ import { useI18n } from 'vue-i18n';
             }
         })
     }
+    const orderlang = computed(() => {
+        if (!order.value) return null;
+        const statusMapByLang = {
+            en: { 0: 'Shipped', 1: 'Not Shipped', 2: 'Completed', 3: "Paid", 4: "Payment Failed", 5: "Pending Payment" },
+            zh: { 0: '已出貨', 1: '未出貨', 2: '已完成', 3: "已付款", 4: "付款失敗", 5: "等待付款" }
+        };
+        const shippingMapByLang = {
+            en: { '宅配': 'Delivery', '超商取貨': 'Pickup' },
+            zh: { '宅配': '宅配', '超商取貨': '超商取貨' }
+        };
+        const paymentMapByLang = {
+            en: { 'Credit Card': 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB', 'Apple Pay': 'Apple Pay' },
+            zh: { 'Credit Card': '信用卡（全額支付）－VISA/ MASTER/ JCB', 'Apple Pay': 'Apple Pay' }
+        };
+
+        const currentLang = lang.value;
+        const data = order.value;
+        return {
+            ...data,
+            statuscode: statusMapByLang[currentLang][data.status] || 'unknown',
+            shippingcode: shippingMapByLang[currentLang][data.shipping] || 'unknown',
+            payment: paymentMapByLang[currentLang][data.payment] || 'unknown',
+        };
+    });
     function order_product(){
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
