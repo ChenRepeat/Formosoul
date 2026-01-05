@@ -37,7 +37,7 @@ const displayStatus = computed(() => {
             ringtoss: props.passedGames.ringtoss,
             bue: props.passedGames.bue,
             bike: props.passedGames.bike,
-            wand: props.passedGames.wand
+            wand: props.passedGames.wand || props.activeTriggers?.wand
         };
     } else {
         // 會員中心：使用內部狀態
@@ -113,7 +113,7 @@ onMounted(async () => {
 
       <div class="stamp-position wand">
         <stampSlot :isUnlocked="displayStatus.wand" :trigger="shouldAnimate.wand">
-          <IconWandCore class="ink-wand"/>
+          <IconWandCore class="ink-wand" :class="{ 'active': displayStatus.wand }"/>
         </stampSlot>
       </div>
 
