@@ -127,9 +127,8 @@ function stopAutoSlide() {
 }
 
 
-onMounted(async() => {
-  await eventData.loadeventData();
-  nextTick();
+onMounted(() => {
+  eventData.loadeventData();
   updateIsMobile();
   window.addEventListener("resize", updateIsMobile);
   startAutoSlide();

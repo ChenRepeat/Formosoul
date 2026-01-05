@@ -24,7 +24,11 @@
     "privacyPolicy":"privacy Policy",
     "welcome":"Hi, Welcome Back ~",
     "backPrepage":"Back to previous page",
-    "newsIntro":"I hereby pledge my malevolent intent to unseal the clandestine mechanisms of this Marauder’s parchment."
+    "newsIntro":"I hereby pledge my malevolent intent to unseal the clandestine mechanisms of this Marauder’s parchment.",
+    "FormosoulCopyright1":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class. This platform is for learning and display purposes only.",
+    "FormosoulCopyright2":"Students are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.If you have any concerns about copyright infringement, please send a private message to [ ",
+    "FormosoulCopyright3":"Wiedu TibaMe",
+    "FormosoulCopyright4":" ] for assistance."
   },
   "classes":{
     "escTip":"Press Esc To Skip and Stop",

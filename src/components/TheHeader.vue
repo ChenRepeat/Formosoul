@@ -279,6 +279,9 @@ onUnmounted(() => {
   gap: 12px;
   align-items: center;
   justify-content: left;
+  @media screen and (max-width: 1200px){
+    flex-direction: column;
+  }
 }
 img { object-fit: none; }
 
@@ -391,7 +394,10 @@ img { object-fit: none; }
 .liquidGlass-tint { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.28); z-index: 1; }
 .liquidGlass-shine { position: absolute; inset: 0; box-shadow: inset 2px 2px 1px rgba(255,255,255,0.4), inset -2px -2px 2px rgba(255,255,255,0.2); z-index: 2; }
 
-.liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; }
+.liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; 
+  @media screen and (max-width: 1200px){
+    padding: 4px 16px;
+  }}
 
 .header-icons-list { gap: 20px; align-items: center; 
   position: relative;
@@ -410,8 +416,8 @@ img { object-fit: none; }
     line-height: 14px;
     font-size: 10px;
     position: absolute;
-    bottom: 0;
-    left: 22px;
+    top: 50%;
+    left: 18px;
   }
 }
 
@@ -441,6 +447,7 @@ img { object-fit: none; }
     text-transform: capitalize;
     text-indent: 1em;
   }
+  
 }
 .member-data-case h6{
     text-indent: unset;

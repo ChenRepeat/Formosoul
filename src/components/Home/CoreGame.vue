@@ -30,7 +30,7 @@
             passedGames.value.ringtoss = status.ring >= 1;
             passedGames.value.bue      = status.bue >= 1;
             passedGames.value.bike     = status.mot >= 1;
-            passedGames.value.wand     = status.member_wandcore >= 1;
+            passedGames.value.wand     = status.member_wandcore;
             console.log('檢查魔杖是否已過關:', passedGames.value.wand);
             console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
         } else {
