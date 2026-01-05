@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import axios from 'axios';
 import { useI18n } from "vue-i18n";
 
+
 export const useMemberStore = defineStore('member', () => {
     const { locale } = useI18n();
 
@@ -269,9 +270,10 @@ export const useMemberStore = defineStore('member', () => {
         });
 
         const result = await response.json();
-
+        console.log('原始集點卡資料狀態:', pointsStatus.value);
         if (result.success && result.data) {
             // 更新 store 的 pointsStatus
+            // console.log('TESTTTTT', result.data.member_wandcore);
             pointsStatus.value = {
                 mot: result.data.mot || 0,
                 shrimp: result.data.shrimp || 0,

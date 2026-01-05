@@ -1,15 +1,14 @@
 <script setup>
-    import { ref, onMounted, computed } from 'vue';
+    import { ref, onMounted, computed, watch } from 'vue';
     import CoreShow from './CoreShow.vue';
     import MemberLedger from "@/components/Member/information/memberLedger.vue";
     import { useMemberStore } from '@/stores/member';
-    // import { ca } from 'element-plus/es/locale';
+
     const memberStore = useMemberStore();
     const passTimes = ref(memberStore.gameData?.wand?.pass || 0);
 
-    const isLoggedIn = computed(() => {
-    const user = localStorage.getItem('user');
-        return !!user;
+    const props = defineProps({
+        wandPassed: Boolean
     });
 
     //設定目前顯示頁面
@@ -17,9 +16,24 @@
 
     // 蓋章
     const showCardOverlay = ref(false);
-    const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
-    const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
+    const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false});
 
+watch(
+        ()=> props.wandPassed,
+        (newValue) => {
+            passedGames.value.wand = newValue;
+            console.log('Props 更新了！wand 現在是:', newValue);
+        },
+        { immediate: true}
+    )
+
+const isLoggedIn = computed(() => {
+    const user = localStorage.getItem('user');
+    return !!user;
+});
+    const activeTriggers = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
+    console.log(passedGames.value.wand);
+    console.log(activeTriggers.value.wand);
     const initGameStatus = () => {
         const status = memberStore.pointsStatus || {};
     
@@ -30,9 +44,9 @@
             passedGames.value.ringtoss = status.ring >= 1;
             passedGames.value.bue      = status.bue >= 1;
             passedGames.value.bike     = status.mot >= 1;
-            if (!passedGames.value.wand)   passedGames.value.wand   = status.member_wandcore >= 1;            
-            console.log('檢查魔杖是否已過關:', passedGames.value.wand);
-            console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
+            // passedGames.value.wand = Number(status.member_wandcore) >= 1;           
+            // console.log('檢查魔杖是否已過關:', passedGames.value.wand);
+            // console.log('[會員模式] 從資料庫讀取狀態:', passedGames.value);
         } else {
             // 訪客：從 localStorage 讀取
             const saved = localStorage.getItem('game_progress');
@@ -43,34 +57,33 @@
                 passedGames.value.ringtoss = !!progress.ringtoss;
                 passedGames.value.bue      = !!progress.bue;
                 passedGames.value.bike     = !!progress.bike;
-                passedGames.value.wand     = !!progress.wand;
+                // passedGames.value.wand     = !!progress.wand;
             }
             
-            console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
+            // console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
         }
     };
 
 async function handleCoreSelected() {
     const isFirstPass = !passedGames.value.wand;
-
-    console.log('[魔杖] 第一次通關判斷:', isFirstPass);
+    // 有問題
+    // console.log(passedGames.value.wand);
     passedGames.value.wand = true;
     passTimes.value += 1;
-
+    console.log(passedGames.value.wand);
+    console.log(activeTriggers.value.wand);
         setTimeout(() => {
             showCardOverlay.value = true; 
             if (isFirstPass) {
-                console.log('%c[魔杖動畫] 觸發蓋章動畫', 'color: red; font-weight: bold');
+                // console.log('%c[魔杖動畫] 觸發蓋章動畫', 'color: red; font-weight: bold');
                 setTimeout(() => {
                     activeTriggers.value.wand = true; 
                     setTimeout(() => {
                         activeTriggers.value.wand = false;
                     }, 600); 
                 }, 500);
-            } else {
-                console.log('[魔杖動畫] 已經過關過，跳過蓋章動畫');
             }
-        }, 300);
+        }, 800);
         
         (async ()=> {
             try{
