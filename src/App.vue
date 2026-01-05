@@ -101,15 +101,23 @@ watch(
   async (newData) => {
     if (newData) {
       const success = authStore.loginWithLine(newData);
+      
       if (success) {
-        await router.replace({ path: '/member/information' });
+        // 讀取路徑
+        const returnUrl = localStorage.getItem('line_return_url');
+
+        //清除紀錄
+        localStorage.removeItem('line_return_url');
+
+        //跳轉
+        await router.replace(returnUrl || '/');
+        
         await memberStore.loadMemberData();
       }
     }
   },
-  { immediate: true } // 確保初始化時也會檢查一次
+  { immediate: true }
 );
-
 watch(
   () => route.path,
   () => {
