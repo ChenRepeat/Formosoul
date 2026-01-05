@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = userData;
         localStorage.setItem('user', JSON.stringify(userData));
         // 購物車同步取得會員ID
-        //cartstore.getMemberID();
+        cartstore.getMemberID();
     };
 
     const setToken = (newToken) => {

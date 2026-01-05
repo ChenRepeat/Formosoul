@@ -148,6 +148,7 @@ const receiptPhone = ref('');
 const receiptAddr = ref('');         //只記錄使用者填寫的部分，完整的地址需要組合下拉選單
 const receiptRemark = ref('');
 const saveAddr = ref(false);         // 是否儲存為常用地址
+const paid = ref('');
 
 // 完整地址需要組合
 
@@ -169,7 +170,45 @@ const finalAddr = computed(()=>{
 
 
 // 確認訂單 ---------------------------
+// 訂單寫入資料庫、寫入後將資料傳給綠界、沒問題後在前往訂單完成頁
 function goOrder(){
+    // step1 再次檢查購物車有沒有商品
+    if(cartstore.cartList.length === 0){
+        return alert(t('shoppingcart.cartEmpty'));      //return 是為了讓程式停在這，不要繼續往下跑，才不會報錯或是送出一張空的訂單
+    }
+
+    // step2 把資料打包
+    const orderData = {
+        //查詢用ID
+        member_ID = cartstore.memberID.value,
+        coupons_ID = 0,   //預設，還沒抓
+
+        //運費跟折扣
+        shipping = , //
+        country = cartstore.selectCountry.value,
+        coupon = 0,
+
+        //購物車內容
+        product_ID = ,//
+        quantity = ,//
+
+        //收件資訊
+        phone = receiptPhone.value,
+        address_en = finalAddr.value,
+        name_en = receiptName.value,
+        remark = receiptRemark.value,
+
+        //付款方式
+        payment = ,//
+
+        //前端計算的總額（只是為了參考，實際還是會用後端查詢到的資訊來計算）
+        frontend_total = cartstore.finalPrice.value,
+    }
+
+
+    // step3 送給後端（發送請求）
+
+
     router.push({
         name: 'OrderSucess',
     });

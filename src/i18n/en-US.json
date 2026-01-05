@@ -336,7 +336,8 @@
     "orderDetailTab":"Detail",
     "orderStatus":"Status",
     "orderDate":"Date",
-    "orderNO":"Number"
+    "orderNO":"Number",
+    "cartEmpty":"Your cart is currently empty."
 
   },
   "coreselection":{
