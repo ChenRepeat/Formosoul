@@ -136,8 +136,11 @@ onMounted(async () => {
       </div>
     </div>
 
+    <div class="nologin" v-if="!authStore.isLoggedIn">
+      <h6>ENROLL TO KEEP POINT ! ! </h6>
+    </div>
     <div class="btn-case dp-flex">
-      <button class="btn-close-card" @click="closeLedger">{{$t('member.closeLedger')}}</button>
+      <button class="btn-close-card" :class="{'unlogbtn':!authStore.isLoggedIn}" @click="closeLedger" >{{$t('member.closeLedger')}}</button>
       <button class="btn-close-card" @click="openEnroll" v-if="!authStore.isLoggedIn">{{$t('coreselection.btnEnroll')}}</button>
     </div>
   </section>
@@ -162,12 +165,19 @@ onMounted(async () => {
 }
 .btn-case{
   position: absolute;
-  top: 110%;
-  width: 100%;
+  top: 105%;
+  width: auto;
   justify-content: center;
   gap: 8px;
+  left: 0;
+  right: 0;
+}
+.nologin{
+  h6{margin-top: 16px;width: auto;color: $color-fsWhite;text-align: center;}
 }
 .btn-close-card {
+  display: block;
+    width: auto;
     padding: 10px 25px;
     background-color: $color-fsRed;
     color: $color-fsWhite;
@@ -175,6 +185,12 @@ onMounted(async () => {
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
+    max-width: fit-content;
+    margin: 0 auto;
+    &.unlogbtn{
+      color:$color-fsCaption;
+      background-color: $color-fsContent;
+    }
 }
 .stamps-layer {
   position: absolute;
