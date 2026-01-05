@@ -18,17 +18,17 @@ const playStampAnimation = () => {
       opacity: 0, 
       rotation: 0 
     }, 
-        { 
-            scale: 1, 
-            opacity: 1, 
-            rotation: 0, 
-            duration: 0.4, 
-            ease: "power2.in", 
-            onComplete: () => {
-                gsap.to(stampRef.value, { x: "+=2", y: "+=2", duration: 0.05, repeat: 3, yoyo: true });
-            }
-        }
-    );
+    { 
+      scale: 1, 
+      opacity: 1, 
+      rotation: 0, 
+      duration: 0.4, 
+      ease: "power2.in", 
+      onComplete: () => {
+        gsap.to(stampRef.value, { x: "+=2", y: "+=2", duration: 0.05, repeat: 3, yoyo: true });
+      }
+    }
+  );
 };
 
 // 監聽trigger訊號

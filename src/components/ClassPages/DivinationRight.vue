@@ -238,23 +238,8 @@ const ledgerClose = ()=> showCardOverlay.value = false;
             'fesCheck': chouqianFes == 2,
             'fesResult': chouqianFes == 3,
         }">
-        <div id="qian1">
-          <p>{{ chouqianResult[stickResult]?.name }}</p>
-          <img src="/Classes/qian.png">
-        </div>
-        <div id="qian2">
-          <img src="/Classes/qian.png">
-        </div>
-        <div id="qian3">
-          <img src="/Classes/qian.png">
-        </div>
-        <div id="qian4">
-          <img src="/Classes/qian.png">
-        </div>
-        <div id="qian5">
-          <img src="/Classes/qian.png">
-        </div>
-        <div id="qian6">
+        <div v-for=" index in 6 " :key="index" :id="`qian${index}`">
+          <p v-if="index == 1">{{ chouqianResult[stickResult]?.name }}</p>
           <img src="/Classes/qian.png">
         </div>
           <img src="/Classes/qianCase.png" id="qianCase">

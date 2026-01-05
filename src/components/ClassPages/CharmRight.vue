@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useclassesStore } from '@/stores/classes';
 import { useMemberStore } from '@/stores/member';
 import BasicButton from '../BasicButton.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const classStore = useclassesStore();
 const memberStore = useMemberStore();
@@ -131,7 +132,7 @@ onMounted(() => {
           <div class="title-case dp-flex">
             <h5>{{$t('classes.drawText1')}}</h5>
           </div>
-          <h5 class="close" @click="closeTips">X</h5>
+          <h6 class="close" @click="closeTips"><FontAwesomeIcon icon="fa-solid fa-xmark" /></h6>
           <h5>Tips</h5>
           <h6>{{$t('classes.charmInput1')}}：</h6>
           <p>{{$t('classes.charmIntroText1')}}</p>
