@@ -84,7 +84,7 @@ function closeMenu(){
 
 }
 function handlelogout() {
-  if(!confirm(`${authStore.user.name}確定要登出嗎?`)){
+  if(!confirm(`${authStore.user.name || 'USER' }確定要登出嗎?`)){
     return;
   }else{
     authStore.logout();
