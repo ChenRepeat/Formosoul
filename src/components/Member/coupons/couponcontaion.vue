@@ -227,9 +227,10 @@ import { useRoute } from 'vue-router';
             grid-template-rows: 1fr;
             row-gap: 48px;
             max-height: 500px;
+            // max-width: 600px;
         // 控制當內容的高度「超過」容器設定的高度時會讓瀏覽器自動判斷是否要顯示「垂直捲軸」。 
             overflow-y: auto;
-            padding: 80px 100px;
+            padding: 40px 0;
         }
     }
 
@@ -242,7 +243,7 @@ import { useRoute } from 'vue-router';
         }
     .coupon {
         min-width: 400px;
-        width: 100%;
+        width: 70%;
         height: 200px;
         border-radius: 10px;
         margin: auto;

@@ -582,6 +582,7 @@ function goOrder(){
     .coupon-dock{
         position: relative;
         width: 50vw;
+        //height: 80vh;
         background-color: $color-fsBlue50;
         border-radius: 10px;
         outline: 10px solid $color-fsBlue50;
@@ -601,7 +602,7 @@ function goOrder(){
 
         & .btn-coupon-use{
             display: block;
-            margin: 12px auto;
+            margin: 20px auto 0;
         }
     }
 
