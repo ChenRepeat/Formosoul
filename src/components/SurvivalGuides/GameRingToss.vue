@@ -301,6 +301,7 @@ const initGameStatus = () => {
     console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
   }
 };
+const ledgerClose = ()=> showCardOverlay.value = false;
 
   onMounted( async () => {
     document.body.style.overflow = 'hidden';
@@ -360,8 +361,8 @@ const initGameStatus = () => {
             <MemberLedger
                 :passedGames="passedGames" 
                 :activeTriggers="activeTriggers"
+                @closeLedger="ledgerClose"
             />
-            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
         </div>
     </div>
 

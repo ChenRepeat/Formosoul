@@ -194,6 +194,8 @@ const buaBue = () => {
     }, 1500);
   }, 50);
 };
+const ledgerClose = ()=> showCardOverlay.value = false;
+
 </script>
 
 <template>
@@ -205,8 +207,8 @@ const buaBue = () => {
             <MemberLedger
                 :passedGames="passedGames" 
                 :activeTriggers="activeTriggers"
+                @closeLedger="ledgerClose"
             />
-            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
         </div>
     </div>
     <div class="stick-top dp-flex">

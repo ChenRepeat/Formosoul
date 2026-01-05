@@ -491,7 +491,8 @@
     "howToUseInfoTitle":"Redemption:",
     "howToUseInfoText":"Once you accumulate the required amount of points in your Ledger, you may visit the Redemption Counter to exchange your points for exclusive magical rewards and perks, such as limited-edition items or special features!",
     "cardText":"Every action counts toward the House Cup!",
-    "backToMemberCard":"Back To Enrollment Card"
+    "backToMemberCard":"Back To Enrollment Card",
+    "closeLedger":"CLOSE LEDGER"
   },
   "about":{
     "aboutTitle":"About",

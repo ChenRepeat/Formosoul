@@ -3,6 +3,8 @@
     import CoreShow from './CoreShow.vue';
     import MemberLedger from "@/components/Member/information/memberLedger.vue";
     import { useMemberStore } from '@/stores/member';
+
+
     // import { ca } from 'element-plus/es/locale';
     const memberStore = useMemberStore();
     const passTimes = ref(memberStore.gameData?.wand?.pass || 0);
@@ -99,6 +101,7 @@ async function handleCoreSelected() {
     function doRestartGame(){
         currentView.value = 'game';
     }
+const ledgerClose = ()=> showCardOverlay.value = false;
 
 onMounted(async () => {
     if (isLoggedIn.value) {
@@ -149,8 +152,8 @@ onMounted(async () => {
             <MemberLedger
                 :passedGames="passedGames" 
                 :activeTriggers="activeTriggers"
+                @closeLedger="ledgerClose"
             />
-            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
         </div>
     </div>
 
@@ -177,15 +180,7 @@ onMounted(async () => {
     gap: 20px;
 }
 
-.btn-close-card {
-    padding: 10px 25px;
-    background-color: $color-fsRed;
-    color: $color-fsWhite;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-}
+
 
 
     .coregame-dock{  

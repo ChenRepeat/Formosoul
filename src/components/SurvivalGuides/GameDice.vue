@@ -364,6 +364,7 @@ const initGameStatus = () => {
     }
   }
 };
+const ledgerClose = ()=> showCardOverlay.value = false;
 
 // ================ 生命週期 ================ 
 onMounted( async ()=>{
@@ -491,8 +492,8 @@ onUnmounted (() => {
                         <MemberLedger
                             :passedGames="passedGames" 
                             :activeTriggers="activeTriggers"
+                            @closeLedger="ledgerClose"
                         />
-                        <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
                     </div>
                 </div>
             </div>

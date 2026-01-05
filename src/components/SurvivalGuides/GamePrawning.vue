@@ -462,6 +462,7 @@ const initGameStatus = () => {
     console.log('[訪客模式] 從 localStorage 讀取狀態:', passedGames.value);
   }
 };
+const ledgerClose = ()=> showCardOverlay.value = false;
 
 // 生命週期 , 開始 modal 鎖住scroll
 onMounted(async () => {
@@ -547,8 +548,8 @@ onUnmounted (()=> {
                     <MemberLedger
                         :passedGames="passedGames" 
                         :activeTriggers="activeTriggers"
+                        @closeLedger="ledgerClose"
                     />
-                    <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
                 </div>
             </div>
             <div class="result-title">TIME'S UP!</div>

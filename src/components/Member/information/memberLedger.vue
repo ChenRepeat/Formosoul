@@ -7,6 +7,16 @@ import IconHelmet from '@/components/icons/SVG/IconHelmet.vue';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useMemberStore } from '@/stores/member';
+import { useAuthStore } from '@/stores/autoStore';
+
+const emit = defineEmits(['closeLedger']);
+const useLedgerActions = () => {
+  const closeLedger = () =>  emit('closeLedger');
+  return {closeLedger};
+};
+const { closeLedger } = useLedgerActions();
+
+const authStore = useAuthStore();
 const memberStore = useMemberStore();
 
 const props = defineProps({
@@ -64,7 +74,11 @@ const shouldAnimate = computed(() => {
         wand: props.activeTriggers?.wand 
     };
 });
-
+function openEnroll(){
+  authStore.openLoginModal();
+  authStore.setmemberView('login');
+  authStore.setloginView('loginpage');
+}
 onMounted(async () => {
     // 不管是遊戲內還是會員中心，都先載入資料
     const storedUser = localStorage.getItem('user');
@@ -77,51 +91,63 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="ledger-container">
-    <img src="/member/ledgercard_back.png" class="ledger-bg" alt="Ledger Background">
-    
-    <div class="stamps-layer">
-      <div class="stamp-position shrimp">
-        <stampSlot :isUnlocked="displayStatus.shrimp" :trigger="shouldAnimate.shrimp">
-          <IconShrimp class="ink-shrimp" />
-        </stampSlot>
-      </div>
+  
+  <section class="ledger-outer-case">
 
-      <div class="stamp-position dice">
-        <stampSlot :isUnlocked="displayStatus.dice" :trigger="shouldAnimate.dice">
-          <IconDice class="ink-dice" />
-        </stampSlot>
-      </div>
+    <div class="ledger-container">
+      <img src="/member/ledgercard_back.png" class="ledger-bg" alt="Ledger Background">
+      
+      <div class="stamps-layer">
+        <div class="stamp-position shrimp">
+          <stampSlot :isUnlocked="displayStatus.shrimp" :trigger="shouldAnimate.shrimp">
+            <IconShrimp class="ink-shrimp" />
+          </stampSlot>
+        </div>
 
-      <div class="stamp-position ringtoss">
-        <stampSlot :isUnlocked="displayStatus.ringtoss" :trigger="shouldAnimate.ringtoss">
-          <IconButton class="ink-ringtoss" />
-        </stampSlot>
-      </div>
+        <div class="stamp-position dice">
+          <stampSlot :isUnlocked="displayStatus.dice" :trigger="shouldAnimate.dice">
+            <IconDice class="ink-dice" />
+          </stampSlot>
+        </div>
 
-      <div class="stamp-position bue">
-        <stampSlot :isUnlocked="displayStatus.bue" :trigger="shouldAnimate.bue">
-          <IconBuecard class="ink-bue" size='140'/>
-        </stampSlot>
-      </div>
+        <div class="stamp-position ringtoss">
+          <stampSlot :isUnlocked="displayStatus.ringtoss" :trigger="shouldAnimate.ringtoss">
+            <IconButton class="ink-ringtoss" />
+          </stampSlot>
+        </div>
 
-      <div class="stamp-position bike">
-        <stampSlot :isUnlocked="displayStatus.bike" :trigger="shouldAnimate.bike">
-          <IconHelmet class="ink-bike" size='140'/>
-        </stampSlot>
-      </div>
+        <div class="stamp-position bue">
+          <stampSlot :isUnlocked="displayStatus.bue" :trigger="shouldAnimate.bue">
+            <IconBuecard class="ink-bue" size='140'/>
+          </stampSlot>
+        </div>
 
-      <div class="stamp-position wand">
-        <stampSlot :isUnlocked="displayStatus.wand" :trigger="shouldAnimate.wand">
-          <IconWandCore class="ink-wand" :class="{ 'active': displayStatus.wand }"/>
-        </stampSlot>
-      </div>
+        <div class="stamp-position bike">
+          <stampSlot :isUnlocked="displayStatus.bike" :trigger="shouldAnimate.bike">
+            <IconHelmet class="ink-bike" size='140'/>
+          </stampSlot>
+        </div>
 
+        <div class="stamp-position wand">
+          <stampSlot :isUnlocked="displayStatus.wand" :trigger="shouldAnimate.wand">
+            <IconWandCore class="ink-wand" :class="{ 'active': displayStatus.wand }"/>
+          </stampSlot>
+        </div> 
+      </div>
     </div>
-  </div>
+
+    <div class="btn-case dp-flex">
+      <button class="btn-close-card" @click="closeLedger">{{$t('member.closeLedger')}}</button>
+      <button class="btn-close-card" @click="openEnroll" v-if="!authStore.isLoggedIn">{{$t('coreselection.btnEnroll')}}</button>
+    </div>
+  </section>
 </template>
 
 <style scoped lang="scss">
+  .ledger-outer-case{
+    height: auto;
+    position: relative;
+  }
 .ledger-container {
   position: relative;
   width: 480px; 
@@ -134,7 +160,22 @@ onMounted(async () => {
   width: 100%;
   display: block;
 }
-
+.btn-case{
+  position: absolute;
+  top: 110%;
+  width: 100%;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-close-card {
+    padding: 10px 25px;
+    background-color: $color-fsRed;
+    color: $color-fsWhite;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+}
 .stamps-layer {
   position: absolute;
   top: 0; left: 0;

@@ -509,7 +509,9 @@
     "howToUseInfoTitle":"兌換：",
     "howToUseInfoText":"一旦您在登記冊中累積了所需的積分，您可以前往兌換櫃台，將您的積分兌換成獨家魔法獎勵和特權，例如限量物品或特殊功能！",
     "cardText":"每個行動都計入學院盃！",
-    "backToMemberCard":"回到學生證"
+    "backToMemberCard":"回到學生證",
+    "closeLedger":"收起集點卡"
+
   },
   "about":{
     "aboutTitle":"關於我們",

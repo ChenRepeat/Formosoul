@@ -87,8 +87,8 @@
               <MemberLedger
                 :passedGames="passedGames" 
                 :activeTriggers="activeTriggers"
+                @closeLedger="ledgerClose"
               />
-            <button class="btn-close-card" @click="showCardOverlay = false">CLOSE LEDGER</button>
             </div>
           </div>
         </div>
@@ -363,7 +363,7 @@ const initGameStatus = () => {
     }
   }
 };
-
+const ledgerClose = ()=> showCardOverlay.value = false;
 onMounted( async () => {
   window.addEventListener('resize', updateSize);
   window.addEventListener('keydown', handleKeyDown);
