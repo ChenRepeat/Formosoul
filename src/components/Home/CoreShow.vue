@@ -8,20 +8,28 @@ import { useI18n } from 'vue-i18n';     //語系控制
 const authStore = useAuthStore();
     const storedUser = localStorage.getItem('user');
     const userData = JSON.parse(storedUser);
+    const storeCore = sessionStorage.getItem('guest');
+    const coreData = JSON.parse(storeCore);
     // const User_store_core = localStorage.getItem('core');
     // const coreData = JSON.parse(User_store_core); 
 // const { member_ID, pointscard_ID } = userData;
 function goToEnroll(){
-    if(storedUser && userData.member_ID && userData.wandcore_ID){
-        authStore.closeLoginModal();    
-    }else if(storedUser && userData.member_ID && !userData.wandcore_ID){
-        wandcore_store_member(userData.member_ID, corenumber.value);
-        authStore.closeLoginModal();    
-
+    if(storedUser && userData.member_ID){
+        if(userData.wandcore_ID){
+            authStore.closeLoginModal();    
+        }else{
+            wandcore_store_member(userData.member_ID, corenumber.value);
+            authStore.closeLoginModal();
+        }
     }else{
-        wandcore_store_guest();
-        authStore.setmemberView('login');
-        authStore.setloginView('enrollment');
+        if(!coreData.core){
+            wandcore_store_guest();
+            authStore.setmemberView('login');
+            authStore.setloginView('enrollment');
+        }else{
+            authStore.setmemberView('login');
+            authStore.setloginView('enrollment');            
+        }
     }
 
 };
@@ -31,7 +39,22 @@ function goToEnroll(){
 const emit = defineEmits(['restart-coregame', 'wand-selected']);
 
 function goToSensing(){
-    emit('restart-coregame');      //按下按鈕時，發送事件給父組件
+    if(storedUser && userData.member_ID){
+        if(userData.wandcore_ID){
+            authStore.closeLoginModal();    
+        }else{
+            wandcore_store_member(userData.member_ID, corenumber.value);
+            authStore.closeLoginModal();
+        }
+    }else{
+        if(!coreData.core){
+            wandcore_store_guest();
+            emit('restart-coregame');      //按下按鈕時，發送事件給父組件
+        }else{
+            emit('restart-coregame');      //按下按鈕時，發送事件給父組件
+            
+        }
+    }
 
 };
 
@@ -486,11 +509,9 @@ function wandcore(){
 
     function wandcore_store_guest(){
         const guestData = {
-            core: corenumber.value,
-            createdAt: Date.now()
+            core: corenumber.value
         };
         sessionStorage.setItem('guest', JSON.stringify(guestData));
-
         const storedGuest = sessionStorage.getItem('guest');
         const userData = JSON.parse(storedGuest);
         console.log(userData);

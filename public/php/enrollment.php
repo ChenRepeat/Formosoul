@@ -3,7 +3,7 @@
   $member = json_decode(file_get_contents("php://input"), true);
 
   session_start();
-
+  $wandcore_ID = $member['wandcore_ID'] ?? null;
   $checksql = '
     SELECT COUNT(*) 
     FROM member 
@@ -44,8 +44,8 @@
   $sql = 
   '
   START TRANSACTION;
-	  INSERT INTO member(email, password, status, role, createdate, updatetime)
-      VALUES (:email, :password , 1, 0, NOW(), NOW());
+	  INSERT INTO member(email, password, wandcore_ID, status, role, createdate, updatetime)
+      VALUES (:email, :password ,:wandcore_ID , 1, 0, NOW(), NOW());
     SET @USER_ID = LAST_INSERT_ID();
 	  INSERT INTO pointscard (member_ID,mot,shrimp,dice,ring,bue,member_wandcore)
 	    VALUES (@USER_ID,0,0,0,0,0,0);
@@ -64,14 +64,28 @@
 	    VALUES (@CARD_ID,0,0,0);
   COMMIT; 
   ';
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':email', $member['email']);
-    $stmt->bindValue(':password', $member['password']);
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':email', $member['email']);
+  $stmt->bindValue(':password', $member['password']);
+  $stmt->bindValue(':wandcore_ID', $wandcore_ID);
+  
+  if($wandcore_ID){
     $stmt->execute();
     unset($_SESSION['otp']);
     unset($_SESSION['otp_email']);
-    echo json_encode(['success' => true]);
+    echo json_encode([
+      'success' => true,
+      'message' => 'you core store'
+    ]);
+  }else{
+    $stmt->execute();
+    unset($_SESSION['otp']);
+    unset($_SESSION['otp_email']);
+    echo json_encode([
+      'success' => true,
+      'message' => 'no core'
+    ]);
+  }
 
 
   ?>

@@ -10,6 +10,7 @@
         d.quantity,
         d.price,
         p.name_en,
+        p.name_zh,
         p.image
 	  FROM order_detail d
     LEFT JOIN product p ON p.product_ID = d.product_ID

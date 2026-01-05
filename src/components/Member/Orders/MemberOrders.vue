@@ -3,7 +3,7 @@
     <h3 v-if="!hasOrders">No Orders</h3>
     <template v-else-if="!hasChildRoute">
             <div class="member-orders">
-                <h3>Query Orders</h3>
+                <h3>{{$t('member.myOrders')}}</h3>
             </div>
             <div class="orders">
                 <div class="title-orders">

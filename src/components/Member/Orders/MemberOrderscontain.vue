@@ -27,7 +27,7 @@
         </div>
         <div v-for="product in productlist"  class="orders-product">
             <img :src="product.image" :alt="1">
-            <p>{{ product.name_en }}</p>
+            <p>{{ product[`name_${lang}`]}}</p>
             <p> {{ product.quantity }} item(s)</p>
             <p>NT$ {{ product.price }}</p>
         </div>
@@ -49,11 +49,21 @@ import { useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BasicButton from '@/components/BasicButton.vue';
 import { useMemberStore } from '@/stores/member';
+import { useI18n } from 'vue-i18n';
     const order = ref(null);
     const totallist = ref(null);
     const memberStore = useMemberStore();
     const route = useRoute();
     const productlist = ref(null);
+    const { locale } = useI18n();  
+    const langList = {
+    'en-US': 'en',
+    'zh-TW': 'zh'
+    };
+
+    const lang = computed( () => {
+        return langList[locale.value] || 'en';
+    });
     // if(route.params && route.params.id){
     //     
 
@@ -254,9 +264,8 @@ import { useMemberStore } from '@/stores/member';
     .orders-product  > p{
         display: flex;
         justify-content: center;
-        align-items: center;
         flex-direction: column;
-        gap: 16px;
+        text-align: center;
         color: $color-fsTitle;  
     }
 
