@@ -7,10 +7,12 @@ const router = useRouter();
 const route = useRoute();
 
 const activeMenu = computed(() => {
-  if(route.path === '/tjd103/admin'){
-    return '/tjd103/admin/member-management'
+  // 1. 如果路由設定有指定 activeMenu (例如在新增頁)，就回傳指定的路徑
+  if (route.meta.activeMenu) {
+    return route.meta.activeMenu
   }
-  return route.path;
+  // 2. 否則就回傳原本的網址路徑
+  return route.path
 })
 
 </script>

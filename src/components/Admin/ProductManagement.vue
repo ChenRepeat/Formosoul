@@ -1,128 +1,157 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import ListLayout from './ListLayout.vue'
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { useRouter } from 'vue-router'
+  import { ElMessage } from 'element-plus'
+
+  const router = useRouter()
 
   const currentPage = ref(1)
   const pageSize = ref(10)
   const total = ref(0)
 
-  const memberSearch = ref('')
-  const ProductData = ref([])
+  // 搜尋關鍵字
+  const productSearch = ref('')
+  const productData = ref([])
 
-  const pagedData = computed( () => {
-    return ProductData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  // 分頁計算 (如果有做前端搜尋過濾，建議要在這裡加入 filter 邏輯)
+  const pagedData = computed(() => {
+    return productData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
   })
 
+  // 取得商品列表
   const getProductData = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/getProductData.php`;
 
-
-    const response = await fetch(API_URL);
-    const data = await response.json();
-    ProductData.value = data;
-
-    total.value = data.length;
-  }
-
-const getImageUrl = (filename) => {
-  const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE; // http://localhost/tjd103
-
-  return `${imgBase}${filename}`;
-}
-
-const handleDelete = async (id) => {
-  // 1. 使用瀏覽器原生的 confirm 彈窗 (簡單、不會跑版)
-  const isConfirmed = confirm('確定要永久刪除這項商品嗎？此動作無法復原。');
-
-  // 2. 如果使用者按「取消」，就直接結束，什麼都不做
-  if (!isConfirmed) {
-    return;
-  }
-
-  // 3. 如果使用者按「確定」，執行 API 刪除邏輯
-  try {
-    const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/deleteProduct.php`;
-
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: id })
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      ElMessage.success('刪除成功');
-      getProductData();
-    } else {
-      ElMessage.error(data.message || '刪除失敗');
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      productData.value = data;
+      total.value = data.length;
+    } catch (error) {
+      console.error(error);
+      ElMessage.error('無法取得商品資料');
     }
-  } catch (error) {
-    console.error(error);
-    ElMessage.error('系統錯誤，無法刪除');
   }
-}
 
+  // 圖片路徑處理
+  const getImageUrl = (filename) => {
+    const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE; 
+    return `${imgBase}${filename}`;
+  }
 
-  
+  // 跳轉新增頁面
+  const addProduct = () => {
+    router.push({ name: 'ProductAdd' })
+  }
+
+  // 刪除功能
+  const handleDelete = async (id) => {
+    const isConfirmed = confirm(`確定要永久刪除編號="${id}"商品嗎？此動作無法復原。`);
+    
+    if (!isConfirmed) return;
+
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE;
+      const API_URL = `${apiBase}/deleteProduct.php`;
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        ElMessage.success('刪除成功');
+        // 刪除後重新抓取資料
+        getProductData();
+      } else {
+        ElMessage.error(data.message || '刪除失敗');
+      }
+    } catch (error) {
+      console.error(error);
+      ElMessage.error('系統錯誤，無法刪除');
+    }
+  }
+
   onMounted (() => {
     getProductData();
   });
 </script>
+
 <template>
   <ListLayout>
 
-  <template #title>
-    <h6>商品列表</h6>
-  </template>
+    <template #title>
+      <h6>商品列表</h6>
+    </template>
 
-  <template #controls>
-    <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋商品名稱/編號" style="width: 400px;"></el-input>
-    <router-link :to="{name:'ProductAdd'}">
-      <el-button class="add-btn" round>新增商品</el-button>
-    </router-link>
-  </template>
+    <template #filters>
+      <el-input 
+        class="custom-search-input" 
+        type="text" 
+        v-model="productSearch" 
+        placeholder="搜尋商品名稱/編號" 
+        style="width: 400px;"
+      />
+    </template>
 
-  <el-table :data="pagedData" stripe>
-    <el-table-column label="商品主圖" width="100px">
-      <template #default="scope">
-        <div v-if="scope.row.main_image" style="display: flex; align-items: center; height: 100%;">
-          <img 
-            :src="getImageUrl(scope.row.main_image)" 
-            alt="主圖"
-            style="width: 30px; height: 30px; object-fit: cover;"
-          />
-        </div>
-        <div v-else>
-          <span style="color: #ccc; font-size: 12px;">無圖片</span>
-        </div>
-      </template>
-    </el-table-column>
-      <el-table-column label="商品編號" prop="product_ID" width="150px"></el-table-column>
-      <el-table-column label="商品名稱" prop="name_zh" width="220px"></el-table-column>
-      <el-table-column label="分類" prop="type_zh" width="90px"></el-table-column>
-      <el-table-column label="價格" prop="price" width="80px"></el-table-column>
-      <el-table-column label="庫存" prop="stock" width="80px"></el-table-column>
-      <el-table-column label="狀態" prop="status" width="80px">
+    <template #controls>
+      <el-button type="primary" @click="addProduct" class="add-btn" round>
+        新增商品
+      </el-button>
+    </template>
+
+    <el-table :data="pagedData" stripe style="position: absolute; width: 100%; height: 100%;">
+      
+      <el-table-column label="圖片" width="60px">
+        <template #default="scope">
+          <div v-if="scope.row.main_image" style="display: flex; align-items: center; justify-content: center;">
+            <img 
+              :src="getImageUrl(scope.row.main_image)" 
+              alt="主圖"
+              style="width: 24px; height: 24px;  object-fit: cover;"
+            />
+          </div>
+          <div v-else>
+            <span style="color: #ccc; font-size: 12px;">無</span>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="編號" prop="product_ID" width="130px"></el-table-column>
+      <el-table-column label="商品名稱" prop="name_zh" min-width="180px"></el-table-column>
+      <el-table-column label="分類" prop="type_zh" width="100px"></el-table-column>
+      <el-table-column label="價格" prop="price" width="100px">
+        <template #default="scope">
+           $ {{ scope.row.price }}
+        </template>
+      </el-table-column>
+      <el-table-column label="庫存" prop="stock" width="90px"></el-table-column>
+      
+      <el-table-column label="狀態" prop="status" width="90px">
         <template #default="scope">
           <span v-if="scope.row.status === 1">
             上架中
           </span>
-          <span v-else style="color:gray;">
+          <span v-else style="color: gray;">
             已下架
           </span>
         </template>
       </el-table-column>
-      <el-table-column width="50">
+
+      <el-table-column width="50px">
         <template #default="scope">
           <router-link :to="{name:'ProductEdit', params: { id: scope.row.product_ID }}">
-<font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" /></router-link>
+            <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column width="50">
+
+      <el-table-column width="50px">
         <template #default="scope">
           <font-awesome-icon 
             :icon="['fas', 'trash-can']" 
@@ -135,59 +164,78 @@ const handleDelete = async (id) => {
     </el-table>
 
     <template #footer>
+      <div class="pagination-text">
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
+      </div>
       <el-pagination 
         v-model:current-page="currentPage"
         :total="total"
+        :page-size="pageSize"
         layout="prev, pager, next"
         background
         class="pagination-btn"
       />
-            <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
-      </div>
     </template>
 
   </ListLayout>
-
 </template>
-<style lang="scss" scoped>
 
+<style lang="scss" scoped>
+/* 搜尋框樣式 */
 :deep(.custom-search-input .el-input__wrapper){
-  border-radius:50px;
+  border-radius: 50px;
   background-color: #F0F7FF;
 }
+
+/* 新增按鈕樣式 (含 Hover) */
 .add-btn{
+  border-color: #F0F7FF;
   background-color: #F0F7FF;
+  font-weight: normal;
+  color: black;
   width: 140px;
+  
+  &:hover {
+    border-color: #409eff;
+    background-color: #F0F7FF;
+    color: #409eff;
+  }
 }
+
+/* 圖標顏色 */
 .edit-icon{
   font-size: 20px;
   color: #0A3D70;
 }
 .delete-icon{
   font-size: 20px;
-  color: red;
-}
-/* 覆蓋element-plus的背景色 */
-:deep(.el-table__row--striped td.el-table__cell) {
-  background-color: #F0F7FF !important; /* 換成淺藍色 */
-}
-/* 修改內建行高 */
-:deep(.el-table .el-table__cell) {
-  padding: 4px 0;
+  color: #F56C6C; /* 刪除用紅色比較直覺 */
+  transition: opacity 0.2s;
+  
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
+/* 表格背景色覆蓋 */
+:deep(.el-table__row--striped td.el-table__cell) {
+  background-color: #F0F7FF !important;
+}
+
+/* 修改內建行高 */
+:deep(.el-table .el-table__cell) {
+  padding: 0;
+}
+
+/* 分頁文字 */
 .pagination-text {
-  text-align: center; 
   color: #606266;
+  margin: 0;
   white-space: nowrap;
 }
-:deep(.el-table__row) {
-  min_height:30px; 
-}
-/* 下方分頁區塊樣式 */
-.pagination-layout {
-  display: flex;
-  justify-content: center;
+
+/* 分頁按鈕間距 */
+.pagination-btn{
+  margin-top: 16px;
 }
 </style>
