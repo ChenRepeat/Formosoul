@@ -20,13 +20,13 @@ const { locale } = useI18n();     // 讀取語系狀態
 const hasCoupon = ref(false);
 function couponclose(){
     hasCoupon.value = false;
- document.body.style.overflow = '' ;
+    document.body.style.overflow = '' ;
     document.documentElement.style.overflow = '';
 }
 function couponopen(){
     hasCoupon.value = true;
     document.documentElement.style.overflow = 'hidden';
-document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 }
 
 

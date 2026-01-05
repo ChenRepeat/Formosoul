@@ -75,6 +75,7 @@
 </template>
 
 <script setup>
+import { useCartStore } from '@/stores/cart';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
     const props = defineProps({
@@ -87,7 +88,7 @@ import { useRoute } from 'vue-router';
     const emit = defineEmits(['no-coupon-found', 'coupon-updated']);
     const get_coupon_information = ref(null);
     const route = useRoute();
-
+    const cartStore = useCartStore();
     const sortedCoupons = computed(() => {
         if (!get_coupon_information.value || get_coupon_information.value.length == 0) {
             return null;
@@ -159,22 +160,35 @@ import { useRoute } from 'vue-router';
             body: JSON.stringify({
                 member_ID, 
                 pointscard_ID,
-                coupons_ID: coupon.coupons_ID
+                coupons_ID: coupon.coupons_ID,
+                coupon_status: coupon.user_coupon_status
             })
         }
         ).then( res => res.json())};
 
     function handleCouponClick(coupon) {
         // if (route.path.includes('/member/coupons')) {
+            
         //     return;
         // }
+        if (cartStore.coupon_ID === coupon.coupons_ID) {
+        // 如果想點第二次就取消選取，可以在這裡寫邏輯
+            return; 
+        }
+        // const previousCoupon = coupon.find(c => c.coupons_ID === cartStore.coupon_ID);
+        //     if (previousCoupon) {
+        //         previousCoupon.status = 2; 
+        //     }
         coupon.isTearing = true;
-        if (coupon.status !== 2) return;    
+        // if (coupon.status !== 2) return;
         change_coupon(coupon).then(result => {
             if (result.success) {
+                const storecouponID= result.data.coupons_ID
+                cartStore.coupon_ID = storecouponID
+                // console.log(result.data.user_coupon_status);
                 coupon.status = 1; 
                 setTimeout(() => {
-                    coupon.status = 0;
+                    coupon.status = result.data.user_coupon_status;
                     coupon.isTearing = false;
                 }, 300);           
             }
