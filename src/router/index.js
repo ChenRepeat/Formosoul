@@ -287,7 +287,8 @@ const router = createRouter({
                         {
           path: "member-add",
           name: "MemberAdd",
-          component: () => import ('@/components/Admin/MemberAdd.vue')
+          component: () => import ('@/components/Admin/MemberAdd.vue'),
+          meta: { activeMenu: '/admin/member-management' }
         },
       ],
     },

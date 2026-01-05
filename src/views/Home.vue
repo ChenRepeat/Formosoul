@@ -2,9 +2,10 @@
   <div id="home-container" ref="containerRef" >
     <canvas id="home-canvas-back" ref="canvasBackRef"></canvas>
     
-    <div id="home-logo-wrapper" ref="logoWrapperRef">
-      <img id="home-logo-img" :src="baseURL + 'Home/home-logo.svg'" alt="Formosoul Logo" />
-      <div id="home-socket-visual" ref="socketVisualRef"></div>
+    <div id="home-logo-wrapper" ref="logoWrapperRef" :class="{ 'home-logo-finished': isDockedState }">
+      <img id="home-logo-img" :src="currentLogoSrc" alt="Formosoul Logo" />
+      
+      <div id="home-socket-visual" ref="socketVisualRef" v-show="!isDockedState"></div>
     </div>
 
     <canvas id="home-canvas-front" ref="canvasFrontRef"></canvas>
@@ -27,17 +28,16 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from "@/stores/autoStore";
 
-
 const authStore = useAuthStore()
-
 const router = useRouter();
+
 // --- Refs ---
 const containerRef = ref(null);
 const canvasBackRef = ref(null);
@@ -49,6 +49,14 @@ const envelopeContainerRef = ref(null);
 
 // --- State ---
 const showLetter = ref(false);
+const isDockedState = ref(false); // false=初始狀態, true=完成狀態
+
+// --- Computed ---
+const currentLogoSrc = computed(() => {
+  return isDockedState.value 
+    ? import.meta.env.BASE_URL + 'Home/home-logo-after.svg'   // 完成態圖片
+    : import.meta.env.BASE_URL + 'Home/home-logo-before.svg'; // 初始態圖片
+});
 
 // --- Variables ---
 let scene, camera, rendererBack, rendererFront;
@@ -59,7 +67,6 @@ let raycaster, mouse, dragPlane, dragOffset;
 let clock;
 
 const baseURL = import.meta.env.BASE_URL;
-// 記錄點擊起始位置
 let clickStartPos = { x: 0, y: 0 };
 
 const snitches = [];
@@ -81,8 +88,11 @@ function getHoleScreenPos() {
   const logoHeight = logoWrapperRef.value.clientHeight;
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
-  const offsetX = (0.72 - 0.5) * logoWidth;
-  const offsetY = (0.75 - 0.5) * logoHeight;
+  
+  // ★ 請依照 CSS left/top 設定微調這裡
+  const offsetX = (0.72 - 0.5) * logoWidth; 
+  const offsetY = (0.7 - 0.5) * logoHeight;
+  
   return { x: centerX + offsetX, y: centerY + offsetY };
 }
 
@@ -106,6 +116,8 @@ function getScreenDistanceToHole(worldPos) {
 }
 
 function updateDockedSnitchLock() {
+  if (isDockedState.value) return; 
+  
   const hero = snitches[0];
   if (!hero || !hero.isDocked) return;
   const newPos = getHoleWorldPos();
@@ -113,16 +125,14 @@ function updateDockedSnitchLock() {
   hero.group.position.copy(newPos);
 }
 
-// 取得目前的理論軌道位置 (不包含 Offset)
 function getOrbitPosition(s, t, idx) {
-  const zNarrowFactor = 0.6; // 用於縮放 z 軸
+  const zNarrowFactor = 0.6;
   const currentAngle = t * s.speed + s.phase;
   const rNow = s.radius; 
   
   const xBase = rNow * Math.cos(currentAngle);
   const zBase = rNow * Math.sin(currentAngle) * zNarrowFactor;
   
-  // Y 軸波動
   const waveY = Math.sin(currentAngle * s.yFreq + s.phase) * s.yAmp;
   const floatY = Math.sin(t * 1.5 + idx) * 0.15; 
   const yTotal = waveY + floatY;
@@ -136,13 +146,15 @@ function getIntersects(event) {
   mouse.y = -(pos.y / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
 
-  const originalVisibilities = snitches.map(s => s.group.visible);
-  snitches.forEach(s => s.group.visible = true); 
+  const activeSnitches = isDockedState.value ? snitches.slice(1) : snitches;
   
-  const targets = snitches.map((s) => s.group);
+  const originalVisibilities = activeSnitches.map(s => s.group.visible);
+  activeSnitches.forEach(s => s.group.visible = true); 
+  
+  const targets = activeSnitches.map((s) => s.group);
   const intersects = raycaster.intersectObjects(targets, true);
 
-  snitches.forEach((s, i) => s.group.visible = originalVisibilities[i]);
+  activeSnitches.forEach((s, i) => s.group.visible = originalVisibilities[i]);
   return intersects;
 }
 
@@ -156,12 +168,7 @@ const onLetterClose = () => {
     envelopeContainerRef.value.classList.remove('home-fade-out');
     envelopeContainerRef.value.classList.remove('home-open');
   }
-  const hero = snitches[0];
-  if (hero) {
-    hero.isDocked = true; 
-    hero.isFront = true; 
-  }
-  if (socketVisualRef.value) socketVisualRef.value.classList.add('home-docked');
+  isDockedState.value = true;
 };
 
 function onDragStart(event) {
@@ -171,16 +178,11 @@ function onDragStart(event) {
   const pos = getClientPos(event);
   clickStartPos = { x: pos.x, y: pos.y };
 
-  if (snitches[0] && snitches[0].isDocked) {
-      // 允許點擊選單
-  }
-
   const intersects = getIntersects(event);
 
   if (intersects.length > 0) {
     let obj = intersects[0].object;
     
-    // 檢查 draggable / link
     let draggableFound = false;
     let tempObj = obj;
     while (tempObj && tempObj.parent) {
@@ -191,7 +193,6 @@ function onDragStart(event) {
         tempObj = tempObj.parent;
     }
     
-    // 找到 Group Root
     let rootGroup = intersects[0].object;
     while (rootGroup.parent && rootGroup.parent.type !== 'Scene') {
       rootGroup = rootGroup.parent;
@@ -200,9 +201,8 @@ function onDragStart(event) {
     const idx = snitches.findIndex((s) => s.group === rootGroup);
     
     if (idx !== -1) {
-        // Hero 特殊保護
         if (idx === 0) {
-            if (snitches[0].isDocked) return;
+            if (isDockedState.value || snitches[0].isDocked) return; 
             if (!draggableFound) return; 
         }
 
@@ -258,42 +258,51 @@ function onDragEnd() {
       const dist = getScreenDistanceToHole(hero.group.position);
       
       if (dist < 80) {
+        // --- 1. 立即鎖定 ---
         const targetPos = getHoleWorldPos();
-        hero.isDocked = true;
         hero.lockedPosition = targetPos.clone();
         hero.group.position.copy(targetPos);
-        hero.group.position.z = targetPos.z;
         hero.group.lookAt(0, 0, 0);
+        hero.isDocked = true; 
         hero.isFront = true;
 
         if (socketVisualRef.value) socketVisualRef.value.classList.add('home-docked');
 
-        letterOverlayRef.value.style.display = 'flex';
-        // eslint-disable-next-line no-unused-expressions
-        letterOverlayRef.value.offsetHeight; 
-        letterOverlayRef.value.style.opacity = '1';
+        // --- 2. 立即開信 ---
+        if (letterOverlayRef.value) {
+            letterOverlayRef.value.style.display = 'flex';
+            // eslint-disable-next-line no-unused-expressions
+            letterOverlayRef.value.offsetHeight; 
+            letterOverlayRef.value.style.opacity = '1';
 
-        const tl = gsap.timeline();
-        gsap.set(envelopeContainerRef.value, {
-          top: '-50%', left: '50%', xPercent: -50, yPercent: -50,
-          scale: 0.2, rotationX: 0, rotation: 5, opacity: 1, zIndex: 10,
-        });
-        tl.to(envelopeContainerRef.value, {
-          top: '60%', scale: 0.8, rotationX: 70, rotation: 0,
-          duration: 1.5, ease: 'power2.out',
-        });
-        tl.add(() => envelopeContainerRef.value.classList.add('home-open'), '+=0.1');
-        tl.add(() => envelopeContainerRef.value.classList.add('home-fade-out'), '+=0.5');
-        tl.add(() => {
-           showLetter.value = true;
-           letterOverlayRef.value.style.display = 'none';
-        }, '+=0.5');
+            const tl = gsap.timeline();
+            gsap.set(envelopeContainerRef.value, {
+            top: '-50%', left: '50%', xPercent: -50, yPercent: -50,
+            scale: 0.2, rotationX: 0, rotation: 5, opacity: 1, zIndex: 10,
+            });
+            tl.to(envelopeContainerRef.value, {
+            top: '60%', scale: 0.8, rotationX: 70, rotation: 0,
+            duration: 1.5, ease: 'power2.out',
+            });
+            tl.add(() => envelopeContainerRef.value.classList.add('home-open'), '+=0.1');
+            tl.add(() => envelopeContainerRef.value.classList.add('home-fade-out'), '+=0.5');
+            tl.add(() => {
+            showLetter.value = true;
+            letterOverlayRef.value.style.display = 'none';
+            }, '+=0.5');
+        }
 
-        if (socketVisualRef.value) socketVisualRef.value.classList.remove('home-active');
+        // --- 3. 延遲3秒換圖 ---
+        setTimeout(() => {
+            isDockedState.value = true;
+        }, 3000);
+
         isDragging = false;
         draggedSnitchIdx = -1;
         containerRef.value.classList.remove('home-dragging');
-        return;
+        if (socketVisualRef.value) socketVisualRef.value.classList.remove('home-active');
+        
+        return; 
       }
       
       if (socketVisualRef.value) socketVisualRef.value.classList.remove('home-active');
@@ -338,10 +347,10 @@ function onDocumentClick(event) {
     }
     if (obj && obj.userData.isLink) {
       if (obj.userData.action === 'login') {
-          authStore.openLoginModal(); // 呼叫你的 store 方法
+          authStore.openLoginModal();
           authStore.setmemberView('coreselection');
           authStore.setloginView('enrollment');
-          return; // 阻止後面的 router.push
+          return; 
       }
 
       document.body.style.cursor = 'wait';
@@ -376,11 +385,13 @@ function onMouseMoveHover(event) {
     while (root.parent && root.parent.type !== 'Scene') {
       root = root.parent;
     }
-    const lbl = root.getObjectByName('snitchLabel');
-    if (lbl) lbl.visible = true;
+    
+    if (!(root.userData.isHero && isDockedState.value)) {
+        const lbl = root.getObjectByName('snitchLabel');
+        if (lbl) lbl.visible = true;
+    }
 
     let obj = intersects[0].object;
-    
     while (obj && !obj.userData.isLink && !obj.userData.draggable && obj.parent) {
       obj = obj.parent;
     }
@@ -420,24 +431,27 @@ function onWindowResize() {
 }
 
 function animate() {
-
   animationId = requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
   const duration = 3.0; 
   const u = Math.min(1, t / duration); 
   const easeOutCubic = (x) => 1 - Math.pow(1 - x, 5);
-
   const breatheSpeed = 3.0;
   const breatheFactor = (Math.sin(t * breatheSpeed) + 1) / 2;
 
   snitches.forEach((s, idx) => {
     
+    if (s.isHero && isDockedState.value) {
+        s.group.visible = false;
+        return;
+    }
+
     // 視覺更新
     if (s.isHero) {
       let targetLightIntensity = 2.0; 
       let targetEmissive = 0.4;
 
-      if (s.isDocked) {
+      if (s.isDocked) { 
         targetLightIntensity = 4.7;
         targetEmissive = 1.2;
       } else if (isDragging && draggedSnitchIdx === idx) {
@@ -452,7 +466,7 @@ function animate() {
       if (s.mainMaterial) s.mainMaterial.emissiveIntensity = targetEmissive;
     }
 
-    // 物理與位置邏輯
+    // 鎖定邏輯
     if (s.isHero && s.isDocked) {
       if (s.lockedPosition) s.group.position.copy(s.lockedPosition);
       s.group.lookAt(0, 0, 0);
@@ -460,6 +474,7 @@ function animate() {
       return; 
     }
 
+    // 拖曳處理
     if (isDragging && draggedSnitchIdx === idx) {
       const dragFlap = Math.sin(t * 37 + s.phase) * 0.84;
       s.wings[0].rotation.z = -0.5 + dragFlap;
@@ -470,6 +485,7 @@ function animate() {
       return; 
     }
 
+    // 一般飛行邏輯
     const spiralRotations = 3.0;
     const extraAngle = u < 1 ? -spiralRotations * Math.PI * 2 * (1 - easeOutCubic(u)) : 0;
     const currentAngle = t * s.speed + s.phase + extraAngle;
@@ -496,22 +512,57 @@ function animate() {
   });
 
   snitches.forEach((s) => s.group.visible = !s.isFront);
+  if (snitches[0] && isDockedState.value) snitches[0].group.visible = false;
+  
   rendererBack.render(scene, camera);
   rendererFront.clear();
+  
   snitches.forEach((s) => s.group.visible = s.isFront);
+  if (snitches[0] && isDockedState.value) snitches[0].group.visible = false;
+  
   rendererFront.render(scene, camera);
 }
+
 const startExperience = () => {
   clock = new THREE.Clock(); 
   clock.start();
   animate();
 };
+
 // --- Initialization ---
 onMounted(() => {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  // 成功載入所有資源才會改變 loading 狀態
+  if (authStore.token || authStore.isLoggedIn) { 
+     isDockedState.value = true;
+  }
+
+  // ★ 監聽 Token 狀態 (包含登入 & 登出)
+  watch(() => authStore.token, (newVal) => {
+    if (newVal) {
+      isDockedState.value = true;
+    } else {
+      // 登出：恢復初始狀態
+      isDockedState.value = false;
+      showLetter.value = false;
+      
+      // ★ 強制移除 CSS class，讓洞口恢復光暈
+      if (socketVisualRef.value) {
+         socketVisualRef.value.classList.remove('home-docked');
+         socketVisualRef.value.classList.remove('home-active');
+      }
+
+      // 重置金探子
+      const hero = snitches[0];
+      if (hero) {
+          hero.isDocked = false;     
+          hero.group.visible = true; 
+          hero.lockedPosition = null;
+      }
+    }
+  });
+
   const manager = new THREE.LoadingManager();
   manager.onLoad = () => {
     setTimeout(() => {
@@ -520,13 +571,11 @@ onMounted(() => {
   };
   const textureLoader = new THREE.TextureLoader(manager);
 
-  // 初始化場景
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 100);
   camera.position.set(0, 0.8, 7);
   camera.lookAt(0, 0, 0);
 
-  // 初始化 Renderers
   rendererBack = new THREE.WebGLRenderer({
     canvas: canvasBackRef.value, antialias: true, alpha: true,
   });
@@ -542,22 +591,24 @@ onMounted(() => {
   rendererFront.setClearColor(0x000000, 0);
   rendererFront.autoClear = false;
 
-  // 燈光
   scene.add(new THREE.HemisphereLight(0xffffff, 0x444466, 0.9));
   const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
   dirLight.position.set(5, 8, 4);
   scene.add(dirLight);
 
   initSnitches(textureLoader);
+  
+  if (isDockedState.value && snitches.length > 0) {
+      snitches[0].group.visible = false;
+      snitches[0].isDocked = true;
+  }
 
-  // 初始化互動與時鐘
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
   dragPlane = new THREE.Plane();
   dragOffset = new THREE.Vector3();
   clock = new THREE.Clock();
 
-  // 事件監聽
   window.addEventListener('mousedown', onDragStart);
   window.addEventListener('mousemove', onDragMove);
   window.addEventListener('mouseup', onDragEnd);
@@ -567,6 +618,7 @@ onMounted(() => {
   window.addEventListener('touchend', onDragEnd);
   window.addEventListener('resize', onWindowResize);
   window.addEventListener('mousemove', onMouseMoveHover);
+  
   watch(() => authStore.isLoading, (newVal) => {
     if (newVal == false) {
       startExperience();
@@ -762,7 +814,10 @@ function initSnitches(loader) {
 
     const yAmp = isHero ? 0.3 : 0.8 + Math.random() * 1.2;
     const yFreq = 1 + Math.random() * 1.5;
-    const speed = 0.2 + Math.random() * 0.15;
+    // ★ 修改這裡：
+    const speed = isHero 
+        ? 0.8                            // 金探子 (Hero) 速度：改成 0.8 或更高 (越快)
+        : 0.2 + Math.random() * 0.1;   // 其他按鈕速度
 
     snitches.push({
       group: snitch.group,
@@ -788,10 +843,8 @@ function initSnitches(loader) {
 </script>
 
 <style lang="scss" scoped>
-// 1. 修改 Keyframes：改為金色光芒的呼吸效果
 @keyframes home-socket-auto-pulse {
   0% {
-    // 暗：稍微縮小，透明度降低，光暈變弱
     transform: translate(-50%, -50%) scale(0.9);
     opacity: 0.6;
     box-shadow: 
@@ -799,7 +852,6 @@ function initSnitches(loader) {
       0 0 30px rgba(255, 100, 0, 0.1);
   }
   50% {
-    // 亮：放大，不透明，強烈光暈
     transform: translate(-50%, -50%) scale(1.1);
     opacity: 1;
     box-shadow: 
@@ -807,7 +859,6 @@ function initSnitches(loader) {
       0 0 60px rgba(255, 100, 0, 0.5);
   }
   100% {
-    // 回到暗
     transform: translate(-50%, -50%) scale(0.9);
     opacity: 0.6;
     box-shadow: 
@@ -855,7 +906,14 @@ canvas {
   animation: home-expandFromPoint 3s
     cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   opacity: 0;
+  transition: width 0.5s ease, transform 0.5s ease;
 }
+
+// ★ 完成狀態：調整大小
+#home-logo-wrapper.home-logo-finished {
+  width: 780px; 
+}
+
 #home-logo-img {
   display: block;
   width: 100%;
@@ -874,17 +932,16 @@ canvas {
   }
 }
 
-// 2. 修改本體：直接應用金色漸層背景，並執行上面的動畫
+// ★ 洞口 CSS
 #home-socket-visual {
   position: absolute;
-  left: 73%;
-  top: 75%;
+  left: 73%; 
+  top: 65%;  
   transform: translate(-50%, -50%);
-  width: 5%;
+  width: 4.5%; 
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   
-  // ★ 修改：預設直接使用金色漸層 (原本是黑色)
   background: radial-gradient(
     circle,
     rgba(255, 255, 255, 1) 10%,
@@ -897,7 +954,6 @@ canvas {
   z-index: 5;
   pointer-events: none;
 
-  // ★ 修改：套用新的自動呼吸動畫
   animation: home-socket-auto-pulse 2.5s infinite ease-in-out;
   transition: all 0.3s ease-out;
 }
@@ -908,17 +964,11 @@ canvas {
   }
 }
 
-// 3. 拖曳時 (.home-active)：鎖定在最亮狀態
 #home-socket-visual.home-active {
-  // ★ 關鍵：停止呼吸動畫，強制鎖定樣式
   animation: none; 
-  
-  // 強制設定為最亮、最大
   opacity: 1;
   transform: translate(-50%, -50%) scale(1.3);
   border-color: rgba(255, 255, 255, 1);
-  
-  // 更強烈的擴散光暈
   box-shadow:
     0 0 20px rgba(255, 255, 255, 0.9),
     0 0 50px rgba(255, 215, 0, 0.8),
@@ -926,7 +976,6 @@ canvas {
     0 0 140px rgba(255, 255, 255, 0.3);
 }
 
-// 4. 外圈光暈：跟隨本體一起呼吸
 #home-socket-visual::after {
   content: '';
   position: absolute;
@@ -941,13 +990,11 @@ canvas {
     rgba(255, 220, 100, 0.4),
     transparent 70%
   );
-  // 跟隨父元素一起透明度變化
   opacity: 1; 
   pointer-events: none;
   z-index: -1;
 }
 
-// 拖曳時外圈也稍微變大
 #home-socket-visual.home-active::after {
   transform: translate(-50%, -50%) scale(1.2);
   opacity: 1;
@@ -964,7 +1011,6 @@ canvas {
   }
 }
 
-// 停泊後：關閉動畫，保持恆亮
 #home-socket-visual.home-docked {
   animation: none;
   background: #fff;

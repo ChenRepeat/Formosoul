@@ -44,11 +44,13 @@
 
   <template #title>
     <h6>會員列表</h6>
-    <p class="subtitle">檢視目前系統的所有會員資料。</p>
   </template>
 
-  <template #controls>
+  <template #filters>
     <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input> 
+  </template>
+
+    <template #controls>
     <el-button type="primary"  @click="addMember" class="add-btn" round>
         新增會員
     </el-button>
@@ -111,10 +113,17 @@
   background-color: #F0F7FF;
 }
 .add-btn{
+  border-color: #F0F7FF;
   background-color: #F0F7FF;
   font-weight: normal;
   color: black;
   width: 140px;
+  
+    &:hover {
+    border-color: #409eff;
+    background-color: #F0F7FF;
+    color: #409eff;
+  }
 }
 .edit-icon{
   font-size: 20px;
@@ -130,19 +139,12 @@
 }
 
 .pagination-text {
-  position: absolute;
-  bottom:0;
-  left: 50%;
-  transform: translateX(-50%);
   color: #606266;
   margin: 0;
   white-space: nowrap;
 }
 .pagination-btn{
-  margin-bottom: 48px;
-}
-.subtitle{
-  min-height: 20px;
+  margin-top: 16px;
 }
 /* 下方分頁區塊樣式 */
 .pagination-layout {
