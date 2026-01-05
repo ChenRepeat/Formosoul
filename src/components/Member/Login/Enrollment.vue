@@ -216,7 +216,7 @@ async function startCountdown() {
         await sendOTPAPI(email.value);
         otpSent.value = true;
         errorMessage.value = `測試otp ${otpnumber.value}`;
-        // errorMessage.value = 'Verification code sent!';
+        // errorMessage.value = 'OTP code sent!';
         timer.value = 60;
         intervalId = setInterval(() => {
             timer.value--;

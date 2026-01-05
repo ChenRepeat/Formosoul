@@ -84,12 +84,21 @@ export const useMemberStore = defineStore('member', () => {
                 imgURL.value = dbData.headshot || '';
 
                 if (Number(dbData.motorcyclegame_pass) >= 1) pointsStatus.value.mot = 1;
-if (Number(dbData.shrimpgame_pass) >= 1) pointsStatus.value.shrimp = 1;
-if (Number(dbData.dicegame_pass) >= 1) pointsStatus.value.dice = 1;
-if (Number(dbData.buegame_pass) >= 1) pointsStatus.value.bue = 1;
-if (Number(dbData.ringgame_pass) >= 1) pointsStatus.value.ring = 1;
-if (Number(dbData.wandcore_pass) >= 1) pointsStatus.value.member_wandcore = 1;
-                console.log("資料加載成功", pointsStatus.value);
+                if (Number(dbData.shrimpgame_pass) >= 1) pointsStatus.value.shrimp = 1;
+                if (Number(dbData.dicegame_pass) >= 1) pointsStatus.value.dice = 1;
+                if (Number(dbData.buegame_pass) >= 1) pointsStatus.value.bue = 1;
+                if (Number(dbData.ringgame_pass) >= 1) pointsStatus.value.ring = 1;
+                if (Number(dbData.wandcore_pass) >= 1) pointsStatus.value.member_wandcore = 1;
+                pointsStatus.value = {
+                    mot: dbData.motorcyclegame_pass,
+                    shrimp: dbData.shrimpgame_pass,
+                    dice: dbData.dicegame_pass,
+                    bue: dbData.buegame_pass,
+                    ring: dbData.ringgame_pass,
+                    member_wandcore: wandcoreKey.value || '',
+                };
+                // console.log(pointsStatus.value.member_wandcore);
+                // console.log("資料加載成功", pointsStatus.value);
 
                 memberData.value.charmImg = dbData.charmgame_img1 || '';
                 gameData.value.bue = { 

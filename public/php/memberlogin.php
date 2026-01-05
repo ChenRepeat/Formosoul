@@ -13,6 +13,7 @@
             m.createdate, 
             m.updatetime, 
             m.member_ID,
+            m.wandcore_ID,
             p.pointscard_ID
             from member m
             left join pointscard p on p.member_ID = m.member_ID
@@ -41,6 +42,7 @@
                 'name' => $user['name'],
                 'member_ID' => $user['member_ID'],
                 'pointscard_ID' => $user['pointscard_ID'],
+                'wandcore_ID' => $user['wandcore_ID'],
                 'isFirstLogin' => $isFirstLogin,
                 'message' => $isFirstLogin ? '第一次登入' : '登入成功',
             ];
