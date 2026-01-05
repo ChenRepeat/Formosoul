@@ -27,6 +27,7 @@
     import BasicButton from '@/components/BasicButton.vue';
     import { useRouter } from 'vue-router';
     import { useMemberStore } from '@/stores/member';
+    import { useI18n } from 'vue-i18n';
     // 接收父組件傳來的當前頁碼
     const props = defineProps({
         currentPage: {
@@ -34,7 +35,15 @@
             default: 1
         }
     });
+    const { locale } = useI18n();  
+    const langList = {
+    'en-US': 'en',
+    'zh-TW': 'zh'
+    };
 
+    const lang = computed( () => {
+        return langList[locale.value] || 'en';
+    });
     const memberStore = useMemberStore();
     const router = useRouter();
     const orders = ref([]);
@@ -72,12 +81,20 @@
 
                     const count = parseInt(subtotalInfo.subtotal)|| 0;
                     const discount = parseInt(couponInfo.discount) || 0;
-                    
                     const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
-                    const shippingMap = {
-                        '宅配' : 'Delivery',
-
-                    }
+                    const shippingMapByLang = {
+                        en: {
+                            '宅配': 'delivery',
+                            '超商取貨': 'pickup'
+                        },
+                        zh: {
+                            '宅配': '宅配',
+                            '超商取貨': '超商取貨'
+                        }
+                    };
+                    const currentLang = lang.value ?? 'zh'; // ⭐ 關鍵
+                    console.log(langList.value);
+                    const shippingMap = shippingMapByLang[langList.value] ?? {};
                     // 物件映射
                     const statusMap = {
                         0: 'Shipped',
@@ -93,11 +110,10 @@
                         ...order, 
                         total: finalTotal,
                         statuscode: statusMap[order.status] || 'unknown',
-                        shippingcode: shippingMap[order.shipping] || 'unknown'
+                        shippingcode: order.shipping || 'unknown'
                     };
                 });
-            // orders.value = combinedOrders;
-            // console.log(orders.value);
+
         });
     };
 

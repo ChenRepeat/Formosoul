@@ -149,7 +149,6 @@ import { useMemberStore } from '@/stores/member';
     
     .btn-yellow-fill{
 
-
         &.without{
             display: none;
         }
@@ -166,6 +165,12 @@ import { useMemberStore } from '@/stores/member';
     @media screen and (max-width: 1300px) {
         .cardcontent{
             grid-template-columns: 1fr;
+        }
+    }
+    @media screen and (max-height: 700px) {
+        .cardcontent{
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
     }
 </style>

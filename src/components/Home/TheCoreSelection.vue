@@ -11,8 +11,15 @@ const authStore = useAuthStore();
 
 watch(
     () => authStore.isLoginModalOpen,
-    () => {
-           currentView.value = 'intro';
+    (newvalue) => {
+        if(newvalue == true){
+            currentView.value = 'intro';
+        }else{
+            setTimeout(() => {
+                currentView.value = 'intro';
+            }, 1500);
+            
+        }
     }
 );
 

@@ -110,11 +110,12 @@ import { useAuthStore } from '@/stores/autoStore';
 import { inject, ref, watch } from 'vue';
 import router from '@/router';
 import emailjs from '@emailjs/browser';
+import { useMemberStore } from '@/stores/member';
 
 
 const setSharedEmail = inject('setEnrollmentEmail');
 const authStore = useAuthStore();
-
+const memberStore = useMemberStore();
 const email = ref('');
 const password = ref('');
 const otp = ref('');
@@ -144,7 +145,7 @@ watch(
 );
 
 async function sendOTPAPI(emailValue) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     if(emailValue && typeof emailValue === 'string' && emailValue.includes('@')){
         return{
@@ -160,7 +161,12 @@ async function sendOTPAPI(emailValue) {
 function enrollmentAPI(email, password, otp) {
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/Enrollment.php`;
+    // 1. 在發送請求時才讀取 sessionStorage
+    const storeCore = sessionStorage.getItem('guest');
+    const coreData = storeCore ? JSON.parse(storeCore) : null;
 
+    // 2. 取得 wandcore_ID，如果沒有則給 null
+    const wandcore_ID = coreData ? coreData.core : null;
     return fetch(API_URL, {
         method: 'POST',
         headers:{
@@ -168,7 +174,7 @@ function enrollmentAPI(email, password, otp) {
         },
         credentials: 'include',
         body: JSON.stringify({
-            email, password, otp
+            email, password, otp, wandcore_ID
         })
     }).then( res => res.json());
 
@@ -285,8 +291,9 @@ async function handleEnrollment() {
         const response = await enrollmentAPI(email.value, password.value, otp.value);
         // 這邊寫成跳到登入頁面 成功才會執行
         if(response.success){
-            authStore.setloginView('loginpage');
-            setSharedEmail(email.value);
+                sessionStorage.removeItem('guest');
+                authStore.setloginView('loginpage');
+                setSharedEmail(email.value);
         }else{
             errorMessage.value = response.message;
         }
