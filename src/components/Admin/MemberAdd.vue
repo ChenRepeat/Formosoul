@@ -1,131 +1,10 @@
-<template>
-  <div class="member-add-container">
-    
-    <div class="page-header">
-      <div class="header-content">
-        <h6 class="title">新增會員</h6>
-        <p class="sub-title">建立一位新會員帳號，亂數產生密碼並寄信給會員登入修改。</p>
-      </div>
-      
-      <div class="header-actions">
-        <el-button @click="goBack" class="back-btn" round>
-          <el-icon class="el-icon--left"><ArrowLeft /></el-icon>返回列表
-        </el-button>
-      </div>
-    </div>
-
-    <el-form 
-      :model="addMemberForm" 
-      ref="formRef"
-      label-position="left"
-      label-width="100px"
-      class="member-form"
-    >
-      <div class="content-card">
-        <el-row :gutter="40">
-          <el-col :span="16" :xs="24">
-            
-            <el-form-item label="會員編號">
-              <el-input 
-                v-model="addMemberForm.id" 
-                disabled 
-                placeholder="系統自動產生" 
-                class="bg-gray"
-              />
-            </el-form-item>
-
-            <el-form-item label="姓名" required>
-              <el-input 
-                v-model="addMemberForm.name" 
-                placeholder="請輸入會員姓名" 
-              />
-            </el-form-item>
-
-            <el-form-item label="Email" required>
-              <el-input 
-                v-model="addMemberForm.email" 
-                placeholder="example@mail.com" 
-              />
-            </el-form-item>
-
-            <el-form-item label="設定密碼" required class="password-item">
-              <div class="password-group">
-                <el-input 
-                  v-model="addMemberForm.password" 
-                  placeholder="********" 
-                  type="text"
-                />
-                <el-button @click="generatePassword" class="gen-btn">產生密碼</el-button>
-              </div>
-              <span class="field-hint">系統自動產生 8 碼含大小寫英文及數字之亂數密碼</span>
-            </el-form-item>
-
-            <el-form-item label="會員狀態">
-              <el-radio-group v-model="addMemberForm.status">
-                <el-radio :label="1" border>
-                  <div class="radio-content">
-                    <div class="status-dot active"></div>啟用
-                  </div>
-                </el-radio>
-                <el-radio :label="0" border>
-                  <div class="radio-content">
-                    <div class="status-dot inactive"></div>停權
-                  </div>
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-
-          </el-col>
-
-          <el-col :span="8" :xs="24">
-            <div class="avatar-upload-section">
-              <div class="upload-label">
-                <span>=</span>
-                <el-icon class="close-icon" @click="clearImage" v-if="avatarList.length"><Close /></el-icon>
-              </div>        
-              <el-upload
-                class="avatar-uploader"
-                action="#"
-                :auto-upload="false"
-                :limit="1"
-                :show-file-list="false"
-                :on-change="handleImageChange"
-                drag
-              >
-                <img v-if="avatarPreview" :src="avatarPreview" class="avatar-preview" />
-                <div v-if="!avatarPreview" class="upload-placeholder">
-                  <el-icon class="placeholder-icon"><Picture /></el-icon>
-                </div>
-              </el-upload>
-              <div class="avatar-text">會員頭貼</div>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-
-      <div class="footer-actions">
-        <el-button @click="goBack" size="large" class="cancel-btn">取消</el-button>
-        <el-button 
-          type="primary" 
-          color="#003060" 
-          @click="submitForm" 
-          size="large" 
-          :loading="loading"
-        >
-          儲存新增
-        </el-button>
-      </div>
-    </el-form>
-  </div>
-</template>
-
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Picture, Close, ArrowLeft } from '@element-plus/icons-vue' 
 import { ElMessage } from 'element-plus'
-// 移除 ListLayout 引入
-// import ListLayout from './ListLayout.vue' 
+// 1. 重新引入 ListLayout 以確保版面一致
+import ListLayout from './ListLayout.vue' 
 
 const router = useRouter()
 const loading = ref(false)
@@ -210,41 +89,154 @@ const submitForm = async () => {
 }
 </script>
 
+<template>
+  <ListLayout>
+    
+    <template #title>
+      <h6>新增會員</h6>
+    </template>
+
+    <template #controls>
+      <el-button @click="goBack" class="back-btn" round>
+        <el-icon><ArrowLeft /></el-icon>返回列表
+      </el-button>
+    </template>
+
+    <div class="scroll-container">
+      <div class="member-add-container">
+        <el-form 
+          :model="addMemberForm" 
+          ref="formRef"
+          label-position="left"
+          label-width="100px"
+          class="member-form"
+        >
+          <div class="content-card">
+            <el-row :gutter="40">
+              <el-col :span="16" :xs="24">
+                
+                <el-form-item label="會員編號">
+                  <el-input 
+                    v-model="addMemberForm.id" 
+                    disabled 
+                    placeholder="系統自動產生" 
+                    class="bg-gray"
+                  />
+                </el-form-item>
+
+                <el-form-item label="姓名" required>
+                  <el-input 
+                    v-model="addMemberForm.name" 
+                    placeholder="請輸入會員姓名" 
+                  />
+                </el-form-item>
+
+                <el-form-item label="Email" required>
+                  <el-input 
+                    v-model="addMemberForm.email" 
+                    placeholder="example@mail.com" 
+                  />
+                </el-form-item>
+
+                <el-form-item label="設定密碼" required class="password-item">
+                  <div class="password-group">
+                    <el-input 
+                      v-model="addMemberForm.password" 
+                      placeholder="********" 
+                      type="text"
+                      show-password
+                    />
+                    <el-button @click="generatePassword" class="gen-btn">產生密碼</el-button>
+                  </div>
+                  <span class="field-hint">系統自動產生 8 碼含大小寫英文及數字之亂數密碼</span>
+                </el-form-item>
+
+                <el-form-item label="會員狀態">
+                  <el-radio-group v-model="addMemberForm.status">
+                    <el-radio :label="1" border>
+                      <div class="radio-content">
+                        <div class="status-dot active"></div>啟用
+                      </div>
+                    </el-radio>
+                    <el-radio :label="0" border>
+                      <div class="radio-content">
+                        <div class="status-dot inactive"></div>停權
+                      </div>
+                    </el-radio>
+                  </el-radio-group>
+                </el-form-item>
+
+              </el-col>
+
+              <el-col :span="8" :xs="24">
+                <div class="avatar-upload-section">
+                  <div class="upload-label">
+                    <span>=</span>
+                    <el-icon class="close-icon" @click="clearImage" v-if="avatarList.length"><Close /></el-icon>
+                  </div>        
+                  <el-upload
+                    class="avatar-uploader"
+                    action="#"
+                    :auto-upload="false"
+                    :limit="1"
+                    :show-file-list="false"
+                    :on-change="handleImageChange"
+                    drag
+                  >
+                    <img v-if="avatarPreview" :src="avatarPreview" class="avatar-preview" />
+                    <div v-if="!avatarPreview" class="upload-placeholder">
+                      <el-icon class="placeholder-icon"><Picture /></el-icon>
+                    </div>
+                  </el-upload>
+                  <div class="avatar-text">會員頭貼</div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
+          <div class="footer-actions">
+            <el-button @click="goBack" size="large" class="cancel-btn">取消</el-button>
+            <el-button 
+              type="primary" 
+              color="#003060" 
+              @click="submitForm" 
+              size="large" 
+              :loading="loading"
+            >
+              儲存新增
+            </el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
+  </ListLayout>
+</template>
+
 <style lang="scss" scoped>
+/* 為了讓表單在 Layout 中可以正常捲動 */
+.scroll-container {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 10px; /* 避免捲軸蓋住內容 */
+}
+
 /* 主要容器 */
 .member-add-container {
   max-width: 1000px;
-  margin: 0 auto;
+  /* margin: 0 auto; 移除 auto，因為 layout 可能會有 padding */ 
   padding-bottom: 40px;
 }
 
-/* 1. 新增 Header 區塊樣式 */
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end; /* 讓按鈕對齊文字底部 */
-  margin-bottom: 24px;
-}
-
-.title {
-  color: #1a1a1a;
-  margin: 0 0 8px 0;
-}
-
-.sub-title {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-  line-height: 1.5;
-}
-
 .back-btn {
+  border-color: #F0F7FF;
   background-color: #F0F7FF;
-  border-color: #dcdfe6;
-  color: #606266;
-  &:hover {
-    border-color: #c6e2ff;
-    background-color: #ecf5ff;
+  font-weight: normal;
+  color: black;
+  width: 140px;
+  
+    &:hover {
+    border-color: #409eff;
+    background-color: #F0F7FF;
     color: #409eff;
   }
 }
@@ -254,7 +246,6 @@ const submitForm = async () => {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-  padding: 40px;
   margin-bottom: 24px;
 }
 

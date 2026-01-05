@@ -1,159 +1,21 @@
-<template>
-  <div class="order-view-container">
-    
-    <div class="page-header">
-      <div class="header-left">
-        <h6 class="title">訂單查看</h6>
-        <span class="order-id">#{{ OrderData.orderId }}</span>
-        <el-tag :type="getStatusType(OrderData.status)" effect="dark" class="status-tag">
-          {{ OrderData.status }}
-        </el-tag>
-      </div>
-      <el-button @click="goBack" class="add-btn" round>返回列表</el-button>
-    </div>
-
-    <div class="content-card">
-      
-      <div class="section-block info-section">
-        <el-row :gutter="40">
-          <el-col :span="8">
-            <div class="info-item">
-              <p>會員姓名</p>
-              <div class="info-value">{{ OrderData.memberName }}</div>
-            </div>
-          </el-col>
-          <el-col :span="8">
-            <div class="info-item">
-              <p>付款方式</p>
-              <div class="info-value">{{ OrderData.paymentMethod }}</div>
-            </div>
-          </el-col>
-          <el-col :span="8">
-            <div class="info-item">
-              <p>建立時間</p>
-              <div class="info-value">{{ OrderData.createTime }}</div>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-
-      <el-divider />
-
-      <el-form 
-        :model="OrderData" 
-        label-position="top"
-        class="order-form"
-      >
-        <div class="section-block form-section">
-          <div class="section-header">
-            <h6>收件人資料</h6>
-            <p class="sub-text">出貨前可修改收件人資料</p>
-          </div>
-
-          <el-row :gutter="24">
-            <el-col :span="12">
-              <el-form-item label="收件人姓名 (中文)">
-                <el-input v-model="OrderData.recipientNameZh" :suffix-icon="Edit" placeholder="請輸入中文姓名" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Recipient Name (English)">
-                <el-input v-model="OrderData.recipientNameEn" :suffix-icon="Edit" placeholder="Enter name" />
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="聯絡電話">
-                <el-input v-model="OrderData.phone" :suffix-icon="Edit" />
-              </el-form-item>
-            </el-col>
-            
-            <el-col :span="24">
-              <el-form-item label="收件人地址 (中文)">
-                <el-input v-model="OrderData.addressZh" :suffix-icon="Edit" />
-              </el-form-item>
-            </el-col>
-            
-            <el-col :span="24">
-              <el-form-item label="Recipient Address (English)">
-                <el-input 
-                  v-model="OrderData.addressEn" 
-                  :suffix-icon="Edit" 
-                  type="textarea" 
-                  :rows="2"
-                  autosize
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-
-        <div class="section-block cancel-section">
-          <el-form-item label-width="0">
-             <el-checkbox v-model="OrderData.isCancel" label="申請取消此訂單" size="large" border class="cancel-checkbox"/>
-          </el-form-item>
-          
-          <transition name="el-zoom-in-top">
-            <div v-if="OrderData.isCancel" class="cancel-reason-box">
-              <el-form-item label="請輸入取消原因與備註">
-                <el-input 
-                  v-model="OrderData.cancelReason" 
-                  type="textarea" 
-                  placeholder="例如：訂錯商品、更換付款方式..." 
-                />
-              </el-form-item>
-            </div>
-          </transition>
-        </div>
-      </el-form>
-    </div>
-
-    <div class="content-card items-section">
-      <p class="section-title mb-4">訂單明細</p>
-      
-      <div class="items-table-header">
-        <div class="col-image">圖片</div>
-        <div class="col-name">Product Name</div>
-        <div class="col-qty">Quantity</div>
-        <div class="col-price">Prices</div>
-      </div>
-
-      <div class="items-list">
-        <div v-for="item in orderItems" :key="item.id" class="item-row">
-          <div class="col-name item-info">
-            <img :src="`${imgBase}${item.url}`" class="product-img" alt="product" />
-            <div class="info-text">
-              <div class="p-name">{{ item.name_en }}</div>
-            </div>
-          </div>
-          <div class="col-qty item-qty">x {{ item.quantity }}</div>
-          <div class="col-price item-price">NT$ {{ item.price }}</div>
-          
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-actions">
-      <el-button class="btn-back" @click="goBack">取消</el-button>
-      <el-button type="primary" color="#003060" class="btn-save">儲存變更</el-button>
-    </div>
-
-  </div>
-</template>
-
 <script setup>
-import { ref, onMounted} from 'vue'
-import { Edit } from '@element-plus/icons-vue' 
+import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { Edit, ArrowLeft } from '@element-plus/icons-vue' 
+import { ElMessage } from 'element-plus'
+import ListLayout from './ListLayout.vue' 
 
 const route = useRoute()
 const router = useRouter()
 
 const currentOrderId = route.params.id
-const imgBase = import.meta.env.VITE_IMG_BASE;
+const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE;
+
+// ★★★ 關鍵 1：初始值設為 true，一進來就是載入中，避免閃爍 ★★★
+const loading = ref(true) 
 
 const OrderData = ref({
-  orderId: 'currentOrderId',
+  orderId: '',
   memberName: '',
   recipientNameZh: '',
   recipientNameEn: '',
@@ -161,7 +23,7 @@ const OrderData = ref({
   addressZh: '',
   addressEn: '',
   paymentMethod: '',
-  status: '',
+  status: '', // 初始值保持空字串即可
   createTime: '',
   updateTime: '',
   isCancel: false, 
@@ -176,176 +38,421 @@ const goBack = () => {
 
 // 根據狀態回傳 Tag 顏色
 const getStatusType = (status) => {
-  if(status === '未付款') return 'danger'
-  if(status === '已完成') return 'success'
-  return 'info'
+  const s = Number(status); 
+  if (s === 0) return 'warning'; 
+  if (s === 1) return 'success'; 
+  if (s === 2) return 'primary'; 
+  if (s === 3) return 'success'; 
+  if (s === 4) return 'info';    
+  return 'info'; 
+}
+
+// 根據狀態回傳中文名稱
+const getStatusText = (status) => {
+  if (status === '' || status === undefined || status === null) return '';
+  const s = Number(status);
+  const statusMap = {
+    0: '未付款',
+    1: '已付款',
+    2: '已出貨',
+    3: '已完成',
+    4: '已取消'
+  };
+  return statusMap[s] || '未知狀態';
 }
 
 const getOrderDetail = async () => {
   if (!currentOrderId) return;
   
-  const apiBase = import.meta.env.VITE_API_BASE;
-  const response = await fetch(`${apiBase}/getOrderDetail.php?id=${currentOrderId}`);
-  const data = await response.json();
+  // 這裡不用再設 loading.value = true 了，因為初始值已經是 true
+  
+  try {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const response = await fetch(`${apiBase}/getOrderDetail.php?id=${currentOrderId}`);
+    const data = await response.json();
 
+    if (data && data.info) {
+        OrderData.value = {
+          orderId: data.info.order_ID,
+          memberName: data.info.name_en,
+          recipientNameZh: data.info.name_zh,
+          recipientNameEn: data.info.name_en,
+          phone: data.info.phone,
+          addressZh: data.info.address_zh,
+          addressEn: data.info.address_en,
+          paymentMethod: data.info.payment,
+          status: data.info.status,
+          createTime: data.info.date,
+          updateTime: new Date().toISOString().split('T')[0],
+          isCancel: false, 
+          cancelReason: data.info.remark
+        }
+    }
 
-  OrderData.value = {
-    orderId:data.info.id,
-    memberName: data.info.name_en,
-    recipientNameZh: data.info.name_zh,
-    recipientNameEn: data.info.name_en,
-    phone: data.info.phone,
-    addressZh: data.info.address_zh,
-    addressEn: data.info.address_en,
-    paymentMethod: data.info.payment,
-    status: data.info.status,
-    createTime: data.info.date,
-    updateTime: new Date().toISOString().split('T')[0],
-    isCancel: false, 
-    cancelReason: data.info.remark
+    if (data && data.items) {
+        orderItems.value = data.items;
+    }
+
+  } catch (error) {
+    console.error('取得訂單資料失敗:', error);
+    ElMessage.error('無法取得訂單資料');
+  } finally {
+    // ★★★ 關鍵 2：資料抓完後，解除載入狀態，畫面才會顯示 ★★★
+    loading.value = false; 
   }
-
-  if (data.items) {
-      orderItems.value = data.items;
-  }
-
 }
 
+// 儲存變更
+const saveChanges = async () => {
+    loading.value = true;
+    
+    // 1. 準備要傳給後端的資料
+    const payload = {
+        orderId: OrderData.value.orderId,
+        recipientNameZh: OrderData.value.recipientNameZh,
+        recipientNameEn: OrderData.value.recipientNameEn,
+        phone: OrderData.value.phone,
+        addressZh: OrderData.value.addressZh,
+        addressEn: OrderData.value.addressEn,
+        isCancel: OrderData.value.isCancel,
+        cancelReason: OrderData.value.remark
+    };
 
+    try {
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/test_cors.php`; // 指向新的 PHP 檔案
 
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            ElMessage.success('訂單更新成功！');
+            // ★ 更新成功後，重新抓取資料，讓畫面上的狀態(Tag)跟唯讀欄位同步更新
+            await getOrderDetail();
+        } else {
+            ElMessage.error(data.message || '更新失敗');
+        }
+
+    } catch (error) {
+        console.error('更新錯誤:', error);
+        ElMessage.error('系統發生錯誤，無法更新');
+    } finally {
+        loading.value = false;
+    }
+}
 
 onMounted(() => {
   getOrderDetail();
 });
 </script>
 
+<template>
+  <ListLayout v-loading="loading">
+    
+    <template #title>
+      <div class="header-title-flex">
+        <h6>訂單查看</h6>
+        <template v-if="OrderData.orderId">
+            <span class="order-id">#{{ OrderData.orderId }}</span>
+            <el-tag 
+            :type="getStatusType(OrderData.status)" 
+            effect="dark" 
+            round 
+            size="small" 
+            class="status-tag"
+            >
+            {{ getStatusText(OrderData.status) }}
+            </el-tag>
+        </template>
+      </div>
+    </template>
+
+    <template #controls>
+      <el-button @click="goBack" class="back-btn" round>
+        <el-icon><ArrowLeft /></el-icon>返回列表
+      </el-button>
+    </template>
+
+    <div class="scroll-container">
+      <div class="order-view-container" v-if="!loading">
+        
+        <div class="content-card">
+          <h5 class="card-title">基本資訊</h5>
+          
+          <div class="info-group">
+             <el-row :gutter="24">
+               <el-col :span="8">
+                 <div class="info-item">
+                   <label>會員姓名</label>
+                   <div class="info-value">{{ OrderData.memberName }}</div>
+                 </div>
+               </el-col>
+               <el-col :span="8">
+                 <div class="info-item">
+                   <label>付款方式</label>
+                   <div class="info-value">{{ OrderData.paymentMethod }}</div>
+                 </div>
+               </el-col>
+               <el-col :span="8">
+                 <div class="info-item">
+                   <label>建立時間</label>
+                   <div class="info-value">{{ OrderData.createTime }}</div>
+                 </div>
+               </el-col>
+             </el-row>
+          </div>
+
+          <el-divider border-style="dashed" />
+
+          <el-form :model="OrderData" label-position="top" class="order-form">
+            <h5 class="card-title" style="margin-top: 10px;">
+                收件人資料 <span class="sub-text">(出貨前可修改)</span>
+            </h5>
+            
+            <el-row :gutter="24">
+                <el-col :span="12">
+                  <el-form-item label="收件人姓名 (中文)">
+                    <el-input v-model="OrderData.recipientNameZh" :suffix-icon="Edit" placeholder="請輸入中文姓名" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="Recipient Name (English)">
+                    <el-input v-model="OrderData.recipientNameEn" :suffix-icon="Edit" placeholder="Enter name" />
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item label="聯絡電話">
+                    <el-input v-model="OrderData.phone" :suffix-icon="Edit" />
+                  </el-form-item>
+                </el-col>
+                
+                <el-col :span="24">
+                  <el-form-item label="收件人地址 (中文)">
+                    <el-input v-model="OrderData.addressZh" :suffix-icon="Edit" />
+                  </el-form-item>
+                </el-col>
+                
+                <el-col :span="24">
+                  <el-form-item label="Recipient Address (English)">
+                    <el-input 
+                      v-model="OrderData.addressEn" 
+                      :suffix-icon="Edit" 
+                      type="textarea" 
+                      :rows="2"
+                      autosize
+                    />
+                  </el-form-item>
+                </el-col>
+            </el-row>
+
+            <div class="cancel-section">
+              <el-form-item label-width="0">
+                 <el-checkbox v-model="OrderData.isCancel" label="取消此訂單" size="large" border class="cancel-checkbox"/>
+              </el-form-item>
+              
+              <transition name="el-zoom-in-top">
+                <div v-if="OrderData.isCancel" class="cancel-reason-box">
+                  <el-form-item label="請輸入取消原因與備註">
+                    <el-input 
+                      v-model="OrderData.cancelReason" 
+                      type="textarea" 
+                      :rows="3"
+                      placeholder="例如：訂錯商品、更換付款方式..." 
+                    />
+                  </el-form-item>
+                </div>
+              </transition>
+            </div>
+          </el-form>
+        </div>
+
+        <div class="content-card">
+           <h5 class="card-title">訂單明細</h5>
+           
+           <div class="items-table-header">
+             <div class="col-name">商品名稱 (Product)</div>
+             <div class="col-qty">數量 (Qty)</div>
+             <div class="col-price">金額 (Price)</div>
+           </div>
+
+           <div class="items-list">
+             <div v-for="item in orderItems" :key="item.id" class="item-row">
+               <div class="col-name item-info">
+                 <img :src="`${imgBase}${item.url}`" class="product-img" alt="product" />
+                 <div class="info-text">
+                   <div class="p-name-en">{{ item.name_en }}</div>
+                 </div>
+               </div>
+               <div class="col-qty item-qty">x {{ item.quantity }}</div>
+               <div class="col-price item-price">NT$ {{ item.price }}</div>
+             </div>
+           </div>
+        </div>
+
+        <div class="footer-actions">
+           <el-button @click="goBack" size="large" class="cancel-btn">取消</el-button>
+           <el-button 
+             type="primary" 
+             color="#003060" 
+             @click="saveChanges" 
+             size="large" 
+             :loading="loading"
+           >
+             儲存變更
+           </el-button>
+        </div>
+
+      </div>
+    </div>
+  </ListLayout>
+</template>
+
 <style scoped>
+/* 佈局容器設定 */
+.scroll-container {
+  height: calc(100vh - 250px);
+  overflow-y: auto;
+  padding: 20px 20px 20px 0;
+}
+
 .order-view-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
-/* 標題區 */
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.header-left {
+/* 標題樣式微調 */
+.header-title-flex {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.title {
-  margin: 0;
-  color: #1a1a1a;
-}
 .order-id {
-  color: #666;
+  color: #909399;
+  font-size: 16px;
+  font-weight: normal;
 }
 .status-tag {
-  padding: 0 12px;
+  font-weight: bold;
 }
 
-/* 通用卡片樣式 */
+/* 返回按鈕 */
+.back-btn {
+  border-color: #F0F7FF;
+  background-color: #F0F7FF;
+  font-weight: normal;
+  color: black;
+  width: 140px;
+}
+.back-btn:hover {
+  border-color: #409eff;
+  background-color: #F0F7FF;
+  color: #409eff;
+}
+
+/* 卡片與內容樣式 */
 .content-card {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-  padding: 30px;
   margin-bottom: 24px;
+  padding: 24px; 
 }
 
-/* 區塊標題 */
-.section-title {
+.card-title {
+  margin: 0 0 20px 0;
+  font-size: 16px;
   color: #333;
-  margin: 0 0 16px 0;
   border-left: 4px solid #003060;
-  padding-left: 12px;
-  line-height: 1.2;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
 }
 
-.section-header {
-  margin-bottom: 20px;
-}
 .sub-text {
-  color: #888;
-  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #909399;
+  margin-left: 8px;
+  font-weight: normal;
 }
 
-.mb-4 { margin-bottom: 16px; }
-
-/* --- 唯讀資訊區 (Info Section) --- */
+/* Info Section */
 .info-item {
   margin-bottom: 10px;
-  font-size: 16px;
 }
 .info-item label {
   display: block;
-  color: #888;
+  color: #606266;
+  font-size: 14px;
   margin-bottom: 4px;
 }
 .info-item .info-value {
   color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #f5f7fa; 
+  padding: 8px 12px;
+  border-radius: 4px;
 }
 
-/* --- 表單優化 --- */
+/* 表單樣式 */
 .order-form :deep(.el-form-item__label) {
   color: #444;
-  line-height: 1.5; /* 讓 label 稍微高一點 */
-  padding-bottom: 6px; /* label 與 input 的距離 */
+  font-weight: 500;
 }
-
-/* 輸入框樣式微調 */
-.order-form :deep(.el-input__wrapper),
-.order-form :deep(.el-textarea__inner) {
-  box-shadow: 0 0 0 1px #dcdfe6 inset;
-  padding: 8px 12px;
-}
-.order-form :deep(.el-input__wrapper:hover) {
-  box-shadow: 0 0 0 1px #003060 inset;
+.bg-gray :deep(.el-input__wrapper) {
+  background-color: #f5f7fa !important;
+  box-shadow: 0 0 0 1px #e4e7ed inset !important;
 }
 
 /* 取消訂單區塊 */
 .cancel-section {
-  margin-top: 30px;
+  margin-top: 20px;
   padding-top: 20px;
   border-top: 1px dashed #eee;
 }
 .cancel-checkbox {
-  color: #e6a23c; /* 警告色 */
-}
-.cancel-checkbox :deep(.el-checkbox__inner) {
-  border-color: #e6a23c;
+  color: #F56C6C;
 }
 .cancel-checkbox :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-  background-color: #e6a23c;
-  border-color: #e6a23c;
+  background-color: #F56C6C;
+  border-color: #F56C6C;
+}
+.cancel-checkbox :deep(.el-checkbox__label) {
+  color: #F56C6C;
+  font-weight: bold;
 }
 
-/* --- 訂單明細列表 --- */
+/* 明細列表 */
 .items-table-header {
   display: flex;
-  background-color: #F5F7FA;
+  background-color: #F8F9FA;
   padding: 12px 20px;
   color: #606266;
+  font-size: 13px;
+  font-weight: 500;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 .item-row {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid #f0f0f0;
 }
 .item-row:last-child {
   border-bottom: none;
 }
-
 .col-name { flex: 3; }
 .col-qty { flex: 1; text-align: center; }
 .col-price { flex: 1; text-align: right; font-weight: 600; color: #333; }
-
 .item-info {
   display: flex;
   align-items: center;
@@ -357,23 +464,23 @@ onMounted(() => {
   border-radius: 6px;
   object-fit: cover;
   border: 1px solid #eee;
+  background-color: #fff;
 }
-.p-name { color: #333; margin-bottom: 4px; }
-.p-spec { color: #999; }
+.p-name-en { 
+  color: #333; 
+  font-weight: 500;
+}
 
 /* 底部按鈕 */
 .footer-actions {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
-  padding-bottom: 60px;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
 }
-.btn-save {
-  padding: 12px 40px;
-}
-.add-btn{
-  background-color: #F0F7FF;
-  width: 140px;
+.cancel-btn {
+  width: 120px;
 }
 </style>

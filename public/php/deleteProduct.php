@@ -16,6 +16,26 @@ try {
     // 3. 開啟交易模式 (Transaction) - 確保主表跟明細表同時刪除
     $pdo->beginTransaction();
 
+
+    // 先撈出圖片路徑，刪除實體檔案
+    $sql_get_img = "SELECT image FROM product WHERE product_ID = ?";
+    $stmt_img = $pdo->prepare($sql_get_img);
+    $stmt_img->execute([$id]);
+    $imgString = $stmt_img->fetchColumn(); // 取得 "Shop/a.jpg|Shop/b.jpg"
+
+    if ($imgString) {
+        $images = explode('|', $imgString);
+        foreach ($images as $img) {
+
+            $filePath = '../' . $img; 
+
+            // 檢查檔案存在才刪除
+            if (file_exists($filePath)) {
+                unlink($filePath); // 刪除檔案指令
+            }
+        }
+    }
+
     // (A) 先刪除明細表 (product_detail)
     $sql_detail = "DELETE FROM product_detail WHERE product_ID = ?";
     $stmt_detail = $pdo->prepare($sql_detail);
