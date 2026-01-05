@@ -59,23 +59,23 @@
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="商品分類 (中文)" required>
-                  <el-select v-model="addProductForm.typeZh" placeholder="請選擇分類" style="width: 100%">
-                    <el-option label="童玩" value="童玩" />
-                    <el-option label="客製化商品" value="客製化商品" />
-                    <el-option label="飾品" value="飾品" />
-                    <el-option label="體驗券" value="體驗券" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="12">
                 <el-form-item label="Product Type (English)" required>
                   <el-select v-model="addProductForm.typeEn" placeholder="Please select a type" style="width: 100%">
                     <el-option label="Folktoys" value="Folktoys" />
                     <el-option label="Personalized" value="Personalized" />
                     <el-option label="Accessories" value="Accessories" />
                     <el-option label="Voucher" value="Voucher" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="12">
+                <el-form-item label="商品分類 (中文)" required>
+                  <el-select v-model="addProductForm.typeZh" placeholder="請選擇分類" style="width: 100%" disabled>
+                    <el-option label="童玩" value="童玩" />
+                    <el-option label="客製化商品" value="客製化商品" />
+                    <el-option label="飾品" value="飾品" />
+                    <el-option label="體驗券" value="體驗券" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -236,7 +236,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus, UploadFilled, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -261,6 +261,21 @@ const addProductForm = reactive({
   storyEn: '',
   useZh: '',
   useEn: '',
+})
+
+// ★ 定義分類對應表 (Key: 英文, Value: 中文)
+const typeMapping = {
+  'Folktoys': '童玩',
+  'Personalized': '客製化商品',
+  'Accessories': '飾品',
+  'Voucher': '體驗券'
+}
+
+// ★ 監聽英文分類變動，自動填入中文
+watch(() => addProductForm.typeEn, (newValue) => {
+  if (newValue && typeMapping[newValue]) {
+    addProductForm.typeZh = typeMapping[newValue]
+  }
 })
 
 // 圖片檔案列表

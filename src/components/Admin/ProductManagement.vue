@@ -132,9 +132,10 @@
       </el-table-column>
       <el-table-column label="庫存" prop="stock" width="90px"></el-table-column>
       
-      <el-table-column label="狀態" prop="status" width="90px">
+      <el-table-column label="狀態" prop="product_status" width="90px">
         <template #default="scope">
-          <span v-if="scope.row.status === 1">
+          {{ console.log('Row Data:', scope.row) }}
+          <span v-if="scope.row.product_status == 1">
             上架中
           </span>
           <span v-else style="color: gray;">
