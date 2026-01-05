@@ -171,7 +171,7 @@ const finalAddr = computed(()=>{
 // 確認訂單 ---------------------------
 // 訂單寫入資料庫、寫入後將資料傳給綠界、沒問題後在前往訂單完成頁
 async function goOrder(){
-    // step1 再次檢查購物車有沒有商品
+    // step1 再次檢查購物車有沒有商品（防護用，因為如果購物車沒商品，應該無法點選按鈕執行goOrder）
     if(cartstore.cartList.length === 0){
         return alert(t('shoppingcart.cartEmpty'));      //return 是為了讓程式停在這，不要繼續往下跑，才不會報錯或是送出一張空的訂單
     }
@@ -180,7 +180,7 @@ async function goOrder(){
     const orderData = {
         //查詢用ID
         member_ID : cartstore.memberID.value,
-        coupons_ID : cartstore.coupon_ID.value,   //預設，還沒抓
+        coupons_ID : cartstore.coupon_ID.value || null,   //預設，還沒抓
 
         //運費
         country : cartstore.selectCountry.value,  //後端會用國家重新查一次
@@ -206,6 +206,15 @@ async function goOrder(){
 
 
     // step3 送給後端（發送請求）
+    try{
+        console.log('正在發送訂單...', orderData);   //console.log 可以同時傳入多個參數，用,隔開即可
+
+        // 使用 POST 發送
+
+        
+    }catch(error){
+
+    }
 
 
     router.push({
