@@ -359,7 +359,8 @@
     "orderDetailTab":"訂單明細",
     "orderStatus":"訂單狀態",
     "orderDate":"訂購日期",
-    "orderNO":"訂單編號"
+    "orderNO":"訂單編號",
+    "cartEmpty":"購物車目前沒有商品"
   },
   "coreselection":{
     "thecoreselection": "喚醒魔杖之心",
