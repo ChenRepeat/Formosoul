@@ -9,10 +9,11 @@ session_start();
 require_once 'vendor/autoload.php';
 
 $googleToken = $member['google_token'];
-$clientId = $member['client_id'];
+$clientId = getenv('VITE_GOOGLE_CLIENT_ID');
+
 
 // 驗證
-$client = new Google_Client(['client_id'=>$clientId]);
+$client = new Google_Client(['client_id' => $clientId]);
 $payload = $client->verifyIdToken($googleToken); // 成功傳值 失敗傳false
 
 if($payload){
