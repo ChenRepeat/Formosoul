@@ -6,10 +6,24 @@ import { useI18n } from 'vue-i18n';     //語系控制
 
 // 頁面串聯 - 前往註冊頁面  -------------------------------------------------------
 const authStore = useAuthStore();
-
+    const storedUser = localStorage.getItem('user');
+    const userData = JSON.parse(storedUser);
+    // const User_store_core = localStorage.getItem('core');
+    // const coreData = JSON.parse(User_store_core); 
+// const { member_ID, pointscard_ID } = userData;
 function goToEnroll(){
-    authStore.setmemberView('login');
-    authStore.setloginView('enrollment');
+    if(storedUser && userData.member_ID && userData.wandcore_ID){
+        authStore.closeLoginModal();    
+    }else if(storedUser && userData.member_ID && !userData.wandcore_ID){
+        wandcore_store_member(userData.member_ID, corenumber.value);
+        authStore.closeLoginModal();    
+
+    }else{
+        wandcore_store_guest();
+        authStore.setmemberView('login');
+        authStore.setloginView('enrollment');
+    }
+
 };
 // 不能再重抽
 
@@ -430,10 +444,10 @@ function wandcore(){
     const apiBase = import.meta.env.VITE_API_BASE;
     const API_URL = `${apiBase}/getcore.php`;
     return fetch(API_URL, {
-        method: 'POST', 
+            method: 'POST', 
             headers: {
                 'Content-Type' : 'application/json'
-            }
+            },
         }
         ).then( res => res.json()
         ).then( core_res => {
@@ -442,11 +456,45 @@ function wandcore(){
             const coreSelectNo = Math.trunc(Math.random() * Arraylength);
             wandCore_list.value = coreArray[coreSelectNo];
             corenumber.value = coreSelectNo;
-            // console.log(wandCore_list.value.name_en);
-            // console.log(corenumber.value);
+                    // const user_core = localStorage.setItem('core', JSON.stringify(corenumber.value));
+        // console.log(user_core);
         })
-    }
+    };
 
+    function wandcore_store_member(member_ID, currentCoreID){
+        // const currentCoreID = corenumber.value;
+        // 加入新物件記得也要回復舊物件的東西 
+        const new_storedUser = {
+            ...userData,
+            wandcore_ID: currentCoreID
+        };
+        localStorage.setItem('user', JSON.stringify(new_storedUser));
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/save_wandcore.php`;
+        return fetch(API_URL, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({
+                    member_ID,
+                    wandcore_ID: currentCoreID
+                })
+            }
+            ).then( res => res.json())
+    };
+
+    function wandcore_store_guest(){
+        const guestData = {
+            core: corenumber.value,
+            createdAt: Date.now()
+        };
+        sessionStorage.setItem('guest', JSON.stringify(guestData));
+
+        const storedGuest = sessionStorage.getItem('guest');
+        const userData = JSON.parse(storedGuest);
+        console.log(userData);
+    }
 // 語系切換  -------------------------------------------------------
 const { locale } = useI18n();
 
@@ -494,10 +542,6 @@ onMounted(() => {
             <div class="core-text" v-if="wandCore_list">
 
                 <!-- <h6>{{wandCores.nameEn}}</h6>   因為wandCores是陣列，所以這樣無法直接取值，要加入索引 -->
-                <!-- <h6>{{wandCores[coreSelect][`name${lang}`]}}</h6>
-                <p>{{ $t('coreselection.coreshowSource')}}{{wandCores[coreSelect][`source${lang}`]}}</p>
-                <p>{{ $t('coreselection.coreshowProperty')}}{{wandCores[coreSelect][`property${lang}`]}}</p>
-                <p>{{ $t('coreselection.coreshowEffect')}}{{wandCores[coreSelect][`effect${lang}`]}}</p> -->
                 <h6>{{wandCore_list[`name${lang}`]}}</h6>
                 <p>{{ $t('coreselection.coreshowSource')}}{{wandCore_list[`source${lang}`]}}</p>
                 <p>{{ $t('coreselection.coreshowProperty')}}{{wandCore_list[`property${lang}`]}}</p>

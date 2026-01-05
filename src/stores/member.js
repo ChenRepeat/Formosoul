@@ -88,8 +88,9 @@ export const useMemberStore = defineStore('member', () => {
                     dice: dbData.dicegame_pass,
                     bue: dbData.buegame_pass,
                     ring: dbData.ringgame_pass,
-                    member_wandcore: dbData.member_wandcore || 0
+                    member_wandcore: wandcoreKey.value || '',
                 };
+                console.log(pointsStatus.value.member_wandcore);
                 console.log("資料加載成功", pointsStatus.value);
 
                 memberData.value.charmImg = dbData.charmgame_img1 || '';
