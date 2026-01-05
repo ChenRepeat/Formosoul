@@ -442,7 +442,7 @@ const lang = computed( () => {
 
 //商品主要文字
 .detail-text{
-    min-width: 320px;
+    width: 320px;
     flex-grow: 1;
     padding-bottom: 60px;
     justify-content: space-between;

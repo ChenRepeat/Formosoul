@@ -341,7 +341,8 @@
     "orderStatus":"Status",
     "orderDate":"Date",
     "orderNO":"Number",
-    "cartEmpty":"Your cart is currently empty."
+    "cartEmpty":"Your cart is currently empty.",
+    "couponuse":"Apply Coupon"
 
   },
   "coreselection":{
