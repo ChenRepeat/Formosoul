@@ -3,6 +3,7 @@ import { computed, ref} from "vue";
 import Cookies from 'js-cookie';
 import { useMemberStore } from "./member";
 import { useRouter } from "vue-router";
+import { useCartStore } from "./cart";
 // 之後可能有封裝好的 axios
 // import axios from 'axios';
 export const useAuthStore = defineStore('auth', () => {
@@ -21,12 +22,21 @@ export const useAuthStore = defineStore('auth', () => {
     
     const isLoggedIn = computed(() => !!token.value);
     const memberStore = useMemberStore();
+    const cartstore = useCartStore();
     // 認證方法
     const setUser = (userData) => {
         user.value = userData;
         localStorage.setItem('user', JSON.stringify(userData));
         // 購物車同步取得會員ID
         cartstore.getMemberID();
+        
+        // setTimeout(() => {
+        //     cartstore.getMemberID();
+        // }, 500) 
+        // if ( userData && userData.member_ID ) {
+        //     cartstore.memberID = userData.member_ID; 
+        // }
+
     };
 
     const setToken = (newToken) => {
