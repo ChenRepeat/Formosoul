@@ -291,6 +291,16 @@ const router = createRouter({
           component: () => import ('@/components/Admin/MemberAdd.vue'),
           meta: { activeMenu: '/admin/member-management' }
         },
+                                {
+          path: "coupon-add",
+          name: "CouponAdd",
+          component: () => import ('@/components/Admin/CouponAdd.vue'),
+        },
+                                {
+          path: "coupon-edit/:id",
+          name: "CouponEdit",
+          component: () => import ('@/components/Admin/CouponEdit.vue')
+        },
       ],
     },
   ],
