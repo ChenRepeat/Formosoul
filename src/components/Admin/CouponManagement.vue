@@ -1,524 +1,326 @@
 <script setup>
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
+  import ListLayout from './ListLayout.vue'
+  import { useRouter } from 'vue-router'
+  import { ArrowDown } from '@element-plus/icons-vue' 
+  import { ElMessage } from 'element-plus'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
-  const total = ref(50)
+  const total = ref(0)
+  const router = useRouter()
 
-  const memberSearch = ref('')
-  const memberData = ref([
-      {
-        id: 'M2025110001',
-        name: 'Wang Xiaoming',
-        email: 'user123@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-01-10',
-        isAdmin: 1,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110002',
-        name: 'Chen Yijun',
-        email: 'user11155@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-02-22',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110003',
-        name: 'Lin Zhihao',
-        email: 'user222222@gmail.com',
-        pointsCard: '4/7',
-        registerDate: '2025-03-02',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110004',
-        name: 'Wu Peiling',
-        email: 'user3332334@gmail.com',
-        pointsCard: '6/7',
-        registerDate: '2025-04-10',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110005',
-        name: 'Huang Jianwei',
-        email: 'user444@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-05-12',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110006',
-        name: 'Liu Xiuying',
-        email: 'user555@gmail.com',
-        pointsCard: '3/7',
-        registerDate: '2025-06-15',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110007',
-        name: 'Zheng Minghui',
-        email: 'user666@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-01',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110008',
-        name: 'Xu Zihao',
-        email: 'user777@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-19',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110009',
-        name: 'Cai Yuting',
-        email: 'user8842328@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-11-22',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110010',
-        name: 'Zhang Jiaying',
-        email: 'user93232394449@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-10-20',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110001',
-        name: 'Wang Xiaoming',
-        email: 'user123@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-01-10',
-        isAdmin: 1,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110002',
-        name: 'Chen Yijun',
-        email: 'user11155@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-02-22',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110003',
-        name: 'Lin Zhihao',
-        email: 'user222222@gmail.com',
-        pointsCard: '4/7',
-        registerDate: '2025-03-02',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110004',
-        name: 'Wu Peiling',
-        email: 'user3332334@gmail.com',
-        pointsCard: '6/7',
-        registerDate: '2025-04-10',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110005',
-        name: 'Huang Jianwei',
-        email: 'user444@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-05-12',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110006',
-        name: 'Liu Xiuying',
-        email: 'user555@gmail.com',
-        pointsCard: '3/7',
-        registerDate: '2025-06-15',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110007',
-        name: 'Zheng Minghui',
-        email: 'user666@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-01',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110008',
-        name: 'Xu Zihao',
-        email: 'user777@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-19',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110009',
-        name: 'Cai Yuting',
-        email: 'user8842328@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-11-22',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110010',
-        name: 'Zhang Jiaying',
-        email: 'user93232394449@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-10-20',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110001',
-        name: 'Wang Xiaoming',
-        email: 'user123@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-01-10',
-        isAdmin: 1,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110002',
-        name: 'Chen Yijun',
-        email: 'user11155@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-02-22',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110003',
-        name: 'Lin Zhihao',
-        email: 'user222222@gmail.com',
-        pointsCard: '4/7',
-        registerDate: '2025-03-02',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110004',
-        name: 'Wu Peiling',
-        email: 'user3332334@gmail.com',
-        pointsCard: '6/7',
-        registerDate: '2025-04-10',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110005',
-        name: 'Huang Jianwei',
-        email: 'user444@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-05-12',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110006',
-        name: 'Liu Xiuying',
-        email: 'user555@gmail.com',
-        pointsCard: '3/7',
-        registerDate: '2025-06-15',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110007',
-        name: 'Zheng Minghui',
-        email: 'user666@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-01',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110008',
-        name: 'Xu Zihao',
-        email: 'user777@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-19',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110009',
-        name: 'Cai Yuting',
-        email: 'user8842328@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-11-22',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110010',
-        name: 'Zhang Jiaying',
-        email: 'user93232394449@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-10-20',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110001',
-        name: 'Wang Xiaoming',
-        email: 'user123@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-01-10',
-        isAdmin: 1,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110002',
-        name: 'Chen Yijun',
-        email: 'user11155@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-02-22',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110003',
-        name: 'Lin Zhihao',
-        email: 'user222222@gmail.com',
-        pointsCard: '4/7',
-        registerDate: '2025-03-02',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110004',
-        name: 'Wu Peiling',
-        email: 'user3332334@gmail.com',
-        pointsCard: '6/7',
-        registerDate: '2025-04-10',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110005',
-        name: 'Huang Jianwei',
-        email: 'user444@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-05-12',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110006',
-        name: 'Liu Xiuying',
-        email: 'user555@gmail.com',
-        pointsCard: '3/7',
-        registerDate: '2025-06-15',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110007',
-        name: 'Zheng Minghui',
-        email: 'user666@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-01',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110008',
-        name: 'Xu Zihao',
-        email: 'user777@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-03-19',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110009',
-        name: 'Cai Yuting',
-        email: 'user8842328@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-11-22',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110010',
-        name: 'Zhang Jiaying',
-        email: 'user93232394449@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-10-20',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110001',
-        name: 'Wang Xiaoming',
-        email: 'user123@gmail.com',
-        pointsCard: '2/7',
-        registerDate: '2025-01-10',
-        isAdmin: 1,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110002',
-        name: 'Chen Yijun',
-        email: 'user11155@gmail.com',
-        pointsCard: '5/7',
-        registerDate: '2025-02-22',
-        isAdmin: 0,
-        memberStatus: 0,
-      },
-            {
-        id: 'M2025110003',
-        name: 'Lin Zhihao',
-        email: 'user222222@gmail.com',
-        pointsCard: '4/7',
-        registerDate: '2025-03-02',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-            {
-        id: 'M2025110004',
-        name: 'Wu Peiling',
-        email: 'user3332334@gmail.com',
-        pointsCard: '6/7',
-        registerDate: '2025-04-10',
-        isAdmin: 0,
-        memberStatus: 1,
-      },
-  ])
+  // 搜尋與篩選變數
+  const couponSearch = ref('')
+  const filterStatus = ref('全部') 
+  const filterType = ref('全部')   
+  
+  const couponData = ref([])
 
-  const pagedData = computed( () => {
-    return memberData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  // ★★★ 核心篩選邏輯 ★★★
+  const filteredData = computed(() => {
+    let data = couponData.value;
+
+    // 1. 關鍵字搜尋 (編號 或 名稱)
+    if (couponSearch.value) {
+      const keyword = couponSearch.value.toLowerCase();
+      data = data.filter(item => 
+        (item.name && item.name.toLowerCase().includes(keyword)) || 
+        (item.coupons_ID && item.coupons_ID.toString().includes(keyword)) // 確保有 coupons_ID
+      );
+    }
+
+    // 2. 狀態篩選
+    if (filterStatus.value !== '全部') {
+      data = data.filter(item => getStatusText(item.status) === filterStatus.value);
+    }
+
+    // 3. 類型篩選 (依照 discount 數值判斷)
+    if (filterType.value !== '全部') {
+      // 這裡改用 getDiscountCategory 來判斷該筆資料屬於哪一類，再跟選單比對
+      data = data.filter(item => getDiscountCategory(item.discount) === filterType.value);
+    }
+
+    return data;
   })
 
+  // 分頁邏輯
+  const pagedData = computed(() => {
+    total.value = filteredData.value.length;
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = currentPage.value * pageSize.value;
+    return filteredData.value.slice(start, end);
+  })
+
+  // 取得資料
+  const getCoupons = async () => {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/getCoupons.php`; 
+
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      couponData.value = data;
+      total.value = data.length;
+    } catch (error) {
+      console.error(error);
+      ElMessage.error('無法取得優惠券資料');
+    }
+  }
+
+  // Helper: 狀態數字轉中文
+  const getStatusText = (status) => {
+    return Number(status) === 1 ? '啟用中' : '草稿'; 
+  }
+
+  // ★★★ 新增 Helper: 根據 discount 數值回傳分類名稱 (用於篩選比對) ★★★
+  const getDiscountCategory = (val) => {
+    const discount = Number(val);
+    if (discount === 0) {
+      return '免運';
+    } else if (discount > 0 && discount < 100) {
+      return '折扣百分比';
+    } else if (discount >= 100) {
+      return '定額折抵';
+    }
+    return '其他';
+  }
+
+  // Handler: 狀態下拉選單
+  const handleStatusCommand = (command) => {
+    filterStatus.value = command;
+    currentPage.value = 1; 
+  }
+
+  // Handler: 類型下拉選單
+  const handleTypeCommand = (command) => {
+    filterType.value = command;
+    currentPage.value = 1; 
+  }
+
+  const addCoupon = () => {
+    router.push({ name: 'CouponAdd' })
+  }
+
+  onMounted(() => {
+    getCoupons();
+  });
 </script>
+
 <template>
-  <div class="page-container">
-    <div class="pagination-layout">
+  <ListLayout>
+
+    <template #title>
+      <h6>優惠券列表</h6>
+    </template>
+
+    <template #filters>
+      <div class="filter-group">
+        
+        <el-input 
+          class="custom-search-input" 
+          type="text" 
+          v-model="couponSearch" 
+          placeholder="搜尋名稱/編號" 
+          style="width: 250px;">
+        </el-input> 
+
+        <el-dropdown trigger="click" @command="handleStatusCommand">
+          <div class="capsule-btn">
+            <span class="label">狀態: {{ filterStatus }}</span>
+            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="全部">全部</el-dropdown-item>
+              <el-dropdown-item command="啟用中">啟用中</el-dropdown-item>
+              <el-dropdown-item command="草稿">草稿</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
+        <el-dropdown trigger="click" @command="handleTypeCommand">
+          <div class="capsule-btn">
+            <span class="label">類型: {{ filterType }}</span>
+            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="全部">全部</el-dropdown-item>
+              <el-dropdown-item command="折扣百分比">折扣百分比</el-dropdown-item>
+              <el-dropdown-item command="定額折抵">定額折抵</el-dropdown-item>
+              <el-dropdown-item command="免運">免運</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
+      </div>
+    </template>
+
+    <template #controls>
+      <el-button type="primary" @click="addCoupon" class="add-btn" round>
+        新增優惠券
+      </el-button>
+    </template>
+
+    <el-table :data="pagedData" stripe style="position: absolute; width: 100%; height: 100%;">
+      
+      <el-table-column label="優惠券編號" prop="coupons_ID" width="120px"></el-table-column>
+      
+      <el-table-column label="名稱" prop="name" min-width="200px"></el-table-column>
+      
+   <el-table-column label="折扣內容" prop="discount" width="160px">
+        <template #default="scope">
+          
+          <span v-if="Number(scope.row.discount) === 0">
+            免運
+          </span>
+
+          <span v-else-if="Number(scope.row.discount) > 0 && Number(scope.row.discount) < 100">
+            折扣 {{ scope.row.discount }}%
+          </span>
+
+          <span v-else-if="Number(scope.row.discount) >= 100">
+            定額折抵 NT${{ scope.row.discount }}
+          </span>
+
+        </template>
+      </el-table-column>
+
+      <el-table-column label="使用門檻" prop="threshold" width="100px">
+        <template #default="scope">
+          <span v-if="scope.row.threshold > 0">
+            NT${{ scope.row.threshold }}
+          </span>
+          <span v-else>
+            無門檻
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="有效期限" width="200px">
+        <template #default="scope">
+          {{ scope.row.startdate }} ~ {{ scope.row.enddate }}
+        </template>
+      </el-table-column>
+
+      <el-table-column label="狀態" prop="status" width="80px">
+        <template #default="scope">
+          <span>
+            {{ getStatusText(scope.row.status) }}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="60px" align="center">
+        <template #default="scope">
+          <router-link :to="{name:'CouponEdit', params:{id: scope.row.coupons_ID}}">
+            <font-awesome-icon 
+              :icon="['fas', 'pen-to-square']" 
+              class="edit-icon" 
+              style="cursor: pointer;"
+            />
+          </router-link>
+        </template>
+      </el-table-column>
+
+    </el-table>
+
+    <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ total / pageSize }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) || 1 }} 頁</p>
       </div>
       <el-pagination 
         v-model:current-page="currentPage"
         :total="total"
+        :page-size="pageSize"
         layout="prev, pager, next"
         background
         class="pagination-btn"
       />
-    </div>
-    <h6>優惠券列表</h6>
-    <p>檢視目前系統的所有優惠券。</p>
-    <div class="search-add-container">
-      <el-input class="custom-search-input" type="text" v-model="memberSearch" placeholder="搜尋會員姓名/Email" style="width: 400px;"></el-input>
-      <el-button class="add-btn" round>新增優惠券</el-button>
-    </div>
-    <el-table :data="pagedData" stripe>
-      <el-table-column label="會員編號" prop="id"  width="125px"></el-table-column>
-      <el-table-column label="姓名" prop="name" width="160px"></el-table-column>
-      <el-table-column label="Email" prop="email"></el-table-column>
-      <el-table-column label="集點卡" prop="pointsCard" width="70px"></el-table-column>
-      <el-table-column label="註冊日期" prop="registerDate" width="110px"></el-table-column>
-      <el-table-column label="權限" width="90px">
-        <template #default="scope">
-          <span v-if="scope.row.isAdmin === 1">
-            管理者
-          </span>
-          <span v-else>
-            一般會員
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="會員狀態" width="90px">
-        <template #default="scope">
-          <span v-if="scope.row.memberStatus === 1">
-            啟用
-          </span>
-          <span v-else style="color:red;">
-            停用
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px">
-        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
-      </el-table-column>
-    </el-table>
-  </div>
+    </template>
+
+  </ListLayout>
 </template>
+
 <style lang="scss" scoped>
-.page-container{
-  position: relative; 
-  min-height: calc(100vh - 100px); /* 撐到底部 */
-  padding-bottom: 60px;
-}
-.el-main p{
-  color: #B0B0B0;
-  margin-bottom: 8px;
-}
-.search-add-container{
+/* 搜尋框與篩選器容器 */
+.filter-group {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  gap: 12px; /* 間距 */
+  align-items: center;
 }
+
+/* 搜尋框樣式 */
 :deep(.custom-search-input .el-input__wrapper){
-  border-radius:50px;
+  border-radius: 50px;
   background-color: #F0F7FF;
 }
-.add-btn{
+
+/* 下拉選單按鈕樣式 (膠囊) */
+.capsule-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F0F7FF; 
+  border-radius: 50px;
+  padding: 0 16px;
+  color: #606266;
+  cursor: pointer;
+  font-size: 14px;
+  height: 32px; /* 與 element-plus input 預設高度一致 */
+  transition: all 0.3s;
+  user-select: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: #409eff;
+    color: #409eff;
+    background-color: #e1f0ff;
+  }
+}
+
+.el-icon--right {
+  margin-left: 6px;
+}
+
+.add-btn {
+  border-color: #F0F7FF;
   background-color: #F0F7FF;
+  font-weight: normal;
+  color: black;
   width: 140px;
+  
+  &:hover {
+    border-color: #409eff;
+    background-color: #F0F7FF;
+    color: #409eff;
+  }
 }
-.edit-icon{
+
+.edit-icon {
   font-size: 20px;
   color: #0A3D70;
 }
-/* 覆蓋element-plus的背景色 */
+
+/* 覆蓋 element-plus 的背景色 */
 :deep(.el-table__row--striped td.el-table__cell) {
-  background-color: #F0F7FF !important; /* 換成淺藍色 */
+  background-color: #F0F7FF !important; 
 }
+
 /* 修改內建行高 */
 :deep(.el-table .el-table__cell) {
-  padding: 4px 0;
-}
-
-.pagination-layout {
-  position: absolute;
-  bottom: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 50px;  
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 10px; 
+  padding: 8px 0; 
 }
 
 .pagination-text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  
-  font-size: 14px;
   color: #606266;
   margin: 0;
   white-space: nowrap;
+}
+
+.pagination-btn {
+  margin-top: 16px;
 }
 </style>

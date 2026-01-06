@@ -120,7 +120,7 @@ const saveChanges = async () => {
 
     try {
         const apiBase = import.meta.env.VITE_API_BASE;
-        const API_URL = `${apiBase}/test_cors.php`; // 指向新的 PHP 檔案
+        const API_URL = `${apiBase}/updateOrderDetail.php`;
 
         const response = await fetch(API_URL, {
             method: 'POST',

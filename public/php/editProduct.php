@@ -93,7 +93,7 @@ try {
         $_POST['typeEn'] ?? '',
         $_POST['price'] ?? 0,
         $_POST['stock'] ?? 0,
-        $_POST['status'] ?? 0, // 前端傳來的 key 還是 status
+        $_POST['status'] ?? 0,
         $finalImageString,
         $id
     ]);
