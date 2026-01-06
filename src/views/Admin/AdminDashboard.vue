@@ -30,7 +30,7 @@ const activeMenu = computed(() => {
           <el-menu-item index="/admin/member-management">會員管理</el-menu-item>
           <el-menu-item index="/admin/product-management">商品管理</el-menu-item>
           <el-menu-item index="/admin/order-management">訂單管理</el-menu-item>
-          <el-menu-item index="/admin/coupon-management">折價券管理</el-menu-item>
+          <el-menu-item index="/admin/coupon-management">優惠券管理</el-menu-item>
           <el-menu-item index="/admin/news-management">消息管理</el-menu-item>
           <el-menu-item index="/admin/annual-event-management">年度盛事管理</el-menu-item>
         </el-menu>

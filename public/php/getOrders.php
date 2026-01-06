@@ -2,7 +2,7 @@
   require_once 'conn.php';
 
  $sql = "
-  select * from `order`
+  SELECT * FROM `order` ORDER BY `date` DESC
 ";
 
   $stmt = $pdo->prepare($sql);

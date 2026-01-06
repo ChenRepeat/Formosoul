@@ -36,22 +36,9 @@
         // $changetmt->bindValue(':coupons_ID', $member['coupons_ID']);
         // $changetmt->execute();
     $returnsql = '
-        SELECT 
-            p.member_ID,
-            uc.pointscard_ID,
-            uc.coupons_ID,
-            uc.status AS user_coupon_status,
-            uc.received_at AS user_coupon_receivedate,
-            uc.used_at,
-            c.discount,
-            c.startdate AS coupon_startdate,
-            c.enddate AS coupon_enddate,
-            c.count AS coupon_count,
-            c.status AS coupon_status
-        FROM user_coupons uc
-        LEFT JOIN coupons c ON uc.coupons_ID = c.coupons_ID
-        LEFT JOIN pointscard p ON p.pointscard_ID = uc.pointscard_ID
-        WHERE uc.pointscard_ID = :pointscard_ID AND uc.coupons_ID = :coupons_ID;
+        SELECT * 
+        FROM view_user_coupons
+        WHERE pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID;
     ';
     $returnstmt = $pdo->prepare($returnsql);
     $returnstmt->bindValue(':pointscard_ID', $member['pointscard_ID']);

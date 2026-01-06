@@ -143,7 +143,6 @@ import { useRoute } from 'vue-router';
     };
     // change_coupon 跟 handleCouponClick 是在結帳頁的時候才用的功能
     function change_coupon(coupon){
-
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
         const API_URL = `${apiBase}/changecouponstatus.php`;
@@ -167,35 +166,65 @@ import { useRoute } from 'vue-router';
         ).then( res => res.json())};
 
     function handleCouponClick(coupon) {
-        // if (route.path.includes('/member/coupons')) {
-            
-        //     return;
-        // }
-        if (cartStore.coupon_ID === coupon.coupons_ID) {
-        // 如果想點第二次就取消選取，可以在這裡寫邏輯
-            return; 
+        if (route.path.includes('/member/coupons')) {
+            return;
         }
+        // if (coupon.status !== 2) return;
+        
+        // console.log('狀態',coupon.status);
+        
+        const cartcoupon = cartStore.coupon_ID
+        // 切換中，防止重複點擊
+        if (coupon.isTearing) return;
+        coupon.isTearing = true;
+        if(cartStore.coupon_ID == null && coupon.status == 2){
+            change_coupon(coupon).then(result => {
+            if (result.success) {
+                    const storecouponID = result.data.coupons_ID
+                    console.log(result.data.coupons_ID);
+                    cartStore.coupon_ID  = storecouponID
+                    console.log('變成1');
+                    coupon.status = 1; 
+                    setTimeout(() => {
+                        coupon.status = result.data.user_coupon_status;
+                        coupon.isTearing = false;
+                    }, 300);
+                }else {
+                    coupon.isTearing = false;
+                }
+            });        
+        }else if(cartcoupon == coupon.coupons_ID && coupon.status == 0){
+            change_coupon(coupon).then(result => {
+            if (result.success) {
+                    console.log(result.data.coupons_ID);
+                    cartStore.coupon_ID  = null;
+                    // console.log('變成1');
+                    coupon.status = 1; 
+                    setTimeout(() => {
+                        coupon.status = result.data.user_coupon_status;
+                        coupon.isTearing = false;
+                    }, 300);
+                }else {
+                    coupon.isTearing = false;
+                }
+            });   
+        }else if(cartcoupon != coupon.coupons_ID && coupon.status == 2){
+            alert('只能用一張');
+            coupon.isTearing = false;     
+        }else{
+            coupon.isTearing = false;
+        }
+
+
+    };
+        // 如果想點第二次就取消選取，可以在這裡寫邏輯
+        // if (cartStore.coupon_ID === coupon.coupons_ID) {
+        //     return; 
+        // }
         // const previousCoupon = coupon.find(c => c.coupons_ID === cartStore.coupon_ID);
         //     if (previousCoupon) {
         //         previousCoupon.status = 2; 
         //     }
-        coupon.isTearing = true;
-        // if (coupon.status !== 2) return;
-        change_coupon(coupon).then(result => {
-            if (result.success) {
-                const storecouponID= result.data.coupons_ID
-                cartStore.coupon_ID = storecouponID
-                // console.log(result.data.user_coupon_status);
-                coupon.status = 1; 
-                setTimeout(() => {
-                    coupon.status = result.data.user_coupon_status;
-                    coupon.isTearing = false;
-                }, 300);           
-            }
-        });
-
-    };
-
     onMounted(() => {
         get_coupon();
 
