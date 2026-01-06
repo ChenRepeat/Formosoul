@@ -36,7 +36,7 @@ const handleKey = (e) => {
 const isShow = ref(-1);
 const animationWelcome = ref(false)
 const isGameLocked = ref(true);
-//
+// 視窗還沒準備好
 const isMapReady = ref(false);
 // 路由
 const router = useRouter();
