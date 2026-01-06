@@ -82,7 +82,13 @@ const closeInfo = () => {
   isOpen.value = false
 }
 
-
+const loadedCount = ref(0);
+function loadSuccess(){
+  loadedCount.value++;
+  if (loadedCount.value == doubleAll.value.length) {
+    authStore.isLoading = false;
+  }
+}
 
 const onMousemove = (e) => { // mousemove 1px 呼叫一次
   // 1. 偵測滑鼠位置，slideChanged()判斷hover。
@@ -100,9 +106,7 @@ const offPress =()=>{
   isPress.value = false
 }
 
-function loadSuccess(){
-  authStore.isLoading = false;
-}
+
 
 onMounted(() => { // DOM 生成後
     // ------------------------------------swiper 屬性---------------------------------------------
@@ -194,8 +198,8 @@ onUnmounted(()=>{
       <li ref='refCard' class="professor-photo-wrapper swiper-slide upper"
       :class="{'mouse-enter':isIn[index]==true}" 
       v-for="(photo, index) in doubleAll" 
-      :data-index="index" 
-      :id="'photo'+index"           
+      :data-index="index"
+      :id="'photo'+index"
       @mouseenter="InOrOut(index, true)" 
       @mouseleave="InOrOut(index, false)">
       <img :src='photo' class="professor-photo "
@@ -241,8 +245,6 @@ onUnmounted(()=>{
 </div>
 
 </div>
-
-
     <section :class="{'professor-info':true,'bg-frostedGlass':true, 'active':isOpen==true }">
       <div class="professor-big-photo-frame">
         <img :src="clickedPhoto" class="professor-big-photo" 
