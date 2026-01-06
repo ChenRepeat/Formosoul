@@ -3,13 +3,26 @@
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
   require_once 'conn.php';
-  require 'saveGameData.php';
+  // require 'saveGameData.php';
+  // echo $input;
+
   $member = json_decode(file_get_contents("php://input"), true);
   session_start();
 
   require_once 'vendor/autoload.php';
 
+  $resData=[];// 儲存回傳到前端的DATA
+
   $googleToken = $member['google_token'];
+  if (!$googleToken) {
+    header('Content-Type: application/json');
+    $resData["success"] = false;
+    $resData["message"] = "Google Token missing";
+    
+    echo json_encode($resData);
+    exit; // 停止執行
+}
+
   $clientId = getenv('VITE_GOOGLE_CLIENT_ID');
 
 
@@ -17,26 +30,26 @@
   $client = new Google_Client(['client_id' => $clientId]);
   $payload = $client->verifyIdToken($googleToken); // 成功傳值 失敗傳false
 
-if($payload){
-  // echo $payload['email'].'成功讀取';
-  $sqlExamine = "SELECT 
-            m.email, 
-            m.name, 
-            m.createdate, 
-            m.updatetime, 
-            m.member_ID,
-            m.wandcore_ID,
-            p.pointscard_ID
-            from member m
-            left join pointscard p on p.member_ID = m.member_ID
-            where email = :email";
-  $statement = $pdo->prepare($sqlExamine);
-  $statement->bindValue(':email', $payload['email']);
-  $statement->execute();
-  $user = $statement->fetch();
+  if($payload){
+    // echo $payload['email'].'成功讀取';
+    $sqlExamine = "SELECT 
+              m.email, 
+              m.name, 
+              m.createdate, 
+              m.updatetime, 
+              m.member_ID,
+              m.wandcore_ID,
+              p.pointscard_ID
+              from member m
+              left join pointscard p on p.member_ID = m.member_ID
+              where email = :email";
+    $statement = $pdo->prepare($sqlExamine);
+    $statement->bindValue(':email', $payload['email']);
+    $statement->execute();
+    $user = $statement->fetch();
 
 
-    $resData=[];// 儲存回傳到前端的DATA
+    
     
     if(!$user){ // 新會員 註冊
       // google登入讀不到使用者密碼 所以沒有存密碼 
@@ -65,7 +78,7 @@ if($payload){
         VALUES (@CARD_ID,0,0,0);
         COMMIT; 
         ";
-        $stmt= $pdo->prepare($sql);
+      $stmt= $pdo->prepare($sql);
       $stmt->bindValue(':email', $payload['email']);
       $stmt->bindValue(':name', $payload['name']);
       $stmt->execute();
@@ -96,8 +109,8 @@ if($payload){
     $resData['token']= $googleToken;
     $resData['success']= true;
     $resData['user']=[
-      'name'=>$user['name'], // 
-      'member_ID'=> $user['member_ID'], //
+      'name'=>$user['name'], 
+      'member_ID'=> $user['member_ID'], 
       'pointscard_ID' => $user['pointscard_ID'],
       'wandcore_ID' => $user['wandcore_ID'],
       'isFirstLogin' => $isFirstLogin,
