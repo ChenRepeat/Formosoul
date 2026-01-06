@@ -3,9 +3,30 @@ import BasicButton from '../BasicButton.vue';
 import { ref } from 'vue';
 import CoreGame from './CoreGame.vue';
 const currentView = ref('history')
-
+const passedGames = ref({wand: false});
+const storedUser = localStorage.getItem('user');
+const userData = JSON.parse(storedUser);
+const saved = localStorage.getItem('game_progress');
+        // if (saved) {
+        //     const progress = JSON.parse(saved);
+        //     passedGames.value.wand = !!progress.wand;
+        // }
 function showGame(){
-currentView.value = 'game';
+    // currentView.value = 'game';
+    if(storedUser && saved){
+        console.log(userData.wandcore_ID);
+        const progress = JSON.parse(saved);
+        passedGames.value.wand = !!progress.wand;
+        currentView.value = 'game';
+
+    }else if(!storedUser && saved){
+        const progress = JSON.parse(saved);
+        passedGames.value.wand = !!progress.wand;
+        currentView.value = 'game';
+    }else{
+        currentView.value = 'game';
+    }
+
 }
 
 </script>
@@ -26,7 +47,7 @@ currentView.value = 'game';
         </div>
         <BasicButton class="btn-yellow-fill" @click="showGame">{{ $t('coreselection.btngame')}}</BasicButton>
     </main>
-    <CoreGame v-if="currentView === 'game'" class=""/>
+    <CoreGame v-if="currentView === 'game'" :wand-passed="passedGames.wand"/>
 
 </template>
 
