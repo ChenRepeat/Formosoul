@@ -74,17 +74,17 @@
   }
 
   // ★★★ 新增 Helper: 根據 discount 數值回傳分類名稱 (用於篩選比對) ★★★
-  const getDiscountCategory = (val) => {
-    const discount = Number(val);
-    if (discount === 0) {
-      return '免運';
-    } else if (discount > 0 && discount < 100) {
-      return '折扣百分比';
-    } else if (discount >= 100) {
-      return '定額折抵';
-    }
-    return '其他';
-  }
+  // const getDiscountCategory = (val) => {
+  //   const discount = Number(val);
+  //   if (discount === 0) {
+  //     return '免運';
+  //   } else if (discount > 0 && discount < 100) {
+  //     return '折扣百分比';
+  //   } else if (discount >= 100) {
+  //     return '定額折抵';
+  //   }
+  //   return '其他';
+  // }
 
   // Handler: 狀態下拉選單
   const handleStatusCommand = (command) => {
@@ -139,7 +139,7 @@
           </template>
         </el-dropdown>
 
-        <el-dropdown trigger="click" @command="handleTypeCommand">
+        <!-- <el-dropdown trigger="click" @command="handleTypeCommand">
           <div class="capsule-btn">
             <span class="label">類型: {{ filterType }}</span>
             <el-icon class="el-icon--right"><ArrowDown /></el-icon>
@@ -152,7 +152,7 @@
               <el-dropdown-item command="免運">免運</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
 
       </div>
     </template>
@@ -169,10 +169,10 @@
       
       <el-table-column label="名稱" prop="name" min-width="200px"></el-table-column>
       
-   <el-table-column label="折扣內容" prop="discount" width="160px">
+   <el-table-column label="折扣" prop="discount" width="160px">
         <template #default="scope">
-          
-          <span v-if="Number(scope.row.discount) === 0">
+          <span>{{ scope.row.discount }}</span>          
+          <!-- <span v-if="Number(scope.row.discount) === 0">
             免運
           </span>
 
@@ -182,7 +182,7 @@
 
           <span v-else-if="Number(scope.row.discount) >= 100">
             定額折抵 NT${{ scope.row.discount }}
-          </span>
+          </span> -->
 
         </template>
       </el-table-column>

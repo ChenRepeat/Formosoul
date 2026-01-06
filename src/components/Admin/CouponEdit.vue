@@ -36,8 +36,15 @@
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="折扣類型" required>
-                  <div class="input-group">
+                <el-form-item label="折扣" required>
+                    <el-input-number 
+                      v-model="editCouponForm.discount" 
+                      :min="0" 
+                      :controls="false"
+                      style="width: 100%;"
+                      placeholder="請輸入折扣金額"
+                    />
+                  <!-- <div class="input-group">
                     <el-select v-model="editCouponForm.discountType" style="width: 140px; margin-right: 10px;">
                       <el-option label="定額折抵" value="amount" />
                       <el-option label="百分比折扣" value="percent" />
@@ -52,7 +59,7 @@
                       :disabled="editCouponForm.discountType === 'shipping'"
                       :placeholder="getPlaceholder"
                     />
-                  </div>
+                  </div> -->
                 </el-form-item>
               </el-col>
 
