@@ -84,11 +84,32 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    // 額外處理關閉彈窗的紀錄
+    function wandcore_member_popup(member_ID, currentCoreID){
+        const new_storedUser = {
+            ...userData,
+            wandcore_ID: currentCoreID
+        };
+        localStorage.setItem('user', JSON.stringify(new_storedUser));
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/save_wandcore.php`;
+        return fetch(API_URL, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({
+                    member_ID,
+                    wandcore_ID: currentCoreID
+                })
+            }
+            ).then( res => res.json())
+    };
 
-
-
-
-    
+    const storedUser = localStorage.getItem('user');
+    const userData = JSON.parse(storedUser);
+    const storeCore = sessionStorage.getItem('guest');
+    const coreData = JSON.parse(storeCore);
     // 彈窗的方式
     const openLoginModal = () => {
         isLoginModalOpen.value = true;
@@ -99,7 +120,14 @@ export const useAuthStore = defineStore('auth', () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
         memberStore.memberData.isEditing = false;
-
+        if(memberView.value == 'coreselection' && storedUser && userData.member_ID){
+            if(userData.wandcore_ID == null){
+                wandcore_member_popup(userData.member_ID, coreData.core);
+                sessionStorage.removeItem('guest');
+            }
+        }else{
+            console.log('沒存到');
+        }
         if(memberView.value != 'coreselection'){
             setTimeout(() => {
                 memberView.value = 'coreselection';
@@ -164,5 +192,6 @@ export const useAuthStore = defineStore('auth', () => {
         informationView,
         setinformationView,
         loginWithLine,
+        wandcore_member_popup,
     }
 });
