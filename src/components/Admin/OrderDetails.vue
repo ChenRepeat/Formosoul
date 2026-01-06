@@ -17,7 +17,6 @@ const loading = ref(true)
 const OrderData = ref({
   orderId: '',
   memberName: '',
-  recipientNameZh: '',
   recipientNameEn: '',
   phone: '',
   addressZh: '',

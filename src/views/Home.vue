@@ -89,7 +89,6 @@ function getHoleScreenPos() {
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
   
-  // ★ 請依照 CSS left/top 設定微調這裡
   const offsetX = (0.72 - 0.5) * logoWidth; 
   const offsetY = (0.7 - 0.5) * logoHeight;
   
@@ -168,7 +167,10 @@ const onLetterClose = () => {
     envelopeContainerRef.value.classList.remove('home-fade-out');
     envelopeContainerRef.value.classList.remove('home-open');
   }
+  
+  // ★ 修改：關閉信件時，記錄狀態到 localStorage
   isDockedState.value = true;
+  localStorage.setItem('hasVisitedHome', 'true');
 };
 
 function onDragStart(event) {
@@ -295,6 +297,8 @@ function onDragEnd() {
         // --- 3. 延遲3秒換圖 ---
         setTimeout(() => {
             isDockedState.value = true;
+            // ★ 修改：這裡也補一個 localStorage 設定，確保萬一使用者沒點X直接F5
+            localStorage.setItem('hasVisitedHome', 'true');
         }, 3000);
 
         isDragging = false;
@@ -353,6 +357,11 @@ function onDocumentClick(event) {
           return; 
       }
 
+      if (obj.userData.target === '_blank') {
+          window.open(obj.userData.url, '_blank');
+          return;
+      }
+
       document.body.style.cursor = 'wait';
       setTimeout(() => {
         document.body.style.cursor = 'default';
@@ -365,9 +374,9 @@ function onDocumentClick(event) {
 
 function onMouseMoveHover(event) {
   if (!containerRef.value || !containerRef.value.contains(event.target)) {
-     document.body.classList.remove('home-hover-link');
-     document.body.style.cursor = 'default';
-     return;
+      document.body.classList.remove('home-hover-link');
+      document.body.style.cursor = 'default';
+      return;
   }
 
   if (isDragging || showLetter.value) return;
@@ -534,20 +543,25 @@ onMounted(() => {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  if (authStore.token || authStore.isLoggedIn) { 
-     isDockedState.value = true;
-  }
+  // ★ 修改：檢查 localStorage 是否有 'hasVisitedHome'，或者已經登入
+  // 如果是，就直接設為 docked 狀態 (隱藏金探子/洞口，顯示 After Logo)
+  // if (authStore.token || localStorage.getItem('hasVisitedHome') === 'true') { 
+  //     isDockedState.value = true;
+  // }
 
   // ★ 監聽 Token 狀態 (包含登入 & 登出)
   watch(() => authStore.token, (newVal) => {
     if (newVal) {
-      isDockedState.value = true;
+        // 登入時維持不變 (因為可能已經是 docked 狀態)
     } else {
       // 登出：恢復初始狀態
       isDockedState.value = false;
       showLetter.value = false;
       
-      // ★ 強制移除 CSS class，讓洞口恢復光暈
+      // ★ 新增：登出時清除 localStorage，讓使用者下次進來能再看一次動畫
+      localStorage.removeItem('hasVisitedHome');
+      
+      // 強制移除 CSS class，讓洞口恢復光暈
       if (socketVisualRef.value) {
          socketVisualRef.value.classList.remove('home-docked');
          socketVisualRef.value.classList.remove('home-active');
@@ -680,7 +694,7 @@ function initSnitches(loader) {
     const ctx = cvs.getContext('2d');
     cvs.width = 512;
     cvs.height = 128;
-    ctx.font = 'bold 48px Georgia, serif';
+    ctx.font = '32px Roboto, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.shadowColor = 'rgba(0,0,0,0.8)';
@@ -736,7 +750,13 @@ function initSnitches(loader) {
         const hitGeo = new THREE.SphereGeometry(0.35, 16, 16);
         const hitMat = new THREE.MeshBasicMaterial({ visible: false }); 
         const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-        hitMesh.userData = { url: linkData.url, isLink: true, action: linkData.action };
+        
+        hitMesh.userData = { 
+            url: linkData.url, 
+            isLink: true, 
+            action: linkData.action, 
+            target: linkData.target 
+        };
         group.add(hitMesh);
 
         if (linkData.name) {
@@ -792,8 +812,15 @@ function initSnitches(loader) {
     { name: 'About', img: `Home/home-about-badge.png`, url: '/about' },
     { name: 'Survival Guide', img: `Home/home-survival-compass.png`, url: '/survivalguide' },
     { name: 'Policy', img: `Home/home-policy-scroll.png`, url: '/policy' },
-    { name: 'Admin', img: `Home/home-admin-tools.png`, url: '/admin' },
-    { name: 'TheCoreSelection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
+    
+    { 
+      name: '', 
+      img: `Home/home-admin-tools.png`, 
+      url: import.meta.env.BASE_URL + 'admin', 
+      target: '_blank' 
+    },
+    
+    { name: 'The Core Selection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;
@@ -814,10 +841,10 @@ function initSnitches(loader) {
 
     const yAmp = isHero ? 0.3 : 0.8 + Math.random() * 1.2;
     const yFreq = 1 + Math.random() * 1.5;
-    // ★ 修改這裡：
+    
     const speed = isHero 
-        ? 0.8                            // 金探子 (Hero) 速度：改成 0.8 或更高 (越快)
-        : 0.2 + Math.random() * 0.1;   // 其他按鈕速度
+        ? 0.8                            
+        : 0.2 + Math.random() * 0.1;   
 
     snitches.push({
       group: snitch.group,

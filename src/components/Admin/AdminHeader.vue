@@ -8,9 +8,9 @@
 
     <div class="header-right">
       <el-tooltip content="去前台" placement="bottom">
-        <a href="/tjd103/" target="_blank">
+        <router-link to="/">
           <el-icon class="action-icon" size="20"><HomeFilled /></el-icon>
-        </a>
+        </router-link>
       </el-tooltip>
 
       <el-badge :value="3" class="action-item">
