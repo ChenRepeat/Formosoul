@@ -2,8 +2,11 @@
 import { useEventData } from "@/stores/event";
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRouter } from "vue-router";
+import { useLangStore } from '@/stores/lang';
+
 const baseUrl = import.meta.env.BASE_URL;
 
+const langStore = useLangStore();
 const eventData = useEventData();
 const router = useRouter();
 const items = computed(() => eventData.eventDatas || [])
@@ -126,7 +129,9 @@ function stopAutoSlide() {
   }
 }
 
-
+const isEnglish = computed(() => {
+  return langStore.locale === 'en-US'; 
+});
 onMounted(() => {
   eventData.loadeventData();
   updateIsMobile();
@@ -189,12 +194,14 @@ onBeforeUnmount(() => {
                   >
                     <div class="slide-text">
                       <p
+                        v-if="isEnglish"
                         class="slide-title-line"
                         v-for="(line, i) in item.title_en_s"
                         :key="i"
                       >
                         {{ line }}
                       </p>
+                      <p v-else class="slide-title-line">{{ item.title_zh }}</p>
                       <p class="slide-date">{{ item.launchDate }}</p>
                     </div>
                   </div>
