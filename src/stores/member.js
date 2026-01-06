@@ -226,7 +226,7 @@ export const useMemberStore = defineStore('member', () => {
             });
             const result = await response.json();
             if(result.success){
-                // console.log(`[${gameType}] 存檔成功:`, result.message);
+                console.log(`[${gameType}] 存檔成功:`, result.message);
 
                 if(gameData.value[gameDataKey]){
                     const currentData = gameData.value[gameDataKey];

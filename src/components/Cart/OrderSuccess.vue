@@ -7,14 +7,14 @@ import { RouterLink } from 'vue-router';
     <section class="success-dock">
 
         <div class="success-icondock">
-            <font-awesome-icon class="success-icon" icon="fa-solid fa-check-double" />
+            <FontAwesomeIcon class="success-icon" icon="fa-solid fa-check-double" />
         </div>
 
         <h3>{{$t('shoppingcart.ordersuccess')}}</h3>
 
         <p class="success-text">
             {{$t('shoppingcart.orderText1')}}
-            <router-link to="/member/orderslist/orderscontain" class="success-orderlist">{{$t('shoppingcart.orderText2')}}</router-link>
+            <RouterLink to="/member/orderslist" class="success-orderlist">{{$t('shoppingcart.orderText2')}}</RouterLink>
         </p>
 
     </section>

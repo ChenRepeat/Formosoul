@@ -272,18 +272,21 @@ const router = createRouter({
                 {
           path: "product-add",
           name: "ProductAdd",
-          component: () => import ('@/components/Admin/ProductAdd.vue')
+          component: () => import ('@/components/Admin/ProductAdd.vue'),
+          meta: { activeMenu: '/admin/product-management' }
         },
                         {
           path: "product-edit/:id",
           name: "ProductEdit",
-          component: () => import ('@/components/Admin/ProductEdit.vue')
+          component: () => import ('@/components/Admin/ProductEdit.vue'),
+          meta: { activeMenu: '/admin/product-management' }
         },
                 {
           path: "order-details/:id",
           name: "OrderDetails",
           component: () => import ('@/components/Admin/OrderDetails.vue'),
-          props: true
+          props: true,
+          meta: { activeMenu: '/admin/order-management' }
         },
                         {
           path: "member-add",
@@ -295,11 +298,13 @@ const router = createRouter({
           path: "coupon-add",
           name: "CouponAdd",
           component: () => import ('@/components/Admin/CouponAdd.vue'),
+          meta: { activeMenu: '/admin/coupon-management' }
         },
                                 {
           path: "coupon-edit/:id",
           name: "CouponEdit",
-          component: () => import ('@/components/Admin/CouponEdit.vue')
+          component: () => import ('@/components/Admin/CouponEdit.vue'),
+          meta: { activeMenu: '/admin/coupon-management' }
         },
       ],
     },
