@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // ================ 試試看用 props 寫法 ================
 const props = defineProps({
+  i18nText: {type: Boolean, default: false},
   text: { type: String, default:'' },
   description: { type: String, default: '' },
   width: { type: String, default: '280px'},
@@ -22,13 +23,22 @@ const emit = defineEmits(['click'])
 <div class="survival-text-frame" :style="{ width: props.width, maxWidth: '100%', height: props.height }">
 
   <template v-if="props.description">
-    <h4 class="text-content title-style" :style="{textAlign: props.align}">
+    <h4 v-if="props.i18nText" class="text-content title-style" :style="{textAlign: props.align}">
+       {{ $t(props.text) }} 
+    </h4>
+    <h4 v-else class="text-content title-style" :style="{textAlign: props.align}">
        {{ props.text }}
     </h4>
     <p class="desc-content" :style="{textAlign: props.align}">
       {{ props.description }}
       <slot name="descriptionExtra"></slot>
     </p>
+  </template>
+
+  <template v-else-if ="props.i18nText">
+    <h4 class="text-content title-style i18nText" :style="{textAlign: props.align}">
+       {{ $t(props.text) }} 
+    </h4>
   </template>
 
   <template v-else>
@@ -120,6 +130,10 @@ function handleClick() {
   &:hover {
     transform: scale(1.05); 
   }
+}
+
+.survival-text-frame .text-content.i18nText {
+  margin-bottom: 0;
 }
 
 </style>

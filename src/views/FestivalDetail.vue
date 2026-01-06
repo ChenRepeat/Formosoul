@@ -4,8 +4,10 @@
   import { useRoute, useRouter } from "vue-router";
   import { useEventData } from "@/stores/event";
   import { storeToRefs } from "pinia";
-  const baseUrl = import.meta.env.BASE_URL;
+  import { useLangStore } from '@/stores/lang';
 
+  const baseUrl = import.meta.env.BASE_URL;
+  const langStore = useLangStore();
   const eventData = useEventData();
   const { eventDatas } = storeToRefs(eventData);
 
@@ -35,6 +37,9 @@
   if (!text) return "";
   return text.replace(/\n/g, '<br />');
 });
+const isEnglish = computed(() => {
+  return langStore.locale === 'en-US'; 
+});
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -56,26 +61,25 @@
 
       <!-- 文字內容 -->
       <article class="detail-content">
-        <p class="breadcrumb">
-          Annual Event · {{ currentFestival.title_en }}
-        </p>
+        <p class="breadcrumb" v-if="isEnglish">Annual Event · {{ currentFestival.title_en }}</p>
+        <p class="breadcrumb" v-else>Annual Event · {{ currentFestival.title_zh }}</p>
 
-        <h1 class="detail-title">
-          {{ currentFestival.title_en }}
-        </h1>
+        <h1 class="detail-title" v-if="isEnglish">{{ currentFestival.title_en }}</h1>
+        <h1 class="detail-title" v-else>{{ currentFestival.title_zh }}</h1>
 
         <p class="detail-date">
           {{ currentFestival.launchDate }}
         </p>
 
         <div class="detail-body">
-          <p>{{ currentFestival.introL_en }}</p>
+          <p v-if="isEnglish">{{ currentFestival.introL_en }}</p>
+          <p v-else>{{ currentFestival.introL_zh }}</p>
         </div>
 
         <!-- 底部按鈕 -->
         <div class="detail-actions">
           <button class="btn-back" @click="goBack">
-            ← Back to previous page
+            ← {{ $t('nav.backPrepage') }}
           </button>
         </div>
       </article>
