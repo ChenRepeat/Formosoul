@@ -371,13 +371,13 @@ async function goOrder(){
                         <p>{{$t('shoppingcart.price')}}：</p>
                         <p>NT$ {{cartstore.totalPrice}}</p>
                     </div>
-                    <div class="check-discount dp-flex">
-                        <p>{{$t('shoppingcart.discount')}}：</p>
-                        <p>－ NT$ {{cartstore.discount}}</p>
-                    </div>
                     <div class="check-shippingfee dp-flex">
                         <p>{{$t('shoppingcart.shippingFee')}}：</p>
                         <p>NT$ {{cartstore.shippingFee}}</p>
+                    </div>
+                    <div class="check-discount dp-flex">
+                        <p>{{$t('shoppingcart.discount')}}：</p>
+                        <p>－ NT$ {{cartstore.discount}}</p>
                     </div>
                     <hr>
                     <div class="check-total-payment dp-flex">
