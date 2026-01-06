@@ -843,8 +843,8 @@ function initSnitches(loader) {
     const yFreq = 1 + Math.random() * 1.5;
     
     const speed = isHero 
-        ? 0.8                            
-        : 0.2 + Math.random() * 0.1;   
+        ? 0.9                            
+        : 0.1 + Math.random() * 0.1;   
 
     snitches.push({
       group: snitch.group,
