@@ -788,11 +788,17 @@ const totalPages = computed(function() {
 
 //顯示目前所在頁面
 const currentPage = ref(1);
-
+const listCategory = ref(null);
 function changePage(page){     //記得傳參數
   //currentPage.value = page.value;
   currentPage.value = page;    // 記得要用 .value 才能重新更新常數的值，但是 page 是從 templete 來，為純數字，並不是 ref，所以不用再 .value 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 參考看要不要這種，不要再刪掉 搭配 791、889 行使用
+  listCategory.value?.scrollIntoView({ 
+    behavior: 'smooth',
+    block: 'start'
+  });
 }
 
 
@@ -880,7 +886,7 @@ function pageMinus(){
     </section> 
 
     <section>
-        <ul class="list-category dp-flex">
+        <ul class="list-category dp-flex" ref="listCategory">
             <li class="list-category-group" @click="productStore.typeBy='All'">
                 <div class="list-dock">
                     <div class="list-liquidGlass">

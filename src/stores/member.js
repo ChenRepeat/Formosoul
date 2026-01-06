@@ -131,7 +131,7 @@ export const useMemberStore = defineStore('member', () => {
                     pass: dbData.shrimpgame_pass,
                     score: dbData.shrimpgame_score,
                 };
-                console.log(dbData);
+                // console.log(dbData);
                 
             }else{
                 console.error(result.message);
@@ -156,7 +156,7 @@ export const useMemberStore = defineStore('member', () => {
 
             if(response.data.success){
                 pointsStatus.value[columnName] = 1;
-                console.log(`[${columnName}]蓋章成功`)
+                // console.log(`[${columnName}]蓋章成功`)
 
                 await fetchPointsStatus();
             } else {
@@ -226,7 +226,7 @@ export const useMemberStore = defineStore('member', () => {
             });
             const result = await response.json();
             if(result.success){
-                console.log(`[${gameType}] 存檔成功:`, result.message);
+                // console.log(`[${gameType}] 存檔成功:`, result.message);
 
                 if(gameData.value[gameDataKey]){
                     const currentData = gameData.value[gameDataKey];
@@ -282,7 +282,7 @@ export const useMemberStore = defineStore('member', () => {
                 ring: result.data.ring || 0,
                 member_wandcore: Number(result.data.member_wandcore) || 0
             };
-            console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
+            // console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
         } else {
             console.error('[Store] 載入集點卡失敗:', result.message);
         }
