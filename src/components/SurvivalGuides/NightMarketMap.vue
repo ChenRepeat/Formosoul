@@ -11,6 +11,9 @@ import BasicButton from "../BasicButton.vue";
 import MapTWNightMarket from "./MapTWNightMarket.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from "@/stores/autoStore";
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 
 // 載入 loading 介面
 const authStore = useAuthStore()
@@ -235,7 +238,7 @@ function closeWelcomeFrame (){
                             <font-awesome-icon @click="close" icon="fa-solid fa-xmark"  style="font-size:32px;"/>
                         </template> 
                         <template v-else>
-                            EXIT GAME
+                            {{ t('nightmarket.others.exit') }}
                         </template>
                     </button>
 
@@ -876,7 +879,7 @@ function closeWelcomeFrame (){
     background-color: $color-fsGold300;
     color: $color-fsTitle;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     border: 2px solid white;
     border-radius: 30px;
     cursor: pointer;
