@@ -5,7 +5,7 @@
 
 ---
 
-## 🛠️ 技術堆疊 (Tech Stack)
+## 技術堆疊 (Tech Stack)
 
 本專案採用 Vue.js 生態系進行開發，並整合多種高階互動函式庫。
 
@@ -23,7 +23,7 @@
 
 ---
 
-## 🎨 視覺設計規範 (Visual Design Guidelines)
+## 視覺設計規範 (Visual Design Guidelines)
 
 本專案視覺系統以「魔法學院」為核心，結合台灣在地色彩元素。
 
@@ -97,7 +97,7 @@
 
 ---
 
-## 📏 開發規範 (Coding Conventions)
+## 開發規範 (Coding Conventions)
 
 為了維護程式碼的一致性與可讀性，請團隊成員嚴格遵守以下命名與開發原則。
 
