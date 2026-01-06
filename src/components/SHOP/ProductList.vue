@@ -794,7 +794,7 @@ function changePage(page){     //記得傳參數
   currentPage.value = page;    // 記得要用 .value 才能重新更新常數的值，但是 page 是從 templete 來，為純數字，並不是 ref，所以不用再 .value 
   // window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // 參考看要不要這種，不要再刪掉
+  // 參考看要不要這種，不要再刪掉 搭配 791、889 行使用
   listCategory.value?.scrollIntoView({ 
     behavior: 'smooth',
     block: 'start'
