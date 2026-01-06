@@ -20,9 +20,10 @@ function goToEnroll(){
         }else{
             wandcore_store_member(userData.member_ID, corenumber.value);
             authStore.closeLoginModal();
+            sessionStorage.removeItem('guest');
         }
     }else{
-            wandcore_store_guest();
+        wandcore_store_guest();
         authStore.setmemberView('login');
         authStore.setloginView('enrollment');  
         // if(!coreData.core){
