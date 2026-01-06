@@ -105,7 +105,7 @@ async function handleCoreSelected() {
     }
                     
     function showCore(){
-        currentView.value = 'core';
+            currentView.value = 'core';
     }
 
     //接收子組件傳來的事件 - 重新開始遊戲 要做的事情

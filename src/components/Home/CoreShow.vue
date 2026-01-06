@@ -6,10 +6,10 @@ import { useI18n } from 'vue-i18n';     //語系控制
 
 // 頁面串聯 - 前往註冊頁面  -------------------------------------------------------
 const authStore = useAuthStore();
-    const storedUser = localStorage.getItem('user');
-    const userData = JSON.parse(storedUser);
-    const storeCore = sessionStorage.getItem('guest');
-    const coreData = JSON.parse(storeCore);
+const storedUser = localStorage.getItem('user');
+const userData = JSON.parse(storedUser);
+const storeCore = sessionStorage.getItem('guest');
+const coreData = JSON.parse(storeCore);
     // const User_store_core = localStorage.getItem('core');
     // const coreData = JSON.parse(User_store_core); 
 // const { member_ID, pointscard_ID } = userData;
@@ -22,7 +22,7 @@ function goToEnroll(){
             authStore.closeLoginModal();
         }
     }else{
-
+            wandcore_store_guest();
         authStore.setmemberView('login');
         authStore.setloginView('enrollment');  
         // if(!coreData.core){
@@ -513,14 +513,35 @@ function wandcore(){
     };
 
     function wandcore_store_guest(){
-        if(!coreData.core){
+        // console.log(coreData);
+        if(coreData == null){
+            // console.log('他是',coreData);
             const guestData = {
                 core: corenumber.value
             };
             sessionStorage.setItem('guest', JSON.stringify(guestData));
-            const storedGuest = sessionStorage.getItem('guest');
-            const userData = JSON.parse(storedGuest);
         }
+        // const storedGuest = sessionStorage.getItem('guest');
+        // const guestData = {
+        //     create: 'true',
+        //     core: null
+        // };
+        // sessionStorage.setItem('guest', JSON.stringify(guestData));
+        // if(guestData.create == 'true' && guestData.core){
+        //     console.log('有惹');
+        // }else{
+        //     console.log('已經',guestData.core);
+        //     console.log('已經',guestData.create);
+        //     const newguestData = {
+        //         ...guestData,
+        //         core: corenumber.value
+        //     };
+        //     sessionStorage.setItem('guest', JSON.stringify(newguestData));
+        // }
+        // const sessioncore = coreData.core || '';
+        //     const storedGuest = sessionStorage.getItem('guest');
+            // const userData = JSON.parse(storedGuest);
+        
     }
 // 語系切換  -------------------------------------------------------
 const { locale } = useI18n();
