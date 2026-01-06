@@ -10,8 +10,44 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 
-const isTextShow = ref(false)
+// 統一彈窗組件：
+const getPopupClass = computed (()=>{
+    if(!activeItemId.value) return '';
 
+    if(leftItems.includes(activeItemId.value)){
+        return 'popup-frame-left'
+    }
+    if(rightItems.includes(activeItemId.value)){
+        return 'popup-frame-right'
+    }
+
+    if(activeItemId.value == 'twegg') return 'popup-frame-middle';
+    if(activeItemId.value == 'twnoodle') return 'popup-frame-up';
+
+    return '';
+})
+
+// 動態取得上下左右 text frane 座標的 Computed
+const popupStyle = computed(()=>{
+    if(!activeItemData.value || !activeItemData.value.pos) return {};
+
+        const pos = activeItemData.value.pos;
+        const styleObj = {
+            top: pos.top,
+            bottom: 'auto'
+        };
+        if (pos.left) {
+                styleObj.left = pos.left;
+                styleObj.right = 'auto';
+            } else if (pos.right) {
+                styleObj.right = pos.right;
+                styleObj.left = 'auto';
+            }
+
+            return styleObj;
+})
+
+const isTextShow = ref(false)
 
 // 1 亂數店員打招呼：
 const randomTextArray = []
@@ -70,6 +106,7 @@ const rightItems = ['manhan', 'kuaikuai', 'puffs', 'twnoodle', 'twpie']
 // 處理點擊功能：
 const activeItemId = ref(null);
 
+// 宣告一個叫做itemClick的function，它會接收一個叫 id 的參數，當這個函式被呼叫時，就執行大括號{}裡面的程式
 const itemClick = (id) => {
     if (activeItemId.value === id) {
         activeItemId.value = null;
@@ -111,7 +148,6 @@ const activeItemData = computed(()=>{
     return csIntroFrame.find(item => item.id == activeItemId.value);
 })
 
-
 const csFrame = ref([
     {
     id:'welcome',
@@ -137,8 +173,6 @@ function closeWelcomeFrame (){
     isGameLocked.value = false;
     animationWelcome.value = false;
 }
-
-
 </script>
 
 <template>
@@ -192,7 +226,7 @@ function closeWelcomeFrame (){
                     {{ $t("survivalguide.startbutton") }}
                 </template>
                 </SurvivalTextFrame>
-
+<!------------------------------- 統一食品的彈窗 ------------------------------->
 <!---------------------------------------- 麥香茶-------------------------------------------->                
                 <div class="mai-tea cs-img"
                 @mouseenter="isHover = 'maitea'"
@@ -202,18 +236,6 @@ function closeWelcomeFrame (){
                         'is-open': activeItemId === 'maitea',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'maitea'" 
-                    class="popup-frame popup-frame-left"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 津津蘆筍汁 -------------------------------------------->   
                 <div class="jin-jin cs-img"
@@ -224,18 +246,6 @@ function closeWelcomeFrame (){
                      'is-open': activeItemId === 'jinjin',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group2.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'jinjin'" 
-                    class="popup-frame popup-frame-left"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 三點一刻 -------------------------------------------->   
                 <div class="three-one cs-img"
@@ -246,19 +256,7 @@ function closeWelcomeFrame (){
                      'is-open': activeItemId === 'threeone',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group3.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'threeone'" 
-                    class="popup-frame popup-frame-left"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>                
+                </div>   
 <!---------------------------------------- 台灣啤酒 -------------------------------------------->   
                 <div class="tw-beer cs-img"
                 @mouseenter="isHover = 'twbeer'"
@@ -268,19 +266,7 @@ function closeWelcomeFrame (){
                         'is-open': activeItemId === 'twbeer',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group4.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'twbeer'" 
-                    class="popup-frame popup-frame-left"
-                    :text="$t(activeItemData.text)"
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>    
+                </div>     
 <!---------------------------------------- 茶葉蛋 -------------------------------------------->   
                 <div class="tw-egg cs-img"
                 @mouseenter="isHover = 'twegg'"
@@ -290,19 +276,7 @@ function closeWelcomeFrame (){
                         'is-open': activeItemId === 'twegg',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group5.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'twegg'" 
-                    class="popup-frame popup-frame-middle"
-                    :text="$t(activeItemData.text)"
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>  
+                </div>    
 <!---------------------------------------- 滿漢大餐 -------------------------------------------->   
                 <div class="man-han cs-img"
                 @mouseenter="isHover = 'manhan'"
@@ -312,19 +286,7 @@ function closeWelcomeFrame (){
                         'is-open': activeItemId === 'manhan',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group6.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'manhan'" 
-                    class="popup-frame popup-frame-right"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>   
+                </div>  
 <!---------------------------------------- 乖乖 -------------------------------------------->   
                 <div class="kuai-kuai cs-img"
                 @mouseenter="isHover = 'kuaikuai'"
@@ -334,19 +296,7 @@ function closeWelcomeFrame (){
                         'is-open': activeItemId === 'kuaikuai',
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group7.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'kuaikuai'" 
-                    class="popup-frame popup-frame-right"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>  
+                </div>    
 <!---------------------------------------- 義美小泡芙 -------------------------------------------->   
                 <div class="puffs cs-img"
                 @mouseenter="isHover = 'puffs'"
@@ -355,19 +305,7 @@ function closeWelcomeFrame (){
                      :class="{'cs-is-active': isHover =='puffs',
                      'is-open': activeItemId === 'puffs',}">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group8.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'puffs'" 
-                    class="popup-frame popup-frame-right"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>  
+                </div> 
 <!---------------------------------------- 維力炸醬麵 -------------------------------------------->   
                 <div class="tw-noodle cs-img"
                 @mouseenter="isHover = 'twnoodle'"
@@ -377,19 +315,7 @@ function closeWelcomeFrame (){
                      'is-open': activeItemId === 'twnoodle'
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group9.png" alt="">
-                     
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'twnoodle'" 
-                    class="popup-frame popup-frame-up"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                 </SurvivalTextFrame>
-                </div>  
+                </div> 
 <!---------------------------------------- 新貴派 -------------------------------------------->   
                 <div class="tw-pie cs-img"
                 @mouseenter="isHover = 'twpie'"
@@ -399,19 +325,7 @@ function closeWelcomeFrame (){
                      'is-open': activeItemId === 'twpie'
                      }">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group10.png" alt="">
-
-                <SurvivalTextFrame 
-                    v-if="activeItemId === 'twpie'" 
-                    class="popup-frame popup-frame-right"
-                    :text="$t(activeItemData.text)" 
-                    :width="activeItemData.width" 
-                    tag="p"
-                    align="center"
-                    @click.stop="activeItemId = null"
-                 >
-                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                </SurvivalTextFrame>
-                </div>  
+                </div> 
 <!---------------------------------------- 蝦味先-------------------------------------------->   
                 <div class="tw-chips cs-img"
                 @mouseenter="isHover = 'twchips'"
@@ -421,9 +335,29 @@ function closeWelcomeFrame (){
                      'is-open': activeItemId === 'twchips'}
                      ">
                      <img src="/SurvivalGuide/ConvenienceStore/Mask group11.png" alt="">
+                </div> 
+                
                 <SurvivalTextFrame 
-                    v-if="activeItemId === 'twchips'" 
-                    class="popup-frame popup-frame-right"
+                 v-if="activeItemData"   
+                 class="popup-frame"
+                 :class="getPopupClass"
+                 :style="popupStyle"
+                 :text="$t(activeItemData.text)"
+                 :width="activeItemData.width"
+                 @click.stop="activeItemId = null"
+                 tag="p"
+                 align="center"
+                >
+                <template #textButton>
+                    <span @click="activeItemId = null" style="display: block; width: 100%;">
+                        {{ $t('nightmarket.others.close') }}
+                    </span>
+                </template>
+                </SurvivalTextFrame>
+            </div>   
+                <!-- <SurvivalTextFrame 
+                    v-if="activeItemId === 'maitea'" 
+                    class="popup-frame popup-frame-left"
                     :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
@@ -431,10 +365,7 @@ function closeWelcomeFrame (){
                     @click.stop="activeItemId = null"
                  >
                     <template #textButton>{{ $t('nightmarket.others.close') }}</template>
-                </SurvivalTextFrame>
-                </div>  
-
-            </div>
+                 </SurvivalTextFrame> -->
 <!---------------------------------------- back btn -------------------------------------------->    
             <div>
                 <RouterLink :to="{
@@ -589,7 +520,7 @@ function closeWelcomeFrame (){
 .cs-img {
     position: absolute;
     transition: all 0.3s ease-in-out;
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
     cursor: pointer;
     z-index: 1;
 
@@ -599,6 +530,7 @@ function closeWelcomeFrame (){
     filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
     z-index: 100;
     }
+
 
     &.is-open{
         z-index: 999;
@@ -671,46 +603,34 @@ function closeWelcomeFrame (){
     outline-offset: -10px;
 
     position: absolute;
-    z-index: 201;
-    
-    bottom: -200%; 
-    left: 50%;
-    transform: translateX(-50%); 
+    z-index: 10000;
     
     min-width: 250px; 
-    
     animation: popUp 0.3s ease-out;
 
+    top: 0;
+    left: 0;
+    
+    &.popup-frame-right {
+        transform: none;
+    }
     &.popup-frame-left {
-    bottom: -180%; 
-    left: 80%;
+        transform: none; // 左邊也不需要位移
     }
     &.popup-frame-middle {
-    bottom: 50%;
-    left: 100%;
-    }
-    &.popup-frame-right {
-    left: 0;
-    bottom: -180%; 
-    right: 60%;
+        transform: translate(-50%, -50%);
     }
     &.popup-frame-up{
-    bottom: 0;
-    top: 140%;
-    left: 0;
-    right: 120%;
+        transform: translateX(-50%);
     }
-
 }
 
 @keyframes popUp {
     from { 
         opacity: 0; 
-        transform: translate(-50%, 10px); 
     }
     to { 
         opacity: 1; 
-        transform: translate(-50%, 0); 
     }
 }
 
