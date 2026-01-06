@@ -70,6 +70,7 @@ if (isset($result['access_token'])) {
                 m.createdate, 
                 m.updatetime, 
                 m.member_ID,
+                m.wandcore_ID,
                 p.pointscard_ID
                 from member m
                 left join pointscard p on p.member_ID = m.member_ID 
@@ -90,6 +91,7 @@ if ($member) {
       $_SESSION['email'] = $member['email'];
       $_SESSION['role'] = $member['role'];
       $_SESSION['pointscard_ID'] = $member['pointscard_ID'];
+      $_SESSION['wandcore_ID'] = $member['wandcore_ID'];
 } else {
     // ===【情況 B：是新會員】===
     // 建立新資料時，就只存 Email 和基本資料

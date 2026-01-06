@@ -17,6 +17,7 @@
   $client = new Google_Client(['client_id' => $clientId]);
   $payload = $client->verifyIdToken($googleToken); // 成功傳值 失敗傳false
 
+<<<<<<< HEAD
   if($payload){
 
     $sqlExamine = "SELECT 
@@ -33,6 +34,25 @@
     $statement->bindValue(':email', $payload['email']);
     $statement->execute();
     $user = $statement->fetch();
+=======
+if($payload){
+  // echo $payload['email'].'成功讀取';
+  $sqlExamine = "SELECT 
+            m.email, 
+            m.name, 
+            m.createdate, 
+            m.updatetime, 
+            m.member_ID,
+            m.wandcore_ID,
+            p.pointscard_ID
+            from member m
+            left join pointscard p on p.member_ID = m.member_ID
+            where email = :email";
+  $statement = $pdo->prepare($sqlExamine);
+  $statement->bindValue(':email', $payload['email']);
+  $statement->execute();
+  $user = $statement->fetch();
+>>>>>>> 7dd5512136f2bc903b92dd6c2f852ac420137d92
 
 
     $resData=[];// 儲存回傳到前端的DATA
@@ -69,6 +89,7 @@
       $stmt->bindValue(':name', $payload['name']);
       $stmt->execute();
 
+<<<<<<< HEAD
       $sqlExamine = "SELECT 
               m.email, 
               m.name, 
@@ -79,6 +100,19 @@
               from member m
               left join pointscard p on p.member_ID = m.member_ID
               where email = :email";
+=======
+    $sqlExamine = "SELECT 
+            m.email, 
+            m.name, 
+            m.createdate, 
+            m.updatetime, 
+            m.member_ID,
+            m.wandcore_ID,
+            p.pointscard_ID
+            from member m
+            left join pointscard p on p.member_ID = m.member_ID
+            where email = :email";
+>>>>>>> 7dd5512136f2bc903b92dd6c2f852ac420137d92
 
 
       // 請威廉查查看\|/
@@ -88,7 +122,22 @@
       $statement->execute();
       $user = $statement->fetch();
 
+<<<<<<< HEAD
       // $memberId = $pdo->lastInsertId();
+=======
+  // 新會員& 舊會員 登入--------------------------------------
+  $isFirstLogin = ($user['createdate'] === $user['updatetime']);
+  $resData['token']= $googleToken;
+  $resData['success']= true;
+  $resData['user']=[
+    'name'=>$user['name'], // 
+    'member_ID'=> $user['member_ID'], //
+    'pointscard_ID' => $user['pointscard_ID'],
+    'wandcore_ID' => $user['wandcore_ID'],
+    'isFirstLogin' => $isFirstLogin,
+    'message' => $isFirstLogin ? '第一次登入' : '登入成功',
+  ];
+>>>>>>> 7dd5512136f2bc903b92dd6c2f852ac420137d92
 
     }
 

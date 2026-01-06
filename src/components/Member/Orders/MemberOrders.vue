@@ -1,6 +1,8 @@
 <template>
-    
-    <h3 v-if="!hasOrders">No Orders</h3>
+    <div class="no-orders dp-flex-col" v-if="!hasOrders">
+        <h3>No Orders</h3>
+        <router-link to="/shop"><h4>Buy Something Now ~ </h4></router-link>
+    </div>
     <template v-else-if="!hasChildRoute">
             <div class="member-orders">
                 <h3>{{$t('member.myOrders')}}</h3>
@@ -92,8 +94,29 @@ const goToPage = (pageNumber) => {
     h3{
         text-align: center;
         color: $color-fsTitle;
-        margin: 100px 0 100px 0;
+        margin: 100px 0;
 
+    }
+    .no-orders {
+        margin: 100px 0 100px 0;
+        h3{margin: 0 0;}
+        h4{text-align: center;}
+        a{  
+            transition: all 0.3s ease;
+            &:link{
+            color: $color-fsTitle;
+            }
+            &:visited {
+            color: $color-fsTitle;
+            }
+            &:hover {
+            color:  $color-fsGold300;
+            text-decoration: underline;
+            }
+            &:active {
+            color: $color-fsGold;
+            }
+        }
     }
     .orders{
         margin: 0 auto;
