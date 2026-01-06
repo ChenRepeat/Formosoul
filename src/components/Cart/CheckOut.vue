@@ -287,7 +287,7 @@ async function goOrder(){
             
             // 訂單成功畫面
             router.push({
-                name: 'OrderSucess',
+                name: 'OrderSuccess',
             });
         
         }else{
