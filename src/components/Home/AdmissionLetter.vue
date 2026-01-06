@@ -22,9 +22,9 @@ let material, particleMat;
 let resizeHandler, clickHandler, mouseMoveHandler;
 
 // --------------------------------------------------------
-// 建立信紙貼圖的函式 (包含圓角按鈕繪製 + 仙女棒)
+// 建立信紙貼圖的函式
 // --------------------------------------------------------
-function createPaperTexture() {
+function createPaperTexture(isLoggedIn) {
   const cvs = document.createElement("canvas");
   cvs.width = 1400;
   cvs.height = 1050;
@@ -139,19 +139,35 @@ function createPaperTexture() {
   sigY += 35;
   ctx.fillText("Office of Academic Affairs.", startX, sigY);
 
-  // Buttons Layout
+  // --------------------------------------------------------
+  // ★ Buttons Layout (按鈕排版邏輯修正區) ★
+  // --------------------------------------------------------
   const btnHeight = 64;
   const btnWidthReg = 240;
   const btnWidthAudit = 280;
   const btnGap = 30;
   const btnY = footerY + 20;
   const rightEdge = cvs.width - paddingX;
-  const regBtnX = rightEdge - btnWidthReg;
-  const auditBtnX = regBtnX - btnGap - btnWidthAudit;
 
-  // [按鈕點擊區域 2 & 3]
+  // 計算 Register 按鈕的位置 (這是最右邊的基準點)
+  const regBtnX = rightEdge - btnWidthReg;
+  
+  // 計算 Audit 按鈕的位置 (根據是否登入決定)
+  let auditBtnX;
+  
+  if (isLoggedIn) {
+      // ★ 情境 B：已登入 (只有一顆按鈕)
+      // 將 Audit 按鈕「靠右對齊」，移動到原本黃色按鈕所在的區域
+      // 算法：右邊界 - Audit按鈕寬度
+      auditBtnX = rightEdge - btnWidthAudit;
+  } else {
+      // ★ 情境 A：未登入 (兩顆按鈕)
+      // Audit 按鈕在 Register 按鈕的左邊
+      auditBtnX = regBtnX - btnGap - btnWidthAudit;
+  }
+
+  // [按鈕點擊區域 2] - Audit (永遠存在，但 X 座標是動態的)
   zones.audit = { x: auditBtnX, y: btnY, w: btnWidthAudit, h: btnHeight };
-  zones.register = { x: regBtnX, y: btnY, w: btnWidthReg, h: btnHeight };
 
   // --- 繪製圓角按鈕 ---
   const radius = 15; // 圓角半徑
@@ -160,73 +176,73 @@ function createPaperTexture() {
   ctx.strokeStyle = "#5a3a22";
   ctx.lineWidth = 3;
   ctx.beginPath();
+  // 這裡會使用上面計算出來的 auditBtnX
   ctx.roundRect(auditBtnX, btnY, btnWidthAudit, btnHeight, radius);
   ctx.stroke();
 
   ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
   ctx.fillStyle = "#5a3a22";
   ctx.textAlign = "center";
+  // 文字置中於按鈕
   ctx.fillText("Audit the Academy", auditBtnX + btnWidthAudit / 2, btnY + 40);
 
-  // 2. Register Button (實心圓角 - 黃色按鈕)
-  ctx.beginPath();
-  ctx.roundRect(regBtnX, btnY, btnWidthReg, btnHeight, radius);
-  
-  ctx.fillStyle = "#FFCC46"; // 填色
-  ctx.fill();
-  
-  ctx.strokeStyle = "#b4941f"; // 邊框
-  ctx.lineWidth = 3;
-  ctx.stroke();
 
-  ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
-  ctx.fillStyle = "#2c1e14"; // 文字
-  ctx.fillText("Entrance Ceremony", regBtnX + btnWidthReg / 2, btnY + 40);
+  // ★ 如果未登入，才繪製黃色按鈕與仙女棒
+  if (!isLoggedIn) {
+      
+      // 設定註冊按鈕的點擊區域
+      zones.register = { x: regBtnX, y: btnY, w: btnWidthReg, h: btnHeight };
 
-  // --------------------------------------------------------
-  // [新增] 仙女棒繪製 (最右下角黃色按鈕右邊)
-  // --------------------------------------------------------
-  ctx.save();
-  
-  // 計算位置：黃色按鈕右邊界 + 35px 偏移量，高度稍微對齊按鈕中心偏上
-  const sparklerX = regBtnX + btnWidthReg + 35; 
-  const sparklerY = btnY + 25; 
+      // 2. Register Button (實心圓角 - 黃色按鈕)
+      ctx.beginPath();
+      ctx.roundRect(regBtnX, btnY, btnWidthReg, btnHeight, radius);
+      
+      ctx.fillStyle = "#FFCC46"; // 填色
+      ctx.fill();
+      
+      ctx.strokeStyle = "#b4941f"; // 邊框
+      ctx.lineWidth = 3;
+      ctx.stroke();
 
-  ctx.translate(sparklerX, sparklerY);
-  
-  // 縮放與旋轉 (縮小為 0.5 倍，逆時針旋轉 8 度)
-  ctx.scale(0.5, 0.5); 
-  ctx.rotate(-8 * Math.PI / 180);
+      ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
+      ctx.fillStyle = "#2c1e14"; // 文字
+      ctx.fillText("Entrance Ceremony", regBtnX + btnWidthReg / 2, btnY + 40);
 
-  // 設定仙女棒樣式
-  ctx.strokeStyle = '#0a1a33'; // 深藍色
-  ctx.lineWidth = 5;
-  ctx.lineCap = 'round';
+      // 仙女棒繪製
+      ctx.save();
+      const sparklerX = regBtnX + btnWidthReg + 35; 
+      const sparklerY = btnY + 25; 
 
-  // 繪製棒身 (相對於新的原點)
-  ctx.beginPath();
-  ctx.moveTo(0, 0); 
-  ctx.lineTo(30, 173); // 棒身向下延伸
-  ctx.stroke();
+      ctx.translate(sparklerX, sparklerY);
+      ctx.scale(0.5, 0.5); 
+      ctx.rotate(-8 * Math.PI / 180);
 
-  // 繪製光芒 (相對於原點 0,0)
-  const drawLine = (x1, y1, x2, y2) => {
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-  };
+      ctx.strokeStyle = '#0a1a33';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
 
-  drawLine(0, -22, 0, -67);    // 上
-  drawLine(-16, -16, -44, -44); // 左上
-  drawLine(-22, 0, -60, 0);     // 左
-  drawLine(-18, 16, -40, 36);   // 左下
-  drawLine(16, -16, 44, -44);   // 右上
-  drawLine(22, 0, 60, 0);       // 右
-  drawLine(17, 14, 40, 34);     // 右下
+      ctx.beginPath();
+      ctx.moveTo(0, 0); 
+      ctx.lineTo(30, 173);
+      ctx.stroke();
 
-  ctx.restore();
-  // --------------------------------------------------------
+      const drawLine = (x1, y1, x2, y2) => {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      };
+
+      drawLine(0, -22, 0, -67);   
+      drawLine(-16, -16, -44, -44);
+      drawLine(-22, 0, -60, 0);    
+      drawLine(-18, 16, -40, 36);  
+      drawLine(16, -16, 44, -44);  
+      drawLine(22, 0, 60, 0);      
+      drawLine(17, 14, 40, 34);    
+
+      ctx.restore();
+  }
 
   return { texture: new THREE.CanvasTexture(cvs), zones };
 }
@@ -235,19 +251,16 @@ function createPaperTexture() {
 // OnMounted: 初始化與邏輯
 // --------------------------------------------------------
 onMounted(async () => {
-  // 1. 等待 Roboto 字型載入 (關鍵修正)
   try {
-    // 這裡的字串必須跟 ctx.font = "64px 'Roboto'" 完全一致
     await document.fonts.load('64px "Roboto"');
     console.log("Roboto font loaded successfully.");
   } catch (err) {
     console.warn("Font load failed, falling back.", err);
   }
 
-  // 2. 字型準備好後，才產生貼圖
-  const { texture: paperTex, zones: buttonZones } = createPaperTexture();
+  const isLoggedIn = !!authStore.token;
+  const { texture: paperTex, zones: buttonZones } = createPaperTexture(isLoggedIn);
 
-  // 3. 場景初始化
   const width = window.innerWidth;
   const height = window.innerHeight;
 
@@ -323,7 +336,6 @@ onMounted(async () => {
     }
   `;
 
-  // 確保使用剛產生的 paperTex
   const uniforms = {
     uTime: { value: 0 },
     uProgress: { value: 0 },
@@ -488,7 +500,6 @@ onMounted(async () => {
         return;
     }
 
-    // 如果點擊了註冊或旁聽，觸發燃燒
     if (hit) {
       triggerBurn();
       if (hit === 'register') {
@@ -561,7 +572,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* 1. 關鍵：引入 Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 .home-canvas-container {

@@ -12,9 +12,12 @@ const authStore = useAuthStore();
 
 // 1 判斷是否登入 要先搶先一步判斷這個集點卡到底有無蓋章過
 const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
-
+// 從history進入會變成false
 //把資料從 getPointsCard.php 拿出來用
     const getMemberInfo = () => {
+        const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
+        currentProgress.wand = true;
+        localStorage.setItem('game_progress', JSON.stringify(currentProgress));
         const storedUser = localStorage.getItem('user');
         const storeGuest = sessionStorage.getItem('guest')
         if(storedUser) {
@@ -108,7 +111,7 @@ function showCore(){
             </nav>
         </div>
 
-        <GameHistory v-else-if="currentView === 'history'" />
+        <GameHistory v-else-if="currentView === 'history'" :wand-passed="passedGames.wand"/>
         <CoreGame 
   v-else-if="currentView === 'game'"
   :wand-passed="passedGames.wand"

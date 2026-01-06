@@ -8,15 +8,24 @@
 </template>
 
 <script setup>
-    import Cardpage from '../Login/cardpage.vue';
+    import { useMemberStore } from '@/stores/member';
+import Cardpage from '../Login/cardpage.vue';
     import Ledgerpage from '../Login/ledgerpage.vue';
     import { useAuthStore } from '@/stores/autoStore';
+import { onMounted, onUnmounted } from 'vue';
 
     
     const authStore = useAuthStore();
 
+    const memberStore = useMemberStore();
 
-
+    onMounted(() => {
+        memberStore.loadMemberData();
+    });
+    
+    onUnmounted(() => {
+        memberStore.loadMemberData();
+    });
 
 
 </script>

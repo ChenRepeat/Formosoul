@@ -19,9 +19,19 @@ const { t, locale } = useI18n();     // 讀取語系狀態
 // coupon -------------------------------------
 const hasCoupon = ref(false);
 function couponclose(){
-    hasCoupon.value = false;
-    document.body.style.overflow = '' ;
-    document.documentElement.style.overflow = '';
+    cart_use_coupon().then( res =>{
+        if(res.success && res.data.coupons_ID == cartstore.coupon_ID){
+            cartstore.discount = res.data.discount
+            hasCoupon.value = false;
+            document.body.style.overflow = '' ;
+            document.documentElement.style.overflow = ''; 
+        }else if(!res.success && cartstore.coupon_ID == null){
+            cartstore.discount = 0
+            hasCoupon.value = false;
+            document.body.style.overflow = '' ;
+            document.documentElement.style.overflow = ''; 
+        }
+    })
 }
 function couponopen(){
     hasCoupon.value = true;
@@ -29,6 +39,42 @@ function couponopen(){
     document.body.style.overflow = 'hidden';
 }
 
+function cart_use_coupon(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/checkdiscount.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser); 
+        const { pointscard_ID } = userData;
+
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                pointscard_ID,
+                coupons_ID: cartstore.coupon_ID
+            })
+        }
+        ).then( res => res.json())
+};
+function couponuse(){
+    cart_use_coupon().then( res =>{
+        if(res.success && res.data.coupons_ID == cartstore.coupon_ID){
+            cartstore.discount = res.data.discount
+            hasCoupon.value = false;
+            document.body.style.overflow = '' ;
+            document.documentElement.style.overflow = ''; 
+        }else if(!res.success && cartstore.coupon_ID == null){
+            cartstore.discount = 0
+            hasCoupon.value = false;
+            document.body.style.overflow = '' ;
+            document.documentElement.style.overflow = ''; 
+        }
+    })
+}
 
 // 信用卡填完跳轉下一格 ---------------------------
 const cardNum = ref([]);
@@ -348,7 +394,7 @@ async function goOrder(){
                         <div class="coupon-dock">
                             <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="couponclose"/>
                             <Couponcontaion isrows></Couponcontaion>
-                            <BasicButton class="btn-yellow-fill btn-coupon-use" >
+                            <BasicButton class="btn-yellow-fill btn-coupon-use" @click="couponuse">
                                 {{$t('shoppingcart.couponuse')}}
                             </BasicButton>
                         </div>

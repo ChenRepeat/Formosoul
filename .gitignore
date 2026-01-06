@@ -43,3 +43,5 @@ public/php/vendor/autoload.php.rej
 public/php/vendor/google/apiclient
 
 /vendor/
+
+public/php/vendor/

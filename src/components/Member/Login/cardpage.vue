@@ -12,7 +12,7 @@
             </div>
         </div>        
         <div class="buttonarea" :class="{ 'hascenter': hascenter}">
-            <BasicButton class="btn-gray-fill" @click="editcard" :class="{ 'withedit': withedit}"><h6>{{$t('member.cardBTN1')}}</h6></BasicButton>
+            <BasicButton class="btn-gray-fill" @click="editcard" :class="{ 'withedit': withedit}" :disabled="!isPopupReady" ><h6>{{$t('member.cardBTN1')}}</h6></BasicButton>
             <BasicButton class="btn-yellow-fill" @click="gotoledger"><h6>{{$t('member.cardBTN2')}}</h6></BasicButton>
         </div>
         
@@ -24,6 +24,16 @@ import BasicButton from '@/components/BasicButton.vue';
 import Membercard from '../information/membercard.vue'; 
 import { useAuthStore } from '@/stores/autoStore';
 import { useMemberStore } from '@/stores/member';
+import { ref, onMounted } from "vue";
+
+const isPopupReady = ref(false);
+
+onMounted(() => {
+    setTimeout(()=> {
+        isPopupReady.value = true
+    }, 2000);
+});
+
     const props = defineProps({
         hasgap:{
             type: Boolean,
@@ -64,12 +74,13 @@ import { useMemberStore } from '@/stores/member';
     
 
     function editcard(){
+        if (!isPopupReady.value) return;
         setTimeout(() => {
             memberStore.memberData.isEditing = true;
         }, 300);
         authStore.openLoginModal();
-        // authStore.setmemberView('cardcontain');
-        authStore.setmemberView('coreselection');
+        authStore.setmemberView('cardcontain');
+        // authStore.setmemberView('coreselection');
     };
 </script>
 

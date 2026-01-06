@@ -52,7 +52,7 @@ if (isset($_GET['id'])) {
       SELECT *, 
       SUBSTRING_INDEX(image, '|', 1) AS main_image 
       FROM product 
-      ORDER BY product_ID DESC
+      ORDER BY create_at DESC
     ";
 
     $stmt = $pdo->prepare($sql);

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db_config.php';
+require 'db_config.php';
 
 // ---------------------------------------------------------
 // 設定 CORS 與 標頭
