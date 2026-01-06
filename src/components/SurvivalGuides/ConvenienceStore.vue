@@ -6,6 +6,45 @@ import  { csIntroFrame  } from "@/components/SurvivalGuides/convenienceStoreData
 import { RouterLink, useRouter } from "vue-router";
 import BasicButton from "../BasicButton.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
+
+const isTextShow = ref(false)
+
+
+// 1 亂數店員打招呼：
+const randomTextArray = []
+for( let i = 0; i < 10; i++) {
+    randomTextArray.push(`conveniencestore.shopkeeper.greetings.text${i+1}`);
+}
+
+// 3 做放變數接字串
+const randomResult = ref('')
+const randomLocationTop = ref(null)
+const randomLocationLeft = ref(null)
+// 給數字用null 
+
+const randomLocation = () => {
+    randomLocationTop.value = Math.floor(Math.random() * 20 +10)
+
+    randomLocationLeft.value = Math.floor(Math.random() * 50 + 20)
+}
+
+// 2 接下來開始做隨機：
+const randomTextWord = () => {
+    isTextShow.value = true;
+    // Math.random是0-1的亂數，如果要設定要在random()
+    randomResult.value = randomTextArray[Math.floor(Math.random()* 10)];
+
+    // 開始做 textframe的 隨機 location
+    randomLocation();
+    // < 25.1 or > 54.5
+    while (randomLocationLeft.value > 25.1 && randomLocationLeft.value < 54.5) {
+        randomLocation();
+    }
+
+};
 
 const isShow = ref(-1);
 const animationWelcome = ref(false)
@@ -44,6 +83,12 @@ const itemClick = (id) => {
         currentFace.value = faces.shock;
         showFaceOverlay.value = true;
         currentFaceClass.value = 'face-shock';
+        randomTextWord();
+        setTimeout(()=>{
+            showFaceOverlay.value = false;
+            currentFaceClass.value = '';
+            isTextShow.value = false;
+        }, 1500);
     }
     else if (leftItems.includes(id)) {
         currentFace.value = faces.left;
@@ -113,6 +158,18 @@ function closeWelcomeFrame (){
                     @click.stop="itemClick('shopkeeper')">
                 </div>
 
+                <SurvivalTextFrame class="randomText"
+                :class="{'isTextShow': isTextShow}"
+                :i18nText="true"
+                :text="randomResult" 
+                tag="h4" 
+                align="center" 
+                :showButton= "false" 
+                width="20%" height="auto"
+                style="padding: 10px;"
+                :style="{top:`${randomLocationTop}%`, left:`${randomLocationLeft}%`}"
+                />
+
                 <SurvivalTextFrame class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
@@ -149,13 +206,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'maitea'" 
                     class="popup-frame popup-frame-left"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 津津蘆筍汁 -------------------------------------------->   
@@ -171,13 +228,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'jinjin'" 
                     class="popup-frame popup-frame-left"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>
 <!---------------------------------------- 三點一刻 -------------------------------------------->   
@@ -193,13 +250,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'threeone'" 
                     class="popup-frame popup-frame-left"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>                
 <!---------------------------------------- 台灣啤酒 -------------------------------------------->   
@@ -215,13 +272,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'twbeer'" 
                     class="popup-frame popup-frame-left"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)"
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>    
 <!---------------------------------------- 茶葉蛋 -------------------------------------------->   
@@ -237,13 +294,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'twegg'" 
                     class="popup-frame popup-frame-middle"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)"
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>  
 <!---------------------------------------- 滿漢大餐 -------------------------------------------->   
@@ -259,13 +316,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'manhan'" 
                     class="popup-frame popup-frame-right"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>   
 <!---------------------------------------- 乖乖 -------------------------------------------->   
@@ -281,13 +338,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'kuaikuai'" 
                     class="popup-frame popup-frame-right"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>  
 <!---------------------------------------- 義美小泡芙 -------------------------------------------->   
@@ -302,13 +359,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'puffs'" 
                     class="popup-frame popup-frame-right"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>  
 <!---------------------------------------- 維力炸醬麵 -------------------------------------------->   
@@ -324,13 +381,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'twnoodle'" 
                     class="popup-frame popup-frame-up"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                  </SurvivalTextFrame>
                 </div>  
 <!---------------------------------------- 新貴派 -------------------------------------------->   
@@ -346,13 +403,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'twpie'" 
                     class="popup-frame popup-frame-right"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                 </SurvivalTextFrame>
                 </div>  
 <!---------------------------------------- 蝦味先-------------------------------------------->   
@@ -367,13 +424,13 @@ function closeWelcomeFrame (){
                 <SurvivalTextFrame 
                     v-if="activeItemId === 'twchips'" 
                     class="popup-frame popup-frame-right"
-                    :text="activeItemData.text" 
+                    :text="$t(activeItemData.text)" 
                     :width="activeItemData.width" 
                     tag="p"
                     align="center"
                     @click.stop="activeItemId = null"
                  >
-                    <template #textButton>CLOSE</template>
+                    <template #textButton>{{ $t('nightmarket.others.close') }}</template>
                 </SurvivalTextFrame>
                 </div>  
 
@@ -392,6 +449,18 @@ function closeWelcomeFrame (){
 
 
 <style scoped lang="scss">
+// random text area
+.randomText {
+    position: absolute;
+    z-index: 9999;
+    top: 10%;
+    left: 0;
+    opacity: 0;
+
+    &.isTextShow {
+    opacity: 1;
+    }
+}    
 // 遮罩
 .start-overlay {
     position: absolute;
