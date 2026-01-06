@@ -2,7 +2,7 @@
   <ListLayout>
     
     <template #title>
-      <h6>新增折價券</h6>
+      <h6>新增優惠券</h6>
     </template>
 
     <template #controls>
@@ -29,7 +29,7 @@
               </el-col>
 
               <el-col :span="24">
-                <el-form-item label="折價券編號">
+                <el-form-item label="優惠券編號">
                   <el-input v-model="addCouponForm.code" disabled placeholder="系統自動產生" class="bg-gray"/>
                 </el-form-item>
               </el-col>
@@ -38,7 +38,7 @@
                 <el-form-item label="折扣" required>
                     <el-input-number 
                       v-model="addCouponForm.discount" 
-                      :min="0" 
+                      :min="1" 
                       :controls="false"
                       style="width: 100%;"
                       placeholder="請輸入折扣金額"
@@ -138,7 +138,7 @@
               size="large" 
               :loading="loading"
             >
-              新增折價券
+              新增優惠券
             </el-button>
           </div>
 
@@ -230,7 +230,7 @@ const submitForm = async () => {
     const data = await response.json();
 
     if (data.success) { // 假設後端回傳格式 { success: true }
-      ElMessage.success('折價券新增成功！');
+      ElMessage.success('優惠券新增成功！');
       router.push('/admin/coupon-management');
     } else {
       ElMessage.error('新增失敗：' + (data.message || '未知錯誤'));
