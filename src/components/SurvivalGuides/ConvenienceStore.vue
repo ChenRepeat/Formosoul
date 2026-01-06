@@ -106,28 +106,40 @@ const rightItems = ['manhan', 'kuaikuai', 'puffs', 'twnoodle', 'twpie']
 // 處理點擊功能：
 const activeItemId = ref(null);
 
+// 加入：防止重複點擊
+const isShopkeeperAnimating = ref(false);
+
 // 宣告一個叫做itemClick的function，它會接收一個叫 id 的參數，當這個函式被呼叫時，就執行大括號{}裡面的程式
 const itemClick = (id) => {
+    if(id === 'shopkeeper'){
+        if (isShopkeeperAnimating.value) return;
+
+        isShopkeeperAnimating.value = true;
+        activeItemId.value = null;
+        currentFace.value = faces.shock;
+        showFaceOverlay.value = true;
+        currentFaceClass.value = 'face-shock';
+        randomTextWord();
+
+        setTimeout(()=>{
+            showFaceOverlay.value = false;
+            currentFaceClass.value = '';
+            isTextShow.value = false;
+            isShopkeeperAnimating.value = false;
+        }, 1500);
+        return
+    }
+
     if (activeItemId.value === id) {
         activeItemId.value = null;
-
         showFaceOverlay.value = false; 
         currentFaceClass.value = '';
         return;
     } 
     activeItemId.value = id;
-    if(id === 'shopkeeper'){
-        currentFace.value = faces.shock;
-        showFaceOverlay.value = true;
-        currentFaceClass.value = 'face-shock';
-        randomTextWord();
-        setTimeout(()=>{
-            showFaceOverlay.value = false;
-            currentFaceClass.value = '';
-            isTextShow.value = false;
-        }, 1500);
-    }
-    else if (leftItems.includes(id)) {
+    isTextShow.value = false;
+
+    if (leftItems.includes(id)) {
         currentFace.value = faces.left;
         showFaceOverlay.value = true;
         currentFaceClass.value = 'face-left'; 
@@ -137,10 +149,8 @@ const itemClick = (id) => {
         showFaceOverlay.value = true; 
         currentFaceClass.value = 'face-right'; 
     } 
-    else {
-        showFaceOverlay.value = false;
-    }
 }
+
 
 
 const activeItemData = computed(()=>{
@@ -189,10 +199,13 @@ function closeWelcomeFrame (){
                  :class="['face-overlay', currentFaceClass]">
 
                 <div class="shopkeeper-click-area" 
-                    @click.stop="itemClick('shopkeeper')">
+                    @click.stop="itemClick('shopkeeper')"
+                    :class="{ 'is-animating': isShopkeeperAnimating }" >
                 </div>
 
-                <SurvivalTextFrame class="randomText"
+                <SurvivalTextFrame 
+                v-if="isTextShow"
+                class="randomText"
                 :class="{'isTextShow': isTextShow}"
                 :i18nText="true"
                 :text="randomResult" 
@@ -204,7 +217,8 @@ function closeWelcomeFrame (){
                 :style="{top:`${randomLocationTop}%`, left:`${randomLocationLeft}%`}"
                 />
 
-                <SurvivalTextFrame class="welcome-text-frame"
+                <SurvivalTextFrame 
+                class="welcome-text-frame"
                 :style="{ zIndex: isShow}"  
                 :class="{ 'is-visible': animationWelcome }" 
                 :text="$t(welcomeFrame.text)"
@@ -344,14 +358,12 @@ function closeWelcomeFrame (){
                  :style="popupStyle"
                  :text="$t(activeItemData.text)"
                  :width="activeItemData.width"
-                 @click.stop="activeItemId = null"
                  tag="p"
                  align="center"
+                 @click="activeItemId = null"
                 >
                 <template #textButton>
-                    <span @click="activeItemId = null" style="display: block; width: 100%;">
                         {{ $t('nightmarket.others.close') }}
-                    </span>
                 </template>
                 </SurvivalTextFrame>
             </div>   
@@ -436,15 +448,17 @@ function closeWelcomeFrame (){
 .shopkeeper-click-area {
     position: absolute;
     z-index: 60;
-    cursor: pointer;
-    
+    cursor: pointer;  
     width: 22%;  
     height: 55%; 
     top: 24%;    
     left: 39%;
-    
-    // background-color: rgba(255, 0, 0, 0.5);
     background-color: transparent;
+
+    &.is-animating {
+        pointer-events: none; // 動畫中不能點擊
+        cursor: default;
+    }
 }
 
 
