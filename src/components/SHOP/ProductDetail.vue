@@ -388,6 +388,7 @@ const lang = computed( () => {
 
 .detail-pic{
     gap: 20px;
+    flex-grow: 1;
 }
 
 .detail-pic-small{

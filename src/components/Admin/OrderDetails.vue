@@ -17,11 +17,9 @@ const loading = ref(true)
 const OrderData = ref({
   orderId: '',
   memberName: '',
-  recipientNameZh: '',
-  recipientNameEn: '',
+  recipientName: '',
   phone: '',
-  addressZh: '',
-  addressEn: '',
+  address: '',
   paymentMethod: '',
   status: '', // 初始值保持空字串即可
   createTime: '',
@@ -75,11 +73,9 @@ const getOrderDetail = async () => {
         OrderData.value = {
           orderId: data.info.order_ID,
           memberName: data.info.name_en,
-          recipientNameZh: data.info.name_zh,
-          recipientNameEn: data.info.name_en,
+          recipientName: data.info.name_en,
           phone: data.info.phone,
-          addressZh: data.info.address_zh,
-          addressEn: data.info.address_en,
+          address: data.info.address_en,
           paymentMethod: data.info.payment,
           status: data.info.status,
           createTime: data.info.date,
@@ -109,11 +105,9 @@ const saveChanges = async () => {
     // 1. 準備要傳給後端的資料
     const payload = {
         orderId: OrderData.value.orderId,
-        recipientNameZh: OrderData.value.recipientNameZh,
-        recipientNameEn: OrderData.value.recipientNameEn,
+        recipientName: OrderData.value.recipientName,
         phone: OrderData.value.phone,
-        addressZh: OrderData.value.addressZh,
-        addressEn: OrderData.value.addressEn,
+        address: OrderData.value.address,
         isCancel: OrderData.value.isCancel,
         cancelReason: OrderData.value.remark
     };
@@ -218,33 +212,21 @@ onMounted(() => {
             
             <el-row :gutter="24">
                 <el-col :span="12">
-                  <el-form-item label="收件人姓名 (中文)">
-                    <el-input v-model="OrderData.recipientNameZh" :suffix-icon="Edit" placeholder="請輸入中文姓名" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="Recipient Name (English)">
-                    <el-input v-model="OrderData.recipientNameEn" :suffix-icon="Edit" placeholder="Enter name" />
+                  <el-form-item label="收件人">
+                    <el-input v-model="OrderData.recipientName" placeholder="Enter name" />
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label="聯絡電話">
-                    <el-input v-model="OrderData.phone" :suffix-icon="Edit" />
+                    <el-input v-model="OrderData.phone"/>
                   </el-form-item>
                 </el-col>
                 
                 <el-col :span="24">
-                  <el-form-item label="收件人地址 (中文)">
-                    <el-input v-model="OrderData.addressZh" :suffix-icon="Edit" />
-                  </el-form-item>
-                </el-col>
-                
-                <el-col :span="24">
-                  <el-form-item label="Recipient Address (English)">
+                  <el-form-item label="收件人地址">
                     <el-input 
-                      v-model="OrderData.addressEn" 
-                      :suffix-icon="Edit" 
+                      v-model="OrderData.address"  
                       type="textarea" 
                       :rows="2"
                       autosize

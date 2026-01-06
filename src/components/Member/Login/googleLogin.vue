@@ -64,7 +64,6 @@ function handleCredential(response) { // 取需要的 JWT Json Web Token
         authStore.setmemberView('membercard')
         console.log('as new member');
 
-        // memberStore.memberData.value.name = resData.user.name// ???
         
       }else{
         console.log('走舊會員區段');
