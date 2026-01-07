@@ -638,6 +638,11 @@ async function goOrder(){
 
         // 移除預設下拉箭頭
         appearance: none;
+
+        & .list-option{
+            background-color: $color-fsTitle;
+            color: $color-fsWhite;
+        }
     }
 
     .nav-list:focus {
