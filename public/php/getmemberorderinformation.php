@@ -9,7 +9,7 @@
 		    d.price,
         p.name_en
       FROM `order` o
-      LEFT JOIN order_detail d ON o.order_ID = d.order_ID
+      LEFT JOIN order_detail d ON o.order_number = d.order_no
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
   ';

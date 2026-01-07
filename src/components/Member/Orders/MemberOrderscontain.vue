@@ -140,12 +140,12 @@ import { useI18n } from 'vue-i18n';
             zh: { 0: '已出貨', 1: '未出貨', 2: '已完成', 3: "已付款", 4: "付款失敗", 5: "等待付款" }
         };
         const shippingMapByLang = {
-            en: { '宅配': 'Delivery', '超商取貨': 'Pickup' },
-            zh: { '宅配': '宅配', '超商取貨': '超商取貨' }
+            en: { 'homeDelivery': 'Delivery', '超商取貨': 'Pickup' },
+            zh: { 'homeDelivery': '宅配', '超商取貨': '超商取貨' }
         };
         const paymentMapByLang = {
-            en: { 'Credit Card': 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB', 'Apple Pay': 'Apple Pay' },
-            zh: { 'Credit Card': '信用卡（全額支付）－VISA/ MASTER/ JCB', 'Apple Pay': 'Apple Pay' }
+            en: { 'creditCard': 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB', 'applePay': 'Apple Pay' },
+            zh: { 'creditCard': '信用卡（全額支付）－VISA/ MASTER/ JCB', 'applePay': 'Apple Pay' }
         };
 
         const currentLang = lang.value;
