@@ -302,7 +302,7 @@ const lang = computed( () => {
   }
 
   // RWD--------------------------------
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1280px) {
     .product-case {
     grid-template-columns: 1fr 1fr 1fr;
   }

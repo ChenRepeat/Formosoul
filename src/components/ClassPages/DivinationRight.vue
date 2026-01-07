@@ -333,7 +333,7 @@ const ledgerClose = ()=> showCardOverlay.value = false;
 
 
   .divination-right{width: 100%;height: 100%;gap: 60px;
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1280px) {
         gap: 30px;
       }
   }
@@ -506,7 +506,7 @@ const ledgerClose = ()=> showCardOverlay.value = false;
       position: absolute;
       transform-style: preserve-3d;
       transition: transform 0.1s;
-      @media screen and (max-width: 1200px) {
+      @media screen and (max-width: 1280px) {
         width: 220px;
         height: 220px;;
       }

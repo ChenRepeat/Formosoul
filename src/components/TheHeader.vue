@@ -279,7 +279,7 @@ onUnmounted(() => {
   gap: 12px;
   align-items: center;
   justify-content: left;
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1280px){
     flex-direction: column;
   }
 }
@@ -288,7 +288,7 @@ img { object-fit: none; }
 .trigger-lang { 
   color: $color-fsWhite;
   margin: 0; 
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1280px){
     font-size: 16px;
   }
 }
@@ -309,7 +309,7 @@ img { object-fit: none; }
   border: 1px solid $color-fsTitle;
   background-color: $color-fsTitle;
   }
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1280px){
     width: 65px;
     height: 30px;
     justify-content: center;
@@ -331,7 +331,7 @@ img { object-fit: none; }
   left: 43px;
   background-color: $color-fsWhite;
   }
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1280px){
     width: 24px;
     height: 24px;
     top: 2px;
@@ -351,7 +351,7 @@ img { object-fit: none; }
   overflow: hidden;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: all;
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1280px){
     border-radius: 18px;
     padding: 6px 20px;
     align-items: center;
@@ -375,7 +375,7 @@ img { object-fit: none; }
     inset 0 2px 6px rgba(255,255,255,0.2),
     0 4px 10px rgba(0,0,0,0.2);
   backdrop-filter: blur(8px); 
-    @media screen and (max-width: 1200px){
+    @media screen and (max-width: 1280px){
     justify-content: center;
     border-radius: 18px;
     padding: 6px 20px;
@@ -395,7 +395,7 @@ img { object-fit: none; }
 .liquidGlass-shine { position: absolute; inset: 0; box-shadow: inset 2px 2px 1px rgba(255,255,255,0.4), inset -2px -2px 2px rgba(255,255,255,0.2); z-index: 2; }
 
 .liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; 
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1280px){
     padding: 4px 16px;
   }}
 
@@ -466,7 +466,7 @@ img { object-fit: none; }
   width: 24px;
   position: relative;
   overflow: hidden;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1280px) {
     transform: scale(0.75);
   }
 }
@@ -548,7 +548,7 @@ img { object-fit: none; }
   border: none; 
   border-top: 1px solid $color-fsCaption;
 }
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1280px) {
   .header-icons-list{
     gap: 8px;
   }

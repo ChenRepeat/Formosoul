@@ -198,7 +198,7 @@ hr {
 .footer-link-corner {
   gap: 120px;
   width: 60%;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1280px) {
     gap: 180px;
   }
 }
@@ -211,7 +211,7 @@ hr {
   z-index: 2;
   position: relative;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1280px) {
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -223,7 +223,7 @@ hr {
   width: 1200px;
   gap: 100px;
   justify-content: center;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1280px) {
     width: 95%;
     display: flex;
     flex-direction: column-reverse;
@@ -321,7 +321,7 @@ hr{
   width: 73%;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1280px) {
 
   .footer-inner-case{
     gap: 30px;
