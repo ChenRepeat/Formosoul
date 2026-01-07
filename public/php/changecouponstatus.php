@@ -5,8 +5,10 @@
         UPDATE user_coupons 
         SET 
             status = CASE 
-                WHEN pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID THEN 1  
-                WHEN pointscard_ID = :pointscard_ID THEN 3                  
+                WHEN status = 0 THEN status
+                WHEN pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID THEN 1
+                WHEN pointscard_ID = :pointscard_ID THEN 3
+                WHEN status IN (1, 2) THEN 3
                 ELSE status
             END,
             used_at = NOW()
