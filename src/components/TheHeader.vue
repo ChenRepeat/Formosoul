@@ -22,7 +22,8 @@ const cartstore = useCartStore();          // 購物車 data
 const isMenuOpen = ref(false);
 const isMemberMenuOpen = ref(false);
 const execLanguageChange = inject('execLanguageChange');
-
+const dragHandleRef = ref(null);
+// 拖曳
 gsap.registerPlugin(Draggable);
 
 const langStore = useLangStore();
@@ -67,32 +68,18 @@ function handleUserIconClick( e ){
  }
 };
 
-function toggleMenu() {
-  if (!isMenuOpen.value && isMemberMenuOpen.value) {
-    isMemberMenuOpen.value = false;
-      setTimeout(() => {
-        isMenuOpen.value = true;
-      },350);
-    } else {
-      isMenuOpen.value = !isMenuOpen.value;
-      isMemberMenuOpen.value = false;
-  }
-};
-function closeMenu(){
-  isMemberMenuOpen.value = false;
-  isMenuOpen.value = false;
-
-}
 function handlelogout() {
   if(!confirm(`${authStore.user.name || 'USER' }確定要登出嗎?`)){
     return;
   }else{
     authStore.logout();
     isMemberMenuOpen.value = false;
+    window.localStorage.removeItem('game_progress')
     router.push('/');
   }
 }
 function onEnter(el, done) {
+  moveHeaderToTop();
 
   gsap.set(el, { height: 0, opacity: 0, overflow: 'hidden' });
   
@@ -101,7 +88,7 @@ function onEnter(el, done) {
     opacity: 1,
     duration: 0.5,
     ease: "power2.out",
-    onComplete: done
+    onComplete: done,
   });
 
   gsap.from(el.querySelectorAll('li'), {
@@ -113,6 +100,7 @@ function onEnter(el, done) {
 }
 
 function onLeave(el, done) {
+  restoreHeaderPosition();
   gsap.to(el, {
     height: 0,
     opacity: 0,
@@ -137,8 +125,89 @@ const isNameNull = computed(() => {
   const nameobj = JSON.parse(username);
   return !nameobj.name;
 })
+const isDrag = ref(false)
+let draggableInstance = null;
+const lastYPosition = ref(0);
+const initDraggable = () => {
+  if (!headerRef.value || !dragHandleRef.value) return;
+  draggableInstance = Draggable.create(headerRef.value, {
+    type: "x,y",
+    trigger: dragHandleRef.value,
+    bounds: window,
+    inertia: true,
+    edgeResistance: 0.65,
+    zIndexBoost: false,
+    onPress: function() {
+      dragHandleRef.value.classList.add('dragging');
+    },
+    onRelease: function() {
+      dragHandleRef.value.classList.remove('dragging');
+    },
+    onDragEnd: function() {
+      lastYPosition.value = draggableInstance.y;
+      isDrag.value = false;
+    }
+  })[0];
+};
+const moveHeaderToTop = () => {
+  if (!draggableInstance) return;
+  if (!isMenuOpen.value && !isMemberMenuOpen.value) {
+    lastYPosition.value = draggableInstance.y;
+  }
+  gsap.to(headerRef.value, {
+    y: 0,
+    duration: 0.4,
+    ease: "power2.out",
+    overwrite: true,
+    onUpdate: () => {
+        if(draggableInstance) draggableInstance.update();
+    }
+  });
+};
+
+const restoreHeaderPosition = () => {
+  if (!draggableInstance) return;
+
+  gsap.to(headerRef.value, {
+    y: lastYPosition.value,
+    duration: 0.4,
+    ease: "power2.out",
+    overwrite: true,
+    delay:0.4,
+    onUpdate: () => {
+        if(draggableInstance) draggableInstance.update();
+    }
+  });
+};
+function toggleMenu() {
+  if (!isMenuOpen.value && isMemberMenuOpen.value) {
+    isMemberMenuOpen.value = false;
+    setTimeout(() => {
+      isMenuOpen.value = true;
+    }, 350);
+  } 
+  else {
+    if (!isMenuOpen.value) {
+        isMenuOpen.value = true;
+        isMemberMenuOpen.value = false;
+    } 
+    else {
+        isMenuOpen.value = false;
+        isMemberMenuOpen.value = false;
+        restoreHeaderPosition();
+    }
+  }
+};
+
+function closeMenu() {
+  if (isMenuOpen.value || isMemberMenuOpen.value) {
+  }
+  isMemberMenuOpen.value = false;
+  isMenuOpen.value = false;
+}
 
 onMounted(() => {
+  initDraggable()
   document.addEventListener('click', handleClickOutside);
 });
 
@@ -179,15 +248,20 @@ onUnmounted(() => {
           </router-link>
           <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
           <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
+          <div class="dragIcon dp-flex" 
+          ref="dragHandleRef" 
+          >
+            <div class="draggerdot"></div>
+            <div class="arrow" v-for="(index) in 4" :class="`arrow${index}`">
+              <div class="arrow-bar"></div>
+            </div>
+          </div>
           <div class="hamburger-btn transition"
               @click="toggleMenu"
               @mousedown.stop
               @touchstart.stop
               :class="{ 'active': isMenuOpen}">
             <div v-for="(index) in 6 " :class="`dot${index}`" class="dot transition"></div>
-          </div>
-          <div class="dragIcon">
-
           </div>
         </div>
       </div>
@@ -259,7 +333,7 @@ onUnmounted(() => {
   width: 100%;
   transform: translateY(16px);
   right:  0;
-  z-index: 1000;
+  z-index: 3000;
   transition: all 0.5s ease;
   pointer-events: none;
 }
@@ -352,7 +426,6 @@ img { object-fit: none; }
   position: absolute;
   flex-direction: column; 
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: all;
   @media screen and (max-width: 1366px){
     border-radius: 18px;
@@ -511,22 +584,7 @@ img { object-fit: none; }
 
 }
 
-.black{
-  .trigger-lang { color: $color-fsTitle;}
-  .header-lang-trigger {border: 1px solid $color-fsTitle;background-color: unset;}
-  .header-lang-trigger.right{
-    border: 1px solid $color-fsWhite;
-    background-color: $color-fsTitle;
-  }
-  .right .trigger-lang { color: $color-fsWhite;}
-  .header-lang-switcher{background-color: $color-fsTitle;}
-  .header-lang-switcher.right{background-color: $color-fsWhite;}
-  .header-icon { color: $color-fsTitle;}
-  .burger-list{ color: $color-fsTitle;}
-  .burger-list li a { color: $color-fsTitle;}
-  .logout > h5 { color: $color-fsTitle;}
-  .dot { background-color: $color-fsTitle;}
-}
+
 
 
 .logout{
@@ -575,6 +633,84 @@ img { object-fit: none; }
 .dragIcon{
   width: 24px;
   height: 24px;
-  background-color: red;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s all ease;
+  .draggerdot{
+    border-radius: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: $color-fsWhite;
+    transition: 0.5s all ease;
+
+  }
+  .arrow{
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    border-top: 2px solid $color-fsWhite;
+    border-left: 2px solid $color-fsWhite;
+    overflow: hidden;
+    transition: 0.5s all ease;
+
+    .arrow-bar{
+      width: 150%;
+      height: 2px;
+      transform: rotate(45deg);
+      background-color: $color-fsWhite;
+      transform-origin: 18% 20%;
+    }
+  }
+  .arrow1{top: 1%;left: 35%;transform: rotate(45deg);}
+  .arrow2{bottom: 1%;left: 35%;transform: rotate(225deg);}
+  .arrow3{top: 35%;left: 1%;transform: rotate(-45deg);}
+  .arrow4{top: 35%;right: 1%;transform: rotate(135deg);}
+  &.dragging{
+    .draggerdot{background-color: $color-fsTitle;}
+    .arrow {
+      border-top: 2px solid $color-fsTitle;
+      border-left: 2px solid $color-fsTitle;
+      .arrow-bar{background-color: $color-fsTitle;}
+    }
+    .arrow1{top: -10%;}
+    .arrow2{bottom: -10%;}
+    .arrow3{left: -10%;}
+    .arrow4{right: -10%;}
+
+  }
+}
+
+.black{
+  .trigger-lang { color: $color-fsTitle;}
+  .header-lang-trigger {border: 1px solid $color-fsTitle;background-color: unset;}
+  .header-lang-trigger.right{
+    border: 1px solid $color-fsWhite;
+    background-color: $color-fsTitle;
+  }
+  .right .trigger-lang { color: $color-fsWhite;}
+  .header-lang-switcher{background-color: $color-fsTitle;}
+  .header-lang-switcher.right{background-color: $color-fsWhite;}
+  .header-icon { color: $color-fsTitle;}
+  .burger-list{ color: $color-fsTitle;}
+  .burger-list li a { color: $color-fsTitle;}
+  .logout > h5 { color: $color-fsTitle;}
+  .dot { background-color: $color-fsTitle;}
+  .dragIcon{
+    .draggerdot{background-color: $color-fsTitle;}
+    .arrow{
+      border-top: 2px solid $color-fsTitle;
+      border-left: 2px solid $color-fsTitle;
+      .arrow-bar{background-color: $color-fsTitle;}
+    }
+    &.dragging{
+      .draggerdot{background-color: $color-fsWhite;}
+      .arrow {
+        border-top: 2px solid $color-fsWhite;
+        border-left: 2px solid $color-fsWhite;
+        .arrow-bar{background-color: $color-fsWhite;}
+      }
+    }
+  }
 }
 </style>

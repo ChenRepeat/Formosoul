@@ -253,7 +253,7 @@ const cleanupResize = () => {
 };
 
 const handleKeydown = (event) => {
-  if (event.key === 'Escape' && isIntroPlaying.value) {
+  if ((event.key === 'Escape' || event.code === 'Space') && isIntroPlaying.value) {
     console.log('Intro animation interrupted by Esc key.');
     cleanupAnimation();
     
@@ -584,11 +584,6 @@ onUnmounted(() => {
   transition: none; 
   transform-style: preserve-3d;
   border-radius: 0 16px 16px 0;
-  // box-shadow:
-  //  6px 1px 20px $color-fsWhite,
-  //  6px 1px 20px $color-fsGold300,
-  //  12px -3px 20px $color-fsWhite,
-  //  12px -3px 6px $color-fsGold300;
   opacity: 1;
 }
 
@@ -599,7 +594,6 @@ onUnmounted(() => {
   left: 0; 
   width: 100%; 
   height: 100%;
-  // background-image: url('https://www.transparenttextures.com/patterns/paper.png');
   opacity: 0.4;
   pointer-events: none;
 }
