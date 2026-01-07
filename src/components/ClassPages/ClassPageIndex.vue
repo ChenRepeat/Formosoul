@@ -123,6 +123,7 @@ const indexItems = ref([
 
   .class-index-case{
     gap: 16px;
+    width: 50%;
   }
   li{
     justify-content: start;

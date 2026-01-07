@@ -540,7 +540,8 @@ onUnmounted(() => {
 }
 
 .book {
-  // filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5)); 書本陰影
+  // filter: drop-shadow(0 0px 20px $color-fsWhite);
+  box-shadow: (0 0px 25px $color-fsWhite);
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .unload{
@@ -617,6 +618,7 @@ onUnmounted(() => {
   z-index: 100;
   width: 50%;
   height: auto;
+  filter: drop-shadow(0 0 15px $color-fsWhite);
 }
 .book-logo {
   position: absolute;

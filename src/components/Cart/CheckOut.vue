@@ -824,7 +824,7 @@ async function goOrder(){
     }
 
     // RWD------------------------------------- 
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
         .card-left, .card-right{
             padding: 20px;   
         }

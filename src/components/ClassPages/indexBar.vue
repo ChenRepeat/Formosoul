@@ -160,7 +160,7 @@ onUnmounted(() => {
   left: 0;
   z-index: 100;
   animation: shining 3s 0.5s ease infinite;
-  @media (max-width: 1280px) {
+  @media (max-width: 1366px) {
     animation: shiningD 3s 0.5s ease infinite;
   }
 }
@@ -195,7 +195,7 @@ onUnmounted(() => {
   &:not(.menu-open){
     background-color: #1d1d27;
   }
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1366px) {
     left: -7.5em;
   }
   &.menu-open{

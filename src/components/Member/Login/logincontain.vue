@@ -231,7 +231,7 @@
         }
 
     }
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
         .login-form{
             margin-top: 80px;
         }

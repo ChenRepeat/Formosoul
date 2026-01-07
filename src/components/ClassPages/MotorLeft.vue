@@ -111,7 +111,7 @@
     height: 280px;
     position: absolute;
     transition: transform 0.3s ease, z-index 0.3s, box-shadow 0.3s;
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       width: 240px;
       height: 240px;
     }
@@ -154,7 +154,7 @@
     top: 20%;left: 35%;
     z-index: 7;
     transform: rotate(-13.9deg);
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       left: 25%;
     }
   }
@@ -162,7 +162,7 @@
     top: 10%; left: 320px;
     transform: rotate(-4.1deg);
     z-index: 6;
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       left: 240px;
     }
   }

@@ -228,7 +228,7 @@ onMounted(async () => {
   min-width: 0.3em;
   transition: color 0.3s;
 }
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1366px) {
   .dpn{
     display: none;
   }
