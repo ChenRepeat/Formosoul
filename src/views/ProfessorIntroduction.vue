@@ -419,7 +419,7 @@ z-index: 80;
     }
   }
 }
-@media (max-width: 1200px){
+@media (max-width: 1280px){
 .professor-info{
   padding: 80px 30px;
   .professor-big-photo-frame{

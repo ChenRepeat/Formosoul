@@ -198,7 +198,7 @@
         }
 
     }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1280px) {
         .Logincontain{
             height: auto;
             padding: 40px;
