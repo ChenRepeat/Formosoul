@@ -115,6 +115,7 @@ async function handleCoreSelected() {
 const ledgerClose = ()=> showCardOverlay.value = false;
 
 onMounted(async () => {
+
     if (isLoggedIn.value) {
         // 只需要確保「點數狀態」抓回來就好
         await memberStore.fetchPointsStatus(); 
