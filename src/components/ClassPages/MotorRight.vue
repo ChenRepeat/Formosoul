@@ -102,7 +102,7 @@
     width: 500px;
     transform: translateX(40px);
     justify-content: space-between;
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       justify-content: start;
       gap: 20px;
     }

@@ -96,7 +96,7 @@
     height: 100%;
     gap: 20%;
     padding-top: 10%;
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       gap: 30%;
     }
   }
@@ -146,7 +146,7 @@
      >.over-lay{
     background-color: rgba(0, 0, 0, 0.6); 
   }
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       left: -20%;
     }
   }
@@ -154,7 +154,7 @@
     top: 10%;left: 20%;
     z-index: 7;
     transform: rotate(5deg);
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       left: 0%;
     }
 
@@ -166,7 +166,7 @@
     >.over-lay{
     background-color: rgba(0, 0, 0, 0.6); 
     }
-    @media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1366px) {
       left: 20%;
     }
   }

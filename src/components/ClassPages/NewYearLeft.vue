@@ -93,7 +93,7 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
       width: 320px;
       height: 320px;
       transform: rotate(15deg);
-      @media screen and (max-width: 1280px) {
+      @media screen and (max-width: 1366px) {
         width: 280px;
         height: 280px;
       }
@@ -105,7 +105,7 @@ import IconFlame from '../icons/SVG/IconFlame.vue';
       height: 360px;
       transform: rotate(-15deg);
       z-index: 2;
-      @media screen and (max-width: 1280px) {
+      @media screen and (max-width: 1366px) {
         width: 320px;
         height: 320px;
         right: -35%;
