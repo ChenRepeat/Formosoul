@@ -1,6 +1,7 @@
 <template>
   <div class="book-section">
     <IndexBar class="index-bar" />
+     
     <div v-if="isAnimating" class="blocking-overlay" 
     :class="{ 
         'unload': !isLoad 
@@ -562,8 +563,8 @@ onUnmounted(() => {
     width: 100%;
     text-align: center;
     bottom: 10%;
-    color: white;
-    opacity: 0.3;
+    color: $color-fsTitle;
+    text-shadow: 0 0 5px $color-fsWhite;
   }
 }
 
@@ -634,11 +635,7 @@ onUnmounted(() => {
   text-align: center;
 }
 
-h1, h3, h4 {
-  font-family: "Times New Roman", serif;
-  margin-bottom: 10px;
-  color: #4a3b2a;
-}
+
 
 .cover h1, .cover h3 { 
   color: #e0d5c1; 
