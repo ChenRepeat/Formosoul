@@ -64,7 +64,7 @@ const gameLine = ref(null); // 繩子;魚線
 const gameClaw = ref(null); // 鉤子頭
 
 // 加入時間，倒數計時
-const timeLeft = ref(10);
+const timeLeft = ref(30);
 // 加入 遊戲結束
 const isGameOver = ref(false);
 // 加入 遊戲準備畫面
@@ -191,7 +191,7 @@ let timerInterval = null;
 const initGame = () => {
     // 重置資料數據
     score.value = 0;
-    timeLeft.value = 10;
+    timeLeft.value = 30;
     isGameOver.value = false;
     isGameReady.value = true;
 

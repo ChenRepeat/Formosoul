@@ -123,8 +123,8 @@ onMounted(async () => {
     } else {
         initGameStatus();
     }
-    initGame();
-    window.addEventListener('keydown', handleKey);
+    // initGame();
+    // window.addEventListener('keydown', handleKey);
 });
 
 </script>
