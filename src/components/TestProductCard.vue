@@ -289,7 +289,7 @@ const lang = computed( () => {
 
 
   .product-name{
-    color: $color-fsGold;
+    color: $color-fsWhite;
     align-self: flex-start;
     padding: 12px 20px;
     height: 88px;
