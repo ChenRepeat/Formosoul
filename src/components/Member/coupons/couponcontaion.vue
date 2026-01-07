@@ -215,7 +215,8 @@ import { useRoute } from 'vue-router';
             change_coupon(coupon).then(result => {
             if (result.success) {
                     get_coupon();
-                    cartStore.coupon_ID  = null;
+                    const storecouponID = result.data.coupons_ID
+                    cartStore.coupon_ID  = storecouponID
                     // console.log('變成1');
                     coupon.status = 2; 
                     setTimeout(() => {
@@ -241,13 +242,16 @@ import { useRoute } from 'vue-router';
         //         previousCoupon.status = 2; 
         //     }
     onMounted(() => {
-        restore_coupon().then( r => {
-            get_coupon();
-        });
-        cartStore.coupon_ID = null;
-        cartStore.discount = 0;
-        
-         return;
+        get_coupon();
+        if (route.path.includes('/member/coupons')) {
+            restore_coupon().then( r => {
+                get_coupon();
+            });
+            cartStore.coupon_ID = null;
+            cartStore.discount = 0;
+            return;
+        }
+    
     });
 </script>
 
