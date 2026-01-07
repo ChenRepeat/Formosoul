@@ -176,6 +176,7 @@ $loginData = [
 
 $dataToken = base64_encode(json_encode($loginData));
 
+
 header("Location: http://localhost:5173/tjd103/?loginData=" . $dataToken);
 exit;
 ?>
