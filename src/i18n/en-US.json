@@ -24,7 +24,7 @@
     "privacyPolicy":"privacy Policy",
     "welcome":"Hi, Welcome Back ~",
     "backPrepage":"Back to previous page",
-    "newsIntro":"I hereby pledge my malevolent intent to unseal the clandestine mechanisms of this Marauder’s parchment.",
+    "newsIntro":"I hereby pledge my malevolent intent to unseal the mechanisms of this Marauder’s parchment.",
     "FormosoulCopyright1":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class. This platform is for learning and display purposes only.",
     "FormosoulCopyright2":"Students are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.If you have any concerns about copyright infringement, please send a private message to [ ",
     "FormosoulCopyright3":"Wiedu TibaMe",
@@ -33,6 +33,7 @@
   "mail":{
     "title1":"Formosoul Institute of Magic",
     "title2":"Admission Notice",
+    "auditBtn":"Audit the Academy",
     "body":[
       "Dear Prospective International Student,",
       "You are about to step into this magical academy, hidden within the alleys of Taiwan, as an 'Auditing Student' or 'International Student.' From this moment on, you will explore the daily life and magical wonders of Taiwan from the perspective of a visiting student.",

@@ -167,7 +167,7 @@ onUnmounted(() => {
 
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
-        <h6 class="news-main-text">－－{{$t("nav.newsIntro")}}－－</h6>
+        <h6 class="news-main-text">{{$t("nav.newsIntro")}}</h6>
         <div class="scroll-tip" >
           <div class="tip-dot"></div>
         </div>
@@ -264,7 +264,23 @@ onUnmounted(() => {
   text-align: center;
   color: #fff;
   mix-blend-mode: exclusion;
+  position: relative;
+  &::after,&::before{
+    content: '';
+    height: 1px;
+    width: 10%;
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+  }
+  &::after{
+    left: 102%;
+  }
+  &::before{
+    right: 102%;
+  }
 }
+.news-main-text
 
 /* 卡片容器 */
 .news-cards-container {

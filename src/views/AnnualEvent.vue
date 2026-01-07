@@ -169,38 +169,44 @@ function onDragStart(e) {
 
   drag.value.active = true;
   drag.value.moved = false;
-  isDragging.value = true;
-
-  hoveredIndex.value = null;
-  stopAutoSlide();
 
   drag.value.startX = e.clientX;
   drag.value.dx = 0;
   drag.value.startTime = performance.now();
-
-  setTrackTransition(false);
   viewportEl.value?.setPointerCapture?.(e.pointerId);
 }
-
 function onDragMove(e) {
   if (!drag.value.active) return;
 
   const dx = e.clientX - drag.value.startX;
   drag.value.dx = dx;
 
-  if (Math.abs(dx) > 6) drag.value.moved = true;
+  // 門檻判斷
+  if (Math.abs(dx) > 6) {
+    drag.value.moved = true;
 
-  // 阻尼讓手感更像 iOS
-  const step = getStepWidth();
-  const resistance = step ? Math.min(1, step / (Math.abs(dx) + step)) : 1;
-  const damped = dx * (0.9 + 0.1 * resistance);
-
-  setTrackTranslate(damped);
+    // ✅ 新增：只有當第一次被判定為移動時，才正式進入拖曳狀態
+    if (!isDragging.value) {
+      isDragging.value = true; // 這時候才觸發 CSS 變形
+      stopAutoSlide();         // 這時候才停止輪播
+      setTrackTransition(false); // 這時候才關閉過場動畫
+    }
+  }
+  if (isDragging.value) {
+    // 阻尼讓手感更像 iOS
+    const step = getStepWidth();
+    const resistance = step ? Math.min(1, step / (Math.abs(dx) + step)) : 1;
+    const damped = dx * (0.9 + 0.1 * resistance);
+    setTrackTranslate(damped);
+  }
 }
 
 function onDragEnd() {
   if (!drag.value.active) return;
   drag.value.active = false;
+  if (!isDragging.value) {
+    return;
+  }
 
   const dx = drag.value.dx;
   const dt = performance.now() - drag.value.startTime;
@@ -214,12 +220,10 @@ function onDragEnd() {
   else if (Math.abs(dx) > threshold) delta = dx < 0 ? 1 : -1;
 
   if (delta !== 0) {
-    // infinite
     const total = items.value.length;
     if (total > 0) currentIndex.value = (currentIndex.value + delta + total) % total;
   }
 
-  // 吸附回去
   setTrackTransition(true);
   setTrackTranslate(0);
 
@@ -238,8 +242,7 @@ function openDetail(item) {
 }
 
 function onSlideClick(item) {
-  // 拖曳中/有滑動就不算 click
-  if (isDragging.value || drag.value.moved) return;
+  if (drag.value.moved) return;
   openDetail(item);
 }
 
@@ -367,8 +370,7 @@ onBeforeUnmount(() => {
           class="dot"
           :class="{ active: p - 1 === currentPage }"
           type="button"
-          @click="goToPage(p - 1)"
-        />
+          @click="goToPage(p - 1)" />
       </div>
     </div>
   </section>
@@ -523,6 +525,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   border: 0;
+  pointer-events: none;
 }
 
 /* ===== Image layer ===== */
