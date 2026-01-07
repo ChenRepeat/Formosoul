@@ -531,7 +531,7 @@ onUnmounted(() => {
 .book-section {
   width: 100vw; 
   height: 100vh;
-  height: auto;
+  // height: auto;
   display: flex;
   justify-content: center;
   align-items: center;

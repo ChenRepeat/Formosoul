@@ -15,5 +15,6 @@ export const useclassesStore = defineStore('classes', () => {
   const changeIndex = (num)=>{
     currentPage.value = num;
   }
-  return { pageToTurn , setPage, imgShare,imgUrl,currentPage,changeIndex}
+  const bueResult = ref(0)
+  return { pageToTurn , setPage, imgShare,imgUrl,currentPage,changeIndex,bueResult}
 })

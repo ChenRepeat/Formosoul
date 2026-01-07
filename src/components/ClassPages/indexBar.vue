@@ -129,10 +129,9 @@ onUnmounted(() => {
         :ref="el => itemsRef[index] = el"
         class="menu__item"
         :class="{ 'active': activeIndex === index }"
-        :style="{ '--bgColorItem': item.itemBg }"
         @click="clickItem(index),turnPage(item.toPage)"
       >
-        <component :is="item.icon" class="icon"/>
+        <component :is="item.icon" class="icon" :class="`icon${index+1}`"/>
       </button>
 
       <div 
@@ -216,6 +215,7 @@ onUnmounted(() => {
 
     &.active {
       transform: translate3d(1.2em, 0, 0);
+
     }
 
     &::before {
@@ -231,7 +231,8 @@ onUnmounted(() => {
 
     &.active::before {
       transform: scale(1.3);
-      background-color: var(--bgColorItem);
+      background-color: $color-fsGold;
+
     }
   }
 
@@ -260,8 +261,9 @@ onUnmounted(() => {
 }
 .menu__item.active .icon {
   animation: strokeL 3s 0.5s ease forwards;
-
 }
+.icon4{transform: scale(0.8);}
+.icon6{transform: translate(2px,4px);}
 @keyframes strokeL {
     0%{
       stroke-dashoffset: 400;

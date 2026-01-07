@@ -184,8 +184,8 @@ const waveConfig = ref(
       </div>
     </main>
     <img src="" alt="" srcset="">
-    <TheFooter />
   </div>
+  <TheFooter />
 </template>
 
 <style lang="scss" scoped>
