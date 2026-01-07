@@ -17,14 +17,21 @@
   const router = useRouter();
 
   const currentSlug = computed(() => route.params.slug);
-
   const currentFestival = computed(() => {
-    if (items.value.length === 0) return null;
-    const found = items.value.find((item) => {
-      return item.title_en_s?.join("-") === currentSlug.value;
-    });
-    return found || items.value[0];
+  if (!items.value || items.value.length === 0) {
+    return null;
+  }
+  const found = items.value.find((item) => {
+    return item.title_en_s?.join("-") === currentSlug.value;
   });
+  const target = found || items.value[0];
+  if (!target) return null;
+  return {
+    ...target,
+    displayTitle: target[`title_${langStore.dbSuffix}`],
+    displayContext: target[`introL_${langStore.dbSuffix}`],
+  };
+});
   function goBack() {
     if (window.history.length > 1) {
       router.back();
@@ -61,19 +68,14 @@ const isEnglish = computed(() => {
 
       <!-- 文字內容 -->
       <article class="detail-content">
-        <p class="breadcrumb" v-if="isEnglish">Annual Event · {{ currentFestival.title_en }}</p>
-        <p class="breadcrumb" v-else>Annual Event · {{ currentFestival.title_zh }}</p>
-
-        <h1 class="detail-title" v-if="isEnglish">{{ currentFestival.title_en }}</h1>
-        <h1 class="detail-title" v-else>{{ currentFestival.title_zh }}</h1>
-
+        <p class="breadcrumb">Annual Event · {{ currentFestival?.displayTitle }}</p>
+        <h1 class="detail-title">{{ currentFestival?.displayTitle }}</h1>
         <p class="detail-date">
           {{ currentFestival.launchDate }}
         </p>
 
         <div class="detail-body">
-          <p v-if="isEnglish">{{ currentFestival.introL_en }}</p>
-          <p v-else>{{ currentFestival.introL_zh }}</p>
+          <p>{{ currentFestival?.displayContext}}</p>
         </div>
 
         <!-- 底部按鈕 -->

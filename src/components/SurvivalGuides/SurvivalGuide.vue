@@ -576,7 +576,7 @@ const rightFrame = computed(()=> frames.value[1])
 // }
 
 //=========================== RWD ===========================
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
   .survival-heropics-left-case.img-is-active {
     transform: translateX(100px) scale(1.2); 
   }

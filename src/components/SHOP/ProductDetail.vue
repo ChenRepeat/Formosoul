@@ -561,7 +561,7 @@ const lang = computed( () => {
 }
 
 // RWD------------------------------------- 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1280px) {
   .detail-dock{ 
     padding: 60px 40px 80px;
   }
