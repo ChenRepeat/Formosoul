@@ -148,7 +148,6 @@ export const useCartStore = defineStore('cart', () => {
 
     // coupon 
     const coupon_ID = ref(null);
-
     const discount = ref(0);
 
     // 最後付款總額

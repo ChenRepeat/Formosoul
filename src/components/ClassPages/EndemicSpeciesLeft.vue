@@ -113,7 +113,7 @@ import IconFomobear from '../icons/SVG/IconFomobear.vue';
   .animal-contain{
     height: 100%;
     gap: 60px;
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1366px) {
       gap: 88px;
     }
   }

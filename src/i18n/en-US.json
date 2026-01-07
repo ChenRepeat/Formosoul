@@ -383,6 +383,10 @@
     "backbutton":"BACK"
   },
   "nightmarket":{
+    "others": {
+        "exit": "EXIT",
+        "close": "CLOSE"
+      },
     "items":{
       "rice": {
         "title":"Braised Pork Rice",
@@ -434,6 +438,33 @@
         "fullText":"Ready to test your luck? 'Si-Ba-La' is the loudest and most exciting game in the night market! The rules are simple: throw three dice into the bowl and try to beat the stall owner's score. If your points are higher, you win a delicious sausage! But watch out—competition is fierce. Are you ready to challenge the boss?",
         "buttonText": "START GAME"
     },
+    "prawningGame": {
+        "score": "Score",
+        "time": "Time",
+        "ready": "READY?",
+        "startHint": "Click or Press Space to Start",
+        "timesUp": "TIME'S UP!",
+        "yourScore": "Your score is",
+        "congrats": "CONGRATS!",
+        "tryAgain": "TRY AGAIN!",
+        "playAgain": "PLAY AGAIN ⟳",
+        "checkLedger": "CHECK YOUR LEDGER"
+   },
+   "diceGame": {
+        "player": "Player",
+        "banker": "Banker",
+        "score": "Score",
+        "makeChoice": "Make a Choice!",
+        "yourScore":"Your Score",
+        "big": "BIG",
+        "small": "SMALL",
+        "draw": "DRAW",
+        "win": "YOU WIN!",
+        "lose": "YOU LOSE..",
+        "youChose": "You chose",
+        "playAgain": "PLAY AGAIN",
+        "checkLedger": "CHECK YOUR LEDGER"
+    },
     "map-weather": {
       "popupDesc": "Night Market Location & \n Weather"
    },
@@ -464,7 +495,40 @@
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
         "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
+        },
+        "gameOver":"GAME OVER",
+        "congradulations":"Congradulations",
+        "playAgain": "PLAY AGAIN",
+        "checkLedger": "CHECK YOUR LEDGER"
       }
+    },
+  "conveniencestore":{
+    "shopkeeper":{
+      "greetings": {
+        "text1":"Please come in.",
+        "text2":"Hello!",
+        "text3":"Scan e-carrier?",
+        "text4":"Need a bag?",
+        "text5":"Microwave it?",
+        "text6":"Phone number?",
+        "text7":"Tax ID?",
+        "text8":"From five hundred.",
+        "text9":"Fifty back.",
+        "text10":"Thank you!"
+      }
+    },
+    "items": {
+      "maitea": "Mai Xiang Milk Tea is a classic, affordable Taiwanese drink known for its unique roasted barley aroma and nostalgic taste.",
+      "jinjin": "A classic Taiwanese sweet asparagus juice known for its refreshing and unique flavor.",
+      "threeone": "A Taiwanese instant milk tea brand famous for using real tea leaves in convenient steeping bags.",
+      "twbeer": "An iconic Taiwanese lager made with local rice, known for its crisp and refreshing taste.",
+      "twegg": "A ubiquitous Taiwanese convenience store snack consisting of eggs simmered in savory tea and spices.",
+      "manhan": "A premium Taiwanese instant noodle brand known for its rich broth and real chunks of meat.",
+      "kuaikuai": "A popular Taiwanese corn snack, often used as a lucky charm for electronics when in its green packaging.",
+      "puffs": "A classic Taiwanese snack consisting of crunchy mini cream puffs with sweet fillings.",
+      "twnoodle": "A famous Taiwanese instant dry noodle brand known for its distinct savory soybean paste flavor.",
+      "twpie": "A beloved Taiwanese chocolate wafer bar famous for its rich layers and crunchy texture.",
+      "twchips": "A classic and addictive Taiwanese prawn cracker snack known for its savory flavor."
     }
   },
   "member": {

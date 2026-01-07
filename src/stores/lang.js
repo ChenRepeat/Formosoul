@@ -4,6 +4,15 @@ export const useLangStore = defineStore('lang', {
   state: () => ({
     locale: sessionStorage.getItem('user-lang') || 'en-US'
   }),
+  getters: {
+    dbSuffix: (state) => {
+      const map = {
+        'en-US': 'en',
+        'zh-TW': 'zh',
+      };
+      return map[state.locale] || state.locale.split('-')[0];
+    }
+  },
   actions: {
     setLanguage(lang) {
       this.locale = lang;

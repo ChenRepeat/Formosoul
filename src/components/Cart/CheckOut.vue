@@ -13,7 +13,7 @@ import Couponcontaion from '../Member/coupons/couponcontaion.vue';
 const router = useRouter();
 const cartstore = useCartStore();
 const addrstore = useAddressStore();
-const { locale } = useI18n();     // 讀取語系狀態
+const { t, locale } = useI18n();     // 讀取語系狀態
 
 
 // coupon -------------------------------------
@@ -155,6 +155,9 @@ function goBack(e, previousOne){
 // 信用卡資訊 ----------------------------------------------
 const paymentInfo = ref('creditCard');
 
+// 運送資訊 ----------------------------------------------
+const deliveryInfo = ref('homeDelivery');
+
 
 // 電話號碼檢核 ----------------------------------------------
 function checkNumber(e){
@@ -194,15 +197,14 @@ const receiptPhone = ref('');
 const receiptAddr = ref('');         //只記錄使用者填寫的部分，完整的地址需要組合下拉選單
 const receiptRemark = ref('');
 const saveAddr = ref(false);         // 是否儲存為常用地址
-const paid = ref('');
 
 // 完整地址需要組合
 
 const finalAddr = computed(()=>{
-
-    if(cartstore.selectCountry.value !=='taiwan'){
+    // pinia 通常會自動解包，所以不用.value
+    if(cartstore.selectCountry !=='taiwan'){
         // 國外：國家＋地址 
-        return `${cartstore.selectCountry.value}-${receiptAddr.value||''}`;  
+        return `${cartstore.selectCountry}-${receiptAddr.value||''}`;  
         // 因為${}是JS，所以如果是 undefined 或 null 會被同步呈現出來，所以要用||''來取代。
         // {{}} 是 vue，就不會有${}的問題，所以不用寫   
     }else{
@@ -217,8 +219,18 @@ const finalAddr = computed(()=>{
 
 // 確認訂單 ---------------------------
 // 訂單寫入資料庫、寫入後將資料傳給綠界、沒問題後在前往訂單完成頁
-function goOrder(){
-    // step1 再次檢查購物車有沒有商品
+
+const errorMsg = ref({});   // 用來存 php 回傳的錯誤訊息
+
+// 設定環境變數
+const apiBase = import.meta.env.VITE_API_BASE;
+const apiURL = `${apiBase}/createOrder.php`;
+
+async function goOrder(){
+    //step0 如果有前次錯誤訊息，先清空
+    errorMsg.value = {};
+
+    // step1 再次檢查購物車有沒有商品（防護用，因為如果購物車沒商品，應該無法點選按鈕執行goOrder）
     if(cartstore.cartList.length === 0){
         return alert(t('shoppingcart.cartEmpty'));      //return 是為了讓程式停在這，不要繼續往下跑，才不會報錯或是送出一張空的訂單
     }
@@ -226,13 +238,12 @@ function goOrder(){
     // step2 把資料打包
     const orderData = {
         //查詢用ID
-        member_ID : cartstore.memberID.value,
-        coupons_ID : cartstore.coupon_ID.value,   //預設，還沒抓
+        member_ID : cartstore.memberID,
+        coupons_ID : cartstore.coupon_ID || null,   //預設，還沒抓
 
-        //運費跟折扣
-        shipping : cartstore.shippingFee.value, //
-        country : cartstore.selectCountry.value,
-        coupon : 0,
+        //運費+運送方式
+        country : cartstore.selectCountry,   //後端會用國家重新查一次運費
+        shipping : deliveryInfo.value,
 
         //購物車內容
         cartItem : cartstore.cartList.map( item => ({
@@ -250,16 +261,50 @@ function goOrder(){
         payment : paymentInfo.value,
 
         //前端計算的總額（只是為了參考，實際還是會用後端查詢到的資訊來計算）
-        frontend_total : cartstore.finalPrice.value,
+        frontend_total : cartstore.finalPrice,
     };
 
 
     // step3 送給後端（發送請求）
+    try{
+        console.log('正在發送訂單...', orderData);   //console.log 可以同時傳入多個參數，用,隔開即可
+
+        // 使用 POST 發送
+        const response = await axios.post(
+            apiURL, //API 路徑
+            //'http://localhost/Formosoul/public/php/createOrder.php',
+            orderData
+        );
+
+        // 判斷回傳狀態
+
+        if(response.data.status === 'success'){
+            //訂單成立
+            alert(`訂單建立成功！\n編號：${response.data.orderID}\n金額：NT$ ${response.data.real_total}`);
+
+            // 清空購物車
+            cartstore.clearCart();
+            
+            // 跳轉訂單成功畫面
+            // router.push({
+            //     name: 'OrderSuccess',
+            // });
 
 
-    router.push({
-        name: 'OrderSucess',
-    });
+            // 拿訂單編號，跳轉綠界
+            const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
+            window.location.href = payURL;
+        
+        }else{
+            alert('訂單建立失敗：' + response.data.message);
+        }
+
+        //之後可以補上驗證失敗的欄位提示
+        
+    }catch(error){
+        console.error('連線錯誤:', error);
+        alert('系統發生錯誤，請檢查網路或聯絡管理員');
+    }    
 }
 
 
@@ -309,8 +354,8 @@ function goOrder(){
                 <p>{{$t('shoppingcart.delivery')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                    <select class="nav-list fw200">
-                        <option class="list-option">{{$t('shoppingcart.homeDelivery')}}</option>
+                    <select class="nav-list fw200" v-model="deliveryInfo">
+                        <option class="list-option" value="homeDelivery">{{$t('shoppingcart.homeDelivery')}}</option>
                     </select>
                 </nav>
                 <p>{{$t('shoppingcart.payment')}}</p>
@@ -784,7 +829,7 @@ function goOrder(){
     }
 
     // RWD------------------------------------- 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1366px) {
         .card-left, .card-right{
             padding: 20px;   
         }

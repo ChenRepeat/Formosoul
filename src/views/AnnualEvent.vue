@@ -2,8 +2,11 @@
 import { useEventData } from "@/stores/event";
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRouter } from "vue-router";
+import { useLangStore } from '@/stores/lang';
+
 const baseUrl = import.meta.env.BASE_URL;
 
+const langStore = useLangStore();
 const eventData = useEventData();
 const router = useRouter();
 const items = computed(() => eventData.eventDatas || [])
@@ -16,11 +19,31 @@ const timerId = ref(null);
 const isMobile = ref(false);
 const DOT_COUNT = 4;
 
+function getTitleLines(item) {
+  const v = item?.title_en_s;
+  if (Array.isArray(v)) return v;
+  if (typeof v === "string" && v.trim()) return v.split(/\s+/); // 保底：字串就切行
+  if (item?.title_en) return String(item.title_en).split(/\s+/);
+  return [];
+}
+
+function getPicSrc(item) {
+  const pic = item?.pic || item?.image || item?.img || ""; // 你資料可能不是叫 pic
+  return pic ? `${baseUrl}${pic}` : "";
+}
+
+
 //  16 筆資料 → 4 組 → 4 顆點
-const totalPages = computed(() => Math.ceil(items.value.length / VISIBLE_COUNT)); // 16/4=4
-const currentPage = computed(() =>
-  Math.ceil(currentIndex.value / VISIBLE_COUNT) % totalPages.value
-);
+const totalPages = computed(() => {
+  const total = items.value.length;
+  return total === 0 ? 0 : Math.ceil(total / VISIBLE_COUNT);
+});
+
+const currentPage = computed(() => {
+  if (totalPages.value === 0) return 0;
+  return Math.floor(currentIndex.value / VISIBLE_COUNT) % totalPages.value;
+});
+
 
 //  點點點擊：跳到那一組的第一張（0/4/8/12）
 function goToPage(page) {
@@ -35,6 +58,8 @@ function goToPage(page) {
 
 const visibleItems = computed(() => {
   const total = items.value.length;
+  if (total === 0) return [];   // ✅ 防止 % 0
+
   const result = [];
   for (let offset = 0; offset < VISIBLE_COUNT; offset++) {
     const idx = (currentIndex.value + offset) % total;
@@ -42,6 +67,7 @@ const visibleItems = computed(() => {
   }
   return result;
 });
+
 
 function nextSlide() {
   const maxStart = Math.max(0, items.value.length - VISIBLE_COUNT); // 12
@@ -126,7 +152,9 @@ function stopAutoSlide() {
   }
 }
 
-
+const isEnglish = computed(() => {
+  return langStore.locale === 'en-US'; 
+});
 onMounted(() => {
   eventData.loadeventData();
   updateIsMobile();
@@ -165,22 +193,27 @@ onBeforeUnmount(() => {
                     class="slide-video-wrapper"
                     :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
                   >
-                    <iframe
-                      :src="getYouTubeSrc(item)"
-                      title="Festival video"
-                      frameborder="0"
-                      allow="autoplay; encrypted-media; picture-in-picture"
-                      allowfullscreen
-                    ></iframe>
+                    <div class="youtube-wrap">
+                      <iframe
+                        class="youtube-iframe"
+                        :src="getYouTubeSrc(item)"
+                        title="Festival video"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
                   </div>
+
 
                   <!-- 中層：圖片（hover 時淡出） -->
                   <img
                     class="slide-image"
                     :class="{ 'is-hidden': isPlaying(visibleIndex, item) }"
-                    :src="`${baseUrl}${item.pic}`"
-                    :alt="item.title_en"
+                    :src="getPicSrc(item)"
+                    :alt="item.title_en || ''"
                   />
+
 
                   <!-- 最上層：遮罩＋文字（未 hover 時顯示，hover 時淡出） -->
                   <div
@@ -189,12 +222,14 @@ onBeforeUnmount(() => {
                   >
                     <div class="slide-text">
                       <p
+                        v-if="isEnglish"
                         class="slide-title-line"
-                        v-for="(line, i) in item.title_en_s"
+                        v-for="(line, i) in getTitleLines(item)"
                         :key="i"
                       >
                         {{ line }}
                       </p>
+                      <p v-else class="slide-title-line">{{ item.title_zh }}</p>
                       <p class="slide-date">{{ item.launchDate }}</p>
                     </div>
                   </div>
@@ -237,7 +272,7 @@ onBeforeUnmount(() => {
   padding: 24px 0 16px;
   overflow: visible;
   background: radial-gradient(circle at center, #00000080, #000000);
-  clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
+  clip-path: none; 
 }
 
 .festival-shell {
@@ -307,8 +342,8 @@ onBeforeUnmount(() => {
   overflow: visible;
   border-radius: 16px;
   background: #000; /* 避免邊緣有縫時露底色 */
-  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  clip-path: none;           /* ✅ 長方形 */
+  overflow: hidden;          /* ✅ 長方形更穩 */
   isolation: isolate; /* ✅ 讓 iframe 不會跑出裁切外 */
 }
 
@@ -319,7 +354,7 @@ onBeforeUnmount(() => {
   overflow: hidden;               /* 一定要 */
   border-radius: 16px;            /* 讓四角圓角一致 */
   background: #000;               /* 防止邊緣露底 */
-  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); /* 平行四邊形 */
+  clip-path: none;
 }
 
 /* 底層影片 */
@@ -334,12 +369,26 @@ onBeforeUnmount(() => {
   opacity: 1;
   pointer-events: auto;
 }
-.slide-video-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.08);
+
+/* ✅ 置中容器：讓影片完整呈現（可出黑邊） */
+.youtube-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
 }
+
+/* ✅ 影片保持 16:9，不裁切 */
+.youtube-iframe {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+}
+
 
 /* 中層圖片 */
 .slide-image {
@@ -356,11 +405,11 @@ onBeforeUnmount(() => {
 .slide-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    #000000aa 0%,
-    #000000dd 55%,
-    #000000ee 100%
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,0.65) 55%,
+    rgba(0,0,0,0.85) 100%
   );
   display: flex;
   align-items: center;
@@ -368,6 +417,7 @@ onBeforeUnmount(() => {
   padding: 40px 24px;
   transition: opacity 0.35s ease;
 }
+
 .overlay-hidden {
   opacity: 0;
 }
@@ -378,17 +428,23 @@ onBeforeUnmount(() => {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC",
     sans-serif;
 }
+
 .slide-title-line {
-  font-size: 20px;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-shadow: 0 4px 14px rgba(0,0,0,.75);
 }
+
 .slide-date {
-  margin-top: 16px;
+  margin-top: 14px;
   font-size: 14px;
-  letter-spacing: 0.18em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.95;
 }
+
 
 /* dots */
 .carousel-dots {

@@ -306,6 +306,30 @@ const router = createRouter({
           component: () => import ('@/components/Admin/CouponEdit.vue'),
           meta: { activeMenu: '/admin/coupon-management' }
         },
+                                        {
+          path: "news-add",
+          name: "NewsAdd",
+          component: () => import ('@/components/Admin/NewsAdd.vue'),
+          meta: { activeMenu: '/admin/news-management' }
+        },
+                                        {
+          path: "news-edit/:id",
+          name: "NewsEdit",
+          component: () => import ('@/components/Admin/NewsEdit.vue'),
+          meta: { activeMenu: '/admin/news-management' }
+        },
+                                                {
+          path: "annual-event-add",
+          name: "AnnualEventAdd",
+          component: () => import ('@/components/Admin/AnnualEventAdd.vue'),
+          meta: { activeMenu: '/admin/annual-event-management' }
+        },
+                                        {
+          path: "annual-event-edit/:id",
+          name: "AnnualEventEdit",
+          component: () => import ('@/components/Admin/AnnualEventEdit.vue'),
+          meta: { activeMenu: '/admin/annual-event-management' }
+        },
       ],
     },
   ],

@@ -238,7 +238,7 @@ const buyWord = computed(() => {
           :alt="currentIntro.name">
           <div class="intro-text dp-flex-col"
           >
-          <h6>
+          <h6 class="no-i18n-anim">
             <FontAwesomeIcon icon="fa-solid fa-xmark" 
             class="close"
             @click="changeIntro(0)"

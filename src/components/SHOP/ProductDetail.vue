@@ -388,6 +388,7 @@ const lang = computed( () => {
 
 .detail-pic{
     gap: 20px;
+    flex-grow: 1;
 }
 
 .detail-pic-small{
@@ -560,7 +561,7 @@ const lang = computed( () => {
 }
 
 // RWD------------------------------------- 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1366px) {
   .detail-dock{ 
     padding: 60px 40px 80px;
   }

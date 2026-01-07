@@ -6,6 +6,8 @@ import HandBack from './HandBack.vue';
 import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import IconDice from '@/components/icons/SVG/IconDice.vue';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.dice.pass)
@@ -262,7 +264,7 @@ const checkWinner = () => {
 
   // 平手
   if (pScore == bScore) {
-    finalMessage.value = 'DRAW';
+    finalMessage.value = 'draw';
     return;
   }
 
@@ -273,7 +275,7 @@ const checkWinner = () => {
     isWin = pScore < bScore;
   }
 
-  finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
+  finalMessage.value = isWin ? 'win' : 'lose';
 
   if (isWin) {
     const isFirstPass = !passedGames.value.dice;
@@ -399,9 +401,9 @@ onUnmounted (() => {
 <template>
     <!-- <img src="SurvivalGuide/Group 604.svg" alt=""> -->
         <div class="playerbox">
-            <h4>Player</h4>
+            <h4>{{ t('nightmarket.items.diceGame.player') }}</h4>
             <div class="scorebox">
-                <h3>Score</h3>
+                <h3>{{ t('nightmarket.items.diceGame.score') }}</h3>
                 <h2 class="scores" :class="{ 'score-up': totalscore >= 10 }">{{ totalscore }}</h2>
             </div>
         </div>
@@ -454,36 +456,36 @@ onUnmounted (() => {
         </div>
 
         <div class="bankerbox">
-            <h4>banker</h4>
+            <h4>{{ t('nightmarket.items.diceGame.banker') }}</h4>
             <div class="scorebox">
-                <h3>Score</h3>
+                <h3>{{ t('nightmarket.items.diceGame.score') }}</h3>
                 <h2 class="scores" :class="{ 'score-up': bankerTotalScore >= 10 }">{{  bankerTotalScore }}</h2>
             </div>
         </div>
 
         <div v-if="gameState === 'CHOOSING'" class="overlay-modal">
             <div class="modal-content">
-                <h2>Make a Choice!</h2>
-                <p>Your Score: {{ totalscore }}</p>
+                <h2>{{ t('nightmarket.items.diceGame.makeChoice') }}</h2>
+                <p>{{ t('nightmarket.items.diceGame.yourScore') }}: {{ totalscore }}</p>
                 <div class="btn-group">
-                    <button class="btn-big" @click="chooseSide('BIG')">BIG</button>
-                    <button class="btn-small" @click="chooseSide('SMALL')">SMALL</button>
+                    <button class="btn-big" @click="chooseSide('BIG')">{{ t('nightmarket.items.diceGame.big') }}</button>
+                    <button class="btn-small" @click="chooseSide('SMALL')">{{ t('nightmarket.items.diceGame.small') }}</button>
                 </div>
             </div>
         </div>
 
         <div v-if="gameState === 'RESULT'" class="overlay-modal">
             <div class="modal-content">
-                <h1>{{ finalMessage }}</h1>
-                <p>You chose: <strong>{{ playerChoice }}</strong></p>
+                <h1>{{ t('nightmarket.items.diceGame.' + finalMessage) }}</h1>
+                <p>{{ t('nightmarket.items.diceGame.youChose') }}: <strong>{{ playerChoice }}</strong></p>
                 <div class="result-details">
-                    <span>Player: {{ totalscore }}</span> vs <span>Banker: {{ bankerTotalScore }}</span>
+                    <span>{{ t('nightmarket.items.diceGame.player') }}: {{ totalscore }}</span> vs <span>{{ t('nightmarket.items.diceGame.banker') }}: {{ bankerTotalScore }}</span>
                 </div>
                 <div class="result-btn-wrapper">
-                    <button class=".btn-action btn-retry" @click="resetGame">PLAY AGAIN</button>
+                    <button class=".btn-action btn-retry" @click="resetGame">{{ t('nightmarket.items.diceGame.playAgain') }}</button>
                     
                     <button class="btn-action btn-check" @click="showCardOverlay = true">
-                        CHECK YOUR LEDGER
+                        {{ t('nightmarket.items.diceGame.checkLedger') }}
                     </button>
                 </div>
 

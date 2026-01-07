@@ -5,6 +5,8 @@ import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.shrimp.pass)
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 // import { prawningData } from "./gamePrawningData"; // 物品是寫死的
 
@@ -469,16 +471,16 @@ onMounted(async () => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
+    initGame();
+    window.addEventListener('keydown', handleKey);
+
     // 先載入集點卡狀態
     if (isLoggedIn.value) {
         await memberStore.fetchPointsStatus();
-    }
-    
+    } 
     // 再初始化遊戲狀態
     initGameStatus();
-
-    initGame();
-    window.addEventListener('keydown', handleKey);
+    
 });
 
 onUnmounted (()=> {
@@ -510,10 +512,10 @@ onUnmounted (()=> {
             <span v-else>🔇</span>
         </div>
 
-        <div class="ui-score" :class="{ 'score-up': score >= 500 }">Score: {{ score }}</div>
+        <div class="ui-score" :class="{ 'score-up': score >= 500 }">{{ t('nightmarket.items.prawningGame.score') }}: {{ score }}</div>
 
         <div class="ui-timer" :class="{ 'urgent': timeLeft <= 10 }">
-            Time: {{ timeLeft }}s
+            {{ t('nightmarket.items.prawningGame.time') }}: {{ timeLeft }}s
         </div>
 
         <div class="hook-wrapper" ref="gameHook"> 
@@ -537,8 +539,8 @@ onUnmounted (()=> {
 
         <div v-if="isGameReady" class="start-screen-overlay">
             <div class="start-text">
-                <h1>READY?</h1>
-                <p>Click or Press Space to Start</p>
+                <h1>{{ t('nightmarket.items.prawningGame.ready') }}</h1>
+                <p>{{ t('nightmarket.items.prawningGame.startHint') }}</p>
             </div>
         </div>
 
@@ -552,20 +554,20 @@ onUnmounted (()=> {
                     />
                 </div>
             </div>
-            <div class="result-title">TIME'S UP!</div>
-            <h3>Your score is:  {{  score }}</h3>
-            <div v-if="score >= 500" class="result-msg win"><h1>CONGRATS!</h1></div>
+            <div class="result-title">{{ t('nightmarket.items.prawningGame.timesUp') }}</div>
+            <h3>{{ t('nightmarket.items.prawningGame.yourScore') }}:  {{  score }}</h3>
+            <div v-if="score >= 500" class="result-msg win"><h1>{{ t('nightmarket.items.prawningGame.congrats') }}</h1></div>
             <div v-else class="result-msg lose">
-                <h1>TRY AGAIN!</h1>
+                <h1>{{ t('nightmarket.items.prawningGame.tryAgain') }}</h1>
             </div>
 
             <div class="action-buttons">
                 <button class="btn-action btn-restart" @click.stop="initGame">
-                    PLAY AGAIN ⟳
+                    {{ t('nightmarket.items.prawningGame.playAgain') }}
                 </button>
 
                 <button class="btn-action btn-check" @click="handleCheckLedger">
-                    CHECK YOUR LEDGER
+                    {{ t('nightmarket.items.prawningGame.checkLedger') }}
                 </button>
             </div>
         </div>
@@ -608,6 +610,11 @@ onUnmounted (()=> {
     animation: pulse 1s infinite alternate;
     font-weight: bold;
 }
+
+.start-text>p{
+    text-align: center;
+}
+
 
 
 // 分數

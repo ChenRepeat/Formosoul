@@ -5,6 +5,9 @@
   import MemberLedger from "@/components/Member/information/memberLedger.vue";
   import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+
 const passTimes = ref(memberStore.gameData.ring.pass)
 
 // 過關蓋章
@@ -346,12 +349,12 @@ const ledgerClose = ()=> showCardOverlay.value = false;
 
     <div v-else-if="isGameOver" class="overlay dp-flex">
       <div class="menu-box result-box">
-        <h2 v-if="score < 100" class="result-title">Game Over</h2>
-        <h2 v-if="score >= 100" class="result-title">Congradulations !!</h2>
+        <h2 v-if="score < 100" class="result-title">{{$t("nightmarket.items.ring-toss.gameOver")}}</h2>
+        <h2 v-if="score >= 100" class="result-title">{{$t("nightmarket.items.ring-toss.congradulations")}} !!</h2>
         <h6 class="result-title">Score: {{ score }}</h6>
         <div class="btn-group-row dp-flex">
-          <BasicButton @click="startGame" class="btn-white"><p>Try Again</p></BasicButton>
-          <BasicButton @click="handleCheckLedger" class="btn-white"><p>Check Ledger</p></BasicButton>
+          <BasicButton @click="startGame" class="btn-white"><p>{{$t("nightmarket.items.ring-toss.playAgain")}}</p></BasicButton>
+          <BasicButton @click="handleCheckLedger" class="btn-white"><p>{{$t("nightmarket.items.ring-toss.checkLedger")}}</p></BasicButton>
         </div>
       </div>
     </div>
