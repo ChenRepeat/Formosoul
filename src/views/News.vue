@@ -26,96 +26,66 @@ const ctx = ref(null); // 用來清理 GSAP 動畫
 const lenis = ref(null); // Lenis 實例
 
 // 1. 視差漂浮卡片資料 (Parallax Items)
-const cards = ref([
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600",
-    style: { top: "25%", left: "5%" },
-    speed: -100,
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?w=600",
-    style: { top: "32%", right: "8%" },
-    speed: 50,
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
-    style: { top: "42%", left: "15%" },
-    speed: -50,
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600",
-    style: { top: "48%", right: "25%" },
-    speed: 120,
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600",
-    style: { top: "55%", left: "8%" },
-    speed: -80,
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600",
-    style: { top: "62%", right: "5%" },
-    speed: 80,
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=600",
-    style: { top: "68%", left: "35%" },
-    speed: -150,
-  },
-  {
-    id: 8,
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600",
-    style: { top: "75%", right: "15%" },
-    speed: 40,
-  },
-  {
-    id: 9,
-    src: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=600",
-    style: { top: "82%", left: "10%" },
-    speed: 150,
-  },
-  {
-    id: 10,
-    src: "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600",
-    style: { top: "85%", right: "30%" },
-    speed: -60,
-  },
-]);
-
+const cards = ref ([])
+const cardsStyle = [
+  { top: "25%", left: "5%" },
+  { top: "32%", right: "8%" },
+  { top: "42%", left: "15%" },
+  { top: "48%", right: "25%" },
+  { top: "55%", left: "8%" },
+  { top: "62%", right: "5%" },
+  { top: "68%", left: "35%" },
+  { top: "75%", right: "15%" },
+  { top: "82%", left: "10%" },
+  { top: "85%", right: "30%" }
+]
+const randomCard=()=>{
+  for(let i = 0; i < 10 ; i++){
+    const rs = Math.floor(Math.random()*300) - 150;
+    const rW = Math.floor(Math.random()*120) + 280;
+    cards.value.push({
+      id : i+1,
+      src: `${ baseUrl }${ allNewsData.value[i].pic }`,
+      style: { width:`${rW}px`,height:`${rW}px`},
+      speed: rs,
+      
+    })
+  }
+}
 // 2. 最新消息資料
-onMounted( async () => {
-  newsDataStore.get_newsinfo();
-  await nextTick();
+onMounted(async () => {
+  await newsDataStore.get_newsinfo();
+  randomCard();
+  nextTick();
+
+  // 初始化 Lenis
   lenis.value = new Lenis({
     duration: 1.5,
     smooth: true,
   });
 
+  // 處理重新整理的邏輯 (保留你原本寫的)
   const navEntry = performance.getEntriesByType("navigation")[0];
-  
   if (navEntry && navEntry.type === 'reload') {
-    // 如果是按 F5 重新整理，強制滾回頂部
     window.scrollTo(0, 0);
     lenis.value.scrollTo(0, { immediate: true });
-  } 
-  // 如果是 'navigate' (點連結) -> Router 會處理歸零
-  // 如果是 'back_forward' (按上一頁) -> Router 會處理回到舊位置
-  // 所以其他情況我們都不用管，只要抓 'reload' 就好！
-
-  function raf(time) {
-    if (!lenis.value) return;
-    lenis.value.raf(time);
-    requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
 
+  // ★★★ 關鍵修正 1: 將 Lenis 的捲動事件通知 ScrollTrigger ★★★
+  // 這行讓 ScrollTrigger 知道 Lenis 正在捲動，從而更新 Pin 的位置
+  lenis.value.on('scroll', ScrollTrigger.update);
+
+  // ★★★ 關鍵修正 2: 使用 GSAP 的 Ticker 來驅動 Lenis ★★★
+  // 不要再用原本的 function raf() { requestAnimationFrame... }
+  // 改用這個寫法，確保動畫與捲動完全同步，解決底部卡死問題
+  gsap.ticker.add((time) => {
+    lenis.value.raf(time * 1000); // Lenis 需要毫秒
+  });
+
+  // ★★★ 關鍵修正 3: 關閉 GSAP 的延遲平滑化，避免計算不同步 ★★★
+  gsap.ticker.lagSmoothing(0);
+
+  // GSAP Context 設定 (保留你原本的邏輯)
   ctx.value = gsap.context(() => {
     ScrollTrigger.create({
       trigger: mainSection.value,
@@ -123,11 +93,12 @@ onMounted( async () => {
       end: "bottom bottom",
       pin: ".news-pin-target",
       pinSpacing: false,
+      // invalidateOnRefresh: true, // 建議加入這行，當視窗改變大小時重新計算
     });
 
     const parallaxCards = document.querySelectorAll(".news-parallax-card");
     parallaxCards.forEach((el) => {
-      const speed = parseFloat(el.getAttribute("data-speed"));;
+      const speed = parseFloat(el.getAttribute("data-speed"));
       gsap.to(el, {
         y: speed,
         ease: "none",
@@ -140,7 +111,7 @@ onMounted( async () => {
       });
     });
   }, mainSection.value);
-  // behavior: 'auto' 代表瞬間跳轉，不要滑動 (重新整理通常不需要滑動特效)
+
   window.scrollTo({ top: 0, behavior: 'auto' });
 });
 
@@ -159,6 +130,7 @@ onBeforeRouteLeave((to, from, next) => {
 onUnmounted(() => {
   if (ctx.value) ctx.value.revert();
   if (lenis.value) lenis.value.destroy();
+  gsap.ticker.remove(lenis.value?.raf);
 });
 </script>
 
@@ -167,7 +139,7 @@ onUnmounted(() => {
 
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
-        <h6 class="news-main-text">－－{{$t("nav.newsIntro")}}－－</h6>
+        <h6 class="news-main-text">{{$t("nav.newsIntro")}}</h6>
         <div class="scroll-tip" >
           <div class="tip-dot"></div>
         </div>
@@ -175,10 +147,10 @@ onUnmounted(() => {
 
       <div class="news-cards-container">
         <div
-          v-for="card in cards"
+          v-for="(card,index) in cards"
           :key="card.id"
           class="news-parallax-card"
-          :style="card.style"
+          :style="[card.style , cardsStyle[index]]"
           :data-speed="card.speed"
         >
           <div class="news-card-inner">
@@ -245,6 +217,7 @@ onUnmounted(() => {
       height: 100%;
       animation: run 2s infinite ease-in-out;
       background-image: linear-gradient(to top,white 0%,transparent 100%);
+      border-radius: 2.5px;
     }
   }
 }
@@ -264,7 +237,23 @@ onUnmounted(() => {
   text-align: center;
   color: #fff;
   mix-blend-mode: exclusion;
+  position: relative;
+  &::after,&::before{
+    content: '';
+    height: 1px;
+    width: 10%;
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+  }
+  &::after{
+    left: 102%;
+  }
+  &::before{
+    right: 102%;
+  }
 }
+.news-main-text
 
 /* 卡片容器 */
 .news-cards-container {
@@ -278,8 +267,6 @@ onUnmounted(() => {
 
 .news-parallax-card {
   position: absolute;
-  width: 270px;
-  height: 290px;
   will-change: transform;
   pointer-events:none;
   z-index: 999;

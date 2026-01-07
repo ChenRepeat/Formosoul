@@ -267,8 +267,7 @@ onBeforeUnmount(() => {
           class="dot"
           :class="{ active: p - 1 === currentPage }"
           type="button"
-          @click="goToPage(p - 1)"
-        />
+          @click="goToPage(p - 1)" />
       </div>
     </div>
   </section>
