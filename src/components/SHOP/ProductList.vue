@@ -753,8 +753,8 @@ products.value.filter( p => p.status ==='Listed')
 const productStore = useProductStore();   // 下方可以開始從 pinia 拿資料
 
 // 網頁掛載時，先從資料庫拿資料
-onMounted(async () => {
-  await productStore.fetchProducts();
+onMounted(() => {
+  productStore.fetchProducts();
 });
 
 

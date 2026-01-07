@@ -85,7 +85,19 @@ function draw(canvasElement, long, Camera, radius, imageSrc) {
 function drawProductImage(){
   // 使用 nextTick 確保 DOM 已經更新完成
   nextTick(() => {
+    //保護機制
+    if (canvasRefs.value.length === 0) return;
+
     canvasRefs.value.forEach((canvasEl, index) => {
+
+      //保護機制
+      const product = props.products[index];
+
+      // 【防呆】如果資料還沒來，就安靜地結束，等待 watch 再次呼叫
+      if (!product || !product.image || product.image.length === 0) {
+        return;
+      }
+
     const imageUrl = props.products[index].image[0];
     const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
     draw(canvasEl, 230, 70, 32, finalImageUrl);
@@ -277,7 +289,7 @@ const lang = computed( () => {
 
 
   .product-name{
-    color: $color-fsWhite;
+    color: $color-fsGold;
     align-self: flex-start;
     padding: 12px 20px;
     height: 88px;
