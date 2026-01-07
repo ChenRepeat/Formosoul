@@ -154,8 +154,9 @@ onMounted(() => {
       @mousemove="draw"
       @mouseup="stopDrawing"
       @mouseleave="stopDrawing"
-      @touchstart="startDrawing"
-      @touchmove="draw"
+      @touchstart.prevent="startDrawing"
+      @touchmove.prevent="draw"
+      style="touch-action: none;"
       @touchend="stopDrawing"
     ></canvas>
     <div class="toolbar dp-flex-col">
