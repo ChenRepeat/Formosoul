@@ -531,10 +531,10 @@ onUnmounted(() => {
 .book-section {
   width: 100vw; 
   height: 100vh;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  // background-color: $color-fsTitle;
   overflow: hidden; 
   user-select: none; 
   position: relative;
@@ -542,8 +542,11 @@ onUnmounted(() => {
 
 .book {
   filter: drop-shadow(0 0px 20px $color-fsWhite);
-  // box-shadow: (0 0px 25px $color-fsWhite);
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  max-width: 1200px;
+  aspect-ratio: 3 / 2;
+  height: 100%;
+  max-height: 800px;
 }
 .unload{
   opacity: 0;
