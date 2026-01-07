@@ -30,6 +30,22 @@
     "FormosoulCopyright3":"Wiedu TibaMe",
     "FormosoulCopyright4":" ] for assistance."
   },
+  "mail":{
+    "title1":"Formosoul Institute of Magic",
+    "title2":"Admission Notice",
+    "auditBtn":"Audit the academy",
+    "entranceBtn":"Entrance ceremony",
+    "body":[
+      "Dear Prospective International Student,",
+      "You are about to step into this magical academy, hidden within the alleys of Taiwan, as an 'Auditing Student' or 'International Student.' From this moment on, you will explore the daily life and magical wonders of Taiwan from the perspective of a visiting student.",
+      "The Academy has prepared six special courses and six interactive mini-games, guiding you to discover temples, night markets, local cuisine, and folk culture.",
+      "These games are scattered throughout different corners of the campus, waiting for you to find them. Successfully complete all the interactive games to graduate and receive a discount coupon from the Taiwan Magical Marketplace.",
+      "You may first explore the campus as an auditing student; after completing the games, if you wish to accumulate credits and save your progress, you can register at any time to receive your magical student ID."
+    ],
+    "sigh1":"Sincerely,",
+    "sigh2":"Formosoul Institute of Magic",
+    "sigh3":"Office of Academic Affairs."
+  },
   "classes":{
     "escTip":"Press Esc To Skip and Stop",
 

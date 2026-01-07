@@ -135,6 +135,11 @@ const goToPage = (pageNumber) => {
         display: flex;
         justify-content: center;
     }
+    .title-orders  > p:first-child{
+        width: 180px;
+
+
+    }
     .title-orders-line{
         height: 2px;
         background-color: $color-fsTitle;

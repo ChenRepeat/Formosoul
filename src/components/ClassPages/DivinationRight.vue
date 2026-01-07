@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, onMounted, computed } from 'vue';
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import { useMemberStore } from '@/stores/member';
+import { useclassesStore } from '@/stores/classes';
+
+const useClass = useclassesStore()
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.bue.pass)
 
@@ -76,8 +79,10 @@ onMounted( async () => {
     5: {name:'末吉',text:'classes.stick5'},
     6: {name:'衰',text:'classes.stick6'},
   }
-
+  const isChouqianing = ref(false);
   function chouqian(){
+    if(isChouqianing.value)return;
+    isChouqianing.value = true;
     chouqianFes.value = 0;
     stickResult.value = 0;
     setTimeout(() => {
@@ -132,11 +137,14 @@ const buaBue = () => {
       if (isBue1Yin && isBue2Yin) {
         finalResult.value = 'classes.bue2Name';
         siannCount.value = 0;
+        useClass.bueResult = 2;
       } else if (!isBue1Yin && !isBue2Yin) {
         finalResult.value = 'classes.bue1Name'; 
         siannCount.value = 0;
+        useClass.bueResult = 1;
       } else {
         finalResult.value = 'classes.bue3Name'; 
+        useClass.bueResult = 3;
         siannCount.value ++
 
         if(siannCount.value == 3){
@@ -152,6 +160,7 @@ const buaBue = () => {
             showCardOverlay.value = true;
 
             if(isFirstPass){
+              memberStore.rewards_coupon();
               setTimeout(() => {
                 activeTriggers.value.bue = true;
                 setTimeout(() => {

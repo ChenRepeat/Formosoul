@@ -116,10 +116,9 @@
     .login-form{
         width: 70%;
         height: 50%;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);   
+        margin: 0 auto;
+        // padding-top: 80px;
+        padding-bottom: 40px;
 
     }
 
@@ -128,7 +127,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        gap: 24px;
+
         margin-bottom: 16px;
 
     }
@@ -179,5 +178,25 @@
         color: $color-fsCaption;
         text-align: center;
         margin-bottom: 24px;
+    }
+    @media screen and (min-width: 1400px) {
+        .login-form{
+            padding-top: 40px;
+        }
+
+    }
+    @media screen and (max-width: 1366px) {
+        .login-form{
+            margin-top: 100px;
+            margin-bottom: 100px;
+        }
+        
+    }
+
+    @media screen and (max-height: 750px) {
+        .login-form{
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
     }
 </style>

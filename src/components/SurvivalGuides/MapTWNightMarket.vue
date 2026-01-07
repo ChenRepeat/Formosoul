@@ -10,8 +10,52 @@ import { useLangStore } from '@/stores/lang';
 import { nightMarketInfo } from '@/components/SurvivalGuides/MapTWNightMarketLocation.js'
 import { LocationInformation } from '@element-plus/icons-vue';
 
+let isSelecting = false;
+
+// 新增：動態定位
+const mapWrapperLocationRef = ref()
+const globalZoomRef = ref()
+const mapLeft = ref(470)
+const mapTop = ref(120)
+
+const updateZoomPosition = () => {
+  if (mapWrapperLocationRef.value && globalZoomRef.value) {
+    const rect = mapWrapperLocationRef.value.getBoundingClientRect()
+    mapLeft.value = rect.left + 20  
+    mapTop.value = rect.top + 20   
+  }
+}
+
+// 回到初始狀態
+const resetView = () => {
+  searchKeyword.value = '';
+  selectedRegion.value = 'all';
+  currentSelectedMarket.value = null;
+
+  map.value?.closePopup();
+  
+  weatherStatus.value = null;
+  clearWeatherAnimation();
+
+  map.value?.flyTo([24, 121.0], 7.5, {
+    animate: true,
+    duration: 1
+  });
+
+  // 列表回頂端
+  const sidebarContent = document.querySelector('.sidebar-content');
+  if (sidebarContent) {
+    sidebarContent.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (mapWrapperRef.value) {
+    mapWrapperRef.value.style.filter = "brightness(1) saturate(1)";
+  }
+};
+
+
 // 抓取天氣API
-const weatherStatus = ref('Clear') // 預設晴天
+const weatherStatus = ref(null) // 預設晴天
 
 // language 
 const langStore = useLangStore();
@@ -45,29 +89,39 @@ const MAP_BOUNDS = [[21.525, 119.459655], [25.615, 122.490]];
 const MAX_BOUNDS = L.latLngBounds(MAP_BOUNDS).pad(1.0);
 
 const filteredMarket = computed(()=>{
+  // 如果搜尋關鍵字是空的，就顯示所有符合區域的
+  const keyword = searchKeyword.value.trim().toLowerCase();
+  // 區域篩選值
+  const targetRegionValue = sheetRegionMapping[selectedRegion.value];
+
   return sheetData.value.filter( item => {
-    const isZh = locale.value.includes('zh');
-    const name = isZh ? item.name : (item.name_en || item.name);
-    const famous = isZh ? item.famous : (item.famous_en || item.famous);
-
-    const targetRegionValue = sheetRegionMapping[selectedRegion.value];
+    // 區域過濾
     const matchRegion = selectedRegion.value === 'all' || item.region === targetRegionValue;
-
-    const matchKeyword = name.includes(searchKeyword.value) || famous.includes(searchKeyword.value);
+    // 關鍵字過濾：不論介面語系，同時比對中英文的「名稱」與「小吃」
+    // 只要其中一個欄位包含關鍵字，就回傳 true
+    const matchKeyword = !keyword || 
+    (item.name && item.name.toLowerCase().includes(keyword)) ||
+    (item.name_en && item.name_en.toLowerCase().includes(keyword)) ||
+    (item.famous && item.famous.toLowerCase().includes(keyword)) ||
+    (item.famous_en && item.famous_en.toLowerCase().includes(keyword));
     
+    // const isZh = locale.value.includes('zh');
+    // const name = isZh ? item.name : (item.name_en || item.name);
+    // const famous = isZh ? item.famous : (item.famous_en || item.famous);
     return matchRegion && matchKeyword;
   });
 });
 
 const openMyPopup = (item) => {
-  const isZh = locale.value.toLowerCase().includes('zh');
+  const isZh = langStore.locale.toLowerCase().includes('zh');
   const displayName = isZh ? item.name : (item.name_en || item.name);
   const displayHours = isZh ? item.hours : (item.hours_en || item.hours);
   const displayFamous = isZh ? item.famous : (item.famous_en || item.famous);
 
   L.popup({
-    autoPan: false,
-    offset: [0, -10],
+    autoPan: true,
+    autoPanPadding: [50, 50],
+    offset: [0, 80],
     closeButton: true,
     className: 'custom-popup'
   })
@@ -85,6 +139,12 @@ const openMyPopup = (item) => {
 };
 
 const selectMarket = (item) => {
+  if (currentSelectedMarket.value === item.name) {
+    resetView();
+    return;
+  }
+
+  isSelecting = true;
   currentSelectedMarket.value = item.name;
 
   map.value.flyTo([item.lat, item.lng], 9, {
@@ -92,8 +152,13 @@ const selectMarket = (item) => {
     duration: 1.2,
     noMoveStart: true
   });
+
+  setTimeout(() => {
+    openMyPopup(item);
+    isSelecting = false;
+  }, 250);
   
-  openMyPopup(item);
+  // openMyPopup(item);
 
   // 自動捲動側邊欄列表
   nextTick(() => {
@@ -105,12 +170,12 @@ const selectMarket = (item) => {
 
   // 觸發天氣的更新
   fetchWeather(item.cityName, item.locationName);
+
+  // setTimeout(() => { isSelecting = false; }, 300);
 };
 
 const renderMarkers = () => {
   if (!map.value || sheetData.value.length === 0) return;
-
-  console.log("正在重畫地標，當前語系:", langStore.locale);
 
   // 先把舊的紅點全部清掉
   markersGroup.clearLayers();
@@ -132,15 +197,33 @@ const renderMarkers = () => {
 
       markersGroup.addLayer(marker);
 
-      if (currentSelectedMarket.value === item.name) {
-        openMyPopup(item);
-      }
+      // if (currentSelectedMarket.value === item.name) { openMyPopup(item); }
   });
 };
 
-watch([() => langStore.locale, filteredMarket], () => {
+watch([() => langStore.locale, filteredMarket], async () => {
     renderMarkers();
+    if (currentSelectedMarket.value) {
+        // 等待 Vue 完成語系切換的響應式更新
+        await nextTick();
+
+        map.value.closePopup();
+    }
 }, { deep: true });
+
+// 監聽搜尋和過濾變化，清除不存在的選中項
+watch([searchKeyword, selectedRegion, filteredMarket], () => {
+  if (currentSelectedMarket.value) {
+    const isCurrentInList = filteredMarket.value.some(
+      item => item.name === currentSelectedMarket.value
+    );
+    if (!isCurrentInList) {
+      currentSelectedMarket.value = null;
+      map.value?.closePopup();
+      weatherStatus.value = null;
+    }
+  }
+});
 
 // fetch Night Market Location
 const fetchData = async () => {
@@ -238,15 +321,20 @@ const fetchWeather = async (cityName, locationName) => {
     }
     
     // 觸發動畫
-    if (weatherText.includes('雨')){
-      weatherStatus.value = 'Rainy';
-    } else if (weatherText.includes('雲')||weatherText.includes('陰')) {
-      weatherStatus.value = 'Cloudy';
-    } else {
-      weatherStatus.value = 'Clear';
-    }
+    const lowerWeatherText = weatherText.toLowerCase();
 
-    console.log(`${locationName} 目前天氣：${weatherText}`)
+    if (weatherText.includes('雨') || weatherText.includes('雷') || weatherText.includes('陣雨')){
+      weatherStatus.value = 'Rainy';
+      console.log(`✅ ${locationName} 天氣：${weatherText} → 雨天`);
+    } else if (weatherText.includes('陰') || weatherText.includes('多雲')) {
+      weatherStatus.value = 'Cloudy';
+      console.log(`✅ ${locationName} 天氣：${weatherText} → 陰天`);
+    } else if (weatherText.includes('晴') || weatherText.includes('sun') || lowerWeatherText.includes('clear')) {
+      weatherStatus.value = 'Clear';
+      console.log(`✅ ${locationName} 天氣：${weatherText} → 晴天`);
+    } else {
+      weatherStatus.value = null;
+    }
   } catch (err) { 
     console.error("天氣抓取失敗", err);
   }
@@ -338,13 +426,20 @@ const createRainAnimation = ()=> {
   };
 
 // 監聽天氣變化
-watch(weatherStatus, (newStatus)=>{
+watch(weatherStatus, (newStatus, oldStatus)=>{
   if (!mapWrapperRef.value) return;
   console.log(`[Animation] 執行 ${newStatus} 效果`);
 
+  // 避免初始化時不必要的動畫
+  if (!oldStatus) {
+    console.log(`[Animation] 初始化天氣：${newStatus}`);
+  } else {
+    console.log(`[Animation] 天氣變化：${oldStatus} → ${newStatus}`);
+  }
+
   const filters = {
-    Rainy: "brightness(0.6) saturate(0.7) hue-rotate(15deg)", // 加強效果以便測試
-    Cloudy: "brightness(0.775) saturate(0.85)",
+    Rainy: "brightness(0.6) saturate(0.7) hue-rotate(15deg)",
+    Cloudy: "brightness(0.8) saturate(0.85)",
     Clear: "brightness(1) saturate(1)"
   };
 
@@ -369,14 +464,20 @@ watch(weatherStatus, (newStatus)=>{
       createSunnyAnimation();
       break;
   }
-}, { immediate: true})
+});
 
 
-const zoomIn = () => map.value?.zoomIn();
-const zoomOut = () => map.value?.zoomOut();
-
+const zoomIn = () => {
+  map.value?.setZoom(map.value.getZoom() + 1);
+}
+const zoomOut = () => {
+  map.value?.setZoom(map.value.getZoom() - 1)
+}
 const handleKey = (e) => {
-  if (e.code === 'Escape') currentSelectedMarket.value = null;
+  const isModalOpen = document.querySelector('.card-modal');
+  if (e.code === 'Escape' && !isModalOpen) {
+    resetView();
+  }
 };
 
 onMounted(async () => {
@@ -434,29 +535,86 @@ onMounted(async () => {
         dashArray: '3, 5'
       },
       onEachFeature: (feature, layer) => {
-        // 綁定 Tooltip
-        if (feature.properties?.COUNTYNAME) {
-          layer.bindTooltip(feature.properties.COUNTYNAME, { 
-            className: 'county-label', 
-            direction: 'center',
-            permanent: false 
-          });
+        const countyName = feature.properties?.COUNTYNAME;
+        
+        if (countyName) {
+          // 檢查這個縣市是否有夜市資料
+          const hasNightMarket = sheetData.value.some(market => 
+            market.cityName === countyName
+          );
+          
+          if (hasNightMarket) {
+            // 只有有夜市的縣市才綁定互動效果
+            layer.bindTooltip(countyName, { 
+              className: 'county-label', 
+              direction: 'center',
+              permanent: false 
+            });
+            
+            layer.on('mouseover', () => {
+              layer.setStyle({ 
+                color: '#00ffcc', 
+                opacity: 1, 
+                weight: 2 
+              });
+            });
+            layer.on('mouseout', () => {
+              layer.setStyle({ 
+                color: 'transparent', 
+                opacity: 0, 
+                weight: 1 
+              });
+            });
+          }
         }
-        // 滑鼠移入高亮 (如果過濾成功，這裡就不會對外島生效)
-        layer.on('mouseover', () => layer.setStyle({ color: '#00ffcc', opacity: 1, weight: 2 }));
-        layer.on('mouseout', () => layer.setStyle({ color: 'transparent', opacity: 0, weight: 1 }));
       }
     }).addTo(map.value);
   } catch (e) {console.error("GeoJSON error", e);}
+//       onEachFeature: (feature, layer) => {
+//         // 綁定 Tooltip
+//         if (feature.properties?.COUNTYNAME) {
+//           layer.bindTooltip(feature.properties.COUNTYNAME, { 
+//             className: 'county-label', 
+//             direction: 'center',
+//             permanent: false 
+//           });
+//         }
+//         // 滑鼠移入高亮 (如果過濾成功，這裡就不會對外島生效)
+//         layer.on('mouseover', () => layer.setStyle({ color: '#00ffcc', opacity: 1, weight: 2 }));
+//         layer.on('mouseout', () => layer.setStyle({ color: 'transparent', opacity: 0, weight: 1 }));
+//       }
+//     }).addTo(map.value);
+//   } catch (e) {console.error("GeoJSON error", e);}
+//   nextTick(() => {
+//     // 這裡呼叫一次確保初始的 'Clear' 效果有被套用
+//     gsap.set(mapWrapperRef.value, { filter: "brightness(1) saturate(1) hue-rotate(0deg)" });
+//   });
+//   await fetchData();
+//   renderMarkers();
+//   window.addEventListener('keydown', handleKey);
+// });
   nextTick(() => {
     // 這裡呼叫一次確保初始的 'Clear' 效果有被套用
     gsap.set(mapWrapperRef.value, { filter: "brightness(1) saturate(1) hue-rotate(0deg)" });
   });
+
   await fetchData();
   renderMarkers();
   window.addEventListener('keydown', handleKey);
+
+  map.value.on('popupclose', () => {
+    // 只有在「不是因為切換夜市」且「目前有選中項目」的情況下，才執行重置
+    if (!isSelecting && currentSelectedMarket.value) {
+      resetView();
+    }
+  });
 });
 
+onMounted(() => {
+  updateZoomPosition()
+  window.addEventListener('resize', updateZoomPosition)
+  window.addEventListener('scroll', updateZoomPosition)
+})
 
 onUnmounted(() => {
 
@@ -465,6 +623,9 @@ onUnmounted(() => {
   
   if (map.value) map.value.remove();
   window.removeEventListener('keydown', handleKey);
+
+  window.removeEventListener('resize', updateZoomPosition)
+  window.removeEventListener('scroll', updateZoomPosition)
 });
 
 
@@ -520,29 +681,96 @@ onUnmounted(() => {
 
   <div ref="mapWrapperRef" class="map-wrapper" :class="`weather-${weatherStatus}`">
     <div ref="mapContainer" class="map"></div>
-      
+    
+    
       <!-- 天氣動畫用的div -->
       <div ref="weatherAnimationRef" class="weather-animation-layer"></div>
 
-      
-      <div class="custom-zoom-control">
-        <button @click="zoomIn" class="zoom-btn">+</button>
-        <button @click="zoomOut" class="zoom-btn">−</button>
+      <!-- 天氣狀態顯示 -->
+      <div class="weather-status-display" v-if="currentSelectedMarket">
+        <div class="weather-icon">
+          {{ weatherStatus === 'Rainy' ? '🌧️' : weatherStatus === 'Cloudy' ? '☁️' : '☀️' }}
+        </div>
+        <div class="weather-text">
+          {{ weatherStatus === 'Rainy' ? 'Rainy' : weatherStatus === 'Cloudy' ? 'Cloudy' : 'Clear' }}
+        </div>
+        <button 
+          class="clear-selection-btn" 
+          @click="resetView"
+          title="Clear Selection (ESC)"
+        >
+          ✕
+        </button>
       </div>
       <!-- 測試按鈕 (可選，用於測試天氣效果) -->
-      <div class="weather-test-controls">
+      <!-- <div class="weather-test-controls">
         <button @click="weatherStatus = 'Clear'">☀️ 晴天</button>
         <button @click="weatherStatus = 'Cloudy'">☁️ 陰天</button>
         <button @click="weatherStatus = 'Rainy'">🌧️ 雨天</button>
-      </div>
+      </div> -->
     </div>
   </div>
-
+  <Teleport to="body">
+    <div class="global-zoom-control" 
+         :style="{ left: mapLeft + 'px', top: mapTop + 'px' }">
+      <button @click.stop.prevent="zoomIn" class="zoom-btn zoom-in">＋</button>
+      <button @click.stop.prevent="zoomOut" class="zoom-btn zoom-out">－</button>
+    </div>
+  </Teleport>
 </template>
 
 
 
 <style scoped lang="scss">
+
+// .custom-zoom-control { position: absolute; top: 20px; left: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; }
+// .zoom-btn { width: 40px; height: 40px; background: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.5rem; }
+
+.global-zoom-control {
+  position: fixed !important;
+  z-index: 999999 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.zoom-btn {
+  width: 48px !important;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  pointer-events: all !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.2s ease !important;
+  
+  /* 完全免疫所有動畫 */
+  transform: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+.zoom-in {
+  background: linear-gradient(145deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+.zoom-out {
+  background: linear-gradient(145deg, #f093fb 0%, #f5576c 100%) !important;
+  color: white !important;
+}
+
+.zoom-btn:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
+}
+
+
 /* 佈局設定 */
 .main-layout {
   display: flex;
@@ -557,14 +785,18 @@ onUnmounted(() => {
   background: #191b31;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
   box-shadow: 4px 0 15px rgba(0,0,0,0.4);
   z-index: 10;
+  overflow: hidden;
 }
 
 .sidebar-header {
   padding: 20px;
   background: #202442;
   border-bottom: 1px solid #2f3455;
+  flex-shrink: 0;
 }
 
 .sidebar-header h2 { font-size: 1.2rem; color: #fff; margin-bottom: 15px; }
@@ -585,7 +817,20 @@ onUnmounted(() => {
 }
 .search-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
 
-.sidebar-content { flex: 1; overflow-y: auto; padding: 15px; scroll-behavior: smooth; }
+.sidebar-content { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 15px; 
+  scroll-behavior: smooth; 
+  min-height: 0;
+}
+.sidebar-content::after {
+  content: "";
+  display: block;
+  height: 80px;          
+  width: 100%;
+}
+
 .sidebar-content::-webkit-scrollbar { width: 6px; }
 .sidebar-content::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 3px; }
 
@@ -620,14 +865,11 @@ onUnmounted(() => {
 }
 }
 
-.custom-zoom-control { position: absolute; top: 20px; left: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; }
-.zoom-btn { width: 40px; height: 40px; background: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.5rem; }
-
 .no-result {
   color: $color-fsWhite;
 }
 
-/* 使用 :deep() 穿透 scoped，只影響這個組件內的動畫 */
+// KEY: 使用:deep()穿透scoped，只影響這個組件內的動畫
 :deep(.weather-animation-layer) {
   position: absolute;
   top: 0;
@@ -727,31 +969,5 @@ onUnmounted(() => {
     opacity: 1;
   }
 };
-
-/* 測試按鈕 */
-.weather-test-controls {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  display: flex;
-  gap: 10px;
-  
-  button {
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s;
-    
-    &:hover {
-      background: white;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-  }
-}
 
 </style>

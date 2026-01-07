@@ -841,7 +841,7 @@ function pageMinus(){
       currentPage.value = 1;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-  )
+  );
 </script>
 
 <template>

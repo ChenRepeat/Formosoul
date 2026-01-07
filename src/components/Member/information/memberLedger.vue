@@ -25,9 +25,6 @@ const props = defineProps({
 });
 
 
-function rewards_coupon(){
-
-};
 // 內部狀態（會員中心使用）
 const internalPointsStatus = ref({
     dice: 0, 

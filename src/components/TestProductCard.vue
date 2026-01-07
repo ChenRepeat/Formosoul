@@ -34,6 +34,10 @@ const props = defineProps({
     type: Array,
     required: true,
     default: () => []  // 預設空陣列，避免報錯  <<要在了解一下原因>>
+  },
+  withwhite:{
+    type:Boolean,
+    default: false
   }
 })
 
