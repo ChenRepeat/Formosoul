@@ -356,7 +356,10 @@
     "orderDate":"Date",
     "orderNO":"Number",
     "cartEmpty":"Your cart is currently empty.",
-    "couponuse":"Apply Coupon"
+    "couponuse":"Apply Coupon",
+    "couponNouse":"Cancel",
+    "couponTips":"Just a heads up: You can cover up to 90% of your total with coupons!"
+
 
   },
   "coreselection":{

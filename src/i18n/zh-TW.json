@@ -376,7 +376,10 @@
     "orderDate":"訂購日期",
     "orderNO":"訂單編號",
     "cartEmpty":"購物車目前沒有商品",
-    "couponuse":"套用折價券"
+    "couponuse":"套用優惠券",
+    "couponNouse":"取消使用",
+    "couponTips":"貼心提醒：優惠券最高可幫您省下 90% 的費用喔！"
+
   },
   "coreselection":{
     "thecoreselection": "喚醒魔杖之心",
