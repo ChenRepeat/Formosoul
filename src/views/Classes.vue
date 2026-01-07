@@ -1,6 +1,7 @@
 <template>
   <div class="book-section">
     <IndexBar class="index-bar" />
+     
     <div v-if="isAnimating" class="blocking-overlay" 
     :class="{ 
         'unload': !isLoad 
@@ -530,10 +531,10 @@ onUnmounted(() => {
 .book-section {
   width: 100vw; 
   height: 100vh;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  // background-color: $color-fsTitle;
   overflow: hidden; 
   user-select: none; 
   position: relative;
@@ -541,8 +542,11 @@ onUnmounted(() => {
 
 .book {
   filter: drop-shadow(0 0px 20px $color-fsWhite);
-  // box-shadow: (0 0px 25px $color-fsWhite);
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  max-width: 1200px;
+  aspect-ratio: 3 / 2;
+  height: 100%;
+  max-height: 800px;
 }
 .unload{
   opacity: 0;
@@ -562,8 +566,8 @@ onUnmounted(() => {
     width: 100%;
     text-align: center;
     bottom: 10%;
-    color: white;
-    opacity: 0.3;
+    color: $color-fsTitle;
+    text-shadow: 0 0 5px $color-fsWhite;
   }
 }
 
@@ -634,11 +638,7 @@ onUnmounted(() => {
   text-align: center;
 }
 
-h1, h3, h4 {
-  font-family: "Times New Roman", serif;
-  margin-bottom: 10px;
-  color: #4a3b2a;
-}
+
 
 .cover h1, .cover h3 { 
   color: #e0d5c1; 

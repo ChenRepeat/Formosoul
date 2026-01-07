@@ -173,18 +173,21 @@ onUnmounted(() => {
 
         <div class="header-icons-list dp-flex">
           <router-link to="/shoppingcart" class="no-i18n-anim ">
-          <font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
-          @click="closeMenu"/>
-          <span v-if=" cartstore.totalQty > 0 " class="cart-qty">{{ cartstore.totalQty }}</span>
-        </router-link>
-            <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
-            <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
+            <font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
+            @click="closeMenu"/>
+            <span v-if=" cartstore.totalQty > 0 " class="cart-qty">{{ cartstore.totalQty }}</span>
+          </router-link>
+          <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
+          <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
           <div class="hamburger-btn transition"
               @click="toggleMenu"
               @mousedown.stop
               @touchstart.stop
               :class="{ 'active': isMenuOpen}">
             <div v-for="(index) in 6 " :class="`dot${index}`" class="dot transition"></div>
+          </div>
+          <div class="dragIcon">
+
           </div>
         </div>
       </div>
@@ -569,5 +572,9 @@ img { object-fit: none; }
     }
   }
 }
-
+.dragIcon{
+  width: 24px;
+  height: 24px;
+  background-color: red;
+}
 </style>
