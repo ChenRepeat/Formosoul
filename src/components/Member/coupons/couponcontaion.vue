@@ -241,7 +241,6 @@ import { useRoute } from 'vue-router';
         //         previousCoupon.status = 2; 
         //     }
     onMounted(() => {
-        if (route.path.includes('/member/coupons')) {
         restore_coupon().then( r => {
             get_coupon();
         });
@@ -249,7 +248,6 @@ import { useRoute } from 'vue-router';
         cartStore.discount = 0;
         
          return;
-        }
     });
 </script>
 
