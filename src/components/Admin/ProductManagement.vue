@@ -225,7 +225,7 @@
 
 /* 修改內建行高 */
 :deep(.el-table .el-table__cell) {
-  padding: 0;
+  padding: 8px 0;
 }
 
 /* 分頁文字 */

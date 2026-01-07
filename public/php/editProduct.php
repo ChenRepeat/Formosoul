@@ -11,7 +11,7 @@ try {
 
     $id = $_POST['product_ID'];
     
-    // ★ 修改 1：統一存放路徑改為 Shop
+    // 設定檔案存放路徑
     $uploadDir = '../Shop/'; 
 
     // 建立上傳資料夾
@@ -35,15 +35,25 @@ try {
     // ====================================================
     // 如果使用者有上傳新主圖，就 "取代" 陣列的第一個元素 (index 0)
     if (isset($_FILES['mainImage']) && $_FILES['mainImage']['error'] === UPLOAD_ERR_OK) {
+        
+        // ★★★ 新增邏輯：在上傳新圖前，先刪除舊的主圖 (Index 0) ★★★
+        if (isset($currentImages[0]) && !empty($currentImages[0])) {
+            // 你的資料庫存的是 "Shop/xxx.jpg"，但 PHP 操作檔案需要相對路徑 "../Shop/xxx.jpg"
+            $oldFilePath = '../' . $currentImages[0];
+            
+            // 檢查檔案是否存在，存在就刪除
+            if (file_exists($oldFilePath)) {
+                unlink($oldFilePath);
+            }
+        }
+        // ★★★ 刪除邏輯結束 ★★★
+
         $ext = pathinfo($_FILES['mainImage']['name'], PATHINFO_EXTENSION);
         $newFilename = uniqid('main_') . '.' . $ext;
         
         if (move_uploaded_file($_FILES['mainImage']['tmp_name'], $uploadDir . $newFilename)) {
-            // ★ 修改 2：配合組員寫法，加上 "Shop/" 前綴
-            // 如果原本陣列是空的，直接塞入；如果不是空的，替換掉第 0 個
+            // 加上 "Shop/" 前綴並覆蓋陣列第 0 個位置
             $currentImages[0] = 'Shop/' . $newFilename;
-            
-            // (選擇性) 若要刪除舊檔，記得路徑也要處理，這裡先保留你的邏輯
         }
     }
 
@@ -66,8 +76,7 @@ try {
         }
     }
 
-    // 重新組合成字串，並過濾掉空值
-    // array_values 確保索引重排，避免 unset 造成的跳號
+    // 重新組合成字串，並過濾掉空值 (array_values 確保索引重排)
     $finalImageString = implode('|', array_values(array_filter($currentImages)));
 
     // ====================================================
