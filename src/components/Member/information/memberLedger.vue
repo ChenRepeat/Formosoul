@@ -160,7 +160,8 @@ onMounted(async () => {
   }
 .ledger-container {
   position: relative;
-  width: 480px; 
+  width: 100%;
+  max-width: 480px; 
   height: auto;
   overflow: hidden;
   border-radius: 10px;
