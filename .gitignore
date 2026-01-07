@@ -45,3 +45,4 @@ public/php/vendor/google/apiclient
 /vendor/
 
 public/php/vendor/
+src/stores/note.js
