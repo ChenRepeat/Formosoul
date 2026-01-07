@@ -160,12 +160,9 @@ async function sendOTPAPI(emailValue) {
 
 function enrollmentAPI(email, password, otp) {
     const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/Enrollment.php`;
-    // 1. 在發送請求時才讀取 sessionStorage
+    const API_URL = `${apiBase}/enrollment.php`;
     const storeCore = sessionStorage.getItem('guest');
     const coreData = storeCore ? JSON.parse(storeCore) : null;
-
-    // 2. 取得 wandcore_ID，如果沒有則給 null
     const wandcore_ID = coreData ? coreData.core : null;
     return fetch(API_URL, {
         method: 'POST',
