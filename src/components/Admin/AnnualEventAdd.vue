@@ -54,14 +54,25 @@
               <el-col :span="10">
                 <el-form-item label="活動封面照">
                   <div class="upload-box" @click="triggerFileInput">
-                    <input type="file" ref="fileInputRef" class="hidden-input" accept="image/*" @change="handleImageChange">
+                    <input 
+                      type="file" 
+                      ref="fileInputRef" 
+                      class="hidden-input" 
+                      accept="image/*" 
+                      @change="handleImageChange"
+                    >
+                    
                     <div v-if="previewImage" class="preview-container">
                       <img :src="previewImage" class="preview-img" />
-                      <div class="overlay"><span>更換圖片</span></div>
+                      <div class="overlay">
+                        <span>更換圖片</span>
+                      </div>
                     </div>
+
                     <div v-else class="upload-placeholder">
                       <el-icon class="upload-icon"><Plus /></el-icon>
-                      <div class="upload-text">上傳圖片</div>
+                      <div class="upload-text">點擊或拖曳圖片至此</div>
+                      <div class="upload-hint">建議尺寸 1200*1200 px<br>檔案大小 ≤ 1MB</div>
                     </div>
                   </div>
                 </el-form-item>
@@ -99,8 +110,16 @@
           </div>
 
           <div class="footer-actions">
-            <el-button @click="goBack" class="cancel-btn">取消</el-button>
-            <el-button type="primary" color="#003060" @click="submitForm" :loading="loading">新增活動</el-button>
+            <el-button @click="goBack" size="large" class="cancel-btn">取消</el-button>
+            <el-button 
+              type="primary" 
+              color="#003060" 
+              @click="submitForm" 
+              size="large"
+              :loading="loading"
+            >
+              新增活動
+            </el-button>
           </div>
 
         </el-form>
@@ -122,7 +141,6 @@ const fileInputRef = ref(null)
 const previewImage = ref(null)
 const selectedFile = ref(null)
 
-// ★ 這裡的欄位必須對應 PHP $_POST 想要接收的資料
 const addEventForm = reactive({
   title_zh: '',
   title_en: '',
@@ -135,35 +153,38 @@ const addEventForm = reactive({
   content_en: ''
 })
 
-const goBack = () => router.push({ name: 'AnnualEventsManagement' })
+const goBack = () => router.push({ name: 'AnnualEventManagement' })
 const triggerFileInput = () => fileInputRef.value.click()
 
 const handleImageChange = (event) => {
   const file = event.target.files[0]
-  if (file && file.size <= 1024 * 1024) {
-    selectedFile.value = file
-    previewImage.value = URL.createObjectURL(file)
-  } else {
-    ElMessage.warning('圖片過大或未選擇')
+  if (!file) return
+
+  // 驗證大小
+  if (file.size > 1024 * 1024) {
+    ElMessage.warning('圖片檔案大小不能超過 1MB')
+    return
   }
+  
+  selectedFile.value = file
+  previewImage.value = URL.createObjectURL(file)
 }
 
 const submitForm = async () => {
   loading.value = true
   
-  // 簡單驗證
-  if(!addEventForm.title_zh || !addEventForm.createdate) {
-      ElMessage.warning('請填寫標題與建立日期')
+  // 驗證
+  if(!addEventForm.title_zh || !addEventForm.launchdate) {
+      ElMessage.warning('請填寫標題與活動日期')
       loading.value = false
       return
   }
 
   const apiBase = import.meta.env.VITE_API_BASE
-  const API_URL = `${apiBase}/addAnnualEvents.php` 
+  const API_URL = `${apiBase}/addAnnualEvent.php` 
 
   const fd = new FormData()
   
-  // ★ 將所有欄位 Append 進 FormData
   fd.append('title_zh', addEventForm.title_zh)
   fd.append('title_en', addEventForm.title_en)
   fd.append('launchdate', addEventForm.launchdate)
@@ -184,7 +205,7 @@ const submitForm = async () => {
 
     if (data.success) {
       ElMessage.success('新增成功！')
-      router.push({ name: 'AnnualEventsManagement' })
+      router.push({ name: 'AnnualEventManagement' })
     } else {
       ElMessage.error('新增失敗：' + (data.message || '未知錯誤'))
     }
@@ -198,13 +219,133 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
-/* 樣式保持原樣即可，或依需求微調 */
-.scroll-container { height: calc(100vh - 250px); overflow-y: auto; padding: 20px 20px 20px 0; }
-.form-container { max-width: 1000px; margin: 0 auto; }
-.content-card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
-.upload-box { width: 100%; height: 250px; border: 1px dashed #dcdfe6; display: flex; justify-content: center; align-items: center; cursor: pointer; background: #fafafa; }
-.upload-box:hover { border-color: #409eff; }
-.preview-img { width: 100%; height: 100%; object-fit: contain; }
-.hidden-input { display: none; }
-.footer-actions { display: flex; justify-content: center; gap: 16px; margin-top: 40px; }
+.scroll-container {
+  height: calc(100vh - 250px);
+  overflow-y: auto;
+  padding: 20px 20px 20px 0;
+}
+
+.form-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.content-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px; /* 這裡改回跟 addNews 一樣的 padding */
+  margin-bottom: 24px;
+}
+
+/* 底部按鈕區 */
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.back-btn {
+  border-color: #F0F7FF;
+  background-color: #F0F7FF;
+  font-weight: normal;
+  color: black;
+  width: 140px;
+  
+  &:hover {
+    border-color: #409eff;
+    background-color: #F0F7FF;
+    color: #409eff;
+  }
+}
+
+.cancel-btn {
+  width: 120px;
+}
+
+/* === ★★★ 圖片上傳區塊樣式 (移植自 addNews) ★★★ === */
+.upload-box {
+  width: 100%;
+  height: 350px; /* 高度調回 350px */
+  border: 1px dashed #dcdfe6;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    border-color: #409eff;
+  }
+}
+
+.hidden-input {
+  display: none;
+}
+
+.upload-placeholder {
+  text-align: center;
+  color: #909399;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #dcdfe6;
+  margin-bottom: 10px;
+}
+
+.upload-text {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: #c0c4cc;
+  line-height: 1.5;
+}
+
+.preview-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  color: white;
+  font-size: 16px;
+}
+
+.upload-box:hover .overlay {
+  opacity: 1;
+}
+
+:deep(.el-form-item__label) {
+  font-weight: 500;
+  color: #606266;
+}
 </style>
