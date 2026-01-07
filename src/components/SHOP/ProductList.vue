@@ -1048,6 +1048,11 @@ function pageMinus(){
 
     // 讓文字在空白處置中
     padding-right: 28px;
+
+  & .list-option{
+    background-color: $color-fsTitle;
+    color: $color-fsWhite;
+  }
 }
 
 .nav-list:focus {
