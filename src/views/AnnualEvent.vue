@@ -17,8 +17,6 @@ const VISIBLE_COUNT = 4;
 const intervalMs = 4000;
 
 const HOVER_DELAY = 350; // hover 慢一點再開影片（250~600 自己調）
-const DRAG_THRESHOLD_RATIO = 0.25; // 拖曳超過「單張寬」25%就換
-const FLICK_VELOCITY = 0.7; // 甩動速度門檻(px/ms)
 
 /** ===== State ===== **/
 const currentIndex = ref(0);
@@ -28,18 +26,6 @@ const timerId = ref(null);
 const isMobile = ref(false);
 
 const hoverTimer = ref(null);
-
-const isDragging = ref(false);
-const viewportEl = ref(null);
-const trackEl = ref(null);
-
-const drag = ref({
-  active: false,
-  startX: 0,
-  dx: 0,
-  startTime: 0,
-  moved: false,
-});
 
 /** ===== Helpers ===== **/
 const isEnglish = computed(() => langStore.locale === "en-US");
@@ -115,7 +101,7 @@ const visibleItems = computed(() => {
   return result;
 });
 
-/** ===== Navigation (infinite) ===== **/
+/** ===== Navigation ===== **/
 function nextSlide() {
   const total = items.value.length;
   if (total === 0) return;
@@ -131,7 +117,6 @@ function prevSlide() {
 /** ===== Hover delay ===== **/
 function handleMouseEnter(visibleIdx) {
   if (isMobile.value) return;
-  if (isDragging.value) return;
 
   if (hoverTimer.value) clearTimeout(hoverTimer.value);
   hoverTimer.value = setTimeout(() => {
@@ -147,99 +132,19 @@ function handleMouseLeave() {
   hoveredIndex.value = null;
 }
 
-/** ===== Drag ===== **/
-function getStepWidth() {
-  const el = viewportEl.value;
-  if (!el) return 0;
-  return el.clientWidth / VISIBLE_COUNT;
-}
-
-function setTrackTranslate(px) {
-  if (!trackEl.value) return;
-  trackEl.value.style.transform = `translateX(${px}px)`;
-}
-
-function setTrackTransition(on) {
-  if (!trackEl.value) return;
-  trackEl.value.style.transition = on ? "transform 260ms ease" : "none";
-}
-
-function onDragStart(e) {
-  if (isMobile.value) return;
-
-  drag.value.active = true;
-  drag.value.moved = false;
-  isDragging.value = true;
-
-  hoveredIndex.value = null;
-  stopAutoSlide();
-
-  drag.value.startX = e.clientX;
-  drag.value.dx = 0;
-  drag.value.startTime = performance.now();
-
-  setTrackTransition(false);
-  viewportEl.value?.setPointerCapture?.(e.pointerId);
-}
-
-function onDragMove(e) {
-  if (!drag.value.active) return;
-
-  const dx = e.clientX - drag.value.startX;
-  drag.value.dx = dx;
-
-  if (Math.abs(dx) > 6) drag.value.moved = true;
-
-  // 阻尼讓手感更像 iOS
-  const step = getStepWidth();
-  const resistance = step ? Math.min(1, step / (Math.abs(dx) + step)) : 1;
-  const damped = dx * (0.9 + 0.1 * resistance);
-
-  setTrackTranslate(damped);
-}
-
-function onDragEnd() {
-  if (!drag.value.active) return;
-  drag.value.active = false;
-
-  const dx = drag.value.dx;
-  const dt = performance.now() - drag.value.startTime;
-  const v = dt > 0 ? Math.abs(dx) / dt : 0;
-
-  const step = getStepWidth();
-  const threshold = step * DRAG_THRESHOLD_RATIO;
-
-  let delta = 0;
-  if (v > FLICK_VELOCITY) delta = dx < 0 ? 1 : -1;
-  else if (Math.abs(dx) > threshold) delta = dx < 0 ? 1 : -1;
-
-  if (delta !== 0) {
-    // infinite
-    const total = items.value.length;
-    if (total > 0) currentIndex.value = (currentIndex.value + delta + total) % total;
-  }
-
-  // 吸附回去
-  setTrackTransition(true);
-  setTrackTranslate(0);
-
-  window.setTimeout(() => {
-    isDragging.value = false;
-    startAutoSlide();
-  }, 280);
-}
-
 /** ===== Click ===== **/
 function openDetail(item) {
+  const slug = Array.isArray(item?.title_en_s)
+    ? item.title_en_s.join("-")
+    : String(item?.title_en || "").trim().split(/\s+/).join("-");
+
   router.push({
     name: "FestivalDetail",
-    params: { slug: item.title_en_s.join("-") },
+    params: { slug },
   });
 }
 
 function onSlideClick(item) {
-  // 拖曳中/有滑動就不算 click
-  if (isDragging.value || drag.value.moved) return;
   openDetail(item);
 }
 
@@ -253,7 +158,7 @@ function startAutoSlide() {
   if (isMobile.value) return;
   stopAutoSlide();
   timerId.value = setInterval(() => {
-    if (hoveredIndex.value === null && !isDragging.value) nextSlide();
+    if (hoveredIndex.value === null) nextSlide();
   }, intervalMs);
 }
 
@@ -278,6 +183,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
+
 <template>
   <section class="annual-event-page">
     <div class="festival-shell" :class="{ 'is-dragging': isDragging }">
@@ -285,15 +191,8 @@ onBeforeUnmount(() => {
       <button class="nav-btn nav-next" type="button" @click="nextSlide">›</button>
 
       <div class="festival-carousel">
-        <div
-          class="carousel-inner"
-          ref="viewportEl"
-          @pointerdown="onDragStart"
-          @pointermove="onDragMove"
-          @pointerup="onDragEnd"
-          @pointercancel="onDragEnd"
-        >
-          <div class="carousel-track" ref="trackEl">
+        <div class="carousel-inner">
+          <div class="carousel-track">
             <div
               v-for="(item, visibleIndex) in visibleItems"
               :key="item.id || `${currentIndex}-${visibleIndex}`"
@@ -303,11 +202,12 @@ onBeforeUnmount(() => {
               @mouseleave="handleMouseLeave"
               @click="onSlideClick(item)"
             >
-              <!-- ✅ Video：放在最外層（不吃 clip-path，所以會是長方形） -->
+              <!-- ✅ Video：hover 顯示後，點影片就進 detail -->
               <div
                 v-if="item.video"
                 class="slide-video-wrapper"
                 :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
+                @click.stop="onSlideClick(item)"
               >
                 <iframe
                   class="youtube-iframe"
@@ -348,7 +248,6 @@ onBeforeUnmount(() => {
                     </div>
                   </div>
                 </div>
-                <!-- /media-wrapper -->
               </div>
               <!-- /slide-tilt -->
             </div>
@@ -358,6 +257,7 @@ onBeforeUnmount(() => {
         </div>
         <!-- /inner -->
       </div>
+
       <!-- /carousel -->
 
       <div class="carousel-dots">
@@ -503,6 +403,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   pointer-events: none;
   transition: opacity .35s ease;
+  cursor: pointer; 
 }
 
 .slide-video-wrapper.is-visible {
@@ -523,6 +424,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   border: 0;
+  pointer-events: none;
 }
 
 /* ===== Image layer ===== */
