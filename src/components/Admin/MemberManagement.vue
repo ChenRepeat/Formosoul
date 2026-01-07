@@ -86,8 +86,12 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column width="50px">
-        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+      <el-table-column width="50px" align="center">
+        <template #default="scope">
+          <router-link :to="{ name: 'MemberEdit', params: { id: scope.row.member_ID } }">
+            <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+          </router-link>
+        </template>
       </el-table-column>
     </el-table>
 

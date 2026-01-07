@@ -15,12 +15,10 @@ const submitting = ref(false) // 送出按鈕
 // 表單資料
 const editMemberForm = reactive({
   id: '', 
-  name_zh: '',
-  name_en: '',
+  name: '',
   email: '',
   role: 0,        // 0: 一般會員, 1: 管理員
   status: 1,      // 1: 啟用, 0: 停權
-  suspend_reason: '' // 停權原因
 })
 
 const goBack = () => {
@@ -32,21 +30,18 @@ const getMemberDetail = async () => {
   loading.value = true
   try {
     const apiBase = import.meta.env.VITE_API_BASE
-    // 假設你的讀取 API 為 getMember.php?id=xxx
-    const API_URL = `${apiBase}/getMember.php?id=${memberID}`
+    const API_URL = `${apiBase}/getMemberData.php?id=${memberID}`
     const response = await fetch(API_URL)
     const data = await response.json()
 
     if (data.error) throw new Error(data.error)
 
     // 填入表單
-    editMemberForm.id = data.memberID // 假設後端回傳 memberID
-    editMemberForm.name_zh = data.name_zh
-    editMemberForm.name_en = data.name_en
+    editMemberForm.id = data.member_ID
+    editMemberForm.name = data.name
     editMemberForm.email = data.email
     editMemberForm.role = Number(data.role)
     editMemberForm.status = Number(data.status)
-    editMemberForm.suspend_reason = data.suspend_reason || ''
 
   } catch (error) {
     console.error(error)
@@ -57,21 +52,18 @@ const getMemberDetail = async () => {
   }
 }
 
-// 送出更新
 const submitForm = async () => {
   submitting.value = true
   
   const apiBase = import.meta.env.VITE_API_BASE
-  // 假設你的更新 API 為 editMember.php
   const API_URL = `${apiBase}/editMember.php` 
 
-  // 使用 JSON 傳送資料 (因為只有文字欄位，不含圖片，用 JSON 比較單純)
-  // 如果你的後端習慣接 FormData，也可以改用 FormData
+  // 使用 JSON 傳送資料 
+  // 也可以改用 FormData
   const payload = {
     id: memberID,
     role: editMemberForm.role,
     status: editMemberForm.status,
-    suspend_reason: editMemberForm.suspend_reason
   }
 
   try {
@@ -130,14 +122,9 @@ onMounted(() => {
             </el-form-item>
 
             <el-row :gutter="20">
-              <el-col :span="12">
-                <el-form-item label="姓名(中文)">
-                  <el-input v-model="editMemberForm.name_zh" disabled class="bg-gray" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="Name(EN)">
-                  <el-input v-model="editMemberForm.name_en" disabled class="bg-gray" />
+              <el-col>
+                <el-form-item label="姓名">
+                  <el-input v-model="editMemberForm.name" disabled class="bg-gray" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -172,18 +159,8 @@ onMounted(() => {
                   </div>
                 </el-radio>
               </el-radio-group>
-              <span class="field-hint">停權後：會員將無法登入前台網站，無法再累積集點；既有訂單與集點記錄仍會保留在系統中。</span>
+              <span class="field-hint">停權後：會員將無法登入前台網站，既有訂單與集點記錄仍會保留在系統中。</span>
             </el-form-item>
-
-            <el-form-item label="停權原因 (備註)">
-              <el-input 
-                v-model="editMemberForm.suspend_reason" 
-                type="textarea" 
-                :rows="3"
-                placeholder="範例：違反社群規範，暫時停權觀察中……"
-                :disabled="editMemberForm.status === 1" 
-              />
-              </el-form-item>
 
           </div>
 
