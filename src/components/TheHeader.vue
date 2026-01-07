@@ -248,6 +248,13 @@ onUnmounted(() => {
           </router-link>
           <font-awesome-icon icon="fa-regular fa-circle-user" class="header-icon" @click="handleUserIconClick" v-if="!authStore.isLoggedIn"/>
           <font-awesome-icon icon="fa-solid fa-hat-wizard" class="header-icon" @click="handleUserIconClick" v-else/>
+          <div class="hamburger-btn transition"
+            @click="toggleMenu"
+            @mousedown.stop
+            @touchstart.stop
+            :class="{ 'active': isMenuOpen}">
+            <div v-for="(index) in 6 " :class="`dot${index}`" class="dot transition"></div>
+          </div>
           <div class="dragIcon dp-flex" 
           ref="dragHandleRef" 
           >
@@ -255,13 +262,6 @@ onUnmounted(() => {
             <div class="arrow" v-for="(index) in 4" :class="`arrow${index}`">
               <div class="arrow-bar"></div>
             </div>
-          </div>
-          <div class="hamburger-btn transition"
-              @click="toggleMenu"
-              @mousedown.stop
-              @touchstart.stop
-              :class="{ 'active': isMenuOpen}">
-            <div v-for="(index) in 6 " :class="`dot${index}`" class="dot transition"></div>
           </div>
         </div>
       </div>
@@ -642,7 +642,7 @@ img { object-fit: none; }
     width: 4px;
     height: 4px;
     background-color: $color-fsWhite;
-    transition: 0.5s all ease;
+    transition: 1s all ease;
 
   }
   .arrow{

@@ -8,6 +8,7 @@ import NewsCard from "@/components/News/NewsCard.vue";
 import { onBeforeRouteLeave } from 'vue-router'
 import Backgroundaction from "@/components/backgroundaction.vue";
 import { useNewsData } from "@/stores/news";
+import ToTopBottom from "@/components/ToTopBottom.vue";
 
 // 連接 php
 const baseUrl = import.meta.env.BASE_URL;
@@ -171,6 +172,7 @@ onUnmounted(() => {
         <NewsCard v-for="item in allNewsData" :key="item.id" :data="item" :link="item.id"/>
       </div>
     </section>
+    <ToTopBottom />
   </div>
 </template>
 
@@ -217,7 +219,7 @@ onUnmounted(() => {
       height: 100%;
       animation: run 2s infinite ease-in-out;
       background-image: linear-gradient(to top,white 0%,transparent 100%);
-      border-radius: 2.5px;
+      border-radius: 20%;
     }
   }
 }
