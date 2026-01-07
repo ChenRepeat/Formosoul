@@ -286,14 +286,14 @@ async function goOrder(){
             cartstore.clearCart();
             
             // 跳轉訂單成功畫面
-            // router.push({
-            //     name: 'OrderSuccess',
-            // });
+            router.push({
+                name: 'OrderSuccess',
+            });
 
 
             // 拿訂單編號，跳轉綠界
-            const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
-            window.location.href = payURL;
+            // const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
+            // window.location.href = payURL;
         
         }else{
             alert('訂單建立失敗：' + response.data.message);
@@ -376,13 +376,13 @@ async function goOrder(){
                         <p>{{$t('shoppingcart.price')}}：</p>
                         <p>NT$ {{cartstore.totalPrice}}</p>
                     </div>
-                    <div class="check-discount dp-flex">
-                        <p>{{$t('shoppingcart.discount')}}：</p>
-                        <p>－ NT$ {{cartstore.discount}}</p>
-                    </div>
                     <div class="check-shippingfee dp-flex">
                         <p>{{$t('shoppingcart.shippingFee')}}：</p>
                         <p>NT$ {{cartstore.shippingFee}}</p>
+                    </div>
+                    <div class="check-discount dp-flex">
+                        <p>{{$t('shoppingcart.discount')}}：</p>
+                        <p>－ NT$ {{cartstore.discount}}</p>
                     </div>
                     <hr>
                     <div class="check-total-payment dp-flex">
