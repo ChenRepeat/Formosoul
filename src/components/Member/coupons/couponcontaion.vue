@@ -40,25 +40,25 @@
             <div
             class="coupon-left"
             :class="{
-                    'tear-animation': coupon.status === 1 || coupon.isTearing, 
-                    'coupon-left': coupon.status >= 1 || coupon.isTearing, 
-                    'coupon-click': coupon.status < 2 || coupon.isTearing, 
-                    'left-used': coupon.status === 0 
+                    'tear-animation': coupon.status === 2 || coupon.isTearing, 
+                    'coupon-left': coupon.status >= 2 || coupon.isTearing, 
+                    'coupon-click': coupon.status < 3 || coupon.isTearing, // 撕掉
+                    'left-used': coupon.status == 0    // 最終是0的時候會灰色
                 }"
             >
                 <p class="fw600">MAGIC FUN</p>
             </div>
             <div class="coupon-center"
                 :class="{ 
-                    'tear-animation': coupon.status === 1 || coupon.isTearing,
-                    'center-used': coupon.status == 0 ,
+                    'tear-animation': coupon.status === 2 || coupon.isTearing,
+                    'center-used': coupon.status == 1 || coupon.status == 0,
                 }"
             >
                 <div>
                 <h4 class="coupon-content"
                 :class="{ 
-                    'tear-animation': coupon.status === 1 || coupon.isTearing, 
-                    'content-used': coupon.status == 0,
+                    'tear-animation': coupon.status === 2 || coupon.isTearing, 
+                    'content-used': coupon.status == 1 || coupon.status == 0,
                 }"  
                 >${{ coupon.discount }}</h4>
                 <h4>COUPON</h4>
@@ -177,14 +177,12 @@ import { useRoute } from 'vue-router';
         // 切換中，防止重複點擊
         if (coupon.isTearing) return;
         coupon.isTearing = true;
-        if(cartStore.coupon_ID == null && coupon.status == 2){
+        if(cartStore.coupon_ID == null && coupon.status == 3){
             change_coupon(coupon).then(result => {
             if (result.success) {
                     const storecouponID = result.data.coupons_ID
-                    console.log(result.data.coupons_ID);
                     cartStore.coupon_ID  = storecouponID
-                    console.log('變成1');
-                    coupon.status = 1; 
+                    coupon.status = 2; 
                     setTimeout(() => {
                         coupon.status = result.data.user_coupon_status;
                         coupon.isTearing = false;
@@ -193,22 +191,21 @@ import { useRoute } from 'vue-router';
                     coupon.isTearing = false;
                 }
             });        
-        }else if(cartcoupon == coupon.coupons_ID && coupon.status == 0){
+        }else if(cartcoupon == coupon.coupons_ID && coupon.status == 1){
             change_coupon(coupon).then(result => {
             if (result.success) {
-                    console.log(result.data.coupons_ID);
                     cartStore.coupon_ID  = null;
                     // console.log('變成1');
-                    coupon.status = 1; 
+                    coupon.status = 2; 
                     setTimeout(() => {
                         coupon.status = result.data.user_coupon_status;
                         coupon.isTearing = false;
                     }, 300);
                 }else {
                     coupon.isTearing = false;
-                }
+                }   
             });   
-        }else if(cartcoupon != coupon.coupons_ID && coupon.status == 2){
+        }else if(cartcoupon != coupon.coupons_ID && coupon.status == 3){
             alert('只能用一張');
             coupon.isTearing = false;     
         }else{
