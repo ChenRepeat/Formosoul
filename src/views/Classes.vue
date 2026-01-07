@@ -540,8 +540,8 @@ onUnmounted(() => {
 }
 
 .book {
-  // filter: drop-shadow(0 0px 20px $color-fsWhite);
-  box-shadow: (0 0px 25px $color-fsWhite);
+  filter: drop-shadow(0 0px 20px $color-fsWhite);
+  // box-shadow: (0 0px 25px $color-fsWhite);
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .unload{

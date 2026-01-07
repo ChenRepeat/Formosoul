@@ -278,7 +278,7 @@ const ledgerClose = ()=> showCardOverlay.value = false;
       <img src="/Classes/bue-yang.png" alt="陽面">
     </div>
       <transition name="fade" mode="out-in">
-        <h3 :key="bue">{{ $t(finalResult)}}</h3>
+        <h3 :key="bue" v-if="finalResult">{{ $t(finalResult)}}</h3>
       </transition>
     </div>
   </section>
@@ -364,7 +364,10 @@ const ledgerClose = ()=> showCardOverlay.value = false;
         position: absolute;
         transition: scale 1s ease, translate 1s ease;
         img{height: 100%;position: absolute;left: 0;top: 0;transform: scaleX(0.5);}
-        p{width: 40%;position: absolute;left: 16px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;font-size: 12px;}
+        p{width: 40%;position: absolute;left: 16px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;font-size: 12px;
+        @media (max-width: 1366px) {
+          left: 13px;
+        }}
       }
       #qianCase{
         height: 85%;
