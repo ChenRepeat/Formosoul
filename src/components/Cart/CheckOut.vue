@@ -280,20 +280,20 @@ async function goOrder(){
 
         if(response.data.status === 'success'){
             //訂單成立
-            alert(`訂單建立成功！\n編號：${response.data.orderID}\n金額：NT$ ${response.data.real_total}`);
+            alert(`訂單建立成功！\n編號：${response.data.orderID}\n金額：NT$ ${response.data.real_total}\n即將前往付款頁面...`);
 
             // 清空購物車
             cartstore.clearCart();
             
             // 跳轉訂單成功畫面
-            router.push({
-                name: 'OrderSuccess',
-            });
+            // router.push({
+            //     name: 'OrderSuccess',
+            // });
 
 
             // 拿訂單編號，跳轉綠界
-            // const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
-            // window.location.href = payURL;
+            const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
+            window.location.href = payURL;
         
         }else{
             alert('訂單建立失敗：' + response.data.message);

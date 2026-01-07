@@ -131,7 +131,7 @@ try{
     $discountVal = 0;
     $couponID = isset($orderInfo['coupons_ID']) ? $orderInfo['coupons_ID'] : null;
 
-    //如果有coupon_ID，需要嚴格檢查：會員確實有這張 coupon 並且還沒使用過(status = 2)
+    //如果有coupon_ID，需要嚴格檢查：會員確實有這張 coupon 並且還沒使用過(status = 1 或 3)
     if($couponID){
         $sql_couponCheck = "SELECT uc.coupons_ID,  uc.pointscard_ID,
                                     c.discount
@@ -144,8 +144,8 @@ try{
 
         $stmtCoupon = $pdo -> prepare($sql_couponCheck);
         $stmtCoupon -> execute([
-            ':m_ID' -> $orderInfo['member_ID'],
-            ':c_ID' -> $orderInfo['coupons_ID']
+            ':m_ID' => $orderInfo['member_ID'],
+            ':c_ID' => $orderInfo['coupons_ID']
         ]); 
 
         $dbDiscount = $stmtCoupon -> fetch(PDO::FETCH_ASSOC);
