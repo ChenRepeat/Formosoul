@@ -148,6 +148,7 @@ const waveConfig = ref(
       // 只清除訪客資料
       if (!localStorage.getItem('user')) {
           localStorage.removeItem('game_progress');
+          sessionStorage.removeItem('guest');
       }
   });
 
