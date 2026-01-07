@@ -3,7 +3,7 @@
 require_once 'conn.php';
 $news = json_decode(file_get_contents("php://input"), true);
  
-$sql = "SELECT * FROM news";
+$sql = "SELECT * FROM news ORDER BY createdate DESC";
 
 // query 準備+執行
 $news_data = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);

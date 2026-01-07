@@ -646,7 +646,6 @@ onUnmounted(() => {
 img { 
   max-width: 100%; 
   border-radius: 4px; 
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
 }
 
 :deep(.stf__item.--cursor) {
