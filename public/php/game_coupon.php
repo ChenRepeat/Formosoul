@@ -1,17 +1,20 @@
 <?php
   require_once 'conn.php';
   $member = json_decode(file_get_contents("php://input"), true);
-
-  
-  $sql = '
-    SELECT 
-      annalevent_ID, title_zh, title_en, pic, content_zh, content_en, content_summary_zh, content_summary_en, video, launchdate, status
-    FROM annalevent 
+  // 事務處理建議改寫在 PHP 中
+  $pdo->beginTransaction();
+  $getsql = '
+      INSERT IGNORE INTO user_coupons (pointscard_ID, coupons_ID, status, received_at)
+      SELECT :pointscard_ID, coupons_id, 2, NOW()
+      FROM game_coupon_rewards
+      WHERE coupons_id = :coupons_id;
   ';
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $event_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $checksql = $pdo->prepare($checksql);
+    $stmt->bindValue(':member_ID', $member['member_ID']);
+    $stmt->bindValue(':coupons_id', $member['coupons_id']);
+    $checksql->execute();
+    $event_data = $checksql->fetchAll(PDO::FETCH_ASSOC);
     if ($event_data) {
       echo json_encode([
         'success' => true,
