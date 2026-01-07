@@ -133,7 +133,7 @@ const initDraggable = () => {
   draggableInstance = Draggable.create(headerRef.value, {
     type: "x,y",
     trigger: dragHandleRef.value,
-    bounds: window,
+    bounds: ".drag-sandbox",
     inertia: true,
     edgeResistance: 0.65,
     zIndexBoost: false,
@@ -155,7 +155,7 @@ const moveHeaderToTop = () => {
     lastYPosition.value = draggableInstance.y;
   }
   gsap.to(headerRef.value, {
-    y: 0,
+    y: -16,
     duration: 0.4,
     ease: "power2.out",
     overwrite: true,
@@ -217,11 +217,12 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <div class="drag-sandbox">
   <div class="header-outer-case dp-flex">
 
     <div 
-    ref="headerRef"
     class="header-link liquidGlass-wrapper dp-flex-col" 
+    ref="headerRef"
     :class="{ open: isMenuOpen || isMemberMenuOpen ,'black': props.isBlackStyle }"
     @mousedown.stop
     @touchstart.stop>
@@ -322,20 +323,33 @@ onUnmounted(() => {
       <feDisplacementMap in="SourceGraphic" in2="softMap" scale="200" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </svg>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.drag-sandbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3000;
+  pointer-events: none;
+  transform: none !important; 
+  overflow: hidden;
+}
 .header-outer-case {
   padding: 0 40px 0 60px;
   justify-content: end;
   position: fixed;
   height: auto;
   width: 100%;
-  transform: translateY(16px);
+  top: 16px;
   right:  0;
   z-index: 3000;
   transition: all 0.5s ease;
-  pointer-events: none;
+  pointer-events: auto;
+  position: absolute;
 }
 
 .head-shot-case{
@@ -678,6 +692,9 @@ img { object-fit: none; }
     .arrow3{left: -10%;}
     .arrow4{right: -10%;}
 
+  }
+  @media screen and (max-width: 1366px){
+   transform: scale(0.75);
   }
 }
 

@@ -41,16 +41,24 @@ const cardsStyle = [
   { top: "85%", right: "30%" }
 ]
 const randomCard=()=>{
-  for(let i = 0; i < 10 ; i++){
-    const rs = Math.floor(Math.random()*300) - 150;
-    const rW = Math.floor(Math.random()*120) + 280;
-    cards.value.push({
-      id : i+1,
-      src: `${ baseUrl }${ allNewsData.value[i].pic }`,
-      style: { width:`${rW}px`,height:`${rW}px`},
-      speed: rs,
-      
-    })
+  const cardLoop = (num)=>{
+    for(let i = 0; i < num ; i++){
+        const rs = Math.ceil(Math.random()*300) - 150;
+        const rW = Math.ceil(Math.random()*120) + 280;
+        const rX = Math.ceil(Math.random()*60) - 40;
+        const rY = Math.ceil(Math.random()*6);
+        cards.value.push({
+          id : i+1,
+          src: `${ baseUrl }${ allNewsData.value[i].pic }`,
+          style: { width:`${rW}px`,height:`${rW}px`,top: `${rY+ 10 * i}%`, right: `${50+rX}%`},
+          speed: rs,
+        })
+      }
+  }
+  if(allNewsData.value.length <10){
+    cardLoop(allNewsData.value.length)
+  }else{
+    cardLoop(10)
   }
 }
 // 2. 最新消息資料
@@ -151,7 +159,7 @@ onUnmounted(() => {
           v-for="(card,index) in cards"
           :key="card.id"
           class="news-parallax-card"
-          :style="[card.style , cardsStyle[index]]"
+          :style="[card.style]"
           :data-speed="card.speed"
         >
           <div class="news-card-inner">
