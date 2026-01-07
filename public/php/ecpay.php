@@ -42,11 +42,23 @@ try {
     
     // 5. 動態取得回傳當下的網址  ----------
     // 判斷是 http 還是 https (Ngrok 通常是 https)
-    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-    $host = $_SERVER['HTTP_HOST'];
+    $host = $_SERVER['HTTP_HOST']; // 例如 localhost:5173 或 xxx.ngrok.app
     
-    // 組合基礎路徑
-    $baseReturnURL = "$protocol://$host/Formosoul/public/php";
+    // 5-1. 定義你的 Ngrok 網址 (測試階段專用)
+    // 🔥 只要改這個變數就好，不用改下面的邏輯
+    $ngrok_domain = "https://carri-luscious-nanci.ngrok-free.dev"; 
+
+    // 5-2. 判斷邏輯
+    if ($host === 'localhost' || str_starts_with($host, '127.0.0.1')) {
+        // [情況 A]：如果你是在本機 localhost 操作
+        // 強制把 ReturnURL 換成 Ngrok，這樣綠界才找得到你！
+        $baseReturnURL = $ngrok_domain . "/Formosoul/public/php";
+    } else {
+        // [情況 B]：如果你是透過 Ngrok 網址開啟，或是未來正式上線
+        // 自動抓取當前的網址 (http 或 https 自動判斷)
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        $baseReturnURL = "$protocol://$host/Formosoul/public/php";
+    }
 
 
     
@@ -66,7 +78,10 @@ try {
     // [ReturnURL] 重要！
     // 付款完成後，綠界伺服器會「背景」通知這支 PHP (Server to Server)
     // 注意：localhost 綠界連不到，測試要用 Ngrok
-    $obj->Send['ReturnURL'] = "https://carri-luscious-nanci.ngrok-free.dev/Formosoul/public/php/ecpay_return.php"; 
+    //$obj->Send['ReturnURL'] = "https://carri-luscious-nanci.ngrok-free.dev/Formosoul/public/php/ecpay_return.php"; 
+    $obj->Send['ReturnURL'] = $baseReturnURL . "/ecpay_return.php";
+
+
 
     
     // [ClientBackURL]
