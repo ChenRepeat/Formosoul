@@ -245,86 +245,92 @@ const router = createRouter({
           component: () => import ('@/components/Admin/MemberManagement.vue')
         },
         {
+          path: "member-add",
+          name: "MemberAdd",
+          component: () => import ('@/components/Admin/MemberAdd.vue'),
+          meta: { activeMenu: '/admin/member-management' }
+        },
+        {
+          path: "member-edit/:id",
+          name: "MemberEdit",
+          component: () => import ('@/components/Admin/MemberEdit.vue'),
+          meta: { activeMenu: '/admin/member-management' }
+        },
+        {
           path: "product-management",
           name: "ProductManagement",
           component: () => import ('@/components/Admin/ProductManagement.vue')
+        },
+        {
+          path: "product-add",
+          name: "ProductAdd",
+          component: () => import ('@/components/Admin/ProductAdd.vue'),
+          meta: { activeMenu: '/admin/product-management' }
+        },
+        {
+          path: "product-edit/:id",
+          name: "ProductEdit",
+          component: () => import ('@/components/Admin/ProductEdit.vue'),
+          meta: { activeMenu: '/admin/product-management' }
         },
         {
           path: "order-management",
           name: "OrderManagement",
           component: () => import ('@/components/Admin/OrderManagement.vue')
         },
-                {
-          path: "coupon-management",
-          name: "CouponManagement",
-          component: () => import ('@/components/Admin/CouponManagement.vue')
-        },
-                {
-          path: "news-management",
-          name: "NewsManagement",
-          component: () => import ('@/components/Admin/NewsManagement.vue')
-        },
-                {
-          path: "annual-event-management",
-          name: "AnnualEventManagement",
-          component: () => import ('@/components/Admin/AnnualEventManagement.vue')
-        },
-                {
-          path: "product-add",
-          name: "ProductAdd",
-          component: () => import ('@/components/Admin/ProductAdd.vue'),
-          meta: { activeMenu: '/admin/product-management' }
-        },
-                        {
-          path: "product-edit/:id",
-          name: "ProductEdit",
-          component: () => import ('@/components/Admin/ProductEdit.vue'),
-          meta: { activeMenu: '/admin/product-management' }
-        },
-                {
+        {
           path: "order-details/:id",
           name: "OrderDetails",
           component: () => import ('@/components/Admin/OrderDetails.vue'),
           props: true,
           meta: { activeMenu: '/admin/order-management' }
         },
-                        {
-          path: "member-add",
-          name: "MemberAdd",
-          component: () => import ('@/components/Admin/MemberAdd.vue'),
-          meta: { activeMenu: '/admin/member-management' }
+        {
+          path: "coupon-management",
+          name: "CouponManagement",
+          component: () => import ('@/components/Admin/CouponManagement.vue')
         },
-                                {
+        {
           path: "coupon-add",
           name: "CouponAdd",
           component: () => import ('@/components/Admin/CouponAdd.vue'),
           meta: { activeMenu: '/admin/coupon-management' }
         },
-                                {
+        {
           path: "coupon-edit/:id",
           name: "CouponEdit",
           component: () => import ('@/components/Admin/CouponEdit.vue'),
           meta: { activeMenu: '/admin/coupon-management' }
         },
-                                        {
+                {
+          path: "news-management",
+          name: "NewsManagement",
+          component: () => import ('@/components/Admin/NewsManagement.vue')
+        },
+        {
           path: "news-add",
           name: "NewsAdd",
           component: () => import ('@/components/Admin/NewsAdd.vue'),
           meta: { activeMenu: '/admin/news-management' }
         },
-                                        {
+        {
           path: "news-edit/:id",
           name: "NewsEdit",
           component: () => import ('@/components/Admin/NewsEdit.vue'),
           meta: { activeMenu: '/admin/news-management' }
         },
-                                                {
+        {
+          path: "annual-event-management",
+          name: "AnnualEventManagement",
+          component: () => import ('@/components/Admin/AnnualEventManagement.vue')
+        },
+        {
           path: "annual-event-add",
           name: "AnnualEventAdd",
           component: () => import ('@/components/Admin/AnnualEventAdd.vue'),
           meta: { activeMenu: '/admin/annual-event-management' }
         },
-                                        {
+        {
           path: "annual-event-edit/:id",
           name: "AnnualEventEdit",
           component: () => import ('@/components/Admin/AnnualEventEdit.vue'),
