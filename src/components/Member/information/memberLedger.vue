@@ -187,8 +187,9 @@ onMounted(async () => {
     font-weight: bold;
     max-width: fit-content;
     margin: 0 auto;
+    border: 2px solid $color-fsWhite;
     &.unlogbtn{
-      color:$color-fsCaption;
+      color:$color-fsWhite;
       background-color: $color-fsContent;
     }
 }
