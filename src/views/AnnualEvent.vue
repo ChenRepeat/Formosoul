@@ -303,27 +303,24 @@ onBeforeUnmount(() => {
               @mouseleave="handleMouseLeave"
               @click="onSlideClick(item)"
             >
+              <!-- ✅ Video：放在最外層（不吃 clip-path，所以會是長方形） -->
+              <div
+                v-if="item.video"
+                class="slide-video-wrapper"
+                :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
+              >
+                <iframe
+                  class="youtube-iframe"
+                  :src="getYouTubeSrc(item)"
+                  frameborder="0"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+
+              <!-- ✅ Card：維持平行四邊形 -->
               <div class="slide-tilt">
                 <div class="media-wrapper">
-                  <!-- Video (hover) -->
-                  <div
-                    v-if="item.video"
-                    class="slide-video-wrapper"
-                    :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
-                  >
-                    <div class="youtube-wrap">
-                      <iframe
-                        class="youtube-iframe"
-                        :src="getYouTubeSrc(item)"
-                        title="Festival video"
-                        frameborder="0"
-                        allow="autoplay; encrypted-media; picture-in-picture"
-                        allowfullscreen
-                      ></iframe>
-                    </div>
-                  </div>
-
-                  <!-- Image -->
                   <img
                     class="slide-image"
                     :class="{ 'is-hidden': isPlaying(visibleIndex, item) }"
@@ -331,7 +328,6 @@ onBeforeUnmount(() => {
                     :alt="item.title_en || ''"
                   />
 
-                  <!-- Overlay -->
                   <div
                     class="slide-overlay"
                     :class="{ 'overlay-hidden': isPlaying(visibleIndex, item) }"
@@ -352,7 +348,9 @@ onBeforeUnmount(() => {
                     </div>
                   </div>
                 </div>
+                <!-- /media-wrapper -->
               </div>
+              <!-- /slide-tilt -->
             </div>
             <!-- /slide -->
           </div>
@@ -375,6 +373,7 @@ onBeforeUnmount(() => {
     </div>
   </section>
 </template>
+
 
 <style scoped lang="scss">
 @import "/src/assets/_variables.scss";
@@ -456,6 +455,7 @@ onBeforeUnmount(() => {
 
 /* ===== Slide sizing (flex expand on hover) ===== */
 .slide {
+  position: relative;
   flex: 1;
   min-width: 0;
   cursor: pointer;
@@ -468,7 +468,6 @@ onBeforeUnmount(() => {
   transform: scale(1.02);
 }
 
-/* 拖曳時不要 hover 擠開，避免手感怪 */
 .festival-shell.is-dragging .slide,
 .festival-shell.is-dragging .slide.is-hovered {
   transition: none !important;
@@ -480,7 +479,7 @@ onBeforeUnmount(() => {
 .slide-tilt {
   height: 100%;
   background: #000;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
   clip-path: polygon(14% 0%, 100% 0%, 86% 100%, 0% 100%);
 }
@@ -497,10 +496,13 @@ onBeforeUnmount(() => {
 /* ===== Video layer ===== */
 .slide-video-wrapper {
   position: absolute;
-  inset: 0;
+  inset: 6%;         /* 控制影片離邊距 */
+  background: #000;
   opacity: 0;
+  z-index: 10;
+  overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.35s ease;
+  transition: opacity .35s ease;
 }
 
 .slide-video-wrapper.is-visible {
@@ -519,9 +521,7 @@ onBeforeUnmount(() => {
 
 .youtube-iframe {
   width: 100%;
-  max-width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
+  height: 100%;
   border: 0;
 }
 
