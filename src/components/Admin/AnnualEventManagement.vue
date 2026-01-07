@@ -74,8 +74,7 @@
 
   // 跳轉新增頁面
   const addEvent = () => {
-    // ★ 修改：跳轉到 EventAdd
-    router.push({ name: 'EventAdd' }) 
+    router.push({ name: 'AnnualEventAdd' }) 
   }
 
   // ★★★ 刪除功能 (使用原生 confirm) ★★★
