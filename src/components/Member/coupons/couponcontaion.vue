@@ -185,9 +185,9 @@ import { useRoute } from 'vue-router';
         }
         ).then( res => res.json())};
     function handleCouponClick(coupon) {
-        // if (route.path.includes('/member/coupons')) {
-        //     return;
-        // }
+        if (route.path.includes('/member/coupons')) {
+            return;
+        }
         // if (coupon.status !== 2) return;
         
         // console.log('狀態',coupon.status);

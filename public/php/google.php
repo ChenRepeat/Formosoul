@@ -124,6 +124,7 @@
     $_SESSION['email']     = $user['email'];
     $_SESSION['role']      = 0;
     $_SESSION['pointscard_ID'] = $user['pointscard_ID'];
+  
 
     setcookie("token", $googleToken, [ 
       'expires' => time() + 600,

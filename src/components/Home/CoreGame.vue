@@ -75,6 +75,7 @@ async function handleCoreSelected() {
         setTimeout(() => {
             showCardOverlay.value = true; 
             if (isFirstPass) {
+                memberStore.rewards_coupon();
                 // console.log('%c[魔杖動畫] 觸發蓋章動畫', 'color: red; font-weight: bold');
                 setTimeout(() => {
                     activeTriggers.value.wand = true; 
