@@ -88,7 +88,8 @@ try{
         //stepD 扣除庫存 ，如果扣完數量庫存為 0 ，商品先下架 ******
         $stmtDeductStock -> execute([$quantity, $unitItem['product_ID']]);
 
-        if($dbStock === 0){
+        $currentStock = $dbStock - $quantity;
+        if($currentStock === 0){
             $stmtUnListed -> execute([$unitItem['product_ID']]);
         }
 
