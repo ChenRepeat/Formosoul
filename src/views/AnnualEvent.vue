@@ -382,39 +382,38 @@ onBeforeUnmount(() => {
 /* ===== Layout ===== */
 .annual-event-page {
   position: relative;
-  padding: 130px 0 80px;
+  padding: 52px 0 20px;
   display: flex;
   justify-content: center;
+  overflow-x: clip;
 }
 
 .festival-shell {
   position: relative;
   width: 100%;
-  max-width: 1452px;
   margin: 0 auto;
+  max-width: 1200px;
   overflow: visible;
 }
 
 .festival-carousel {
   width: 100%;
   margin: 0 auto;
-  padding: 24px 0 16px;
+  padding: 24px 55px 16px;
   background: radial-gradient(circle at center, #00000080, #000000);
 }
 
 /* ===== Viewport / Track ===== */
 .carousel-inner {
-  overflow: hidden; /* 拖曳看得出滑動 */
-  touch-action: pan-y; /* 允許左右拖，不影響垂直滾 */
+  overflow: hidden;
+  touch-action: pan-y;
   user-select: none;
+  position: relative;
 }
 
 .carousel-track {
   display: flex;
-  gap: 8px;
   height: 600px;
-  padding: 0 48px;
-  cursor: grab;
   will-change: transform;
 }
 
@@ -444,11 +443,11 @@ onBeforeUnmount(() => {
 }
 
 .nav-prev {
-  left: -28px;
+  left: 12px;
 }
 
 .nav-next {
-  right: -28px;
+  right: 12px;
 }
 
 .nav-btn:hover {
@@ -483,7 +482,7 @@ onBeforeUnmount(() => {
   background: #000;
   overflow: hidden;
   isolation: isolate;
-  clip-path: polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%);
+  clip-path: polygon(14% 0%, 100% 0%, 86% 100%, 0% 100%);
 }
 
 .media-wrapper {
@@ -492,7 +491,7 @@ onBeforeUnmount(() => {
   height: 100%;
   overflow: hidden;
   background: #000;
-  clip-path: polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%);
+  clip-path: polygon(14% 0%, 100% 0%, 86% 100%, 0% 100%);
 }
 
 /* ===== Video layer ===== */
@@ -586,7 +585,6 @@ onBeforeUnmount(() => {
 
 /* ===== Dots ===== */
 .carousel-dots {
-  margin-top: 12px;
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -609,7 +607,7 @@ onBeforeUnmount(() => {
 /* ===== RWD ===== */
 @media (max-width: 1023px) {
   .carousel-track {
-    padding: 0 24px;
+    padding: 0 20px;
     height: 320px;
   }
 }
