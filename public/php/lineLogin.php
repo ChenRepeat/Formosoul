@@ -99,18 +99,16 @@ if ($member) {
     } else {
         // ===【情況 C：完全新會員】===
         // 動作：註冊新帳號 (同時存 line_id 和 email)
-        
-        $randomPassword = bin2hex(random_bytes(6));
 
         try {
             $pdo->beginTransaction();
 
             // 1. 新增會員 (記得把 line_id 寫進去)
             $sql_member = "INSERT INTO member (email, password, name, line_id, status, role, createdate, updatetime) 
-                           VALUES (?, ?, ?, ?, 1, 0, NOW(), NOW())";
+                           VALUES (?, NULL, ?, ?, 1, 0, NOW(), NOW())";
             
             $stmt = $pdo->prepare($sql_member);
-            $stmt->execute([$user_email, $randomPassword, $user_name, $line_user_id]);
+            $stmt->execute([$user_email, $user_name, $line_user_id]);
             
             $newUserId = $pdo->lastInsertId();
 
@@ -155,9 +153,7 @@ if ($member) {
     }
 }
 
-// ==========================================
 // ★★★ 共用的登入 Session 設定 (不管是 A, B 還是 C) ★★★
-// ==========================================
 
 $_SESSION['member_ID'] = $member['member_ID'];
 $_SESSION['name']      = $member['name'];
@@ -176,8 +172,17 @@ $loginData = [
 ];
 
 $dataToken = base64_encode(json_encode($loginData));
+$host = $_SERVER['HTTP_HOST'];
+// 設定前端網址
+if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+    // 【本機開發環境】 (Vite 預設 port)
+    $frontend_url = "http://localhost:5173/tjd103";
+} else {
+    // 【線上正式環境】 (您的正式網域)
+    $frontend_url = "https://tibamef2e.com/tjd103";
+}
 
-
-header("Location: http://localhost:5173/tjd103/?loginData=" . $dataToken);
+// 跳轉回前端
+header("Location: " . $frontend_url . "/?loginData=" . $dataToken);
 exit;
 ?>
