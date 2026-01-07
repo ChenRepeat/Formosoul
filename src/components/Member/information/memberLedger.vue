@@ -24,6 +24,10 @@ const props = defineProps({
   activeTriggers: Object
 });
 
+
+function rewards_coupon(){
+
+};
 // 內部狀態（會員中心使用）
 const internalPointsStatus = ref({
     dice: 0, 
@@ -138,6 +142,9 @@ onMounted(async () => {
 
     <div class="nologin" v-if="!authStore.isLoggedIn">
       <h6>ENROLL TO KEEP POINT ! ! </h6>
+    </div>
+    <div class="nologin" v-if="authStore.isLoggedIn">
+      <h6>YOU HAVE GET COUPON</h6>
     </div>
     <div class="btn-case dp-flex">
       <button class="btn-close-card" :class="{'unlogbtn':!authStore.isLoggedIn}" @click="closeLedger" >{{$t('member.closeLedger')}}</button>
