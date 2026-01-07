@@ -31,6 +31,7 @@ function createPaperTexture(isLoggedIn) {
   cvs.height = 1050;
   const ctx = cvs.getContext("2d");
 
+  // --- 背景與材質 (保持不變) ---
   ctx.fillStyle = "#F4E4BC";
   ctx.fillRect(0, 0, cvs.width, cvs.height);
   const gradient = ctx.createRadialGradient(
@@ -47,20 +48,24 @@ function createPaperTexture(isLoggedIn) {
     ctx.fillRect(Math.random() * cvs.width, Math.random() * cvs.height, 2, 2);
   }
 
+  // --- 排版變數 ---
   const paddingX = 80;
   const startX = paddingX;
   const contentWidth = cvs.width - paddingX * 2;
   let currentY = 100;
 
+  // --- 改良版 wrapText (支援中文) ---
   function wrapText(context, text, x, y, maxWidth, lineHeight, marginBottom) {
-    const words = text.split(" ");
+    const hasChinese = /[\u4e00-\u9fa5]/.test(text);
+    const words = hasChinese ? text.split("") : text.split(" ");
+    
     let line = "";
     for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + " ";
+      const testLine = line + words[n] + (hasChinese ? "" : " ");
       const metrics = context.measureText(testLine);
       if (metrics.width > maxWidth && n > 0) {
         context.fillText(line, x, y);
-        line = words[n] + " ";
+        line = words[n] + (hasChinese ? "" : " ");
         y += lineHeight;
       } else {
         line = testLine;
@@ -74,6 +79,7 @@ function createPaperTexture(isLoggedIn) {
   // Close Button
   zones.close = { x: cvs.width - 80, y: 20, w: 60, h: 60 };
 
+  // --- Header ---
   ctx.textAlign = "right";
   ctx.font = "bold 50px Arial, sans-serif";
   ctx.fillStyle = "#5a3a22";
@@ -82,7 +88,6 @@ function createPaperTexture(isLoggedIn) {
   ctx.globalAlpha = 1.0;
 
   ctx.textAlign = "left";
-
   ctx.font = "56px 'Roboto' , 'Noto Sans TC', sans-serif";
   ctx.fillStyle = "#3e2723";
   ctx.fillText(t("mail.title1"), startX, currentY);
@@ -104,36 +109,51 @@ function createPaperTexture(isLoggedIn) {
   // --- Body ---
   ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
   ctx.fillStyle = "#3e2723";
-  const lineHeight = 40;
+  
+  const isZh = locale.value === 'zh-TW' || locale.value === 'zh';
+  const lineHeight = isZh ? 45 : 40; 
   const paraMargin = 25;
 
   const paragraphs = tm('mail.body'); 
-  
   if (Array.isArray(paragraphs)) {
     paragraphs.forEach((text) => {
       currentY = wrapText(ctx, text, startX, currentY, contentWidth, lineHeight, paraMargin);
     });
   }
 
-  // --- Footer ---
-  const footerY = currentY + 30;
+  // --------------------------------------------------------
+  // ★★★ 核心修正：Footer 區塊同步定位 ★★★
+  // --------------------------------------------------------
+  
+  // 1. 設定整個底部區塊 (簽名+按鈕) 的基準 Y 座標
+  //    minFooterY: 820 確保不會太高
+  //    currentY + 60: 確保跟內文保持距離
+  const minFooterY = 910; 
+  const footerBaseY = Math.max(currentY + 100, minFooterY);
+
+  // 2. 左側：繪製簽名
+  //    簽名從 footerBaseY 開始畫
   ctx.font = "italic 24px 'Roboto', 'Noto Sans TC', sans-serif";
   ctx.fillStyle = "#3e2723";
   ctx.textAlign = "left";
 
-  let sigY = footerY;
+  let sigY = footerBaseY;
   ctx.fillText(t("mail.sigh1"), startX, sigY);
   sigY += 35;
   ctx.fillText(t("mail.sigh2"), startX, sigY);
   sigY += 35;
   ctx.fillText(t("mail.sigh3"), startX, sigY);
 
-  // --- Buttons Layout ---
+  // 3. 右側：繪製按鈕
+  //    btnY 使用同一個 footerBaseY 來定位
+  //    +15 是為了「視覺置中」：因為左邊簽名有3行(約100px高)，右邊按鈕高64px
+  //    往下移 15px 可以讓按鈕看起來跟左邊文字群組的中間對齊
+  const btnY = footerBaseY + 15; 
+  
   const btnHeight = 64;
   const btnWidthReg = 240;
   const btnWidthAudit = 280;
   const btnGap = 30;
-  const btnY = footerY + 20;
   const rightEdge = cvs.width - paddingX;
 
   const regBtnX = rightEdge - btnWidthReg;
@@ -160,7 +180,7 @@ function createPaperTexture(isLoggedIn) {
   ctx.textAlign = "center";
   ctx.fillText(t("mail.auditBtn"), auditBtnX + btnWidthAudit / 2, btnY + 40);
 
-  // Register Button (if not logged in)
+  // Register Button
   if (!isLoggedIn) {
       zones.register = { x: regBtnX, y: btnY, w: btnWidthReg, h: btnHeight };
 
@@ -174,9 +194,9 @@ function createPaperTexture(isLoggedIn) {
 
       ctx.font = "24px 'Roboto', 'Noto Sans TC', sans-serif";
       ctx.fillStyle = "#2c1e14"; 
-      ctx.fillText("Entrance Ceremony", regBtnX + btnWidthReg / 2, btnY + 40);
+      ctx.fillText(t("mail.entranceBtn"), regBtnX + btnWidthReg / 2, btnY + 40);
 
-      // 仙女棒 (保持不變)
+      // 仙女棒 (跟隨 btnY)
       ctx.save();
       const sparklerX = regBtnX + btnWidthReg + 35; 
       const sparklerY = btnY + 25; 
