@@ -24,7 +24,7 @@ function createOrderID(){
     // 抓取時間到年月日小時，實際可以取到秒 'YmdHis'
     $orderDate = date('YmdH');      
     // 抓亂數，從0開始抓5個位數
-    $random = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, 5);;
+    $random = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, 5);
     return $prefix.$orderDate.$random;
 }
 
@@ -152,8 +152,14 @@ try{
         $dbDiscount = $stmtCoupon -> fetch(PDO::FETCH_ASSOC);
 
         if($dbDiscount){
+            $currentPrice = round(($totalSum + $shippingFee) * 0.9);
+
+            if($dbDiscount['discount'] > $currentPrice){
+                $discountVal = $currentPrice;
+            }else{
+                $discountVal = $dbDiscount['discount'];
+            }
             //確認可使用，紀錄折扣並將折價券改為已使用(status = 0)
-            $discountVal = $dbDiscount['discount'];
 
             $updateCoupon = $pdo -> prepare("UPDATE user_coupons SET status = 0 WHERE pointscard_ID = ? AND coupons_ID = ?");
             $updateCoupon -> execute([$dbDiscount['pointscard_ID'], $dbDiscount['coupons_ID']]);
@@ -165,7 +171,7 @@ try{
     }
 
     //total amount  ＝＝＝
-    $finalTotalAmount = $totalSum + $shippingFee - $discountVal;
+    $finalTotalAmount = intval($totalSum + $shippingFee - $discountVal);
     if ($finalTotalAmount < 0) $finalTotalAmount = 0;       //訂單總金額不能為負數
 
 

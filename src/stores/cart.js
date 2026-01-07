@@ -150,9 +150,28 @@ export const useCartStore = defineStore('cart', () => {
     const coupon_ID = ref(null);
     const discount = ref(0);
 
+    const currentPrice = computed(() =>
+        Math.round((totalPrice.value + shippingFee.value) *0.9)
+    );
+
+    watch(
+        [currentPrice, discount],
+        () => {
+        //需要放在 watch 中，以便即時確認這兩個數字是否有變化
+        if(discount.value > currentPrice.value){
+            discount.value = currentPrice.value;
+        }},
+        {immediate: false}
+    );
+
+    
+ 
+
     // 最後付款總額
-    const finalPrice = computed(() => 
-        totalPrice.value + shippingFee.value - discount.value
+    const finalPrice = computed(() =>{
+        const checkPrice = totalPrice.value + shippingFee.value - discount.value;
+        return Math.trunc(checkPrice > 0 ? checkPrice : 0);
+        } 
     );
 
 
