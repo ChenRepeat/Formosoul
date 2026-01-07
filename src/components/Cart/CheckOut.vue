@@ -285,10 +285,15 @@ async function goOrder(){
             // 清空購物車
             cartstore.clearCart();
             
-            // 訂單成功畫面
-            router.push({
-                name: 'OrderSuccess',
-            });
+            // 跳轉訂單成功畫面
+            // router.push({
+            //     name: 'OrderSuccess',
+            // });
+
+
+            // 拿訂單編號，跳轉綠界
+            const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
+            window.location.href = payURL;
         
         }else{
             alert('訂單建立失敗：' + response.data.message);

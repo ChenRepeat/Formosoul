@@ -140,7 +140,7 @@ try{
                             JOIN coupons c ON uc.coupons_ID = c.coupons_ID
                             WHERE p.member_ID = :m_ID
                               AND uc.coupons_ID = :c_ID
-                              AND uc.status = 2; ";
+                              AND uc.status IN (1, 3); ";
 
         $stmtCoupon = $pdo -> prepare($sql_couponCheck);
         $stmtCoupon -> execute([
