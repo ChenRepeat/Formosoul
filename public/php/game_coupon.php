@@ -1,26 +1,56 @@
 <?php
   require_once 'conn.php';
   $member = json_decode(file_get_contents("php://input"), true);
-  // 事務處理建議改寫在 PHP 中
+
   $pdo->beginTransaction();
-  $getsql = '
-      INSERT IGNORE INTO user_coupons (pointscard_ID, coupons_ID, status, received_at)
-      SELECT :pointscard_ID, coupons_id, 2, NOW()
-      FROM game_coupon_rewards
-      WHERE coupons_id = :coupons_id;
+
+  $coupon_found = false;
+  $coupons_id = null;
+  do {
+
+    $selectsql = '
+      SELECT 
+      coupons_id 
+      FROM coupons 
+      ORDER BY RAND() 
+      LIMIT 1
+    ';
+
+    $selectstmt = $pdo->prepare($selectsql);
+    $selectstmt->execute();
+    $coupon = $selectstmt->fetch(PDO::FETCH_ASSOC);
+    $coupons_id = $coupon['coupons_id'];
+    $checksql = '
+      SELECT * 
+      FROM user_coupons 
+      WHERE pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID
+    ';
+
+    $checkstmt = $pdo->prepare($checksql);
+    $checkstmt->bindValue(':pointscard_ID', $member['pointscard_ID']);
+    $checkstmt->bindValue(':coupons_ID', $coupons_id);
+    $checkstmt->execute();
+    $event_data = $checkstmt->fetch(PDO::FETCH_ASSOC);
+    if (!$event_data) {
+      $coupon_found = true;
+    }
+  } while(!$coupon_found);
+
+  $insertsql = '
+    INSERT IGNORE INTO user_coupons (pointscard_ID, coupons_ID, status, received_at) 
+    VALUES (:pointscard_ID, :coupons_ID, 3, NOW())
   ';
 
-    $checksql = $pdo->prepare($checksql);
-    $stmt->bindValue(':member_ID', $member['member_ID']);
-    $stmt->bindValue(':coupons_id', $member['coupons_id']);
-    $checksql->execute();
-    $event_data = $checksql->fetchAll(PDO::FETCH_ASSOC);
-    if ($event_data) {
-      echo json_encode([
-        'success' => true,
-        'data' => $event_data
-      ]);
-    } else {
-        echo json_encode(['success' => false, 'message' => '讀取資料失敗']);
-    }
+  $insertstmt = $pdo->prepare($insertsql);
+  $insertstmt->bindValue(':pointscard_ID', $member['pointscard_ID']);
+  $insertstmt->bindValue(':coupons_ID', $coupons_id);
+  $insertstmt->execute();
+
+  $pdo->commit();
+
+  echo json_encode([
+    'success' => true,
+    'message' => 'get coupon',
+    'coupons_id' => $coupons_id
+  ]);
 ?>

@@ -297,6 +297,7 @@ const checkWinner = () => {
         showCardOverlay.value = true;
 
         if(isFirstPass) {
+            memberStore.rewards_coupon();
             setTimeout(() => {
                 activeTriggers.value.dice = true;
                 setTimeout(() => {

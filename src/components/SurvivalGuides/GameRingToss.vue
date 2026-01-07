@@ -42,6 +42,7 @@ const checkGamePass = () => {
     
     // ← 只有第一次過關才播放動畫！
     if (isFirstPass) {
+      memberStore.rewards_coupon();
       console.log('[動畫] 第一次過關，播放蓋章動畫');
       setTimeout(() => {
         activeTriggers.value.ringtoss = true;

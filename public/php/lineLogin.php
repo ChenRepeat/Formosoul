@@ -172,6 +172,7 @@ $loginData = [
     'name'      => $_SESSION['name'],
     'role'      => $_SESSION['role'],
     'pointscard_ID' => $_SESSION['pointscard_ID'],
+    'wandcore_ID' => $_SESSION['wandcore_ID'],
 ];
 
 $dataToken = base64_encode(json_encode($loginData));

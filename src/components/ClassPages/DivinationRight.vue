@@ -152,6 +152,7 @@ const buaBue = () => {
             showCardOverlay.value = true;
 
             if(isFirstPass){
+              memberStore.rewards_coupon();
               setTimeout(() => {
                 activeTriggers.value.bue = true;
                 setTimeout(() => {
