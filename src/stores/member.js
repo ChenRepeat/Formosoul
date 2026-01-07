@@ -156,8 +156,8 @@ export const useMemberStore = defineStore('member', () => {
 
             if(response.data.success){
                 pointsStatus.value[columnName] = 1;
-                // console.log(`[${columnName}]蓋章成功`)
-
+                
+                console.log(columnName)
                 await fetchPointsStatus();
             } else {
                 console.error('蓋章失敗', response.data.message);
@@ -282,6 +282,7 @@ export const useMemberStore = defineStore('member', () => {
                 ring: result.data.ring || 0,
                 member_wandcore: Number(result.data.member_wandcore) || 0
             };
+
             // console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
         } else {
             console.error('[Store] 載入集點卡失敗:', result.message);
