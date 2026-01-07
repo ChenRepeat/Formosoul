@@ -21,11 +21,14 @@ const hasCoupon = ref(false);
 function couponclose(){
     cart_use_coupon().then( res =>{
         if(res.success && res.data.coupons_ID == cartstore.coupon_ID){
-            cartstore.discount = res.data.discount
+            restore_coupon();
+            cartstore.coupon_ID = null;
+            cartstore.discount = 0;
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
             document.documentElement.style.overflow = ''; 
         }else if(!res.success && cartstore.coupon_ID == null){
+            restore_coupon();
             cartstore.discount = 0
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
@@ -38,6 +41,25 @@ function couponopen(){
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 }
+function restore_coupon(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/modifycoupon.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser); 
+        const { pointscard_ID } = userData;
+
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                pointscard_ID
+            })
+        }
+        ).then( res => res.json())}; 
 
 function cart_use_coupon(){
         const storedUser = localStorage.getItem('user');
