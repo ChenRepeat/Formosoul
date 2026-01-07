@@ -148,7 +148,7 @@ const selectedFile = ref(null)
 
 // 環境變數
 const apiBase = import.meta.env.VITE_API_BASE
-const imgBase = import.meta.env.VITE_NEWS_IMG_BASE
+const imgBase = import.meta.env.VITE_IMG_BASE
 const imgBaseUrl = imgBase
 
 // 表單資料模型

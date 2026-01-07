@@ -29,7 +29,7 @@
       );
     }
 
-    // 2. 狀態篩選
+    // 2. 狀態篩選 (如果未來有開放篩選功能可保留)
     if (filterStatus.value !== '全部') {
       data = data.filter(item => getStatusText(item.status) === filterStatus.value);
     }
@@ -48,7 +48,7 @@
   // 取得資料
   const getEvents = async () => {
     const apiBase = import.meta.env.VITE_API_BASE;
-    // ★ 修改：指向 Event 相關 API
+    // 指向正確的讀取 API
     const API_URL = `${apiBase}/getAnnualEvents.php`; 
 
     try {
@@ -66,30 +66,30 @@
     return Number(status) === 1 ? '顯示中' : '草稿';
   }
 
-  // Handler: 狀態下拉選單
-  const handleStatusCommand = (command) => {
-    filterStatus.value = command;
-    currentPage.value = 1;
-  }
-
   // 跳轉新增頁面
   const addEvent = () => {
     router.push({ name: 'AnnualEventAdd' }) 
   }
 
-  // ★★★ 刪除功能 (使用原生 confirm) ★★★
+  // ★★★ 刪除功能 (修正版) ★★★
   const handleDelete = async (id) => {
-    if (!id) return;
+    // 1. 先確認 ID 存在
+    if (!id) {
+        console.error("刪除失敗：ID 為 undefined，請檢查 template 中的欄位名稱");
+        return;
+    }
 
-    // ★ 修改：提示文字改為"活動"
-    const isConfirmed = window.confirm(`確定要永久刪除編號 "${id}" 的活動嗎？此動作無法復原。`);
+    // 2. 彈出確認視窗
+    const isConfirmed = window.confirm(`確定要永久刪除編號 "${id}" 的年度盛事嗎？此動作無法復原。`);
     
+    // 3. 取消則結束
     if (!isConfirmed) return;
 
+    // 4. 執行 API
     try {
       const apiBase = import.meta.env.VITE_API_BASE;
-      // ★ 修改：指向 Event 刪除 API
-      const API_URL = `${apiBase}/deleteEvents.php`; 
+      // ★ 修正：API 檔名要對應 deleteAnnualEvent.php
+      const API_URL = `${apiBase}/deleteAnnualEvent.php`; 
 
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -126,7 +126,6 @@
 
     <template #filters>
       <div class="filter-group">
-        
         <el-input
           class="custom-search-input"
           type="text"
@@ -134,21 +133,6 @@
           placeholder="搜尋活動標題 / 內容"
           style="width: 250px;">
         </el-input>
-
-        <el-dropdown trigger="click" @command="handleStatusCommand">
-          <div class="capsule-btn">
-            <span class="label">狀態: {{ filterStatus }}</span>
-            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="全部">全部</el-dropdown-item>
-              <el-dropdown-item command="顯示中">顯示中</el-dropdown-item>
-              <el-dropdown-item command="草稿">草稿</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
       </div>
     </template>
 
@@ -161,7 +145,10 @@
     <el-table :data="pagedData" stripe style="position: absolute; width: 100%; height: 100%;">
       
       <el-table-column label="活動標題" prop="title_zh" min-width="150px"></el-table-column>
-      <el-table-column label="活動大綱" prop="content_summary_zh" min-width="300px" show-overflow-tooltip></el-table-column>
+      
+      <el-table-column label="活動大綱" prop="content_summary_zh" min-width="300px" show-overflow-tooltip>
+      </el-table-column>
+      
       <el-table-column label="活動日期" prop="launchdate" width="180px" align="center">
       </el-table-column>
 
@@ -178,7 +165,7 @@
             <font-awesome-icon
                 :icon="['fas', 'trash-can']"
                 class="icon-btn delete-icon"
-                @click="handleDelete(scope.row.eventID)"
+                @click="handleDelete(scope.row.annalevent_ID)"
               />
           </div>
         </template>
@@ -204,7 +191,7 @@
 </template>
 
 <style lang="scss" scoped>
-/* 樣式直接沿用，保持一致性 */
+/* 樣式保持不變 */
 
 .filter-group {
   display: flex;
@@ -215,33 +202,6 @@
 :deep(.custom-search-input .el-input__wrapper){
   border-radius: 50px;
   background-color: #F0F7FF;
-}
-
-.capsule-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #F0F7FF;
-  border-radius: 50px;
-  padding: 0 16px;
-  color: #606266;
-  cursor: pointer;
-  font-size: 14px;
-  height: 32px;
-  transition: all 0.3s;
-  user-select: none;
-  border: 1px solid transparent;
-  white-space: nowrap;
-
-  &:hover {
-    border-color: #409eff;
-    color: #409eff;
-    background-color: #e1f0ff;
-  }
-}
-
-.el-icon--right {
-  margin-left: 6px;
 }
 
 .add-btn {
@@ -258,11 +218,10 @@
   }
 }
 
-/* 操作區塊 icon 樣式 */
 .action-icons {
   display: flex;
   justify-content: center;
-  gap: 15px; /* 圖示間距 */
+  gap: 15px;
 }
 
 .icon-btn {
@@ -279,17 +238,16 @@
 }
 
 .delete-icon {
-  color: #F56C6C; /* 類似 Element Danger 紅色 */
+  color: #F56C6C;
   cursor: pointer;
 }
 
-/* 覆蓋 element-plus 的背景色 */
 :deep(.el-table__row--striped td.el-table__cell) {
   background-color: #F0F7FF !important;
 }
 
 :deep(.el-table .el-table__cell) {
-  padding: 8px 0; /* 保持與訂單列表一致 */
+  padding: 8px 0;
 }
 
 .pagination-text {
@@ -300,17 +258,5 @@
 
 .pagination-btn {
   margin-top: 16px;
-}
-.text-truncate {
-  /* 1. 不換行 */
-  white-space: nowrap; 
-  /* 2. 超出部分隱藏 */
-  overflow: hidden; 
-  /* 3. 顯示刪節號 (...) */
-  text-overflow: ellipsis; 
-  
-  /* ★ 關鍵：必須給定一個最大寬度，否則表格會被撐開 */
-  max-width: 300px; /* 數字可依你的版面調整 */
-  display: block; /* 在某些表格結構下需要加上這行確保寬度生效 */
 }
 </style>

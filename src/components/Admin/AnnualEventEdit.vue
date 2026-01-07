@@ -1,10 +1,6 @@
 <template>
   <ListLayout>
-    
-    <template #title>
-      <h6>編輯年度盛事</h6>
-    </template>
-
+    <template #title><h6>編輯年度盛事</h6></template>
     <template #controls>
       <el-button @click="goBack" class="back-btn" round>
         <el-icon><ArrowLeft /></el-icon>返回列表
@@ -13,61 +9,46 @@
 
     <div class="scroll-container" v-loading="pageLoading">
       <div class="form-container">
-        <el-form 
-          :model="editEventForm" 
-          ref="formRef"
-          label-position="top"
-          class="custom-form"
-        >
+        <el-form :model="editEventForm" ref="formRef" label-position="top" class="custom-form">
           
-          <div class="content-card">        
+          <div class="content-card">       
             <el-row :gutter="40">
+              
               <el-col :span="14">
                 <el-form-item label="活動標題(中文)" required>
                   <el-input v-model="editEventForm.title_zh" placeholder="請輸入中文標題" />
                 </el-form-item>
                 
-                <el-form-item label="Event Title(EN)" required>
+                <el-form-item label="Event Title(EN)">
                   <el-input v-model="editEventForm.title_en" placeholder="Enter English title" />
                 </el-form-item>
 
-                <el-form-item label="活動日期" required>
-                  <el-date-picker
-                    v-model="editEventForm.event_date"
-                    type="date"
-                    placeholder="選擇活動日期"
-                    value-format="YYYY-MM-DD"
-                    style="width: 100%"
-                  />
-                </el-form-item>
+                <el-row :gutter="20">
+                  <el-col :span="12">
+                    <el-form-item label="上架/活動日期 (Launch Date)" required>
+                      <el-date-picker
+                        v-model="editEventForm.launchdate"
+                        type="date"
+                        placeholder="選擇日期"
+                        value-format="YYYY-MM-DD"
+                        style="width: 100%"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
 
                 <el-form-item label="影片連結 (Video URL)">
-                  <el-input 
-                    v-model="editEventForm.video_url" 
-                    placeholder="請輸入 YouTube 或 Vimeo 連結" 
-                    clearable
-                  >
-                    <template #prefix>
-                      <el-icon><VideoPlay /></el-icon>
-                    </template>
+                  <el-input v-model="editEventForm.video" placeholder="請輸入影片連結" clearable>
+                    <template #prefix><el-icon><VideoPlay /></el-icon></template>
                   </el-input>
                 </el-form-item>
 
                 <el-form-item label="狀態" required>
                   <el-radio-group v-model="editEventForm.status">
-                    <el-radio :label="1" border>
-                      <div class="radio-content">
-                        <div class="status-dot active"></div>顯示中
-                      </div>
-                    </el-radio>
-                    <el-radio :label="0" border>
-                      <div class="radio-content">
-                        <div class="status-dot inactive"></div>草稿
-                      </div>
-                    </el-radio>
+                    <el-radio :label="1" border>顯示中</el-radio>
+                    <el-radio :label="0" border>草稿</el-radio>
                   </el-radio-group>
                 </el-form-item>
-
               </el-col>
 
               <el-col :span="10">
@@ -77,7 +58,7 @@
                       type="file" 
                       ref="fileInputRef" 
                       class="hidden-input" 
-                      accept="image/*"
+                      accept="image/*" 
                       @change="handleImageChange"
                     >
                     
@@ -91,31 +72,37 @@
                     <div v-else class="upload-placeholder">
                       <el-icon class="upload-icon"><Plus /></el-icon>
                       <div class="upload-text">點擊或拖曳圖片至此</div>
-                      <div class="upload-hint">建議尺寸 1200*800 px<br>檔案大小 ≤ 1MB</div>
+                      <div class="upload-hint">建議尺寸 1200*1200 px<br>檔案大小 ≤ 1MB</div>
                     </div>
                   </div>
                 </el-form-item>
               </el-col>
 
               <el-col :span="24">
-                <el-form-item label="活動大綱(中文)" required>
-                  <el-input 
-                    v-model="editEventForm.description_zh" 
-                    type="textarea" 
-                    :rows="6" 
-                    placeholder="請輸入活動大綱..."
-                  />
+                <el-divider content-position="left">內容簡介 (Summary)</el-divider>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="簡介(中文)">
+                  <el-input v-model="editEventForm.content_summary_zh" type="textarea" :rows="3" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="Summary(EN)">
+                  <el-input v-model="editEventForm.content_summary_en" type="textarea" :rows="3" />
                 </el-form-item>
               </el-col>
 
               <el-col :span="24">
-                <el-form-item label="Event Description(EN)" required>
-                  <el-input 
-                    v-model="editEventForm.description_en" 
-                    type="textarea" 
-                    :rows="6" 
-                    placeholder="Enter event description..."
-                  />
+                <el-divider content-position="left">內容 (Full Content)</el-divider>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="內容(中文)">
+                  <el-input v-model="editEventForm.content_zh" type="textarea" :rows="6" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="Content(EN)">
+                  <el-input v-model="editEventForm.content_en" type="textarea" :rows="6" />
                 </el-form-item>
               </el-col>
 
@@ -128,7 +115,7 @@
               type="primary" 
               color="#003060" 
               @click="submitForm" 
-              size="large" 
+              size="large"
               :loading="submitting"
             >
               更新活動
@@ -143,50 +130,41 @@
 
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { ArrowLeft, Plus, VideoPlay } from '@element-plus/icons-vue' // 引入 VideoPlay
+import { useRouter, useRoute } from 'vue-router' // 引入 useRoute
+import { ArrowLeft, Plus, VideoPlay } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
 const route = useRoute()
-const eventID = route.params.id // 取得活動 ID
+const eventID = route.params.id // 從網址取得 ID
 
-const pageLoading = ref(true)
-const submitting = ref(false)
+const pageLoading = ref(true) // 頁面載入中狀態
+const submitting = ref(false) // 送出按鈕狀態
 const fileInputRef = ref(null)
-const previewImage = ref(null) 
-const selectedFile = ref(null) 
+const previewImage = ref(null)
+const selectedFile = ref(null)
 
-// 環境變數
+// 環境變數設定
 const apiBase = import.meta.env.VITE_API_BASE
-// ★ 如果你的活動圖片放在不同資料夾，建議在 .env 新增 VITE_EVENT_IMG_BASE
-// 這裡暫時沿用邏輯，若無設定則需手動調整路徑
-const imgBase = import.meta.env.VITE_EVENT_IMG_BASE || import.meta.env.VITE_NEWS_IMG_BASE 
+// ★ 圖片的路徑 Base URL (如果跟新聞圖片不同，可能需要另外設定，這裡暫設為跟 API 同源或另外的變數)
+const imgBaseUrl = import.meta.env.VITE_IMG_BASE || apiBase.replace('/api', '') 
 
-// 表單資料模型
 const editEventForm = reactive({
   title_zh: '',
   title_en: '',
-  event_date: '',
-  video_url: '', // ★ 新增影片連結
-  status: 1, 
-  description_zh: '',
-  description_en: ''
+  launchdate: '',
+  video: '',
+  status: 0, 
+  content_summary_zh: '', 
+  content_summary_en: '',
+  content_zh: '',
+  content_en: ''
 })
 
-// 返回列表
-const goBack = () => {
-  // ★ 記得確認你的 Router 名稱是否為 AnnualEventsManagement
-  router.push({ name: 'AnnualEventManagement' })
-}
+const goBack = () => router.push({ name: 'AnnualEventManagement' })
+const triggerFileInput = () => fileInputRef.value.click()
 
-// 觸發檔案選擇
-const triggerFileInput = () => {
-  fileInputRef.value.click()
-}
-
-// 處理圖片選擇
 const handleImageChange = (event) => {
   const file = event.target.files[0]
   if (!file) return
@@ -195,12 +173,12 @@ const handleImageChange = (event) => {
     ElMessage.warning('圖片檔案大小不能超過 1MB')
     return
   }
-
+  
   selectedFile.value = file
   previewImage.value = URL.createObjectURL(file)
 }
 
-// ★ 取得單筆資料
+// ★ 讀取單筆資料
 const getEventDetail = async () => {
   if (!eventID) {
     ElMessage.error('無效的活動 ID')
@@ -209,29 +187,36 @@ const getEventDetail = async () => {
   }
 
   try {
-    // 呼叫 getAnnualEvents.php?id=xxx
+    // 假設你的 PHP 檔名是 getAnnualEvent.php，並且接受 id 參數
     const API_URL = `${apiBase}/getAnnualEvents.php?id=${eventID}`
     const response = await fetch(API_URL)
     const data = await response.json()
 
-    // 填入表單 (請確保欄位名稱與資料庫一致)
+    if (data.error) {
+        throw new Error(data.error)
+    }
+
+    // 將後端資料填入表單
     editEventForm.title_zh = data.title_zh
     editEventForm.title_en = data.title_en
-    editEventForm.event_date = data.event_date // 或 data.createdate，視資料庫而定
-    editEventForm.video_url = data.video_url   // ★ 讀取影片連結
-    editEventForm.status = Number(data.status)
-    editEventForm.description_zh = data.description_zh
-    editEventForm.description_en = data.description_en
-    
+    editEventForm.launchdate = data.launchdate
+    editEventForm.video = data.video
+    editEventForm.status = Number(data.status) // 確保轉為數字 (Radio判斷用)
+    editEventForm.content_summary_zh = data.content_summary_zh
+    editEventForm.content_summary_en = data.content_summary_en
+    editEventForm.content_zh = data.content_zh
+    editEventForm.content_en = data.content_en
+
     // 處理圖片預覽
     if (data.pic) {
-      // 組合圖片網址
-      previewImage.value = `${imgBase}/${data.pic}`
+      // 假設資料庫存的是 'festivals/xxx.jpg'，這裡要組合成完整網址
+      // 建議檢查一下你的 .env 設定，或是直接寫死相對路徑測試
+      previewImage.value = `${imgBaseUrl}/${data.pic}`
     }
 
   } catch (error) {
     console.error(error)
-    ElMessage.error('無法讀取活動資料')
+    ElMessage.error('讀取資料失敗')
   } finally {
     pageLoading.value = false
   }
@@ -241,64 +226,61 @@ const getEventDetail = async () => {
 const submitForm = async () => {
   submitting.value = true
   
-  if(!editEventForm.title_zh || !editEventForm.event_date) {
+  if(!editEventForm.title_zh || !editEventForm.launchdate) {
       ElMessage.warning('請填寫標題與活動日期')
       submitting.value = false
       return
   }
 
-  // ★ 呼叫 editAnnualEvents.php
-  const API_URL = `${apiBase}/editAnnualEvents.php` 
+  // ★ 使用編輯用的 API
+  const API_URL = `${apiBase}/editAnnualEvent.php` 
 
   const fd = new FormData()
   
-  // 必填：ID (注意後端接收的是 eventID 還是 id)
-  fd.append('eventID', eventID)
+  // 必填：ID
+  fd.append('annalevent_ID', eventID) // 注意：這裡的 key 要對應 PHP 接收的 $_POST['annalevent_ID']
   
   fd.append('title_zh', editEventForm.title_zh)
   fd.append('title_en', editEventForm.title_en)
-  fd.append('event_date', editEventForm.event_date)
-  fd.append('video_url', editEventForm.video_url) // ★ 傳送影片連結
+  fd.append('launchdate', editEventForm.launchdate)
+  fd.append('video', editEventForm.video)           
   fd.append('status', editEventForm.status)
-  fd.append('description_zh', editEventForm.description_zh)
-  fd.append('description_en', editEventForm.description_en)
+  fd.append('content_summary_zh', editEventForm.content_summary_zh)
+  fd.append('content_summary_en', editEventForm.content_summary_en)
+  fd.append('content_zh', editEventForm.content_zh)
+  fd.append('content_en', editEventForm.content_en)
   
-  // 只有當使用者有選新圖片時，才傳送 pic
+  // 只有當使用者選了新圖片時，才傳送 pic
   if (selectedFile.value) {
     fd.append('pic', selectedFile.value)
   }
 
   try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      body: fd        
-    })
-
+    const response = await fetch(API_URL, { method: 'POST', body: fd })
     const data = await response.json()
 
     if (data.success) {
-      ElMessage.success('年度盛事更新成功！')
-      router.push({ name: 'AnnualEventsManagement' })
+      ElMessage.success('更新成功！')
+      router.push({ name: 'AnnualEventManagement' })
     } else {
       ElMessage.error('更新失敗：' + (data.message || '未知錯誤'))
     }
-
   } catch (error) {
-    console.error('Network error:', error)
+    console.error(error)
     ElMessage.error('系統發生錯誤')
   } finally {
     submitting.value = false
   }
 }
 
-// 進入頁面時載入資料
+// 進入頁面時執行
 onMounted(() => {
-  getEventDetail()
+    getEventDetail()
 })
 </script>
 
 <style scoped>
-/* 樣式沿用 editNews.vue */
+/* 樣式完全沿用 AddAnnualEvent 的樣式 */
 .scroll-container {
   height: calc(100vh - 250px);
   overflow-y: auto;
@@ -317,19 +299,6 @@ onMounted(() => {
   margin-bottom: 24px;
 }
 
-.radio-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.status-dot.active { background-color: #67C23A; }
-.status-dot.inactive { background-color: #909399; }
-
 .footer-actions {
   display: flex;
   justify-content: center;
@@ -345,11 +314,12 @@ onMounted(() => {
   font-weight: normal;
   color: black;
   width: 140px;
-}
-.back-btn:hover {
-  border-color: #409eff;
-  background-color: #F0F7FF;
-  color: #409eff;
+  
+  &:hover {
+    border-color: #409eff;
+    background-color: #F0F7FF;
+    color: #409eff;
+  }
 }
 
 .cancel-btn {
@@ -369,29 +339,70 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.upload-box:hover {
-  border-color: #409eff;
+
+  &:hover {
+    border-color: #409eff;
+  }
 }
 
-.hidden-input { display: none; }
-.upload-placeholder { text-align: center; color: #909399; }
-.upload-icon { font-size: 48px; color: #dcdfe6; margin-bottom: 10px; }
-.upload-text { font-size: 14px; margin-bottom: 5px; }
-.upload-hint { font-size: 12px; color: #c0c4cc; line-height: 1.5; }
+.hidden-input {
+  display: none;
+}
 
-.preview-container { width: 100%; height: 100%; position: relative; }
-.preview-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.upload-placeholder {
+  text-align: center;
+  color: #909399;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #dcdfe6;
+  margin-bottom: 10px;
+}
+
+.upload-text {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: #c0c4cc;
+  line-height: 1.5;
+}
+
+.preview-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
 .overlay {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex; justify-content: center; align-items: center;
-  opacity: 0; transition: opacity 0.3s;
-  color: white; font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  color: white;
+  font-size: 16px;
 }
-.upload-box:hover .overlay { opacity: 1; }
+
+.upload-box:hover .overlay {
+  opacity: 1;
+}
 
 :deep(.el-form-item__label) {
   font-weight: 500;
