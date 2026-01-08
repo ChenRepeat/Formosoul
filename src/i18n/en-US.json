@@ -219,11 +219,15 @@
     "potion15": "A combination of warm winter melon sugars and pure milk dew, added with slippery immortal grass gels. The layered texture provides the warmest magical protection on cold winter nights.",
     "potionName16": "Phantom Walker Special (Lemon Coconut Jelly Black Tea)",
     "potion16": "Infusing explosive sourness and chewy elements into deep shadow leaves. This is a stamina recovery agent prepared for magical adventurers facing long treks.",
+    "potionName17": "Hot Grass Jelly",
+    "potion17": "You found the hidden recipe! Nothing beats warm grass jelly in winter—pure bliss with pearls and coconut jelly.",
 
     "secretPotionName1": "Dreamweaver's Delight",
     "secretPotion1": "Don't let the dark look fool you; the 'yarn' is actually blue spun sugar and the mushroom is a gummy treat. This sparkling blueberry brew helps untangle messy thoughts and boosts creativity.",
     "secretPotionName2": "Nebula Nectar",
-    "secretPotion2": "A mesmerizing swirl of galaxies and stardust captured in a glass. It tastes like sparkling blueberries and infinite possibilities, granting the drinker a moment of cosmic clarity."
+    "secretPotion2": "A mesmerizing swirl of galaxies and stardust captured in a glass. It tastes like sparkling blueberries and infinite possibilities, granting the drinker a moment of cosmic clarity.",
+    "secretPotionName3": "Accidental Golden Froth",
+    "secretPotion3": "Congrats! You brewed this sparkling beer from basic ingredients. It untangles messy thoughts and sparks inspiration."
     },
 
     "divinationTitle":"Divination",
@@ -665,6 +669,7 @@
     "otp":"One-Time Password (OTP)",
     "getOTP":"Summon the Code",
     "acceptBtn":"Accept Terms and Enroll",
-    "loading":"Loading..."
+    "loading":"Loading...",
+    "saveBtn":"Save changes"
   }
 }

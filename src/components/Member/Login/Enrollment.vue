@@ -96,7 +96,7 @@
         @click="handleEnrollment"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : $t('loginPage.acceptBtn')}}
+            {{ isLoading ? $t('loginPage.loading') : $t('loginPage.acceptBtn')}}
         </BasicButton>
 
 

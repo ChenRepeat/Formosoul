@@ -158,7 +158,7 @@ const cook = () => {
     resultBigTitle.value = 'classes.potionBigTitle2' 
 
   }
-  for(let i = 1; i<= 16 ; i++){
+  for(let i = 1; i<= potionAll.length ; i++){
     if(!selectNum) return
     let recipeNum = 0
     recipeNum = Object.values(potionAll[i].recipe).length 
@@ -203,9 +203,9 @@ const cook = () => {
 
   // 4. (例外)不符合食譜神秘飲料區段 random 要給他五種
   else{
-    let index = Math.round(Math.random() + 1)
-    // index = 15 // 測試用
-    // resultImg.value = potionAll[index].imgUrl
+    let index = Math.floor(Math.random() * 3 + 1)
+    // index = 11
+    // resultImg.value = potionAll[index].imgUrl // 測試用
     // resultTitle.value = potionAll[index].name
     // resultIntro.value = potionAll[index].resultIntro
 
@@ -402,12 +402,14 @@ onMounted(()=>{
     color: $color-fsTitle;
     flex-basis: 0;
     &.potion-right-result-bigtitle{
-      margin-top: 2%;
+      // margin-top: 2%;
       flex-grow: 1;
     }
     &.potion-right-result-title{
       flex-grow: 1;
       padding: 0 5%;
+      margin-top: 3%;
+
     }
     
   }
@@ -421,6 +423,7 @@ onMounted(()=>{
 
     .potion-right-result-img{
       width: 100%;
+      // object-fit: contain;
 
     }
   }

@@ -48,7 +48,7 @@
         @click="handleLogin"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : $t('loginPage.loginBtn')}}
+            {{ isLoading ? $t('loginPage.loading') : $t('loginPage.loginBtn')}}
         </BasicButton>
 
 
