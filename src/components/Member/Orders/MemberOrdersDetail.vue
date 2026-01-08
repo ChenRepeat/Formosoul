@@ -14,7 +14,7 @@
                     class="btn-yellow-fill" 
                     @click="handleCheckOrder(order.order_number)"
                 >
-                    <p>Check</p>
+                    <p class="Check">Check</p>
                 </basic-button>
                 </router-link>
             </p>
@@ -172,6 +172,12 @@
         color: $color-fsTitle;
         text-decoration: none;
     }
+    .btn-yellow-fill:hover,
+    .Check:hover{
+        background-color: $color-fsContent;
+        color: $color-fsWhite;
+    }
+
     .btn-yellow-fill > p{
         // width: 100%;
         // height: 100%;

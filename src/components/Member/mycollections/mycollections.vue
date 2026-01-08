@@ -844,7 +844,10 @@ const products = ref([
         background-color: $color-fsTitle;
         color: $color-fsWhite;
     }
-
+    .list-page.active{
+      background-color: $color-fsTitle;
+      color: $color-fsWhite;
+    }
     .noborder{
         border: 0;
     }

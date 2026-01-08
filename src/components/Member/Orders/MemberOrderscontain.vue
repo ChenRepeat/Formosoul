@@ -97,13 +97,12 @@ import { useI18n } from 'vue-i18n';
             const totalQuantity = countArray.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = countArray.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const discountAmount = realArray.discount;
-            // console.log(totalQuantity);
             // console.log(totalPrice);
             // console.log(countArray);
             realArray.total_quantity = totalQuantity;
             countArray.totalPrice = totalPrice;
             countArray.discount = discountAmount;
-
+            countArray.total = realArray.total_amount;
             order.value = realArray;
             totallist.value = countArray;
 
@@ -120,12 +119,6 @@ import { useI18n } from 'vue-i18n';
             }
         }
         ).then( () => {
-            const subtotal = computed(() => {
-                const { discount, fee, totalPrice } = totallist.value;
-                return  fee + totalPrice - discount; 
-            });
-            totallist.value.total = subtotal.value;
-        }).then( () => {
             if(totallist.value.discount > 0){
                 totallist.value.discount = `-${totallist.value.discount}`;
             }else{
@@ -182,9 +175,7 @@ import { useI18n } from 'vue-i18n';
             productlist.value = productArray.map((product, index) => {
                 const productInfo = productArray[index] || {};
                 const productid = productInfo.product_ID || 0;
-                const productprice = productInfo.price || 0;
-                const productpieces = productInfo.quantity || 0;
-                const product_total = productprice * productpieces;
+                const product_total = productInfo.price_sum;
                 const imglist = productInfo.image || {};
                 let  finalpath = '';
                 if(imglist.includes('|')){

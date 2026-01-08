@@ -166,6 +166,26 @@ watch(
     { immediate: true }
 );
 
+// 分享功能 ------------------------------------
+
+function shareTo(platform) {
+  const url = `https://tibamef2e.com/tjd103/shop/productdetail/${route.params.id}`
+
+  const text = "分享您喜愛的商品"; 
+  let shareUrl = "";
+
+  switch (platform) {
+    case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+    case 'line':
+        const lineContent = `${text} ${url}`;
+        shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContent)}`;
+        break;
+  }
+
+  window.open(shareUrl, '_blank', 'width=600,height=400');
+}
 
 // Tab 開關 ------------------------------------
 //const tabInfo = ref(story);  story 對程式來說是變數，所以需要宣告程式才會認識
@@ -264,8 +284,8 @@ const lang = computed( () => {
                         <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
                         <p class="fw200">{{ showDetail[`description_${lang}`]}}</p>
                         <div class="share-icon">
-                            <font-awesome-icon icon="fa-brands fa-square-facebook" />
-                            <font-awesome-icon icon="fa-brands fa-instagram" />
+                            <font-awesome-icon icon="fa-brands fa-square-facebook" @click="shareTo('facebook')" />
+                            <font-awesome-icon icon="fa-brands fa-line"  @click="shareTo('line')" />
                         </div>
                     </div>
 
