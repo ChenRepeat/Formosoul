@@ -49,7 +49,7 @@ const pi = x => x * Math.PI / 180
 //} 
 
 function draw(canvasElement, long, Camera, radius, imageSrc) {
-  console.log('draw 函數被呼叫，圖片路徑:', imageSrc);
+  // console.log('draw 函數被呼叫，圖片路徑:', imageSrc);
   
 
   const canvas = canvasElement; 

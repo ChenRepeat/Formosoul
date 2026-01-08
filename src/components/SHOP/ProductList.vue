@@ -890,9 +890,11 @@ function pageMinus(){
 
   // 如果分類、排序、搜尋有被點選，一律回到第１頁，才不會讀不到資料，頁碼也錯誤 ----------------------------------------
   watch(
-    () => [productStore.typeBy, productStore.sortBy, searchText],
+    () => [productStore.typeBy, productStore.sortBy, searchText.value],
     () => {
       currentPage.value = 1;
+      // console.log('search');
+      
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   );
