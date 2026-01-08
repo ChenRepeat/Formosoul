@@ -601,5 +601,10 @@
     "aboutTitle3":"Portkey",
     "aboutTitle4":"(For magical partners)",
     "aboutIntro3":"Ensure your target coordinates are precise to prevent accidental misdirection."
+  },
+  "notfound":{
+    "notFoundMsg":"The summoning spell failed! The page you’re looking for has vanished into a temporal rift.",
+    "btnBack": "Retrace Your Steps",
+    "btnHome": "Back to the Academy"
   }
 }

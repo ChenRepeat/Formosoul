@@ -620,5 +620,10 @@
     "aboutTitle3":"港口鑰",
     "aboutTitle4":"(魔法師通道)",
     "aboutIntro3":"請確保您的坐標設定正確，以避免意外飛到遠方。"
+  },
+  "notfound":{
+    "notFoundMsg":"召喚術似乎失效了！您所尋找的頁面已消失在時空裂縫中。",
+    "btnBack": "返回上個空間",
+    "btnHome": "回到學院大廳"
   }
 }
