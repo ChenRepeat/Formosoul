@@ -299,7 +299,9 @@
     "voucher":"Voucher",
     "newArrival": "New Arrival",
     "priceLow": "Price : Low to High",
-    "priceHigh": "Price : High to Low"
+    "priceHigh": "Price : High to Low",
+    "noSearch":"The Tracking Spell finds no trace. Please try chanting a different search incantation.",
+    "search":"Enter your search incantation..."
 
   },
   "shoppingcart":{
