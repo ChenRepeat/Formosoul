@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'conn.php';
-$member_wand = json_decode(file_get_contents("php://input"), true);
+// $member_wand = json_decode(file_get_contents("php://input"), true);
 
 $code = $_GET['code'];
 $state = $_GET['state'];
@@ -112,7 +112,7 @@ if ($member) {
 
         try {
             $pdo->beginTransaction();
-            $wandcore_ID = $member_wand['wandcore_ID'] ?? null;
+            // $wandcore_ID = $member_wand['wandcore_ID'] ?? null;
             // 1. 新增會員 (記得把 line_id 寫進去)
             $sql_member = "INSERT INTO member (email, password, name, line_id, wandcore_ID, status, role, createdate, updatetime) 
                            VALUES (?, NULL, ?, ?, :wandcore_ID, 1, 0, NOW(), NOW())";
