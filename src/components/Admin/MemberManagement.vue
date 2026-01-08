@@ -119,7 +119,7 @@
 
     <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData / pageSize) }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData.length / pageSize) }} 頁</p>
       </div>
       <el-pagination 
         v-model:current-page="currentPage"
