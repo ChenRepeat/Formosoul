@@ -240,7 +240,7 @@ hr {
 }
 .footer-inner-case {
   justify-content: start;
-  gap: 120px;
+  gap: 117px;
 }
 .footer-social-link {
   text-align: center;

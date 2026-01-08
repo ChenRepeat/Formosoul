@@ -7,8 +7,13 @@ import { RouterLink, useRouter } from "vue-router";
 import BasicButton from "../BasicButton.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import { useAuthStore } from "@/stores/autoStore";
 
+const { t } = useI18n();
+const authStore = useAuthStore()
+const isLoading = () => {
+    authStore.isLoading = false;
+}
 
 // 統一彈窗組件：
 const getPopupClass = computed (()=>{
@@ -189,7 +194,7 @@ function closeWelcomeFrame (){
         <!-- z-index= 數字  這邊寫成動態style是用物件方法寫 isShow其實是值，一開始就是-1 -->
         <main class="survival-convenience-store-case">
             <div class="survival-convenience-store-case-wrapper">
-                <img class='survival-convenience-store-case-bg' src="/SurvivalGuide/ConvenienceStore/convenienceStore-bg-min.png" alt="cs-base">
+                <img class='survival-convenience-store-case-bg' src="/SurvivalGuide/ConvenienceStore/convenienceStore-bg-min.png" alt="cs-base" @load="isLoading">
 
                 <div v-if="isGameLocked" class="start-overlay"></div>
 

@@ -191,6 +191,7 @@ const buaBue = () => {
                 pass: memberStore.gameData.bue.pass
               });
               
+              memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass }).catch(err => console.error("儲存進度失敗:", err));
               console.log('[背景] 擲筊遊戲資料儲存完成');
         } catch (err) {
             console.error("[背景] 擲筊遊戲儲存失敗:", err);
@@ -199,7 +200,6 @@ const buaBue = () => {
     }
   }
          
-      memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass }).catch(err => console.error("儲存進度失敗:", err));
     }, 1500);
   }, 50);
 };
