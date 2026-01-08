@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
     const isLoading = ref(true);
     // 彈窗狀態
     const isLoginModalOpen = ref(false);
-    const memberView = ref('coreselection');
+    const memberView = ref('');
     const loginView = ref('loginpage');
     const informationView = ref('informationmembercard');
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -133,11 +133,6 @@ export const useAuthStore = defineStore('auth', () => {
             }   
         }else{
             console.log('沒存到');
-        }
-        if(memberView.value != 'coreselection'){
-            setTimeout(() => {
-                memberView.value = 'coreselection';
-            }, 1500);
         }
 
         if(loginView.value != 'loginpage'){

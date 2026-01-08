@@ -5,7 +5,7 @@
     @keydown="handleKeyDown"
     >
         <div class="Loginout">
-        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
+        <div class="closebutton" @click.self="authStore.closeLoginModal()"><font-awesome-icon @click.self="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
         <TheCoreSelection v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
         <loginpage v-else-if="authStore.memberView == 'login'"></loginpage>
         <cardpage v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
@@ -51,6 +51,7 @@ import Editcardpage from './Member/information/editcardpage.vue';
         position: absolute;
         top: 16px;
         right: 16px;
+        pointer-events: auto;
     }
     .bg-frostedGlass{
         width: 90%;
