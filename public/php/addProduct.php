@@ -3,53 +3,73 @@ header('Content-Type: application/json; charset=utf-8');
 require_once 'conn.php';
 
 try {
-    // 0. 基本檢查
-    if (empty($_POST['id'])) {
-        throw new Exception('必須填寫商品編號 (ID)');
+    // 0. 基本檢查 (移除 ID 檢查，但要確保有傳入 typeEn)
+    if (empty($_POST['typeEn'])) {
+        throw new Exception('必須填寫商品分類英文代號 (typeEn)');
     }
-    $customID = $_POST['id'];
+
+    // 取得分類並轉大寫 (確保格式統一，例如 pe -> PE)
+    $typeEn = strtoupper($_POST['typeEn']); 
 
     // 交易開始
     $pdo->beginTransaction();
 
-    // ===========================================================
-    // ★ 關鍵步驟：先檢查 ID 是否已存在
-    // ===========================================================
-    $checkSql = "SELECT COUNT(*) FROM product WHERE product_ID = ?";
-    $stmtCheck = $pdo->prepare($checkSql);
-    $stmtCheck->execute([$customID]);
+    // 自動產生 product_ID
+    // 格式：[Type][YYYYMM][0001~9999]  EX: PE2026010001  
+    //組合前綴 (Prefix)
+    $currentYM = date('Ym'); // 取得當前年月，如 202601
+    $prefix = $typeEn . $currentYM; // 組合，如 PE202601
+
+    //查詢該月份目前最大的編號
+    // 用 LIKE 'PE202601%'去找
+    // FOR UPDATE 是為了鎖定讀取，避免高併發時兩個人算到同一個號碼
+    $sqlGetMax = "SELECT product_ID FROM product 
+                  WHERE product_ID LIKE ? 
+                  ORDER BY product_ID DESC 
+                  LIMIT 1 FOR UPDATE"; 
     
-    if ($stmtCheck->fetchColumn() > 0) {
-        throw new Exception("編號 '{$customID}' 已經存在，請換一個編號。");
+    $stmtMax = $pdo->prepare($sqlGetMax);
+    $stmtMax->execute([$prefix . '%']);
+    $rowMax = $stmtMax->fetch(PDO::FETCH_ASSOC);
+
+    if ($rowMax) {
+        // --- 情況 A：這個月該分類已經有商品 (例如 PE2026010005) ---
+        $lastID = $rowMax['product_ID'];
+        
+        // 取出最後 4 碼流水號
+        $lastSeqStr = substr($lastID, -4); 
+        
+        // 轉數字 + 1
+        $newSeq = intval($lastSeqStr) + 1;
+    } else {
+        // --- 情況 B：這個月該分類還沒商品 (是第一筆) ---
+        $newSeq = 1;
     }
 
-    // ===========================================================
-    // 第一步：寫入 product 主表 (加入 product_ID 欄位)
-    // ===========================================================
+    // 3. 補零組合成完整 ID (例如 PE2026010006)
+    $newProductID = $prefix . str_pad($newSeq, 4, '0', STR_PAD_LEFT);
+
+
+    // 寫入 product 主表
     $sqlProduct = "INSERT INTO product (
-        product_ID, name_zh, name_en, type_zh, type_en, price, stock, create_at, update_at, product_status,`image`
+        product_ID, name_zh, name_en, type_zh, type_en, price, stock, create_at, update_at, product_status, `image`
     ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?,''
+        ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, ''
     )";
 
     $stmtProduct = $pdo->prepare($sqlProduct);
     $stmtProduct->execute([
-        $customID,           // ★ 這裡手動填入 ID
+        $newProductID,       // ★ 使用剛剛算出來的 ID
         $_POST['nameZh'],
         $_POST['nameEn'],
         $_POST['typeZh'],
-        $_POST['typeEn'],
+        $_POST['typeEn'], 
         $_POST['price'],
         $_POST['stock'],
-        $_POST['status']     // 記得前端傳來的是 status 還是 product_status，請對應好
+        $_POST['status']
     ]);
 
-    // ★ 自訂ID模式下，不需要也不會有 lastInsertId()，直接用 $customID
-    $newProductID = $customID; 
-
-    // ===========================================================
-    // 第二步：寫入 product_detail
-    // ===========================================================
+    //寫入 product_detail (使用 $newProductID)
     $sqlDetail = "INSERT INTO product_detail (
         product_ID, description_zh, description_en, story_zh, story_en, use_zh, use_en
     ) VALUES (
@@ -67,9 +87,7 @@ try {
         $_POST['useEn']
     ]);
 
-    // ===========================================================
-    // 第三步：處理圖片上傳 (邏輯不變)
-    // ===========================================================
+    // 處理圖片上傳
     $uploadDir = '../Shop/';
     if (!file_exists($uploadDir)) {
         mkdir($uploadDir, 0777, true);
@@ -100,9 +118,7 @@ try {
         }
     }
 
-    // ===========================================================
-    // 第四步：更新圖片欄位
-    // ===========================================================
+    // 更新圖片欄位
     if (!empty($uploadedImages)) {
         $imageString = implode('|', $uploadedImages);
         $sqlUpdate = "UPDATE product SET image = ? WHERE product_ID = ?";
@@ -115,14 +131,14 @@ try {
     echo json_encode([
         'success' => true, 
         'message' => '新增成功',
-        'id' => $newProductID
+        'id' => $newProductID // 回傳新產生的 ID 給前端，這樣前端可以跳轉或顯示
     ]);
 
 } catch (Exception $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    // 回傳具體錯誤訊息 (例如 ID 重複)
+    // 回傳具體錯誤訊息
     echo json_encode(['success' => false, 'message' => '處理失敗: ' . $e->getMessage()]);
 }
 ?>

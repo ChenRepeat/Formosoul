@@ -127,7 +127,7 @@
 
         <el-dropdown trigger="click" @command="handleStatusCommand">
           <div class="capsule-btn">
-            <span class="label">狀態: {{ filterStatus }}</span>
+            <span class="label">狀態:{{ filterStatus }}</span>
             <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </div>
           <template #dropdown>

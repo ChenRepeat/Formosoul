@@ -98,16 +98,18 @@
               </el-col>
               
               <el-col :span="12">
-                 <div class="system-info-group">
-                  <el-form-item label="自訂商品編號" required> <el-input 
-                      v-model="addProductForm.id" 
-                      placeholder="請輸入唯一編號 (例如: P001)" 
-                    />
+                  <div class="system-info-group">
+                    <el-form-item label="商品編號">
+                       <el-input 
+                         placeholder="由系統生成" 
+                         disabled 
+                         class="bg-gray"
+                       />
                     </el-form-item>
                     <el-form-item label="建立日期">
-                       <el-input v-model="addProductForm.createDate" disabled placeholder="自動生成" class="bg-gray"/>
+                        <el-input v-model="displayDate" disabled placeholder="自動生成" class="bg-gray"/>
                     </el-form-item>
-                 </div>
+                  </div>
               </el-col>
             </el-row>
           </div>
@@ -236,7 +238,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus, UploadFilled, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -244,16 +246,22 @@ import { ElMessage } from 'element-plus'
 const router = useRouter()
 const loading = ref(false)
 
+// ★ 修改點 2: 顯示當前日期 (僅供顯示用)
+const displayDate = computed(() => {
+    const now = new Date();
+    return now.toISOString().split('T')[0]; // 格式: YYYY-MM-DD
+});
+
 // 表單資料模型
 const addProductForm = reactive({
   nameZh: '',
   nameEn: '',
-  id: '', 
+  // id: '', // ★ 移除 id 欄位
   typeZh: '',
   typeEn:'',
   price: undefined,
   stock: undefined,
-  createDate: '', 
+  // createDate: '', // ★ 移除 createDate，後端 SQL 會自己 NOW()
   status: 0, 
   descriptionZh: '',
   descriptionEn: '',
@@ -263,7 +271,7 @@ const addProductForm = reactive({
   useEn: '',
 })
 
-// ★ 定義分類對應表 (Key: 英文, Value: 中文)
+// 定義分類對應表 (Key: 英文, Value: 中文)
 const typeMapping = {
   'Folktoys': '童玩',
   'Personalized': '客製化商品',
@@ -271,7 +279,7 @@ const typeMapping = {
   'Voucher': '體驗券'
 }
 
-// ★ 監聽英文分類變動，自動填入中文
+// 監聽英文分類變動，自動填入中文
 watch(() => addProductForm.typeEn, (newValue) => {
   if (newValue && typeMapping[newValue]) {
     addProductForm.typeZh = typeMapping[newValue]
@@ -289,8 +297,9 @@ const goBack = () => {
 const submitForm = async () => {
   loading.value = true;
   
-  if(!addProductForm.id || !addProductForm.nameZh || !addProductForm.price) {
-      ElMessage.warning('請填寫必填欄位 (編號、名稱、價格)');
+  // ★ 修改點 3: 驗證邏輯移除 id
+  if(!addProductForm.nameZh || !addProductForm.price || !addProductForm.typeEn) {
+      ElMessage.warning('請填寫必填欄位 (名稱、分類、價格)');
       loading.value = false;
       return;
   }
@@ -301,7 +310,6 @@ const submitForm = async () => {
   const fd = new FormData();
 
   for (const [key, value] of Object.entries(addProductForm)) {
-    // 處理 undefined 或 null 轉空字串
     fd.append(key, value === undefined || value === null ? '' : value);
   }
 
@@ -322,7 +330,8 @@ const submitForm = async () => {
     const data = await response.json();
 
     if (data.success) {
-      ElMessage.success('商品新增成功！');
+      // ★ 修改點 4: 成功訊息顯示後端回傳的 ID
+      ElMessage.success(`商品新增成功！編號：${data.id}`);
       router.push('/admin/product-management');
     } else {
       ElMessage.error('新增失敗：' + data.message);
@@ -338,6 +347,7 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
+/* 樣式保持原樣，只有 .bg-gray 有用到 */
 .scroll-container {
   height: calc(100vh - 250px);
   overflow-y: auto;
