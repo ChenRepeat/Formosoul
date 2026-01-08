@@ -644,5 +644,26 @@
     "notFoundMsg":"The summoning spell failed! The page you’re looking for has vanished into a temporal rift.",
     "btnBack": "Retrace Your Steps",
     "btnHome": "Back to the Academy"
+  },
+  "loginPage":{
+    "login":"Login",
+    "other":"Other",
+    "placeholderAcc":"E-mail",    
+    "placeholderPwd":"Password",
+    "confirmPwd":"Confirm password",
+    "forgetPasswordMsg":"* If your memory has been tampered with by a Memory Charm, click here：",
+    "forgetPasswordBtn":"ForgetPassword",
+    "loginBtn":"Enter the Academy",
+    "enroll":"Enrollment",
+    "pwdRule":"* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.",
+    "acceptMsg":"I have read and agree to the Terms of",
+    "service":"Service",
+    "and":"and",
+    "privacy":"Privacy Policy",
+    "dot":".",
+    "otp":"One-Time Password (OTP)",
+    "getOTP":"Summon the Code",
+    "acceptBtn":"Accept Terms and Enroll",
+    "loading":"Loading..."
   }
 }

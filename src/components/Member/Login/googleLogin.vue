@@ -19,6 +19,9 @@ const btnLook = {
 
 
 function handleCredential(response) { // 取需要的 JWT Json Web Token
+  const coreJson = sessionStorage.getItem('guest');
+  const coreJs = coreJson ? JSON.parse(coreJson) : null; // 有從session讀到的話 轉成js物件
+  const wandcore_ID = coreJs ? coreJs.core : null; // 換成js 物件之後可以用物件取值方法]
   emit('googleMessage', '')
   const apiBase = import.meta.env.VITE_API_BASE
   fetch(`${apiBase}/google.php`,{
@@ -31,6 +34,7 @@ function handleCredential(response) { // 取需要的 JWT Json Web Token
     // 資安考量改傳raw JWT 到php 用google 提供的函式庫驗證 
     body: JSON.stringify({
       'google_token' : response.credential,
+      'wandcore_ID' : wandcore_ID
     })
   })
   .then(res => res.json()) // -- ↓開始處理 php 回傳值↓ --

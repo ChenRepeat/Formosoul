@@ -663,5 +663,26 @@
     "notFoundMsg":"召喚術似乎失效了！您所尋找的頁面已消失在時空裂縫中。",
     "btnBack": "返回上個空間",
     "btnHome": "回到學院大廳"
+  },
+  "loginPage":{
+    "login":"回到學院",
+    "other":"多元入學",
+    "placeholderAcc":"電子郵件",    
+    "placeholderPwd":"密碼",
+    "confirmPwd":"確認密碼",
+    "forgetPasswordMsg":"* 如果您的記憶被記憶咒干擾了，請點擊這裡：",
+    "forgetPasswordBtn":"忘記密碼",
+    "loginBtn":"進入學院",
+    "enroll":"申請入學",
+    "pwdRule":"* 請輸入 8 至 16 個字元，需包含大寫字母、小寫字母及數字。",
+    "acceptMsg":"我已閱讀並同意",
+    "service":"服務條款",
+    "and":"和",
+    "privacy":"隱私權政策",
+    "dot":"。",
+    "otp":"一次性驗證碼",
+    "getOTP":"召喚代碼",
+    "acceptBtn":"接受條款並入學",
+    "loading":"載入中..."
   }
 }

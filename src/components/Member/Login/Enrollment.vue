@@ -6,7 +6,7 @@
             type="email"
             v-model="email"
             class="input-text"
-            placeholder="E-mail"
+            :placeholder="$t('loginPage.placeholderAcc')"
             :disabled="isLoading"
             @keydown="handleKeyDown"
             />
@@ -18,7 +18,7 @@
                 type="text"
                 v-model="otp"
                 class="input-text"
-                placeholder="One-Time Password (OTP)"
+                :placeholder="$t('loginPage.otp')"
                 :disabled="!otpSent"
                 @keydown="handleKeyDown"
                 />
@@ -27,7 +27,7 @@
                         {{ timer > 0 ? `Resend in ${timer} seconds` : 'Sending...' }}
                 </p>
                 <p v-else>
-                    Summon  the  Code
+                    {{$t('loginPage.getOTP')}}
                 </p>
                 </BasicButton>
             </div>
@@ -39,7 +39,7 @@
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 class="input-text"
-                placeholder="Password"
+                :placeholder="$t('loginPage.placeholderPwd')"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
                 />
@@ -63,7 +63,7 @@
                 v-model="confirmpassword"
                 :type="showconfirmPassword ? 'text' : 'password'"
                 class="input-text"
-                placeholder="Confirm password"
+                :placeholder="$t('loginPage.confirmPwd')"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
                 />
@@ -82,21 +82,21 @@
         </div>
         <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
         <div class="login-bottom">
-            <p>* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
+            <p>{{$t('loginPage.pwdRule')}}</p>
         </div>
         <div class="checkpolicy dp-flex">
             <input type="checkbox" v-model="checkbox" id="checkbox">
-            <div class="agreetext dp-flex"><p>I have read and agree to the Terms of </p>
-                <p @click="gotoService" class="Service">Service</p><p>and</p>
-                <p @click="gotoPrivacy" class="Privacy">Privacy Policy</p>
-                <p>.</p></div>
+            <div class="agreetext dp-flex"><p>{{$t('loginPage.acceptMsg')}}</p>
+                <p @click="gotoService" class="Service">{{$t('loginPage.service')}}</p><p>{{$t('loginPage.and')}}</p>
+                <p @click="gotoPrivacy" class="Privacy">{{$t('loginPage.privacy')}}</p>
+                <p>{{$t('loginPage.dot')}}</p></div>
         </div>
         <BasicButton
         :class="btnclose ?  'btn-close' : 'btn-yellow-fill'"
         @click="handleEnrollment"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : 'Accept Terms and Enroll'}}
+            {{ isLoading ? 'Loading...' : $t('loginPage.acceptBtn')}}
         </BasicButton>
 
 
