@@ -1,11 +1,10 @@
 <script setup>
-  import gsap from 'gsap';
   import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
   const containerSelector = 'main';
 
   const showBtn = ref(false);
-  const btnOffsetBottom = ref('1%');
+  const btnOffsetBottom = ref('20px');
 
   // 加入一個鎖定變數，避免重複呼叫
   let ticking = false; 
@@ -33,7 +32,7 @@
         if (gap > 0) {
           btnOffsetBottom.value = `calc(1% + ${gap}px)`;
         } else {
-          btnOffsetBottom.value = '1%';
+          btnOffsetBottom.value = '20px';
         }
       }
     }
@@ -53,17 +52,6 @@
   onMounted(async() => {
     window.addEventListener('scroll', handleScroll, { passive: true }); // 加入 passive: true 優化
     updatePosition(); // 初始化執行一次
-    await nextTick()
-    gsap.to(".breath-light", {
-      keyframes: [
-        { "--inner": 5,  "--outer": 30, duration: 1 },   // 階段 1
-        { "--inner": 2,  "--outer": 50, duration: 0.5 }, // 階段 2
-        { "--inner": 15, "--outer": 70, duration: 0.3 }, // 階段 3
-        { "--inner": 0,  "--outer": 20, duration: 1.5 }  // 階段 4 (回到原點)
-      ],
-      repeat: -1,
-      ease: "sine.inOut" // 讓關鍵影格之間的連接更滑順
-    });
   });
   onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
@@ -93,11 +81,10 @@ $color-fsWhite: #ffffff;
 .toTop {
   position: fixed;
   z-index: 9999;
-  right: 1%;
+  right: 28px;
   cursor: pointer;
   width: 30px;
   height: 30px;
-  // border: 1px solid red;
   border-radius: 50%;
   filter: drop-shadow(0 0 100px $color-fsWhite);
   transition: opacity 0.3s, transform 0.3s, filter 0.3s;
@@ -132,14 +119,20 @@ $color-fsWhite: #ffffff;
 .breath-light{
   width: 100%;
   height: 100%;
-  --inner: 0;
-  --outer: 20;
-  opacity: 0.5;
   border-radius: 50%;
-  background-image: radial-gradient(
-    circle, 
-    white calc(var(--inner) * 1%),
-    transparent calc(var(--outer) * 1%)
-  );
+  border: 1px solid transparent;
+  box-shadow: (0px 0px 5px $color-fsWhite);
+  animation: breath-light 2s ease-in-out infinite alternate;
+}
+@keyframes breath-light {
+  0% {
+    box-shadow: 0 0 1px $color-fsWhite;
+  }
+  70% {
+    box-shadow: 0 0 10px $color-fsWhite;
+  }
+  100% {
+    box-shadow: 0 0 5px $color-fsWhite;
+  }
 }
 </style>

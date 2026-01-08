@@ -189,8 +189,8 @@ onUnmounted(() => {
     <section class="news-updates-section" id="updates">
       
       <div class="news-updates-header">
-        <h2 class="news-updates-title">{{$t('nav.news')}}</h2>
-        <h6 class="news-updates-title">{{ $t('nav.news2ndTitle') }}</h6>
+        <h3 class="news-updates-title">{{$t('nav.news')}}</h3>
+        <h6 class="news-updates-title fw200">{{ $t('nav.news2ndTitle') }}</h6>
       </div>
 
       <div class="news-updates-grid">

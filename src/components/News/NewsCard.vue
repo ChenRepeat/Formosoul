@@ -29,7 +29,7 @@ const isEnglish = computed(() => {
         <div class="newscard-container-text">
           <h5 v-if="isEnglish">{{ data.title_en }}</h5>
           <h5 v-else>{{ data.title_zh }}</h5>
-          <h5>{{ data.update }}</h5>
+          <h5 class="fw200">{{ data.update }}</h5>
         </div>
       </div>
   
