@@ -115,7 +115,6 @@
         // padding: 40px;
         width: 70%;
         margin:  auto;       
-        // box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         animation: slideUp 0.3s ease;
         // position: relative;
 
