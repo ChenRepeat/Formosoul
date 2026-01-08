@@ -318,7 +318,7 @@ async function goOrder(){
 
         if(response.data.status === 'success'){
             //訂單成立
-            alert(`訂單建立成功！\n編號：${response.data.orderID}\n金額：NT$ ${response.data.real_total}\n即將前往付款頁面...`);
+            //alert(`訂單建立成功！\n編號：${response.data.orderID}\n金額：NT$ ${response.data.real_total}\n即將前往付款頁面...`);
 
             // 清空購物車
             cartstore.clearCart();
