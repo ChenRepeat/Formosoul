@@ -58,7 +58,7 @@
 <script setup >
     import BasicButton from '@/components/BasicButton.vue';
     import { useAuthStore } from '@/stores/autoStore';
-    import { inject, ref } from 'vue';
+    import { inject, ref, watchEffect, watch } from 'vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import { useMemberStore } from '@/stores/member';
 
@@ -95,6 +95,19 @@
         // // avatarimg.src = avatar;
         // });
     };
+    const props = defineProps(['googleMessage']) 
+    console.log(`google message初始:${props.googleMessage}`);
+    if(props.googleMessage) errorMessage.value = props.googleMessage
+    watch(
+        ()=>props.googleMessage,
+        // props.googleMessage 也式是響應式物件 但它傳值，故需使用函式追蹤才會看到更新 (以ref宣告的變數 則為傳址 會去追蹤該變數的更新)
+        ()=>{
+            // console.log(`Watch 賦值前的google message:${props.googleMessage}`),
+            // console.log(`Watch 賦值前的error message:${errorMessage.value}`),
+            errorMessage.value = props.googleMessage
+            // console.log(`Watch 賦值後的error message:${errorMessage.value}`)
+        }
+    )
 
     async function handleLogin() {
 

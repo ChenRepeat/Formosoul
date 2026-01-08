@@ -28,6 +28,7 @@ const resultBigTitle = ref('classes.potionBigTitle2');
 
 const container = ref(null);
 
+const initialRule = ('classes.potionRule')
 let containerWidth
 let containerHeight
 let selectList = []
@@ -76,7 +77,7 @@ let ingredientList = [
             imgUrl:'Classes/potions/recipeCoconut.png',
           },
 ]
-  // potions 外部引入
+  // potions 外部引入 *他的物件名從1開始
 
 //functions
 function shuffle(arr) {
@@ -105,17 +106,7 @@ const initDraggable = () => { //清掉上回合的實體
       type:'x, y', // == default 允許平面上下左右移動
 
       bounds:{left:-40, top:-40, width: containerWidth + 80, height: containerHeight + 80}, // 應該要抓到確切的組件寬高..但先這樣
-      // onDrag: function(e){
 
-      //   // const [left , right, top, bottom] = [-40, 560, -40, 760]
-      //     // 更改key 對應的value to bounds values
-      //   // console.log(e.x, e.y); // 這是相對螢幕左上角的座標
-      //   // if(e.x < left){//
-      //     // this.endDrag()
-      //   // gsap.to(this.target, { x: 0, y: 0, duration: 0.3, overwrite: true });
-      //   // }
-
-      // },
       onDragEnd: e => {
         const instance = Draggable.get(e.target)
         if(!instance ) return
@@ -167,11 +158,12 @@ const cook = () => {
   for(let i = 1; i<= 8 ; i++){
     if(!selectNum) return
     let recipeNum = Object.values(potions[i].recipe).length 
-    // 一種飲料的食譜有多長(幾種原料)
-    if(selectNum == recipeNum){
+    // 統計各個食譜長度(有幾種原料)
+    if(selectNum == recipeNum || selectNum - 1 == recipeNum){
       correctList.push(potions[i]) 
-      // correctList == 符合數量的完整食譜
-      // index 從 0 開始自動重編
+      // correctList == 符合數量的完整食譜// index 從 0 
+
+      // 擴充糖 先允許多一個食材的食譜先進到這邊
     }
   }
   
@@ -183,7 +175,8 @@ const cook = () => {
                            .map(item => item.name) // 化為陣列 // 物件不能 .length
     let isMatch = true
     for(let j = 0 ; j < selectList.length ; j++){ 
-      if(!recipeName.includes(selectList[j]) ) {
+      if(!recipeName.includes(selectList[j]) && selectList[j] != 'suger') {
+        // 如果食譜不包含那個食材 那個食材又不是糖
         isMatch = false
         break} // 一次false 就進入下一圈判斷
     }
@@ -201,9 +194,12 @@ const cook = () => {
     resultIntro.value = correctList[resultIndex].resultIntro
   }
   
-  // 4. (例外)不符合食譜或數量大於五直接給怪怪飲料
+  // 4. (例外)不符合食譜神秘飲料區段 random 要給他五種
   else{
+    let index = Math.floor(Math.random()* 5 + 1)
+    console.log(index);
     
+    // 圖片跟敘述還沒放好
     resultImg.value = 'Classes/potions/potion8.png'
     resultTitle.value = 'classes.potiongame.potionNameFail'
     resultIntro.value = 'classes.potiongame.potionFail'
@@ -228,6 +224,7 @@ onMounted(()=>{
     <div class="potion-right-glass" >
       <img src="/Classes/potions/glass.png">
     </div>
+    <p class="potion-right-rule">{{ $t(initialRule) }}</p>
     <BasicButton class="potion-right-start btn-black " 
     @click="start" >
       START
@@ -273,17 +270,22 @@ onMounted(()=>{
   width: 100%;
   align-items:center ;
   min-height: 100%;
-  .potion-right-glass{
+  .potion-right-title{
+    color: $color-fsTitle;
     margin-bottom: 20%;
+  
+  }
+  .potion-right-glass{
+    margin-bottom: 10%;
+  }
+  .potion-right-rule{
+    color: $color-fsContent;
+
+    margin-bottom: 10%;
   }
   .potion-right-start{
     width: max-content;
   }
-}
-.potion-right-title{
-  color: $color-fsTitle;
-  margin-bottom: 30%;
-
 }
 .potion-right-game{
   height: 100%;

@@ -1,23 +1,25 @@
 <script setup>
-import { onMounted, defineEmits, nextTick } from 'vue'
+import { onMounted, nextTick } from 'vue'
 import {GoogleLogin as GoogleLoginBtn} from 'vue3-google-login'
 import { useAuthStore } from '@/stores/autoStore';
 import { useMemberStore } from '@/stores/member';
 
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
+const emit = defineEmits(['googleMessage']);
 
 const btnLook = {
   theme:"outline",
   size: "large" ,
   shape: "circle",
   width: 48,
-  type : "icon" //
+  type : "icon" 
 }
 
 
+
 function handleCredential(response) { // 取需要的 JWT Json Web Token
-  
+  emit('googleMessage', '')
   const apiBase = import.meta.env.VITE_API_BASE
   fetch(`${apiBase}/google.php`,{
 
@@ -43,20 +45,21 @@ function handleCredential(response) { // 取需要的 JWT Json Web Token
       if(resData.user.isFirstLogin){ // 是否初次登入
         authStore.setmemberView('membercard')
         console.log('as new member');
-
         
       }else{
         console.log('走舊會員區段');
+        // authStore.setmemberView('membercard')
+
         authStore.closeLoginModal()
 
       }
     }
     else{
-      console.log(resData.message);
+      authStore.setloginView('loginpage')
+      emit('googleMessage', resData.message)
       
     }
-  }
-    
+    }    
   )
 }
 
