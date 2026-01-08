@@ -96,7 +96,7 @@
         // });
     };
     const props = defineProps(['googleMessage']) 
-    console.log(`google message初始:${props.googleMessage}`);
+    // console.log(`google message初始:${props.googleMessage}`);
     if(props.googleMessage) errorMessage.value = props.googleMessage
     watch(
         ()=>props.googleMessage,
