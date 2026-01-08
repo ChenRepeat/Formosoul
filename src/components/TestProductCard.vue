@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';     //語系控制
 import { useCartStore } from '@/stores/cart';   //加入購物車按鈕
+import { useAuthStore } from "@/stores/autoStore";       //確認登入狀態
 
-// 宣告常數來接收 useRouter() ，方便後續使用 ----------------------------------------------
+// 宣告常數來接收，方便後續使用 ----------------------------------------------
 const router = useRouter();
+const authStore = useAuthStore();
 
 // 設定路由功能
 function goProductDetail(id){
@@ -150,6 +152,21 @@ function likeHeart(product){
   //isLike.value = !isLike.value;  這樣會讓所有的收藏連動
   product.isLike = !product.isLike;  //只調整點選的那一張
   // 之後要連動到資料庫更新狀態
+
+  // 先判斷登入狀態，再開始處理收藏
+  if(authStore.token){
+
+
+
+
+
+    }else{
+        authStore.openLoginModal();
+        authStore.setmemberView('login');
+        // router.push(''); 這句表示跳到這頁的最上面  
+    }
+
+
   
 }
 
