@@ -34,7 +34,10 @@ import gsap from 'gsap';
 import AdmissionLetter from '@/components/Home/AdmissionLetter.vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from "@/stores/autoStore";
+import { useI18n } from 'vue-i18n';
 
+// 1. 引入 i18n
+const { t, tm, locale } = useI18n();
 const authStore = useAuthStore()
 const router = useRouter();
 
@@ -804,15 +807,15 @@ function initSnitches(loader) {
   let menuIdx = 0;
   
   const menuItemsData = [
-    { name: 'Classes', img: `Home/home-class-book.png`, url: '/classes' },
-    { name: 'Professors', img: `Home/home-professor-people.png`, url: '/professorsintroduction' },
-    { name: 'News', img: `Home/home-news-owl.png`, url: '/news' },
-    { name: 'Shop', img: `Home/home-shopping-money.png`, url: '/shop' },
-    { name: 'Annual Event', img: `Home/home-annual-lantern.png`, url: '/annualevent' },
-    { name: 'About', img: `Home/home-about-badge.png`, url: '/about' },
-    { name: 'Survival Guide', img: `Home/home-survival-compass.png`, url: '/survivalguide' },
-    { name: 'Policy', img: `Home/home-policy-scroll.png`, url: '/policy' },
-    
+    { name: t("nav.classes"), img: `Home/home-class-book.png`, url: '/classes' },
+    { name: t("nav.professor"), img: `Home/home-professor-people.png`, url: '/professorsintroduction' },
+    { name: t("nav.news"), img: `Home/home-news-owl.png`, url: '/news' },
+    { name: t("nav.diagonAlley"), img: `Home/home-shopping-money.png`, url: '/shop' },
+    { name: t("nav.annualEvent"), img: `Home/home-annual-lantern.png`, url: '/annualevent' },
+    { name: t("nav.about"), img: `Home/home-about-badge.png`, url: '/about' },
+    { name: t("nav.survivalGuide"), img: `Home/home-survival-compass.png`, url: '/survivalguide' },
+    { name: t("nav.policy"), img: `Home/home-policy-scroll.png`, url: '/policy' },
+    { name: 'The Core Selection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
     { 
       name: '', 
       img: `Home/home-admin-tools.png`, 
@@ -820,7 +823,6 @@ function initSnitches(loader) {
       target: '_blank' 
     },
     
-    { name: 'The Core Selection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;
