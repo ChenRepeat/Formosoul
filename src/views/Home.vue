@@ -540,7 +540,7 @@ const startExperience = () => {
   clock.start();
   animate();
 };
-
+let textureLoader;
 // --- Initialization ---
 onMounted(() => {
   const width = window.innerWidth;
@@ -586,7 +586,7 @@ onMounted(() => {
       authStore.isLoading = false;
     }, 500);
   };
-  const textureLoader = new THREE.TextureLoader(manager);
+  textureLoader = new THREE.TextureLoader(manager);
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 100);
@@ -612,7 +612,32 @@ onMounted(() => {
   const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
   dirLight.position.set(5, 8, 4);
   scene.add(dirLight);
+  function removeOldSnitches() {
+    // 遍歷目前的金探子陣列
+    snitches.forEach((s) => {
+      // 1. 從場景中移除 Group
+      scene.remove(s.group);
 
+      // 2. 釋放記憶體 (非常重要，否則切換幾次語系網頁就卡死了)
+      s.group.traverse((child) => {
+        if (child.isMesh) {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            // 檢查材質是否為陣列
+            if (Array.isArray(child.material)) {
+              child.material.forEach(m => m.dispose());
+            } else {
+              child.material.dispose();
+              if (child.material.map) child.material.map.dispose(); // 釋放貼圖
+            }
+          }
+        }
+      });
+    });
+    
+    // 3. 清空陣列，準備裝新的
+    snitches.length = 0;
+  }
   initSnitches(textureLoader);
   
   if (isDockedState.value && snitches.length > 0) {
@@ -635,16 +660,28 @@ onMounted(() => {
   window.addEventListener('touchend', onDragEnd);
   window.addEventListener('resize', onWindowResize);
   window.addEventListener('mousemove', onMouseMoveHover);
-  
-  watch(() => authStore.isLoading, (newVal) => {
-    if (newVal == false) {
+  watch([locale, () => authStore.token], () => {
+        if (animationId) cancelAnimationFrame(animationId);
+        removeOldSnitches();
+        initSnitches(textureLoader);
+        if (logoWrapperRef.value) {
+            logoWrapperRef.value.style.animation = 'none';
+            logoWrapperRef.value.offsetHeight;
+            logoWrapperRef.value.style.animation = '';
+        }
+        clock = new THREE.Clock(); 
+        clock.start();
+        animate();
+    });
+    watch(() => authStore.isLoading, (newVal) => {
+      if (newVal == false) {
+        startExperience();
+      }
+    });
+    if (authStore.isLoading == false) {
       startExperience();
     }
   });
-  if (authStore.isLoading == false) {
-    startExperience();
-  }
-});
 
 onUnmounted(() => {
   cancelAnimationFrame(animationId);
@@ -697,17 +734,17 @@ function initSnitches(loader) {
     const ctx = cvs.getContext('2d');
     cvs.width = 512;
     cvs.height = 128;
-    ctx.font = '32px Roboto, sans-serif';
+    ctx.font = '56px Roboto, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.shadowColor = 'rgba(0,0,0,0.8)';
     ctx.shadowBlur = 5;
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#93c8fd';
     ctx.fillText(text, 256, 64);
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 2.5;
+    // ctx.strokeStyle = '#93c8fd';
+    ctx.lineWidth = 0.2;
     ctx.strokeText(text, 256, 64);
     const tex = new THREE.CanvasTexture(cvs);
     const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
@@ -746,7 +783,7 @@ function initSnitches(loader) {
         const iconMat = new THREE.MeshBasicMaterial({
           map: tex, transparent: true, side: THREE.DoubleSide, depthWrite: false,
         });
-        const iconGeo = new THREE.PlaneGeometry(0.5, 0.5);
+        const iconGeo = new THREE.PlaneGeometry(0.6, 0.6);
         bodyMesh = new THREE.Mesh(iconGeo, iconMat);
         group.add(bodyMesh);
 
@@ -812,7 +849,7 @@ function initSnitches(loader) {
     { name: t("nav.news"), img: `Home/home-news-owl.png`, url: '/news' },
     { name: t("nav.diagonAlley"), img: `Home/home-shopping-money.png`, url: '/shop' },
     { name: t("nav.annualEvent"), img: `Home/home-annual-lantern.png`, url: '/annualevent' },
-    { name: t("nav.about"), img: `Home/home-about-badge.png`, url: '/about' },
+    { name: t("nav.about"), img: `SurvivalGuide/taiwan_image2_nobg.png`, url: '/about' },
     { name: t("nav.survivalGuide"), img: `Home/home-survival-compass.png`, url: '/survivalguide' },
     { name: t("nav.policy"), img: `Home/home-policy-scroll.png`, url: '/policy' },
     { name: 'The Core Selection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
