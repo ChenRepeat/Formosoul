@@ -75,7 +75,7 @@ $user_name = $profile['displayName'];
 $user_avatar = $profile['pictureUrl'];
 
 // ★★★ 核心邏輯修改開始 ★★★
-//先檢查 line_id 是否已存在
+// 1. 檢查 line_id 是否已存在
 $stmt = $pdo->prepare('
     SELECT m.*, p.pointscard_ID 
     FROM member m
@@ -87,7 +87,8 @@ $member = $stmt->fetch();
 
 if ($member) {
     // ===【情況 A：完全是舊會員 (Line ID 已存在)】===
-    // 直接登入
+    // 什麼都不用做，程式會自動往下跑到 "共用的登入 Session 設定"
+    
 } else {
     // Line ID 不存在，嘗試用 Email 找人
     $stmt = $pdo->prepare('
@@ -105,20 +106,22 @@ if ($member) {
         $updateStmt = $pdo->prepare("UPDATE member SET line_id = ? WHERE member_ID = ?");
         $updateStmt->execute([$line_user_id, $member['member_ID']]);
         
-        // (選擇性) 如果你想更新他的大頭貼或名稱，也可以在這裡做 UPDATE
     } else {
         // ===【情況 C：完全新會員】===
         // 動作：註冊新帳號 (同時存 line_id 和 email)
 
         try {
             $pdo->beginTransaction();
-            $wandcore_ID = $member_wand['wandcore_ID'] ?? null;
-            // 1. 新增會員 (記得把 line_id 寫進去)
+
+            // 從 Session 取得魔杖 ID
+            $wandcore_ID = $_SESSION['wandcore_ID'] ?? null; 
+
+            // 1. 新增會員
             $sql_member = "INSERT INTO member (email, password, name, line_id, wandcore_ID, status, role, createdate, updatetime) 
-                           VALUES (?, NULL, ?, ?, :wandcore_ID, 1, 0, NOW(), NOW())";
+                           VALUES (?, NULL, ?, ?, ?, 1, 0, NOW(), NOW())";
             
             $stmt = $pdo->prepare($sql_member);
-            $stmt->execute([$user_email, $user_name, $line_user_id]);
+            $stmt->execute([$user_email, $user_name, $line_user_id, $wandcore_ID]);
             
             $newUserId = $pdo->lastInsertId();
 
@@ -130,38 +133,48 @@ if ($member) {
             $stmt->execute([$newUserId]);
             $newCardId = $pdo->lastInsertId();
 
-            // 3. 初始化遊戲 (複製你原本的代碼)
-            $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, 0)")
-                ->execute([$newUserId]);
+            // 3. 把 Session 裡的過關紀錄寫進資料庫
+            
+            // 範例：Charmgame
+            $charm_pass = isset($_SESSION['charmgame_pass']) ? 1 : 0; 
+            $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, ?)")
+                ->execute([$newUserId, $charm_pass]);
+
+            // 其他遊戲預設值
             $pdo->prepare("INSERT INTO buegame (pointscard_ID, buegame_count, buegame_pass) VALUES (?, 0, 0)")
                 ->execute([$newCardId]);
+
             $pdo->prepare("INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass) VALUES (?, 0, 0)")
                 ->execute([$newCardId]);
+
             $pdo->prepare("INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass) VALUES (?, 0, 0, 0)")
                 ->execute([$newCardId]);
+
             $pdo->prepare("INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass) VALUES (?, 0, 0, 0)")
                 ->execute([$newCardId]);
+
             $pdo->prepare("INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass) VALUES (?, 0, 0, 0)")
                 ->execute([$newCardId]);
 
             $pdo->commit();
 
-            // 為了讓下面程式碼共用 $member 變數，這裡手動組一個 member 陣列
+            // 重新組裝 Member 資料給下面的 Login Session 使用
+            // 因為是新會員，$member 變數現在是空的，必須手動賦值
             $member = [
                 'member_ID' => $newUserId,
                 'name' => $user_name,
                 'email' => $user_email,
-                'role' => 0,
+                'role' => 0, // 一般會員
                 'pointscard_ID' => $newCardId,
-                'wandcore_ID' => null // 新會員預設可能沒有魔杖
+                'wandcore_ID' => $wandcore_ID 
             ];
 
         } catch (Exception $e) {
             $pdo->rollBack();
             die("註冊失敗：" . $e->getMessage());
         }
-    }
-}
+    } // 這裡補上了 Case C 結束的括號 (Else 結束)
+} // 這裡補上了 Case A 結束的括號 (Else 結束)
 
 // ★★★ 共用的登入 Session 設定 (不管是 A, B 還是 C) ★★★
 
@@ -172,7 +185,7 @@ $_SESSION['role']      = $member['role'];
 $_SESSION['pointscard_ID'] = $member['pointscard_ID'];
 $_SESSION['wandcore_ID'] = $member['wandcore_ID'] ?? null;
 
-// 準備傳回前端的資料
+// ... (後面轉址的部分不用改) ...
 $loginData = [
     'member_ID' => $_SESSION['member_ID'],
     'name'      => $_SESSION['name'],
@@ -182,12 +195,11 @@ $loginData = [
 ];
 
 $dataToken = base64_encode(json_encode($loginData));
+
 // 設定前端網址
 if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
-    // 【本機開發環境】 (Vite 預設 port)
     $frontend_url = "http://localhost:5173/tjd103";
 } else {
-    // 【線上正式環境】 (您的正式網域)
     $frontend_url = "https://tibamef2e.com/tjd103";
 }
 
