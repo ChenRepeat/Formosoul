@@ -798,7 +798,7 @@ export const useProductStore = defineStore('products', () =>{
 
     // 過濾出所有已上架商品
     const productListed = computed(()=>{
-       return allProduct.value.filter( p => p.product_status === 1);
+       return allProduct.value.filter( p => Number(p.product_status) === 1);
     });
 
 
@@ -815,6 +815,10 @@ export const useProductStore = defineStore('products', () =>{
         // 分類功能
         let finalDisplay = [...productListed.value]; //預設為所有上架商品
                                                      //因為 productListed 為陣列，所以要.value拿，再用陣列來接
+        // console.log(finalDisplay);
+        // console.log(finalDisplay,'finalDisplay 1');
+
+        
 
         // 如果使用者點選分類按鈕，那 typeBy 傳入值可能就不是 All
         if( typeBy.value !== 'All'){
@@ -838,6 +842,8 @@ export const useProductStore = defineStore('products', () =>{
                 finalDisplay = finalDisplay.sort((a, b) => Number(b.price) - Number(a.price)); 
                 break;
         };
+        // console.log(finalDisplay,'finalDisplay 2');
+
 
         return finalDisplay;
     })
