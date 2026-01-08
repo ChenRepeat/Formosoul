@@ -6,10 +6,10 @@
 
 <template>
   <div class="toTop" @click="scrollToTop">
-    <div class="toTopBar1"></div>
-    <div class="toTopBar2"></div>
-    <div class="toTopBar3"></div>
-    <div class="toTopBar4"></div>
+    <div v-for=" index in 4"
+    :key="index"
+    class="bar"
+    :class="`bar${index}`"></div>
   </div>
 </template>
 
@@ -23,30 +23,27 @@
   width: 50px;
   height: 50px;
   filter: 
-    drop-shadow(2px 0 1px $color-fsWhite)
-    drop-shadow(-2px 0 1px $color-fsWhite)
-    drop-shadow(0 2px 1px $color-fsWhite) 
-    drop-shadow(0 -2px 1px $color-fsWhite);
+    // drop-shadow(2px 0 1px $color-fsWhite)
+    // drop-shadow(-2px 0 1px $color-fsWhite)
+    // drop-shadow(0 2px 1px $color-fsWhite) 
+    drop-shadow(0 0 3px $color-fsWhite);
   transition: all 0.3s;
-}
-.toTop:hover{
-  opacity: 0.8;
-}
-.toTopBar1,.toTopBar2,.toTopBar3,.toTopBar4{
-  width: 20%;
-  border: 1px solid $color-fsTitle;
-  position: absolute;
-}
-.toTopBar1{
-  transform: rotate(-45deg) translate(-8px,16px);
-}
-.toTopBar2{
-  transform: rotate(-45deg) translate(-16px,24px);
-}
-.toTopBar3{
-  transform: rotate(45deg) translate(32px,8px);
-}
-.toTopBar4{
-  transform: rotate(45deg) translate(24px,0px);
+  .bar{
+    width: 50%;
+    height: 5px;
+    background-color: $color-fsTitle;
+    position: absolute;
+    transform-origin: 50% 100%;
+    &.bar1,&.bar2{
+      transform: rotate(45deg);
+    }
+    &.bar3,&.bar4{
+      transform: rotate(-45deg);
+    }
+    &.bar1{top: 30%;right: 14%;}
+    &.bar2{top: 60%;right: 14%;}
+    &.bar3{top: 30%;left: 14%;}
+    &.bar4{top: 60%;left: 14%;}
+  }
 }
 </style>
