@@ -25,6 +25,7 @@
           o.status,
           o.name_en,
           o.shipping,
+          o.total_amount,
           COALESCE(SUM(d.price * d.quantity), 0) as subtotal
       FROM `order` o
       LEFT JOIN order_detail d ON o.order_number = d.order_no
