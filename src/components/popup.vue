@@ -57,7 +57,7 @@ import Editcardpage from './Member/information/editcardpage.vue';
         height: 90%;
         position: fixed;
         inset: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+
 
         margin: 0 auto;
         top: 50%;
