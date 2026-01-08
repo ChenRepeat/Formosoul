@@ -120,12 +120,11 @@ export const useAuthStore = defineStore('auth', () => {
         isLoginModalOpen.value = false;
         document.body.style.overflow = '' ;
         memberStore.memberData.isEditing = false;
-        localStorage.removeItem('game_progress');
         if(memberView.value == 'coreselection' && storedUser && userData.member_ID){
             if(userData.wandcore_ID == null){
                 wandcore_member_popup(userData.member_ID, coreData.core);
-                sessionStorage.removeItem('guest');
-            }
+                sessionStorage.removeItem('guest'); 
+            }   
         }else{
             console.log('沒存到');
         }

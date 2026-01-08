@@ -5,12 +5,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Couponcontaion from './couponcontaion.vue';
+import { useCartStore } from '@/stores/cart';
     const havecoupon = ref(true);
     const handleNoCoupon = (errorMessage) => {
         havecoupon.value = false;
     };
+    const cartStore = useCartStore();
 
 </script>
 

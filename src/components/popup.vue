@@ -95,5 +95,17 @@ import Editcardpage from './Member/information/editcardpage.vue';
         position: relative;
     }
 
-
+    @media screen and (max-height: 750px) {
+        .bg-frostedGlass{
+            height: 95%;
+        }
+        
+    }
+    @media screen and (max-height: 650px) {
+        .bg-frostedGlass{
+            width: 95%;
+            height: 100%;
+        }
+        
+    }
 </style>

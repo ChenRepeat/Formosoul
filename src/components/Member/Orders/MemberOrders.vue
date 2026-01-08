@@ -135,6 +135,11 @@ const goToPage = (pageNumber) => {
         display: flex;
         justify-content: center;
     }
+    .title-orders  > p:first-child{
+        width: 180px;
+
+
+    }
     .title-orders-line{
         height: 2px;
         background-color: $color-fsTitle;
@@ -167,11 +172,19 @@ const goToPage = (pageNumber) => {
         background-color: $color-fsTitle;
         color: $color-fsWhite;
     }
-
+    .list-page.active{
+      background-color: $color-fsTitle;
+      color: $color-fsWhite;
+    }
     .noborder{
         border: 0;
     }
     @media screen and (max-width: 1300px) {
+        .title-orders  > p:first-child{
+            width: 200px;
+
+
+        }
         .member-orders{
             width: 900px;
 

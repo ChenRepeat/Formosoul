@@ -238,6 +238,7 @@
         color: $color-fsRed;
         margin-bottom: 24px;
     }
+    
     @media screen and (min-width: 1400px) {
         .login-form{
             padding-top: 40px;

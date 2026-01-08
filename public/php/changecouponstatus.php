@@ -5,12 +5,14 @@
         UPDATE user_coupons 
         SET 
             status = CASE 
-                WHEN status = 1 THEN 3 
-                WHEN status = 3 THEN 1
-                ELSE status 
+                WHEN status = 0 THEN status
+                WHEN pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID THEN 1
+                WHEN pointscard_ID = :pointscard_ID THEN 3
+                WHEN status IN (1, 2) THEN 3
+                ELSE status
             END,
             used_at = NOW()
-        WHERE pointscard_ID = :pointscard_ID AND coupons_ID = :coupons_ID;
+        WHERE pointscard_ID = :pointscard_ID;
     ';
 
     $stmt = $pdo->prepare($sql);

@@ -17,6 +17,15 @@ const isLoggedIn = computed(() => {
   return !!user;
 });
 
+// 骰子音效
+const diceSound = new Audio(`${import.meta.env.BASE_URL}/SurvivalGuide/dice.mp3`)
+
+const playDiceSound = ()=> {
+    diceSound.currentTime = 0; // 重置播放時間，連確點擊也可以發聲音
+    diceSound.volume = 1;
+    diceSound.play().catch(e => console.log("音效播放失敗", e));
+}
+
 // 過關蓋章
 const showCardOverlay = ref(false);
 const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand:   false });
@@ -184,6 +193,7 @@ function getSingleDiceScore(rawX, rawY){
 
 function randomRoll(){
     if(isRolling.value) return;
+    playDiceSound();
     isRolling.value = true;
 
     // 新增： 設定狀態為： 玩家轉動中
@@ -228,6 +238,7 @@ const chooseSide = (choice) => {
 function startBankerTurn (){
   gameState.value = 'BANKER_ROLLING';
 
+  playDiceSound();
   // 重置莊家分數
   bankerDicelist.value.forEach(die => die.score = '_');
 
@@ -286,6 +297,7 @@ const checkWinner = () => {
         showCardOverlay.value = true;
 
         if(isFirstPass) {
+            memberStore.rewards_coupon();
             setTimeout(() => {
                 activeTriggers.value.dice = true;
                 setTimeout(() => {

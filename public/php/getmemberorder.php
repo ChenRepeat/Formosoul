@@ -27,7 +27,7 @@
           o.shipping,
           COALESCE(SUM(d.price * d.quantity), 0) as subtotal
       FROM `order` o
-      LEFT JOIN order_detail d ON o.order_id = d.order_id
+      LEFT JOIN order_detail d ON o.order_number = d.order_no
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE member_ID = :member_ID
       GROUP BY o.order_id;

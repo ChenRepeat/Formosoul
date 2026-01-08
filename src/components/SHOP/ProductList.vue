@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useProductStore } from '@/stores/products';
 import TestProductCard from '@/components/TestProductCard.vue';
+import { log } from 'three';
 
 
 // 所有商品 ----------------------------------------
@@ -755,6 +756,8 @@ const productStore = useProductStore();   // 下方可以開始從 pinia 拿資�
 // 網頁掛載時，先從資料庫拿資料
 onMounted(() => {
   productStore.fetchProducts();
+  console.log(productStore);
+  
 });
 
 
@@ -830,6 +833,11 @@ function pageMinus(){
   const productsPerPage = computed(() => {
     const start = (currentPage.value -1) * itemsPerPage;
     const end = start + itemsPerPage;
+    console.log(end);
+    console.log(start);
+    
+    console.log(productStore.displayProduct.slice(start, end));
+    
     return productStore.displayProduct.slice(start, end);
   });
   
@@ -841,7 +849,7 @@ function pageMinus(){
       currentPage.value = 1;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-  )
+  );
 </script>
 
 <template>
@@ -1048,6 +1056,11 @@ function pageMinus(){
 
     // 讓文字在空白處置中
     padding-right: 28px;
+
+  & .list-option{
+    background-color: $color-fsTitle;
+    color: $color-fsWhite;
+  }
 }
 
 .nav-list:focus {

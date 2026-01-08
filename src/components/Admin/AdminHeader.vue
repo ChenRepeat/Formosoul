@@ -13,10 +13,6 @@
         </router-link>
       </el-tooltip>
 
-      <el-badge :value="3" class="action-item">
-        <el-icon class="action-icon" size="20"><Bell /></el-icon>
-      </el-badge>
-
       <el-dropdown trigger="click">
         <div class="user-profile">
           <el-avatar :size="32" :icon="UserFilled" />
@@ -76,9 +72,7 @@ import { HomeFilled, Bell, CaretBottom, UserFilled } from '@element-plus/icons-v
   align-items: center;
 }
 
-.action-icon:hover {
-  color: #409eff;
-}
+
 
 .user-profile {
   display: flex;
@@ -86,12 +80,5 @@ import { HomeFilled, Bell, CaretBottom, UserFilled } from '@element-plus/icons-v
   cursor: pointer;
   gap: 8px;
   color: #606266;
-}
-
-/* 修正 Badge 被切到 */
-.action-item :deep(.el-badge__content) {
-  top: 15px;   
-  right: 5px;
-  transform: translateY(-50%) translateX(100%); 
 }
 </style>

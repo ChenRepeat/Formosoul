@@ -1,4 +1,4 @@
-  <?php
+<?php
   require_once 'conn.php';
   $member = json_decode(file_get_contents("php://input"), true);
 
@@ -9,12 +9,13 @@
         d.product_ID,
         d.quantity,
         d.price,
-        p.name_en,
-        p.name_zh,
+        d.price_sum,
+        d.name_en,
+        d.name_zh,
         p.image
 	  FROM order_detail d
     LEFT JOIN product p ON p.product_ID = d.product_ID
-    LEFT JOIN `order` o ON o.order_ID = d.order_ID
+    LEFT JOIN `order` o ON o.order_number = d.order_no
     WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
   ';
 

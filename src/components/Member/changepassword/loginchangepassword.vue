@@ -1,6 +1,6 @@
 <template>
     <div class="changepassword">
-        <h3>Change password</h3>
+        <!-- <h3>Change password</h3> -->
         <div class="contain">
 
             <label><h6>OTP：</h6></label>
@@ -216,12 +216,11 @@ function changeAPI(changeotp, Newpassword){
         color: $color-fsTitle;
     }
     .contain{
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        // gap: 12px;
+        width: 70%;
+        height: 50%;
         margin: 0 auto;
-        padding-bottom: 100px;
+        // padding-top: 80px;
+        padding-bottom: 40px;
     }
 
     .input-text{
@@ -239,10 +238,41 @@ function changeAPI(changeotp, Newpassword){
 
     }
 
-
+    .btn-yellow-fill{
+        width: 280px;
+        display: flex;
+        margin: 0 auto;
+        justify-content: center;
+    }
     .error-message > p{
         color: $color-fsRed;
 
+        
+    }
+    @media screen and (min-width: 1400px) {
+        .contain{
+            padding-top: 40px;
+        }
+
+    }
+    @media screen and (max-width: 1366px) {
+        .contain{
+            margin-top: 80px;
+        }
+        
+    }
+    @media screen and (max-height: 700px) {
+        .contain{
+            margin-top: 30px;
+            padding-bottom: 10px;
+        }
+        
+    }
+    @media screen and (max-height: 650px) {
+        .contain{
+            margin-top: 30px;
+            padding-bottom: 4px;
+        }
         
     }
 </style>

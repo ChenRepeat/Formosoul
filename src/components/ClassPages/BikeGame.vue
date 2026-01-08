@@ -249,6 +249,7 @@ const endGame = () => {
       showCardOverlay.value = true;    
 
       if(isFirstPass) {
+        memberStore.rewards_coupon();
         setTimeout(()=>{
         activeTriggers.value.bike = true
         setTimeout(()=>{

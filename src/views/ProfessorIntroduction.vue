@@ -238,24 +238,26 @@ onUnmounted(()=>{
 </div>
 
 </div>
-    <section :class="{'professor-info':true,'bg-frostedGlass':true, 'active':isOpen==true }">
+  <transition name="fade" mode="out-in">
+    <section v-if="isOpen" :class="{'professor-info':true,'bg-frostedGlass':true }">
       <div class="professor-big-photo-frame">
         <img :src="clickedPhoto" class="professor-big-photo" 
         ref="refBigPhoto" alt="Professor Photo" > 
       </div>
       <article class="professor-text">
         <FontAwesomeIcon icon="fa-solid fa-xmark" class="professor-xmark" @click="closeInfo"/>
-        
+
         <h3 class="professor-name">{{$t(professsor)}}</h3>
         <p class="professor-job ">{{$t(job)}}</p>
         <div class="professor-skill-wand">
           <IconWandCore class="professor-wand"/>
           <h5 class="professor-skill">{{$t('professor.skillTitle')}}</h5>
         </div>
-        
+
         <p class="professor-skill-detail">{{$t(skillDetail)}}</p>
       </article>
     </section>
+  </transition>
   </section>
 </template>
 
@@ -286,7 +288,6 @@ z-index: 80;
   left: 0;right: 0;
   margin: auto;
   padding: 80px 60px;
-  display: none;
   z-index: 100;
   align-items: center;
   .professor-big-photo-frame{
@@ -340,7 +341,7 @@ z-index: 80;
     }
   }
 }
-.professor-info.active{
+.professor-info{
   display: flex; 
 }
 
@@ -460,7 +461,12 @@ z-index: 80;
 }
 
 }
-
+.fade-enter-active,.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,.fade-leave-to {
+  opacity: 0;
+}
 </style>
 
 
