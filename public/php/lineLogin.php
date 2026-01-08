@@ -104,8 +104,8 @@ if ($member) {
             $pdo->beginTransaction();
 
             // 1. 新增會員 (記得把 line_id 寫進去)
-            $sql_member = "INSERT INTO member (email, password, name, line_id, status, role, createdate, updatetime) 
-                           VALUES (?, NULL, ?, ?, 1, 0, NOW(), NOW())";
+            $sql_member = "INSERT INTO member (email, password, name, line_id, wandcore_ID, status, role, createdate, updatetime) 
+                           VALUES (?, NULL, ?, ?, :wandcore_ID, 1, 0, NOW(), NOW())";
             
             $stmt = $pdo->prepare($sql_member);
             $stmt->execute([$user_email, $user_name, $line_user_id]);

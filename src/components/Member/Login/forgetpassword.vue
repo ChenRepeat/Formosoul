@@ -78,8 +78,8 @@
 
         try{
             const response = await forgetpasswordAPI(email.value);
-            const decryptedOtp = atob(response.changeotp)
             if(response.success){
+                const decryptedOtp = atob(response.changeotp)
                 // console.log(decryptedOtp);
                 const templateParams = {
                     email: email.value,
@@ -128,11 +128,9 @@
         flex-direction: column;
         width: 100%;
 
-        margin-bottom: 16px;
-
     }
     .input-text{
-        margin-bottom: 36px;
+        margin-bottom: 24px;
     }
     .btn-yellow-fill{
         width: 280px;
@@ -171,11 +169,12 @@
     }
 
     .login-bottom > p{
+        margin-bottom: 16px;
         color: $color-fsCaption;
     }
 
     .error-message > p{
-        color: $color-fsCaption;
+        color: $color-fsRed;
         text-align: center;
         margin-bottom: 24px;
     }

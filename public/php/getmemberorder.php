@@ -30,7 +30,8 @@
       LEFT JOIN order_detail d ON o.order_number = d.order_no
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE member_ID = :member_ID
-      GROUP BY o.order_id;
+      GROUP BY o.order_id
+      ORDER BY o.date DESC, o.order_id DESC;
   ';
 
     $stmt = $pdo->prepare($sql);
