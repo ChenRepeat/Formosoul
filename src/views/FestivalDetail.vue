@@ -5,7 +5,7 @@
   import { useEventData } from "@/stores/event";
   import { storeToRefs } from "pinia";
   import { useLangStore } from '@/stores/lang';
-import ToTopBottom from "@/components/ToTopBottom.vue";
+  import ToTopBottom from "@/components/ToTopBottom.vue";
 
   const baseUrl = import.meta.env.BASE_URL;
   const langStore = useLangStore();
@@ -174,22 +174,6 @@ const isEnglish = computed(() => {
   color: #fff;
   font-size: 14px;
   cursor: pointer;
-}
-
-/* 右下角「回到頂部」小按鈕 */
-.scroll-top-btn {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  border: none;
-  background: #1a3a6b;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 5;
 }
 
 /* RWD */
