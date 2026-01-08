@@ -71,10 +71,31 @@
     });
 
     const route = useRoute();
-    
+
     const lineLogin = () => {
+        // 記錄當前頁面
         localStorage.setItem('line_return_url', route.fullPath);
 
+        // 從 Session 抓取 guest 資料並解析 ID
+        let currentWandId = null;
+        
+        // 從 sessionStorage 抓
+        const guestDataStr = sessionStorage.getItem('guest') || localStorage.getItem('guest');
+
+        if (guestDataStr) {
+            try {
+                // 解析 JSON 字串
+                const guestData = JSON.parse(guestDataStr);
+                // 拿出 core 的值
+                if (guestData && guestData.core) {
+                    currentWandId = guestData.core;
+                }
+            } catch (e) {
+                console.error("解析 guest 資料失敗", e);
+            }
+        }
+
+        // 判斷環境
         let redirectUrl = '';
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             redirectUrl = 'http://localhost/Formosoul/public/php/lineLogin.php';
@@ -82,10 +103,18 @@
             redirectUrl = 'https://tibamef2e.com/tjd103/php/lineLogin.php';
         }
 
-        const loginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=${encodeURIComponent(redirectUrl)}&state=12345&scope=profile%20openid%20email`;
+        // 因為傳給LINE不能為空'',所以組合 state 參數 (重點：如果有抓到 ID，拼成 12345_16)
+        let stateCode = '12345'; 
+        if (currentWandId) {
+            stateCode = `${stateCode}_${currentWandId}`;
+        }
+
+        // 跳轉
+        const loginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=${encodeURIComponent(redirectUrl)}&state=${stateCode}&scope=profile%20openid%20email`;
         
         window.location.href = loginUrl;
     };
+
     const emitMessage=ref('')
     const receiver=(msg)=>{
         emitMessage.value = msg

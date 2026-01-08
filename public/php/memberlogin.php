@@ -61,6 +61,7 @@
                 'wandcore_ID' => $user['wandcore_ID'],
                 'isFirstLogin' => $isFirstLogin,
                 'message' => $isFirstLogin ? '第一次登入' : '登入成功',
+                // 'role' => $user['role']
             ];
 
             setcookie("token", $token, [
