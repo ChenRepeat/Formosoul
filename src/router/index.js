@@ -31,6 +31,7 @@ import Privacypolicy from '@/components/policy/privacypolicy.vue'
 import Returns from '@/components/policy/returns.vue'
 import Cookies from 'js-cookie'
 import { useAuthStore } from '@/stores/autoStore'
+import NotFound from '../views/NotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -338,6 +339,12 @@ const router = createRouter({
         },
       ],
     },
+    // :pathMatch(.*)* 會抓取所有上面沒對應到的網址
+    { 
+      path: '/:pathMatch(.*)*', 
+      name: 'NotFound', 
+      component: NotFound 
+    }
   ],
 scrollBehavior(to, from, savedPosition) {
     return new Promise((resolve) => {
