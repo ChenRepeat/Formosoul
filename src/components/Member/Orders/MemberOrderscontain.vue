@@ -98,11 +98,14 @@ import { useI18n } from 'vue-i18n';
             const totalPrice = countArray.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const discountAmount = realArray.discount;
             // console.log(totalPrice);
-            // console.log(countArray);
+            // console.log(realArray.shipping_fee);
+            
             realArray.total_quantity = totalQuantity;
             countArray.totalPrice = totalPrice;
+
             countArray.discount = discountAmount;
             countArray.total = realArray.total_amount;
+            countArray.fee = realArray.shipping_fee;
             order.value = realArray;
             totallist.value = countArray;
 
@@ -110,13 +113,13 @@ import { useI18n } from 'vue-i18n';
             //     order.value.payment = 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB';
             // }
             // 修改成英文後 需改變判斷式
-            if(order.value.shipping === '宅配'){
-                const shippingfee = 80;
-                countArray.fee = shippingfee;
-            }else{
-                const shippingfee = 60;
-                countArray.fee = shippingfee; 
-            }
+            // if(order.value.shipping === 'homeDelivery'){
+            //     const shippingfee = 80;
+            //     countArray.fee = shippingfee;
+            // }else{
+            //     const shippingfee = 60;
+            //     countArray.fee = shippingfee; 
+            // }
         }
         ).then( () => {
             if(totallist.value.discount > 0){

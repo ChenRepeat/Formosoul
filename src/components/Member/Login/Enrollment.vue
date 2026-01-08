@@ -204,22 +204,22 @@ async function startCountdown() {
             credentials: 'include' // 這行是確保 Session Cookie 能運作
         });
         // emailJS API
-        // const templateParams = {
-        //     email: email.value,
-        //     otp_code: code,
-        // };
+        const templateParams = {
+            email: email.value,
+            otp_code: code,
+        };
 
-        // await emailjs.send(
-        //     'service_3xw68ou',   // 替換為你的 Service ID
-        //     'template_1tux8ni',  // 替換為你的 Template ID
-        //     templateParams, 
-        //     'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
-        // )
+        await emailjs.send(
+            'service_3xw68ou',   // 替換為你的 Service ID
+            'template_1tux8ni',  // 替換為你的 Template ID
+            templateParams, 
+            'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
+        )
 
         await sendOTPAPI(email.value);
         otpSent.value = true;
-        errorMessage.value = `測試otp ${otpnumber.value}`;
-        // errorMessage.value = 'OTP code sent!';
+        // errorMessage.value = `測試otp ${otpnumber.value}`;
+        errorMessage.value = 'OTP code sent!';
         timer.value = 60;
         intervalId = setInterval(() => {
             timer.value--;
