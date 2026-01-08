@@ -9,12 +9,12 @@
                         <BasicButton 
                         :class="{ 'active-tab': authStore.loginView == 'enrollment'}"
                         @click="authStore.loginView = 'enrollment'"
-                        class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
+                        class="btn-blue-fill"><h4>{{$t('loginPage.enroll')}}</h4></BasicButton>
 
                         <BasicButton 
                         :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword' || authStore.loginView == 'loginchangepassword'}"
                         @click="authStore.loginView = 'loginpage'"
-                        class="btn-blue-fill"><h4>Login</h4></BasicButton>
+                        class="btn-blue-fill"><h4>{{$t('loginPage.login')}}</h4></BasicButton>
                     </div>
                     <div class="pagecontain">
                         <div class="pagetop">
@@ -27,7 +27,7 @@
                             <div class="otherlogin">
                                 <div class="otherlogin-title">
                                     <hr>
-                                    <h6>Other</h6>
+                                    <h6>{{$t('loginPage.other')}}</h6>
                                     <hr>
                                 </div>
                                 <div class="otherlogin-icon">
