@@ -237,7 +237,7 @@ const router = createRouter({
     {
       path: "/admin",
       component: () => import ('@/views/Admin/AdminDashboard.vue'),
-      meta: { layout: 'admin' },
+      meta: { layout: 'admin',requiresAdmin: true},
       children: [
         {
           path: '', 
@@ -388,6 +388,46 @@ router.beforeEach((to, from, next) => {
 
     next();
 })
+
+// ★★★ 第二個守門員：專門負責「後台管理員」權限檢查 ★★★
+router.beforeEach((to, from, next) => {
+  // 1. 檢查要去的地方是否包含 requiresAdmin 標記
+  // (使用 matched.some 是為了讓 /admin 的子路由也能被抓到)
+  if (to.matched.some(record => record.meta.requiresAdmin)) {
+    
+    // 2. 嘗試從 localStorage 抓取使用者資料
+    // 請確認你的 key 是叫 'loginData' 還是 'user'，這裡範例用 'loginData'
+    const userStr = localStorage.getItem('user'); 
+
+    if (!userStr) {
+      // 沒資料 = 沒登入，踢回首頁 (或登入頁)
+      alert('請先登入');
+      return next('/'); 
+    }
+
+    try {
+      const user = JSON.parse(userStr);
+      
+      // 3. 檢查 role 是否為 1
+      // (使用 parseInt 比較保險，避免字串 "1" 對上數字 1 的問題)
+      if (user && parseInt(user.role) === 1) {
+        // 是管理員 -> 放行
+        return next(); 
+      } else {
+        // 有登入但不是管理員 -> 踢走
+        alert('權限不足：您不是管理員！');
+        return next('/'); 
+      }
+
+    } catch (e) {
+      console.error("使用者資料解析失敗", e);
+      return next('/'); 
+    }
+  }
+
+  // 如果不是去後台，這個守衛就不管事，直接交給下一個
+  next();
+});
 
 router.beforeEach((to, from, next) => {
   if ('scrollRestoration' in history) {

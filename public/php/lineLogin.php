@@ -6,6 +6,14 @@ require 'conn.php';
 $code = $_GET['code'];
 $state = $_GET['state'];
 
+// ★ 解析 State 來取得魔杖 ID
+// 使用 explode 切割字串，取底線後面的數字
+$wandcore_ID = null;
+$state_parts = explode('_', $state);
+if (isset($state_parts[1])) {
+    $wandcore_ID = $state_parts[1]; // 取後面數字
+}
+
 $host = $_SERVER['HTTP_HOST'];
 $redirect_uri = '';
 
@@ -74,104 +82,76 @@ $line_user_id = $profile['userId']; // ★ 這是 Line 唯一的 User ID
 $user_name = $profile['displayName'];
 $user_avatar = $profile['pictureUrl'];
 
-// ★★★ 核心邏輯修改開始 ★★★
-// 1. 檢查 line_id 是否已存在
-$stmt = $pdo->prepare('
-    SELECT m.*, p.pointscard_ID 
-    FROM member m
-    LEFT JOIN pointscard p ON p.member_ID = m.member_ID 
-    WHERE m.line_id = ?
-');
-$stmt->execute([$line_user_id]);
-$member = $stmt->fetch();
 
-if ($member) {
-    // ===【情況 A：完全是舊會員 (Line ID 已存在)】===
-    // 什麼都不用做，程式會自動往下跑到 "共用的登入 Session 設定"
-    
-} else {
-    // Line ID 不存在，嘗試用 Email 找人
-    $stmt = $pdo->prepare('
-        SELECT m.*, p.pointscard_ID 
-        FROM member m
-        LEFT JOIN pointscard p ON p.member_ID = m.member_ID 
-        WHERE m.email = ?
-    ');
-    $stmt->execute([$user_email]);
+    // 1. 檢查 line_id 是否已存在
+    $stmt = $pdo->prepare('SELECT m.*, p.pointscard_ID FROM member m LEFT JOIN pointscard p ON p.member_ID = m.member_ID WHERE m.line_id = ?');
+    $stmt->execute([$line_user_id]);
     $member = $stmt->fetch();
 
     if ($member) {
-        // ===【情況 B：信箱已存在，但沒綁 Line (Google/Email 註冊過)】===
-        // 動作：把 Line ID 綁定到這個舊帳號上
-        $updateStmt = $pdo->prepare("UPDATE member SET line_id = ? WHERE member_ID = ?");
-        $updateStmt->execute([$line_user_id, $member['member_ID']]);
-        
+        // ===【情況 A：舊會員】===
+        // 什麼都不用做
     } else {
-        // ===【情況 C：完全新會員】===
-        // 動作：註冊新帳號 (同時存 line_id 和 email)
+        // 找 Email
+        $stmt = $pdo->prepare('SELECT m.*, p.pointscard_ID FROM member m LEFT JOIN pointscard p ON p.member_ID = m.member_ID WHERE m.email = ?');
+        $stmt->execute([$user_email]);
+        $member = $stmt->fetch();
 
-        try {
-            $pdo->beginTransaction();
-            // $wandcore_ID = $member_wand['wandcore_ID'] ?? null;
-            // 1. 新增會員 (記得把 line_id 寫進去)
-            $sql_member = "INSERT INTO member (email, password, name, line_id, wandcore_ID, status, role, createdate, updatetime) 
-                           VALUES (?, NULL, ?, ?, ?, 1, 0, NOW(), NOW())";
-            
-            $stmt = $pdo->prepare($sql_member);
-            $stmt->execute([$user_email, $user_name, $line_user_id, $wandcore_ID]);
-            
-            $newUserId = $pdo->lastInsertId();
+        if ($member) {
+            // ===【情況 B：綁定舊帳號】===
+            $updateStmt = $pdo->prepare("UPDATE member SET line_id = ? WHERE member_ID = ?");
+            $updateStmt->execute([$line_user_id, $member['member_ID']]);
+        } else {
+            // ===【情況 C：完全新會員】===
+            try {
+                $pdo->beginTransaction();
 
-            // 2. 新增集點卡
-            $sql_card = "INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore) 
-                         VALUES (?, 0, 0, 0, 0, 0, 0)";
-            
-            $stmt = $pdo->prepare($sql_card);
-            $stmt->execute([$newUserId]);
-            $newCardId = $pdo->lastInsertId();
+                // ★ 這裡直接使用我們從 GET state 解析出來的 $wandcore_ID
+                // 不需要再去 session 抓了，因為 session 有時候會因為跨網域或 cookie 問題遺失
+                
+                // 1. 新增會員
+                $sql_member = "INSERT INTO member (email, password, name, line_id, wandcore_ID, status, role, createdate, updatetime) 
+                            VALUES (?, NULL, ?, ?, ?, 1, 0, NOW(), NOW())";
+                
+                $stmt = $pdo->prepare($sql_member);
+                // 變數順序：Email, Name, LineID, WandID
+                $stmt->execute([$user_email, $user_name, $line_user_id, $wandcore_ID]);
+                
+                $newUserId = $pdo->lastInsertId();
 
-            // 3. 把 Session 裡的過關紀錄寫進資料庫
-            
-            // 範例：Charmgame
-            $charm_pass = isset($_SESSION['charmgame_pass']) ? 1 : 0; 
-            $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, ?)")
-                ->execute([$newUserId, $charm_pass]);
+                // 2. 新增集點卡 (後面邏輯保持不變)
+                $sql_card = "INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore) 
+                            VALUES (?, 0, 0, 0, 0, 0, 0)";
+                $stmt = $pdo->prepare($sql_card);
+                $stmt->execute([$newUserId]);
+                $newCardId = $pdo->lastInsertId();
 
-            // 其他遊戲預設值
-            $pdo->prepare("INSERT INTO buegame (pointscard_ID, buegame_count, buegame_pass) VALUES (?, 0, 0)")
-                ->execute([$newCardId]);
+                // 3. 初始化遊戲 (保持不變)
+                $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, 0)")->execute([$newUserId]);
+                $pdo->prepare("INSERT INTO buegame (pointscard_ID, buegame_count, buegame_pass) VALUES (?, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass) VALUES (?, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass) VALUES (?, 0, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass) VALUES (?, 0, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass) VALUES (?, 0, 0, 0)")->execute([$newCardId]);
 
-            $pdo->prepare("INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass) VALUES (?, 0, 0)")
-                ->execute([$newCardId]);
+                $pdo->commit();
 
-            $pdo->prepare("INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass) VALUES (?, 0, 0, 0)")
-                ->execute([$newCardId]);
+                // 補上 $member 變數給下面的 Session 用
+                $member = [
+                    'member_ID' => $newUserId,
+                    'name' => $user_name,
+                    'email' => $user_email,
+                    'role' => 0,
+                    'pointscard_ID' => $newCardId,
+                    'wandcore_ID' => $wandcore_ID 
+                ];
 
-            $pdo->prepare("INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass) VALUES (?, 0, 0, 0)")
-                ->execute([$newCardId]);
-
-            $pdo->prepare("INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass) VALUES (?, 0, 0, 0)")
-                ->execute([$newCardId]);
-
-            $pdo->commit();
-
-            // 重新組裝 Member 資料給下面的 Login Session 使用
-            // 因為是新會員，$member 變數現在是空的，必須手動賦值
-            $member = [
-                'member_ID' => $newUserId,
-                'name' => $user_name,
-                'email' => $user_email,
-                'role' => 0, // 一般會員
-                'pointscard_ID' => $newCardId,
-                'wandcore_ID' => $wandcore_ID 
-            ];
-
-        } catch (Exception $e) {
-            $pdo->rollBack();
-            die("註冊失敗：" . $e->getMessage());
+            } catch (Exception $e) {
+                $pdo->rollBack();
+                die("註冊失敗：" . $e->getMessage());
+            }
         }
-    } // 這裡補上了 Case C 結束的括號 (Else 結束)
-} // 這裡補上了 Case A 結束的括號 (Else 結束)
+    }
 
 // ★★★ 共用的登入 Session 設定 (不管是 A, B 還是 C) ★★★
 
