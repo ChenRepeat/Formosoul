@@ -5,6 +5,7 @@
   import { useEventData } from "@/stores/event";
   import { storeToRefs } from "pinia";
   import { useLangStore } from '@/stores/lang';
+import ToTopBottom from "@/components/ToTopBottom.vue";
 
   const baseUrl = import.meta.env.BASE_URL;
   const langStore = useLangStore();
@@ -88,9 +89,7 @@ const isEnglish = computed(() => {
     </div>
 
     <!-- 右下角回到最上面的小按鈕 -->
-    <button class="scroll-top-btn" @click="scrollToTop">
-      ↑
-    </button>
+    <ToTopBottom />
   </section>
 </template>
 
