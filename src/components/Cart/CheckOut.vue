@@ -534,16 +534,16 @@ async function goOrder(){
                             <div class="nav-addr-dock dp-flex">
                                 <nav class="nav-addr">
                                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                                    <select class="nav-list fw200" v-model="selectCity">
-                                        <option disabled value="">{{$t('shoppingcart.city')}}</option>
-                                        <option v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
+                                    <select class="nav-list fw200" v-model="selectCity" required>
+                                        <option class="list-option" disabled value="">{{$t('shoppingcart.city')}}</option>
+                                        <option class="list-option" v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
                                     </select>
                                 </nav>
                                 <nav class="nav-addr">
                                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                                    <select class="nav-list fw200" v-model="selectDist">
-                                        <option disabled value="">{{$t('shoppingcart.dist')}}</option>
-                                        <option v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
+                                    <select class="nav-list fw200" v-model="selectDist" required>
+                                        <option class="list-option"  disabled value="">{{$t('shoppingcart.dist')}}</option>
+                                        <option class="list-option"  v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
                                     </select>
                                 </nav>
                             </div>
@@ -724,6 +724,7 @@ async function goOrder(){
 
         & .coupon-tips{
             text-align: center;
+            color: $color-fsRed;
         }
 
         & .btn-coupon-use{
