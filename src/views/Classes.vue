@@ -5,7 +5,15 @@
     <div v-if="isAnimating" class="blocking-overlay" 
     :class="{ 
         'unload': !isLoad 
-      }"><h4 v-if="isIntroPlaying">{{$t('classes.escTip')}}</h4></div>
+      }">
+      <h4 v-if="isIntroPlaying">
+        <i18n-t keypath="classes.escTip" tag="span">
+          <template #keyin>
+            <span class="bright-text">{{ $t('classes.keyBoard')}}</span>
+          </template>
+        </i18n-t>
+      </h4>
+    </div>
     <div 
       class="book" 
       ref="bookRef"
@@ -665,5 +673,7 @@ $high-layer-pages: 4, 6, 9, 12;
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
-
+.bright-text{
+  color: $color-fsGold;
+}
 </style>

@@ -55,13 +55,8 @@ const scrollToTop = (duration = 800) => {
   requestAnimationFrame(animate);
 };
 
-const goBack = () => {
-  if (window.history.state.back) {
-    router.back(); // 有上一頁 -> 回上一頁 (保留捲動位置)
-  } else {
-    router.push('/news'); // 沒上一頁 -> 回列表
-  }
-}
+const goBack = () => router.push({ path: '/news', hash: '#updates' })
+
 const isEnglish = computed(() => {
   return langStore.locale === 'en-US'; 
 });
@@ -87,7 +82,7 @@ onMounted( async () => {
     <h6 class="page-guide">
         <router-link to="/news">{{$t('nav.news')}}</router-link>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        <h6>{{ currentArticle?.displayTitle }}</h6>
+        {{ currentArticle?.displayTitle }}
     </h6>
     <div class="content-container">
       <aside>

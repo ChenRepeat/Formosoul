@@ -62,8 +62,10 @@ const offsetMenuBorder = () => {
 };
 
 const clickItem = (index) => {
-  activeIndex.value = index;
-  offsetMenuBorder();
+  if (index != activeIndex.value) {
+    activeIndex.value = index;
+    offsetMenuBorder();
+  }
  
 };
 
@@ -128,7 +130,7 @@ onUnmounted(() => {
         :key="index"
         :ref="el => itemsRef[index] = el"
         class="menu__item"
-        :class="{ 'active': activeIndex === index }"
+        :class="{ 'active': activeIndex == index }"
         @click="clickItem(index),turnPage(item.toPage)"
       >
         <component :is="item.icon" class="icon" :class="`icon${index+1}`"/>

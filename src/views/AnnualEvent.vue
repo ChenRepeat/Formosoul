@@ -279,11 +279,12 @@ onBeforeUnmount(() => {
 
 /* ===== Layout ===== */
 .annual-event-page {
+  height: 100vh;
   position: relative;
-  padding: 52px 0 20px;
   display: flex;
   justify-content: center;
   overflow-x: clip;
+  align-items: center;
 }
 
 .festival-shell {

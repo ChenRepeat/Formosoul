@@ -203,7 +203,9 @@ const waveConfig = ref(
   position: absolute;
   padding-left: 40px;
   top: 20px;
-  z-index: 2000;
+  z-index: 8000; 
+  pointer-events: auto; 
+  cursor: pointer;
 }
 .content {
   display: block;
