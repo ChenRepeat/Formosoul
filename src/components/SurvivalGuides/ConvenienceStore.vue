@@ -114,49 +114,108 @@ const activeItemId = ref(null);
 // 加入：防止重複點擊
 const isShopkeeperAnimating = ref(false);
 
+
 // 宣告一個叫做itemClick的function，它會接收一個叫 id 的參數，當這個函式被呼叫時，就執行大括號{}裡面的程式
 const itemClick = (id) => {
-    if(id === 'shopkeeper'){
-        if (isShopkeeperAnimating.value) return;
-
-        isShopkeeperAnimating.value = true;
-        activeItemId.value = null;
-        currentFace.value = faces.shock;
-        showFaceOverlay.value = true;
-        currentFaceClass.value = 'face-shock';
-        randomTextWord();
-
-        setTimeout(()=>{
-            showFaceOverlay.value = false;
-            currentFaceClass.value = '';
-            isTextShow.value = false;
-            isShopkeeperAnimating.value = false;
-        }, 1500);
-        return
-    }
-
-    if (activeItemId.value === id) {
-        activeItemId.value = null;
-        showFaceOverlay.value = false; 
-        currentFaceClass.value = '';
+    if(activeItemId.value == id) {
+        clearAllStates();
         return;
-    } 
-    activeItemId.value = id;
+    }
+    clearAllStates();
+
+    if (id == 'shopkeeper') {
+        handleShopkeeperClick();
+    } else {
+        handleProductClick(id);
+    }
+}
+    // 建立一個統一清除狀態的工具函式
+const clearAllStates = () => {
+    activeItemId.value = null;
+    isTextShow.value = false;
+    showFaceOverlay.value = false;
+    currentFaceClass.value= '';
+}
+// 店員點擊處理
+const handleShopkeeperClick = ()=> {
+    if(isShopkeeperAnimating.value) return;
+
+    activeItemId.value = 'shopkeeper'; // 賦值
+    isShopkeeperAnimating.value = true;
+
+    // 正臉
+    currentFace.value = faces.shock;
+    showFaceOverlay.value = true;
+    currentFaceClass.value = 'face-shock';
+
+    randomTextWord();
+
+    setTimeout(()=>{
+        // 檢查目前顯示的角色是不是店員, 如果是店員就清掉動畫or狀態
+        if(activeItemId.value == 'shopkeeper') {
+            clearAllStates()
+        }
+        // 不管怎樣，都要把動畫結束掉
+        isShopkeeperAnimating.value = false;
+    }, 1500);
+}
+// 商品點擊處理
+const handleProductClick = (id) => {
+    // 點商品時，把「目前被選中的東西」更新成這個商品的ID。這邊的 = 是賦值，不是比較(==)，是程式執行流程 
+    activeItemId.value = id; 
     isTextShow.value = false;
 
-    if (leftItems.includes(id)) {
+    if(leftItems.includes(id)) {
         currentFace.value = faces.left;
         showFaceOverlay.value = true;
-        currentFaceClass.value = 'face-left'; 
-    } 
-    else if (rightItems.includes(id)) {
+        currentFaceClass.value = 'face-left';
+    } else if (rightItems.includes(id)) {
         currentFace.value = faces.right;
-        showFaceOverlay.value = true; 
-        currentFaceClass.value = 'face-right'; 
-    } 
-}
+        showFaceOverlay.value = true;
+        currentFaceClass.value = 'face-right';
+    }
+  }
+    // // 如果點擊的是贏同一個商品，關閉 取消所有狀態
+    // if (activeItemId.value == id) 
 
+    // if(id === 'shopkeeper'){
+    //     if (isShopkeeperAnimating.value) return;
 
+    //     isShopkeeperAnimating.value = true;
+    //     activeItemId.value = null;
+    //     currentFace.value = faces.shock;
+    //     showFaceOverlay.value = true;
+    //     currentFaceClass.value = 'face-shock';
+    //     randomTextWord();
+
+    //     setTimeout(()=>{
+    //         showFaceOverlay.value = false;
+    //         currentFaceClass.value = '';
+    //         isTextShow.value = false;
+    //         isShopkeeperAnimating.value = false;
+    //     }, 1500);
+    //     return
+    // }
+
+    // if (activeItemId.value === id) {
+    //     activeItemId.value = null;
+    //     showFaceOverlay.value = false; 
+    //     currentFaceClass.value = '';
+    //     return;
+    // } 
+    // activeItemId.value = id;
+    // isTextShow.value = false;
+
+    // if (leftItems.includes(id)) {
+    //     currentFace.value = faces.left;
+    //     showFaceOverlay.value = true;
+    //     currentFaceClass.value = 'face-left'; 
+    // } 
+    // else if (rightItems.includes(id)) {
+    //     currentFace.value = faces.right;
+    //     showFaceOverlay.value = true; 
+    //     currentFaceClass.value = 'face-right'; 
+    // } 
 
 const activeItemData = computed(()=>{
     if (!activeItemId.value) return null;
@@ -468,6 +527,7 @@ function closeWelcomeFrame (){
 
 
 .btn-blue-fill{
+  cursor: pointer;
   background-color: $color-fsBlue900;
   color: $color-fsWhite;
   position: absolute;
@@ -486,7 +546,7 @@ function closeWelcomeFrame (){
   transition: all 0.3s ease-in-out;
 
   &.btn-blue-fill:hover {
-    transform: scale(1.025);
+    transform: scale(1.055);
   }
 }
 
@@ -522,8 +582,8 @@ function closeWelcomeFrame (){
     position: absolute;
     left: 57%;
     top: 28%;
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
@@ -618,13 +678,13 @@ function closeWelcomeFrame (){
 }
 
 .popup-frame{
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 
     position: absolute;
     z-index: 10000;
     
-    min-width: 250px; 
+    // min-width: 250px; 
     animation: popUp 0.3s ease-out;
 
     top: 0;

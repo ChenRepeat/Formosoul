@@ -300,8 +300,8 @@ function closeWelcomeFrame (){
     left: 50%;
     top: 50%;
     transform: translate(-50%, calc(-50% + 20px)); 
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
@@ -331,8 +331,9 @@ function closeWelcomeFrame (){
   z-index: 1001;
   transition: all 0.3s ease-in-out;
 
+  cursor: pointer;
   &.btn-blue-fill:hover {
-    transform: scale(1.025);
+    transform: scale(1.055);
   }
 }
 
@@ -405,8 +406,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 珍珠奶茶 攤位的區塊 ===================== 
@@ -449,8 +450,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-40%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 // ===================== 臭豆腐 攤位的區塊 ===================== 
 
@@ -492,8 +493,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-30%, 50%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 雞排 攤位的區塊 ===================== 
@@ -537,8 +538,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-30%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 
@@ -583,8 +584,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 70%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 蔥油餅 攤位的區塊 ===================== 
@@ -628,8 +629,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 共同 的區塊 ===================== 
@@ -715,8 +716,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(100%, -160%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== prawing 遊戲的區塊 ===================
@@ -760,8 +761,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(120%, -80%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== ring-toss 遊戲的區塊 =================
@@ -805,8 +806,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-180%, -220%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== MAP & WEATHER API 的區塊 ======================
@@ -844,8 +845,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(40%, -120%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 
