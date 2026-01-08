@@ -22,7 +22,7 @@ export const newPotions = {
     10: {
       name: 'classes.potiongame.potionName10',
       resultIntro: 'classes.potiongame.potion10',
-      imgUrl: 'Classes/potions/potion10.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'Lemon',
@@ -41,7 +41,7 @@ export const newPotions = {
     11: {
       name: 'classes.potiongame.potionName11',
       resultIntro: 'classes.potiongame.potion11',
-      imgUrl: 'Classes/potions/potion11.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'milk',
@@ -64,7 +64,7 @@ export const newPotions = {
     12: {
       name: 'classes.potiongame.potionName12',
       resultIntro: 'classes.potiongame.potion12',
-      imgUrl: 'Classes/potions/potion12.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'suger',
@@ -83,7 +83,7 @@ export const newPotions = {
     13: {
       name: 'classes.potiongame.potionName13',
       resultIntro: 'classes.potiongame.potion13',
-      imgUrl: 'Classes/potions/potion13.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'Winter Melon',
@@ -102,7 +102,7 @@ export const newPotions = {
     14: {
       name: 'classes.potiongame.potionName14',
       resultIntro: 'classes.potiongame.potion14',
-      imgUrl: 'Classes/potions/potion14.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'milk',
@@ -121,7 +121,7 @@ export const newPotions = {
     15: {
       name: 'classes.potiongame.potionName15',
       resultIntro: 'classes.potiongame.potion15',
-      imgUrl: 'Classes/potions/potion15.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'Winter Melon',
@@ -140,7 +140,7 @@ export const newPotions = {
     16: {
       name: 'classes.potiongame.potionName16',
       resultIntro: 'classes.potiongame.potion16',
-      imgUrl: 'Classes/potions/potion16.png',
+      imgUrl: 'Classes/potions/potion9.png',
       recipe: {
         1: {
           name: 'Lemon',

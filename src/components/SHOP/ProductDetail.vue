@@ -179,10 +179,8 @@ function shareTo(platform) {
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
         break;
     case 'line':
-        // const lineContentzh = `${textzh}\n${url}`;
-        // const lineContenten = `${texten}\n${url}`;
-        const lineContentzh = `${textzh}`;
-        const lineContenten = `${texten}`;
+        const lineContentzh = `${textzh}\n${url}`;
+        const lineContenten = `${texten}\n${url}`;
         if(lang.value == 'zh'){
             shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContentzh)}`;
         }else{

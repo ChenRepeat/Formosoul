@@ -80,8 +80,9 @@ let ingredientList = [
           },
 ]
 potionAll = {...potions, ...newPotions}
+console.log(potionAll[9].recipe);
 
-//functions
+//functions 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -148,25 +149,27 @@ const cook = () => {
   // 1.食材總數 == 飲料食材總數 
   const selectNum = selectList.length // 儲存被選到的食材名稱
   if(selectNum == 0){
-    resultBigTitle.value = 'classes.potionBigTitle0'
+    resultBigTitle.value = 'classes.potionBigTitle0' // 鍋子燒壞警告
     resultImg.value = "Classes/potions/eletricPot.png"
     hasContent.value = false
     
   }else {
     hasContent.value = true
-    resultBigTitle.value = 'classes.potionBigTitle2' // 鍋子燒壞警告
+    resultBigTitle.value = 'classes.potionBigTitle2' 
 
   }
-  for(let i = 1; i<= 8 ; i++){
+  for(let i = 1; i<= 16 ; i++){
     if(!selectNum) return
     let recipeNum = 0
-    if(i<=8) {recipeNum = Object.values(potions[i].recipe).length }
+    recipeNum = Object.values(potionAll[i].recipe).length 
+    
     // 統計各個食譜長度(有幾種原料)
     if(selectNum == recipeNum || selectNum - 1 == recipeNum){
-      correctList.push(potions[i]) 
+      correctList.push(potionAll[i]) 
       // correctList == 符合數量的完整食譜// index 從 0 
       // 先擴充糖 允許多選一個食材的食譜先進到這邊 
     }
+    console.log(correctList)
   }
   
   // 2.食材name == 食譜.recipe[遍歷].name 
@@ -201,8 +204,11 @@ const cook = () => {
   // 4. (例外)不符合食譜神秘飲料區段 random 要給他五種
   else{
     let index = Math.round(Math.random() + 1)
-    // index = 2 // 測試用
-    
+    // index = 15 // 測試用
+    // resultImg.value = potionAll[index].imgUrl
+    // resultTitle.value = potionAll[index].name
+    // resultIntro.value = potionAll[index].resultIntro
+
     // 圖片跟敘述還沒放好
     resultImg.value = `Classes/potions/secretPotion${index}.png` || 'Classes/potions/secretPotion1.png',
     resultTitle.value = `classes.potiongame.secretPotionName${index}`
@@ -394,11 +400,10 @@ onMounted(()=>{
   position: relative;
   .potion-right-result-bigtitle, .potion-right-result-title{
     color: $color-fsTitle;
-    margin-top: 5%;
     flex-basis: 0;
     &.potion-right-result-bigtitle{
-      // margin-bottom: 8%;
-      flex-grow: 2;
+      margin-top: 2%;
+      flex-grow: 1;
     }
     &.potion-right-result-title{
       flex-grow: 1;
@@ -410,7 +415,7 @@ onMounted(()=>{
     flex-basis: 0;
     flex-grow: 4;
     &.no-content{
-      flex-grow: 6;
+      flex-grow: 2;
       padding: 14%;
     }
 

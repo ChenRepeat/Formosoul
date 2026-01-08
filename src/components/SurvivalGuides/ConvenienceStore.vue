@@ -424,7 +424,7 @@ function closeWelcomeFrame (){
                  :width="activeItemData.width"
                  tag="p"
                  align="center"
-                 @click="activeItemId = null"
+                 @click="activeItemId = null, showFaceOverlay= null"
                 >
                 <template #textButton>
                         {{ $t('nightmarket.others.close') }}

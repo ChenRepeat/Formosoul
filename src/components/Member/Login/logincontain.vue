@@ -7,7 +7,7 @@
             type="email"
             v-model="email"
             class="input-text"
-            placeholder="E-mail"
+            :placeholder="$t('loginPage.placeholderAcc')"
             :disabled="isLoading"
             @keydown="handleKeyDown"
             />
@@ -19,7 +19,7 @@
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 class="input-text"
-                placeholder="Password"
+                :placeholder="$t('loginPage.placeholderPwd')"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
                 />
@@ -40,7 +40,7 @@
         <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
         <div class="login-bottom">
             <p>
-                * If your memory has been tampered with by a Memory Charm, click here：<a @click="hanldeForgetpassword" class="bottom-link">ForgetPassword</a>
+                {{$t('loginPage.forgetPasswordMsg')}}<a @click="hanldeForgetpassword" class="bottom-link">{{$t('loginPage.forgetPasswordBtn')}}</a>
             </p>
         </div>
         <BasicButton
@@ -48,7 +48,7 @@
         @click="handleLogin"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : 'Enter the Academy'}}
+            {{ isLoading ? 'Loading...' : $t('loginPage.loginBtn')}}
         </BasicButton>
 
 

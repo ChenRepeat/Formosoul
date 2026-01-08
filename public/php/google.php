@@ -6,7 +6,7 @@
 
   $member = json_decode(file_get_contents("php://input"), true);
   session_start();
-
+  $wandcore_ID = $member['wandcore_ID'] ?? null;
   require_once 'vendor/autoload.php';
 
   $resData=[];// 儲存回傳到前端的DATA
@@ -42,33 +42,32 @@
     $statementCheck->execute();
     $otherWayRegisterd = $statementCheck->fetch(); // 
 
-      // 要把遊戲的0 改成抓傳入的遊戲紀錄值
-      $sql = " 
-      START TRANSACTION;
-        INSERT INTO member(email, name, wandcore_ID, status, role, createdate, updatetime)
-        VALUES (:email, :name ,:wandcore_ID, 1, 0, NOW(), NOW());
-                  SET @USER_ID = LAST_INSERT_ID();
-        INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
-        VALUES (@USER_ID,0,0,0,0,0,0);
-        SET @CARD_ID = LAST_INSERT_ID();
-        INSERT INTO buegame (buegame_count, pointscard_ID, buegame_pass)
-        VALUES (0,@CARD_ID,0);
-        INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count)
-        VALUES (@USER_ID,0,0);
-        INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass)
-        VALUES (@CARD_ID,0,0);
-        INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
-        VALUES (@CARD_ID,0,0,0);
-        INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
-        VALUES (@CARD_ID,0,0,0);
-        INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
-        VALUES (@CARD_ID,0,0,0);
-        COMMIT; 
-        ";
-      $stmt= $pdo->prepare($sql);
-      $stmt->bindValue(':email', $payload['email']);
-      $stmt->bindValue(':name', $payload['name']);
-      $stmt->execute();
+      // $sql = " 
+      // START TRANSACTION;
+      //   INSERT INTO member(email, name, status, role, createdate, updatetime)
+      //   VALUES (:email, :name, 1, 0, NOW(), NOW());
+      //             SET @USER_ID = LAST_INSERT_ID();
+      //   INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
+      //   VALUES (@USER_ID,0,0,0,0,0,0);
+      //   SET @CARD_ID = LAST_INSERT_ID();
+      //   INSERT INTO buegame (buegame_count, pointscard_ID, buegame_pass)
+      //   VALUES (0,@CARD_ID,0);
+      //   INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count)
+      //   VALUES (@USER_ID,0,0);
+      //   INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass)
+      //   VALUES (@CARD_ID,0,0);
+      //   INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
+      //   VALUES (@CARD_ID,0,0,0);
+      //   INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
+      //   VALUES (@CARD_ID,0,0,0);
+      //   INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
+      //   VALUES (@CARD_ID,0,0,0);
+      //   COMMIT; 
+      //   ";
+      // $stmt= $pdo->prepare($sql);
+      // $stmt->bindValue(':email', $payload['email']);
+      // $stmt->bindValue(':name', $payload['name']);
+      // $stmt->execute();
 
     if($otherWayRegisterd) {
       $resData["success"] = false;
@@ -99,8 +98,8 @@
         // 要把遊戲的0 改成抓傳入的遊戲紀錄值
         $sql = " 
         START TRANSACTION;
-          INSERT INTO member(email, name, status, role, createdate, updatetime)
-          VALUES (:email, :name, 1, 0, NOW(), NOW());
+          INSERT INTO member(email, name, wandcore_ID, status, role, createdate, updatetime)
+          VALUES (:email, :name, :wandcore_ID,1, 0, NOW(), NOW());
                     SET @USER_ID = LAST_INSERT_ID();
           INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
           VALUES (@USER_ID,0,0,0,0,0,0);
@@ -122,6 +121,7 @@
         $stmt= $pdo->prepare($sql);
         $stmt->bindValue(':email', $payload['email']);
         $stmt->bindValue(':name', $payload['name']);
+        $stmt->bindValue(':wandcore_ID', $wandcore_ID);
         $stmt->execute();
 
         $sqlGoogle = "SELECT 
