@@ -46,7 +46,7 @@ try{
         // 切換狀態：1變0，0變1
         $newStatus = ($record['collect_status'] == 1) ? 0 : 1;
         
-        $sqlUpdate = "UPDATE collection SET status = ? WHERE member_ID = ? AND product_ID = ?";
+        $sqlUpdate = "UPDATE collection SET collect_status = ? WHERE member_ID = ? AND product_ID = ?";
         $stmtUpdate = $pdo -> prepare($sqlUpdate);
         $stmtUpdate -> execute([$newStatus, $memberID, $productID]);
         

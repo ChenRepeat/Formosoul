@@ -164,11 +164,23 @@ async function likeHeart(product){
   if(authStore.token){
 
     // 取得需要的商品跟會員 ID 
-    // 商品的在網址列
-    const urlProductID = route.params.id;   //因為是從網址列拿，所以記得 id 要等於當初取的變數名稱
+    // 商品的在商品資料中
+    const urlProductID = product.product_ID;   
 
     // 會員的在 storage
-    const storageMemberID = localStorage.getItem('member_ID');
+    const storageUser = localStorage.getItem('user');
+
+    // 宣告變數準備裝 ID
+    let storageMemberID = null;
+
+    // 2. 如果有抓到 user，就把它轉成物件，再拿出裡面的 member_ID
+    if (storageUser) {
+        const userObj = JSON.parse(storageUser); // 把字串變成物件
+        storageMemberID = userObj.member_ID;     // 拿到 300018
+    }
+
+    console.log('網址ID (route.params.id):', urlProductID);
+    console.log('會員ID (storage):', storageMemberID);
 
 
     // 避免找不到 ID 的情況
