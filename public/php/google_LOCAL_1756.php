@@ -42,33 +42,7 @@
     $statementCheck->execute();
     $otherWayRegisterd = $statementCheck->fetch(); // 
 
-      // 要把遊戲的0 改成抓傳入的遊戲紀錄值
-      $sql = " 
-      START TRANSACTION;
-        INSERT INTO member(email, name, wandcore_ID, status, role, createdate, updatetime)
-        VALUES (:email, :name ,:wandcore_ID, 1, 0, NOW(), NOW());
-                  SET @USER_ID = LAST_INSERT_ID();
-        INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore)
-        VALUES (@USER_ID,0,0,0,0,0,0);
-        SET @CARD_ID = LAST_INSERT_ID();
-        INSERT INTO buegame (buegame_count, pointscard_ID, buegame_pass)
-        VALUES (0,@CARD_ID,0);
-        INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count)
-        VALUES (@USER_ID,0,0);
-        INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass)
-        VALUES (@CARD_ID,0,0);
-        INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass)
-        VALUES (@CARD_ID,0,0,0);
-        INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass)
-        VALUES (@CARD_ID,0,0,0);
-        INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass)
-        VALUES (@CARD_ID,0,0,0);
-        COMMIT; 
-        ";
-      $stmt= $pdo->prepare($sql);
-      $stmt->bindValue(':email', $payload['email']);
-      $stmt->bindValue(':name', $payload['name']);
-      $stmt->execute();
+    // 有可能email 查下去就根本沒有值嗎  
 
     if($otherWayRegisterd) {
       $resData["success"] = false;

@@ -14,7 +14,7 @@ const router = useRouter();
 const cartstore = useCartStore();
 const addrstore = useAddressStore();
 const { t, locale } = useI18n();     // 讀取語系狀態
-
+const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
 // coupon -------------------------------------
 const hasCoupon = ref(false);
@@ -26,20 +26,29 @@ function couponclose(){
             cartstore.discount = 0;
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
         }else if(!res.success && cartstore.coupon_ID == null){
             restore_coupon();
             cartstore.discount = 0
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
+ 
+
         }
     })
 }
+
 function couponopen(){
     hasCoupon.value = true;
+    document.querySelector('.shoppingcart-main').style.overflow = 'hidden' ;
+    document.querySelector('.shoppingcart-main').style.paddingRight = 120 + scrollbarWidth + 'px';
     document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
+    
 }
 function restore_coupon(){
         const storedUser = localStorage.getItem('user');
@@ -88,12 +97,16 @@ function couponuse(){
             cartstore.discount = res.data.discount
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
         }else if(!res.success && cartstore.coupon_ID == null){
             cartstore.discount = 0
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
         }
     })
 }
@@ -420,12 +433,12 @@ async function goOrder(){
                 </BasicButton>
                 <Teleport v-if="hasCoupon" to="body">
 
-                    <div class="coupon-overlay dp-flex" @click.self="couponclose">
+                    <div class="coupon-overlay dp-flex"  @click.self="couponclose">
                         <div class="coupon-dock">
                             <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="couponclose"/>
                             <Couponcontaion isrows></Couponcontaion>
                             <p class="coupon-tips">{{$t('shoppingcart.couponTips')}}</p>
-                            <div class="btn-coupon-use dp-flex">
+                            <div class="btn-coupon-use  dp-flex ">
                                 <BasicButton class="btn-gray-fill" @click="couponclose">
                                     {{$t('shoppingcart.couponNouse')}}
                                 </BasicButton>
@@ -534,16 +547,16 @@ async function goOrder(){
                             <div class="nav-addr-dock dp-flex">
                                 <nav class="nav-addr">
                                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                                    <select class="nav-list fw200" v-model="selectCity">
-                                        <option disabled value="">{{$t('shoppingcart.city')}}</option>
-                                        <option v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
+                                    <select class="nav-list fw200" v-model="selectCity" required>
+                                        <option class="list-option" disabled value="">{{$t('shoppingcart.city')}}</option>
+                                        <option class="list-option" v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
                                     </select>
                                 </nav>
                                 <nav class="nav-addr">
                                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                                    <select class="nav-list fw200" v-model="selectDist">
-                                        <option disabled value="">{{$t('shoppingcart.dist')}}</option>
-                                        <option v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
+                                    <select class="nav-list fw200" v-model="selectDist" required>
+                                        <option class="list-option"  disabled value="">{{$t('shoppingcart.dist')}}</option>
+                                        <option class="list-option"  v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
                                     </select>
                                 </nav>
                             </div>
@@ -724,6 +737,7 @@ async function goOrder(){
 
         & .coupon-tips{
             text-align: center;
+            color: $color-fsRed;
         }
 
         & .btn-coupon-use{
@@ -855,7 +869,6 @@ async function goOrder(){
         height: auto;
         margin-top: 40px;
     }
-
 
     //order
     .btn-order{
