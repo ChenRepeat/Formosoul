@@ -852,14 +852,13 @@ function initSnitches(loader) {
     { name: t("nav.about"), img: `SurvivalGuide/taiwan_image2_nobg.png`, url: '/about' },
     { name: t("nav.survivalGuide"), img: `Home/home-survival-compass.png`, url: '/survivalguide' },
     { name: t("nav.policy"), img: `Home/home-policy-scroll.png`, url: '/policy' },
-    { name: 'The Core Selection', img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
     { 
       name: '', 
       img: `Home/home-admin-tools.png`, 
       url: import.meta.env.BASE_URL + 'admin', 
       target: '_blank' 
     },
-    
+    { name: t("coreselection.thecoreselection"), img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
   ];
 
   const angleStep = (Math.PI * 2) / snitchCount;
