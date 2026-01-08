@@ -5,12 +5,24 @@ require 'conn.php';
 $code = $_GET['code'];
 $state = $_GET['state'];
 
+$host = $_SERVER['HTTP_HOST'];
+$redirect_uri = '';
+
 $token_url = "https://api.line.me/oauth2/v2.1/token";
+
+// 判斷是否為本機環境
+if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+    // 【本機環境】
+    $redirect_uri = 'http://localhost/Formosoul/public/php/lineLogin.php';
+} else {
+    // 【線上環境】
+    $redirect_uri = 'https://tibamef2e.com/tjd103/php/lineLogin.php'; 
+}
 
 $data = [
     'grant_type' => 'authorization_code',
     'code' => $code,
-    'redirect_uri' => 'http://localhost/Formosoul/public/php/lineLogin.php',
+    'redirect_uri' => $redirect_uri,
     'client_id' => '2008793662',
     'client_secret' => '37ae333babb2944a79fa3ee3a6e9afdd'
 ];
@@ -61,11 +73,8 @@ $line_user_id = $profile['userId']; // ★ 這是 Line 唯一的 User ID
 $user_name = $profile['displayName'];
 $user_avatar = $profile['pictureUrl'];
 
-// ==========================================
 // ★★★ 核心邏輯修改開始 ★★★
-// ==========================================
-
-// 【第一查】：先檢查 line_id 是否已存在
+//先檢查 line_id 是否已存在
 $stmt = $pdo->prepare('
     SELECT m.*, p.pointscard_ID 
     FROM member m
@@ -77,7 +86,7 @@ $member = $stmt->fetch();
 
 if ($member) {
     // ===【情況 A：完全是舊會員 (Line ID 已存在)】===
-    // 直接登入，什麼都不用改
+    // 直接登入
 } else {
     // Line ID 不存在，嘗試用 Email 找人
     $stmt = $pdo->prepare('
@@ -160,7 +169,7 @@ $_SESSION['name']      = $member['name'];
 $_SESSION['email']     = $member['email'];
 $_SESSION['role']      = $member['role'];
 $_SESSION['pointscard_ID'] = $member['pointscard_ID'];
-// $_SESSION['wandcore_ID'] = $member['wandcore_ID']; // 看你有沒有需要
+$_SESSION['wandcore_ID'] = $member['wandcore_ID'] ?? null;
 
 // 準備傳回前端的資料
 $loginData = [
@@ -168,11 +177,10 @@ $loginData = [
     'name'      => $_SESSION['name'],
     'role'      => $_SESSION['role'],
     'pointscard_ID' => $_SESSION['pointscard_ID'],
-    'wandcore_ID' => $_SESSION['wandcore_ID'],
+    'wandcore_ID' => $_SESSION['wandcore_ID'] ?? null,
 ];
 
 $dataToken = base64_encode(json_encode($loginData));
-$host = $_SERVER['HTTP_HOST'];
 // 設定前端網址
 if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
     // 【本機開發環境】 (Vite 預設 port)
