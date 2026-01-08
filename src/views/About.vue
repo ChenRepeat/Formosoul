@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import gsap from 'gsap'; 
 import Wave from '@/components/Wave.vue';
+const baseUrl = import.meta.env.BASE_URL
 
 // 1. 綁定 DOM 元素
 const mapSectionRef = ref(null);    // 世界地圖區
@@ -34,8 +35,11 @@ const shipLocations = ref([
 ]);
 
 const islandRef = ref(null);
+const cloud1 = ref(null)
+const cloud2 = ref(null)
+const cloud3 = ref(null)
 let floatCtx; 
-
+let floatCloud;
 onMounted(() => {
   // GSAP 漂浮動畫
   floatCtx = gsap.context(() => {
@@ -47,7 +51,22 @@ onMounted(() => {
       ease: "sine.inOut"
     });
   });
+floatCloud = gsap.context(() => {
+  const clouds = [cloud1.value, cloud2.value, cloud3.value];
 
+  clouds.forEach((cloud) => {
+    if (!cloud) return;
+
+    gsap.to(cloud, {
+      y: "random(15, 30)", 
+      duration: "random(2, 4)", 
+      delay: "random(0, 2)", 
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+  });
+});
   observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       //地圖
@@ -95,15 +114,19 @@ onUnmounted(() => {
     
     <img 
       ref="islandRef" 
-      src="/public/About/about-island.png" 
+      src="/About/about-island.png" 
       class="island-img" 
       alt="#"
     >
-    
+    <img v-for=" index in 3" :key="index"
+    :src="`${baseUrl}/About/cloud${index}.png`" 
+    alt=""  class="cloud" 
+    :class="`cloud${index}`"
+    :ref="`cloud${index}`">
     <div class="location-container" ref="mapSectionRef" :class="{ 'active': isMapVisible }">
       <h2>{{$t("about.aboutLocation")}}</h2>
       <div class="map-container">
-        <img src="/public/About/world-map.png" alt="#">
+        <img src="/About/world-map.png" alt="#">
         <span class="pin-point">
           <font-awesome-icon :icon="['fas', 'location-dot']"/>
         </span>
@@ -128,7 +151,7 @@ onUnmounted(() => {
 
     <div class="air-map-section" ref="airMapRef">
       <div class="taiwan-map-container" :class="{ 'show-details': isAirMapVisible }">
-        <img src="/public/About/taiwan-map.png" class="taiwan-map" alt="Taiwan Map">
+        <img src="/About/taiwan-map.png" class="taiwan-map" alt="Taiwan Map">
         
         <div 
           v-for="(point, index) in airports" 
@@ -222,7 +245,10 @@ onUnmounted(() => {
     position: relative;  
     z-index: 10;
   }
-
+  .cloud{position: absolute;z-index: 11;}
+  .cloud1{top: 18%; left: 15%;width: 25%;}
+  .cloud2{top: 18%; left: 62%;width: 10%;}
+  .cloud3{top: 22%; left: 53%;width: 4%;}
   .location-container{
     width: 100%;
     margin: 0 auto;

@@ -90,8 +90,8 @@ onMounted( async () => {
           <li v-for="(item,key) in allNewsData" :key="key">
             <router-link :to="`/news/${item.id}`" replace>
               <div>
-                <h5 v-if="isEnglish">{{ item.title_en }}</h5>
-                <h5 v-else>{{ item.title_zh }}</h5>
+                <h6 v-if="isEnglish">{{ item.title_en }}</h6>
+                <h6 v-else>{{ item.title_zh }}</h6>
                 <p>{{ item.update }}</p>
               </div>
               <span><font-awesome-icon :icon="['fas', 'caret-down']" size="3x" class="arrow-icon"/></span>

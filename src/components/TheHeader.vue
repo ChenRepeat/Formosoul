@@ -367,9 +367,10 @@ onUnmounted(() => {
   }
 }
 .member-data-case{
-  gap: 12px;
+  gap: 28px;
   align-items: center;
   justify-content: left;
+  padding: 8px 12px;
   @media screen and (max-width: 1366px){
     flex-direction: column;
   }
