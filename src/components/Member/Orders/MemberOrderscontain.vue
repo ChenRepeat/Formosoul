@@ -1,29 +1,29 @@
 <template>
     <div class="detail" @click="activeIndex = 2">
-        <h3>Orders Detail</h3>
+        <h3>{{$t('member.OrdersDetail')}}</h3>
         <div class="detailbar">
-            <p>Orders Information</p>
+            <p>{{$t('member.OrdersInformation')}}</p>
             <!-- {{ $route.params.id }} -->
         </div>
         <div v-if="orderlang" class="orders-information notice">
-            <p>Order Number： <span>{{ orderlang.order_number }}</span></p>
-            <p>Order Date： {{ orderlang.orderdate }}</p>
-            <p>Order Status： {{ orderlang.statuscode }}</p>
-            <p>Recipient's Name： {{ orderlang.name_en }}</p>
-            <p>Delivery method： {{ orderlang.shippingcode }}</p>
-            <p>pieces： {{ orderlang.total_quantity }}</p>
-            <p>address： {{ orderlang.address_en }}</p>
-            <p>Remark： {{ orderlang.remark }}</p>
-            <p>* Notice *<br>To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.</p>
+            <p>{{$t('member.OrderNumber')}}： <span>{{ orderlang.order_number }}</span></p>
+            <p>{{$t('member.OrderDate')}}： {{ orderlang.orderdate }}</p>
+            <p>{{$t('member.OrderStatus')}}： {{ orderlang.statuscode }}</p>
+            <p>{{$t('member.RecipientName')}}： {{ orderlang.name_en }}</p>
+            <p>{{$t('member.DeliveryMethod')}}： {{ orderlang.shippingcode }}</p>
+            <p>{{$t('member.pieces')}}： {{ orderlang.total_quantity }}</p>
+            <p>{{$t('member.address')}}： {{ orderlang.address_en }}</p>
+            <p>{{$t('member.Remark')}}： {{ orderlang.remark }}</p>
+            <p>* {{$t('member.Notice')}} *<br>{{$t('member.ReturnNoticeText')}}</p>
         </div>
         <div class="detailbar">
-            <p>Payment Information</p>
+            <p>{{$t('member.PaymentInformation')}}</p>
         </div>
         <div v-if="orderlang" class="orders-information">
             <p>{{$t('shoppingcart.payment')}}： {{ orderlang.payment }}</p>
         </div>
         <div class="detailbar">
-            <p>Products Information</p>
+            <p>{{$t('member.ProductsInformation')}}</p>
         </div>
         <div v-for="product in productlist"  class="orders-product">
             <img :src="product.image" :alt="1">
@@ -39,7 +39,7 @@
         </div>
 
         <div class="back-to-member">
-            <router-link to="/member/orderslist"><basic-button class="btn-yellow-fill"><h6><font-awesome-icon icon="fa-solid fa-angle-left" /> Back to Query orders</h6></basic-button></router-link>
+            <router-link to="/member/orderslist"><basic-button class="btn-yellow-fill"><h6><font-awesome-icon icon="fa-solid fa-angle-left" />{{$t('member.backtoqueryorders')}}</h6></basic-button></router-link>
         </div>
     </div>
 </template>

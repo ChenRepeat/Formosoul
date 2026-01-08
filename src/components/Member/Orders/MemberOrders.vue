@@ -180,6 +180,11 @@ const goToPage = (pageNumber) => {
         border: 0;
     }
     @media screen and (max-width: 1300px) {
+        .title-orders  > p:first-child{
+            width: 200px;
+
+
+        }
         .member-orders{
             width: 900px;
 
