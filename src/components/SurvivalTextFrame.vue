@@ -105,7 +105,7 @@ function handleClick() {
   letter-spacing: 2px;
   position: relative;
   border-radius: 8px;
-  border: 2px solid #1A1A1A;
+  border: 1px solid #1A1A1A;
 
   &::before {
     top: -3px;
