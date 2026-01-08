@@ -545,7 +545,7 @@ onUnmounted (()=> {
             </div>
         </div>
 
-        <div v-if="isGameOver" class="game-over-text">
+        <div v-if="isGameOver" class="game-over-text dp-flex-col">
             <div v-if="showCardOverlay" class="ledger-overlay-in-game">
                 <div class="card-modal">
                     <MemberLedger
@@ -686,11 +686,12 @@ onUnmounted (()=> {
 
 // Finish: Time's up
 .game-over-text {
-    position: absolute;
-    top: 53%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
+    // position: absolute;
+    // top: 53%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    justify-content: center;
+    height: 100%;
     width: 100%;
     text-align: center;
 
@@ -766,6 +767,7 @@ onUnmounted (()=> {
     &:active {
         transform: scale(0.95);
     }
+    z-index: 10;
 }
 
 .btn-restart {
