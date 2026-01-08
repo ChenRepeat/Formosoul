@@ -116,4 +116,13 @@ $color-fsWhite: #ffffff;
   opacity: 0;
   transform: translateY(20px);
 }
+.breathLight{
+  width: 40%;
+  height: 40%;
+  filter: drop-shadow(0 0 1px $color-fsWhite);
+  transition: all 0.3s;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
 </style>

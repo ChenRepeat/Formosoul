@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
     const memberView = ref('coreselection');
     const loginView = ref('loginpage');
     const informationView = ref('informationmembercard');
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     
     const isLoggedIn = computed(() => !!token.value);
     const memberStore = useMemberStore();
@@ -112,13 +113,18 @@ export const useAuthStore = defineStore('auth', () => {
     const coreData = JSON.parse(storeCore);
     // 彈窗的方式
     const openLoginModal = () => {
-        isLoginModalOpen.value = true;
-        document.body.style.overflow = 'hidden';  //鎖定背景 - 將網頁最外層設為不可滾動
+        isLoginModalOpen.value = true;  //鎖定背景 - 將網頁最外層設為不可滾動
+        document.querySelector('.content').style.overflow = 'hidden' ;
+        document.querySelector('.content').style.paddingRight = scrollbarWidth + 'px';
+        document.documentElement.style.overflow = 'hidden';
+
     };
 
     const closeLoginModal = () => {
         isLoginModalOpen.value = false;
-        document.body.style.overflow = '' ;
+        document.querySelector('.content').style.overflow = '' ;
+        document.querySelector('.content').style.paddingRight = 0 + 'px';
+        document.documentElement.style.overflow = '';
         memberStore.memberData.isEditing = false;
         if(memberView.value == 'coreselection' && storedUser && userData.member_ID){
             if(userData.wandcore_ID == null){
@@ -193,5 +199,6 @@ export const useAuthStore = defineStore('auth', () => {
         setinformationView,
         loginWithLine,
         wandcore_member_popup,
+        scrollbarWidth,
     }
 });

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useProductStore } from '@/stores/products';
 import TestProductCard from '@/components/TestProductCard.vue';
+import { log } from 'three';
 
 
 // 所有商品 ----------------------------------------
@@ -755,7 +756,60 @@ const productStore = useProductStore();   // 下方可以開始從 pinia 拿資�
 // 網頁掛載時，先從資料庫拿資料
 onMounted(() => {
   productStore.fetchProducts();
+  console.log(productStore);
+  
 });
+
+
+// 搜尋功能 ----------------------------------------
+const searchText = ref('');
+
+//從傳來的商品陣列中搜尋，然後再丟出最終的商品列表來呈現
+
+const finalDisplay = computed(() => {
+  const currentDisplay = productStore.displayProduct;
+  const keyWord = searchText.value.trim().toLowerCase();
+
+  /* 寫法一
+  if(!keyWord){ 
+    return currentDisplay;
+  }else{
+    return currentDisplay.filter( p => 
+      p.name_zh.includes(keyWord) ||
+      p.name_en.toLowerCase().includes(keyWord) ||
+      p.product_ID.toLowerCase().includes(keyWord) ||
+      p.type_zh.toLowerCase().includes(keyWord) ||
+      p.type_en.toLowerCase().includes(keyWord)
+    );
+  };
+  */
+
+  //寫法二  縮寫
+
+  if(!keyWord)
+    return currentDisplay;
+  
+    return currentDisplay.filter( p => 
+      p.name_zh.includes(keyWord) ||
+      p.name_en.toLowerCase().includes(keyWord) ||
+      p.product_ID.toLowerCase().includes(keyWord) ||
+      p.type_zh.toLowerCase().includes(keyWord) ||
+      p.type_en.toLowerCase().includes(keyWord)
+    );
+ 
+
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 // 分頁功能 ----------------------------------------
@@ -768,7 +822,7 @@ const itemsPerPage = 12;      // 因為每頁顯示幾筆資料是固定的，�
 //要讓總頁數可以追蹤 products.value.length 跟 itemsPerPage 是否有改變，並即時更新，要改成用 computed ，如果沒用，那 totalPages 只會在一開始進到網頁時跑一次，無法跟進後續的改變
 // 寫法一
 const totalPages = computed(() => 
-  Math.ceil ( productStore.displayProduct.length / itemsPerPage )
+  Math.ceil ( finalDisplay.value.length / itemsPerPage )
 );
 
 /* 其他寫法
@@ -830,13 +884,13 @@ function pageMinus(){
   const productsPerPage = computed(() => {
     const start = (currentPage.value -1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return productStore.displayProduct.slice(start, end);
+    return finalDisplay.value.slice(start, end);
   });
   
 
-  // 如果分類或排序有被點選，一律回到第１頁，才不會讀不到資料，頁碼也錯誤 ----------------------------------------
+  // 如果分類、排序、搜尋有被點選，一律回到第１頁，才不會讀不到資料，頁碼也錯誤 ----------------------------------------
   watch(
-    () => [productStore.typeBy, productStore.sortBy],
+    () => [productStore.typeBy, productStore.sortBy, searchText],
     () => {
       currentPage.value = 1;
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -867,8 +921,8 @@ function pageMinus(){
     <!-- 上方區塊 -->
     <section class="nav-top dp-flex">
         <div class="search">
-            <form class="search-content dp-flex" action="" method="GET">
-                <input type="text" class="search-text" placeholder="Search">
+            <form class="search-content dp-flex" action="" method="GET" @submit.prevent><!--@submit.prevent 防止按下 Enter 時，網頁重新載入，只留搜尋功能-->
+                <input type="text" v-model="searchText" class="search-text" :placeholder="$t('productlist.search')">
                 <button type="submit" class="btn-search-submit">
                     <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 </button>
@@ -934,15 +988,26 @@ function pageMinus(){
     </section>
 
 <!-- 中間商品列表 -->
-    <section class="list-all dp-flex">
+    <section v-if="finalDisplay.length === 0" class="no-search dp-flex-col">
+        <font-awesome-icon icon="fa-solid fa-ghost" class="icon-no-search" />
+        <p>{{$t('productlist.noSearch')}}</p>
+    </section>
+
+    <section v-else class="list-all dp-flex">
+        <!-- <div v-if="finalDisplay.length === 0" class="no-search">
+            <font-awesome-icon icon="fa-solid fa-ghost" class="icon-no-search" />
+            <p>{{$t('productlist.noSearch')}}</p>
+        </div> -->
+
         <TestProductCard 
           :products="productsPerPage"
-          />  <!-- product 傳遞變數 listedProducts 的值，子組件接收時要用 products 來接收 -->
+          />  
+          <!-- product 傳遞變數 listedProducts 的值，子組件接收時要用 products 來接收 -->
           <!-- :key="currentPage" 可以在每次換頁時，讓舊組件被銷毀，重新掛載TestProductCard繪製新組件，但是這樣會讓效能變差，所以優先在 TestProductCard 加入 watch 來處理這件事，如果之後還有 bug 再多加上這個方式 -->
     </section>
 
 <!-- 下方頁碼 -->
-    <nav class="nav-down fw200" >
+    <nav v-if="finalDisplay.length !== 0" class="nav-down fw200" > <!--也可以直接寫 v-if="finalDisplay.length" 因為 0 會直接被視為 false-->
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-left" @click="pageMinus()"/>
         <!-- 改成動態產生頁碼 -->
         <span v-for="page in totalPages"
@@ -1128,6 +1193,18 @@ function pageMinus(){
 
 
 //中間商品列表--------------------------------
+
+  .no-search{
+    //text-align: center;
+    align-items: center;
+
+    & .icon-no-search{
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+
+  }
 
 .list-all{
   //放大時置中

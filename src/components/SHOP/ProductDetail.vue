@@ -170,8 +170,8 @@ watch(
 
 function shareTo(platform) {
   const url = `https://tibamef2e.com/tjd103/shop/productdetail/${route.params.id}`
-
-  const text = "分享您喜愛的商品"; 
+  const textzh = "我在這座魔法商店發現了奇妙的東西，快點進來和我一起探險！";
+  const texten = "I’ve discovered something wondrous in this magic shop. Come explore it with me!"; 
   let shareUrl = "";
 
   switch (platform) {
@@ -179,8 +179,15 @@ function shareTo(platform) {
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
         break;
     case 'line':
-        const lineContent = `${text} ${url}`;
-        shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContent)}`;
+        // const lineContentzh = `${textzh}\n${url}`;
+        // const lineContenten = `${texten}\n${url}`;
+        const lineContentzh = `${textzh}`;
+        const lineContenten = `${texten}`;
+        if(lang.value == 'zh'){
+            shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContentzh)}`;
+        }else{
+            shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContenten)}`;
+        }
         break;
   }
 

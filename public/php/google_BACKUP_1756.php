@@ -42,6 +42,9 @@
     $statementCheck->execute();
     $otherWayRegisterd = $statementCheck->fetch(); // 
 
+<<<<<<< HEAD
+    // 有可能email 查下去就根本沒有值嗎  
+=======
       // 要把遊戲的0 改成抓傳入的遊戲紀錄值
       $sql = " 
       START TRANSACTION;
@@ -69,6 +72,7 @@
       $stmt->bindValue(':email', $payload['email']);
       $stmt->bindValue(':name', $payload['name']);
       $stmt->execute();
+>>>>>>> aassdd
 
     if($otherWayRegisterd) {
       $resData["success"] = false;

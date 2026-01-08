@@ -68,13 +68,6 @@ const openInfo = (index) => {
   professsor.value = info.value[index].name
   job.value = info.value[index].job
   skillDetail.value = info.value[index].skill
-  // if (index == 0 || index == 16) {
-  //   refBigPhoto.value.style.width =`auto`
-  //   refBigPhoto.value.style.height =`100%`
-  // }else{
-  //   refBigPhoto.value.style.width =`100%`
-  //   refBigPhoto.value.style.height =`auto`
-  // }
   clickedPhoto.value = all[index]
   isOpen.value = true
 }

@@ -1,9 +1,25 @@
 <?php
   require_once 'conn.php';
   $member = json_decode(file_get_contents("php://input"), true);
+    $checksql = '
+        SELECT email, line_ID	
+        FROM member 
+        WHERE email = :email;
+    ';
 
-  
-  
+    $checkstmt = $pdo->prepare($checksql);
+    $checkstmt->bindValue(':email', $member['email']);
+    $checkstmt->execute();
+    $checkemail = $checkstmt->fetch();
+    if (!$checkemail) {
+        echo json_encode(['success' => false, 'message' => 'Email not found']);
+        exit;
+    }
+    
+    if ($checkemail['line_ID'] !== null) {
+        echo json_encode(['success' => false, 'message' => 'Please login with LINE']);
+        exit;
+    }
   
   $sql = '
         select 
@@ -64,14 +80,17 @@
                 time() + 600, 
                 "/",            
             );
+            echo json_encode($resbody);
+
         }else{
             $resbody['success'] = false;
             $resbody['message'] = 'Incorrect username or password, Please enter again。';
+        echo json_encode($resbody);
+        
         }
         
 
         // 把 PHP 陣列 ($rows) 轉成 JSON 字串並傳到前端
-        echo json_encode($resbody);
 
 
         

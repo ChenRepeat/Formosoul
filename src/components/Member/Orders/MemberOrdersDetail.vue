@@ -14,7 +14,7 @@
                     class="btn-yellow-fill" 
                     @click="handleCheckOrder(order.order_number)"
                 >
-                    <p class="Check">Check</p>
+                    <p class="Check">{{$t('member.check')}}</p>
                 </basic-button>
                 </router-link>
             </p>
@@ -182,5 +182,10 @@
         // width: 100%;
         // height: 100%;
     }
-
+    @media screen and (max-width: 1300px) {
+    .orders-contain > p:first-child{
+        width: 200px;
+            justify-content: start;
+    }
+    }
 </style>
