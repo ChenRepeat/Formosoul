@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import ListLayout from './ListLayout.vue'
   import { useRouter } from 'vue-router'
   import { ElMessage } from 'element-plus'
@@ -8,15 +8,34 @@
 
   const currentPage = ref(1)
   const pageSize = ref(10)
-  const total = ref(0)
 
-  // 搜尋關鍵字
   const productSearch = ref('')
   const productData = ref([])
 
-  // 分頁計算 (如果有做前端搜尋過濾，建議要在這裡加入 filter 邏輯)
+  const filteredData = computed(() => {
+    if (!productSearch.value) return productData.value;
+
+    const keyword = productSearch.value.toLowerCase().trim();
+
+    return productData.value.filter(item => {
+      // 比對商品名稱 (確保有值)
+      const nameMatch = item.name_zh ? item.name_zh.toLowerCase().includes(keyword) : false;
+      
+      // 比對商品編號 (ID可能是數字，必須先 String() 轉字串才能轉小寫)
+      const idMatch = item.product_ID ? String(item.product_ID).toLowerCase().includes(keyword) : false;
+
+      return nameMatch || idMatch;
+    });
+  });
+
+  //分頁從過濾後filteredData去切
   const pagedData = computed(() => {
-    return productData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+    return filteredData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  })
+
+  //一搜尋就跳回第一頁，不然會找不到資料
+  watch(productSearch, () => {
+    currentPage.value = 1;
   })
 
   // 取得商品列表
@@ -28,7 +47,6 @@
       const response = await fetch(API_URL);
       const data = await response.json();
       productData.value = data;
-      total.value = data.length;
     } catch (error) {
       console.error(error);
       ElMessage.error('無法取得商品資料');
@@ -166,11 +184,11 @@
 
     <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData / pageSize) }} 頁</p>
       </div>
       <el-pagination 
         v-model:current-page="currentPage"
-        :total="total"
+        :total="filteredData.length"
         :page-size="pageSize"
         layout="prev, pager, next"
         background

@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import ListLayout from './ListLayout.vue'
   import { useRouter } from 'vue-router'
   import { ArrowDown } from '@element-plus/icons-vue'
@@ -7,7 +7,6 @@
 
   const currentPage = ref(1)
   const pageSize = ref(10)
-  const total = ref(0)
   const router = useRouter()
 
   // 搜尋與篩選變數
@@ -18,11 +17,11 @@
 
   // ★★★ 核心篩選邏輯 ★★★
   const filteredData = computed(() => {
-    let data = [...eventData.value]; // 淺拷貝避免影響原始資料
+    let data = eventData.value; 
 
     // 1. 關鍵字搜尋 (標題 或 內容)
     if (eventSearch.value) {
-      const keyword = eventSearch.value.toLowerCase();
+      const keyword = eventSearch.value.toLowerCase().trim();
       data = data.filter(item =>
         (item.title_zh && item.title_zh.toLowerCase().includes(keyword)) ||
         (item.content_zh && item.content_zh.toLowerCase().includes(keyword))
@@ -39,10 +38,13 @@
 
   // 分頁邏輯
   const pagedData = computed(() => {
-    total.value = filteredData.value.length;
     const start = (currentPage.value - 1) * pageSize.value;
     const end = currentPage.value * pageSize.value;
     return filteredData.value.slice(start, end);
+  })
+
+  watch(eventSearch, () => {
+    currentPage.value = 1;
   })
 
   // 取得資料
@@ -175,11 +177,11 @@
 
     <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) || 1 }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData.length / pageSize) || 1 }} 頁</p>
       </div>
       <el-pagination
         v-model:current-page="currentPage"
-        :total="total"
+        :total="filteredData.length"
         :page-size="pageSize"
         layout="prev, pager, next"
         background

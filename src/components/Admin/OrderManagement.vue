@@ -1,47 +1,16 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import ListLayout from './ListLayout.vue'
   import { ArrowDown } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
-  const total = ref(0)
 
-  // 搜尋與篩選狀態
   const memberSearch = ref('')
-  const filterStatus = ref('全部') // 用來綁定 dropdown 顯示文字
+  const filterStatus = ref('全部') 
   const orderData = ref([])
 
-  // 分頁計算
-  const pagedData = computed(() => {
-    // 這裡只做分頁切片，若需前端搜尋功能可在此加入 .filter
-    return orderData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
-  })
-
-  // 取得訂單列表
-  const getOrders = async () => {
-    const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/getOrders.php`;
-
-    try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-      orderData.value = data;
-      total.value = data.length;
-    } catch (error) {
-      console.error(error);
-      ElMessage.error('無法取得訂單資料');
-    }
-  }
-
-  // 切換訂單狀態篩選
-  const handleCommand = (command) => {
-    filterStatus.value = command;
-    // TODO: 這裡可以呼叫過濾 function (記得要把中文轉回數字去比對，或請後端支援)
-  }
-  
-  // ★★★ 新增 helper 1: 數字轉中文 ★★★
   const getStatusText = (status) => {
     const s = Number(status);
     const map = {
@@ -54,6 +23,53 @@
     return map[s] || '未知';
   }
 
+  const filteredData = computed(() => {
+    let results = orderData.value;
+
+    if (filterStatus.value !== '全部') {
+      results = results.filter(item => {
+        return getStatusText(item.status) === filterStatus.value;
+      });
+    }
+
+    if (memberSearch.value) {
+      const keyword = memberSearch.value.toLowerCase().trim();
+      results = results.filter(item => {
+        const idMatch = item.order_ID ? String(item.order_ID).toLowerCase().includes(keyword) : false;
+        const nameMatch = item.name_en ? item.name_en.toLowerCase().includes(keyword) : false;
+        return idMatch || nameMatch;
+      });
+    }
+
+    return results;
+  })
+
+  const pagedData = computed(() => {
+    return filteredData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  })
+
+  watch([memberSearch, filterStatus], () => {
+    currentPage.value = 1;
+  })
+
+  const getOrders = async () => {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    const API_URL = `${apiBase}/getOrders.php`;
+
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      orderData.value = data;
+    } catch (error) {
+      console.error(error);
+      ElMessage.error('無法取得訂單資料');
+    }
+  }
+
+  const handleCommand = (command) => {
+    filterStatus.value = command;
+  }
+   
   onMounted (() => {
     getOrders();
   });
@@ -87,6 +103,8 @@
               <el-dropdown-item command="全部">全部</el-dropdown-item>
               <el-dropdown-item command="已付款">已付款</el-dropdown-item>
               <el-dropdown-item command="未付款">未付款</el-dropdown-item>
+              <el-dropdown-item command="已出貨">已出貨</el-dropdown-item>
+              <el-dropdown-item command="已完成">已完成</el-dropdown-item>
               <el-dropdown-item command="已取消">已取消</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -121,11 +139,11 @@
 
     <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData.length / pageSize) }} 頁</p>
       </div>
       <el-pagination 
         v-model:current-page="currentPage"
-        :total="total"
+        :total="filteredData.length"
         :page-size="pageSize"
         layout="prev, pager, next"
         background
@@ -137,20 +155,17 @@
 </template>
 
 <style lang="scss" scoped>
-/* 搜尋框與篩選器容器 */
 .filter-group {
   display: flex;
-  gap: 16px; /* 搜尋框跟下拉選單的間距 */
+  gap: 16px;
   align-items: center;
 }
 
-/* 搜尋框樣式 */
 :deep(.custom-search-input .el-input__wrapper){
   border-radius: 50px;
   background-color: #F0F7FF;
 }
 
-/* 下拉選單按鈕樣式 */
 .capsule-btn {
   display: flex;
   align-items: center;
@@ -161,7 +176,7 @@
   color: #606266;
   cursor: pointer;
   font-size: 14px;
-  height: 32px; /* 與 element-plus input 預設高度一致 */
+  height: 32px; 
   transition: all 0.3s;
   user-select: none;
   border: 1px solid transparent;
@@ -177,7 +192,6 @@
   margin-left: 8px;
 }
 
-/* 圖標顏色 */
 .search-icon{
   font-size: 18px;
   color: #0A3D70;
@@ -189,24 +203,20 @@
   }
 }
 
-/* 表格背景色覆蓋 */
 :deep(.el-table__row--striped td.el-table__cell) {
   background-color: #F0F7FF !important;
 }
 
-/* 修改內建行高 */
 :deep(.el-table .el-table__cell) {
   padding: 8px 0;
 }
 
-/* 分頁文字 */
 .pagination-text {
   color: #606266;
   margin: 0;
   white-space: nowrap;
 }
 
-/* 分頁按鈕間距 */
 .pagination-btn{
   margin-top: 16px;
 }

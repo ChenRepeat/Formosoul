@@ -1,43 +1,81 @@
 <?php
-require 'sendGmail.php'; 
-require 'conn.php'; 
-
-//產生 8 位數亂數密碼
-// function generateRandomPassword($length = 8) {
-//     // 密碼字元庫 (去除了容易混淆的字元，如 1, l, I, 0, O)
-//     $chars = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    
-//     // 亂數字串，然後取8次的一個字拼接
-//     $password = '';
-//     for ($i = 0; $i < $length; $i++) {
-//         $password .= $chars[rand(0, strlen($chars) - 1)];
-//     }
-    
-//     return $password;
-// }
-
-// 收件人資料
-$email = 'michael4292018@gmail.com';
-$name  = '收件測試人';
-$pwd = generateRandomPassword(8);
+require 'conn.php';
+require 'sendGmail.php';
 
 try {
-    $sql = "INSERT INTO member (email, `name`, `password`, createdate, `status`, updatetime, `role`) VALUES (?, ?, ?, NOW(), 1, NOW(), 0)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$email, $name, $pwd]); 
-
-    //取得新建立的ID
-    echo "使用者建立成功！(ID: " . $pdo->lastInsertId() . ")<br>";
-
-    // 寄信
-    echo "📧 正在寄信...<br>";
-    if (sendPasswordEmail($email, $name, $pwd)) {
-        echo "<h2 style='color:green'>帳號已建立且信件已寄出。</h2>";
-    } else {
-        echo "<h2 style='color:red'>帳號建好了，但信寄失敗了。</h2>";
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception('無效的請求方法');
     }
 
+    //接收前端 FormData 傳來的欄位
+    $name = $_POST['name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $status = $_POST['status'] ?? 1;
+
+    // 基本驗證
+    if (empty($name) || empty($email) || empty($password)) {
+        throw new Exception('請填寫完整資訊 (姓名、Email、密碼)');
+    }
+
+    //處理圖片上傳
+    $avatarPath = null;
+    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../member/'; // 圖片存放資料夾
+        
+        // 如果資料夾不存在，嘗試建立
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // 取得副檔名並重新命名以防重複
+        $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+        $newFileName = time() . '_' . uniqid() . '.' . $ext;
+        $targetFile = $uploadDir . $newFileName;
+
+        if (move_uploaded_file($_FILES['avatar']['tmp_name'], $targetFile)) {
+            $avatarPath = $targetFile; // 存入資料庫的路徑
+        }
+    }
+
+    // 寫入資料庫
+    // SQL 欄位請依照你實際的資料庫調整，這裡假設有 avatar 欄位
+    $sql = "INSERT INTO member (email, `name`, `password`, `status`, headshot, createdate, updatetime, `role`) 
+            VALUES (?, ?, ?, ?, ?, NOW(), NOW(), 0)";
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$email, $name, $password, $status, $avatarPath]);
+
+    $newId = $pdo->lastInsertId();
+
+    // 5. 寄送開通通知信
+    $mailSent = false;
+    // 呼叫 sendGmail.php 裡的函式
+    if (sendPasswordEmail($email, $name, $password)) {
+        $mailSent = true;
+    }
+
+    // 6. 回傳成功訊息給前端
+    echo json_encode([
+        'success' => true,
+        'message' => '會員新增成功' . ($mailSent ? '，且已發送通知信' : '，但通知信發送失敗'),
+        'id' => $newId,
+        'mailSent' => $mailSent
+    ]);
+
+} catch (Exception $e) {
+    // 錯誤處理
+    http_response_code(400); // 或 500
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
 } catch (PDOException $e) {
-    echo "<h2 style='color:red'>資料庫錯誤: " . $e->getMessage() . "</h2>";
+    // 資料庫錯誤處理
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => '資料庫錯誤：' . $e->getMessage()
+    ]);
 }
 ?>

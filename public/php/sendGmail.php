@@ -26,7 +26,16 @@ function sendPasswordEmail($userEmail, $userName, $plainPassword) {
         $mail->Username   = 'michael4292015@gmail.com';         // Gmail
         $mail->Password   = 'fgso eohd iids dnuo';              // 應用程式密碼
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     
-        $mail->Port       = 587;                                
+        $mail->Port       = 587;
+        
+        // ★★★ 新增這段：解決 XAMPP 本機 SSL 憑證錯誤的問題 ★★★
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
 
         // --- 收件人設定 (使用傳進來的變數) ---
         $mail->setFrom('michael4292015@gmail.com', 'Michael 系統管理員'); // 寄件人

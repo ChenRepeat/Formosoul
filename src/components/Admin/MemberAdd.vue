@@ -82,7 +82,8 @@ const submitForm = async () => {
     const data = await response.json()
 
     if (data.success) {
-      ElMessage.success('會員新增成功！')
+    console.log('準備顯示訊息:', data.message)
+      ElMessage.success(data.message)
       goBack()
     } else {
       ElMessage.error(data.message || '新增失敗')
