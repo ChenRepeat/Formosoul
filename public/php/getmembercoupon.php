@@ -20,7 +20,8 @@
       LEFT JOIN game_coupon_rewards r ON r.coupons_id = uc.coupons_ID
       LEFT JOIN pointscard p ON p.pointscard_ID = uc.pointscard_ID
       LEFT JOIN coupons c ON c.coupons_ID = uc.coupons_ID
-      WHERE p.member_ID = :member_ID AND p.pointscard_ID = :pointscard_ID;
+      WHERE p.member_ID = :member_ID AND p.pointscard_ID = :pointscard_ID
+      ORDER BY c.enddate;
   ';
 
     $stmt = $pdo->prepare($sql);
