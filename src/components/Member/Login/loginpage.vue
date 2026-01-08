@@ -114,8 +114,7 @@
         border-radius: 8px;
         // padding: 40px;
         width: 70%;
-        height: 80vh;
-        margin: 0 auto;       
+        margin:  auto;       
         // box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         animation: slideUp 0.3s ease;
         // position: relative;
@@ -205,6 +204,12 @@
         width: 40px;
         cursor: pointer;
 
+    }
+    @media screen and (min-width: 1500px) {
+        .Logincontain{
+            height: 80vh;
+
+        }
     }
     @media screen and (min-width: 1400px) {
         .Logincontain{

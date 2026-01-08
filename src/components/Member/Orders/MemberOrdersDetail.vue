@@ -2,7 +2,7 @@
         <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
             <p>{{ order.order_number }}</p> 
             <p>{{ order.orderdate }}</p>
-            <p>{{ order.total }}</p>
+            <p>{{ order.total_amount }}</p>
             <p>{{ order.payment }}</p>
             <p>{{ order.statuscode }}</p>
             <p>{{ order.shippingcode }}</p>
@@ -82,7 +82,7 @@
                     const count = parseInt(subtotalInfo.subtotal)|| 0;
                     const discount = parseInt(couponInfo.discount) || 0;
                     const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
-
+                    console.log(realArray);
                     const finalTotal =  count + shippingFee - discount; 
                     emit('order-updated', order_response.success);
                     return {
