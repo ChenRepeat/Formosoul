@@ -9,6 +9,9 @@ import { onBeforeRouteLeave } from 'vue-router'
 import Backgroundaction from "@/components/backgroundaction.vue";
 import { useNewsData } from "@/stores/news";
 import ToTopBottom from "@/components/ToTopBottom.vue";
+import { useRoute } from 'vue-router'; 
+
+const route = useRoute();
 
 // 連接 php
 const baseUrl = import.meta.env.BASE_URL;
@@ -28,29 +31,22 @@ const lenis = ref(null); // Lenis 實例
 
 // 1. 視差漂浮卡片資料 (Parallax Items)
 const cards = ref ([])
-const cardsStyle = [
-  { top: "25%", left: "5%" },
-  { top: "32%", right: "8%" },
-  { top: "42%", left: "15%" },
-  { top: "48%", right: "25%" },
-  { top: "55%", left: "8%" },
-  { top: "62%", right: "5%" },
-  { top: "68%", left: "35%" },
-  { top: "75%", right: "15%" },
-  { top: "82%", left: "10%" },
-  { top: "85%", right: "30%" }
-]
 const randomCard=()=>{
   const cardLoop = (num)=>{
     for(let i = 0; i < num ; i++){
         const rs = Math.ceil(Math.random()*300) - 150;
         const rW = Math.ceil(Math.random()*120) + 280;
-        const rX = Math.ceil(Math.random()*60) - 40;
+        let rX = Math.ceil(Math.random()*20);
         const rY = Math.ceil(Math.random()*6);
+        if(i%2 == 0){
+          rX += 50;
+        }else{
+          rX = 30 - rX
+        }
         cards.value.push({
           id : i+1,
           src: `${ baseUrl }${ allNewsData.value[i].pic }`,
-          style: { width:`${rW}px`,height:`${rW}px`,top: `${rY+ 10 * i}%`, right: `${50+rX}%`},
+          style: { width:`${rW}px`,height:`${rW}px`,top: `${rY+ 10 * i}%`, right: `${rX}%`},
           speed: rs,
         })
       }
@@ -62,39 +58,51 @@ const randomCard=()=>{
   }
 }
 // 2. 最新消息資料
-onMounted(async () => {
-  await newsDataStore.get_newsinfo();
-  randomCard();
-  nextTick();
+// 定義 ticker 更新函式 (放在 setup 裡，onMounted 之外)，以便新增與移除時能指涉到同一個函式
+const updateLenis = (time) => {
+  if (lenis.value) {
+    lenis.value.raf(time * 1000); // 毫秒轉換
+  }
+};
 
-  // 初始化 Lenis
+onMounted(async () => {
+  // 1. 等待資料抓取完成
+  await newsDataStore.get_newsinfo();
+  
+  // 2. 產生卡片資料
+  randomCard();
+  
+  // 3. ★★★ 修正點：加上 await，確保 Vue 把卡片畫到畫面上 ★★★
+  await nextTick();
+
+  // 4. 初始化 Lenis
   lenis.value = new Lenis({
     duration: 1.5,
     smooth: true,
   });
 
-  // 處理重新整理的邏輯 (保留你原本寫的)
-  const navEntry = performance.getEntriesByType("navigation")[0];
-  if (navEntry && navEntry.type === 'reload') {
+  // 處理重新整理 (Reload)
+  if (route.hash) {
+    const target = document.querySelector(route.hash);
+    if (target) {
+      ScrollTrigger.refresh();
+      lenis.value.scrollTo(target, { offset: 0, immediate: false });
+    }
+  } 
+  else {
     window.scrollTo(0, 0);
     lenis.value.scrollTo(0, { immediate: true });
   }
-
-  // ★★★ 關鍵修正 1: 將 Lenis 的捲動事件通知 ScrollTrigger ★★★
-  // 這行讓 ScrollTrigger 知道 Lenis 正在捲動，從而更新 Pin 的位置
+  // 5. 連接 ScrollTrigger
   lenis.value.on('scroll', ScrollTrigger.update);
 
-  // ★★★ 關鍵修正 2: 使用 GSAP 的 Ticker 來驅動 Lenis ★★★
-  // 不要再用原本的 function raf() { requestAnimationFrame... }
-  // 改用這個寫法，確保動畫與捲動完全同步，解決底部卡死問題
-  gsap.ticker.add((time) => {
-    lenis.value.raf(time * 1000); // Lenis 需要毫秒
-  });
+  // 6. 加入 Ticker
+  gsap.ticker.add(updateLenis);
 
-  // ★★★ 關鍵修正 3: 關閉 GSAP 的延遲平滑化，避免計算不同步 ★★★
+  // 7. 關閉延遲平滑
   gsap.ticker.lagSmoothing(0);
 
-  // GSAP Context 設定 (保留你原本的邏輯)
+  // 8. 設定 GSAP 動畫 Context
   ctx.value = gsap.context(() => {
     ScrollTrigger.create({
       trigger: mainSection.value,
@@ -102,12 +110,16 @@ onMounted(async () => {
       end: "bottom bottom",
       pin: ".news-pin-target",
       pinSpacing: false,
-      // invalidateOnRefresh: true, // 建議加入這行，當視窗改變大小時重新計算
     });
 
+    // 這裡因為有 await nextTick()，所以現在抓得到 DOM 元素了
     const parallaxCards = document.querySelectorAll(".news-parallax-card");
+    
     parallaxCards.forEach((el) => {
-      const speed = parseFloat(el.getAttribute("data-speed"));
+      // 加上防呆，避免某些元素沒有 speed 屬性
+      const speedStr = el.getAttribute("data-speed");
+      const speed = speedStr ? parseFloat(speedStr) : 0; 
+      
       gsap.to(el, {
         y: speed,
         ease: "none",
@@ -124,11 +136,8 @@ onMounted(async () => {
   window.scrollTo({ top: 0, behavior: 'auto' });
 });
 
-
-// 2. ★★★ 加入這段安全煞車 ★★★
-// 這會在「按下連結，但還沒換頁」的那一瞬間執行
+// 路由離開攔截
 onBeforeRouteLeave((to, from, next) => {
-  // 立即殺死 Lenis，防止它在換頁過程中干擾卷軸位置
   if (lenis.value) {
     lenis.value.destroy(); 
     lenis.value = null;
@@ -136,10 +145,17 @@ onBeforeRouteLeave((to, from, next) => {
   next();
 });
 
+// 元件卸載清理
 onUnmounted(() => {
   if (ctx.value) ctx.value.revert();
-  if (lenis.value) lenis.value.destroy();
-  gsap.ticker.remove(lenis.value?.raf);
+  
+  // ★★★ 修正點：移除正確的函式 ★★★
+  gsap.ticker.remove(updateLenis);
+  
+  if (lenis.value) {
+    lenis.value.destroy();
+    lenis.value = null;
+  }
 });
 </script>
 
@@ -170,7 +186,7 @@ onUnmounted(() => {
     </section>
 
     <Backgroundaction></Backgroundaction>
-    <section class="news-updates-section">
+    <section class="news-updates-section" id="updates">
       
       <div class="news-updates-header">
         <h2 class="news-updates-title">UPDATES</h2>

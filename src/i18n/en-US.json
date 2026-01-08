@@ -45,7 +45,8 @@
     "sigh3":"Office of Academic Affairs."
   },
   "classes":{
-    "escTip":"Press Esc To Skip and Stop",
+    "escTip":"Press {keyin} To Skip and Stop",
+    "keyBoard":"ESC or SPACE",
 
     "motorClass":"Motorcycle",
     "motorIntro1Title":"Daily Life Essential",

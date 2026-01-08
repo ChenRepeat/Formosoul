@@ -61,8 +61,8 @@
     "sigh3":"謹啟"
   },
   "classes":{
-    "escTip":"按 ESC 跳過動畫並停留在當前頁面",
-
+    "escTip":"按 {keyin} 跳過動畫並停留在當前頁面",
+    "keyBoard":"ESC 或 空白鍵",
     "motorClass":"飛行學",
     "motorIntro1Title":"日常生活必需品",
     "motorIntro1text":"在台灣，機車很重要，提供快速又彈性的交通方式，穿梭繁忙街道。",
