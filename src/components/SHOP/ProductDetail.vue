@@ -292,7 +292,7 @@ const lang = computed( () => {
                         <p class="fw200">{{ showDetail[`description_${lang}`]}}</p>
                         <div class="share-icon">
                             <font-awesome-icon icon="fa-brands fa-square-facebook" @click="shareTo('facebook')" />
-                            <font-awesome-icon icon="fa-brands fa-line"  @click="shareTo('line')" />
+                            <font-awesome-icon icon="fa-brands fa-line" class="icon-line" @click="shareTo('line')" />
                         </div>
                     </div>
 
@@ -484,6 +484,12 @@ const lang = computed( () => {
         font-size: 2.8rem;
         display: inline-block;
         cursor: pointer;
+
+
+        & .icon-line{
+            font-size: 2.5rem;
+            margin-bottom: 1px;
+        }
     }
 
 }
