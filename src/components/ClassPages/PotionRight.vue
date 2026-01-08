@@ -4,6 +4,7 @@ import BasicButton from '../BasicButton.vue';
 import { gsap } from 'gsap/gsap-core';
 import { Draggable } from 'gsap/Draggable';
 import { potions } from '../ClassPages/potions'
+import { newPotions } from '../ClassPages/newPotions'
 
 
 //plugins
@@ -31,6 +32,7 @@ const container = ref(null);
 const initialRule = ('classes.potionRule')
 let containerWidth
 let containerHeight
+let potionAll = {}
 let selectList = []
 let correctList = []
 let resultIndex = null
@@ -77,7 +79,7 @@ let ingredientList = [
             imgUrl:'Classes/potions/recipeCoconut.png',
           },
 ]
-  // potions 外部引入 *他的物件名從1開始
+potionAll = {...potions, ...newPotions}
 
 //functions
 function shuffle(arr) {
@@ -152,18 +154,18 @@ const cook = () => {
     
   }else {
     hasContent.value = true
-    resultBigTitle.value = 'classes.potionBigTitle2'
+    resultBigTitle.value = 'classes.potionBigTitle2' // 鍋子燒壞警告
 
   }
   for(let i = 1; i<= 8 ; i++){
     if(!selectNum) return
-    let recipeNum = Object.values(potions[i].recipe).length 
+    let recipeNum = 0
+    if(i<=8) {recipeNum = Object.values(potions[i].recipe).length }
     // 統計各個食譜長度(有幾種原料)
     if(selectNum == recipeNum || selectNum - 1 == recipeNum){
       correctList.push(potions[i]) 
       // correctList == 符合數量的完整食譜// index 從 0 
-
-      // 擴充糖 先允許多一個食材的食譜先進到這邊
+      // 先擴充糖 允許多選一個食材的食譜先進到這邊 
     }
   }
   
@@ -176,7 +178,7 @@ const cook = () => {
     let isMatch = true
     for(let j = 0 ; j < selectList.length ; j++){ 
       if(!recipeName.includes(selectList[j]) && selectList[j] != 'suger') {
-        // 如果食譜不包含那個食材 那個食材又不是糖
+        // 如果多了食譜上沒有的糖 仍不要判定為失敗
         isMatch = false
         break} // 一次false 就進入下一圈判斷
     }
@@ -193,16 +195,18 @@ const cook = () => {
     resultTitle.value = correctList[resultIndex].name
     resultIntro.value = correctList[resultIndex].resultIntro
   }
-  
+
+
+
   // 4. (例外)不符合食譜神秘飲料區段 random 要給他五種
   else{
-    let index = Math.floor(Math.random()* 5 + 1)
-    console.log(index);
+    let index = Math.round(Math.random() + 1)
+    // index = 2 // 測試用
     
     // 圖片跟敘述還沒放好
-    resultImg.value = 'Classes/potions/potion8.png'
-    resultTitle.value = 'classes.potiongame.potionNameFail'
-    resultIntro.value = 'classes.potiongame.potionFail'
+    resultImg.value = `Classes/potions/secretPotion${index}.png` || 'Classes/potions/secretPotion1.png',
+    resultTitle.value = `classes.potiongame.secretPotionName${index}`
+    resultIntro.value = `classes.potiongame.secretPotion${index}`
 
   }
 }
@@ -398,6 +402,7 @@ onMounted(()=>{
     }
     &.potion-right-result-title{
       flex-grow: 1;
+      padding: 0 5%;
     }
     
   }
@@ -411,6 +416,7 @@ onMounted(()=>{
 
     .potion-right-result-img{
       width: 100%;
+
     }
   }
     .potion-right-result-intro{
@@ -418,7 +424,6 @@ onMounted(()=>{
       padding: 2% 10%;
       min-height: 11%;
       width: 100%;
-      text-align: center;
       flex-basis: 0;
       flex-grow: 2;
     }

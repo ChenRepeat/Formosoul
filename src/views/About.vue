@@ -389,9 +389,10 @@ onUnmounted(() => {
   }
   .portkey-section {
     position: relative; width: 100%; max-width: 1200px;
+    padding: 5%;
     margin: 0 auto 220px; min-height: 900px;
     display: flex; align-items: center;
-        position: relative;
+    position: relative;
     z-index: 15;
   }
 

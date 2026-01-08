@@ -33,7 +33,7 @@
                                 <div class="otherlogin-icon">
                                     <!-- <img :src="`${publicPath}member/googleicon.png`" alt="1"> -->
                                     <GoogleLogin @google-message="receiver"></GoogleLogin>
-                                    <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="LineLogin">
+                                    <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="lineLogin">
                                 </div>
                             </div>
                         </template>
@@ -71,10 +71,20 @@
     });
 
     const route = useRoute();
-    const LineLogin = () => {
-        localStorage.setItem('line_return_url', route.fullPath);
-        window.location.href = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=http%3A%2F%2Flocalhost%2FFormosoul%2Fpublic%2Fphp%2FlineLogin.php&state=12345&scope=profile%20openid%20email";
     
+    const lineLogin = () => {
+        localStorage.setItem('line_return_url', route.fullPath);
+
+        let redirectUrl = '';
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            redirectUrl = 'http://localhost/Formosoul/public/php/lineLogin.php';
+        } else {
+            redirectUrl = 'https://tibamef2e.com/tjd103/php/lineLogin.php';
+        }
+
+        const loginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=${encodeURIComponent(redirectUrl)}&state=12345&scope=profile%20openid%20email`;
+        
+        window.location.href = loginUrl;
     };
     const emitMessage=ref('')
     const receiver=(msg)=>{

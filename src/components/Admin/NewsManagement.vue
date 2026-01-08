@@ -164,7 +164,7 @@
       
       <el-table-column label="標題" prop="title_zh" min-width="200px"></el-table-column>
       
-      <el-table-column label="上稿日期" prop="createdate" width="180px" align="center">
+      <el-table-column label="建立日期" prop="createdate" width="180px" align="center">
       </el-table-column>
 
       <el-table-column label="狀態" prop="status" width="120px" align="center">

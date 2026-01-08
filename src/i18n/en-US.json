@@ -4,6 +4,7 @@
   "nav": {
     "home": "home",
     "news": "Daily Diviner",
+    "news2ndTitle":"Rhythms of inspiration from the Academy. Stay tuned to the mystic pulse.",
     "annualEvent":"Annual Event",
     "classes":"classes",
     "professor":"professor",
@@ -24,8 +25,8 @@
     "privacyPolicy":"privacy Policy",
     "welcome":"Hi, Welcome Back ~",
     "backPrepage":"Back to previous page",
-    "newsIntro":"I hereby pledge my malevolent intent to unseal the mechanisms of this Marauder’s parchment.",
-    "FormosoulCopyright":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class.\nThis platform is for learning and display purposes only.\nStudents are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.\nIf you have any concerns about copyright infringement, please send a private message to {link} for assistance.",
+    "newsIntro":"Gather the floating ink to reveal the guidance within.",
+    "FormosoulCopyright":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class.This platform is for learning and display purposes only.\nStudents are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.\nIf you have any concerns about copyright infringement, please send a private message to {link} for assistance.",
     "tibame":"Wiedu TibaMe"
   },
   "mail":{
@@ -202,8 +203,27 @@
     "potion7": "Refreshing green tea topped with a thick, savory, and lightly salted cream foam.", 
     "potionName8": "Winter Melon Drink with Nata de Coco", 
     "potion8": "Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).",
-    "potionNameFail": "Alchemy's Rebellious Phase",
-    "potionFail": "Blue energy and purple matter clash chaotically in the dark liquid. Drinking this takes immense courage... and a good doctor."
+    "potionName9": "Moonlit Dream Dew (Aiyu Jelly Winter Melon Green Tea)",
+    "potion9": "A fusion of the warmth of winter melon and the coolness of jade nectar, with smooth fairy jellies glimmering at the bottom. Drinking it calms the deepest restlessness of the soul, bringing tranquility like moonlight.",
+    "potionName10": "Psychic Shield Elixir (Lemon Green Tea with Coconut Jelly)",
+    "potion10": "The intense tartness of fanged fruits clashes with sobering green tea, added with chewy gifts from the seabed. This strong sensory shock instantly clears distracting thoughts and resists external mental interference.",
+    "potionName11": "Misty Forest Special (Milk Foam Grass Jelly Black Tea)",
+    "potion11": "Deep shadow leaves are covered with a thick layer of snowy milk cream, hiding immortal grass gels within like shadows in the forest. Legend says this potion guides lost travelers to sanctuary.",
+    "potionName12": "Philosopher's Stone Ink (Brown Sugar Pearl Green Tea)",
+    "potion12": "Pitch-black, mysterious dragon scale beads settle in jade nectar. This was the favorite drink of ancient alchemists during research, allowing thoughts to flow like a spring when writing magical tomes.",
+    "potionName13": "Swift Eye Capture Solution (Winter Melon Lemon with Pearls)",
+    "potion13": "A perfect magical balance of sweet and sour ratios, paired with resilient dragon scale beads. Drinking it briefly boosts dynamic vision, allowing precise tracking of fast-moving magical objects.",
+    "potionName14": "Elven Morning Breeze (Coconut Jelly Milk Green Tea)",
+    "potion14": "Pure milk dew perfectly fuses with jade nectar, added with transparent seabed stones. This potion radiates the fresh scent of a morning forest, as if placing you in an untrodden hidden realm.",
+    "potionName15": "Morning Star Warming Brew (Winter Melon Fresh Milk with Grass Jelly)",
+    "potion15": "A combination of warm winter melon sugars and pure milk dew, added with slippery immortal grass gels. The layered texture provides the warmest magical protection on cold winter nights.",
+    "potionName16": "Phantom Walker Special (Lemon Coconut Jelly Black Tea)",
+    "potion16": "Infusing explosive sourness and chewy elements into deep shadow leaves. This is a stamina recovery agent prepared for magical adventurers facing long treks.",
+
+    "secretPotionName1": "Dreamweaver's Delight",
+    "secretPotion1": "Don't let the dark look fool you; the 'yarn' is actually blue spun sugar and the mushroom is a gummy treat. This sparkling blueberry brew helps untangle messy thoughts and boosts creativity.",
+    "secretPotionName2": "Nebula Nectar",
+    "secretPotion2": "A mesmerizing swirl of galaxies and stardust captured in a glass. It tastes like sparkling blueberries and infinite possibilities, granting the drinker a moment of cosmic clarity."
     },
 
     "divinationTitle":"Divination",

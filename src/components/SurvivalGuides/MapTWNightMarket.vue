@@ -628,7 +628,9 @@ onUnmounted(() => {
   window.removeEventListener('scroll', updateZoomPosition)
 });
 
-
+defineExpose({
+  zoomIn,zoomOut
+});
 </script>
 
 <template>
@@ -710,15 +712,10 @@ onUnmounted(() => {
       </div> -->
     </div>
   </div>
-  <Teleport to="body">
-    <div class="global-zoom-control" 
-         :style="{ left: mapLeft + 'px', top: mapTop + 'px' }">
-      <button @click.stop.prevent="zoomIn" class="zoom-btn zoom-in">＋</button>
-      <button @click.stop.prevent="zoomOut" class="zoom-btn zoom-out">－</button>
-    </div>
-  </Teleport>
+
 </template>
 
+    <!-- :style="{ left: mapLeft + 'px', top: mapTop + 'px' }" -->
 
 
 <style scoped lang="scss">
@@ -726,49 +723,7 @@ onUnmounted(() => {
 // .custom-zoom-control { position: absolute; top: 20px; left: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; }
 // .zoom-btn { width: 40px; height: 40px; background: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.5rem; }
 
-.global-zoom-control {
-  position: fixed !important;
-  z-index: 999999 !important;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-  user-select: none;
-}
 
-.zoom-btn {
-  width: 48px !important;
-  height: 48px !important;
-  border: none !important;
-  border-radius: 50% !important;
-  font-size: 20px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-  pointer-events: all !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
-  backdrop-filter: blur(10px) !important;
-  transition: all 0.2s ease !important;
-  
-  /* 完全免疫所有動畫 */
-  transform: none !important;
-  filter: none !important;
-  will-change: auto !important;
-}
-
-.zoom-in {
-  background: linear-gradient(145deg, #667eea 0%, #764ba2 100%) !important;
-  color: white !important;
-}
-
-.zoom-out {
-  background: linear-gradient(145deg, #f093fb 0%, #f5576c 100%) !important;
-  color: white !important;
-}
-
-.zoom-btn:hover {
-  transform: scale(1.1) !important;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
-}
 
 
 /* 佈局設定 */

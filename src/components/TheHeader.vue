@@ -348,7 +348,7 @@ onUnmounted(() => {
   right:  0;
   z-index: 3000;
   transition: all 0.5s ease;
-  pointer-events: auto;
+  pointer-events: none;
   position: absolute;
 }
 

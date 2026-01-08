@@ -117,7 +117,17 @@ const csFrame = ref([
     },
 ])
 const welcomeFrame = computed(()=> csFrame.value[0])
-
+const nightMarketMap = ref(null);
+const zoomIn = () => {
+  if (nightMarketMap.value) {
+    nightMarketMap.value.zoomIn();
+  }
+};
+const zoomOut = () => {
+  if (nightMarketMap.value) {
+    nightMarketMap.value.zoomOut();
+  }
+};
 onMounted (()=>{
     window.addEventListener('keydown', handleKey);
     document.body.style.overflow = 'hidden';
@@ -246,8 +256,12 @@ function closeWelcomeFrame (){
                         <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
                         <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
                         <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
-                        <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" />
+                        <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" ref="nightMarketMap"/>
                     </div>
+                        <div class="global-zoom-control" v-if="activeGame == 'taiwan-map'">
+                            <button @click.stop.prevent="zoomIn" class="zoom-btn zoom-in">＋</button>
+                            <button @click.stop.prevent="zoomOut" class="zoom-btn zoom-out">－</button>
+                        </div>
                 </div>
             </div>
          </div>
@@ -930,7 +944,52 @@ function closeWelcomeFrame (){
 .nm-is-active {
     z-index: 998;
 }
+// 天氣按鈕
+.global-zoom-control {
+  position: absolute ;
+  z-index: 999 ;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  user-select: none;
+  bottom: 24px;
+  right: 24px;
+}
 
+.zoom-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  pointer-events: all !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.2s ease !important;
+  
+  /* 完全免疫所有動畫 */
+  transform: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+.zoom-in {
+  background: linear-gradient(145deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+.zoom-out {
+  background: linear-gradient(145deg, #f093fb 0%, #f5576c 100%) !important;
+  color: white !important;
+}
+
+.zoom-btn:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
+}
 
 
 // RWD 1200 

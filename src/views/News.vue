@@ -190,6 +190,7 @@ onUnmounted(() => {
       
       <div class="news-updates-header">
         <h2 class="news-updates-title">{{$t('nav.news')}}</h2>
+        <h6 class="news-updates-title">{{ $t('nav.news2ndTitle') }}</h6>
       </div>
 
       <div class="news-updates-grid">
@@ -337,7 +338,7 @@ onUnmounted(() => {
   text-transform: uppercase;
   color: #fff;
   line-height: 1;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 

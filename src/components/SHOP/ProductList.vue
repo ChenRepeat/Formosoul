@@ -4,6 +4,7 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useProductStore } from '@/stores/products';
 import TestProductCard from '@/components/TestProductCard.vue';
 import { log } from 'three';
+import ToTopBottom from '../ToTopBottom.vue';
 
 
 // 所有商品 ----------------------------------------
@@ -901,6 +902,8 @@ function pageMinus(){
 </script>
 
 <template>
+  <div class="shop-case">
+    <ToTopBottom />
     <!-- 麵包屑 -->
     <h6 class="page-guide">
         <span @click="productStore.typeBy='All'">{{ $t('productlist.all') }}</span>
@@ -1024,11 +1027,13 @@ function pageMinus(){
         <font-awesome-icon class="list-icon" icon="fa-solid fa-angle-right" @click="pageAdd()"/>
     </nav>
 
-
+  </div>
 </template>
 
 <style scoped lang="scss">
-
+.shop-case{
+  position: relative;
+}
 // 麵包屑
 .page-guide{
   padding-bottom: 60px;
