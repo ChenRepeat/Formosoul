@@ -134,7 +134,7 @@
 
 
       $_SESSION['member_ID'] = $user['member_ID'];
-      // $_SESSION['name']      = $user['name'];
+      $_SESSION['name']      = $user['name'];
       $_SESSION['email']     = $user['email'];
       $_SESSION['role']      = 0;
       $_SESSION['pointscard_ID'] = $user['pointscard_ID'];

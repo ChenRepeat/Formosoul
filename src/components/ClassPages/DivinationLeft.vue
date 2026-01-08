@@ -1,5 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { useclassesStore } from '@/stores/classes';
+import { computed, ref, watch } from 'vue';
+const useClass = useclassesStore()
   const showDialog = ref(1); 
   const dialogs = {
     1: {
@@ -18,12 +20,16 @@ import { computed, ref } from 'vue';
       imgUrl:'Classes/xinbue.png',
     },
   };
-    function changeDialog(i){
+  function changeDialog(i){
     showDialog.value = i;
   }
   const currentDialog = computed(() => {
     return dialogs[showDialog.value];
   });
+  watch(()=>useClass.bueResult,(newVal)=>{
+    changeDialog(newVal)
+  })
+  
 </script>
 
 <template>

@@ -1,29 +1,29 @@
 <template>
     <div class="detail" @click="activeIndex = 2">
-        <h3>Orders Detail</h3>
+        <h3>{{$t('member.OrdersDetail')}}</h3>
         <div class="detailbar">
-            <p>Orders Information</p>
+            <p>{{$t('member.OrdersInformation')}}</p>
             <!-- {{ $route.params.id }} -->
         </div>
         <div v-if="orderlang" class="orders-information notice">
-            <p>Order Number： <span>{{ orderlang.order_number }}</span></p>
-            <p>Order Date： {{ orderlang.orderdate }}</p>
-            <p>Order Status： {{ orderlang.statuscode }}</p>
-            <p>Recipient's Name： {{ orderlang.name_en }}</p>
-            <p>Delivery method： {{ orderlang.shippingcode }}</p>
-            <p>pieces： {{ orderlang.total_quantity }}</p>
-            <p>address： {{ orderlang.address_en }}</p>
-            <p>Remark： {{ orderlang.remark }}</p>
-            <p>* Notice *<br>To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.</p>
+            <p>{{$t('member.OrderNumber')}}： <span>{{ orderlang.order_number }}</span></p>
+            <p>{{$t('member.OrderDate')}}： {{ orderlang.orderdate }}</p>
+            <p>{{$t('member.OrderStatus')}}： {{ orderlang.statuscode }}</p>
+            <p>{{$t('member.RecipientName')}}： {{ orderlang.name_en }}</p>
+            <p>{{$t('member.DeliveryMethod')}}： {{ orderlang.shippingcode }}</p>
+            <p>{{$t('member.pieces')}}： {{ orderlang.total_quantity }}</p>
+            <p>{{$t('member.address')}}： {{ orderlang.address_en }}</p>
+            <p>{{$t('member.Remark')}}： {{ orderlang.remark }}</p>
+            <p>* {{$t('member.Notice')}} *<br>{{$t('member.ReturnNoticeText')}}</p>
         </div>
         <div class="detailbar">
-            <p>Payment Information</p>
+            <p>{{$t('member.PaymentInformation')}}</p>
         </div>
         <div v-if="orderlang" class="orders-information">
             <p>{{$t('shoppingcart.payment')}}： {{ orderlang.payment }}</p>
         </div>
         <div class="detailbar">
-            <p>Products Information</p>
+            <p>{{$t('member.ProductsInformation')}}</p>
         </div>
         <div v-for="product in productlist"  class="orders-product">
             <img :src="product.image" :alt="1">
@@ -39,7 +39,7 @@
         </div>
 
         <div class="back-to-member">
-            <router-link to="/member/orderslist"><basic-button class="btn-yellow-fill"><h6><font-awesome-icon icon="fa-solid fa-angle-left" /> Back to Query orders</h6></basic-button></router-link>
+            <router-link to="/member/orderslist"><basic-button class="btn-yellow-fill"><h6><font-awesome-icon icon="fa-solid fa-angle-left" />{{$t('member.backtoqueryorders')}}</h6></basic-button></router-link>
         </div>
     </div>
 </template>
@@ -97,13 +97,12 @@ import { useI18n } from 'vue-i18n';
             const totalQuantity = countArray.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = countArray.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const discountAmount = realArray.discount;
-            // console.log(totalQuantity);
             // console.log(totalPrice);
             // console.log(countArray);
             realArray.total_quantity = totalQuantity;
             countArray.totalPrice = totalPrice;
             countArray.discount = discountAmount;
-
+            countArray.total = realArray.total_amount;
             order.value = realArray;
             totallist.value = countArray;
 
@@ -120,12 +119,6 @@ import { useI18n } from 'vue-i18n';
             }
         }
         ).then( () => {
-            const subtotal = computed(() => {
-                const { discount, fee, totalPrice } = totallist.value;
-                return  fee + totalPrice - discount; 
-            });
-            totallist.value.total = subtotal.value;
-        }).then( () => {
             if(totallist.value.discount > 0){
                 totallist.value.discount = `-${totallist.value.discount}`;
             }else{
@@ -140,12 +133,12 @@ import { useI18n } from 'vue-i18n';
             zh: { 0: '已出貨', 1: '未出貨', 2: '已完成', 3: "已付款", 4: "付款失敗", 5: "等待付款" }
         };
         const shippingMapByLang = {
-            en: { '宅配': 'Delivery', '超商取貨': 'Pickup' },
-            zh: { '宅配': '宅配', '超商取貨': '超商取貨' }
+            en: { 'homeDelivery': 'Delivery', '超商取貨': 'Pickup' },
+            zh: { 'homeDelivery': '宅配', '超商取貨': '超商取貨' }
         };
         const paymentMapByLang = {
-            en: { 'Credit Card': 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB', 'Apple Pay': 'Apple Pay' },
-            zh: { 'Credit Card': '信用卡（全額支付）－VISA/ MASTER/ JCB', 'Apple Pay': 'Apple Pay' }
+            en: { 'creditCard': 'Credit Card (Pay in Full)－VISA/ MASTER/ JCB', 'applePay': 'Apple Pay' },
+            zh: { 'creditCard': '信用卡（全額支付）－VISA/ MASTER/ JCB', 'applePay': 'Apple Pay' }
         };
 
         const currentLang = lang.value;
@@ -182,9 +175,7 @@ import { useI18n } from 'vue-i18n';
             productlist.value = productArray.map((product, index) => {
                 const productInfo = productArray[index] || {};
                 const productid = productInfo.product_ID || 0;
-                const productprice = productInfo.price || 0;
-                const productpieces = productInfo.quantity || 0;
-                const product_total = productprice * productpieces;
+                const product_total = productInfo.price_sum;
                 const imglist = productInfo.image || {};
                 let  finalpath = '';
                 if(imglist.includes('|')){

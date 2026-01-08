@@ -130,7 +130,6 @@ import { useRoute } from 'vue-router';
                 const status = parseInt(couponInfo.status) || 0;
                 const enddate = couponInfo.end_date || 'N/A';
                 emit('coupon-updated', get_coupon_information.value);
-                
                 return{
                     ...coupon,
                     discount,
@@ -141,7 +140,28 @@ import { useRoute } from 'vue-router';
             })
         })
     };
+    function restore_coupon(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/modifycoupon.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser); 
+        const { pointscard_ID } = userData;
+
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                pointscard_ID
+            })
+        }
+        ).then( res => res.json())};
+        // 在更新依次狀態   
     // change_coupon 跟 handleCouponClick 是在結帳頁的時候才用的功能
+
     function change_coupon(coupon){
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -164,7 +184,6 @@ import { useRoute } from 'vue-router';
             })
         }
         ).then( res => res.json())};
-
     function handleCouponClick(coupon) {
         if (route.path.includes('/member/coupons')) {
             return;
@@ -180,6 +199,7 @@ import { useRoute } from 'vue-router';
         if(cartStore.coupon_ID == null && coupon.status == 3){
             change_coupon(coupon).then(result => {
             if (result.success) {
+                    get_coupon();
                     const storecouponID = result.data.coupons_ID
                     cartStore.coupon_ID  = storecouponID
                     coupon.status = 2; 
@@ -191,10 +211,12 @@ import { useRoute } from 'vue-router';
                     coupon.isTearing = false;
                 }
             });        
-        }else if(cartcoupon == coupon.coupons_ID && coupon.status == 1){
+        }else if(cartcoupon != coupon.coupons_ID && coupon.status == 3){
             change_coupon(coupon).then(result => {
             if (result.success) {
-                    cartStore.coupon_ID  = null;
+                    get_coupon();
+                    const storecouponID = result.data.coupons_ID
+                    cartStore.coupon_ID  = storecouponID
                     // console.log('變成1');
                     coupon.status = 2; 
                     setTimeout(() => {
@@ -204,10 +226,7 @@ import { useRoute } from 'vue-router';
                 }else {
                     coupon.isTearing = false;
                 }   
-            });   
-        }else if(cartcoupon != coupon.coupons_ID && coupon.status == 3){
-            alert('只能用一張');
-            coupon.isTearing = false;     
+            });      
         }else{
             coupon.isTearing = false;
         }
@@ -224,7 +243,15 @@ import { useRoute } from 'vue-router';
         //     }
     onMounted(() => {
         get_coupon();
-
+        if (route.path.includes('/member/coupons')) {
+            restore_coupon().then( r => {
+                get_coupon();
+            });
+            cartStore.coupon_ID = null;
+            cartStore.discount = 0;
+            return;
+        }
+    
     });
 </script>
 

@@ -6,7 +6,9 @@
   $sql = '
     SELECT 
       annalevent_ID, title_zh, title_en, pic, content_zh, content_en, content_summary_zh, content_summary_en, video, launchdate, status
-    FROM annalevent 
+    FROM annalevent
+    WHERE launchdate > CURDATE()
+    ORDER BY launchdate ASC
   ';
 
     $stmt = $pdo->prepare($sql);

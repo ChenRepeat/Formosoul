@@ -10,6 +10,7 @@ export const nightMarketInfo = [
     lng: 121.5241,
     cityName: "臺北市",      // 用來縮小查詢範圍
     locationName: "士林區", // 用來對應氣象局 API
+    region: "North"
   },
   {
     name: "饒河街觀光夜市",
@@ -22,6 +23,7 @@ export const nightMarketInfo = [
     lng: 121.5777,
     cityName: "臺北市",      
     locationName: "松山區",
+    region: "North"
   },
   {
     name: "寧夏觀光夜市",
@@ -34,6 +36,7 @@ export const nightMarketInfo = [
     lng: 121.5153,
     cityName: "臺北市",      
     locationName: "大同區",
+    region: "North"
   },
   {
     name: "臨江街夜市 (通化)",
@@ -46,6 +49,7 @@ export const nightMarketInfo = [
     lng: 121.5543,
     cityName: "臺北市",      
     locationName: "大安區",
+    region: "North"
   },
   {
     name: "南機場夜市",
@@ -58,6 +62,7 @@ export const nightMarketInfo = [
     lng: 121.5052,
     cityName: "臺北市",      
     locationName: "中正區",
+    region: "North"
   },
   {
     name: "台中逢甲夜市",
@@ -70,6 +75,7 @@ export const nightMarketInfo = [
     lng: 120.645,
     cityName: "臺中市",      
     locationName: "西屯區",
+    region: "Central"
   },
   {
     name: "花蓮東大門夜市",
@@ -82,6 +88,7 @@ export const nightMarketInfo = [
     lng: 121.6115,
     cityName: "花蓮縣",      
     locationName: "花蓮市",
+    region: "East",
   },
   {
     name: "高雄瑞豐夜市",
@@ -94,6 +101,7 @@ export const nightMarketInfo = [
     lng: 120.2998,
     cityName: "高雄市",      
     locationName: "鼓山區",
+    region: "South",
   },
   {
     name: "台中旱溪夜市",
@@ -106,6 +114,7 @@ export const nightMarketInfo = [
     lng: 120.7013,
     cityName: "臺中市",      
     locationName: "東區",
+    region: "Central"
   },
   {
     name: "嘉義文化路夜市",
@@ -118,6 +127,7 @@ export const nightMarketInfo = [
     lng: 120.4497,
     cityName: "嘉義市",      
     locationName: "東區",
+    region: "South",
   },
   {
     name: "台南花園夜市",
@@ -130,6 +140,7 @@ export const nightMarketInfo = [
     lng: 120.1997,
     cityName: "臺南市",      
     locationName: "北區",
+    region: "South",
   },
   {
     name: "台南大東夜市",
@@ -142,6 +153,7 @@ export const nightMarketInfo = [
     lng: 120.2223,
     cityName: "臺南市",      
     locationName: "東區",
+    region: "South",
   },
   {
     name: "高雄六合夜市",
@@ -154,6 +166,7 @@ export const nightMarketInfo = [
     lng: 120.3016,
     cityName: "高雄市",      
     locationName: "新興區",
+    region: "South",
   },
   {
     name: "屏東墾丁大街",
@@ -166,5 +179,6 @@ export const nightMarketInfo = [
     lng: 120.7971,
     cityName: "屏東縣",      
     locationName: "恆春鎮",
+    region: "South",
   }
 ];

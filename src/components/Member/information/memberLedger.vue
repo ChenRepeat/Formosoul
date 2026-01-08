@@ -25,9 +25,6 @@ const props = defineProps({
 });
 
 
-function rewards_coupon(){
-
-};
 // 內部狀態（會員中心使用）
 const internalPointsStatus = ref({
     dice: 0, 
@@ -160,7 +157,8 @@ onMounted(async () => {
   }
 .ledger-container {
   position: relative;
-  width: 480px; 
+  width: 100%;
+  max-width: 480px; 
   height: auto;
   overflow: hidden;
   border-radius: 10px;
@@ -194,8 +192,9 @@ onMounted(async () => {
     font-weight: bold;
     max-width: fit-content;
     margin: 0 auto;
+    border: 2px solid $color-fsWhite;
     &.unlogbtn{
-      color:$color-fsCaption;
+      color:$color-fsWhite;
       background-color: $color-fsContent;
     }
 }

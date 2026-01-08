@@ -3,7 +3,7 @@
 
   "nav": {
     "home": "home",
-    "news": "news",
+    "news": "Daily Diviner",
     "annualEvent":"Annual Event",
     "classes":"classes",
     "professor":"professor",
@@ -24,14 +24,29 @@
     "privacyPolicy":"privacy Policy",
     "welcome":"Hi, Welcome Back ~",
     "backPrepage":"Back to previous page",
-    "newsIntro":"I hereby pledge my malevolent intent to unseal the clandestine mechanisms of this Marauder’s parchment.",
-    "FormosoulCopyright1":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class. This platform is for learning and display purposes only.",
-    "FormosoulCopyright2":"Students are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.If you have any concerns about copyright infringement, please send a private message to [ ",
-    "FormosoulCopyright3":"Wiedu TibaMe",
-    "FormosoulCopyright4":" ] for assistance."
+    "newsIntro":"I hereby pledge my malevolent intent to unseal the mechanisms of this Marauder’s parchment.",
+    "FormosoulCopyright":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class.\nThis platform is for learning and display purposes only.\nStudents are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.\nIf you have any concerns about copyright infringement, please send a private message to {link} for assistance.",
+    "tibame":"Wiedu TibaMe"
+  },
+  "mail":{
+    "title1":"Formosoul Institute of Magic",
+    "title2":"Admission Notice",
+    "auditBtn":"Audit the academy",
+    "entranceBtn":"Entrance ceremony",
+    "body":[
+      "Dear Prospective International Student,",
+      "You are about to step into this magical academy, hidden within the alleys of Taiwan, as an 'Auditing Student' or 'International Student.' From this moment on, you will explore the daily life and magical wonders of Taiwan from the perspective of a visiting student.",
+      "The Academy has prepared six special courses and six interactive mini-games, guiding you to discover temples, night markets, local cuisine, and folk culture.",
+      "These games are scattered throughout different corners of the campus, waiting for you to find them. Successfully complete all the interactive games to graduate and receive a discount coupon from the Taiwan Magical Marketplace.",
+      "You may first explore the campus as an auditing student; after completing the games, if you wish to accumulate credits and save your progress, you can register at any time to receive your magical student ID."
+    ],
+    "sigh1":"Sincerely,",
+    "sigh2":"Formosoul Institute of Magic",
+    "sigh3":"Office of Academic Affairs."
   },
   "classes":{
-    "escTip":"Press Esc To Skip and Stop",
+    "escTip":"Press {keyin} To Skip and Stop",
+    "keyBoard":"ESC or SPACE",
 
     "motorClass":"Motorcycle",
     "motorIntro1Title":"Daily Life Essential",
@@ -343,7 +358,10 @@
     "orderDate":"Date",
     "orderNO":"Number",
     "cartEmpty":"Your cart is currently empty.",
-    "couponuse":"Apply Coupon"
+    "couponuse":"Apply Coupon",
+    "couponNouse":"Cancel",
+    "couponTips":"Just a heads up: You can cover up to 90% of your total with coupons!"
+
 
   },
   "coreselection":{
@@ -495,12 +513,12 @@
         "rule5":"3. How Points are Awarded : ",
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
-        "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
-        },
+        "rule8":"Advanced Mana Potions (3rd Row) : 300 Points",
         "gameOver":"GAME OVER",
-        "congradulations":"Congradulations",
+  "congradulations":"Congradulations",
         "playAgain": "PLAY AGAIN",
         "checkLedger": "CHECK YOUR LEDGER"
+      }
       }
     },
   "conveniencestore":{
@@ -558,7 +576,23 @@
     "howToUseInfoText":"Once you accumulate the required amount of points in your Ledger, you may visit the Redemption Counter to exchange your points for exclusive magical rewards and perks, such as limited-edition items or special features!",
     "cardText":"Every action counts toward the House Cup!",
     "backToMemberCard":"Back To Enrollment Card",
-    "closeLedger":"CLOSE LEDGER"
+    "closeLedger":"CLOSE LEDGER",
+    "OrdersDetail": "OrdersDetail",
+    "OrdersInformation": "OrdersInformation",
+    "OrderNumber": "OrderNumber",
+    "OrderDate": "OrderDate",
+    "OrderStatus": "OrderStatus",
+    "RecipientName": "RecipientName",
+    "DeliveryMethod": "DeliveryMethod",
+    "pieces": "pieces",
+    "address": "address",
+    "Remark": "Remark",
+    "Notice": "Notice",
+    "ReturnNoticeText": "To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.",
+    "PaymentInformation": "PaymentInformation",
+    "ProductsInformation": "ProductsInformation",
+    "backtoqueryorders": "Back to Query orders",
+    "check": "check"
   },
   "about":{
     "aboutTitle":"About",

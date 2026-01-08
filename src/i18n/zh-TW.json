@@ -3,7 +3,7 @@
   "common":{},
   "nav": {
     "home": "首頁",
-    "news": "最新消息",
+    "news": "福靈日報",
     "annualEvent":"年度盛事",
     "classes":"課程表",
     "professor":"教授介紹",
@@ -25,10 +25,8 @@
     "welcome":"嗨 ~ 歡迎回來 ~",
     "backPrepage":"回到上一頁",
     "newsIntro":"我特此宣誓我那隱秘的不軌企圖，以開啟這份「劫盜地圖」中深奧的機關。",
-    "FormosoulCopyright1":"本網站為緯育TibaMe_前端工程師班第97期學員專題成果作品，本平台僅供學習、展示之用。",
-    "FormosoulCopyright2":"若有抵觸有關著作權，或有第三人主張侵害智慧財產權等情事，均由學員負法律上責任，緯育公司概不負責。若有侵權疑慮，您可以私訊「",
-    "FormosoulCopyright3":"緯育TibaMe",
-    "FormosoulCopyright4":"」，後續會由專人協助處理。"
+    "FormosoulCopyright":"本網站為緯育TibaMe_前端工程師班第97期學員專題成果作品，本平台僅供學習、展示之用。\n若有抵觸有關著作權，或有第三人主張侵害智慧財產權等情事，均由學員負法律上責任，緯育公司概不負責。\n若有侵權疑慮，您可以私訊「{link}」，後續會由專人協助處理。",
+    "tibame":"緯育TibaMe"
   },
   "login":{
     "accept": "接受條款並入學",
@@ -45,9 +43,26 @@
     "lengthPW": "請輸入一個長度為 8 到 16 個字元的字串，其中包含大寫字母、小寫字母和數字。",
     "resetPW":"看起來您的記憶被「遺忘咒」干擾了！不用擔心，要重鑄您的登入咒語只需要幾個簡單的步驟。請在下方輸入您註冊的電子郵件信箱，我們將派遣一隻信使貓頭鷹，將重設密碼的連結送給您。"
   },
+  "mail":{
+    "title1":"Formosoul 魔法學院",
+    "title2":"入學通知",
+    "auditBtn":"先探索學院",
+    "entranceBtn":"入學儀式",
+    "body":[
+      "親愛的準留學生：",
+      "你即將以「旁聽生」或「留學生」的身份，踏入這座隱藏在台灣巷弄的魔法學院。",
+      "從這一刻起，你將以海外來訪的學生視角，探索台灣的日常生活與魔法。",
+      "學院已為你準備六門特別課程及六項互動小遊戲，帶你認識廟宇、夜市、飲食與民俗文化。",
+      "而這些遊戲將分布在校園不同角落，待你一一發掘。",
+      "你可以先以旁聽生身份參觀校園；通過遊戲後，若想累積學分並保存學習進度，可隨時註冊入學，獲取魔法學生證。"
+    ],
+    "sigh1":"台灣魔法學院 - Formosoul",
+    "sigh2":"教務處",
+    "sigh3":"謹啟"
+  },
   "classes":{
-    "escTip":"按 ESC 跳過動畫並停留在當前頁面",
-
+    "escTip":"按 {keyin} 跳過動畫並停留在當前頁面",
+    "keyBoard":"ESC 或 空白鍵",
     "motorClass":"飛行學",
     "motorIntro1Title":"日常生活必需品",
     "motorIntro1text":"在台灣，機車很重要，提供快速又彈性的交通方式，穿梭繁忙街道。",
@@ -362,7 +377,10 @@
     "orderDate":"訂購日期",
     "orderNO":"訂單編號",
     "cartEmpty":"購物車目前沒有商品",
-    "couponuse":"套用折價券"
+    "couponuse":"套用優惠券",
+    "couponNouse":"取消使用",
+    "couponTips":"貼心提醒：優惠券最高可幫您省下 90% 的費用喔！"
+
   },
   "coreselection":{
     "thecoreselection": "喚醒魔杖之心",
@@ -576,7 +594,23 @@
     "howToUseInfoText":"一旦您在登記冊中累積了所需的積分，您可以前往兌換櫃台，將您的積分兌換成獨家魔法獎勵和特權，例如限量物品或特殊功能！",
     "cardText":"每個行動都計入學院盃！",
     "backToMemberCard":"回到學生證",
-    "closeLedger":"收起集點卡"
+    "closeLedger":"收起集點卡",
+    "OrdersDetail": "訂單詳情",
+    "OrdersInformation": "訂單資訊",
+    "OrderNumber": "訂單編號",
+    "OrderDate": "訂單日期",
+    "OrderStatus": "訂單狀態",
+    "RecipientName": "收件人姓名",
+    "DeliveryMethod": "配送方式",
+    "pieces": "件數",
+    "address": "地址",
+    "Remark": "備註",
+    "Notice": "注意事項",
+    "ReturnNoticeText": "如欲申請退貨，請於 7 天鑑賞期內發送電子郵件至我們的客服信箱。更多詳細資訊請參閱我們的退換貨政策。",
+    "PaymentInformation": "付款資訊",
+    "ProductsInformation": "商品資訊",
+    "backtoqueryorders": "回到訂單列表",
+    "check": "查看"
 
   },
   "about":{

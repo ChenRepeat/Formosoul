@@ -42,6 +42,7 @@ const checkGamePass = () => {
     
     // ← 只有第一次過關才播放動畫！
     if (isFirstPass) {
+      memberStore.rewards_coupon();
       console.log('[動畫] 第一次過關，播放蓋章動畫');
       setTimeout(() => {
         activeTriggers.value.ringtoss = true;
@@ -62,7 +63,7 @@ const checkGamePass = () => {
 
   // 物件設定
   const config = {
-    startRings:3,      // 圈圈數
+    startRings:10,      // 圈圈數
     ringRadius: 50,     // 圈圈半徑
     targetRadius: 50,   // 物件半徑
     objWidth: 110,      // 物件寬

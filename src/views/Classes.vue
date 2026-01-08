@@ -5,7 +5,15 @@
     <div v-if="isAnimating" class="blocking-overlay" 
     :class="{ 
         'unload': !isLoad 
-      }"><h4 v-if="isIntroPlaying">{{$t('classes.escTip')}}</h4></div>
+      }">
+      <h4 v-if="isIntroPlaying">
+        <i18n-t keypath="classes.escTip" tag="span">
+          <template #keyin>
+            <span class="bright-text">{{ $t('classes.keyBoard')}}</span>
+          </template>
+        </i18n-t>
+      </h4>
+    </div>
     <div 
       class="book" 
       ref="bookRef"
@@ -253,7 +261,7 @@ const cleanupResize = () => {
 };
 
 const handleKeydown = (event) => {
-  if (event.key === 'Escape' && isIntroPlaying.value) {
+  if ((event.key === 'Escape' || event.code === 'Space') && isIntroPlaying.value) {
     console.log('Intro animation interrupted by Esc key.');
     cleanupAnimation();
     
@@ -531,7 +539,7 @@ onUnmounted(() => {
 .book-section {
   width: 100vw; 
   height: 100vh;
-  height: auto;
+  // height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -584,11 +592,6 @@ onUnmounted(() => {
   transition: none; 
   transform-style: preserve-3d;
   border-radius: 0 16px 16px 0;
-  // box-shadow:
-  //  6px 1px 20px $color-fsWhite,
-  //  6px 1px 20px $color-fsGold300,
-  //  12px -3px 20px $color-fsWhite,
-  //  12px -3px 6px $color-fsGold300;
   opacity: 1;
 }
 
@@ -599,7 +602,6 @@ onUnmounted(() => {
   left: 0; 
   width: 100%; 
   height: 100%;
-  // background-image: url('https://www.transparenttextures.com/patterns/paper.png');
   opacity: 0.4;
   pointer-events: none;
 }
@@ -652,7 +654,6 @@ onUnmounted(() => {
 img { 
   max-width: 100%; 
   border-radius: 4px; 
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
 }
 
 :deep(.stf__item.--cursor) {
@@ -672,5 +673,7 @@ $high-layer-pages: 4, 6, 9, 12;
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
-
+.bright-text{
+  color: $color-fsGold;
+}
 </style>

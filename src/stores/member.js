@@ -50,6 +50,25 @@ export const useMemberStore = defineStore('member', () => {
         ring: { count: 0, score: 0, pass: 0 },
         shrimp: { count: 0, score: 0, pass: 0 },
     });
+
+    // 獲取優惠券
+    function rewards_coupon(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/game_coupon.php`;
+        if(!storedUser) return;
+        const { pointscard_ID } = JSON.parse(storedUser);
+
+        return fetch( API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                pointscard_ID
+            })
+        }).then( res => res.json())
+    };
     const loadMemberData = async () => {
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -305,5 +324,6 @@ export const useMemberStore = defineStore('member', () => {
         gameData,
         pointsStatus,
         stampOnepoint,
+        rewards_coupon,
     };
 });

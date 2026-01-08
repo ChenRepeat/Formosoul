@@ -2,15 +2,12 @@
 require 'conn.php';
 
 try {
-    // 1. 檢查必要欄位：除了標題與日期，編輯時絕對需要 'newsID'
     if (empty($_POST['newsID']) || empty($_POST['title_zh']) || empty($_POST['createdate'])) {
         throw new Exception('缺少必要欄位 (newsID, 標題或日期)');
     }
 
     $newsID = $_POST['newsID'];
 
-    // 2. 準備更新文字資料的 SQL
-    // 注意：這裡先不更新 pic (圖片)，因為使用者可能不想換圖
     $sql = "UPDATE news SET 
             title_zh = ?, 
             title_en = ?,
