@@ -18,7 +18,7 @@
                     </div>
                     <div class="pagecontain">
                         <div class="pagetop">
-                            <Logincontain v-if="authStore.loginView == 'loginpage'"></Logincontain>
+                            <Logincontain v-if="authStore.loginView == 'loginpage'" :google-message="emitMessage"></Logincontain>
                             <Enrollment v-else-if="authStore.loginView == 'enrollment'"></Enrollment>
                             <Forgetpassword v-else-if="authStore.loginView == 'forgetpassword'"></Forgetpassword>
                             <Loginchangepassword v-else-if="authStore.loginView == 'loginchangepassword'"></Loginchangepassword>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="otherlogin-icon">
                                     <!-- <img :src="`${publicPath}member/googleicon.png`" alt="1"> -->
-                                    <GoogleLogin ></GoogleLogin>
+                                    <GoogleLogin @google-message="receiver"></GoogleLogin>
                                     <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="LineLogin">
                                 </div>
                             </div>
@@ -76,6 +76,11 @@
         window.location.href = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=http%3A%2F%2Flocalhost%2FFormosoul%2Fpublic%2Fphp%2FlineLogin.php&state=12345&scope=profile%20openid%20email";
     
     };
+    const emitMessage=ref('')
+    const receiver=(msg)=>{
+        emitMessage.value = msg
+        // props('googleMessage',msg)
+    }
 </script>
 
 <style lang="scss" scoped>
