@@ -7,7 +7,7 @@
 
   $stmt = $pdo->prepare($sql);
   $stmt->execute();
-  $rows = $stmt->fetchAll();
+  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($rows);
 
