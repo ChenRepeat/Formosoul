@@ -251,7 +251,8 @@ import { useRoute } from 'vue-router';
             cartStore.discount = 0;
             return;
         }
-    
+
+
     });
 </script>
 
