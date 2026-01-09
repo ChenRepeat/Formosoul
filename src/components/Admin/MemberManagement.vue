@@ -90,7 +90,7 @@
       </el-table-column>
       <el-table-column label="權限" width="90px" prop="role">
         <template #default="scope">
-          <span v-if="scope.row.role === 1">
+          <span v-if="scope.row.role == 1">
             管理者
           </span>
           <span v-else>
@@ -100,7 +100,7 @@
       </el-table-column>
       <el-table-column label="會員狀態" width="90px" prop="status">
         <template #default="scope">
-          <span v-if="scope.row.status === 1">
+          <span v-if="scope.row.status == 1">
             啟用
           </span>
           <span v-else style="color:red;">
