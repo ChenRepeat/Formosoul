@@ -202,7 +202,7 @@ const cook = () => {
   // 4. (例外)不符合食譜神秘飲料區段 random 有3種
   else{
     let index = Math.floor(Math.random() * 3 + 1)
-    index = 1
+
     // resultImg.value = potionAll[index].imgUrl // 測試用
     // resultTitle.value = potionAll[index].name
     // resultIntro.value = potionAll[index].resultIntro

@@ -49,6 +49,7 @@ function handleCredential(response) { // 取需要的 JWT Json Web Token
       if(resData.user.isFirstLogin){ // 是否初次登入
 
         // console.log('as new member');
+        authStore.closeLoginModal()
         
       }else{
         // console.log('走舊會員區段');
