@@ -142,7 +142,7 @@
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品更多視角 (最多 4 張)</span>
-                    <span class="hint">建議 800x800px, 可拖曳排序</span>
+                    <span class="hint">建議 800x800px</span>
                   </div>
                   <el-upload
                     v-model:file-list="subImages"

@@ -23,11 +23,11 @@
           <div class="content-card">       
             <el-row :gutter="40">
               <el-col :span="14">
-              <el-form-item label="標題(中文)" required>
-                <el-input v-model="addNewsForm.title_zh" placeholder="請輸入中文標題" />
-              </el-form-item>
-                
-              <el-form-item label="Title(EN)" required>
+                <el-form-item label="標題(中文)" required>
+                  <el-input v-model="addNewsForm.title_zh" placeholder="請輸入中文標題" />
+                </el-form-item>
+                  
+                <el-form-item label="Title(EN)" required>
                   <el-input v-model="addNewsForm.title_en" placeholder="Enter English title" />
                 </el-form-item>
 
@@ -55,20 +55,22 @@
                     </el-radio>
                   </el-radio-group>
                 </el-form-item>
-
               </el-col>
 
               <el-col :span="10">
                 <el-form-item label="封面照">
-                  <div class="upload-box" @click="triggerFileInput">
-                    <input 
-                      type="file" 
-                      ref="fileInputRef" 
-                      class="hidden-input" 
-                      accept="image/*"
-                      @change="handleImageChange"
-                    >
-                    
+                  <el-upload
+                    ref="uploadRef"
+                    class="news-uploader"
+                    drag
+                    action="#"
+                    :auto-upload="false"
+                    :show-file-list="false"
+                    :limit="1"
+                    :on-exceed="handleExceed"
+                    :on-change="handleFileChange"
+                    accept="image/*"
+                  >
                     <div v-if="previewImage" class="preview-container">
                       <img :src="previewImage" class="preview-img" />
                       <div class="overlay">
@@ -81,7 +83,7 @@
                       <div class="upload-text">點擊或拖曳圖片至此</div>
                       <div class="upload-hint">建議尺寸 1200*1200 px<br>檔案大小 ≤ 1MB</div>
                     </div>
-                  </div>
+                  </el-upload>
                 </el-form-item>
               </el-col>
 
@@ -133,16 +135,15 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeft, Plus } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-import ListLayout from './ListLayout.vue' // 確認路徑
+import { ElMessage, genFileId } from 'element-plus'
+import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
 const loading = ref(false)
-const fileInputRef = ref(null) // 綁定隱藏的 file input
-const previewImage = ref(null) // 圖片預覽網址
-const selectedFile = ref(null) // 實際要上傳的檔案物件
+const uploadRef = ref(null)
+const previewImage = ref(null)
+const selectedFile = ref(null)
 
-// 表單資料模型
 const addNewsForm = reactive({
   title_zh: '',
   title_en: '',
@@ -152,38 +153,40 @@ const addNewsForm = reactive({
   content_en: ''
 })
 
-// 返回列表
 const goBack = () => {
   router.push({ name: 'NewsManagement' })
 }
 
-// 觸發檔案選擇視窗
-const triggerFileInput = () => {
-  fileInputRef.value.click()
+const handleExceed = (files) => {
+  uploadRef.value.clearFiles()
+  const file = files[0]
+  file.uid = genFileId()
+  uploadRef.value.handleStart(file)
 }
 
-// 處理圖片選擇與預覽
-const handleImageChange = (event) => {
-  const file = event.target.files[0]
+const handleFileChange = (uploadFile) => {
+  const file = uploadFile.raw
   if (!file) return
 
-  // 驗證檔案大小 (例如限制 1MB)
   if (file.size > 1024 * 1024) {
     ElMessage.warning('圖片檔案大小不能超過 1MB')
+    uploadRef.value.clearFiles()
+    return
+  }
+
+  if (!file.type.startsWith('image/')) {
+    ElMessage.warning('請上傳圖片格式')
+    uploadRef.value.clearFiles()
     return
   }
 
   selectedFile.value = file
-  
-  // 建立預覽網址
   previewImage.value = URL.createObjectURL(file)
 }
 
-// 送出表單
 const submitForm = async () => {
   loading.value = true
   
-  // 驗證必填欄位
   if(!addNewsForm.title_zh || !addNewsForm.createdate) {
       ElMessage.warning('請填寫標題與上稿日期')
       loading.value = false
@@ -193,9 +196,7 @@ const submitForm = async () => {
   const apiBase = import.meta.env.VITE_API_BASE
   const API_URL = `${apiBase}/addNews.php` 
 
-  // 使用 FormData 傳送 (包含文字與檔案)
   const fd = new FormData()
-  
   fd.append('title_zh', addNewsForm.title_zh)
   fd.append('title_en', addNewsForm.title_en)
   fd.append('createdate', addNewsForm.createdate)
@@ -203,9 +204,8 @@ const submitForm = async () => {
   fd.append('content_zh', addNewsForm.content)
   fd.append('content_en', addNewsForm.content_en)
   
-  // 如果有選擇圖片，才加入圖片欄位
   if (selectedFile.value) {
-    fd.append('pic', selectedFile.value) // 對應 PHP $_FILES['image']
+    fd.append('pic', selectedFile.value)
   }
 
   try {
@@ -240,19 +240,17 @@ const submitForm = async () => {
 }
 
 .form-container {
-  max-width: 1000px; /* 因為有左右欄，寬一點比較好看 */
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .content-card {
   background: #fff;
   border-radius: 8px;
-  /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05); */
-  padding: 10px; /* 稍微留白 */
+  padding: 10px;
   margin-bottom: 24px;
 }
 
-/* 狀態 Radio 樣式 */
 .radio-content {
   display: flex;
   align-items: center;
@@ -266,7 +264,6 @@ const submitForm = async () => {
 .status-dot.active { background-color: #67C23A; }
 .status-dot.inactive { background-color: #909399; }
 
-/* 底部按鈕區 */
 .footer-actions {
   display: flex;
   justify-content: center;
@@ -294,33 +291,49 @@ const submitForm = async () => {
   width: 120px;
 }
 
-/* === 圖片上傳區塊樣式 (參考截圖) === */
-.upload-box {
+/* === ★★★ 修正部分：確保 upload 填滿寬度 ★★★ === */
+
+/* 1. 確保 el-upload 元件本身是 block 且寬度 100% */
+.news-uploader {
   width: 100%;
-  height: 350px; /* 固定高度，依照截圖大概長寬比 */
-  border: 1px dashed #dcdfe6;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s;
-  background-color: #fafafa;
+  display: block;
+}
+
+/* 2. 確保 el-upload 內部的容器也是 block 且寬度 100% */
+.news-uploader :deep(.el-upload) {
+  width: 100%;
+  display: block; 
+}
+
+/* 3. 設定拖曳區域樣式 */
+.news-uploader :deep(.el-upload-dragger) {
+  width: 100%;       /* 填滿父容器 */
+  height: 350px;     /* 固定高度 */
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &:hover {
-    border-color: #409eff;
-  }
+  background-color: #fafafa;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+  padding: 0;        /* 清除預設 padding */
+  border: 1px dashed #dcdfe6;
 }
 
-.hidden-input {
-  display: none;
+.news-uploader :deep(.el-upload-dragger:hover) {
+  border-color: #409eff;
+  background-color: #f0f7ff;
 }
 
+/* 內容排版 */
 .upload-placeholder {
   text-align: center;
   color: #909399;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .upload-icon {
@@ -344,12 +357,16 @@ const submitForm = async () => {
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 防止圖片溢出 */
 }
 
 .preview-img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* 保持比例顯示，或是用 cover 填滿 */
+  object-fit: contain; /* 保持比例 */
   display: block;
 }
 
@@ -367,9 +384,10 @@ const submitForm = async () => {
   transition: opacity 0.3s;
   color: white;
   font-size: 16px;
+  z-index: 10;
 }
 
-.upload-box:hover .overlay {
+.news-uploader:hover .overlay {
   opacity: 1;
 }
 

@@ -55,20 +55,22 @@
                     </el-radio>
                   </el-radio-group>
                 </el-form-item>
-
               </el-col>
 
               <el-col :span="10">
                 <el-form-item label="封面照">
-                  <div class="upload-box" @click="triggerFileInput">
-                    <input 
-                      type="file" 
-                      ref="fileInputRef" 
-                      class="hidden-input" 
-                      accept="image/*"
-                      @change="handleImageChange"
-                    >
-                    
+                  <el-upload
+                    ref="uploadRef"
+                    class="news-uploader"
+                    drag
+                    action="#"
+                    :auto-upload="false"
+                    :show-file-list="false"
+                    :limit="1"
+                    :on-exceed="handleExceed"
+                    :on-change="handleFileChange"
+                    accept="image/*"
+                  >
                     <div v-if="previewImage" class="preview-container">
                       <img :src="previewImage" class="preview-img" />
                       <div class="overlay">
@@ -81,7 +83,7 @@
                       <div class="upload-text">點擊或拖曳圖片至此</div>
                       <div class="upload-hint">建議尺寸 1200*1200 px<br>檔案大小 ≤ 1MB</div>
                     </div>
-                  </div>
+                  </el-upload>
                 </el-form-item>
               </el-col>
 
@@ -131,27 +133,24 @@
 
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router' // 引入 useRoute
+import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeft, Plus } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, genFileId } from 'element-plus' // ★ 引入 genFileId
 import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
-const route = useRoute() // 取得當前路由資訊
-const newsID = route.params.id // 從網址取得 ID
+const route = useRoute()
+const newsID = route.params.id
 
-const pageLoading = ref(true) // 頁面載入中
-const submitting = ref(false) // 送出按鈕 loading
-const fileInputRef = ref(null)
+const pageLoading = ref(true)
+const submitting = ref(false)
+const uploadRef = ref(null) // ★ 改用 el-upload ref
 const previewImage = ref(null) 
 const selectedFile = ref(null) 
 
-// 環境變數
 const apiBase = import.meta.env.VITE_API_BASE
 const imgBase = import.meta.env.VITE_IMG_BASE
-const imgBaseUrl = imgBase
 
-// 表單資料模型
 const editNewsForm = reactive({
   title_zh: '',
   title_en: '',
@@ -161,32 +160,41 @@ const editNewsForm = reactive({
   content_en: ''
 })
 
-// 返回列表
 const goBack = () => {
   router.push({ name: 'NewsManagement' })
 }
 
-// 觸發檔案選擇
-const triggerFileInput = () => {
-  fileInputRef.value.click()
+// ★ 新增：處理拖曳覆蓋圖片
+const handleExceed = (files) => {
+  uploadRef.value.clearFiles()
+  const file = files[0]
+  file.uid = genFileId()
+  uploadRef.value.handleStart(file)
 }
 
-// 處理圖片選擇
-const handleImageChange = (event) => {
-  const file = event.target.files[0]
+// ★ 修改：統一處理圖片變更 (選取/拖曳)
+const handleFileChange = (uploadFile) => {
+  const file = uploadFile.raw
   if (!file) return
 
   if (file.size > 1024 * 1024) {
     ElMessage.warning('圖片檔案大小不能超過 1MB')
+    uploadRef.value.clearFiles()
+    return
+  }
+
+  if (!file.type.startsWith('image/')) {
+    ElMessage.warning('請上傳圖片格式')
+    uploadRef.value.clearFiles()
     return
   }
 
   selectedFile.value = file
-  // 建立本地預覽網址 (取代原本的後端圖片顯示)
+  // 建立本地預覽網址 (取代舊圖)
   previewImage.value = URL.createObjectURL(file)
 }
 
-// ★ 取得單筆資料
+// 取得詳細資料
 const getNewsDetail = async () => {
   if (!newsID) {
     ElMessage.error('無效的消息 ID')
@@ -195,24 +203,21 @@ const getNewsDetail = async () => {
   }
 
   try {
-    // 這裡假設你有一個 getNewsDetail.php 或者用 getNews.php?id=xxx
     const API_URL = `${apiBase}/getNews.php?id=${newsID}`
     const response = await fetch(API_URL)
     const data = await response.json()
 
-    // 填入表單
     editNewsForm.title_zh = data.title_zh
     editNewsForm.title_en = data.title_en
     editNewsForm.createdate = data.createdate
-    editNewsForm.status = Number(data.status) // 確保是數字
+    editNewsForm.status = Number(data.status)
     editNewsForm.content_zh = data.content_zh
     editNewsForm.content_en = data.content_en
     
-    // 處理圖片預覽
+    // ★ 處理舊圖片預覽
     if (data.pic) {
-      // 假設資料庫存的是 'News/abc.jpg'，前端要組合成完整網址
-      // 請依實際檔案結構調整 imgBaseUrl
-      previewImage.value = `${imgBaseUrl}/${data.pic}`
+      // 如果資料庫有圖片，組合成完整網址顯示
+      previewImage.value = `${imgBase}/${data.pic}`
     }
 
   } catch (error) {
@@ -223,7 +228,7 @@ const getNewsDetail = async () => {
   }
 }
 
-// ★ 送出更新
+// 送出更新
 const submitForm = async () => {
   submitting.value = true
   
@@ -237,9 +242,7 @@ const submitForm = async () => {
 
   const fd = new FormData()
   
-  // 必填：ID
   fd.append('newsID', newsID)
-  
   fd.append('title_zh', editNewsForm.title_zh)
   fd.append('title_en', editNewsForm.title_en)
   fd.append('createdate', editNewsForm.createdate)
@@ -254,7 +257,7 @@ const submitForm = async () => {
 
   try {
     const response = await fetch(API_URL, {
-      method: 'POST', // 雖然是編輯，但因為有檔案上傳，通常還是用 POST
+      method: 'POST',
       body: fd        
     })
 
@@ -275,14 +278,13 @@ const submitForm = async () => {
   }
 }
 
-// 進入頁面時載入資料
 onMounted(() => {
   getNewsDetail()
 })
 </script>
 
 <style scoped>
-/* 樣式與 NewsAdd.vue 完全相同 */
+/* 樣式與 NewsAdd.vue 保持一致 */
 .scroll-container {
   height: calc(100vh - 250px);
   overflow-y: auto;
@@ -341,32 +343,44 @@ onMounted(() => {
   width: 120px;
 }
 
-.upload-box {
+/* === ★ 關鍵樣式：el-upload 修正 === */
+.news-uploader {
   width: 100%;
-  height: 350px;
-  border: 1px dashed #dcdfe6;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s;
-  background-color: #fafafa;
+  display: block;
+}
+
+.news-uploader :deep(.el-upload) {
+  width: 100%;
+  display: block; 
+}
+
+.news-uploader :deep(.el-upload-dragger) {
+  width: 100%;       
+  height: 350px;     
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &:hover {
-    border-color: #409eff;
-  }
+  background-color: #fafafa;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+  padding: 0;        
+  border: 1px dashed #dcdfe6;
 }
 
-.hidden-input {
-  display: none;
+.news-uploader :deep(.el-upload-dragger:hover) {
+  border-color: #409eff;
+  background-color: #f0f7ff;
 }
 
 .upload-placeholder {
   text-align: center;
   color: #909399;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .upload-icon {
@@ -390,6 +404,10 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .preview-img {
@@ -413,9 +431,10 @@ onMounted(() => {
   transition: opacity 0.3s;
   color: white;
   font-size: 16px;
+  z-index: 10;
 }
 
-.upload-box:hover .overlay {
+.news-uploader:hover .overlay {
   opacity: 1;
 }
 

@@ -780,10 +780,36 @@ export const useProductStore = defineStore('products', () =>{
     const apiURL = `${apiBase}/getProductList.php`;
 
     const fetchProducts = async () => {
+        //**增加收藏功能，所以要先看看有沒有會員ID**
+        const userStorage = localStorage.getItem('user'); 
+        let currentMemberID = 0; // 預設 0 (代表未登入)
+
+        if (userStorage) {
+            try {
+                const userObj = JSON.parse(userStorage); // 把 JSON 字串轉成物件
+                if (userObj && userObj.member_ID) {
+                    currentMemberID = userObj.member_ID; 
+                }
+            } catch (e) {
+                console.error("讀取會員資料失敗", e);
+            }
+        }
+
+        //**使用 Axios 發送請求給 PHP (把 ID 帶在網址參數 member_id)
+
         try {
-            // 發出請求
-            // const response = await axios.get('http://localhost/Formosoul/public/php/getProductList.php');
-            const response = await axios.get(apiURL);
+            // 這樣寫等同於 GET http://.../getProductList.php?member_id=xxx
+            const response = await axios.get(apiURL, {
+                params: {
+                    member_id: currentMemberID
+                }
+            });
+
+        // 沒有傳會員ID的寫法
+        // try {
+        //     // 發出請求
+        //     // const response = await axios.get('http://localhost/Formosoul/public/php/getProductList.php');
+        //     const response = await axios.get(apiURL);
             
             // 將後端回傳的資料放入 allProduct
             allProduct.value = response.data;
@@ -798,6 +824,9 @@ export const useProductStore = defineStore('products', () =>{
 
     // 過濾出所有已上架商品
     const productListed = computed(()=>{
+        //保護機制，避免還沒載入時 undefined 報錯
+        if (!allProduct.value) return [];
+
        return allProduct.value.filter( p => Number(p.product_status) === 1);
     });
 

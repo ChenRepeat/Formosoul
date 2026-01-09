@@ -31,7 +31,8 @@ export const useMemberStore = defineStore('member', () => {
         isEditing: false, 
         tempName: '',
         pointscard_ID:'',
-        charmImg:''
+        charmImg:'',
+        role:0,
     });
     const pointsStatus = ref({
         dice: 0, 
@@ -101,6 +102,7 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = wandcoreKey;
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
+                memberData.value.role = dbData.role;
                 imgURL.value = dbData.headshot || '';
 
                 if (Number(dbData.motorcyclegame_pass) >= 1) pointsStatus.value.mot = 1;
