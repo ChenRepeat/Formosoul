@@ -873,6 +873,12 @@ function initSnitches(loader) {
     { name: t("nav.about"), img: `SurvivalGuide/taiwan_image2_nobg.png`, url: '/about' },
     { name: t("nav.survivalGuide"), img: `Home/home-survival-compass.png`, url: '/survivalguide' },
     { name: t("nav.policy"), img: `Home/home-policy-scroll.png`, url: '/policy' },
+    { 
+    name: t("coreselection.thecoreselection"), 
+    img: `Home/game/poking lottery.png`, 
+    url: '#',
+    action: 'login'
+  }
   ];
 
   // 如果是管理員，加入後台齒輪按鈕
