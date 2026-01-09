@@ -73,7 +73,7 @@ const baseURL = import.meta.env.BASE_URL;
 let clickStartPos = { x: 0, y: 0 };
 
 const snitches = [];
-const snitchCount = 11;
+const snitchCount = ref(0);
 
 // --- Helper ---
 const checkIsMobile = () => window.innerWidth < 768;
@@ -894,9 +894,9 @@ function initSnitches(loader) {
   });
   // --- ★★★ 修改結束 ★★★ ---
 
-  const angleStep = (Math.PI * 2) / snitchCount;
-
-  for (let i = 0; i < snitchCount; i++) {
+  snitchCount.value =menuItemsData.length
+  const angleStep = (Math.PI * 2) / snitchCount.value;
+  for (let i = 0; i < snitchCount.value; i++) {
     const isHero = i === 0;
     let linkData = null;
     if (!isHero && menuIdx < menuItemsData.length) {
