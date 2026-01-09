@@ -304,7 +304,7 @@ onBeforeUnmount(() => {
 .festival-carousel {
   width: 100%;
   margin: 0 auto;
-  padding: 24px 55px 16px;
+  padding: 55px 55px 16px;
   background: radial-gradient(circle at center, #00000080, #000000);
 }
 
