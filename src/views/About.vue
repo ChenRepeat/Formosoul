@@ -246,9 +246,9 @@ onUnmounted(() => {
     z-index: 10;
   }
   .cloud{position: absolute;z-index: 11;}
-  .cloud1{top: 18%; left: 15%;width: 25%;}
-  .cloud2{top: 18%; left: 62%;width: 10%;}
-  .cloud3{top: 22%; left: 53%;width: 4%;}
+  .cloud1{top: 19.5%; left: 10%;width: 25%;}
+  .cloud2{top: 18%; left: 80%;width: 10%;}
+  .cloud3{top: 23%; left: 70%;width: 4%;}
   .location-container{
     width: 100%;
     margin: 0 auto;
