@@ -156,8 +156,8 @@
       setcookie(
           "user_name", // cookie name
           $user['name'], // cookie value
-          // ['expires' =>time() + 600,  // 我把它包成跟上面一樣
-          // 'path' => "/"]            
+          ['expires' =>time() + 600,  // 我把它包成跟上面一樣
+          'path' => "/"]            
       );
     }
 
