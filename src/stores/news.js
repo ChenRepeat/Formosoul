@@ -46,7 +46,7 @@ const formatDate = (i) => {
       content_en: item.content_en,
       intro_en: item.intro_en,
       status: item.status,
-      createdate: item.createdate,
+      createdate: formatDate(item.createdate),
       update: formatDate(item.update),
       pic: item.pic,
       })); 
