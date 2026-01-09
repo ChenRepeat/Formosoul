@@ -618,7 +618,10 @@
     "PaymentInformation": "PaymentInformation",
     "ProductsInformation": "ProductsInformation",
     "backtoqueryorders": "Back to Query orders",
-    "check": "check"
+    "check": "check",
+    "nocollection": "No Collection",
+    "NoOrders": "No Orders",
+    "BuyNow": "Buy Something Now ~"
   },
   "about":{
     "aboutTitle":"About",

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="nocollection" class="nocoupon"><h3>{{ nocollection }}</h3></div>
+    <div v-if="nocollection" class="nocoupon"><h3>{{$t('member.nocollection')}}</h3></div>
     <div v-else class="collections">
         <h3>{{$t('member.myCollect')}}</h3>
         <section class="list-all">
@@ -118,11 +118,7 @@ function getcollectionlist(){
 onMounted(async () => {
     await getcollectionlist();
     if(collectionlist.value.length == 0){
-      if(lang.value == 'en'){
         nocollection.value = 'No Collection'
-      }else{
-        nocollection.value = '還沒有收藏'
-      }
     }
 });
 

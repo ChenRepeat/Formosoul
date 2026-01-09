@@ -63,7 +63,7 @@
                 >${{ coupon.discount }}</h4>
                 <h4>COUPON</h4>
                 <p class="coupon-valid">VAILD UNTIL {{ coupon.enddate }}</p>
-                <p class="coupon-valid">Usage threshold Spend ${{ coupon.threshold }}</p>
+                <!-- <p class="coupon-valid">Usage threshold Spend ${{ coupon.threshold }}</p> -->
                 </div>
             </div>
             
@@ -89,6 +89,7 @@ import { useRoute } from 'vue-router';
     const get_coupon_information = ref(null);
     const route = useRoute();
     const cartStore = useCartStore();
+
     const sortedCoupons = computed(() => {
         if (!get_coupon_information.value || get_coupon_information.value.length == 0) {
             return null;
@@ -185,12 +186,16 @@ import { useRoute } from 'vue-router';
         }
         ).then( res => res.json())};
     function handleCouponClick(coupon) {
+
+        // if(cartStore.totalPrice <    coupon.threshold){
+        //     alert('無法使用');
+        //     return;
+        // }
         if (route.path.includes('/member/coupons')) {
             return;
         }
         // if (coupon.status !== 2) return;
         
-        // console.log('狀態',coupon.status);
         
         const cartcoupon = cartStore.coupon_ID
         // 切換中，防止重複點擊
@@ -251,8 +256,7 @@ import { useRoute } from 'vue-router';
             cartStore.discount = 0;
             return;
         }
-
-
+        
     });
 </script>
 
