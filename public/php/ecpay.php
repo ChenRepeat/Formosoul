@@ -44,9 +44,13 @@ try {
     // 判斷是 http 還是 https (Ngrok 通常是 https)
     $host = $_SERVER['HTTP_HOST']; // 例如 localhost:5173 或 xxx.ngrok.app
     
-    // 5-1. 定義你的 Ngrok 網址 (測試階段專用)
+    // 5-1. 定義你的網址
     // 🔥 只要改這個變數就好，不用改下面的邏輯
+    // Ngrok 網址 (測試階段專用)
     $ngrok_domain = "https://carri-luscious-nanci.ngrok-free.dev"; 
+    // tibame 網址 (測試階段專用)
+    $tibame_domain = "https://tibamef2e.com/tjd103";
+
 
     // 5-2. 判斷邏輯
     if ($host === 'localhost' || str_starts_with($host, '127.0.0.1')) {
@@ -56,9 +60,32 @@ try {
     } else {
         // [情況 B]：如果你是透過 Ngrok 網址開啟，或是未來正式上線
         // 自動抓取當前的網址 (http 或 https 自動判斷)
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-        $baseReturnURL = "$protocol://$host/Formosoul/public/php";
+        // $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        // $baseReturnURL = "$protocol://$host/Formosoul/public/php";
+        // https://tibamef2e.com/tjd103/php/ecpay_return.php
+        $baseReturnURL = $tibame_domain . "/php";
     }
+
+    // 5-3. 定義跳回網址
+    // 🔥 只要改這個變數就好，不用改下面的邏輯
+    //定義接收網址
+    //local（測試）
+    $local_website = "http://localhost:5173";
+    // http://localhost:5173/tjd103/shoppingcart/ordersuccess
+
+    //tibame（正式上線）
+    $tibame_website = "https://tibamef2e.com";
+    // https://tibamef2e.com/tjd103/shoppingcart/ordersuccess
+
+
+    // 5-2. 判斷邏輯
+    if ($host === 'localhost' || str_starts_with($host, '127.0.0.1')) {
+        $baseShowURL = $local_website . "/tjd103/shoppingcart/ordersuccess";
+    } else {
+        $baseShowURL = $tibame_website . "/tjd103/shoppingcart/ordersuccess";
+    }
+
+
 
 
     
@@ -82,12 +109,12 @@ try {
     $obj->Send['ReturnURL'] = $baseReturnURL . "/ecpay_return.php";
 
 
-
+    
     
     // [ClientBackURL]
     // 付款完成後，使用者按「返回商店」按鈕會跳轉回哪裡？ (通常是你的 Vue 訂單成功頁)
     // 請確認你的 Vue 本地端 Port 是 5173 還是其他
-    $obj->Send['ClientBackURL'] = "http://localhost:5173/tjd103/shoppingcart/ordersuccess"; 
+    $obj->Send['ClientBackURL'] = $baseShowURL; 
 
     // [OrderResultURL]
     // 如果設定這個，綠界付款完會直接跳轉回來，不顯示綠界成功頁 (通常留空，讓綠界顯示成功頁比較清楚)
