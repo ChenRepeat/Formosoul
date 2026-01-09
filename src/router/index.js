@@ -32,6 +32,7 @@ import Returns from '@/components/policy/returns.vue'
 import Cookies from 'js-cookie'
 import { useAuthStore } from '@/stores/autoStore'
 import NotFound from '../views/NotFound.vue';
+import { useMemberStore } from '@/stores/member';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -393,6 +394,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
   // 1. 檢查要去的地方是否包含 requiresAdmin 標記
   // (使用 matched.some 是為了讓 /admin 的子路由也能被抓到)
+  const memberStore = useMemberStore();
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     
     // 2. 嘗試從 localStorage 抓取使用者資料
@@ -410,7 +412,7 @@ router.beforeEach((to, from, next) => {
       
       // 3. 檢查 role 是否為 1
       // (使用 parseInt 比較保險，避免字串 "1" 對上數字 1 的問題)
-      if (user && parseInt(user.role) === 1) {
+      if (user && parseInt(memberStore.memberData.role) === 1) {
         // 是管理員 -> 放行
         return next(); 
       } else {

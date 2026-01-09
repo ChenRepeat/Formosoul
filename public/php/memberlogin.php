@@ -60,7 +60,6 @@
                 'member_ID' => $user['member_ID'],
                 'pointscard_ID' => $user['pointscard_ID'],
                 'wandcore_ID' => $user['wandcore_ID'],
-                'role' => $user['role'],
                 'isFirstLogin' => $isFirstLogin,
                 'message' => $isFirstLogin ? '第一次登入' : '登入成功',
             ];
