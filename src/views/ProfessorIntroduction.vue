@@ -151,7 +151,7 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
   },
   slidesPerView: 'auto',
   loopedSlides: 32,
-  speed: 1250, // FOR MARQUEE SPEED
+  speed: 1750, // FOR MARQUEE SPEED
   loop: true,
   loopAdditionalSlides: 10,
   spaceBetween: 12,
