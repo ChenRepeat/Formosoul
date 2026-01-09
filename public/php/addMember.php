@@ -1,4 +1,10 @@
 <?php
+
+// --- 測試用：開啟錯誤顯示 (修好後記得刪除) ---
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// ----------------------------------------
 require 'conn.php';
 require 'sendGmail.php';
 
