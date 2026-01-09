@@ -3,15 +3,13 @@
         <div class="otherlogin">
             <div class="otherlogin-title">
                 <hr>
-                <h6>Forget Password</h6>
+                <h6>{{$t('loginPage.forgetPasswordBtn')}}</h6>
                 <hr>
             </div>
         </div>
         <div class="form-group">
             <div class="login-bottom">
-                <p>It seems your memory has been tampered with by an Obliviate Charm! 
-    Don't worry, resetting your login incantation only takes a few simple steps. 
-    Please enter your registered email address below, and we will dispatch a messenger owl with the link to reset your password.</p>
+                <p>{{$t('loginPage.forgetPwd')}}</p>
             </div>
             <input 
             id="email"

@@ -611,8 +611,8 @@
     "memberInfo":"會員資料",
     "PWChange":"更改密碼",
     "myOrders":"查詢訂單",
-    "myCollect":"我的收藏",
-    "coupons":"我的酷碰",
+    "myCollect":"收藏",
+    "coupons":"優惠券",
     "oldPW":"請輸入舊密碼",
     "newPW":"請輸入新密碼",
     "newPWConf":"請確認新密碼",
@@ -693,6 +693,8 @@
     "getOTP":"召喚代碼",
     "acceptBtn":"接受條款並入學",
     "loading":"載入中...",
-    "saveBtn":"儲存變更"
+    "saveBtn":"儲存變更",
+    "forgetPwd":"看起來您的記憶被「遺忘咒」干擾了！ \n 不用擔心，要重鑄您的登入咒語只需要幾個簡單的步驟。 \n 請在下方輸入您註冊的電子郵件信箱，我們將派遣一隻信使貓頭鷹，將重設密碼的連結送給您。",
+    "forgetBtn":"發送連結"
   }
 }
