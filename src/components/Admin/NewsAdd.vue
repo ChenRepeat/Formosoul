@@ -23,11 +23,11 @@
           <div class="content-card">       
             <el-row :gutter="40">
               <el-col :span="14">
-              <el-form-item label="標題(中文)" required>
-                <el-input v-model="addNewsForm.title_zh" placeholder="請輸入中文標題" />
-              </el-form-item>
-                
-              <el-form-item label="Title(EN)" required>
+                <el-form-item label="標題(中文)" required>
+                  <el-input v-model="addNewsForm.title_zh" placeholder="請輸入中文標題" />
+                </el-form-item>
+                  
+                <el-form-item label="Title(EN)" required>
                   <el-input v-model="addNewsForm.title_en" placeholder="Enter English title" />
                 </el-form-item>
 
@@ -55,7 +55,6 @@
                     </el-radio>
                   </el-radio-group>
                 </el-form-item>
-
               </el-col>
 
               <el-col :span="10">
@@ -136,16 +135,15 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeft, Plus } from '@element-plus/icons-vue'
-import { ElMessage, genFileId } from 'element-plus' // ★ 引入 genFileId
+import { ElMessage, genFileId } from 'element-plus'
 import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
 const loading = ref(false)
-const uploadRef = ref(null) // ★ 綁定 el-upload
-const previewImage = ref(null) // 圖片預覽網址
-const selectedFile = ref(null) // 實際要上傳的檔案物件
+const uploadRef = ref(null)
+const previewImage = ref(null)
+const selectedFile = ref(null)
 
-// 表單資料模型
 const addNewsForm = reactive({
   title_zh: '',
   title_en: '',
@@ -155,12 +153,10 @@ const addNewsForm = reactive({
   content_en: ''
 })
 
-// 返回列表
 const goBack = () => {
   router.push({ name: 'NewsManagement' })
 }
 
-// ★ 新增：處理覆蓋圖片 (當拖曳第二張圖時，自動替換第一張)
 const handleExceed = (files) => {
   uploadRef.value.clearFiles()
   const file = files[0]
@@ -168,19 +164,16 @@ const handleExceed = (files) => {
   uploadRef.value.handleStart(file)
 }
 
-// ★ 修改：處理圖片選擇與預覽 (el-upload 的 on-change 事件)
 const handleFileChange = (uploadFile) => {
   const file = uploadFile.raw
   if (!file) return
 
-  // 驗證檔案大小 (例如限制 1MB)
   if (file.size > 1024 * 1024) {
     ElMessage.warning('圖片檔案大小不能超過 1MB')
-    uploadRef.value.clearFiles() // 清除不合規的檔案
+    uploadRef.value.clearFiles()
     return
   }
 
-  // 驗證格式 (簡單驗證)
   if (!file.type.startsWith('image/')) {
     ElMessage.warning('請上傳圖片格式')
     uploadRef.value.clearFiles()
@@ -188,16 +181,12 @@ const handleFileChange = (uploadFile) => {
   }
 
   selectedFile.value = file
-  
-  // 建立預覽網址
   previewImage.value = URL.createObjectURL(file)
 }
 
-// 送出表單
 const submitForm = async () => {
   loading.value = true
   
-  // 驗證必填欄位
   if(!addNewsForm.title_zh || !addNewsForm.createdate) {
       ElMessage.warning('請填寫標題與上稿日期')
       loading.value = false
@@ -207,9 +196,7 @@ const submitForm = async () => {
   const apiBase = import.meta.env.VITE_API_BASE
   const API_URL = `${apiBase}/addNews.php` 
 
-  // 使用 FormData 傳送 (包含文字與檔案)
   const fd = new FormData()
-  
   fd.append('title_zh', addNewsForm.title_zh)
   fd.append('title_en', addNewsForm.title_en)
   fd.append('createdate', addNewsForm.createdate)
@@ -217,9 +204,8 @@ const submitForm = async () => {
   fd.append('content_zh', addNewsForm.content)
   fd.append('content_en', addNewsForm.content_en)
   
-  // 如果有選擇圖片，才加入圖片欄位
   if (selectedFile.value) {
-    fd.append('pic', selectedFile.value) // 對應 PHP $_FILES['pic'] 或 'image'，看你後端寫什麼
+    fd.append('pic', selectedFile.value)
   }
 
   try {
@@ -265,7 +251,6 @@ const submitForm = async () => {
   margin-bottom: 24px;
 }
 
-/* 狀態 Radio 樣式 */
 .radio-content {
   display: flex;
   align-items: center;
@@ -279,7 +264,6 @@ const submitForm = async () => {
 .status-dot.active { background-color: #67C23A; }
 .status-dot.inactive { background-color: #909399; }
 
-/* 底部按鈕區 */
 .footer-actions {
   display: flex;
   justify-content: center;
@@ -307,23 +291,31 @@ const submitForm = async () => {
   width: 120px;
 }
 
-/* === ★ 修改：el-upload 樣式調整 === */
-/* 強制設定 upload 拖曳區塊的高度與樣式，以符合原本設計 */
-.news-uploader :deep(.el-upload),
-.news-uploader :deep(.el-upload-dragger) {
+/* === ★★★ 修正部分：確保 upload 填滿寬度 ★★★ === */
+
+/* 1. 確保 el-upload 元件本身是 block 且寬度 100% */
+.news-uploader {
   width: 100%;
-  height: 350px; /* 固定高度 */
+  display: block;
+}
+
+/* 2. 確保 el-upload 內部的容器也是 block 且寬度 100% */
+.news-uploader :deep(.el-upload) {
+  width: 100%;
+  display: block; 
+}
+
+/* 3. 設定拖曳區域樣式 */
+.news-uploader :deep(.el-upload-dragger) {
+  width: 100%;       /* 填滿父容器 */
+  height: 350px;     /* 固定高度 */
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fafafa;
   border-radius: 6px;
   transition: border-color 0.3s;
-}
-
-/* 當有圖片時，去除內建 padding，讓圖片滿版 */
-.news-uploader :deep(.el-upload-dragger) {
-  padding: 0;
+  padding: 0;        /* 清除預設 padding */
   border: 1px dashed #dcdfe6;
 }
 
@@ -332,6 +324,7 @@ const submitForm = async () => {
   background-color: #f0f7ff;
 }
 
+/* 內容排版 */
 .upload-placeholder {
   text-align: center;
   color: #909399;
@@ -364,15 +357,16 @@ const submitForm = async () => {
   width: 100%;
   height: 100%;
   position: relative;
-  display: flex;       /* 確保圖片居中 */
+  display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden; /* 防止圖片溢出 */
 }
 
 .preview-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 保持比例 */
   display: block;
 }
 
@@ -393,7 +387,6 @@ const submitForm = async () => {
   z-index: 10;
 }
 
-/* 這裡要改用 .news-uploader:hover 來觸發 */
 .news-uploader:hover .overlay {
   opacity: 1;
 }
