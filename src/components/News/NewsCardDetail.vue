@@ -92,7 +92,7 @@ onMounted( async () => {
               <div>
                 <h6 v-if="isEnglish">{{ item.title_en }}</h6>
                 <h6 v-else>{{ item.title_zh }}</h6>
-                <p>{{ item.update }}</p>
+                <p>{{ item.createdate }}</p>
               </div>
               <span><font-awesome-icon :icon="['fas', 'caret-down']" size="3x" class="arrow-icon"/></span>
             </router-link>
@@ -106,7 +106,7 @@ onMounted( async () => {
             <img :src="`${ baseUrl }${currentArticle.pic}`" alt="#">
             <div class="text-area">
               <h3 >{{ currentArticle?.displayTitle }}</h3>
-              <h5>{{ currentArticle.update }}</h5>
+              <h5>{{ currentArticle.createdate }}</h5>
               <p>{{ currentArticle.displayContext }}</p>
 
               <div class="btn-back-layout">
