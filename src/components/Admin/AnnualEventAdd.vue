@@ -53,15 +53,18 @@
 
               <el-col :span="10">
                 <el-form-item label="活動封面照">
-                  <div class="upload-box" @click="triggerFileInput">
-                    <input 
-                      type="file" 
-                      ref="fileInputRef" 
-                      class="hidden-input" 
-                      accept="image/*" 
-                      @change="handleImageChange"
-                    >
-                    
+                  <el-upload
+                    ref="uploadRef"
+                    class="event-uploader"
+                    drag
+                    action="#"
+                    :auto-upload="false"
+                    :show-file-list="false"
+                    :limit="1"
+                    :on-exceed="handleExceed"
+                    :on-change="handleFileChange"
+                    accept="image/*"
+                  >
                     <div v-if="previewImage" class="preview-container">
                       <img :src="previewImage" class="preview-img" />
                       <div class="overlay">
@@ -74,7 +77,7 @@
                       <div class="upload-text">點擊或拖曳圖片至此</div>
                       <div class="upload-hint">建議尺寸 1200*1200 px<br>檔案大小 ≤ 1MB</div>
                     </div>
-                  </div>
+                  </el-upload>
                 </el-form-item>
               </el-col>
 
@@ -132,12 +135,12 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeft, Plus, VideoPlay } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, genFileId } from 'element-plus' // ★ 引入 genFileId
 import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
 const loading = ref(false)
-const fileInputRef = ref(null)
+const uploadRef = ref(null) // ★ 改用 el-upload ref
 const previewImage = ref(null)
 const selectedFile = ref(null)
 
@@ -154,18 +157,32 @@ const addEventForm = reactive({
 })
 
 const goBack = () => router.push({ name: 'AnnualEventManagement' })
-const triggerFileInput = () => fileInputRef.value.click()
 
-const handleImageChange = (event) => {
-  const file = event.target.files[0]
+// ★ 新增：處理覆蓋圖片
+const handleExceed = (files) => {
+  uploadRef.value.clearFiles()
+  const file = files[0]
+  file.uid = genFileId()
+  uploadRef.value.handleStart(file)
+}
+
+// ★ 修改：統一處理圖片變更 (選取/拖曳)
+const handleFileChange = (uploadFile) => {
+  const file = uploadFile.raw
   if (!file) return
 
-  // 驗證大小
   if (file.size > 1024 * 1024) {
     ElMessage.warning('圖片檔案大小不能超過 1MB')
+    uploadRef.value.clearFiles()
     return
   }
   
+  if (!file.type.startsWith('image/')) {
+    ElMessage.warning('請上傳圖片格式')
+    uploadRef.value.clearFiles()
+    return
+  }
+
   selectedFile.value = file
   previewImage.value = URL.createObjectURL(file)
 }
@@ -173,7 +190,6 @@ const handleImageChange = (event) => {
 const submitForm = async () => {
   loading.value = true
   
-  // 驗證
   if(!addEventForm.title_zh || !addEventForm.launchdate) {
       ElMessage.warning('請填寫標題與活動日期')
       loading.value = false
@@ -233,11 +249,10 @@ const submitForm = async () => {
 .content-card {
   background: #fff;
   border-radius: 8px;
-  padding: 10px; /* 這裡改回跟 addNews 一樣的 padding */
+  padding: 10px;
   margin-bottom: 24px;
 }
 
-/* 底部按鈕區 */
 .footer-actions {
   display: flex;
   justify-content: center;
@@ -265,33 +280,45 @@ const submitForm = async () => {
   width: 120px;
 }
 
-/* === ★★★ 圖片上傳區塊樣式 (移植自 addNews) ★★★ === */
-.upload-box {
+/* === ★★★ 圖片上傳區塊樣式 (修正為 el-upload 架構) ★★★ === */
+
+.event-uploader {
   width: 100%;
-  height: 350px; /* 高度調回 350px */
-  border: 1px dashed #dcdfe6;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s;
-  background-color: #fafafa;
+  display: block;
+}
+
+.event-uploader :deep(.el-upload) {
+  width: 100%;
+  display: block; 
+}
+
+.event-uploader :deep(.el-upload-dragger) {
+  width: 100%;       
+  height: 350px;     
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &:hover {
-    border-color: #409eff;
-  }
+  background-color: #fafafa;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+  padding: 0;        
+  border: 1px dashed #dcdfe6;
 }
 
-.hidden-input {
-  display: none;
+.event-uploader :deep(.el-upload-dragger:hover) {
+  border-color: #409eff;
+  background-color: #f0f7ff;
 }
 
 .upload-placeholder {
   text-align: center;
   color: #909399;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .upload-icon {
@@ -315,6 +342,10 @@ const submitForm = async () => {
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .preview-img {
@@ -338,9 +369,10 @@ const submitForm = async () => {
   transition: opacity 0.3s;
   color: white;
   font-size: 16px;
+  z-index: 10;
 }
 
-.upload-box:hover .overlay {
+.event-uploader:hover .overlay {
   opacity: 1;
 }
 
