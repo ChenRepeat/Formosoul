@@ -843,6 +843,27 @@ function initSnitches(loader) {
   const isMobile = checkIsMobile();
   let menuIdx = 0;
   
+  // --- ★★★ 修改開始：判斷管理員權限 ★★★ ---
+  let isAdmin = false;
+
+  // 1. 確保已登入 (有Token)
+  if (authStore.token) {
+    // 2. 從 localStorage 取得 user 資料
+    const userStr = localStorage.getItem('user'); 
+    if (userStr) {
+      try {
+        const userData = JSON.parse(userStr);
+        // 3. 檢查 role 是否為 1 (管理員)
+        if (parseInt(userData.role) === 1) {
+            isAdmin = true;
+        }
+      } catch (e) {
+        console.error("解析使用者權限失敗", e);
+      }
+    }
+  }
+
+  // 建立選單資料 (不含 admin 和 抽獎)
   const menuItemsData = [
     { name: t("nav.classes"), img: `Home/home-class-book.png`, url: '/classes' },
     { name: t("nav.professor"), img: `Home/home-professor-people.png`, url: '/professorsintroduction' },
@@ -852,14 +873,26 @@ function initSnitches(loader) {
     { name: t("nav.about"), img: `SurvivalGuide/taiwan_image2_nobg.png`, url: '/about' },
     { name: t("nav.survivalGuide"), img: `Home/home-survival-compass.png`, url: '/survivalguide' },
     { name: t("nav.policy"), img: `Home/home-policy-scroll.png`, url: '/policy' },
-    { 
-      name: '', 
-      img: `Home/home-admin-tools.png`, 
-      url: import.meta.env.BASE_URL + 'admin', 
-      target: '_blank' 
-    },
-    { name: t("coreselection.thecoreselection"), img: `Home/game/poking lottery.png`, url: '#',action: 'login'},
   ];
+
+  // 如果是管理員，加入後台齒輪按鈕
+  if (isAdmin) {
+    menuItemsData.push({
+        name: '', 
+        img: `Home/home-admin-tools.png`, 
+        url: import.meta.env.BASE_URL + 'admin', 
+        target: '_blank' 
+    });
+  }
+
+  // 最後加入抽獎
+  menuItemsData.push({ 
+    name: t("coreselection.thecoreselection"), 
+    img: `Home/game/poking lottery.png`, 
+    url: '#',
+    action: 'login'
+  });
+  // --- ★★★ 修改結束 ★★★ ---
 
   const angleStep = (Math.PI * 2) / snitchCount;
 
@@ -881,8 +914,8 @@ function initSnitches(loader) {
     const yFreq = 1 + Math.random() * 1.5;
     
     const speed = isHero 
-        ? 0.9                            
-        : 0.1 + Math.random() * 0.1;   
+        ? 0.9                             
+        : 0.1 + Math.random() * 0.1;    
 
     snitches.push({
       group: snitch.group,
