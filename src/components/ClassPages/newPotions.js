@@ -83,7 +83,7 @@ export const newPotions = {
     13: {
       name: 'classes.potiongame.potionName13',
       resultIntro: 'classes.potiongame.potion13',
-      imgUrl: 'Classes/potions/potion9.png',
+      imgUrl: 'Classes/potions/newPotion13.png',
       recipe: {
         1: {
           name: 'Winter Melon',
@@ -102,7 +102,7 @@ export const newPotions = {
     14: {
       name: 'classes.potiongame.potionName14',
       resultIntro: 'classes.potiongame.potion14',
-      imgUrl: 'Classes/potions/potion9.png',
+      imgUrl: 'Classes/potions/newPotion14.png',
       recipe: {
         1: {
           name: 'milk',
@@ -121,7 +121,7 @@ export const newPotions = {
     15: {
       name: 'classes.potiongame.potionName15',
       resultIntro: 'classes.potiongame.potion15',
-      imgUrl: 'Classes/potions/potion9.png',
+      imgUrl: 'Classes/potions/newPotion15.png',
       recipe: {
         1: {
           name: 'Winter Melon',
@@ -140,7 +140,7 @@ export const newPotions = {
     16: {
       name: 'classes.potiongame.potionName16',
       resultIntro: 'classes.potiongame.potion16',
-      imgUrl: 'Classes/potions/potion9.png',
+      imgUrl: 'Classes/potions/newPotion16.png',
       recipe: {
         1: {
           name: 'Lemon',
@@ -159,7 +159,7 @@ export const newPotions = {
     17: {
       name: 'classes.potiongame.potionName17',
       resultIntro: 'classes.potiongame.potion17',
-      imgUrl: 'Classes/potions/potion17.png',
+      imgUrl: 'Classes/potions/newPotion17.png',
       recipe: {
         1: {
           name: 'Xian Tsou',

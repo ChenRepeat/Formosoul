@@ -80,7 +80,6 @@ let ingredientList = [
           },
 ]
 potionAll = {...potions, ...newPotions}
-console.log(potionAll[9].recipe);
 
 //functions 
 function shuffle(arr) {
@@ -158,7 +157,7 @@ const cook = () => {
     resultBigTitle.value = 'classes.potionBigTitle2' 
 
   }
-  for(let i = 1; i<= potionAll.length ; i++){
+  for(let i = 1; i<= 17 ; i++){
     if(!selectNum) return
     let recipeNum = 0
     recipeNum = Object.values(potionAll[i].recipe).length 
@@ -169,9 +168,8 @@ const cook = () => {
       // correctList == 符合數量的完整食譜// index 從 0 
       // 先擴充糖 允許多選一個食材的食譜先進到這邊 
     }
-    console.log(correctList)
   }
-  
+
   // 2.食材name == 食譜.recipe[遍歷].name 
   for(let i = 0 ; i < correctList.length; i++){
     if(!correctList.length) return
@@ -201,28 +199,21 @@ const cook = () => {
 
 
 
-  // 4. (例外)不符合食譜神秘飲料區段 random 要給他五種
+  // 4. (例外)不符合食譜神秘飲料區段 random 有3種
   else{
     let index = Math.floor(Math.random() * 3 + 1)
-    // index = 11
+    index = 1
     // resultImg.value = potionAll[index].imgUrl // 測試用
     // resultTitle.value = potionAll[index].name
     // resultIntro.value = potionAll[index].resultIntro
 
-    // 圖片跟敘述還沒放好
-    resultImg.value = `Classes/potions/secretPotion${index}.png` || 'Classes/potions/secretPotion1.png',
+
+    resultImg.value = `Classes/potions/secretPotion${index}.png`,
     resultTitle.value = `classes.potiongame.secretPotionName${index}`
     resultIntro.value = `classes.potiongame.secretPotion${index}`
 
   }
 }
-
-
-
-onMounted(()=>{
-
-
-})
 
 
 
@@ -237,7 +228,7 @@ onMounted(()=>{
     <p class="potion-right-rule">{{ $t(initialRule) }}</p>
     <BasicButton class="potion-right-start btn-black " 
     @click="start" >
-      START
+      Start
     </BasicButton>
   </section>
 
@@ -256,7 +247,7 @@ onMounted(()=>{
     @drop="dropped">
     <BasicButton class="potion-right-cook btn-black" 
       @click="cook" >
-        COOK
+        Cook
     </BasicButton>
   </section>
 
@@ -264,7 +255,7 @@ onMounted(()=>{
   <section v-else-if="afterCook" class="potion-right-result dp-flex-col">
       <h3 class="potion-right-result-bigtitle">{{$t(resultBigTitle)}}</h3>
       <div class="potion-right-img-wrapper" :class="{'no-content':!hasContent}">
-        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'potion-right-glass':!hasContent}">
+        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'potion-right-glass':!hasContent}" >
       </div>
       <h5 class="potion-right-result-title" v-show="hasContent">{{ $t(resultTitle) }}</h5>
       <p class="potion-right-result-intro" v-show="hasContent">{{ $t(resultIntro) }}</p>
@@ -280,20 +271,31 @@ onMounted(()=>{
   width: 100%;
   align-items:center ;
   min-height: 100%;
+  flex-basis: 0;
+
   .potion-right-title{
+    flex-basis: 0;
+    flex-grow: 2;
     color: $color-fsTitle;
     margin-bottom: 20%;
   
   }
   .potion-right-glass{
-    margin-bottom: 10%;
+    flex-basis: 0;
+    flex-grow: 5;
+    align-items: center;
+    // margin-bottom: 5%;
   }
   .potion-right-rule{
+    flex-basis: 0;
+    flex-grow:2;
     color: $color-fsContent;
 
     margin-bottom: 10%;
   }
   .potion-right-start{
+    flex-basis: 0;
+
     width: max-content;
   }
 }
@@ -360,7 +362,7 @@ onMounted(()=>{
       &#img9, &#img5,&#img4{
         width: 16%;
         &#img4{
-          top: 22%;
+          top: 26%;
           right: 21%;
         }
         &#img9{
@@ -415,16 +417,17 @@ onMounted(()=>{
   }
   .potion-right-img-wrapper{
     flex-basis: 0;
-    flex-grow: 4;
+    // flex-grow: 2; 
     &.no-content{
       flex-grow: 2;
       padding: 14%;
     }
-
+    
     .potion-right-result-img{
       width: 100%;
-      // object-fit: contain;
-
+      max-width: 350px;
+      max-height: 250px;
+      
     }
   }
     .potion-right-result-intro{
