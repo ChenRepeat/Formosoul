@@ -228,7 +228,7 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 1;
+  timeRemaining.value = 30;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
