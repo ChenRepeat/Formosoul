@@ -1,5 +1,6 @@
 <template>
-    <div class="collections">
+    <div v-if="nocollection" class="nocoupon"><h3>{{ nocollection }}</h3></div>
+    <div v-else class="collections">
         <h3>{{$t('member.myCollect')}}</h3>
         <section class="list-all">
             <TestProductCard :products="calcollectionspage" :currentPage="currentPage" withwhite></TestProductCard>
@@ -25,9 +26,18 @@ import ProductCard from '@/components/ProductCard.vue';
 import TestProductCard from '@/components/TestProductCard.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+  const { locale } = useI18n();  
+  const langList = {
+  'en-US': 'en',
+  'zh-TW': 'zh'
+  };
 
+  const lang = computed( () => {
+      return langList[locale.value] || 'en';
+  });
 const collectionlist =  ref([]);
-
+const nocollection = ref('');
 
 function getcollectionlist(){
           const storedUser = localStorage.getItem('user');
@@ -107,6 +117,13 @@ function getcollectionlist(){
 
 onMounted(async () => {
     await getcollectionlist();
+    if(collectionlist.value.length == 0){
+      if(lang.value == 'en'){
+        nocollection.value = 'No Collection'
+      }else{
+        nocollection.value = '還沒有收藏'
+      }
+    }
 });
 
 watch(
