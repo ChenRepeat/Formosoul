@@ -14,11 +14,12 @@
   const getStatusText = (status) => {
     const s = Number(status);
     const map = {
-      0: '未付款',
-      1: '已付款',
-      2: '已出貨',
-      3: '已完成',
-      4: '已取消'
+      0: '已出貨',
+      1: '未出貨',
+      2: '已完成',
+      3: '已付款',
+      4: '付款失敗',
+      5: '等待付款'
     };
     return map[s] || '未知';
   }
@@ -114,8 +115,8 @@
     </template>
 
     <el-table :data="pagedData" stripe style="position: absolute; width: 100%; height: 100%;">
-      <el-table-column label="訂單編號" width="120px" prop="order_number"></el-table-column>
-      <el-table-column label="會員姓名" prop="name_en" min-width="150px"></el-table-column>
+      <el-table-column label="訂單編號" width="200px" prop="order_number"></el-table-column>
+      <el-table-column label="會員姓名" prop="name_en" min-width="130px"></el-table-column>
       <el-table-column label="付款方式" prop="payment" width="120px"></el-table-column>
       <el-table-column label="運送方式" prop="shipping" width="120px"></el-table-column>
       <el-table-column label="訂單狀態" prop="status" width="120px">
