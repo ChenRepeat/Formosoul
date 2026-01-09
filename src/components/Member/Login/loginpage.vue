@@ -9,16 +9,16 @@
                         <BasicButton 
                         :class="{ 'active-tab': authStore.loginView == 'enrollment'}"
                         @click="authStore.loginView = 'enrollment'"
-                        class="btn-blue-fill"><h4>Enrollment</h4></BasicButton>
+                        class="btn-blue-fill"><h4>{{$t('loginPage.enroll')}}</h4></BasicButton>
 
                         <BasicButton 
                         :class="{ 'active-tab': authStore.loginView == 'loginpage' || authStore.loginView === 'forgetpassword' || authStore.loginView == 'loginchangepassword'}"
                         @click="authStore.loginView = 'loginpage'"
-                        class="btn-blue-fill"><h4>Login</h4></BasicButton>
+                        class="btn-blue-fill"><h4>{{$t('loginPage.login')}}</h4></BasicButton>
                     </div>
                     <div class="pagecontain">
                         <div class="pagetop">
-                            <Logincontain v-if="authStore.loginView == 'loginpage'"></Logincontain>
+                            <Logincontain v-if="authStore.loginView == 'loginpage'" :google-message="emitMessage"></Logincontain>
                             <Enrollment v-else-if="authStore.loginView == 'enrollment'"></Enrollment>
                             <Forgetpassword v-else-if="authStore.loginView == 'forgetpassword'"></Forgetpassword>
                             <Loginchangepassword v-else-if="authStore.loginView == 'loginchangepassword'"></Loginchangepassword>
@@ -27,13 +27,13 @@
                             <div class="otherlogin">
                                 <div class="otherlogin-title">
                                     <hr>
-                                    <h6>Other</h6>
+                                    <h6>{{$t('loginPage.other')}}</h6>
                                     <hr>
                                 </div>
                                 <div class="otherlogin-icon">
                                     <!-- <img :src="`${publicPath}member/googleicon.png`" alt="1"> -->
-                                    <GoogleLogin ></GoogleLogin>
-                                    <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="LineLogin">
+                                    <GoogleLogin @google-message="receiver"></GoogleLogin>
+                                    <img :src="`${publicPath}member/lineicon.png`" alt="2"  @click="lineLogin">
                                 </div>
                             </div>
                         </template>
@@ -71,11 +71,55 @@
     });
 
     const route = useRoute();
-    const LineLogin = () => {
+
+    const lineLogin = () => {
+        // 記錄當前頁面
         localStorage.setItem('line_return_url', route.fullPath);
-        window.location.href = "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=http%3A%2F%2Flocalhost%2FFormosoul%2Fpublic%2Fphp%2FlineLogin.php&state=12345&scope=profile%20openid%20email";
-    
+
+        // 從 Session 抓取 guest 資料並解析 ID
+        let currentWandId = null;
+        
+        // 從 sessionStorage 抓
+        const guestDataStr = sessionStorage.getItem('guest') || localStorage.getItem('guest');
+
+        if (guestDataStr) {
+            try {
+                // 解析 JSON 字串
+                const guestData = JSON.parse(guestDataStr);
+                // 拿出 core 的值
+                if (guestData && guestData.core) {
+                    currentWandId = guestData.core;
+                }
+            } catch (e) {
+                console.error("解析 guest 資料失敗", e);
+            }
+        }
+
+        // 判斷環境
+        let redirectUrl = '';
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            redirectUrl = 'http://localhost/Formosoul/public/php/lineLogin.php';
+        } else {
+            redirectUrl = 'https://tibamef2e.com/tjd103/php/lineLogin.php';
+        }
+
+        // 因為傳給LINE不能為空'',所以組合 state 參數 (重點：如果有抓到 ID，拼成 12345_16)
+        let stateCode = '12345'; 
+        if (currentWandId) {
+            stateCode = `${stateCode}_${currentWandId}`;
+        }
+
+        // 跳轉
+        const loginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2008793662&redirect_uri=${encodeURIComponent(redirectUrl)}&state=${stateCode}&scope=profile%20openid%20email`;
+        
+        window.location.href = loginUrl;
     };
+
+    const emitMessage=ref('')
+    const receiver=(msg)=>{
+        emitMessage.value = msg
+        // props('googleMessage',msg)
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -99,9 +143,7 @@
         border-radius: 8px;
         // padding: 40px;
         width: 70%;
-        height: 80vh;
-        margin: 0 auto;       
-        // box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        margin:  auto;       
         animation: slideUp 0.3s ease;
         // position: relative;
 
@@ -191,6 +233,12 @@
         cursor: pointer;
 
     }
+    @media screen and (min-width: 1500px) {
+        .Logincontain{
+            height: 80vh;
+
+        }
+    }
     @media screen and (min-width: 1400px) {
         .Logincontain{
             width: 50%;
@@ -198,7 +246,7 @@
         }
 
     }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1366px) {
         .Logincontain{
             height: auto;
             padding: 40px;

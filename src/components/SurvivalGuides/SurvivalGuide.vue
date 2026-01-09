@@ -420,14 +420,15 @@ const rightFrame = computed(()=> frames.value[1])
     transform: scale(0.9);
   }
 
-  .text-is-active {
+}
+
+.survival-heropics-right-case .text-is-active {
     h4{
       text-shadow: 2px 2px 4px #000, 4px 4px 8px rgba(0, 0, 0, 0.3);
     }
   z-index: 30;
-  transform: translate(-300px, -500px);
-  } 
-}
+  transform: translate(-260px, -500px);
+} 
 
 .survival-heropics-right-case.img-is-active h4{
   font-size: 5.2rem;
@@ -576,7 +577,7 @@ const rightFrame = computed(()=> frames.value[1])
 // }
 
 //=========================== RWD ===========================
-@media (max-width: 1200px) {
+@media (max-width: 1366px) {
   .survival-heropics-left-case.img-is-active {
     transform: translateX(100px) scale(1.2); 
   }
@@ -588,10 +589,10 @@ const rightFrame = computed(()=> frames.value[1])
     flex: 1; 
   }
   .survival-heropics-left-case .text-is-active {
-    transform: translate(150px, -400px); 
+    transform: translate(200px, -480px); 
   }
   .survival-heropics-right-case .text-is-active {
-    transform: translate(-150px, -400px);
+    transform: translate(-200px, -480px);
   }
 }
 

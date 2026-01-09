@@ -31,6 +31,7 @@ import Privacypolicy from '@/components/policy/privacypolicy.vue'
 import Returns from '@/components/policy/returns.vue'
 import Cookies from 'js-cookie'
 import { useAuthStore } from '@/stores/autoStore'
+import NotFound from '../views/NotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -157,14 +158,17 @@ const router = createRouter({
           path: "nightmarketmap",
           name: "NightMarketMap",
           component: NightMarketMap,
-          // meta:{
-          //   requireLoading: true
-          // },
+          meta:{
+            requireLoading: true
+          },
         },
         {
           path: "conveniencestore",
           name: "ConvenienceStore",
           component: ConvenienceStore,
+          meta:{
+            requireLoading: true
+          },
         },
         { path: '/survivalguide', redirect: '/survivalrules' },
       ],
@@ -233,7 +237,7 @@ const router = createRouter({
     {
       path: "/admin",
       component: () => import ('@/views/Admin/AdminDashboard.vue'),
-      meta: { layout: 'admin' },
+      meta: { layout: 'admin',requiresAdmin: true},
       children: [
         {
           path: '', 
@@ -245,64 +249,105 @@ const router = createRouter({
           component: () => import ('@/components/Admin/MemberManagement.vue')
         },
         {
+          path: "member-add",
+          name: "MemberAdd",
+          component: () => import ('@/components/Admin/MemberAdd.vue'),
+          meta: { activeMenu: '/admin/member-management' }
+        },
+        {
+          path: "member-edit/:id",
+          name: "MemberEdit",
+          component: () => import ('@/components/Admin/MemberEdit.vue'),
+          meta: { activeMenu: '/admin/member-management' }
+        },
+        {
           path: "product-management",
           name: "ProductManagement",
           component: () => import ('@/components/Admin/ProductManagement.vue')
+        },
+        {
+          path: "product-add",
+          name: "ProductAdd",
+          component: () => import ('@/components/Admin/ProductAdd.vue'),
+          meta: { activeMenu: '/admin/product-management' }
+        },
+        {
+          path: "product-edit/:id",
+          name: "ProductEdit",
+          component: () => import ('@/components/Admin/ProductEdit.vue'),
+          meta: { activeMenu: '/admin/product-management' }
         },
         {
           path: "order-management",
           name: "OrderManagement",
           component: () => import ('@/components/Admin/OrderManagement.vue')
         },
-                {
+        {
+          path: "order-details/:id",
+          name: "OrderDetails",
+          component: () => import ('@/components/Admin/OrderDetails.vue'),
+          props: true,
+          meta: { activeMenu: '/admin/order-management' }
+        },
+        {
           path: "coupon-management",
           name: "CouponManagement",
           component: () => import ('@/components/Admin/CouponManagement.vue')
+        },
+        {
+          path: "coupon-add",
+          name: "CouponAdd",
+          component: () => import ('@/components/Admin/CouponAdd.vue'),
+          meta: { activeMenu: '/admin/coupon-management' }
+        },
+        {
+          path: "coupon-edit/:id",
+          name: "CouponEdit",
+          component: () => import ('@/components/Admin/CouponEdit.vue'),
+          meta: { activeMenu: '/admin/coupon-management' }
         },
                 {
           path: "news-management",
           name: "NewsManagement",
           component: () => import ('@/components/Admin/NewsManagement.vue')
         },
-                {
+        {
+          path: "news-add",
+          name: "NewsAdd",
+          component: () => import ('@/components/Admin/NewsAdd.vue'),
+          meta: { activeMenu: '/admin/news-management' }
+        },
+        {
+          path: "news-edit/:id",
+          name: "NewsEdit",
+          component: () => import ('@/components/Admin/NewsEdit.vue'),
+          meta: { activeMenu: '/admin/news-management' }
+        },
+        {
           path: "annual-event-management",
           name: "AnnualEventManagement",
           component: () => import ('@/components/Admin/AnnualEventManagement.vue')
         },
-                {
-          path: "product-add",
-          name: "ProductAdd",
-          component: () => import ('@/components/Admin/ProductAdd.vue')
+        {
+          path: "annual-event-add",
+          name: "AnnualEventAdd",
+          component: () => import ('@/components/Admin/AnnualEventAdd.vue'),
+          meta: { activeMenu: '/admin/annual-event-management' }
         },
-                        {
-          path: "product-edit/:id",
-          name: "ProductEdit",
-          component: () => import ('@/components/Admin/ProductEdit.vue')
-        },
-                {
-          path: "order-details/:id",
-          name: "OrderDetails",
-          component: () => import ('@/components/Admin/OrderDetails.vue'),
-          props: true
-        },
-                        {
-          path: "member-add",
-          name: "MemberAdd",
-          component: () => import ('@/components/Admin/MemberAdd.vue'),
-          meta: { activeMenu: '/admin/member-management' }
-        },
-                                {
-          path: "coupon-add",
-          name: "CouponAdd",
-          component: () => import ('@/components/Admin/CouponAdd.vue'),
-        },
-                                {
-          path: "coupon-edit/:id",
-          name: "CouponEdit",
-          component: () => import ('@/components/Admin/CouponEdit.vue')
+        {
+          path: "annual-event-edit/:id",
+          name: "AnnualEventEdit",
+          component: () => import ('@/components/Admin/AnnualEventEdit.vue'),
+          meta: { activeMenu: '/admin/annual-event-management' }
         },
       ],
     },
+    // :pathMatch(.*)* 會抓取所有上面沒對應到的網址
+    { 
+      path: '/:pathMatch(.*)*', 
+      name: 'NotFound', 
+      component: NotFound 
+    }
   ],
 scrollBehavior(to, from, savedPosition) {
     return new Promise((resolve) => {
@@ -343,6 +388,46 @@ router.beforeEach((to, from, next) => {
 
     next();
 })
+
+// ★★★ 第二個守門員：專門負責「後台管理員」權限檢查 ★★★
+router.beforeEach((to, from, next) => {
+  // 1. 檢查要去的地方是否包含 requiresAdmin 標記
+  // (使用 matched.some 是為了讓 /admin 的子路由也能被抓到)
+  if (to.matched.some(record => record.meta.requiresAdmin)) {
+    
+    // 2. 嘗試從 localStorage 抓取使用者資料
+    // 請確認你的 key 是叫 'loginData' 還是 'user'，這裡範例用 'loginData'
+    const userStr = localStorage.getItem('user'); 
+
+    if (!userStr) {
+      // 沒資料 = 沒登入，踢回首頁 (或登入頁)
+      alert('請先登入');
+      return next('/'); 
+    }
+
+    try {
+      const user = JSON.parse(userStr);
+      
+      // 3. 檢查 role 是否為 1
+      // (使用 parseInt 比較保險，避免字串 "1" 對上數字 1 的問題)
+      if (user && parseInt(user.role) === 1) {
+        // 是管理員 -> 放行
+        return next(); 
+      } else {
+        // 有登入但不是管理員 -> 踢走
+        alert('權限不足：您不是管理員！');
+        return next('/'); 
+      }
+
+    } catch (e) {
+      console.error("使用者資料解析失敗", e);
+      return next('/'); 
+    }
+  }
+
+  // 如果不是去後台，這個守衛就不管事，直接交給下一個
+  next();
+});
 
 router.beforeEach((to, from, next) => {
   if ('scrollRestoration' in history) {

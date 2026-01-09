@@ -5,6 +5,7 @@ import { useRouter, useRoute } from "vue-router";     //使用路由功能、抓
 import { useProductStore } from '@/stores/products';
 import { useCartStore } from '@/stores/cart';
 import { useI18n } from 'vue-i18n';       // 語系控制使用
+import { useAuthStore } from "@/stores/autoStore";       //確認登入狀態
 import BasicButton from '../BasicButton.vue';
 
 
@@ -15,6 +16,7 @@ const productstore = useProductStore();    // 商品 data
 const cartstore = useCartStore();          // 購物車 data
 const { t } = useI18n();                   // 把翻譯功能 t 取出來
 const { locale } = useI18n();              // 讀取語系狀態
+const authStore = useAuthStore();
 
 
 
@@ -166,6 +168,31 @@ watch(
     { immediate: true }
 );
 
+// 分享功能 ------------------------------------
+
+function shareTo(platform) {
+  const url = `https://tibamef2e.com/tjd103/shop/productdetail/${route.params.id}`
+  const textzh = "我在這座魔法商店發現了奇妙的東西，快點進來和我一起探險！";
+  const texten = "I’ve discovered something wondrous in this magic shop. Come explore it with me!"; 
+  let shareUrl = "";
+
+  switch (platform) {
+    case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+    case 'line':
+        const lineContentzh = `${textzh}\n${url}`;
+        const lineContenten = `${texten}\n${url}`;
+        if(lang.value == 'zh'){
+            shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContentzh)}`;
+        }else{
+            shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineContenten)}`;
+        }
+        break;
+  }
+
+  window.open(shareUrl, '_blank', 'width=600,height=400');
+}
 
 // Tab 開關 ------------------------------------
 //const tabInfo = ref(story);  story 對程式來說是變數，所以需要宣告程式才會認識
@@ -173,11 +200,109 @@ const tabInfo = ref('story');
 
 
 // like 切換 ------------------------------------
+const apiBase = import.meta.env.VITE_API_BASE;
+const apiURL = `${apiBase}/changeCollection.php`;
+
 //const isLike = ref(false);
-function likeHeart(){
+async function likeHeart(){
+    // step0 不管有沒有登入，優先讓使用者看到畫面（如果後續執行失敗再變回來即可）
     //isLike = !isLike;   因為是const，所以這樣寫無法改變值
     showDetail.value.isLike = !showDetail.value.isLike;
+
+    // step1 先判斷登入狀態，再開始處理收藏  =======
+  if(authStore.token){
+
+    // 取得需要的商品跟會員 ID 
+    // 商品的在網址列
+    const urlProductID = route.params.id;   //因為是從網址列拿，所以記得 id 要等於當初取的變數名稱
+
+    // 會員的在 storage
+    const storageUser = localStorage.getItem('user');
+
+    // 宣告變數準備裝 ID
+    let storageMemberID = null;
+
+    // 2. 如果有抓到 user，就把它轉成物件，再拿出裡面的 member_ID
+    if (storageUser) {
+        const userObj = JSON.parse(storageUser); // 把字串變成物件
+        storageMemberID = userObj.member_ID;     // 拿到 300018
+    }
+
+    console.log('網址ID (route.params.id):', urlProductID);
+    console.log('會員ID (storage):', storageMemberID);
+
+
+    // 避免找不到 ID 的情況
+    if(!urlProductID || !storageMemberID){
+      console.error("找不到商品ID或會員ID");
+      return;
+    }
+
+
+    // step2 用 fetch 發送請求  =======
+    try{
+      const response = await fetch(apiURL,{
+        method: 'POST',
+        headers: {
+          // fetch 必須告訴後端傳的是 JSON
+          // 這代表 php 接資料時，不能用$_POST，因為 body 不會是 formData 而是 JSON
+          'Content-Type': 'application/json',
+        },
+        // fetch 必須把物件轉成 JSON 字串
+        body: JSON.stringify({
+          member_id: storageMemberID,
+          product_id: urlProductID
+        })
+      });
+
+      //fetch 如果有 404(網址錯) 或 500(伺服器報錯) ，不會自動跑到 catch，所以要加寫這行判斷
+      //.ok 確認請求狀態碼事不是在成功範圍內
+      if (!response.ok) {     
+        throw new Error(`伺服器錯誤: ${response.status}`);  //throw  錯誤處理機制，拋出例外來讓 catch 接
+      }
+
+      //接回傳的資料 
+      //如果接下來沒有要用資料執行其他動作時，不一定要接
+      //開發階段為了測試，需要接
+      //如果想確保狀態同步，需要接資料來強制校正，讓前端的顯示都以資料庫最後拿到的為準
+      const data = await response.json();
+
+      //測試
+      console.log('資料庫更新成功:', data);
+
+      //強制校正的語法
+      if (data.current_status !== undefined) {
+        //如果後端現在是 1，愛心就是亮的；如果是 0，就是暗的
+
+        //寫法一 縮寫 先執行括號裡的判斷 程式會先看右邊的 (data.current_status == 1)。
+        //後端回傳1 為true，後段回傳0 為false
+        showDetail.value.isLike = (data.current_status == 1);
+
+        /*寫法二 原始寫法
+        if (data.current_status == 1) {
+            product.isLike = true; 
+        } else {
+            product.isLike = false;
+        }
+        */
+      }
+
+    }catch(error){
+      console.error('API 錯誤:', error);
+      // step3. 如果沒有成功，要把愛心變回來
+      showDetail.value.isLike = !showDetail.value.isLike;
+      alert('收藏失敗，請檢查網路連線');
+    }
+
+  }else{
+    authStore.openLoginModal();
+    authStore.setmemberView('login');
+    // router.push(''); 這句表示跳到這頁的最上面  
+  }
+
+
 }
+
 
 
 // 數量切換 ------------------------------------
@@ -264,8 +389,8 @@ const lang = computed( () => {
                         <h4 class="no-i18n-anim">NT$ {{ showDetail.price }}</h4>
                         <p class="fw200">{{ showDetail[`description_${lang}`]}}</p>
                         <div class="share-icon">
-                            <font-awesome-icon icon="fa-brands fa-square-facebook" />
-                            <font-awesome-icon icon="fa-brands fa-instagram" />
+                            <font-awesome-icon icon="fa-brands fa-square-facebook" @click="shareTo('facebook')" />
+                            <font-awesome-icon icon="fa-brands fa-line" class="icon-line" @click="shareTo('line')" />
                         </div>
                     </div>
 
@@ -388,6 +513,7 @@ const lang = computed( () => {
 
 .detail-pic{
     gap: 20px;
+    flex-grow: 1;
 }
 
 .detail-pic-small{
@@ -456,6 +582,12 @@ const lang = computed( () => {
         font-size: 2.8rem;
         display: inline-block;
         cursor: pointer;
+
+
+        & .icon-line{
+            font-size: 2.5rem;
+            margin-bottom: 1px;
+        }
     }
 
 }
@@ -560,7 +692,7 @@ const lang = computed( () => {
 }
 
 // RWD------------------------------------- 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1366px) {
   .detail-dock{ 
     padding: 60px 40px 80px;
   }

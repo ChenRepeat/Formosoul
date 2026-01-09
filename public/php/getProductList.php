@@ -8,7 +8,26 @@ exit; // 讓程式停在這裡，不執行後面的
 // 連線 ----------
 require_once 'conn.php';
 
-// SQL ----------
+// **收藏 SQL ----------
+// 如果有傳 member_id 過來，就使用；如果沒傳或未登入，預設為 0
+$memberId = isset($_GET['member_id']) ? (int)$_GET['member_id'] : 0;
+
+// **如果有，先查出收藏清單 
+// ---------------------------------------------------------
+$myLikedProductIDs = []; // 預設空陣列 (未登入時使用)
+
+if ($memberId > 0) {
+    $sqlLikes = "SELECT product_ID FROM collection WHERE member_ID = ? AND collect_status = 1";   
+    $stmtLikes = $pdo->prepare($sqlLikes);
+    $stmtLikes->execute([$memberId]);
+    
+    $myLikedProductIDs = $stmtLikes->fetchAll(PDO::FETCH_COLUMN);   //可能會有很多筆
+}
+
+
+
+
+// 商品 SQL ----------
 $sql = "SELECT * 
         FROM product p
 	    LEFT JOIN product_detail pd
@@ -48,9 +67,17 @@ $product["image"] = !empty($product["image"]) ? explode('|', $product["image"]):
 
 
 // step2 新增 isLike 欄位 ----------
-$product["isLike"] = false;
+//$product["isLike"] = false;   
+//加入會員收藏狀態
+if (in_array($product['product_ID'], $myLikedProductIDs)) {
+        // 如果在清單裡，代表會員有收藏
+        $product["isLike"] = true;
+    } else {
+        // 如果沒登入($myLikedProductIDs是空的)，或是沒收藏
+        $product["isLike"] = false;
+    }
 
-
+    
 // step3 把庫存跟價格從字串轉成數字 ----------
 $product['price'] = (int)$product['price'];
 $product['stock'] = (int)$product['stock'];

@@ -48,20 +48,20 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
             class="cart-dock-block"
             :class="{nowblock: currentStep === 1}">
                 <RouterLink to="/shoppingcart" class="btn-step">
-                    <h1 class="cart-step fw200" :class="{nowstep: currentStep === 1}">1</h1>
+                    <h3 class="cart-step fw200" :class="{nowstep: currentStep === 1}">1</h3>
                     <h6 class="cart-step-text" :class="{nowtext: currentStep === 1}">{{$t('shoppingcart.step1')}}</h6>
                 </RouterLink>
             </li>
             <li 
             class="cart-dock-block"
             :class="{nowblock: currentStep === 2}">
-                <h1 class="cart-step fw200" :class="{nowstep: currentStep === 2}">2</h1>
+                <h3 class="cart-step fw200" :class="{nowstep: currentStep === 2}">2</h3>
                 <h6 class="cart-step-text" :class="{nowtext: currentStep === 2}">{{$t('shoppingcart.step2')}}</h6>
             </li>
             <li 
             class="cart-dock-block"
             :class="{nowblock: currentStep === 3}">
-                <h1 class="cart-step fw200" :class="{nowstep: currentStep === 3}">3</h1>
+                <h3 class="cart-step fw200" :class="{nowstep: currentStep === 3}">3</h3>
                 <h6 class="cart-step-text" :class="{nowtext: currentStep === 3}">{{$t('shoppingcart.step3')}}</h6>
             </li>
         </ul>
@@ -120,7 +120,7 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
 
     & .nowstep{
         color: $color-fsWhite;
-        border: 1.5px solid $color-fsWhite;
+        border: 1px solid $color-fsWhite;
     }
 
     & .nowtext{
@@ -130,8 +130,9 @@ const currentStep = computed(()=>{      //當前的步驟永遠由路由決定
 
 .cart-step{
     border-radius: 50%;
-    border: 1.5px solid $color-fsContent;
-    width: 100px;
+    border: 1px solid $color-fsContent;
+    width: 80px;
+    line-height: 76px;
     color:  $color-fsContent;
     text-align: center;
     margin: 0 auto 20px;  

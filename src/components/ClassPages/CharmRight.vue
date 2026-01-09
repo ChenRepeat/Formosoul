@@ -132,7 +132,7 @@ onMounted(() => {
           <div class="title-case dp-flex">
             <h5>{{$t('classes.drawText1')}}</h5>
           </div>
-          <h6 class="close" @click="closeTips"><FontAwesomeIcon icon="fa-solid fa-xmark" /></h6>
+          <h6 class="close no-i18n-anim" @click="closeTips"><FontAwesomeIcon icon="fa-solid fa-xmark" /></h6>
           <h5>Tips</h5>
           <h6>{{$t('classes.charmInput1')}}：</h6>
           <p>{{$t('classes.charmIntroText1')}}</p>
@@ -154,8 +154,9 @@ onMounted(() => {
       @mousemove="draw"
       @mouseup="stopDrawing"
       @mouseleave="stopDrawing"
-      @touchstart="startDrawing"
-      @touchmove="draw"
+      @touchstart.prevent="startDrawing"
+      @touchmove.prevent="draw"
+      style="touch-action: none;"
       @touchend="stopDrawing"
     ></canvas>
     <div class="toolbar dp-flex-col">

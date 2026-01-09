@@ -2,7 +2,7 @@
   <ListLayout>
     
     <template #title>
-      <h6>編輯折價券</h6>
+      <h6>編輯優惠券</h6>
     </template>
 
     <template #controls>
@@ -30,14 +30,21 @@
               </el-col>
 
               <el-col :span="24">
-                <el-form-item label="折價券編號">
+                <el-form-item label="優惠券編號">
                   <el-input v-model="editCouponForm.code" disabled class="bg-gray"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="折扣類型" required>
-                  <div class="input-group">
+                <el-form-item label="折扣" required>
+                    <el-input-number 
+                      v-model="editCouponForm.discount" 
+                      :min="0" 
+                      :controls="false"
+                      style="width: 100%;"
+                      placeholder="請輸入折扣金額"
+                    />
+                  <!-- <div class="input-group">
                     <el-select v-model="editCouponForm.discountType" style="width: 140px; margin-right: 10px;">
                       <el-option label="定額折抵" value="amount" />
                       <el-option label="百分比折扣" value="percent" />
@@ -52,7 +59,7 @@
                       :disabled="editCouponForm.discountType === 'shipping'"
                       :placeholder="getPlaceholder"
                     />
-                  </div>
+                  </div> -->
                 </el-form-item>
               </el-col>
 
@@ -231,7 +238,7 @@ const getCouponDetail = async () => {
     }
   } catch (error) {
     console.error(error);
-    ElMessage.error('無法讀取折價券資料');
+    ElMessage.error('無法讀取優惠券資料');
   } finally {
     pageLoading.value = false;
   }

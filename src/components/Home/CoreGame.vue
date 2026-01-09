@@ -75,6 +75,7 @@ async function handleCoreSelected() {
         setTimeout(() => {
             showCardOverlay.value = true; 
             if (isFirstPass) {
+                memberStore.rewards_coupon();
                 // console.log('%c[魔杖動畫] 觸發蓋章動畫', 'color: red; font-weight: bold');
                 setTimeout(() => {
                     activeTriggers.value.wand = true; 
@@ -115,6 +116,7 @@ async function handleCoreSelected() {
 const ledgerClose = ()=> showCardOverlay.value = false;
 
 onMounted(async () => {
+
     if (isLoggedIn.value) {
         // 只需要確保「點數狀態」抓回來就好
         await memberStore.fetchPointsStatus(); 
@@ -122,8 +124,8 @@ onMounted(async () => {
     } else {
         initGameStatus();
     }
-    initGame();
-    window.addEventListener('keydown', handleKey);
+    // initGame();
+    // window.addEventListener('keydown', handleKey);
 });
 
 </script>

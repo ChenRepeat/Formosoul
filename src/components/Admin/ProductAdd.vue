@@ -98,16 +98,18 @@
               </el-col>
               
               <el-col :span="12">
-                 <div class="system-info-group">
-                  <el-form-item label="自訂商品編號" required> <el-input 
-                      v-model="addProductForm.id" 
-                      placeholder="請輸入唯一編號 (例如: P001)" 
-                    />
+                  <div class="system-info-group">
+                    <el-form-item label="商品編號">
+                       <el-input 
+                         placeholder="由系統生成" 
+                         disabled 
+                         class="bg-gray"
+                       />
                     </el-form-item>
                     <el-form-item label="建立日期">
-                       <el-input v-model="addProductForm.createDate" disabled placeholder="自動生成" class="bg-gray"/>
+                        <el-input v-model="displayDate" disabled placeholder="自動生成" class="bg-gray"/>
                     </el-form-item>
-                 </div>
+                  </div>
               </el-col>
             </el-row>
           </div>
@@ -119,9 +121,10 @@
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品主圖 (封面)</span>
-                    <span class="hint">建議 1200x1200px, JPG/PNG</span>
+                    <span class="hint">建議 1200x1200px, JPG/PNG (拖曳可直接替換)</span>
                   </div>
                   <el-upload
+                    ref="mainUploaderRef"
                     class="main-uploader"
                     drag
                     action="#"
@@ -130,6 +133,7 @@
                     :show-file-list="true"
                     v-model:file-list="mainImage"
                     list-type="picture"
+                    @exceed="handleExceed"
                   >
                     <div class="upload-content">
                       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
@@ -145,7 +149,7 @@
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品更多視角 (最多 4 張)</span>
-                    <span class="hint">建議 800x800px, 可拖曳排序</span>
+                    <span class="hint">建議 800x800px</span>
                   </div>
                   <el-upload
                     v-model:file-list="subImages"
@@ -154,6 +158,7 @@
                     :auto-upload="false"
                     :limit="4"
                     multiple
+                    drag
                     class="sub-uploader"
                   >
                     <el-icon><Plus /></el-icon>
@@ -236,24 +241,31 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus, UploadFilled, ArrowLeft } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, genFileId } from 'element-plus' // ★ 引入 genFileId
 
 const router = useRouter()
 const loading = ref(false)
+
+// ★ 1. 為了主圖覆蓋功能，新增 ref
+const mainUploaderRef = ref(null)
+
+// 顯示當前日期
+const displayDate = computed(() => {
+    const now = new Date();
+    return now.toISOString().split('T')[0]; 
+});
 
 // 表單資料模型
 const addProductForm = reactive({
   nameZh: '',
   nameEn: '',
-  id: '', 
   typeZh: '',
   typeEn:'',
   price: undefined,
   stock: undefined,
-  createDate: '', 
   status: 0, 
   descriptionZh: '',
   descriptionEn: '',
@@ -263,7 +275,6 @@ const addProductForm = reactive({
   useEn: '',
 })
 
-// ★ 定義分類對應表 (Key: 英文, Value: 中文)
 const typeMapping = {
   'Folktoys': '童玩',
   'Personalized': '客製化商品',
@@ -271,7 +282,6 @@ const typeMapping = {
   'Voucher': '體驗券'
 }
 
-// ★ 監聽英文分類變動，自動填入中文
 watch(() => addProductForm.typeEn, (newValue) => {
   if (newValue && typeMapping[newValue]) {
     addProductForm.typeZh = typeMapping[newValue]
@@ -282,6 +292,17 @@ watch(() => addProductForm.typeEn, (newValue) => {
 const mainImage = ref([])
 const subImages = ref([])
 
+// ★ 2. 新增：處理主圖拖曳覆蓋 (當檔案超出 limit 1 時觸發)
+const handleExceed = (files) => {
+  // 清空目前的檔案列表
+  mainUploaderRef.value.clearFiles()
+  const file = files[0]
+  // 產生新的檔案 ID (Element Plus 內部需要)
+  file.uid = genFileId()
+  // 手動執行上傳前處理，這樣就會把新圖放進去
+  mainUploaderRef.value.handleStart(file)
+}
+
 const goBack = () => {
   router.push('/admin/product-management') 
 }
@@ -289,8 +310,8 @@ const goBack = () => {
 const submitForm = async () => {
   loading.value = true;
   
-  if(!addProductForm.id || !addProductForm.nameZh || !addProductForm.price) {
-      ElMessage.warning('請填寫必填欄位 (編號、名稱、價格)');
+  if(!addProductForm.nameZh || !addProductForm.price || !addProductForm.typeEn) {
+      ElMessage.warning('請填寫必填欄位 (名稱、分類、價格)');
       loading.value = false;
       return;
   }
@@ -301,7 +322,6 @@ const submitForm = async () => {
   const fd = new FormData();
 
   for (const [key, value] of Object.entries(addProductForm)) {
-    // 處理 undefined 或 null 轉空字串
     fd.append(key, value === undefined || value === null ? '' : value);
   }
 
@@ -322,7 +342,7 @@ const submitForm = async () => {
     const data = await response.json();
 
     if (data.success) {
-      ElMessage.success('商品新增成功！');
+      ElMessage.success(`商品新增成功！編號：${data.id}`);
       router.push('/admin/product-management');
     } else {
       ElMessage.error('新增失敗：' + data.message);
@@ -338,6 +358,7 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
+/* 樣式保持原樣，只有 .bg-gray 有用到 */
 .scroll-container {
   height: calc(100vh - 250px);
   overflow-y: auto;
@@ -439,6 +460,16 @@ const submitForm = async () => {
     width: 100px;
     height: 100px;
     margin: 0 10px 10px 0;
+}
+/* ★ 新增：修正副圖開啟 drag 後，拖曳區域的排版 */
+.sub-uploader :deep(.el-upload-dragger) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none; /* 移除 dragger 自帶的框，沿用 picture-card 的 */
+    background: transparent;
 }
 
 /* 底部按鈕區 */

@@ -13,31 +13,62 @@ import Couponcontaion from '../Member/coupons/couponcontaion.vue';
 const router = useRouter();
 const cartstore = useCartStore();
 const addrstore = useAddressStore();
-const { locale } = useI18n();     // 讀取語系狀態
-
+const { t, locale } = useI18n();     // 讀取語系狀態
+const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
 // coupon -------------------------------------
 const hasCoupon = ref(false);
 function couponclose(){
     cart_use_coupon().then( res =>{
         if(res.success && res.data.coupons_ID == cartstore.coupon_ID){
-            cartstore.discount = res.data.discount
+            restore_coupon();
+            cartstore.coupon_ID = null;
+            cartstore.discount = 0;
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
         }else if(!res.success && cartstore.coupon_ID == null){
+            restore_coupon();
             cartstore.discount = 0
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
+ 
+
         }
     })
 }
+
 function couponopen(){
     hasCoupon.value = true;
+    document.querySelector('.shoppingcart-main').style.overflow = 'hidden' ;
+    document.querySelector('.shoppingcart-main').style.paddingRight = 120 + scrollbarWidth + 'px';
     document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
+    
 }
+function restore_coupon(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/modifycoupon.php`;
+        if(!storedUser) return;
+        const userData = JSON.parse(storedUser); 
+        const { pointscard_ID } = userData;
+
+        return fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                pointscard_ID
+            })
+        }
+        ).then( res => res.json())}; 
 
 function cart_use_coupon(){
         const storedUser = localStorage.getItem('user');
@@ -66,94 +97,104 @@ function couponuse(){
             cartstore.discount = res.data.discount
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
         }else if(!res.success && cartstore.coupon_ID == null){
             cartstore.discount = 0
             hasCoupon.value = false;
             document.body.style.overflow = '' ;
-            document.documentElement.style.overflow = ''; 
+            document.documentElement.style.overflow = '';
+            document.querySelector('.shoppingcart-main').style.paddingRight = 120 + 'px';
+
         }
     })
 }
 
-// 信用卡填完跳轉下一格 ---------------------------
-const cardNum = ref([]);
-const cardMonth = ref(null);
-const cardYear = ref(null);
-const cardCode = ref(null);
-const cardName = ref(null);
+// #region 暫時不用的信用卡格式
+// // 信用卡填完跳轉下一格 ---------------------------
+// const cardNum = ref([]);
+// const cardMonth = ref(null);
+// const cardYear = ref(null);
+// const cardCode = ref(null);
+// const cardName = ref(null);
 
-/* 這個寫法要寫好幾個function來進行跳轉
-function nextInput( e, index ){
-    //檢查內容是否為數字
+// /* 這個寫法要寫好幾個function來進行跳轉
+// function nextInput( e, index ){
+//     //檢查內容是否為數字
 
-    //檢查內容的長度
-    if(e.target.value.length === 4 ){    
-        //檢查是否為最後一格
-        if(index < 3){
-            cardNum.value[ index + 1 ].focus();
-        }else{
-            cardMonth.value.focus();
-        }
-    }
-}
-*/
+//     //檢查內容的長度
+//     if(e.target.value.length === 4 ){    
+//         //檢查是否為最後一格
+//         if(index < 3){
+//             cardNum.value[ index + 1 ].focus();
+//         }else{
+//             cardMonth.value.focus();
+//         }
+//     }
+// }
+// */
 
-//用一個 function 統一處理跳轉
-function goNext( e, maxlength, nextOne ){
+// //用一個 function 統一處理跳轉
+// function goNext( e, maxlength, nextOne ){
 
-    // 先過濾輸入的內容是否為數字，但是排除姓名欄
-    // 因為在目前情況下，剛好有限制長度的欄位皆為數字，所以一定會輸入限制長度，而長度必大於0，所以可以用這件事來進行排除
-    if( maxlength > 0 ){
-        //e.target.value = e.target.value.replace(/[^\d]/g, '');
-        e.target.value = e.target.value.replace(/\D/g, '');
-        // replace() 是字串的方法，因為 input 的內容會被視為字串傳回來，所以可以使用字串的方法
-        // replace(舊值, 取代舊值的新值)
+//     // 先過濾輸入的內容是否為數字，但是排除姓名欄
+//     // 因為在目前情況下，剛好有限制長度的欄位皆為數字，所以一定會輸入限制長度，而長度必大於0，所以可以用這件事來進行排除
+//     if( maxlength > 0 ){
+//         //e.target.value = e.target.value.replace(/[^\d]/g, '');
+//         e.target.value = e.target.value.replace(/\D/g, '');
+//         // replace() 是字串的方法，因為 input 的內容會被視為字串傳回來，所以可以使用字串的方法
+//         // replace(舊值, 取代舊值的新值)
 
-        /*
-        /[^\d]/g 正則表達式
-        /  / ：中間寫規則
-        g    ：修飾符，代表規則的備註 / 設定 => g代表全部都要找出來，如果沒有 g，找到一個之後就會停止
-        \d   ：代表 數字 (0-9)。
-        \D   ：代表 非數字 (0-9)。
-        [^  ]：代表 除了... 以外。
-        ^    ：代表 開頭為...
-        */
-    }
+//         /*
+//         /[^\d]/g 正則表達式
+//         /  / ：中間寫規則
+//         g    ：修飾符，代表規則的備註 / 設定 => g代表全部都要找出來，如果沒有 g，找到一個之後就會停止
+//         \d   ：代表 數字 (0-9)。
+//         \D   ：代表 非數字 (0-9)。
+//         [^  ]：代表 除了... 以外。
+//         ^    ：代表 開頭為...
+//         */
+//     }
 
-    if(e.target.value.length === maxlength){
-        //nextOne.value.focus();  因為nextOne在目前的情況，有可能是 陣列裡的某一個 或 單獨的 Ref，所以這樣寫會有 bug，跑不動
+//     if(e.target.value.length === maxlength){
+//         //nextOne.value.focus();  因為nextOne在目前的情況，有可能是 陣列裡的某一個 或 單獨的 Ref，所以這樣寫會有 bug，跑不動
 
-        // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
-        if(nextOne){
-            // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
-            // nextOne.focus 代表 檢查有沒有這個功能 => 回傳函式本身 (True) 或 undefined (False)。
-            // nextOne.focus() 代表 現在立刻執行這個功能！ 
-            const target = nextOne.focus ? nextOne : nextOne.value;
-            // step3 程式保護，避免報錯，網頁會死掉
-            // ? : 萬一沒有就停在這邊，不要繼續執行（ JavaScript (ES2020)的語法糖 ）
-            target?.focus?.();
-        }
-    }
-};
+//         // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
+//         if(nextOne){
+//             // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
+//             // nextOne.focus 代表 檢查有沒有這個功能 => 回傳函式本身 (True) 或 undefined (False)。
+//             // nextOne.focus() 代表 現在立刻執行這個功能！ 
+//             const target = nextOne.focus ? nextOne : nextOne.value;
+//             // step3 程式保護，避免報錯，網頁會死掉
+//             // ? : 萬一沒有就停在這邊，不要繼續執行（ JavaScript (ES2020)的語法糖 ）
+//             target?.focus?.();
+//         }
+//     }
+// };
 
 
-function goBack(e, previousOne){
-    if(e.target.value.length === 0){
+// function goBack(e, previousOne){
+//     if(e.target.value.length === 0){
 
-        // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
-        if(previousOne){
+//         // step1 先確認 nextOne 真的存在 (避免最後一格傳 null 進來報錯)
+//         if(previousOne){
 
-            // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
-            const target = previousOne.focus ? previousOne : previousOne.value;
-            // step3 程式保護，避免報錯，網頁會死掉
-            target?.focus?.();
-        }
-    }
-}
+//             // step2 判斷它是「陣列裡的某一個」還是「單獨的 Ref」
+//             const target = previousOne.focus ? previousOne : previousOne.value;
+//             // step3 程式保護，避免報錯，網頁會死掉
+//             target?.focus?.();
+//         }
+//     }
+// }
+//#endregion
 
-// 信用卡資訊 ----------------------------------------------
+// 付款方式 ----------------------------------------------
 const paymentInfo = ref('creditCard');
+
+
+// 運送資訊 ----------------------------------------------
+const deliveryInfo = ref('homeDelivery');
 
 
 // 電話號碼檢核 ----------------------------------------------
@@ -194,15 +235,14 @@ const receiptPhone = ref('');
 const receiptAddr = ref('');         //只記錄使用者填寫的部分，完整的地址需要組合下拉選單
 const receiptRemark = ref('');
 const saveAddr = ref(false);         // 是否儲存為常用地址
-const paid = ref('');
 
 // 完整地址需要組合
 
 const finalAddr = computed(()=>{
-
-    if(cartstore.selectCountry.value !=='taiwan'){
+    // pinia 通常會自動解包，所以不用.value
+    if(cartstore.selectCountry !=='taiwan'){
         // 國外：國家＋地址 
-        return `${cartstore.selectCountry.value}-${receiptAddr.value||''}`;  
+        return `${cartstore.selectCountry}-${receiptAddr.value||''}`;  
         // 因為${}是JS，所以如果是 undefined 或 null 會被同步呈現出來，所以要用||''來取代。
         // {{}} 是 vue，就不會有${}的問題，所以不用寫   
     }else{
@@ -217,8 +257,18 @@ const finalAddr = computed(()=>{
 
 // 確認訂單 ---------------------------
 // 訂單寫入資料庫、寫入後將資料傳給綠界、沒問題後在前往訂單完成頁
-function goOrder(){
-    // step1 再次檢查購物車有沒有商品
+
+const errorMsg = ref({});   // 用來存 php 回傳的錯誤訊息
+
+// 設定環境變數
+const apiBase = import.meta.env.VITE_API_BASE;
+const apiURL = `${apiBase}/createOrder.php`;
+
+async function goOrder(){
+    //step0 如果有前次錯誤訊息，先清空
+    errorMsg.value = {};
+
+    // step1 再次檢查購物車有沒有商品（防護用，因為如果購物車沒商品，應該無法點選按鈕執行goOrder）
     if(cartstore.cartList.length === 0){
         return alert(t('shoppingcart.cartEmpty'));      //return 是為了讓程式停在這，不要繼續往下跑，才不會報錯或是送出一張空的訂單
     }
@@ -226,13 +276,12 @@ function goOrder(){
     // step2 把資料打包
     const orderData = {
         //查詢用ID
-        member_ID : cartstore.memberID.value,
-        coupons_ID : cartstore.coupon_ID.value,   //預設，還沒抓
+        member_ID : cartstore.memberID,
+        coupons_ID : cartstore.coupon_ID || null,   //預設，還沒抓
 
-        //運費跟折扣
-        shipping : cartstore.shippingFee.value, //
-        country : cartstore.selectCountry.value,
-        coupon : 0,
+        //運費+運送方式
+        country : cartstore.selectCountry,   //後端會用國家重新查一次運費
+        shipping : deliveryInfo.value,
 
         //購物車內容
         cartItem : cartstore.cartList.map( item => ({
@@ -250,16 +299,50 @@ function goOrder(){
         payment : paymentInfo.value,
 
         //前端計算的總額（只是為了參考，實際還是會用後端查詢到的資訊來計算）
-        frontend_total : cartstore.finalPrice.value,
+        frontend_total : cartstore.finalPrice,
     };
 
 
     // step3 送給後端（發送請求）
+    try{
+        console.log('正在發送訂單...', orderData);   //console.log 可以同時傳入多個參數，用,隔開即可
+
+        // 使用 POST 發送
+        const response = await axios.post(
+            apiURL, //API 路徑
+            //'http://localhost/Formosoul/public/php/createOrder.php',
+            orderData
+        );
+
+        // 判斷回傳狀態
+
+        if(response.data.status === 'success'){
+            //訂單成立
+            //alert(`訂單建立成功！\n編號：${response.data.orderID}\n金額：NT$ ${response.data.real_total}\n即將前往付款頁面...`);
+
+            // 清空購物車
+            cartstore.clearCart();
+            
+            // 跳轉訂單成功畫面
+            // router.push({
+            //     name: 'OrderSuccess',
+            // });
 
 
-    router.push({
-        name: 'OrderSucess',
-    });
+            // 拿訂單編號，跳轉綠界
+            const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
+            window.location.href = payURL;
+        
+        }else{
+            alert('訂單建立失敗：' + response.data.message);
+        }
+
+        //之後可以補上驗證失敗的欄位提示
+        
+    }catch(error){
+        console.error('連線錯誤:', error);
+        alert('系統發生錯誤，請檢查網路或聯絡管理員');
+    }    
 }
 
 
@@ -309,8 +392,8 @@ function goOrder(){
                 <p>{{$t('shoppingcart.delivery')}}</p>
                 <nav class="nav-payment-total">
                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                    <select class="nav-list fw200">
-                        <option class="list-option">{{$t('shoppingcart.homeDelivery')}}</option>
+                    <select class="nav-list fw200" v-model="deliveryInfo">
+                        <option class="list-option" value="homeDelivery">{{$t('shoppingcart.homeDelivery')}}</option>
                     </select>
                 </nav>
                 <p>{{$t('shoppingcart.payment')}}</p>
@@ -331,13 +414,13 @@ function goOrder(){
                         <p>{{$t('shoppingcart.price')}}：</p>
                         <p>NT$ {{cartstore.totalPrice}}</p>
                     </div>
-                    <div class="check-discount dp-flex">
-                        <p>{{$t('shoppingcart.discount')}}：</p>
-                        <p>－ NT$ {{cartstore.discount}}</p>
-                    </div>
                     <div class="check-shippingfee dp-flex">
                         <p>{{$t('shoppingcart.shippingFee')}}：</p>
                         <p>NT$ {{cartstore.shippingFee}}</p>
+                    </div>
+                    <div class="check-discount dp-flex">
+                        <p>{{$t('shoppingcart.discount')}}：</p>
+                        <p>－ NT$ {{cartstore.discount}}</p>
                     </div>
                     <hr>
                     <div class="check-total-payment dp-flex">
@@ -350,13 +433,19 @@ function goOrder(){
                 </BasicButton>
                 <Teleport v-if="hasCoupon" to="body">
 
-                    <div class="coupon-overlay dp-flex" @click.self="couponclose">
+                    <div class="coupon-overlay dp-flex"  @click.self="couponclose">
                         <div class="coupon-dock">
                             <font-awesome-icon class="coupon-close" icon="fa-solid fa-xmark" @click="couponclose"/>
                             <Couponcontaion isrows></Couponcontaion>
-                            <BasicButton class="btn-yellow-fill btn-coupon-use" @click="couponuse">
-                                {{$t('shoppingcart.couponuse')}}
-                            </BasicButton>
+                            <p class="coupon-tips">{{$t('shoppingcart.couponTips')}}</p>
+                            <div class="btn-coupon-use  dp-flex ">
+                                <BasicButton class="btn-gray-fill" @click="couponclose">
+                                    {{$t('shoppingcart.couponNouse')}}
+                                </BasicButton>
+                                <BasicButton class="btn-yellow-fill" @click="couponuse">
+                                    {{$t('shoppingcart.couponuse')}}
+                                </BasicButton>
+                            </div>
                         </div>
                     </div>
                 </Teleport>
@@ -368,9 +457,9 @@ function goOrder(){
         <!-- 表單 -->
         <form action="" method="POST" @submit.prevent="goOrder">
             <!-- @submit.prevent="goOrder" 阻止預設行為並且執行goOrder -->
-            
             <!-- 信用卡資料 -->
-            <section v-if="paymentInfo === 'creditCard'" class="creditcard-info">
+            <section v-if="false" class="creditcard-info">
+            <!-- <section v-if="paymentInfo === 'creditCard'" class="creditcard-info"> -->
                 <h5>{{$t('shoppingcart.creditCard')}}<span class="fw200"> （ VISA / MASTER / JCB ）</span></h5>
                 <hr>  
                 <div class="card-dock dp-flex">
@@ -388,11 +477,6 @@ function goOrder(){
                                                 $event 因為還要傳遞 index 值，所以不能省略-->
                                 <span v-if="index < 3">－</span>
                             </span>
-
-                            <!-- <input class="input-text" type="text" required>
-                            －<input class="input-text" type="text" required>
-                            －<input class="input-text" type="text" required>
-                            －<input class="input-text" type="text" required> -->
                         </div>
 
                         <div class="card-date-type dp-flex">
@@ -434,7 +518,7 @@ function goOrder(){
 
                 </div>
 
-            </section>
+            </section> 
 
             <!-- 收件資料 -->
             <section class="received-info">
@@ -463,16 +547,16 @@ function goOrder(){
                             <div class="nav-addr-dock dp-flex">
                                 <nav class="nav-addr">
                                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                                    <select class="nav-list fw200" v-model="selectCity">
-                                        <option disabled value="">{{$t('shoppingcart.city')}}</option>
-                                        <option v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
+                                    <select class="nav-list fw200" v-model="selectCity" required>
+                                        <option class="list-option" disabled value="">{{$t('shoppingcart.city')}}</option>
+                                        <option class="list-option" v-for="city in addrstore.addrTaiwan" :key="city.name_zh" :value="city.name_zh">{{ city[`name_${lang}`]}}</option>
                                     </select>
                                 </nav>
                                 <nav class="nav-addr">
                                     <font-awesome-icon class="nav-icon" icon="fa-solid fa-angle-down" /> 
-                                    <select class="nav-list fw200" v-model="selectDist">
-                                        <option disabled value="">{{$t('shoppingcart.dist')}}</option>
-                                        <option v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
+                                    <select class="nav-list fw200" v-model="selectDist" required>
+                                        <option class="list-option"  disabled value="">{{$t('shoppingcart.dist')}}</option>
+                                        <option class="list-option"  v-for="dist in currentDist" :key="dist.name_zh" :value="dist.name_zh">{{ dist[`name_${lang}`] }}</option>
                                     </select>
                                 </nav>
                             </div>
@@ -571,6 +655,11 @@ function goOrder(){
 
         // 移除預設下拉箭頭
         appearance: none;
+
+        & .list-option{
+            background-color: $color-fsTitle;
+            color: $color-fsWhite;
+        }
     }
 
     .nav-list:focus {
@@ -646,8 +735,13 @@ function goOrder(){
             cursor: pointer;
         }
 
+        & .coupon-tips{
+            text-align: center;
+            color: $color-fsRed;
+        }
+
         & .btn-coupon-use{
-            display: block;
+            justify-content: space-around;
             margin: 20px auto 0;
         }
     }
@@ -776,7 +870,6 @@ function goOrder(){
         margin-top: 40px;
     }
 
-
     //order
     .btn-order{
         display: block;
@@ -784,7 +877,7 @@ function goOrder(){
     }
 
     // RWD------------------------------------- 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1366px) {
         .card-left, .card-right{
             padding: 20px;   
         }

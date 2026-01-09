@@ -5,6 +5,9 @@
   import MemberLedger from "@/components/Member/information/memberLedger.vue";
   import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+
 const passTimes = ref(memberStore.gameData.ring.pass)
 
 // 過關蓋章
@@ -39,6 +42,7 @@ const checkGamePass = () => {
     
     // ← 只有第一次過關才播放動畫！
     if (isFirstPass) {
+      memberStore.rewards_coupon();
       console.log('[動畫] 第一次過關，播放蓋章動畫');
       setTimeout(() => {
         activeTriggers.value.ringtoss = true;
@@ -59,7 +63,7 @@ const checkGamePass = () => {
 
   // 物件設定
   const config = {
-    startRings:3,      // 圈圈數
+    startRings:10,      // 圈圈數
     ringRadius: 50,     // 圈圈半徑
     targetRadius: 50,   // 物件半徑
     objWidth: 110,      // 物件寬
@@ -346,12 +350,12 @@ const ledgerClose = ()=> showCardOverlay.value = false;
 
     <div v-else-if="isGameOver" class="overlay dp-flex">
       <div class="menu-box result-box">
-        <h2 v-if="score < 100" class="result-title">Game Over</h2>
-        <h2 v-if="score >= 100" class="result-title">Congradulations !!</h2>
+        <h2 v-if="score < 100" class="result-title">{{$t("nightmarket.items.ring-toss.gameOver")}}</h2>
+        <h2 v-if="score >= 100" class="result-title">{{$t("nightmarket.items.ring-toss.congradulations")}} !!</h2>
         <h6 class="result-title">Score: {{ score }}</h6>
         <div class="btn-group-row dp-flex">
-          <BasicButton @click="startGame" class="btn-white"><p>Try Again</p></BasicButton>
-          <BasicButton @click="handleCheckLedger" class="btn-white"><p>Check Ledger</p></BasicButton>
+          <BasicButton @click="startGame" class="btn-white"><p>{{$t("nightmarket.items.ring-toss.playAgain")}}</p></BasicButton>
+          <BasicButton @click="handleCheckLedger" class="btn-white"><p>{{$t("nightmarket.items.ring-toss.checkLedger")}}</p></BasicButton>
         </div>
       </div>
     </div>

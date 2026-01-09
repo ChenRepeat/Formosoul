@@ -1,19 +1,43 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import ListLayout from './ListLayout.vue'
   import { useRouter } from 'vue-router'
 
   const currentPage = ref(1)
   const pageSize = ref(10)
-  const total = ref(0)
+  // const total = ref(0)
 
   const memberSearch = ref('')
   const memberData = ref([])
 
   const router = useRouter()
 
-  const pagedData = computed( () => {
-    return memberData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  //篩選後的資料 (搜尋)
+  const filteredData = computed(() => {
+    if (!memberSearch.value) {
+      return memberData.value;
+    }
+    
+    // 轉小寫以進行不分大小寫搜尋
+    const keyword = memberSearch.value.toLowerCase().trim();
+
+    return memberData.value.filter(item => {
+      // 確保欄位有值再搜尋
+      const nameMatch = item.name ? item.name.toLowerCase().includes(keyword) : false;
+      const emailMatch = item.email ? item.email.toLowerCase().includes(keyword) : false;
+      
+      return nameMatch || emailMatch;
+    });
+  })
+
+  //分頁資料改成從 filteredData 來切
+  const pagedData = computed(() => {
+    return filteredData.value.slice((currentPage.value - 1) * pageSize.value , currentPage.value * pageSize.value)
+  })
+
+  //監聽搜尋字串，一旦改變就跳回第一頁
+  watch(memberSearch, () => {
+    currentPage.value = 1;
   })
 
   const getMemberData = async () => {
@@ -24,8 +48,6 @@
     const response = await fetch(API_URL);
     const data = await response.json();
     memberData.value = data;
-
-    total.value = data.length;
   }
 
    const addMember = () => {
@@ -68,7 +90,7 @@
       </el-table-column>
       <el-table-column label="權限" width="90px" prop="role">
         <template #default="scope">
-          <span v-if="scope.row.role === 1">
+          <span v-if="scope.row.role == 1">
             管理者
           </span>
           <span v-else>
@@ -78,7 +100,7 @@
       </el-table-column>
       <el-table-column label="會員狀態" width="90px" prop="status">
         <template #default="scope">
-          <span v-if="scope.row.status === 1">
+          <span v-if="scope.row.status == 1">
             啟用
           </span>
           <span v-else style="color:red;">
@@ -86,18 +108,23 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column width="50px">
-        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+      <el-table-column width="50px" align="center">
+        <template #default="scope">
+          <router-link :to="{ name: 'MemberEdit', params: { id: scope.row.member_ID } }">
+            <font-awesome-icon :icon="['fas', 'pen-to-square']" class="edit-icon" />
+          </router-link>
+        </template>
       </el-table-column>
     </el-table>
 
     <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData.length / pageSize) }} 頁</p>
       </div>
       <el-pagination 
         v-model:current-page="currentPage"
-        :total="total"
+        :page-size="pageSize"
+        :total="filteredData.length"
         layout="prev, pager, next"
         background
         class="pagination-btn"
@@ -135,7 +162,7 @@
 }
 /* 修改內建行高 */
 :deep(.el-table .el-table__cell) {
-  padding: 4px 0;
+  padding: 8px 0;
 }
 
 .pagination-text {

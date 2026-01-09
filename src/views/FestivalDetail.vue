@@ -4,8 +4,11 @@
   import { useRoute, useRouter } from "vue-router";
   import { useEventData } from "@/stores/event";
   import { storeToRefs } from "pinia";
-  const baseUrl = import.meta.env.BASE_URL;
+  import { useLangStore } from '@/stores/lang';
+  import ToTopBottom from "@/components/ToTopBottom.vue";
 
+  const baseUrl = import.meta.env.BASE_URL;
+  const langStore = useLangStore();
   const eventData = useEventData();
   const { eventDatas } = storeToRefs(eventData);
 
@@ -15,14 +18,21 @@
   const router = useRouter();
 
   const currentSlug = computed(() => route.params.slug);
-
   const currentFestival = computed(() => {
-    if (items.value.length === 0) return null;
-    const found = items.value.find((item) => {
-      return item.title_en_s?.join("-") === currentSlug.value;
-    });
-    return found || items.value[0];
+  if (!items.value || items.value.length === 0) {
+    return null;
+  }
+  const found = items.value.find((item) => {
+    return item.title_en_s?.join("-") === currentSlug.value;
   });
+  const target = found || items.value[0];
+  if (!target) return null;
+  return {
+    ...target,
+    displayTitle: target[`title_${langStore.dbSuffix}`],
+    displayContext: target[`introL_${langStore.dbSuffix}`],
+  };
+});
   function goBack() {
     if (window.history.length > 1) {
       router.back();
@@ -35,6 +45,9 @@
   if (!text) return "";
   return text.replace(/\n/g, '<br />');
 });
+const isEnglish = computed(() => {
+  return langStore.locale === 'en-US'; 
+});
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -44,7 +57,7 @@
 </script>
 
 <template>
-  <section class="festival-detail-page">
+  <main class="festival-detail-page">
     <div class="detail-container">
       <!-- Hero 圖片 -->
       <div class="hero-media">
@@ -56,36 +69,28 @@
 
       <!-- 文字內容 -->
       <article class="detail-content">
-        <p class="breadcrumb">
-          Annual Event · {{ currentFestival.title_en }}
-        </p>
-
-        <h1 class="detail-title">
-          {{ currentFestival.title_en }}
-        </h1>
-
+        <p class="breadcrumb">Annual Event · {{ currentFestival?.displayTitle }}</p>
+        <h1 class="detail-title">{{ currentFestival?.displayTitle }}</h1>
         <p class="detail-date">
           {{ currentFestival.launchDate }}
         </p>
 
         <div class="detail-body">
-          <p>{{ currentFestival.introL_en }}</p>
+          <p>{{ currentFestival?.displayContext}}</p>
         </div>
 
         <!-- 底部按鈕 -->
         <div class="detail-actions">
           <button class="btn-back" @click="goBack">
-            ← Back to previous page
+            ← {{ $t('nav.backPrepage') }}
           </button>
         </div>
       </article>
     </div>
 
     <!-- 右下角回到最上面的小按鈕 -->
-    <button class="scroll-top-btn" @click="scrollToTop">
-      ↑
-    </button>
-  </section>
+     <ToTopBottom />
+  </main>
 </template>
 
 <style scoped lang="scss">
@@ -169,22 +174,6 @@
   color: #fff;
   font-size: 14px;
   cursor: pointer;
-}
-
-/* 右下角「回到頂部」小按鈕 */
-.scroll-top-btn {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  border: none;
-  background: #1a3a6b;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 5;
 }
 
 /* RWD */

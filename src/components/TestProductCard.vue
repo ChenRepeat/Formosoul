@@ -1,12 +1,15 @@
 <script setup>
 import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';     //語系控制
 import { useCartStore } from '@/stores/cart';   //加入購物車按鈕
+import { useAuthStore } from "@/stores/autoStore";       //確認登入狀態
 
-// 宣告常數來接收 useRouter() ，方便後續使用 ----------------------------------------------
+// 宣告常數來接收，方便後續使用 ----------------------------------------------
 const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
 
 // 設定路由功能
 function goProductDetail(id){
@@ -34,6 +37,10 @@ const props = defineProps({
     type: Array,
     required: true,
     default: () => []  // 預設空陣列，避免報錯  <<要在了解一下原因>>
+  },
+  withwhite:{
+    type:Boolean,
+    default: false
   }
 })
 
@@ -45,7 +52,7 @@ const pi = x => x * Math.PI / 180
 //} 
 
 function draw(canvasElement, long, Camera, radius, imageSrc) {
-  console.log('draw 函數被呼叫，圖片路徑:', imageSrc);
+  // console.log('draw 函數被呼叫，圖片路徑:', imageSrc);
   
 
   const canvas = canvasElement; 
@@ -85,7 +92,19 @@ function draw(canvasElement, long, Camera, radius, imageSrc) {
 function drawProductImage(){
   // 使用 nextTick 確保 DOM 已經更新完成
   nextTick(() => {
+    //保護機制
+    if (canvasRefs.value.length === 0) return;
+
     canvasRefs.value.forEach((canvasEl, index) => {
+
+      //保護機制
+      const product = props.products[index];
+
+      // 【防呆】如果資料還沒來，就安靜地結束，等待 watch 再次呼叫
+      if (!product || !product.image || product.image.length === 0) {
+        return;
+      }
+
     const imageUrl = props.products[index].image[0];
     const finalImageUrl = `${import.meta.env.BASE_URL}${imageUrl}`
     draw(canvasEl, 230, 70, 32, finalImageUrl);
@@ -130,16 +149,112 @@ watch(
 
 // like 切換 ----------------------------------------------
 //const isLike = ref(false);
-function likeHeart(product){
+
+// 設定環境變數
+const apiBase = import.meta.env.VITE_API_BASE;
+const apiURL = `${apiBase}/changeCollection.php`;
+
+async function likeHeart(product){
+
+  // step0 不管有沒有登入，優先讓使用者看到畫面（如果後續執行失敗再變回來即可）
   //isLike.value = !isLike.value;  這樣會讓所有的收藏連動
   product.isLike = !product.isLike;  //只調整點選的那一張
-  // 之後要連動到資料庫更新狀態
   
+  // step1 先判斷登入狀態，再開始處理收藏  =======
+  if(authStore.token){
+
+    // 取得需要的商品跟會員 ID 
+    // 商品的在商品資料中
+    const urlProductID = product.product_ID;   
+
+    // 會員的在 storage
+    const storageUser = localStorage.getItem('user');
+
+    // 宣告變數準備裝 ID
+    let storageMemberID = null;
+
+    // 2. 如果有抓到 user，就把它轉成物件，再拿出裡面的 member_ID
+    if (storageUser) {
+        const userObj = JSON.parse(storageUser); // 把字串變成物件
+        storageMemberID = userObj.member_ID;     // 拿到 300018
+    }
+
+    console.log('網址ID (route.params.id):', urlProductID);
+    console.log('會員ID (storage):', storageMemberID);
+
+
+    // 避免找不到 ID 的情況
+    if(!urlProductID || !storageMemberID){
+      console.error("找不到商品ID或會員ID");
+      return;
+    }
+
+
+    // step2 用 fetch 發送請求  =======
+    try{
+      const response = await fetch(apiURL,{
+        method: 'POST',
+        headers: {
+          // fetch 必須告訴後端傳的是 JSON
+          // 這代表 php 接資料時，不能用$_POST，因為 body 不會是 formData 而是 JSON
+          'Content-Type': 'application/json',
+        },
+        // fetch 必須把物件轉成 JSON 字串
+        body: JSON.stringify({
+          member_id: storageMemberID,
+          product_id: urlProductID
+        })
+      });
+
+      //fetch 如果有 404(網址錯) 或 500(伺服器報錯) ，不會自動跑到 catch，所以要加寫這行判斷
+      //.ok 確認請求狀態碼事不是在成功範圍內
+      if (!response.ok) {     
+        throw new Error(`伺服器錯誤: ${response.status}`);  //throw  錯誤處理機制，拋出例外來讓 catch 接
+      }
+
+      //接回傳的資料 
+      //如果接下來沒有要用資料執行其他動作時，不一定要接
+      //開發階段為了測試，需要接
+      //如果想確保狀態同步，需要接資料來強制校正，讓前端的顯示都以資料庫最後拿到的為準
+      const data = await response.json();
+
+      //測試
+      console.log('資料庫更新成功:', data);
+
+      //強制校正的語法
+      if (data.current_status !== undefined) {
+        //如果後端現在是 1，愛心就是亮的；如果是 0，就是暗的
+
+        //寫法一 縮寫 先執行括號裡的判斷 程式會先看右邊的 (data.current_status == 1)。
+        //後端回傳1 為true，後段回傳0 為false
+        product.isLike = (data.current_status == 1);
+
+        /*寫法二 原始寫法
+        if (data.current_status == 1) {
+            product.isLike = true; 
+        } else {
+            product.isLike = false;
+        }
+        */
+      }
+
+    }catch(error){
+      console.error('API 錯誤:', error);
+      // step3. 如果沒有成功，要把愛心變回來
+      product.isLike = !product.isLike;
+      alert('收藏失敗，請檢查網路連線');
+    }
+
+  }else{
+    authStore.openLoginModal();
+    authStore.setmemberView('login');
+    // router.push(''); 這句表示跳到這頁的最上面  
+  }
+ 
 }
 
 //加入購物車按鈕 --------------------------------------------
 const cartstore = useCartStore();
-
 
 
 // 語系切換  -------------------------------------------------------
@@ -165,6 +280,7 @@ const lang = computed( () => {
       v-for="(product, index) in products" 
       :key="product.product_ID" 
       class="product-card dp-flex-col"
+      :class="{ 'withwhite': withwhite}"
       @click="goProductDetail(product.product_ID)"
     >
     <!-- 從商品陣列中取出每一個物件及物件再陣列中的索引
@@ -195,9 +311,9 @@ const lang = computed( () => {
         <font-awesome-icon icon="fa-solid fa-cart-shopping" @click.stop="cartstore.addToCart(product)"/>
       </div>
   
-      <h6 class="product-name" >{{product[`name_${lang}`]}}</h6>
+      <h6 class="product-name" :class="{ 'withwhite': withwhite}">{{product[`name_${lang}`]}}</h6>
       <div class="product-content dp-flex" >
-        <p class="product-tag">#{{product[`type_${lang}`]}}</p>
+        <p class="product-tag" :class="{ 'withwhite': withwhite}">#{{product[`type_${lang}`]}}</p>
         <h6 class="product-price">NT {{product.price}}</h6>
       </div>
       <!-- <h6 class="product-name" >Bamboo Helicopter</h6>
@@ -233,7 +349,10 @@ const lang = computed( () => {
   }
 
  .product-card:hover{
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) ;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      &.withwhite{
+      box-shadow: 0 0 20px $color-fsBlue900;
+    }
  }
 
  .product-card:hover .fa-cart-shopping{
@@ -281,6 +400,9 @@ const lang = computed( () => {
     align-self: flex-start;
     padding: 12px 20px;
     height: 88px;
+    &.withwhite{
+      color: $color-fsTitle;
+    }
   }
 
   .product-content{
@@ -295,6 +417,9 @@ const lang = computed( () => {
     border-radius: 10px;
     padding: 0 8px;
     font-size: 1.2rem;
+    &.withwhite{
+      color: $color-fsWhite;
+    }
   }
 
   .product-price{
@@ -302,7 +427,7 @@ const lang = computed( () => {
   }
 
   // RWD--------------------------------
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1366px) {
     .product-case {
     grid-template-columns: 1fr 1fr 1fr;
   }

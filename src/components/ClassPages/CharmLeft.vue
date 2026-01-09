@@ -238,7 +238,7 @@ const buyWord = computed(() => {
           :alt="currentIntro.name">
           <div class="intro-text dp-flex-col"
           >
-          <h6>
+          <h6 class="no-i18n-anim">
             <FontAwesomeIcon icon="fa-solid fa-xmark" 
             class="close"
             @click="changeIntro(0)"
@@ -247,7 +247,10 @@ const buyWord = computed(() => {
           </h6>
           <p>{{ $t(currentIntro.intro) }}</p>
           <p v-if="showText==13" class="userDraw">{{$t(buyWord)}}
-            <font-awesome-icon icon="fa-solid fa-circle-right" class="rightArrow"/>
+            <font-awesome-icon v-if="buyWord =='classes.drawText1' " icon="fa-solid fa-circle-right" class="rightArrow"/>
+            <a href="shop/productdetail/PE2026010701" v-else>
+              <font-awesome-icon icon="fa-solid fa-circle-right" class="rightArrow"/>
+            </a>
           </p>
           </div>
       </div>

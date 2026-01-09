@@ -1,14 +1,14 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Picture, Close, ArrowLeft } from '@element-plus/icons-vue' 
+import { ArrowLeft, Plus, Close } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-// 1. 重新引入 ListLayout 以確保版面一致
-import ListLayout from './ListLayout.vue' 
+import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
 const loading = ref(false)
 const formRef = ref(null)
+const fileInputRef = ref(null) 
 
 const addMemberForm = reactive({
   id: '', 
@@ -18,8 +18,8 @@ const addMemberForm = reactive({
   status: 1 
 })
 
-const avatarList = ref([])
-const avatarPreview = ref('')
+const avatarPreview = ref(null) 
+const selectedFile = ref(null)  
 
 const generatePassword = () => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -30,14 +30,21 @@ const generatePassword = () => {
   addMemberForm.password = pwd
 }
 
-const handleImageChange = (uploadFile) => {
-  avatarList.value = [uploadFile]
-  avatarPreview.value = URL.createObjectURL(uploadFile.raw)
+const triggerFileInput = () => {
+  fileInputRef.value.click()
 }
 
-const clearImage = () => {
-  avatarList.value = []
-  avatarPreview.value = ''
+const handleImageChange = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  if (file.size > 1024 * 1024) {
+    ElMessage.warning('圖片檔案大小不能超過 1MB')
+    return
+  }
+
+  selectedFile.value = file
+  avatarPreview.value = URL.createObjectURL(file)
 }
 
 const goBack = () => {
@@ -62,8 +69,8 @@ const submitForm = async () => {
   fd.append('password', addMemberForm.password)
   fd.append('status', addMemberForm.status)
 
-  if (avatarList.value.length > 0) {
-    fd.append('avatar', avatarList.value[0].raw)
+  if (selectedFile.value) {
+    fd.append('avatar', selectedFile.value) 
   }
 
   try {
@@ -75,7 +82,8 @@ const submitForm = async () => {
     const data = await response.json()
 
     if (data.success) {
-      ElMessage.success('會員新增成功！')
+    console.log('準備顯示訊息:', data.message)
+      ElMessage.success(data.message)
       goBack()
     } else {
       ElMessage.error(data.message || '新增失敗')
@@ -169,28 +177,33 @@ const submitForm = async () => {
               </el-col>
 
               <el-col :span="8" :xs="24">
-                <div class="avatar-upload-section">
-                  <div class="upload-label">
-                    <span>=</span>
-                    <el-icon class="close-icon" @click="clearImage" v-if="avatarList.length"><Close /></el-icon>
-                  </div>        
-                  <el-upload
-                    class="avatar-uploader"
-                    action="#"
-                    :auto-upload="false"
-                    :limit="1"
-                    :show-file-list="false"
-                    :on-change="handleImageChange"
-                    drag
-                  >
-                    <img v-if="avatarPreview" :src="avatarPreview" class="avatar-preview" />
-                    <div v-if="!avatarPreview" class="upload-placeholder">
-                      <el-icon class="placeholder-icon"><Picture /></el-icon>
+                <div class="custom-label">會員頭貼</div>
+                
+                <el-form-item label-width="0"> <div class="upload-box" @click="triggerFileInput">
+                    <input 
+                      type="file" 
+                      ref="fileInputRef" 
+                      class="hidden-input" 
+                      accept="image/*"
+                      @change="handleImageChange"
+                    >
+                    
+                    <div v-if="avatarPreview" class="preview-container">
+                      <img :src="avatarPreview" class="preview-img" />
+                      <div class="overlay">
+                        <span>更換圖片</span>
+                      </div>
                     </div>
-                  </el-upload>
-                  <div class="avatar-text">會員頭貼</div>
-                </div>
+
+                    <div v-else class="upload-placeholder">
+                      <el-icon class="upload-icon"><Plus /></el-icon>
+                      <div class="upload-text">上傳頭貼</div>
+                      <div class="upload-hint">建議尺寸 500*500 px<br>檔案大小 ≤ 1MB</div>
+                    </div>
+                  </div>
+                </el-form-item>
               </el-col>
+
             </el-row>
           </div>
 
@@ -213,17 +226,14 @@ const submitForm = async () => {
 </template>
 
 <style lang="scss" scoped>
-/* 為了讓表單在 Layout 中可以正常捲動 */
 .scroll-container {
-  height: 100%;
-  overflow-y: auto;
-  padding-right: 10px; /* 避免捲軸蓋住內容 */
+  height: auto;     
+  overflow-y: visible;
+  padding-right: 0; 
 }
 
-/* 主要容器 */
 .member-add-container {
   max-width: 1000px;
-  /* margin: 0 auto; 移除 auto，因為 layout 可能會有 padding */ 
   padding-bottom: 40px;
 }
 
@@ -241,11 +251,10 @@ const submitForm = async () => {
   }
 }
 
-/* 以下維持原樣 */
 .content-card {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  padding: 20px;
   margin-bottom: 24px;
 }
 
@@ -254,12 +263,13 @@ const submitForm = async () => {
   color: #333;
 }
 
-.member-form :deep(.el-input__wrapper) {
-  box-shadow: 0 0 0 1px #dcdfe6 inset;
-  padding: 8px 12px;
-  &.is-disabled {
-    background-color: #F5F7FA;
-  }
+/* ★★★ 新增：自定義標籤樣式 ★★★ */
+.custom-label {
+  font-size: 14px;
+  color: #333; /* 與 Element Plus label 顏色一致 */
+  font-weight: 500;
+  margin-bottom: 10px; /* 讓標題跟圖片有點距離 */
+  line-height: 1.5;
 }
 
 .password-group {
@@ -281,10 +291,6 @@ const submitForm = async () => {
   display: block;
 }
 
-.password-item :deep(.el-form-item__content) {
-  display: block; 
-}
-
 .radio-content {
   display: flex;
   align-items: center;
@@ -297,71 +303,55 @@ const submitForm = async () => {
   &.active { background-color: #67C23A; }
   &.inactive { background-color: #909399; }
 }
-.member-form :deep(.el-radio.is-bordered.is-checked) {
-  border-color: #003060;
-  .el-radio__inner {
-    border-color: #003060;
-    background: #003060;
-  }
-  .el-radio__label { color: #003060; }
-}
-
-.avatar-upload-section {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-  position: relative;
-  background: #fff;
-}
-
-.upload-label {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 10px 10px;
-  color: #ccc;
-  .close-icon {
-    cursor: pointer;
-    &:hover { color: #333; }
-  }
-}
-
-.avatar-uploader :deep(.el-upload-dragger) {
-  width: 100%;
-  height: 200px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px dashed #e0e0e0;
-  background: #fafafa;
-  border-radius: 4px;
-  padding: 0;
-  overflow: hidden;
-  &:hover { border-color: #003060; }
-}
-
-.placeholder-icon {
-  color: #ddd;
-}
-
-.avatar-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.avatar-text {
-  margin-top: 10px;
-  color: #333;
-}
 
 .footer-actions {
   display: flex;
   justify-content: center; 
   gap: 16px;
   margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
 }
 .cancel-btn {
   width: 100px;
 }
+
+/* 圖片上傳區塊樣式 */
+.upload-box {
+  width: 100%;
+  height: 250px;
+  border: 1px dashed #dcdfe6;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    border-color: #409eff;
+  }
+}
+
+.hidden-input { display: none; }
+.upload-placeholder { text-align: center; color: #909399; }
+.upload-icon { font-size: 48px; color: #dcdfe6; margin-bottom: 10px; }
+.upload-text { font-size: 14px; margin-bottom: 5px; }
+.upload-hint { font-size: 12px; color: #c0c4cc; line-height: 1.5; }
+
+.preview-container { width: 100%; height: 100%; position: relative; }
+.preview-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; justify-content: center; align-items: center;
+  opacity: 0; transition: opacity 0.3s;
+  color: white; font-size: 16px;
+}
+.upload-box:hover .overlay { opacity: 1; }
 </style>

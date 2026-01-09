@@ -1,96 +1,52 @@
 <script setup>
 import { useEventData } from "@/stores/event";
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
+import { useLangStore } from "@/stores/lang";
+
 const baseUrl = import.meta.env.BASE_URL;
 
+const langStore = useLangStore();
 const eventData = useEventData();
 const router = useRouter();
-const items = computed(() => eventData.eventDatas || [])
 
+const items = computed(() => eventData.eventDatas || []);
+
+/** ===== Config ===== **/
 const VISIBLE_COUNT = 4;
-const currentIndex = ref(0);
-const hoveredIndex = ref(null);
 const intervalMs = 4000;
+const HOVER_DELAY = 350;
+
+/** ===== State ===== **/
+const currentIndex = ref(0); // ✅ 用「第幾張卡」當狀態
+const hoveredIndex = ref(null);
+
 const timerId = ref(null);
 const isMobile = ref(false);
-const DOT_COUNT = 4;
+const hoverTimer = ref(null);
 
-//  16 筆資料 → 4 組 → 4 顆點
-const totalPages = computed(() => Math.ceil(items.value.length / VISIBLE_COUNT)); // 16/4=4
-const currentPage = computed(() =>
-  Math.ceil(currentIndex.value / VISIBLE_COUNT) % totalPages.value
-);
+/** ===== Helpers ===== **/
+const isEnglish = computed(() => langStore.locale === "en-US");
 
-//  點點點擊：跳到那一組的第一張（0/4/8/12）
-function goToPage(page) {
-  const maxStart = Math.max(0, items.value.length - VISIBLE_COUNT); // 16-4=12
-  const target = page * VISIBLE_COUNT;
-  currentIndex.value = Math.min(target, maxStart);
-
-  // 點點點完建議重啟計時，避免剛好 0.1 秒後又自動跳
-  startAutoSlide();
+function getTitleLines(item) {
+  const v = item?.title_en_s;
+  if (Array.isArray(v)) return v;
+  if (typeof v === "string" && v.trim()) return v.split(/\s+/);
+  if (item?.title_en) return String(item.title_en).split(/\s+/);
+  return [];
 }
 
-
-const visibleItems = computed(() => {
-  const total = items.value.length;
-  const result = [];
-  for (let offset = 0; offset < VISIBLE_COUNT; offset++) {
-    const idx = (currentIndex.value + offset) % total;
-    result.push(items.value[idx]);
-  }
-  return result;
-});
-
-function nextSlide() {
-  const maxStart = Math.max(0, items.value.length - VISIBLE_COUNT); // 12
-  if (currentIndex.value >= maxStart) currentIndex.value = 0;
-  else currentIndex.value += 1;
+function getPicSrc(item) {
+  const pic = item?.pic || item?.image || item?.img || "";
+  return pic ? `${baseUrl}${pic}` : "";
 }
-
-function prevSlide() {
-  const maxStart = Math.max(0, items.value.length - VISIBLE_COUNT);
-  if (currentIndex.value <= 0) currentIndex.value = maxStart;
-  else currentIndex.value -= 1;
-}
-
-function goTo(index) {
-  currentIndex.value = index;
-}
-
-function handleMouseEnter(visibleIdx) {
-  if (isMobile.value) return;
-  hoveredIndex.value = visibleIdx;
-}
-
-function handleMouseLeave() {
-  hoveredIndex.value = null;
-}
-
-// 有 youtube 且 hover 到才播放
-function isPlaying(visibleIdx, item) {
-  return hoveredIndex.value === visibleIdx && !!item.video;
-}
-
-// 點擊 → 詳細頁
-function openDetail(item) {
-  router.push({
-    name: "FestivalDetail",
-    params: { slug: item.title_en_s.join("-") },
-  });
-}
-
 
 function getYouTubeId(url) {
   if (!url) return "";
-  // embed/xxxx
   const embedMatch = url.match(/\/embed\/([a-zA-Z0-9_-]{6,})/);
   if (embedMatch) return embedMatch[1];
-  // watch?v=xxxx
   const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
   if (watchMatch) return watchMatch[1];
-  // youtu.be/xxxx
   const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
   if (shortMatch) return shortMatch[1];
   const shortsMatch = url.match(/\/shorts\/([a-zA-Z0-9_-]{6,})/);
@@ -104,8 +60,97 @@ function getYouTubeSrc(item) {
   return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&playsinline=1&rel=0`;
 }
 
+function isPlaying(visibleIdx, item) {
+  return hoveredIndex.value === visibleIdx && !!item?.video;
+}
+
+/** ===== Pages / Dots ===== **/
+const totalPages = computed(() => {
+  const total = items.value.length;
+  return total === 0 ? 0 : Math.ceil(total / VISIBLE_COUNT);
+});
+
+const currentPage = computed(() => {
+  if (totalPages.value === 0) return 0;
+  return Math.floor(currentIndex.value / VISIBLE_COUNT) % totalPages.value;
+});
 
 
+
+function goToPage(page) {
+  const total = items.value.length;
+  if (total === 0) return;
+
+  hoveredIndex.value = null;                 // 清 hover
+  currentIndex.value = (page * VISIBLE_COUNT) % total; // ✅ 跳到該頁第一張
+  startAutoSlide();
+}
+
+
+/** ===== Visible items (page-based) ===== **/
+const visibleItems = computed(() => {
+  const total = items.value.length;
+  if (total === 0) return [];
+
+  const start = ((currentIndex.value % total) + total) % total;
+
+  const result = [];
+  for (let offset = 0; offset < VISIBLE_COUNT; offset++) {
+    result.push(items.value[(start + offset) % total]);
+  }
+  return result;
+});
+
+
+
+/** ===== Navigation (page-based) ===== **/
+function nextSlide() {
+  const total = items.value.length;
+  if (total === 0) return;
+  hoveredIndex.value = null; // 建議：換卡清掉 hover
+  currentIndex.value = (currentIndex.value + 1) % total;
+}
+
+function prevSlide() {
+  const total = items.value.length;
+  if (total === 0) return;
+  hoveredIndex.value = null;
+  currentIndex.value = (currentIndex.value - 1 + total) % total;
+}
+
+
+/** ===== Hover delay ===== **/
+function handleMouseEnter(visibleIdx) {
+  if (isMobile.value) return;
+
+  if (hoverTimer.value) clearTimeout(hoverTimer.value);
+  hoverTimer.value = setTimeout(() => {
+    hoveredIndex.value = visibleIdx;
+  }, HOVER_DELAY);
+}
+
+function handleMouseLeave() {
+  if (hoverTimer.value) {
+    clearTimeout(hoverTimer.value);
+    hoverTimer.value = null;
+  }
+  hoveredIndex.value = null;
+}
+
+/** ===== Click ===== **/
+function openDetail(item) {
+  const slug = Array.isArray(item?.title_en_s)
+    ? item.title_en_s.join("-")
+    : String(item?.title_en || "").trim().split(/\s+/).join("-");
+
+  router.push({ name: "FestivalDetail", params: { slug } });
+}
+
+function onSlideClick(item) {
+  openDetail(item);
+}
+
+/** ===== Auto slide ===== **/
 function updateIsMobile() {
   if (typeof window === "undefined") return;
   isMobile.value = window.innerWidth < 768;
@@ -115,7 +160,7 @@ function startAutoSlide() {
   if (isMobile.value) return;
   stopAutoSlide();
   timerId.value = setInterval(() => {
-    if (hoveredIndex.value === null) nextSlide();
+    if (hoveredIndex.value === null) nextSlide(); // ✅ hover 就暫停
   }, intervalMs);
 }
 
@@ -126,7 +171,7 @@ function stopAutoSlide() {
   }
 }
 
-
+/** ===== Lifecycle ===== **/
 onMounted(() => {
   eventData.loadeventData();
   updateIsMobile();
@@ -140,131 +185,154 @@ onBeforeUnmount(() => {
 });
 </script>
 
+
+
 <template>
   <section class="annual-event-page">
-    <div class="festival-shell">
-      <button class="nav-btn nav-prev" @click="prevSlide">‹</button>
-      <button class="nav-btn nav-next" @click="nextSlide">›</button>
+    <div class="festival-shell" :class="{ 'is-dragging': isDragging }">
+      <button class="nav-btn nav-prev" type="button" @click="prevSlide">‹</button>
+      <button class="nav-btn nav-next" type="button" @click="nextSlide">›</button>
 
       <div class="festival-carousel">
         <div class="carousel-inner">
           <div class="carousel-track">
             <div
               v-for="(item, visibleIndex) in visibleItems"
+              :key="item.id || `${currentIndex}-${visibleIndex}`"
               class="slide"
               :class="{ 'is-hovered': hoveredIndex === visibleIndex }"
               @mouseenter="handleMouseEnter(visibleIndex)"
               @mouseleave="handleMouseLeave"
-              @click="openDetail(item)"
+              @click="onSlideClick(item)"
             >
+              <!-- ✅ Video：hover 顯示後，點影片就進 detail -->
+              <div
+                v-if="item.video"
+                class="slide-video-wrapper"
+                :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
+                @click.stop="onSlideClick(item)"
+              >
+                <iframe
+                  class="youtube-iframe"
+                  :src="getYouTubeSrc(item)"
+                  frameborder="0"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+
+              <!-- ✅ Card：維持平行四邊形 -->
               <div class="slide-tilt">
                 <div class="media-wrapper">
-                  <!-- 底層：YouTube 影片（只在 hover 時顯示 iframe） -->
-                  <div
-                    v-if="item.video"
-                    class="slide-video-wrapper"
-                    :class="{ 'is-visible': isPlaying(visibleIndex, item) }"
-                  >
-                    <iframe
-                      :src="getYouTubeSrc(item)"
-                      title="Festival video"
-                      frameborder="0"
-                      allow="autoplay; encrypted-media; picture-in-picture"
-                      allowfullscreen
-                    ></iframe>
-                  </div>
-
-                  <!-- 中層：圖片（hover 時淡出） -->
                   <img
                     class="slide-image"
                     :class="{ 'is-hidden': isPlaying(visibleIndex, item) }"
-                    :src="`${baseUrl}${item.pic}`"
-                    :alt="item.title_en"
+                    :src="getPicSrc(item)"
+                    :alt="item.title_en || ''"
                   />
 
-                  <!-- 最上層：遮罩＋文字（未 hover 時顯示，hover 時淡出） -->
                   <div
                     class="slide-overlay"
                     :class="{ 'overlay-hidden': isPlaying(visibleIndex, item) }"
                   >
                     <div class="slide-text">
-                      <p
-                        class="slide-title-line"
-                        v-for="(line, i) in item.title_en_s"
-                        :key="i"
-                      >
-                        {{ line }}
-                      </p>
+                      <template v-if="isEnglish">
+                        <p
+                          v-for="(line, i) in getTitleLines(item)"
+                          :key="i"
+                          class="slide-title-line"
+                        >
+                          {{ line }}
+                        </p>
+                      </template>
+
+                      <p v-else class="slide-title-line">{{ item.title_zh }}</p>
                       <p class="slide-date">{{ item.launchDate }}</p>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- /slide-tilt -->
             </div>
+            <!-- /slide -->
           </div>
+          <!-- /track -->
         </div>
+        <!-- /inner -->
       </div>
+
+      <!-- /carousel -->
 
       <div class="carousel-dots">
         <button
           v-for="p in totalPages"
           :key="p"
           class="dot"
-          :class="{ active: (p - 1) === currentPage }"
-          @click="goToPage(p - 1)"
-        ></button>
+          :class="{ active: p - 1 === currentPage }"
+          type="button"
+          @click="goToPage(p - 1)" />
       </div>
+
 
 
     </div>
   </section>
 </template>
 
+
 <style scoped lang="scss">
 @import "/src/assets/_variables.scss";
 
+/* ===== Layout ===== */
 .annual-event-page {
+  height: 100vh;
   position: relative;
-  padding: 130px 0 80px;
   display: flex;
   justify-content: center;
+  overflow-x: clip;
+  align-items: center;
+}
+
+.festival-shell {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+  overflow: visible;
 }
 
 .festival-carousel {
   width: 100%;
-  max-width: 1452px;
   margin: 0 auto;
-  padding: 24px 0 16px;
-  overflow: visible;
+  padding: 55px 55px 16px;
   background: radial-gradient(circle at center, #00000080, #000000);
-  clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
 }
 
-.festival-shell {
-  overflow: visible;
-  position: relative;
-  width: 100%;
-  max-width: 1452px;
-  margin: 0 auto;
-}
-
+/* ===== Viewport / Track ===== */
 .carousel-inner {
-  transform: none;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  position: relative;
 }
 
 .carousel-track {
   display: flex;
-  gap: 8px;
   height: 600px;
-  padding: 0 48px;
+  will-change: transform;
 }
 
-/* arrows */
+.festival-shell.is-dragging .carousel-track {
+  cursor: grabbing;
+}
+
+/* ===== Arrows ===== */
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 50;
+
   width: 40px;
   height: 40px;
   border-radius: 999px;
@@ -272,131 +340,164 @@ onBeforeUnmount(() => {
   background: #ffffff99;
   backdrop-filter: blur(6px);
   cursor: pointer;
+
   font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .nav-prev {
-  left: -28px;
+  left: 12px;
 }
+
 .nav-next {
-  right: -28px;
+  right: 12px;
 }
+
 .nav-btn:hover {
   background: #ffffffdd;
 }
 
-/* 單張卡片：斜 + hover 放大 */
-/* 卡片：只用 flex 擠開，不要 scale */
+/* ===== Slide sizing (flex expand on hover) ===== */
 .slide {
+  position: relative;
   flex: 1;
   min-width: 0;
   cursor: pointer;
-  transition: flex 0.45s ease;
+  transition: flex 0.45s ease, transform 0.45s ease;
   transform: none;
 }
+
 .slide.is-hovered {
-  flex: 6; /* 你要更擠就 7 或 8 */
-  transform: scale(1.02);   /* 你要更大可以 1.04 */
+  flex: 6;
+  transform: scale(1.02);
 }
 
-/* 卡片外形：用 clip-path 做平行四邊形（文字不會歪） */
+.festival-shell.is-dragging .slide,
+.festival-shell.is-dragging .slide.is-hovered {
+  transition: none !important;
+  flex: 1 !important;
+  transform: none !important;
+}
+
+/* ===== Shape (parallelogram) ===== */
 .slide-tilt {
   height: 100%;
+  background: #000;
   overflow: visible;
-  border-radius: 16px;
-  background: #000; /* 避免邊緣有縫時露底色 */
-  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-  isolation: isolate; /* ✅ 讓 iframe 不會跑出裁切外 */
+  isolation: isolate;
+  clip-path: polygon(14% 0%, 100% 0%, 86% 100%, 0% 100%);
 }
 
 .media-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;               /* 一定要 */
-  border-radius: 16px;            /* 讓四角圓角一致 */
-  background: #000;               /* 防止邊緣露底 */
-  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); /* 平行四邊形 */
+  overflow: hidden;
+  background: #000;
+  clip-path: polygon(14% 0%, 100% 0%, 86% 100%, 0% 100%);
 }
 
-/* 底層影片 */
+/* ===== Video layer ===== */
 .slide-video-wrapper {
   position: absolute;
-  inset: 0;
+  inset: 6%;         /* 控制影片離邊距 */
+  background: #000;
   opacity: 0;
+  z-index: 10;
+  overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.35s ease;
+  transition: opacity .35s ease;
+  cursor: pointer; 
 }
+
 .slide-video-wrapper.is-visible {
   opacity: 1;
   pointer-events: auto;
 }
-.slide-video-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.08);
+
+.youtube-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
 }
 
-/* 中層圖片 */
+.youtube-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+/* ===== Image layer ===== */
 .slide-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.08); /* 蓋住 clip-path 斜邊 */
+  transform: scale(1.08);
+  transition: opacity 0.35s ease;
 }
+
 .slide-image.is-hidden {
   opacity: 0;
 }
 
-/* 最上層遮罩 + 文字：完全置中 */
+/* ===== Overlay text ===== */
 .slide-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    #000000aa 0%,
-    #000000dd 55%,
-    #000000ee 100%
-  );
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 40px 24px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.65) 55%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+
   transition: opacity 0.35s ease;
 }
-.overlay-hidden {
+
+.slide-overlay.overlay-hidden {
   opacity: 0;
 }
 
 .slide-text {
   text-align: center;
   color: #fff;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC",
-    sans-serif;
-}
-.slide-title-line {
-  font-size: 20px;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-}
-.slide-date {
-  margin-top: 16px;
-  font-size: 14px;
-  letter-spacing: 0.18em;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
 }
 
-/* dots */
+.slide-title-line {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
+}
+
+.slide-date {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.95;
+}
+
+/* ===== Dots ===== */
 .carousel-dots {
-  margin-top: 12px;
   display: flex;
   justify-content: center;
   gap: 8px;
 }
+
 .dot {
   width: 8px;
   height: 8px;
@@ -405,15 +506,16 @@ onBeforeUnmount(() => {
   background: #ffffff55;
   cursor: pointer;
 }
+
 .dot.active {
   width: 22px;
   background: #ffffffdd;
 }
 
-/* RWD */
+/* ===== RWD ===== */
 @media (max-width: 1023px) {
   .carousel-track {
-    padding: 0 24px;
+    padding: 0 20px;
     height: 320px;
   }
 }
@@ -421,15 +523,6 @@ onBeforeUnmount(() => {
 @media (max-width: 767px) {
   .annual-event-page {
     padding: 40px 0 60px;
-  }
-
-  .festival-carousel {
-    padding: 16px 0;
-    clip-path: none; /* 手機先改回矩形，避免太擠 */
-  }
-
-  .carousel-inner {
-    transform: none;
   }
 
   .carousel-track {
@@ -446,23 +539,19 @@ onBeforeUnmount(() => {
     transform: none;
   }
 
-  .slide-tilt {
-    transform: none;
-    border-radius: 12px;
-  }
-
-  .swiper-pagination {
-    display: none ;
-  }
-
   .nav-btn {
-    display: flex;
     width: 32px;
     height: 32px;
     font-size: 18px;
+    display: flex;
   }
-  .nav-prev { left: -16px; }
-  .nav-next { right: -16px; }
 
+  .nav-prev {
+    left: -16px;
+  }
+
+  .nav-next {
+    right: -16px;
+  }
 }
 </style>

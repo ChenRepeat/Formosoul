@@ -1,21 +1,42 @@
 <?php
- session_start();
- require_once 'conn.php';
+session_start();
+require 'conn.php';
+// $member_wand = json_decode(file_get_contents("php://input"), true);
 
-  $code =  $_GET['code'];
-  $state = $_GET['state'];
+$code = $_GET['code'];
+$state = $_GET['state'];
 
-  $token_url = "https://api.line.me/oauth2/v2.1/token";
+// ★ 解析 State 來取得魔杖 ID
+// 使用 explode 切割字串，取底線後面的數字
+$wandcore_ID = null;
+$state_parts = explode('_', $state);
+if (isset($state_parts[1])) {
+    $wandcore_ID = $state_parts[1]; // 取後面數字
+}
 
-  $data = [
+$host = $_SERVER['HTTP_HOST'];
+$redirect_uri = '';
+
+$token_url = "https://api.line.me/oauth2/v2.1/token";
+
+// 判斷是否為本機環境
+if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+    // 【本機環境】
+    $redirect_uri = 'http://localhost/Formosoul/public/php/lineLogin.php';
+} else {
+    // 【線上環境】
+    $redirect_uri = 'https://tibamef2e.com/tjd103/php/lineLogin.php'; 
+}
+
+$data = [
     'grant_type' => 'authorization_code',
     'code' => $code,
-    'redirect_uri' => 'http://localhost/Formosoul/public/php/lineLogin.php', // 網頁的接收網址
-    'client_id' => '2008793662',       // Channel ID
-    'client_secret' => '37ae333babb2944a79fa3ee3a6e9afdd' // 密碼
+    'redirect_uri' => $redirect_uri,
+    'client_id' => '2008793662',
+    'client_secret' => '37ae333babb2944a79fa3ee3a6e9afdd'
 ];
 
-//用 cURL 發送 POST 請求
+// 1. 拿 Access Token
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $token_url);
 curl_setopt($ch, CURLOPT_POST, true);
@@ -26,154 +47,140 @@ curl_close($ch);
 
 $result = json_decode($response, true);
 
-//檢查有沒有成功拿到 Access Token
-if (isset($result['access_token'])) {
-    $access_token = $result['access_token'];
-
-    //拿 Token 換個資
-    $profile_url = "https://api.line.me/v2/profile";
-    
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $profile_url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // 重點：把 Token 放在信封標頭 (Header) 裡
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: Bearer " . $access_token
-    ]);
-    
-    $profile_response = curl_exec($ch);
-    curl_close($ch);
-    
-    $profile = json_decode($profile_response, true);
-
+if (!isset($result['access_token'])) {
+    die("Line Login Error: Access Token not found.");
 }
 
-//解碼 id_token 拿出 Email
-    if (isset($result['id_token'])) {
-        $id_token = $result['id_token'];
-        // JWT Token 是由三段組成的，中間那段(payload)藏著資料
-        $payload = explode('.', $id_token)[1]; 
-        // 因為它是用 Base64 編碼的，我們要解開它
-        $data = json_decode(base64_decode($payload), true);
-    }
+$access_token = $result['access_token'];
+
+// 2. 拿 Profile (包含 line_id, displayName, pictureUrl)
+$profile_url = "https://api.line.me/v2/profile";
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $profile_url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer " . $access_token
+]);
+
+$profile_response = curl_exec($ch);
+curl_close($ch);
+
+$profile = json_decode($profile_response, true);
+
+// 3. 解析 Email (從 id_token)
+$user_email = null;
+if (isset($result['id_token'])) {
+    $id_token = $result['id_token'];
+    $payload = explode('.', $id_token)[1];
+    $data = json_decode(base64_decode($payload), true);
+    $user_email = $data['email'] ?? null;
+}
+
+// 取得 Line 的使用者資訊
+$line_user_id = $profile['userId']; // ★ 這是 Line 唯一的 User ID
+$user_name = $profile['displayName'];
+$user_avatar = $profile['pictureUrl'];
 
 
-    $user_email = $data['email'];
-    $user_name = $profile['displayName'];
-    $user_avatar = $profile['pictureUrl'];
-
-    $stmt = $pdo->prepare('       
-            select 
-                m.email, 
-                m.password, 
-                m.name, 
-                m.createdate, 
-                m.updatetime, 
-                m.member_ID,
-                p.pointscard_ID
-                from member m
-                left join pointscard p on p.member_ID = m.member_ID 
-            WHERE email = ?
-    ');
-    $stmt->execute([$user_email]);
+    // 1. 檢查 line_id 是否已存在
+    $stmt = $pdo->prepare('SELECT m.*, p.pointscard_ID FROM member m LEFT JOIN pointscard p ON p.member_ID = m.member_ID WHERE m.line_id = ?');
+    $stmt->execute([$line_user_id]);
     $member = $stmt->fetch();
 
-if ($member) {
-    // ===【情況 A：是舊會員】===
-    // 既然不存 line_id，這裡甚至不需要 UPDATE 資料，直接讓他登入就好
-    
-    // 如果你想順便更新他的大頭貼，可以加這行 (選擇性)
-    // $updateStmt = $pdo->prepare("UPDATE member SET headshot = ? WHERE email = ?");
-    // $updateStmt->execute([$user_avatar, $user_email]);
-      $_SESSION['member_ID'] = $member['member_ID']; // 注意資料庫欄位大小寫
-      $_SESSION['name'] = $member['name'];
-      $_SESSION['email'] = $member['email'];
-      $_SESSION['role'] = $member['role'];
-      $_SESSION['pointscard_ID'] = $member['pointscard_ID'];
-} else {
-    // ===【情況 B：是新會員】===
-    // 建立新資料時，就只存 Email 和基本資料
+    if ($member) {
+        // ===【情況 A：舊會員】===
+        // 什麼都不用做
+    } else {
+        // 找 Email
+        $stmt = $pdo->prepare('SELECT m.*, p.pointscard_ID FROM member m LEFT JOIN pointscard p ON p.member_ID = m.member_ID WHERE m.email = ?');
+        $stmt->execute([$user_email]);
+        $member = $stmt->fetch();
 
-    // 因為是用 LINE 登入，資料庫的 password 欄位給一個隨機亂碼即可
-    $randomPassword = bin2hex(random_bytes(6));
+        if ($member) {
+            // ===【情況 B：綁定舊帳號】===
+            $updateStmt = $pdo->prepare("UPDATE member SET line_id = ? WHERE member_ID = ?");
+            $updateStmt->execute([$line_user_id, $member['member_ID']]);
+        } else {
+            // ===【情況 C：完全新會員】===
+            try {
+                $pdo->beginTransaction();
 
-    try {
-        // 1. 啟動交易 (確保下面動作要嘛全成功，要嘛全失敗)
-        $pdo->beginTransaction();
+                // ★ 這裡直接使用我們從 GET state 解析出來的 $wandcore_ID
+                // 不需要再去 session 抓了，因為 session 有時候會因為跨網域或 cookie 問題遺失
+                
+                // 1. 新增會員
+                $sql_member = "INSERT INTO member (email, password, name, line_id, wandcore_ID, status, role, createdate, updatetime) 
+                            VALUES (?, NULL, ?, ?, ?, 1, 0, NOW(), NOW())";
+                
+                $stmt = $pdo->prepare($sql_member);
+                // 變數順序：Email, Name, LineID, WandID
+                $stmt->execute([$user_email, $user_name, $line_user_id, $wandcore_ID]);
+                
+                $newUserId = $pdo->lastInsertId();
 
-        // 2. 新增會員 (Member)
-        // 注意：我幫你補上了 name 欄位，不然你的 $user_name 沒地方存
-        $sql_member = "INSERT INTO member (email, password, name, status, role, createdate, updatetime) 
-                       VALUES (?, ?, ?, 1, 0, NOW(), NOW())";
-        
-        $stmt = $pdo->prepare($sql_member);
-        // 這裡順序要對應上面的問號：email, password, name
-        $stmt->execute([$user_email, $randomPassword, $user_name]);
-        
-        // ★ 拿到剛產生的 會員ID
-        $newUserId = $pdo->lastInsertId();
+                // 2. 新增集點卡 (後面邏輯保持不變)
+                $sql_card = "INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore) 
+                            VALUES (?, 0, 0, 0, 0, 0, 0)";
+                $stmt = $pdo->prepare($sql_card);
+                $stmt->execute([$newUserId]);
+                $newCardId = $pdo->lastInsertId();
 
-        // 3. 新增集點卡 (PointsCard)
-        $sql_card = "INSERT INTO pointscard (member_ID, mot, shrimp, dice, ring, bue, member_wandcore) 
-                     VALUES (?, 0, 0, 0, 0, 0, 0)";
-        
-        $stmt = $pdo->prepare($sql_card);
-        $stmt->execute([$newUserId]); // 傳入剛剛拿到的會員ID
-        
-        // ★ 拿到剛產生的 集點卡ID
-        $newCardId = $pdo->lastInsertId();
+                // 3. 初始化遊戲 (保持不變)
+                $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, 0)")->execute([$newUserId]);
+                $pdo->prepare("INSERT INTO buegame (pointscard_ID, buegame_count, buegame_pass) VALUES (?, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass) VALUES (?, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass) VALUES (?, 0, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass) VALUES (?, 0, 0, 0)")->execute([$newCardId]);
+                $pdo->prepare("INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass) VALUES (?, 0, 0, 0)")->execute([$newCardId]);
 
-        // 4. 初始化所有遊戲 (用剛剛拿到的 ID)
-        // Charmgame 用 user_ID
-        $pdo->prepare("INSERT INTO charmgame (member_ID, charmgame_img1, charmgame_count) VALUES (?, 0, 0)")
-            ->execute([$newUserId]);
+                $pdo->commit();
 
-        // 其他遊戲用 card_ID
-        $pdo->prepare("INSERT INTO buegame (pointscard_ID, buegame_count, buegame_pass) VALUES (?, 0, 0)")
-            ->execute([$newCardId]);
-            
-        $pdo->prepare("INSERT INTO dicegame (pointscard_ID, dicegame_count, dicegame_pass) VALUES (?, 0, 0)")
-            ->execute([$newCardId]);
-            
-        $pdo->prepare("INSERT INTO motorcyclegame (pointscard_ID, motorcyclegame_count, motorcyclegame_score, motorcyclegame_pass) VALUES (?, 0, 0, 0)")
-            ->execute([$newCardId]);
-            
-        $pdo->prepare("INSERT INTO ringgame (pointscard_ID, ringgame_count, ringgame_score, ringgame_pass) VALUES (?, 0, 0, 0)")
-            ->execute([$newCardId]);
-            
-        $pdo->prepare("INSERT INTO shrimpgame (pointscard_ID, shrimpgame_count, shrimpgame_score, shrimpgame_pass) VALUES (?, 0, 0, 0)")
-            ->execute([$newCardId]);
+                // 補上 $member 變數給下面的 Session 用
+                $member = [
+                    'member_ID' => $newUserId,
+                    'name' => $user_name,
+                    'email' => $user_email,
+                    'role' => 0,
+                    'pointscard_ID' => $newCardId,
+                    'wandcore_ID' => $wandcore_ID 
+                ];
 
-        // 5. 全部成功，提交確認！
-        $pdo->commit();
-
-        // 6. 設定 Session (讓系統知道他登入了)
-        $_SESSION['member_ID'] = $newUserId;
-        $_SESSION['name']      = $user_name;
-        $_SESSION['email']     = $user_email;
-        $_SESSION['role']      = 0;
-        $_SESSION['pointscard_ID'] = $newCardId;
-
-    } catch (Exception $e) {
-        // 如果中間出錯，全部取消 (Rollback)
-        $pdo->rollBack();
-        // 為了除錯，先印出錯誤訊息 (上線後可拿掉)
-        die("註冊失敗，錯誤代碼：" . $e->getMessage());
+            } catch (Exception $e) {
+                $pdo->rollBack();
+                die("註冊失敗：" . $e->getMessage());
+            }
+        }
     }
-}
-// 1. 準備要傳給前端的資料
+
+// ★★★ 共用的登入 Session 設定 (不管是 A, B 還是 C) ★★★
+
+$_SESSION['member_ID'] = $member['member_ID'];
+$_SESSION['name']      = $member['name'];
+$_SESSION['email']     = $member['email'];
+$_SESSION['role']      = $member['role'];
+$_SESSION['pointscard_ID'] = $member['pointscard_ID'];
+$_SESSION['wandcore_ID'] = $member['wandcore_ID'] ?? null;
+
+// ... (後面轉址的部分不用改) ...
 $loginData = [
     'member_ID' => $_SESSION['member_ID'],
     'name'      => $_SESSION['name'],
     'role'      => $_SESSION['role'],
-    'pointscard_ID'      => $_SESSION['pointscard_ID'],
+    'pointscard_ID' => $_SESSION['pointscard_ID'],
+    'wandcore_ID' => $_SESSION['wandcore_ID'] ?? null,
 ];
 
-// 2. 編碼資料 (JSON -> Base64)
 $dataToken = base64_encode(json_encode($loginData));
 
-// 3. 【關鍵修改】
-//   B. 加上 ?loginData=... (把資料帶過去)
-header("Location: http://localhost:5173/tjd103/?loginData=" . $dataToken);
+// 設定前端網址
+if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+    $frontend_url = "http://localhost:5173/tjd103";
+} else {
+    $frontend_url = "https://tibamef2e.com/tjd103";
+}
+
+// 跳轉回前端
+header("Location: " . $frontend_url . "/?loginData=" . $dataToken);
 exit;
 ?>

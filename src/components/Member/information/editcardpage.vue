@@ -2,7 +2,7 @@
     <div class="cardwrapper dp-flex-col">
         <Membercard hasscale></Membercard>
         <BasicButton class="btn-yellow-fill" @click="data_change" :disabled="isLoading">
-            {{ isLoading ? 'Loading...' : 'Save changes'}}
+            {{ isLoading ? $t('loginPage.loading') : $t('loginPage.saveBtn')}}
         </BasicButton>
     </div>
 </template>

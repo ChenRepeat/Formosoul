@@ -4,7 +4,7 @@ import TheFooter from './components/TheFooter.vue';
 import TheHeader from './components/TheHeader.vue';
 import loginpage from './components/Member/Login/loginpage.vue';
 import Popup from './components/popup.vue';
-import { ref, watch, computed, onMounted,nextTick, provide } from 'vue';
+import { ref, watch, computed, onMounted, onUnmounted, nextTick, provide } from 'vue';
 import { useAuthStore } from './stores/autoStore';
 import DefaultLogo from '@/assets/logo_white.svg';
 import { useLangStore } from './stores/lang';
@@ -125,6 +125,7 @@ watch(
   }
 );
 
+
 // --- Loading 畫面邏輯 ^^ ---
 const innerH = ref(window.innerHeight).value
 const waveConfig = ref(
@@ -134,13 +135,23 @@ const waveConfig = ref(
     [innerH/2, 0.8, 20, 0.6, '#F0F7FF', '#000', 0, 3.5],
     [innerH/2, 0.8, 110, 0, '#F0F7FF', '#000', 0, 0.2],
   ])
-onMounted(async () => {
-  await nextTick();
-  if (authStore.token) {
-    await authStore.fetchUser();
-    memberStore.loadMemberData();
-  }
-})
+  onMounted(async () => {
+    await nextTick();
+    if (authStore.token) {
+      await authStore.fetchUser();
+      memberStore.loadMemberData();
+    }
+  })
+
+  // 訪客關閉視窗就全清除紀錄
+  window.addEventListener('beforeunload', () => {
+      // 只清除訪客資料
+      if (!localStorage.getItem('user')) {
+          localStorage.removeItem('game_progress');
+          sessionStorage.removeItem('guest');
+      }
+  });
+
 </script>
 
 <template>
@@ -173,8 +184,8 @@ onMounted(async () => {
       </div>
     </main>
     <img src="" alt="" srcset="">
-    <TheFooter />
   </div>
+  <TheFooter />
 </template>
 
 <style lang="scss" scoped>
@@ -192,7 +203,9 @@ onMounted(async () => {
   position: absolute;
   padding-left: 40px;
   top: 20px;
-  z-index: 2000;
+  z-index: 8000; 
+  pointer-events: auto; 
+  cursor: pointer;
 }
 .content {
   display: block;
@@ -228,7 +241,7 @@ onMounted(async () => {
   min-width: 0.3em;
   transition: color 0.3s;
 }
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1366px) {
   .dpn{
     display: none;
   }

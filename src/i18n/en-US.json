@@ -3,15 +3,16 @@
 
   "nav": {
     "home": "home",
-    "news": "news",
+    "news": "Daily Diviner",
+    "news2ndTitle":"Rhythms of inspiration from the Academy. Stay tuned to the mystic pulse.",
     "annualEvent":"Annual Event",
-    "classes":"classes",
-    "professor":"professor",
-    "survivalGuide":"survival Guide",
-    "diagonAlley":"diagon Alley",
-    "about":"about",
-    "policy":"policy",
-    "member":"member",
+    "classes":"Classes",
+    "professor":"Professor",
+    "survivalGuide":"Survival Guide",
+    "diagonAlley":"Diagon Alley",
+    "about":"About",
+    "policy":"Policy",
+    "member":"Member",
     "information":"information",
     "changepassword":"change password",
     "orderslist":"orders list",
@@ -21,17 +22,33 @@
     "Payment":"Payment",
     "Delivery":"Delivery",
     "Returns":"Returns",
-    "privacyPolicy":"privacy Policy",
+    "privacyPolicy":"Privacy Policy",
     "welcome":"Hi, Welcome Back ~",
     "backPrepage":"Back to previous page",
-    "newsIntro":"I hereby pledge my malevolent intent to unseal the clandestine mechanisms of this Marauder’s parchment.",
-    "FormosoulCopyright1":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class. This platform is for learning and display purposes only.",
-    "FormosoulCopyright2":"Students are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.If you have any concerns about copyright infringement, please send a private message to [ ",
-    "FormosoulCopyright3":"Wiedu TibaMe",
-    "FormosoulCopyright4":" ] for assistance."
+    "newsIntro":"Gather the floating ink to reveal the guidance within.",
+    "FormosoulCopyright":"This website showcases the project results of students from the 98th Wiedu TibaMe Front-End Engineer Class.This platform is for learning and display purposes only.\nStudents are solely responsible for any copyright infringements or claims of intellectual property rights violations by third parties; Wiedu TibaMe assumes no legal liability.\nIf you have any concerns about copyright infringement, please send a private message to {link} for assistance.",
+    "tibame":"Wiedu TibaMe",
+    "admin":"Administrator"
+  },
+  "mail":{
+    "title1":"Formosoul Institute of Magic",
+    "title2":"Admission Notice",
+    "auditBtn":"Audit the academy",
+    "entranceBtn":"Entrance ceremony",
+    "body":[
+      "Dear Prospective International Student,",
+      "You are about to step into this magical academy, hidden within the alleys of Taiwan, as an 'Auditing Student' or 'International Student.' From this moment on, you will explore the daily life and magical wonders of Taiwan from the perspective of a visiting student.",
+      "The Academy has prepared six special courses and six interactive mini-games, guiding you to discover temples, night markets, local cuisine, and folk culture.",
+      "These games are scattered throughout different corners of the campus, waiting for you to find them. Successfully complete all the interactive games to graduate and receive a discount coupon from the Taiwan Magical Marketplace.",
+      "You may first explore the campus as an auditing student; after completing the games, if you wish to accumulate credits and save your progress, you can register at any time to receive your magical student ID."
+    ],
+    "sigh1":"Sincerely,",
+    "sigh2":"Formosoul Institute of Magic",
+    "sigh3":"Office of Academic Affairs."
   },
   "classes":{
-    "escTip":"Press Esc To Skip and Stop",
+    "escTip":"Press {keyin} To Skip and Stop",
+    "keyBoard":"ESC or SPACE",
 
     "motorClass":"Motorcycle",
     "motorIntro1Title":"Daily Life Essential",
@@ -168,6 +185,7 @@
     "potion6":"Winter Melon Drink with Grass Jelly : Sweet winter melon juice perfectly paired with smooth, cooling herbal grass jelly cubes.",
     "potion7":"Cheese Foam Green Tea : Refreshing green tea topped with a thick, savory, and lightly salted cream foam.",
     "potion8":"Winter Melon Drink with Nata de Coco : Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).",
+    "potionRule": "Follow the recipes on the left, or get creative and toss ingredients into the pot to brew your own unique potion!",
     
     "potiongame":{
     "potionName1": "Boba Milk Tea", 
@@ -186,8 +204,30 @@
     "potion7": "Refreshing green tea topped with a thick, savory, and lightly salted cream foam.", 
     "potionName8": "Winter Melon Drink with Nata de Coco", 
     "potion8": "Icy, traditional winter melon juice with sweet, chewy pieces of coconut jelly (nata de coco).",
-    "potionNameFail": "Alchemy's Rebellious Phase",
-    "potionFail": "Blue energy and purple matter clash chaotically in the dark liquid. Drinking this takes immense courage... and a good doctor."
+    "potionName9": "Moonlit Dream Dew (Aiyu Jelly Winter Melon Green Tea)",
+    "potionName10": "Psychic Shield Elixir (Lemon Green Tea with Coconut Jelly)",
+    "potionName11": "Misty Forest Special (Milk Foam Grass Jelly Black Tea)",
+    "potionName12": "Philosopher's Stone Ink (Brown Sugar Pearl Green Tea)",
+    "potionName13": "Swift Eye Capture Solution (Winter Melon Lemon with Pearls)",
+    "potionName14": "Elven Morning Breeze (Coconut Jelly Milk Green Tea)",
+    "potionName15": "Morning Star Warming Brew (Winter Melon Fresh Milk with Grass Jelly)",
+    "potionName16": "Phantom Walker Special (Lemon Coconut Jelly Black Tea)",
+    "potion9": "Warm winter melon meets cool jade nectar and fairy jellies. Calms the soul like soothing moonlight.",
+    "potion10": "Tart fruit clashes with tea and chewy seabed gifts. Instantly clears thoughts and blocks mental interference.",
+    "potion11": "Shadow leaves topped with snowy cream and hidden grass gels. Guides lost travelers to safe sanctuary.",
+    "potion12": "Mysterious black dragon beads in jade nectar. An alchemist's favorite for sparking creative flow and writing.",
+    "potion13": "Sweet and sour magic paired with dragon beads. Grants dynamic vision to track fast moving objects.",
+    "potion14": "Milk dew fuses with jade nectar and transparent stones. Radiates the fresh scent of morning forests.",
+    "potion15": "Warm winter melon sugar meets milk dew and slippery grass gels. Provides protection on cold nights.",
+    "potion16": "Explosive sourness and chewy bits infused in shadow leaves. A vital stamina booster for long treks.",
+    "potionName17": "Hot Grass Jelly",
+    "potion17": "You found the hidden recipe! Nothing beats warm grass jelly in winter—pure bliss with pearls and coconut jelly.",
+
+    "secretPotionName1": "Dreamweaver's Delight",
+    "secretPotion1": "Dark blueberry brew with spun sugar yarn and gummy mushrooms. Untangles messy thoughts and boosts creativity.",    "secretPotionName2": "Nebula Nectar",
+    "secretPotion2": "A mesmerizing swirl of galaxies and stardust captured in a glass. It tastes like sparkling blueberries and infinite possibilities, granting the drinker a moment of cosmic clarity.",
+    "secretPotionName3": "Accidental Golden Froth",
+    "secretPotion3": "Congrats! You brewed this sparkling beer from basic ingredients. It untangles messy thoughts and sparks inspiration."
     },
 
     "divinationTitle":"Divination",
@@ -285,7 +325,9 @@
     "voucher":"Voucher",
     "newArrival": "New Arrival",
     "priceLow": "Price : Low to High",
-    "priceHigh": "Price : High to Low"
+    "priceHigh": "Price : High to Low",
+    "noSearch":"The Tracking Spell finds no trace. Please try chanting a different search incantation.",
+    "search":"Enter your search incantation..."
 
   },
   "shoppingcart":{
@@ -332,7 +374,7 @@
     "homeDelivery":"Home Delivery",
     "card":"Credit Card",
     "applePAY":"Apple PAY",
-    "order":"ORDER",
+    "order":"Confirm & Pay",
     "ordersuccess":"Your order has been received !",
     "orderText1":"To check your order, please visit the",
     "orderText2":"Member Center",
@@ -342,7 +384,10 @@
     "orderDate":"Date",
     "orderNO":"Number",
     "cartEmpty":"Your cart is currently empty.",
-    "couponuse":"Apply Coupon"
+    "couponuse":"Apply Coupon",
+    "couponNouse":"Cancel",
+    "couponTips":"Just a heads up: You can cover up to 90% of your total with coupons!"
+
 
   },
   "coreselection":{
@@ -383,6 +428,10 @@
     "backbutton":"BACK"
   },
   "nightmarket":{
+    "others": {
+        "exit": "EXIT",
+        "close": "CLOSE"
+      },
     "items":{
       "rice": {
         "title":"Braised Pork Rice",
@@ -434,6 +483,33 @@
         "fullText":"Ready to test your luck? 'Si-Ba-La' is the loudest and most exciting game in the night market! The rules are simple: throw three dice into the bowl and try to beat the stall owner's score. If your points are higher, you win a delicious sausage! But watch out—competition is fierce. Are you ready to challenge the boss?",
         "buttonText": "START GAME"
     },
+    "prawningGame": {
+        "score": "Score",
+        "time": "Time",
+        "ready": "READY?",
+        "startHint": "Click or Press Space to Start",
+        "timesUp": "TIME'S UP!",
+        "yourScore": "Your score is",
+        "congrats": "CONGRATS!",
+        "tryAgain": "TRY AGAIN!",
+        "playAgain": "PLAY AGAIN ⟳",
+        "checkLedger": "CHECK YOUR LEDGER"
+   },
+   "diceGame": {
+        "player": "Player",
+        "banker": "Banker",
+        "score": "Score",
+        "makeChoice": "Make a Choice!",
+        "yourScore":"Your Score",
+        "big": "BIG",
+        "small": "SMALL",
+        "draw": "DRAW",
+        "win": "YOU WIN!",
+        "lose": "YOU LOSE..",
+        "youChose": "You chose",
+        "playAgain": "PLAY AGAIN",
+        "checkLedger": "CHECK YOUR LEDGER"
+    },
     "map-weather": {
       "popupDesc": "Night Market Location & \n Weather"
    },
@@ -463,8 +539,41 @@
         "rule5":"3. How Points are Awarded : ",
         "rule6":"Novice Supplies (1st Row) : 100 Points",
         "rule7":"Intermediate Cursed Relics (2nd Row) : 200 Points",
-        "rule8":"Advanced Mana Potions (3rd Row) : 300 Points"
+        "rule8":"Advanced Mana Potions (3rd Row) : 300 Points",
+        "gameOver":"GAME OVER",
+  "congradulations":"Congradulations",
+        "playAgain": "PLAY AGAIN",
+        "checkLedger": "CHECK YOUR LEDGER"
       }
+      }
+    },
+  "conveniencestore":{
+    "shopkeeper":{
+      "greetings": {
+        "text1":"Please come in.",
+        "text2":"Hello!",
+        "text3":"Scan e-carrier?",
+        "text4":"Need a bag?",
+        "text5":"Microwave it?",
+        "text6":"Phone number?",
+        "text7":"Tax ID?",
+        "text8":"From five hundred.",
+        "text9":"Fifty back.",
+        "text10":"Thank you!"
+      }
+    },
+    "items": {
+      "maitea": "Mai Xiang Milk Tea is a classic, affordable Taiwanese drink known for its unique roasted barley aroma and nostalgic taste.",
+      "jinjin": "A classic Taiwanese sweet asparagus juice known for its refreshing and unique flavor.",
+      "threeone": "A Taiwanese instant milk tea brand famous for using real tea leaves in convenient steeping bags.",
+      "twbeer": "An iconic Taiwanese lager made with local rice, known for its crisp and refreshing taste.",
+      "twegg": "A ubiquitous Taiwanese convenience store snack consisting of eggs simmered in savory tea and spices.",
+      "manhan": "A premium Taiwanese instant noodle brand known for its rich broth and real chunks of meat.",
+      "kuaikuai": "A popular Taiwanese corn snack, often used as a lucky charm for electronics when in its green packaging.",
+      "puffs": "A classic Taiwanese snack consisting of crunchy mini cream puffs with sweet fillings.",
+      "twnoodle": "A famous Taiwanese instant dry noodle brand known for its distinct savory soybean paste flavor.",
+      "twpie": "A beloved Taiwanese chocolate wafer bar famous for its rich layers and crunchy texture.",
+      "twchips": "A classic and addictive Taiwanese prawn cracker snack known for its savory flavor."
     }
   },
   "member": {
@@ -493,7 +602,23 @@
     "howToUseInfoText":"Once you accumulate the required amount of points in your Ledger, you may visit the Redemption Counter to exchange your points for exclusive magical rewards and perks, such as limited-edition items or special features!",
     "cardText":"Every action counts toward the House Cup!",
     "backToMemberCard":"Back To Enrollment Card",
-    "closeLedger":"CLOSE LEDGER"
+    "closeLedger":"CLOSE LEDGER",
+    "OrdersDetail": "OrdersDetail",
+    "OrdersInformation": "OrdersInformation",
+    "OrderNumber": "OrderNumber",
+    "OrderDate": "OrderDate",
+    "OrderStatus": "OrderStatus",
+    "RecipientName": "RecipientName",
+    "DeliveryMethod": "DeliveryMethod",
+    "pieces": "pieces",
+    "address": "address",
+    "Remark": "Remark",
+    "Notice": "Notice",
+    "ReturnNoticeText": "To request a return, please email our customer service within the 7-day cooling-off period. For further information, please refer to our Return and Exchange Policy.",
+    "PaymentInformation": "PaymentInformation",
+    "ProductsInformation": "ProductsInformation",
+    "backtoqueryorders": "Back to Query orders",
+    "check": "check"
   },
   "about":{
     "aboutTitle":"About",
@@ -519,5 +644,32 @@
     "aboutTitle3":"Portkey",
     "aboutTitle4":"(For magical partners)",
     "aboutIntro3":"Ensure your target coordinates are precise to prevent accidental misdirection."
+  },
+  "notfound":{
+    "notFoundMsg":"The summoning spell failed! The page you’re looking for has vanished into a temporal rift.",
+    "btnBack": "Retrace Your Steps",
+    "btnHome": "Back to the Academy"
+  },
+  "loginPage":{
+    "login":"Login",
+    "other":"Other",
+    "placeholderAcc":"E-mail",    
+    "placeholderPwd":"Password",
+    "confirmPwd":"Confirm password",
+    "forgetPasswordMsg":"* If your memory has been tampered with by a Memory Charm, click here：",
+    "forgetPasswordBtn":"ForgetPassword",
+    "loginBtn":"Enter the Academy",
+    "enroll":"Enrollment",
+    "pwdRule":"* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.",
+    "acceptMsg":"I have read and agree to the Terms of",
+    "service":"Service",
+    "and":"and",
+    "privacy":"Privacy Policy",
+    "dot":".",
+    "otp":"One-Time Password (OTP)",
+    "getOTP":"Summon the Code",
+    "acceptBtn":"Accept Terms and Enroll",
+    "loading":"Loading...",
+    "saveBtn":"Save changes"
   }
 }

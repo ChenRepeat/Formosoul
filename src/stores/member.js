@@ -31,7 +31,8 @@ export const useMemberStore = defineStore('member', () => {
         isEditing: false, 
         tempName: '',
         pointscard_ID:'',
-        charmImg:''
+        charmImg:'',
+        role:0,
     });
     const pointsStatus = ref({
         dice: 0, 
@@ -50,6 +51,25 @@ export const useMemberStore = defineStore('member', () => {
         ring: { count: 0, score: 0, pass: 0 },
         shrimp: { count: 0, score: 0, pass: 0 },
     });
+
+    // 獲取優惠券
+    function rewards_coupon(){
+        const storedUser = localStorage.getItem('user');
+        const apiBase = import.meta.env.VITE_API_BASE;
+        const API_URL = `${apiBase}/game_coupon.php`;
+        if(!storedUser) return;
+        const { pointscard_ID } = JSON.parse(storedUser);
+
+        return fetch( API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                pointscard_ID
+            })
+        }).then( res => res.json())
+    };
     const loadMemberData = async () => {
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
@@ -82,6 +102,7 @@ export const useMemberStore = defineStore('member', () => {
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = wandcoreKey;
                 memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
+                memberData.value.role = dbData.role;
                 imgURL.value = dbData.headshot || '';
 
                 if (Number(dbData.motorcyclegame_pass) >= 1) pointsStatus.value.mot = 1;
@@ -131,7 +152,7 @@ export const useMemberStore = defineStore('member', () => {
                     pass: dbData.shrimpgame_pass,
                     score: dbData.shrimpgame_score,
                 };
-                console.log(dbData);
+                // console.log(dbData);
                 
             }else{
                 console.error(result.message);
@@ -156,8 +177,8 @@ export const useMemberStore = defineStore('member', () => {
 
             if(response.data.success){
                 pointsStatus.value[columnName] = 1;
-                console.log(`[${columnName}]蓋章成功`)
-
+                
+                console.log(columnName)
                 await fetchPointsStatus();
             } else {
                 console.error('蓋章失敗', response.data.message);
@@ -282,7 +303,8 @@ export const useMemberStore = defineStore('member', () => {
                 ring: result.data.ring || 0,
                 member_wandcore: Number(result.data.member_wandcore) || 0
             };
-            console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
+
+            // console.log('[Store] 集點卡狀態已更新:', pointsStatus.value);
         } else {
             console.error('[Store] 載入集點卡失敗:', result.message);
         }
@@ -304,5 +326,6 @@ export const useMemberStore = defineStore('member', () => {
         gameData,
         pointsStatus,
         stampOnepoint,
+        rewards_coupon,
     };
 });

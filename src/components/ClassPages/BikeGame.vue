@@ -228,7 +228,7 @@ const spawnObstacle = () => {
 
 const startGame = () => {
   lives.value = 3;
-  timeRemaining.value = 1;
+  timeRemaining.value = 30;
   playerX.value = 0;
   obstacles.length = 0;
   gameState.value = 'playing';
@@ -249,6 +249,7 @@ const endGame = () => {
       showCardOverlay.value = true;    
 
       if(isFirstPass) {
+        memberStore.rewards_coupon();
         setTimeout(()=>{
         activeTriggers.value.bike = true
         setTimeout(()=>{

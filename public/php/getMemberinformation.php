@@ -9,6 +9,7 @@
       DATE_FORMAT(m.createdate, "%Y-%m-%d") AS createdate,
       m.updatetime,
       m.headshot,
+      m.role,
       p.pointscard_ID,
       w.nameEn,
       w.nameZh,

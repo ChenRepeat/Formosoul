@@ -6,7 +6,7 @@
             type="email"
             v-model="email"
             class="input-text"
-            placeholder="E-mail"
+            :placeholder="$t('loginPage.placeholderAcc')"
             :disabled="isLoading"
             @keydown="handleKeyDown"
             />
@@ -18,7 +18,7 @@
                 type="text"
                 v-model="otp"
                 class="input-text"
-                placeholder="One-Time Password (OTP)"
+                :placeholder="$t('loginPage.otp')"
                 :disabled="!otpSent"
                 @keydown="handleKeyDown"
                 />
@@ -27,7 +27,7 @@
                         {{ timer > 0 ? `Resend in ${timer} seconds` : 'Sending...' }}
                 </p>
                 <p v-else>
-                    Summon  the  Code
+                    {{$t('loginPage.getOTP')}}
                 </p>
                 </BasicButton>
             </div>
@@ -39,7 +39,7 @@
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 class="input-text"
-                placeholder="Password"
+                :placeholder="$t('loginPage.placeholderPwd')"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
                 />
@@ -63,7 +63,7 @@
                 v-model="confirmpassword"
                 :type="showconfirmPassword ? 'text' : 'password'"
                 class="input-text"
-                placeholder="Confirm password"
+                :placeholder="$t('loginPage.confirmPwd')"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
                 />
@@ -82,21 +82,21 @@
         </div>
         <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
         <div class="login-bottom">
-            <p>* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
+            <p>{{$t('loginPage.pwdRule')}}</p>
         </div>
         <div class="checkpolicy dp-flex">
             <input type="checkbox" v-model="checkbox" id="checkbox">
-            <div class="agreetext dp-flex"><p>I have read and agree to the Terms of </p>
-                <p @click="gotoService" class="Service">Service</p><p>and</p>
-                <p @click="gotoPrivacy" class="Privacy">Privacy Policy</p>
-                <p>.</p></div>
+            <div class="agreetext dp-flex"><p>{{$t('loginPage.acceptMsg')}}</p>
+                <p @click="gotoService" class="Service">{{$t('loginPage.service')}}</p><p>{{$t('loginPage.and')}}</p>
+                <p @click="gotoPrivacy" class="Privacy">{{$t('loginPage.privacy')}}</p>
+                <p>{{$t('loginPage.dot')}}</p></div>
         </div>
         <BasicButton
         :class="btnclose ?  'btn-close' : 'btn-yellow-fill'"
         @click="handleEnrollment"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : 'Accept Terms and Enroll'}}
+            {{ isLoading ? $t('loginPage.loading') : $t('loginPage.acceptBtn')}}
         </BasicButton>
 
 
@@ -160,12 +160,9 @@ async function sendOTPAPI(emailValue) {
 
 function enrollmentAPI(email, password, otp) {
     const apiBase = import.meta.env.VITE_API_BASE;
-    const API_URL = `${apiBase}/Enrollment.php`;
-    // 1. 在發送請求時才讀取 sessionStorage
+    const API_URL = `${apiBase}/enrollment.php`;
     const storeCore = sessionStorage.getItem('guest');
     const coreData = storeCore ? JSON.parse(storeCore) : null;
-
-    // 2. 取得 wandcore_ID，如果沒有則給 null
     const wandcore_ID = coreData ? coreData.core : null;
     return fetch(API_URL, {
         method: 'POST',
@@ -207,22 +204,22 @@ async function startCountdown() {
             credentials: 'include' // 這行是確保 Session Cookie 能運作
         });
         // emailJS API
-        // const templateParams = {
-        //     email: email.value,
-        //     otp_code: code,
-        // };
+        const templateParams = {
+            email: email.value,
+            otp_code: code,
+        };
 
-        // await emailjs.send(
-        //     'service_3xw68ou',   // 替換為你的 Service ID
-        //     'template_1tux8ni',  // 替換為你的 Template ID
-        //     templateParams, 
-        //     'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
-        // )
+        await emailjs.send(
+            'service_3xw68ou',   // 替換為你的 Service ID
+            'template_1tux8ni',  // 替換為你的 Template ID
+            templateParams, 
+            'M9dyTlBa0NmdjaERY'    // 替換為你的 Public Key
+        )
 
         await sendOTPAPI(email.value);
         otpSent.value = true;
-        errorMessage.value = `測試otp ${otpnumber.value}`;
-        // errorMessage.value = 'OTP code sent!';
+        // errorMessage.value = `測試otp ${otpnumber.value}`;
+        errorMessage.value = 'OTP code sent!';
         timer.value = 60;
         intervalId = setInterval(() => {
             timer.value--;

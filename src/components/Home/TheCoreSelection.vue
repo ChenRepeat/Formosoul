@@ -16,8 +16,8 @@ const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: fals
 //把資料從 getPointsCard.php 拿出來用
     const getMemberInfo = () => {
         const currentProgress = JSON.parse(localStorage.getItem('game_progress') || '{}');
-        currentProgress.wand = true;
-        localStorage.setItem('game_progress', JSON.stringify(currentProgress));
+        // currentProgress.wand = true;
+        // localStorage.setItem('game_progress', JSON.stringify(currentProgress));
         const storedUser = localStorage.getItem('user');
         const storeGuest = sessionStorage.getItem('guest')
         if(storedUser) {

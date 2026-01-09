@@ -11,6 +11,9 @@ import BasicButton from "../BasicButton.vue";
 import MapTWNightMarket from "./MapTWNightMarket.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAuthStore } from "@/stores/autoStore";
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 
 // 載入 loading 介面
 const authStore = useAuthStore()
@@ -36,7 +39,7 @@ const handleKey = (e) => {
 const isShow = ref(-1);
 const animationWelcome = ref(false)
 const isGameLocked = ref(true);
-//
+// 視窗還沒準備好
 const isMapReady = ref(false);
 // 路由
 const router = useRouter();
@@ -114,7 +117,17 @@ const csFrame = ref([
     },
 ])
 const welcomeFrame = computed(()=> csFrame.value[0])
-
+const nightMarketMap = ref(null);
+const zoomIn = () => {
+  if (nightMarketMap.value) {
+    nightMarketMap.value.zoomIn();
+  }
+};
+const zoomOut = () => {
+  if (nightMarketMap.value) {
+    nightMarketMap.value.zoomOut();
+  }
+};
 onMounted (()=>{
     window.addEventListener('keydown', handleKey);
     document.body.style.overflow = 'hidden';
@@ -235,7 +248,7 @@ function closeWelcomeFrame (){
                             <font-awesome-icon @click="close" icon="fa-solid fa-xmark"  style="font-size:32px;"/>
                         </template> 
                         <template v-else>
-                            EXIT GAME
+                            {{ t('nightmarket.others.exit') }}
                         </template>
                     </button>
 
@@ -243,8 +256,12 @@ function closeWelcomeFrame (){
                         <GameRingToss v-if="activeGame == 'ring-toss'" @close-game="isGameModalOpen = false"  />
                         <GamePrawning v-if="activeGame == 'prawning'" @close-game="isGameModalOpen = false" />
                         <GameDice v-if="activeGame == 'dice'" @close-game="isGameModalOpen = false" />
-                        <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" />
+                        <MapTWNightMarket v-if="activeGame == 'taiwan-map'" @close-game="isGameModalOpen = false" ref="nightMarketMap"/>
                     </div>
+                        <div class="global-zoom-control" v-if="activeGame == 'taiwan-map'">
+                            <button @click.stop.prevent="zoomIn" class="zoom-btn zoom-in">＋</button>
+                            <button @click.stop.prevent="zoomOut" class="zoom-btn zoom-out">－</button>
+                        </div>
                 </div>
             </div>
          </div>
@@ -283,8 +300,8 @@ function closeWelcomeFrame (){
     left: 50%;
     top: 50%;
     transform: translate(-50%, calc(-50% + 20px)); 
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 
     transition: opacity 1s ease-out, transform 1s ease-out; 
     
@@ -314,8 +331,9 @@ function closeWelcomeFrame (){
   z-index: 1001;
   transition: all 0.3s ease-in-out;
 
+  cursor: pointer;
   &.btn-blue-fill:hover {
-    transform: scale(1.025);
+    transform: scale(1.055);
   }
 }
 
@@ -388,8 +406,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 珍珠奶茶 攤位的區塊 ===================== 
@@ -432,8 +450,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-40%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 // ===================== 臭豆腐 攤位的區塊 ===================== 
 
@@ -475,8 +493,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-30%, 50%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 雞排 攤位的區塊 ===================== 
@@ -520,8 +538,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-30%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 
@@ -566,8 +584,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 70%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 蔥油餅 攤位的區塊 ===================== 
@@ -611,8 +629,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-50%, 60%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== 共同 的區塊 ===================== 
@@ -698,8 +716,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(100%, -160%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== prawing 遊戲的區塊 ===================
@@ -743,8 +761,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(120%, -80%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== ring-toss 遊戲的區塊 =================
@@ -788,8 +806,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(-180%, -220%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 // ===================== MAP & WEATHER API 的區塊 ======================
@@ -827,8 +845,8 @@ function closeWelcomeFrame (){
     opacity: 1;     
     pointer-events: auto; 
     transform: translate(40%, -120%);
-    outline: 1px solid $color-fsTitle;
-    outline-offset: -10px;
+    // outline: 1px solid $color-fsTitle;
+    // outline-offset: -10px;
 }
 
 
@@ -876,7 +894,7 @@ function closeWelcomeFrame (){
     background-color: $color-fsGold300;
     color: $color-fsTitle;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     border: 2px solid white;
     border-radius: 30px;
     cursor: pointer;
@@ -927,7 +945,52 @@ function closeWelcomeFrame (){
 .nm-is-active {
     z-index: 998;
 }
+// 天氣按鈕
+.global-zoom-control {
+  position: absolute ;
+  z-index: 999 ;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  user-select: none;
+  bottom: 24px;
+  right: 24px;
+}
 
+.zoom-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  pointer-events: all !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.2s ease !important;
+  
+  /* 完全免疫所有動畫 */
+  transform: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+.zoom-in {
+  background: linear-gradient(145deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+.zoom-out {
+  background: linear-gradient(145deg, #f093fb 0%, #f5576c 100%) !important;
+  color: white !important;
+}
+
+.zoom-btn:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
+}
 
 
 // RWD 1200 

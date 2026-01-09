@@ -775,13 +775,41 @@ export const useProductStore = defineStore('products', () =>{
     const allProduct = ref([]);
 
     // 改從資料庫拿資料
+    // 設定環境變數
     const apiBase = import.meta.env.VITE_API_BASE;
-    const apiRUL = `${apiBase}/getProductList.php`;
+    const apiURL = `${apiBase}/getProductList.php`;
+
     const fetchProducts = async () => {
+        //**增加收藏功能，所以要先看看有沒有會員ID**
+        const userStorage = localStorage.getItem('user'); 
+        let currentMemberID = 0; // 預設 0 (代表未登入)
+
+        if (userStorage) {
+            try {
+                const userObj = JSON.parse(userStorage); // 把 JSON 字串轉成物件
+                if (userObj && userObj.member_ID) {
+                    currentMemberID = userObj.member_ID; 
+                }
+            } catch (e) {
+                console.error("讀取會員資料失敗", e);
+            }
+        }
+
+        //**使用 Axios 發送請求給 PHP (把 ID 帶在網址參數 member_id)
+
         try {
-            // 發出請求
-            // const response = await axios.get('http://localhost/Formosoul/public/php/getProductList.php');
-            const response = await axios.get(apiRUL);
+            // 這樣寫等同於 GET http://.../getProductList.php?member_id=xxx
+            const response = await axios.get(apiURL, {
+                params: {
+                    member_id: currentMemberID
+                }
+            });
+
+        // 沒有傳會員ID的寫法
+        // try {
+        //     // 發出請求
+        //     // const response = await axios.get('http://localhost/Formosoul/public/php/getProductList.php');
+        //     const response = await axios.get(apiURL);
             
             // 將後端回傳的資料放入 allProduct
             allProduct.value = response.data;
@@ -796,7 +824,10 @@ export const useProductStore = defineStore('products', () =>{
 
     // 過濾出所有已上架商品
     const productListed = computed(()=>{
-       return allProduct.value.filter( p => p.product_status === 1);
+        //保護機制，避免還沒載入時 undefined 報錯
+        if (!allProduct.value) return [];
+
+       return allProduct.value.filter( p => Number(p.product_status) === 1);
     });
 
 
@@ -813,6 +844,10 @@ export const useProductStore = defineStore('products', () =>{
         // 分類功能
         let finalDisplay = [...productListed.value]; //預設為所有上架商品
                                                      //因為 productListed 為陣列，所以要.value拿，再用陣列來接
+        // console.log(finalDisplay);
+        // console.log(finalDisplay,'finalDisplay 1');
+
+        
 
         // 如果使用者點選分類按鈕，那 typeBy 傳入值可能就不是 All
         if( typeBy.value !== 'All'){
@@ -836,6 +871,8 @@ export const useProductStore = defineStore('products', () =>{
                 finalDisplay = finalDisplay.sort((a, b) => Number(b.price) - Number(a.price)); 
                 break;
         };
+        // console.log(finalDisplay,'finalDisplay 2');
+
 
         return finalDisplay;
     })

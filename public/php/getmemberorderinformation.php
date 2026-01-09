@@ -5,11 +5,14 @@
   $countsql = '
       SELECT
         o.order_number,
+        o.total_amount,
         d.quantity,
 		    d.price,
+        d.price_sum,
+        o.shipping_fee,
         p.name_en
       FROM `order` o
-      LEFT JOIN order_detail d ON o.order_ID = d.order_ID
+      LEFT JOIN order_detail d ON o.order_number = d.order_no
       LEFT JOIN product p ON p.product_ID = d.product_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
   ';
@@ -28,12 +31,11 @@
         o.name_en,
         o.shipping,
         o.address_en,
-        o.remark,
-        c.name AS coupon_name,      
-        c.discount
+        o.remark,     
+        o.discount,
+        o.shipping_fee,
+        o.total_amount
       FROM `order` o
-      LEFT JOIN order_detail d ON o.order_ID = d.order_ID
-      LEFT JOIN coupons c ON o.coupons_ID = c.coupons_ID
       WHERE o.member_ID = :member_ID AND o.order_number = :order_number;
   ';
 

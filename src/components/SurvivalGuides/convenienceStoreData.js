@@ -1,70 +1,79 @@
 export const csIntroFrame = [
     {
         id: 'maitea',
-        text: 'Mai Xiang Milk Tea is a classic, affordable Taiwanese drink known for its unique roasted barley aroma and nostalgic taste.',
+        text: 'conveniencestore.items.maitea',
         width: '200px',
         height: 'auto',
+        pos: { top: '32%', left: '1%' }
     },
     {
         id: 'jinjin',
-        text: 'A classic Taiwanese sweet asparagus juice known for its refreshing and unique flavor.',
+        text: 'conveniencestore.items.jinjin',
         width: '200px',
         height: 'auto',
-
+        pos: { top: '32%', left: '13%' }
     },
     {
         id: 'threeone',
-        text: 'A Taiwanese instant milk tea brand famous for using real tea leaves in convenient steeping bags.',
+        text: 'conveniencestore.items.threeone',
         width: '200px',
         height: 'auto',
+        pos: { top: '48%', left: '1%' }
     },
     {
         id: 'twbeer',
-        text: 'An iconic Taiwanese lager made with local rice, known for its crisp and refreshing taste.',
+        text: 'conveniencestore.items.twbeer',
         width: '200px',
         height: 'auto',
-
+        pos: { top: '48%', left: '13%' }
     },
     {
         id: 'twegg',
-        text: 'A ubiquitous Taiwanese convenience store snack consisting of eggs simmered in savory tea and spices.',
+        text: 'conveniencestore.items.twegg',
         width: '200px',
         height: 'auto',
+        pos: { top: '52%', left: '23%' }
     },
     {
         id: 'manhan',
-        text: 'A premium Taiwanese instant noodle brand known for its rich broth and real chunks of meat.',
+        text: 'conveniencestore.items.manhan',
         width: '200px',
         height: 'auto',
+        pos: { top: '20%', right: '15%' }
     },
     {
         id: 'kuaikuai',
-        text: 'A popular Taiwanese corn snack, often used as a lucky charm for electronics when in its green packaging.',
+        text: 'conveniencestore.items.kuaikuai',
         width: '200px',
         height: 'auto',
+        pos: { top: '35%', right: '15%' }
     },
     {
         id: 'puffs',
-        text: 'A classic Taiwanese snack consisting of crunchy mini cream puffs with sweet fillings.',
+        text: 'conveniencestore.items.puffs',
         width: '200px',
         height: 'auto',
+        pos: { top: '35%', right: '26%' }
     },
     {
         id: 'twnoodle',
-        text: 'A famous Taiwanese instant dry noodle brand known for its distinct savory soybean paste flavor.',
+        text: 'conveniencestore.items.twnoodle',
         width: '200px',
         height: 'auto',
+        pos: { top: '14%', right: '15%' }
     },
     {
         id: 'twpie',
-        text: 'A beloved Taiwanese chocolate wafer bar famous for its rich layers and crunchy texture.',
+        text: 'conveniencestore.items.twpie',
         width: '200px',
         height: 'auto',
+        pos: { top: '30%', right: '26%' }
     },
     {
         id: 'twchips',
-        text: 'A classic and addictive Taiwanese prawn cracker snack known for its savory flavor.',
+        text: 'conveniencestore.items.twchips',
         width: '200px',
         height: 'auto',
+        pos: { top: '16%', left: '26%' }
     },
 ]

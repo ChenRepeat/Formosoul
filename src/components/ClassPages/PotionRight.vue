@@ -4,6 +4,7 @@ import BasicButton from '../BasicButton.vue';
 import { gsap } from 'gsap/gsap-core';
 import { Draggable } from 'gsap/Draggable';
 import { potions } from '../ClassPages/potions'
+import { newPotions } from '../ClassPages/newPotions'
 
 
 //plugins
@@ -28,8 +29,10 @@ const resultBigTitle = ref('classes.potionBigTitle2');
 
 const container = ref(null);
 
+const initialRule = ('classes.potionRule')
 let containerWidth
 let containerHeight
+let potionAll = {}
 let selectList = []
 let correctList = []
 let resultIndex = null
@@ -76,9 +79,9 @@ let ingredientList = [
             imgUrl:'Classes/potions/recipeCoconut.png',
           },
 ]
-  // potions 外部引入
+potionAll = {...potions, ...newPotions}
 
-//functions
+//functions 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -105,17 +108,7 @@ const initDraggable = () => { //清掉上回合的實體
       type:'x, y', // == default 允許平面上下左右移動
 
       bounds:{left:-40, top:-40, width: containerWidth + 80, height: containerHeight + 80}, // 應該要抓到確切的組件寬高..但先這樣
-      // onDrag: function(e){
 
-      //   // const [left , right, top, bottom] = [-40, 560, -40, 760]
-      //     // 更改key 對應的value to bounds values
-      //   // console.log(e.x, e.y); // 這是相對螢幕左上角的座標
-      //   // if(e.x < left){//
-      //     // this.endDrag()
-      //   // gsap.to(this.target, { x: 0, y: 0, duration: 0.3, overwrite: true });
-      //   // }
-
-      // },
       onDragEnd: e => {
         const instance = Draggable.get(e.target)
         if(!instance ) return
@@ -155,26 +148,28 @@ const cook = () => {
   // 1.食材總數 == 飲料食材總數 
   const selectNum = selectList.length // 儲存被選到的食材名稱
   if(selectNum == 0){
-    resultBigTitle.value = 'classes.potionBigTitle0'
+    resultBigTitle.value = 'classes.potionBigTitle0' // 鍋子燒壞警告
     resultImg.value = "Classes/potions/eletricPot.png"
     hasContent.value = false
     
   }else {
     hasContent.value = true
-    resultBigTitle.value = 'classes.potionBigTitle2'
+    resultBigTitle.value = 'classes.potionBigTitle2' 
 
   }
-  for(let i = 1; i<= 8 ; i++){
+  for(let i = 1; i<= 17 ; i++){
     if(!selectNum) return
-    let recipeNum = Object.values(potions[i].recipe).length 
-    // 一種飲料的食譜有多長(幾種原料)
-    if(selectNum == recipeNum){
-      correctList.push(potions[i]) 
-      // correctList == 符合數量的完整食譜
-      // index 從 0 開始自動重編
+    let recipeNum = 0
+    recipeNum = Object.values(potionAll[i].recipe).length 
+    
+    // 統計各個食譜長度(有幾種原料)
+    if(selectNum == recipeNum || selectNum - 1 == recipeNum){
+      correctList.push(potionAll[i]) 
+      // correctList == 符合數量的完整食譜// index 從 0 
+      // 先擴充糖 允許多選一個食材的食譜先進到這邊 
     }
   }
-  
+
   // 2.食材name == 食譜.recipe[遍歷].name 
   for(let i = 0 ; i < correctList.length; i++){
     if(!correctList.length) return
@@ -183,7 +178,8 @@ const cook = () => {
                            .map(item => item.name) // 化為陣列 // 物件不能 .length
     let isMatch = true
     for(let j = 0 ; j < selectList.length ; j++){ 
-      if(!recipeName.includes(selectList[j]) ) {
+      if(!recipeName.includes(selectList[j]) && selectList[j] != 'suger') {
+        // 如果多了食譜上沒有的糖 仍不要判定為失敗
         isMatch = false
         break} // 一次false 就進入下一圈判斷
     }
@@ -200,23 +196,24 @@ const cook = () => {
     resultTitle.value = correctList[resultIndex].name
     resultIntro.value = correctList[resultIndex].resultIntro
   }
-  
-  // 4. (例外)不符合食譜或數量大於五直接給怪怪飲料
+
+
+
+  // 4. (例外)不符合食譜神秘飲料區段 random 有3種
   else{
-    
-    resultImg.value = 'Classes/potions/potion8.png'
-    resultTitle.value = 'classes.potiongame.potionNameFail'
-    resultIntro.value = 'classes.potiongame.potionFail'
+    let index = Math.floor(Math.random() * 3 + 1)
+    index = 1
+    // resultImg.value = potionAll[index].imgUrl // 測試用
+    // resultTitle.value = potionAll[index].name
+    // resultIntro.value = potionAll[index].resultIntro
+
+
+    resultImg.value = `Classes/potions/secretPotion${index}.png`,
+    resultTitle.value = `classes.potiongame.secretPotionName${index}`
+    resultIntro.value = `classes.potiongame.secretPotion${index}`
 
   }
 }
-
-
-
-onMounted(()=>{
-
-
-})
 
 
 
@@ -228,9 +225,10 @@ onMounted(()=>{
     <div class="potion-right-glass" >
       <img src="/Classes/potions/glass.png">
     </div>
+    <p class="potion-right-rule">{{ $t(initialRule) }}</p>
     <BasicButton class="potion-right-start btn-black " 
     @click="start" >
-      START
+      Start
     </BasicButton>
   </section>
 
@@ -249,7 +247,7 @@ onMounted(()=>{
     @drop="dropped">
     <BasicButton class="potion-right-cook btn-black" 
       @click="cook" >
-        COOK
+        Cook
     </BasicButton>
   </section>
 
@@ -257,7 +255,7 @@ onMounted(()=>{
   <section v-else-if="afterCook" class="potion-right-result dp-flex-col">
       <h3 class="potion-right-result-bigtitle">{{$t(resultBigTitle)}}</h3>
       <div class="potion-right-img-wrapper" :class="{'no-content':!hasContent}">
-        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'potion-right-glass':!hasContent}">
+        <img class="potion-right-result-img" :src=resultImg alt="" :class="{'potion-right-glass':!hasContent}" >
       </div>
       <h5 class="potion-right-result-title" v-show="hasContent">{{ $t(resultTitle) }}</h5>
       <p class="potion-right-result-intro" v-show="hasContent">{{ $t(resultIntro) }}</p>
@@ -273,17 +271,33 @@ onMounted(()=>{
   width: 100%;
   align-items:center ;
   min-height: 100%;
-  .potion-right-glass{
+  flex-basis: 0;
+
+  .potion-right-title{
+    flex-basis: 0;
+    flex-grow: 2;
+    color: $color-fsTitle;
     margin-bottom: 20%;
+  
+  }
+  .potion-right-glass{
+    flex-basis: 0;
+    flex-grow: 5;
+    align-items: center;
+    // margin-bottom: 5%;
+  }
+  .potion-right-rule{
+    flex-basis: 0;
+    flex-grow:2;
+    color: $color-fsContent;
+
+    margin-bottom: 10%;
   }
   .potion-right-start{
+    flex-basis: 0;
+
     width: max-content;
   }
-}
-.potion-right-title{
-  color: $color-fsTitle;
-  margin-bottom: 30%;
-
 }
 .potion-right-game{
   height: 100%;
@@ -348,7 +362,7 @@ onMounted(()=>{
       &#img9, &#img5,&#img4{
         width: 16%;
         &#img4{
-          top: 22%;
+          top: 26%;
           right: 21%;
         }
         &#img9{
@@ -388,27 +402,32 @@ onMounted(()=>{
   position: relative;
   .potion-right-result-bigtitle, .potion-right-result-title{
     color: $color-fsTitle;
-    margin-top: 5%;
     flex-basis: 0;
     &.potion-right-result-bigtitle{
-      // margin-bottom: 8%;
-      flex-grow: 2;
+      // margin-top: 2%;
+      flex-grow: 1;
     }
     &.potion-right-result-title{
       flex-grow: 1;
+      padding: 0 5%;
+      margin-top: 3%;
+
     }
     
   }
   .potion-right-img-wrapper{
     flex-basis: 0;
-    flex-grow: 4;
+    // flex-grow: 2; 
     &.no-content{
-      flex-grow: 6;
+      flex-grow: 2;
       padding: 14%;
     }
-
+    
     .potion-right-result-img{
       width: 100%;
+      max-width: 350px;
+      max-height: 250px;
+      
     }
   }
     .potion-right-result-intro{
@@ -416,7 +435,6 @@ onMounted(()=>{
       padding: 2% 10%;
       min-height: 11%;
       width: 100%;
-      text-align: center;
       flex-basis: 0;
       flex-grow: 2;
     }

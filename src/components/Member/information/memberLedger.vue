@@ -24,6 +24,7 @@ const props = defineProps({
   activeTriggers: Object
 });
 
+
 // 內部狀態（會員中心使用）
 const internalPointsStatus = ref({
     dice: 0, 
@@ -139,6 +140,9 @@ onMounted(async () => {
     <div class="nologin" v-if="!authStore.isLoggedIn">
       <h6>ENROLL TO KEEP POINT ! ! </h6>
     </div>
+    <div class="nologin" v-if="authStore.isLoggedIn">
+      <h6>YOU HAVE GET COUPON</h6>
+    </div>
     <div class="btn-case dp-flex">
       <button class="btn-close-card" :class="{'unlogbtn':!authStore.isLoggedIn}" @click="closeLedger" >{{$t('member.closeLedger')}}</button>
       <button class="btn-close-card" @click="openEnroll" v-if="!authStore.isLoggedIn">{{$t('coreselection.btnEnroll')}}</button>
@@ -153,7 +157,8 @@ onMounted(async () => {
   }
 .ledger-container {
   position: relative;
-  width: 480px; 
+  width: 100%;
+  max-width: 480px; 
   height: auto;
   overflow: hidden;
   border-radius: 10px;
@@ -187,8 +192,9 @@ onMounted(async () => {
     font-weight: bold;
     max-width: fit-content;
     margin: 0 auto;
+    border: 2px solid $color-fsWhite;
     &.unlogbtn{
-      color:$color-fsCaption;
+      color:$color-fsWhite;
       background-color: $color-fsContent;
     }
 }

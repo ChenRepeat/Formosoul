@@ -57,7 +57,7 @@ import Editcardpage from './Member/information/editcardpage.vue';
         height: 90%;
         position: fixed;
         inset: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+
 
         margin: 0 auto;
         top: 50%;
@@ -81,12 +81,12 @@ import Editcardpage from './Member/information/editcardpage.vue';
     }
 
     .Loginout{
+        overflow: auto;
         width: 100%;
         height: 100%;
         // 轉換成RGB 數值 再調 opacity
         // background-color: rgba(93, 93, 93, 0.5);
         // 在原本的 6 碼色碼後面直接加上 2 碼來代表透明度（範圍 00 到 FF）
-        background-color: #5D5D5D80;
         display: flex;
         justify-content: center; 
         align-items: center; 
@@ -95,5 +95,17 @@ import Editcardpage from './Member/information/editcardpage.vue';
         position: relative;
     }
 
-
+    @media screen and (max-height: 750px) {
+        .bg-frostedGlass{
+            height: 95%;
+        }
+        
+    }
+    @media screen and (max-height: 650px) {
+        .bg-frostedGlass{
+            width: 95%;
+            height: 100%;
+        }
+        
+    }
 </style>

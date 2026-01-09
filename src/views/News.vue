@@ -8,6 +8,10 @@ import NewsCard from "@/components/News/NewsCard.vue";
 import { onBeforeRouteLeave } from 'vue-router'
 import Backgroundaction from "@/components/backgroundaction.vue";
 import { useNewsData } from "@/stores/news";
+import ToTopBottom from "@/components/ToTopBottom.vue";
+import { useRoute } from 'vue-router'; 
+
+const route = useRoute();
 
 // 連接 php
 const baseUrl = import.meta.env.BASE_URL;
@@ -26,96 +30,79 @@ const ctx = ref(null); // 用來清理 GSAP 動畫
 const lenis = ref(null); // Lenis 實例
 
 // 1. 視差漂浮卡片資料 (Parallax Items)
-const cards = ref([
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600",
-    style: { top: "25%", left: "5%" },
-    speed: -100,
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?w=600",
-    style: { top: "32%", right: "8%" },
-    speed: 50,
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1601314167099-232775b3d6fd?w=600",
-    style: { top: "42%", left: "15%" },
-    speed: -50,
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600",
-    style: { top: "48%", right: "25%" },
-    speed: 120,
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600",
-    style: { top: "55%", left: "8%" },
-    speed: -80,
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600",
-    style: { top: "62%", right: "5%" },
-    speed: 80,
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=600",
-    style: { top: "68%", left: "35%" },
-    speed: -150,
-  },
-  {
-    id: 8,
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600",
-    style: { top: "75%", right: "15%" },
-    speed: 40,
-  },
-  {
-    id: 9,
-    src: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=600",
-    style: { top: "82%", left: "10%" },
-    speed: 150,
-  },
-  {
-    id: 10,
-    src: "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600",
-    style: { top: "85%", right: "30%" },
-    speed: -60,
-  },
-]);
-
+const cards = ref ([])
+const randomCard=()=>{
+  const cardLoop = (num)=>{
+    for(let i = 0; i < num ; i++){
+        const rs = Math.ceil(Math.random()*300) - 150;
+        const rW = Math.ceil(Math.random()*120) + 280;
+        let rX = Math.ceil(Math.random()*20);
+        const rY = Math.ceil(Math.random()*6);
+        if(i%2 == 0){
+          rX += 50;
+        }else{
+          rX = 30 - rX
+        }
+        cards.value.push({
+          id : i+1,
+          src: `${ baseUrl }${ allNewsData.value[i].pic }`,
+          style: { width:`${rW}px`,height:`${rW}px`,top: `${rY+ 10 * i}%`, right: `${rX}%`},
+          speed: rs,
+        })
+      }
+  }
+  if(allNewsData.value.length <10){
+    cardLoop(allNewsData.value.length)
+  }else{
+    cardLoop(10)
+  }
+}
 // 2. 最新消息資料
-onMounted( async () => {
-  newsDataStore.get_newsinfo();
+// 定義 ticker 更新函式 (放在 setup 裡，onMounted 之外)，以便新增與移除時能指涉到同一個函式
+const updateLenis = (time) => {
+  if (lenis.value) {
+    lenis.value.raf(time * 1000); // 毫秒轉換
+  }
+};
+
+onMounted(async () => {
+  // 1. 等待資料抓取完成
+  await newsDataStore.get_newsinfo();
+  
+  // 2. 產生卡片資料
+  randomCard();
+  
+  // 3. ★★★ 修正點：加上 await，確保 Vue 把卡片畫到畫面上 ★★★
   await nextTick();
+
+  // 4. 初始化 Lenis
   lenis.value = new Lenis({
     duration: 1.5,
     smooth: true,
   });
 
-  const navEntry = performance.getEntriesByType("navigation")[0];
-  
-  if (navEntry && navEntry.type === 'reload') {
-    // 如果是按 F5 重新整理，強制滾回頂部
+  // 處理重新整理 (Reload)
+  if (route.hash) {
+    const target = document.querySelector(route.hash);
+    if (target) {
+      ScrollTrigger.refresh();
+      lenis.value.scrollTo(target, { offset: 0, immediate: false });
+    }
+  } 
+  else {
     window.scrollTo(0, 0);
     lenis.value.scrollTo(0, { immediate: true });
-  } 
-  // 如果是 'navigate' (點連結) -> Router 會處理歸零
-  // 如果是 'back_forward' (按上一頁) -> Router 會處理回到舊位置
-  // 所以其他情況我們都不用管，只要抓 'reload' 就好！
-
-  function raf(time) {
-    if (!lenis.value) return;
-    lenis.value.raf(time);
-    requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
+  // 5. 連接 ScrollTrigger
+  lenis.value.on('scroll', ScrollTrigger.update);
 
+  // 6. 加入 Ticker
+  gsap.ticker.add(updateLenis);
+
+  // 7. 關閉延遲平滑
+  gsap.ticker.lagSmoothing(0);
+
+  // 8. 設定 GSAP 動畫 Context
   ctx.value = gsap.context(() => {
     ScrollTrigger.create({
       trigger: mainSection.value,
@@ -125,9 +112,14 @@ onMounted( async () => {
       pinSpacing: false,
     });
 
+    // 這裡因為有 await nextTick()，所以現在抓得到 DOM 元素了
     const parallaxCards = document.querySelectorAll(".news-parallax-card");
+    
     parallaxCards.forEach((el) => {
-      const speed = parseFloat(el.getAttribute("data-speed"));;
+      // 加上防呆，避免某些元素沒有 speed 屬性
+      const speedStr = el.getAttribute("data-speed");
+      const speed = speedStr ? parseFloat(speedStr) : 0; 
+      
       gsap.to(el, {
         y: speed,
         ease: "none",
@@ -140,15 +132,12 @@ onMounted( async () => {
       });
     });
   }, mainSection.value);
-  // behavior: 'auto' 代表瞬間跳轉，不要滑動 (重新整理通常不需要滑動特效)
+
   window.scrollTo({ top: 0, behavior: 'auto' });
 });
 
-
-// 2. ★★★ 加入這段安全煞車 ★★★
-// 這會在「按下連結，但還沒換頁」的那一瞬間執行
+// 路由離開攔截
 onBeforeRouteLeave((to, from, next) => {
-  // 立即殺死 Lenis，防止它在換頁過程中干擾卷軸位置
   if (lenis.value) {
     lenis.value.destroy(); 
     lenis.value = null;
@@ -156,9 +145,17 @@ onBeforeRouteLeave((to, from, next) => {
   next();
 });
 
+// 元件卸載清理
 onUnmounted(() => {
   if (ctx.value) ctx.value.revert();
-  if (lenis.value) lenis.value.destroy();
+  
+  // ★★★ 修正點：移除正確的函式 ★★★
+  gsap.ticker.remove(updateLenis);
+  
+  if (lenis.value) {
+    lenis.value.destroy();
+    lenis.value = null;
+  }
 });
 </script>
 
@@ -167,7 +164,7 @@ onUnmounted(() => {
 
     <section ref="mainSection" class="news-parallax-section">
       <div class="news-sticky-title-wrapper news-pin-target">
-        <h5 class="news-main-text">－－{{$t("nav.newsIntro")}}－－</h5>
+        <h6 class="news-main-text">{{$t("nav.newsIntro")}}</h6>
         <div class="scroll-tip" >
           <div class="tip-dot"></div>
         </div>
@@ -175,10 +172,10 @@ onUnmounted(() => {
 
       <div class="news-cards-container">
         <div
-          v-for="card in cards"
+          v-for="(card,index) in cards"
           :key="card.id"
           class="news-parallax-card"
-          :style="card.style"
+          :style="[card.style]"
           :data-speed="card.speed"
         >
           <div class="news-card-inner">
@@ -189,16 +186,18 @@ onUnmounted(() => {
     </section>
 
     <Backgroundaction></Backgroundaction>
-    <section class="news-updates-section">
+    <section class="news-updates-section" id="updates">
       
       <div class="news-updates-header">
-        <h2 class="news-updates-title">UPDATES</h2>
+        <h3 class="news-updates-title">{{$t('nav.news')}}</h3>
+        <h6 class="news-updates-title fw200">{{ $t('nav.news2ndTitle') }}</h6>
       </div>
 
       <div class="news-updates-grid">
         <NewsCard v-for="item in allNewsData" :key="item.id" :data="item" :link="item.id"/>
       </div>
     </section>
+    <ToTopBottom />
   </div>
 </template>
 
@@ -245,6 +244,7 @@ onUnmounted(() => {
       height: 100%;
       animation: run 2s infinite ease-in-out;
       background-image: linear-gradient(to top,white 0%,transparent 100%);
+      border-radius: 20%;
     }
   }
 }
@@ -264,7 +264,23 @@ onUnmounted(() => {
   text-align: center;
   color: #fff;
   mix-blend-mode: exclusion;
+  position: relative;
+  &::after,&::before{
+    content: '';
+    height: 1px;
+    width: 10%;
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+  }
+  &::after{
+    left: 102%;
+  }
+  &::before{
+    right: 102%;
+  }
 }
+.news-main-text
 
 /* 卡片容器 */
 .news-cards-container {
@@ -278,8 +294,6 @@ onUnmounted(() => {
 
 .news-parallax-card {
   position: absolute;
-  width: 270px;
-  height: 290px;
   will-change: transform;
   pointer-events:none;
   z-index: 999;
@@ -324,7 +338,7 @@ onUnmounted(() => {
   text-transform: uppercase;
   color: #fff;
   line-height: 1;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 

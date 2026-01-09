@@ -1,10 +1,19 @@
 <template>
   <div class="book-section">
     <IndexBar class="index-bar" />
+     
     <div v-if="isAnimating" class="blocking-overlay" 
     :class="{ 
         'unload': !isLoad 
-      }"><h4 v-if="isIntroPlaying">{{$t('classes.escTip')}}</h4></div>
+      }">
+      <h4 v-if="isIntroPlaying">
+        <i18n-t keypath="classes.escTip" tag="span">
+          <template #keyin>
+            <span class="bright-text">{{ $t('classes.keyBoard')}}</span>
+          </template>
+        </i18n-t>
+      </h4>
+    </div>
     <div 
       class="book" 
       ref="bookRef"
@@ -252,7 +261,7 @@ const cleanupResize = () => {
 };
 
 const handleKeydown = (event) => {
-  if (event.key === 'Escape' && isIntroPlaying.value) {
+  if ((event.key === 'Escape' || event.code === 'Space') && isIntroPlaying.value) {
     console.log('Intro animation interrupted by Esc key.');
     cleanupAnimation();
     
@@ -530,18 +539,22 @@ onUnmounted(() => {
 .book-section {
   width: 100vw; 
   height: 100vh;
+  // height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  // background-color: $color-fsTitle;
   overflow: hidden; 
   user-select: none; 
   position: relative;
 }
 
 .book {
-  // filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.5)); 書本陰影
+  filter: drop-shadow(0 0px 20px $color-fsWhite);
   transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  max-width: 1200px;
+  aspect-ratio: 3 / 2;
+  height: 100%;
+  max-height: 800px;
 }
 .unload{
   opacity: 0;
@@ -561,8 +574,8 @@ onUnmounted(() => {
     width: 100%;
     text-align: center;
     bottom: 10%;
-    color: white;
-    opacity: 0.3;
+    color: $color-fsTitle;
+    text-shadow: 0 0 5px $color-fsWhite;
   }
 }
 
@@ -579,11 +592,6 @@ onUnmounted(() => {
   transition: none; 
   transform-style: preserve-3d;
   border-radius: 0 16px 16px 0;
-  // box-shadow:
-  //  6px 1px 20px $color-fsWhite,
-  //  6px 1px 20px $color-fsGold300,
-  //  12px -3px 20px $color-fsWhite,
-  //  12px -3px 6px $color-fsGold300;
   opacity: 1;
 }
 
@@ -594,7 +602,6 @@ onUnmounted(() => {
   left: 0; 
   width: 100%; 
   height: 100%;
-  // background-image: url('https://www.transparenttextures.com/patterns/paper.png');
   opacity: 0.4;
   pointer-events: none;
 }
@@ -617,6 +624,7 @@ onUnmounted(() => {
   z-index: 100;
   width: 50%;
   height: auto;
+  filter: drop-shadow(0 0 15px $color-fsWhite);
 }
 .book-logo {
   position: absolute;
@@ -632,11 +640,7 @@ onUnmounted(() => {
   text-align: center;
 }
 
-h1, h3, h4 {
-  font-family: "Times New Roman", serif;
-  margin-bottom: 10px;
-  color: #4a3b2a;
-}
+
 
 .cover h1, .cover h3 { 
   color: #e0d5c1; 
@@ -650,7 +654,6 @@ h1, h3, h4 {
 img { 
   max-width: 100%; 
   border-radius: 4px; 
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
 }
 
 :deep(.stf__item.--cursor) {
@@ -670,5 +673,7 @@ $high-layer-pages: 4, 6, 9, 12;
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
-
+.bright-text{
+  color: $color-fsGold;
+}
 </style>

@@ -1,8 +1,9 @@
 <template>
-    <div class="collections">
+    <div v-if="nocollection" class="nocoupon"><h3>{{ nocollection }}</h3></div>
+    <div v-else class="collections">
         <h3>{{$t('member.myCollect')}}</h3>
         <section class="list-all">
-            <ProductCard :images="calcollectionspage" :currentPage="currentPage" withwhite></ProductCard>
+            <TestProductCard :products="calcollectionspage" :currentPage="currentPage" withwhite></TestProductCard>
         </section>
         <div class="pagebtn">
             <span class="list-page noborder" @click="prevPage"><font-awesome-icon icon="fa-solid fa-angle-left" /></span>
@@ -16,42 +17,69 @@
             </span>
             <span class="list-page noborder" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></span>
         </div>
-        
     </div>
 </template>
 
 <script setup>
 import BasicButton from '@/components/BasicButton.vue';
 import ProductCard from '@/components/ProductCard.vue';
+import TestProductCard from '@/components/TestProductCard.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+  const { locale } = useI18n();  
+  const langList = {
+  'en-US': 'en',
+  'zh-TW': 'zh'
+  };
 
-    const myimg = ref([
-        { id: 1, img: 'Shop/1.png' },
-        { id: 2, img: 'Shop/2.png' },
-        { id: 3, img: 'Shop/3.png' },
-        { id: 4, img: 'Shop/4.png' },
-        { id: 5, img: 'Shop/5.png' },
-        { id: 6, img: 'Shop/6.png' },
-        { id: 7, img: 'Shop/1.png' },
-        { id: 8, img: 'Shop/2.png' },
-        { id: 9, img: 'Shop/3.png' },
-        { id: 10, img: 'Shop/4.png' },
-        { id: 11, img: 'Shop/5.png' },
-        { id: 12, img: 'Shop/6.png' },
-        { id: 13, img: 'Shop/1.png' },
-        { id: 14, img: 'Shop/2.png' },
-        { id: 15, img: 'Shop/3.png' },
-        { id: 16, img: 'Shop/4.png' },
-        { id: 17, img: 'Shop/5.png' },
-        { id: 18, img: 'Shop/6.png' },
-        { id: 19, img: 'Shop/1.png' },
-        { id: 20, img: 'Shop/2.png' },
-        { id: 21, img: 'Shop/3.png' },
-        { id: 22, img: 'Shop/4.png' },
-        { id: 23, img: 'Shop/5.png' },
-        { id: 24, img: 'Shop/6.png' },
-    ]);
+  const lang = computed( () => {
+      return langList[locale.value] || 'en';
+  });
+const collectionlist =  ref([]);
+const nocollection = ref('');
+
+function getcollectionlist(){
+          const storedUser = localStorage.getItem('user');
+          const apiBase = import.meta.env.VITE_API_BASE;
+          const API_URL = `${apiBase}/getmembercollectionlist.php`;
+          if(!storedUser) return;
+          const userData = JSON.parse(storedUser); 
+          const { member_ID } = userData;
+          
+          return fetch(API_URL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type' : 'application/json'
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                  member_ID, 
+              })
+          }
+          ).then( res => res.json()
+          ).then(collection_list => {
+          const collection_Array = collection_list.data || [];
+          collectionlist.value = collection_Array.map((item, index) => {
+            const collectionInfo = collection_Array[index] || {};
+            let processedImages = collectionInfo.image;
+            if (typeof processedImages === 'string') {
+                processedImages = processedImages.split('|');
+            }
+            if (Array.isArray(processedImages)) {
+                processedImages = processedImages.map(path => {
+                    return path.startsWith('Shop/') ? path : `Shop/${path}`;
+                });
+            }
+            return {
+                ...item,
+                image: processedImages,
+                isLike: Number(item.collect_status) == 1 
+            };
+        });
+        
+    });
+};
 
     // 設定現在在一頁(預設是第一頁)
     const currentPage = ref(1);
@@ -61,11 +89,11 @@ import { computed, ref } from 'vue';
     const calcollectionspage = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        return myimg.value.slice(start, end);
+        return collectionlist.value.slice(start, end);
     })
     // 總頁數 ceil是除完後無條件 +1
     const totalPages = computed(() => {
-        return Math.ceil(myimg.value.length / itemsPerPage);
+        return Math.ceil(collectionlist.value.length / itemsPerPage);
     });
     // 下面兩個為上一頁跟下一頁 邏輯就是用條件式去判斷 currentPage 是要 +1 還是 -1 判斷的條件一個是不能超過第一頁另一個是不能大於總頁數
     const prevPage = () => {
@@ -86,6 +114,37 @@ import { computed, ref } from 'vue';
             // console.log(pageNumber);
         }
     };
+
+onMounted(async () => {
+    await getcollectionlist();
+    if(collectionlist.value.length == 0){
+      if(lang.value == 'en'){
+        nocollection.value = 'No Collection'
+      }else{
+        nocollection.value = '還沒有收藏'
+      }
+    }
+});
+
+watch(
+    collectionlist, 
+    (newList) => {
+        const hasUnliked = newList.some(item => item.isLike === false);
+        if (hasUnliked) {
+            collectionlist.value = collectionlist.value.filter(item => item.isLike !== false);
+            if (calcollectionspage.value.length === 0 && currentPage.value > 1) {
+                currentPage.value--;
+            }
+        }
+    },
+    // 深層監聽 才能監聽到裡面的islike
+    { deep: true }
+);
+
+// .some()	只要有一個符合，就是 true	布林值 (true/false)
+// .every()	必須全部都符合，才是 true	布林值 (true/false)
+// .find()	找第一個符合的項目	回傳該項目物件 (找不到則 undefined)
+// .filter()	找所有符合的項目	回傳新陣列
 </script>
 
 <style scoped lang="scss">
@@ -135,7 +194,10 @@ import { computed, ref } from 'vue';
         background-color: $color-fsTitle;
         color: $color-fsWhite;
     }
-
+    .list-page.active{
+      background-color: $color-fsTitle;
+      color: $color-fsWhite;
+    }
     .noborder{
         border: 0;
     }

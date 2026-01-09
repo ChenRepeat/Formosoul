@@ -1,29 +1,27 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Edit, ArrowLeft } from '@element-plus/icons-vue' 
+import { ArrowLeft } from '@element-plus/icons-vue' 
 import { ElMessage } from 'element-plus'
 import ListLayout from './ListLayout.vue' 
 
 const route = useRoute()
 const router = useRouter()
 
-const currentOrderId = route.params.id
+// 這裡抓到的就是 'ORD2026xxxx' 字串
+const currentOrderNumber = route.params.id 
 const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE;
 
-// ★★★ 關鍵 1：初始值設為 true，一進來就是載入中，避免閃爍 ★★★
 const loading = ref(true) 
 
 const OrderData = ref({
   orderId: '',
   memberName: '',
-  recipientNameZh: '',
-  recipientNameEn: '',
+  recipientName: '',
   phone: '',
-  addressZh: '',
-  addressEn: '',
+  address: '',
   paymentMethod: '',
-  status: '', // 初始值保持空字串即可
+  status: '', 
   createTime: '',
   updateTime: '',
   isCancel: false, 
@@ -36,18 +34,17 @@ const goBack = () => {
   router.push('/admin/order-management') 
 }
 
-// 根據狀態回傳 Tag 顏色
 const getStatusType = (status) => {
   const s = Number(status); 
-  if (s === 0) return 'warning'; 
-  if (s === 1) return 'success'; 
-  if (s === 2) return 'primary'; 
-  if (s === 3) return 'success'; 
-  if (s === 4) return 'info';    
+  if (s === 0) return 'warning'; // 未付款
+  if (s === 1) return 'success'; // 已付款
+  if (s === 2) return 'primary'; // 已出貨
+  if (s === 3) return 'success'; // 已完成
+  if (s === 4) return 'info';    // 已取消
+  if (s === 5) return 'danger';  // 付款失敗
   return 'info'; 
 }
 
-// 根據狀態回傳中文名稱
 const getStatusText = (status) => {
   if (status === '' || status === undefined || status === null) return '';
   const s = Number(status);
@@ -56,35 +53,40 @@ const getStatusText = (status) => {
     1: '已付款',
     2: '已出貨',
     3: '已完成',
-    4: '已取消'
+    4: '已取消',
+    5: '付款失敗'
   };
   return statusMap[s] || '未知狀態';
 }
 
 const getOrderDetail = async () => {
-  if (!currentOrderId) return;
-  
-  // 這裡不用再設 loading.value = true 了，因為初始值已經是 true
+  if (!currentOrderNumber) return;
   
   try {
     const apiBase = import.meta.env.VITE_API_BASE;
-    const response = await fetch(`${apiBase}/getOrderDetail.php?id=${currentOrderId}`);
+    // 傳送訂單編號字串給後端
+    const response = await fetch(`${apiBase}/getOrderDetail.php?id=${currentOrderNumber}`);
     const data = await response.json();
+
+    if (data.error) {
+        ElMessage.error(data.error);
+        return;
+    }
 
     if (data && data.info) {
         OrderData.value = {
-          orderId: data.info.order_ID,
-          memberName: data.info.name_en,
-          recipientNameZh: data.info.name_zh,
-          recipientNameEn: data.info.name_en,
+          // ★ 修改：顯示訂單編號 (字串)
+          orderId: data.info.order_number, 
+          // 如果你的資料庫有 name_en 則用，否則用 member_ID 或需要 JOIN member 表
+          memberName: data.info.name_en || data.info.member_ID, 
+          recipientName: data.info.name_en, // 假設收件人同會員，若有獨立欄位請修改
           phone: data.info.phone,
-          addressZh: data.info.address_zh,
-          addressEn: data.info.address_en,
+          address: data.info.address_en,
           paymentMethod: data.info.payment,
           status: data.info.status,
           createTime: data.info.date,
           updateTime: new Date().toISOString().split('T')[0],
-          isCancel: false, 
+          isCancel: Number(data.info.status) === 4, // 如果狀態是 4 則視為取消
           cancelReason: data.info.remark
         }
     }
@@ -97,7 +99,6 @@ const getOrderDetail = async () => {
     console.error('取得訂單資料失敗:', error);
     ElMessage.error('無法取得訂單資料');
   } finally {
-    // ★★★ 關鍵 2：資料抓完後，解除載入狀態，畫面才會顯示 ★★★
     loading.value = false; 
   }
 }
@@ -106,16 +107,14 @@ const getOrderDetail = async () => {
 const saveChanges = async () => {
     loading.value = true;
     
-    // 1. 準備要傳給後端的資料
     const payload = {
-        orderId: OrderData.value.orderId,
-        recipientNameZh: OrderData.value.recipientNameZh,
-        recipientNameEn: OrderData.value.recipientNameEn,
+        // 傳送訂單編號給後端更新
+        orderId: OrderData.value.orderId, 
+        recipientName: OrderData.value.recipientName,
         phone: OrderData.value.phone,
-        addressZh: OrderData.value.addressZh,
-        addressEn: OrderData.value.addressEn,
+        address: OrderData.value.address,
         isCancel: OrderData.value.isCancel,
-        cancelReason: OrderData.value.remark
+        cancelReason: OrderData.value.cancelReason // 注意這裡原本寫 remark，對應 v-model 是 cancelReason
     };
 
     try {
@@ -134,7 +133,6 @@ const saveChanges = async () => {
 
         if (data.success) {
             ElMessage.success('訂單更新成功！');
-            // ★ 更新成功後，重新抓取資料，讓畫面上的狀態(Tag)跟唯讀欄位同步更新
             await getOrderDetail();
         } else {
             ElMessage.error(data.message || '更新失敗');
@@ -218,33 +216,21 @@ onMounted(() => {
             
             <el-row :gutter="24">
                 <el-col :span="12">
-                  <el-form-item label="收件人姓名 (中文)">
-                    <el-input v-model="OrderData.recipientNameZh" :suffix-icon="Edit" placeholder="請輸入中文姓名" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="Recipient Name (English)">
-                    <el-input v-model="OrderData.recipientNameEn" :suffix-icon="Edit" placeholder="Enter name" />
+                  <el-form-item label="收件人">
+                    <el-input v-model="OrderData.recipientName" placeholder="Enter name" />
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label="聯絡電話">
-                    <el-input v-model="OrderData.phone" :suffix-icon="Edit" />
+                    <el-input v-model="OrderData.phone"/>
                   </el-form-item>
                 </el-col>
                 
                 <el-col :span="24">
-                  <el-form-item label="收件人地址 (中文)">
-                    <el-input v-model="OrderData.addressZh" :suffix-icon="Edit" />
-                  </el-form-item>
-                </el-col>
-                
-                <el-col :span="24">
-                  <el-form-item label="Recipient Address (English)">
+                  <el-form-item label="收件人地址">
                     <el-input 
-                      v-model="OrderData.addressEn" 
-                      :suffix-icon="Edit" 
+                      v-model="OrderData.address"  
                       type="textarea" 
                       :rows="2"
                       autosize
@@ -284,12 +270,12 @@ onMounted(() => {
            </div>
 
            <div class="items-list">
-             <div v-for="item in orderItems" :key="item.id" class="item-row">
+             <div v-for="item in orderItems" :key="item.order_detail_ID" class="item-row">
                <div class="col-name item-info">
                  <img :src="`${imgBase}${item.url}`" class="product-img" alt="product" />
                  <div class="info-text">
                    <div class="p-name-en">{{ item.name_en }}</div>
-                 </div>
+                   </div>
                </div>
                <div class="col-qty item-qty">x {{ item.quantity }}</div>
                <div class="col-price item-price">NT$ {{ item.price }}</div>

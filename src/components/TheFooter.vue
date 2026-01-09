@@ -168,9 +168,15 @@ const newVSize=()=>{
       </div>
     </section>
     <div class="tibame-policy i18n-anim">
-      {{$t('nav.FormosoulCopyright1')}}<br/>{{$t('nav.FormosoulCopyright2')}}
-      <a href="https://www.facebook.com/TibaMe">{{$t('nav.FormosoulCopyright3')}}</a>
-      {{$t('nav.FormosoulCopyright4')}}
+      <i18n-t keypath="nav.FormosoulCopyright" tag="span">
+      
+      <template #link>
+        <a href="https://www.facebook.com/TibaMe" class="link-text">
+          {{ $t('nav.tibame')}}
+        </a>
+      </template>
+
+    </i18n-t>
     </div>
   </main>
 </template>
@@ -198,7 +204,7 @@ hr {
 .footer-link-corner {
   gap: 120px;
   width: 60%;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1366px) {
     gap: 180px;
   }
 }
@@ -211,7 +217,7 @@ hr {
   z-index: 2;
   position: relative;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1366px) {
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -223,7 +229,7 @@ hr {
   width: 1200px;
   gap: 100px;
   justify-content: center;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1366px) {
     width: 95%;
     display: flex;
     flex-direction: column-reverse;
@@ -234,7 +240,7 @@ hr {
 }
 .footer-inner-case {
   justify-content: start;
-  gap: 120px;
+  gap: 117px;
 }
 .footer-social-link {
   text-align: center;
@@ -276,7 +282,7 @@ hr {
   text-align: center;
   font-size: 12px;
   color: $color-fsCaption;
-  margin-top: 60px;
+  margin-top: 60px;white-space: pre-line;
   a{
     transition: all 0.3s ease;
     &:link{
@@ -321,7 +327,7 @@ hr{
   width: 73%;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1366px) {
 
   .footer-inner-case{
     gap: 30px;

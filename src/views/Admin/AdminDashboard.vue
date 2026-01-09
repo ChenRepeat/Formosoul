@@ -2,19 +2,30 @@
 import { useRouter, useRoute } from "vue-router";
 import { computed } from "vue";
 import AdminHeader from "@/components/Admin/AdminHeader.vue";
+import Cookies from 'js-cookie'
+import { useAuthStore } from '@/stores/autoStore'
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
 
 const activeMenu = computed(() => {
-  // 1. 如果路由設定有指定 activeMenu (例如在新增頁)，就回傳指定的路徑
   if (route.meta.activeMenu) {
     return route.meta.activeMenu
   }
-  // 2. 否則就回傳原本的網址路徑
   return route.path
 })
 
+// 登出邏輯 (跟 Header 一樣)
+const handleLogout = () => {
+  Cookies.remove('token')
+  localStorage.removeItem('user')
+  localStorage.removeItem('loginData')
+  authStore.token = ''
+  authStore.user = null
+  
+  router.push('/')
+}
 </script>
 
 <template>
@@ -34,11 +45,12 @@ const activeMenu = computed(() => {
           <el-menu-item index="/admin/news-management">消息管理</el-menu-item>
           <el-menu-item index="/admin/annual-event-management">年度盛事管理</el-menu-item>
         </el-menu>
-        <router-link to="/" class="el-menu-item logout-btn">
+        
+        <div class="el-menu-item logout-btn" @click="handleLogout">
           登出
-        </router-link>
+        </div>
       </el-aside>
-      <el-main>       
+      <el-main>        
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -46,6 +58,7 @@ const activeMenu = computed(() => {
 </template>
 
 <style scoped>
+/* CSS 完全不用動，因為我們保留了 class="logout-btn" */
 .layout-container {
   height:calc(100vh - 60px);
   max-width: 1200px;
@@ -75,12 +88,11 @@ const activeMenu = computed(() => {
 .el-main{
   padding: 20px 20px 0 20px;
 }
-/* 一般狀態的按鈕 */
 .el-menu-item {
   margin: 10px 0;
   border-radius: 10px;
   background-color: #F0F7FF;
-  justify-content: center;/* 文字置中 */
+  justify-content: center;
   color: #333; 
   box-sizing: border-box;
   width: 180px;
@@ -90,8 +102,6 @@ const activeMenu = computed(() => {
   background-color: #0A3D70;
   color: #fff;
 }
-
-/* 被選中時的狀態 */
 .el-menu-item.is-active {
   background-color: #0A3D70;
   color: #fff; 
@@ -103,7 +113,6 @@ const activeMenu = computed(() => {
   margin-bottom: 10px;
 }
 .logout-btn {
-  /* 推到最下面 */
   margin: 40px 10px 10px 10px;
   border-radius: 10px;
   background-color: #F0F7FF;
@@ -112,12 +121,11 @@ const activeMenu = computed(() => {
   height: 48px;
   display: flex;
   justify-content: center; 
-  align-items: center;     
+  align-items: center;      
   cursor: pointer;
   color: #333;
   text-decoration: none;
 }
-
 .logout-btn:hover {
   background-color: #0A3D70;
   color: #fff;

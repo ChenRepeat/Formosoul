@@ -78,8 +78,8 @@
 
         try{
             const response = await forgetpasswordAPI(email.value);
-            const decryptedOtp = atob(response.changeotp)
             if(response.success){
+                const decryptedOtp = atob(response.changeotp)
                 // console.log(decryptedOtp);
                 const templateParams = {
                     email: email.value,
@@ -116,10 +116,9 @@
     .login-form{
         width: 70%;
         height: 50%;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);   
+        margin: 0 auto;
+        // padding-top: 80px;
+        padding-bottom: 40px;
 
     }
 
@@ -128,12 +127,10 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        gap: 24px;
-        margin-bottom: 16px;
 
     }
     .input-text{
-        margin-bottom: 36px;
+        margin-bottom: 24px;
     }
     .btn-yellow-fill{
         width: 280px;
@@ -172,12 +169,33 @@
     }
 
     .login-bottom > p{
+        margin-bottom: 16px;
         color: $color-fsCaption;
     }
 
     .error-message > p{
-        color: $color-fsCaption;
+        color: $color-fsRed;
         text-align: center;
         margin-bottom: 24px;
+    }
+    @media screen and (min-width: 1400px) {
+        .login-form{
+            padding-top: 40px;
+        }
+
+    }
+    @media screen and (max-width: 1366px) {
+        .login-form{
+            margin-top: 100px;
+            margin-bottom: 100px;
+        }
+        
+    }
+
+    @media screen and (max-height: 750px) {
+        .login-form{
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
     }
 </style>

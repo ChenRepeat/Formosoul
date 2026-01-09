@@ -16,7 +16,7 @@ if (!$member_ID || !in_array($column, $allowColumns)) {
 
 try {
     // 修正重點：使用雙引號才能正確解析 $column 變數
-    $sql = "UPDATE formosoul.pointscard SET $column = 1 WHERE member_ID = :member_ID";
+    $sql = "UPDATE pointscard SET $column = 1 WHERE member_ID = :member_ID";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':member_ID', $member_ID, PDO::PARAM_INT);
     $stmt->execute();

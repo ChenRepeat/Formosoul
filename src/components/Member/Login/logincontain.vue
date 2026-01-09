@@ -7,7 +7,7 @@
             type="email"
             v-model="email"
             class="input-text"
-            placeholder="E-mail"
+            :placeholder="$t('loginPage.placeholderAcc')"
             :disabled="isLoading"
             @keydown="handleKeyDown"
             />
@@ -19,7 +19,7 @@
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 class="input-text"
-                placeholder="Password"
+                :placeholder="$t('loginPage.placeholderPwd')"
                 :disabled="isLoading"
                 @keydown="handleKeyDown"
                 />
@@ -40,7 +40,7 @@
         <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
         <div class="login-bottom">
             <p>
-                * If your memory has been tampered with by a Memory Charm, click here：<a @click="hanldeForgetpassword" class="bottom-link">ForgetPassword</a>
+                {{$t('loginPage.forgetPasswordMsg')}}<a @click="hanldeForgetpassword" class="bottom-link">{{$t('loginPage.forgetPasswordBtn')}}</a>
             </p>
         </div>
         <BasicButton
@@ -48,7 +48,7 @@
         @click="handleLogin"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : 'Enter the Academy'}}
+            {{ isLoading ? $t('loginPage.loading') : $t('loginPage.loginBtn')}}
         </BasicButton>
 
 
@@ -58,7 +58,7 @@
 <script setup >
     import BasicButton from '@/components/BasicButton.vue';
     import { useAuthStore } from '@/stores/autoStore';
-    import { inject, ref } from 'vue';
+    import { inject, ref, watchEffect, watch } from 'vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import { useMemberStore } from '@/stores/member';
 
@@ -95,6 +95,19 @@
         // // avatarimg.src = avatar;
         // });
     };
+    const props = defineProps(['googleMessage']) 
+    // console.log(`google message初始:${props.googleMessage}`);
+    if(props.googleMessage) errorMessage.value = props.googleMessage
+    watch(
+        ()=>props.googleMessage,
+        // props.googleMessage 也式是響應式物件 但它傳值，故需使用函式追蹤才會看到更新 (以ref宣告的變數 則為傳址 會去追蹤該變數的更新)
+        ()=>{
+            // console.log(`Watch 賦值前的google message:${props.googleMessage}`),
+            // console.log(`Watch 賦值前的error message:${errorMessage.value}`),
+            errorMessage.value = props.googleMessage
+            // console.log(`Watch 賦值後的error message:${errorMessage.value}`)
+        }
+    )
 
     async function handleLogin() {
 
@@ -225,13 +238,14 @@
         color: $color-fsRed;
         margin-bottom: 24px;
     }
+    
     @media screen and (min-width: 1400px) {
         .login-form{
             padding-top: 40px;
         }
 
     }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1366px) {
         .login-form{
             margin-top: 80px;
         }

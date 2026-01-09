@@ -6,6 +6,8 @@ import HandBack from './HandBack.vue';
 import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import IconDice from '@/components/icons/SVG/IconDice.vue';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 import { useMemberStore } from '@/stores/member';
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.dice.pass)
@@ -14,6 +16,15 @@ const isLoggedIn = computed(() => {
   const user = localStorage.getItem('user');
   return !!user;
 });
+
+// 骰子音效
+const diceSound = new Audio(`${import.meta.env.BASE_URL}/SurvivalGuide/dice.mp3`)
+
+const playDiceSound = ()=> {
+    diceSound.currentTime = 0; // 重置播放時間，連確點擊也可以發聲音
+    diceSound.volume = 1;
+    diceSound.play().catch(e => console.log("音效播放失敗", e));
+}
 
 // 過關蓋章
 const showCardOverlay = ref(false);
@@ -182,6 +193,7 @@ function getSingleDiceScore(rawX, rawY){
 
 function randomRoll(){
     if(isRolling.value) return;
+    playDiceSound();
     isRolling.value = true;
 
     // 新增： 設定狀態為： 玩家轉動中
@@ -226,6 +238,7 @@ const chooseSide = (choice) => {
 function startBankerTurn (){
   gameState.value = 'BANKER_ROLLING';
 
+  playDiceSound();
   // 重置莊家分數
   bankerDicelist.value.forEach(die => die.score = '_');
 
@@ -262,7 +275,7 @@ const checkWinner = () => {
 
   // 平手
   if (pScore == bScore) {
-    finalMessage.value = 'DRAW';
+    finalMessage.value = 'draw';
     return;
   }
 
@@ -273,7 +286,7 @@ const checkWinner = () => {
     isWin = pScore < bScore;
   }
 
-  finalMessage.value = isWin? "YOU WIN!" : "YOU LOSE..";
+  finalMessage.value = isWin ? 'win' : 'lose';
 
   if (isWin) {
     const isFirstPass = !passedGames.value.dice;
@@ -284,6 +297,7 @@ const checkWinner = () => {
         showCardOverlay.value = true;
 
         if(isFirstPass) {
+            memberStore.rewards_coupon();
             setTimeout(() => {
                 activeTriggers.value.dice = true;
                 setTimeout(() => {
@@ -399,9 +413,9 @@ onUnmounted (() => {
 <template>
     <!-- <img src="SurvivalGuide/Group 604.svg" alt=""> -->
         <div class="playerbox">
-            <h4>Player</h4>
+            <h4>{{ t('nightmarket.items.diceGame.player') }}</h4>
             <div class="scorebox">
-                <h3>Score</h3>
+                <h3>{{ t('nightmarket.items.diceGame.score') }}</h3>
                 <h2 class="scores" :class="{ 'score-up': totalscore >= 10 }">{{ totalscore }}</h2>
             </div>
         </div>
@@ -454,36 +468,36 @@ onUnmounted (() => {
         </div>
 
         <div class="bankerbox">
-            <h4>banker</h4>
+            <h4>{{ t('nightmarket.items.diceGame.banker') }}</h4>
             <div class="scorebox">
-                <h3>Score</h3>
+                <h3>{{ t('nightmarket.items.diceGame.score') }}</h3>
                 <h2 class="scores" :class="{ 'score-up': bankerTotalScore >= 10 }">{{  bankerTotalScore }}</h2>
             </div>
         </div>
 
         <div v-if="gameState === 'CHOOSING'" class="overlay-modal">
             <div class="modal-content">
-                <h2>Make a Choice!</h2>
-                <p>Your Score: {{ totalscore }}</p>
+                <h2>{{ t('nightmarket.items.diceGame.makeChoice') }}</h2>
+                <p>{{ t('nightmarket.items.diceGame.yourScore') }}: {{ totalscore }}</p>
                 <div class="btn-group">
-                    <button class="btn-big" @click="chooseSide('BIG')">BIG</button>
-                    <button class="btn-small" @click="chooseSide('SMALL')">SMALL</button>
+                    <button class="btn-big" @click="chooseSide('BIG')">{{ t('nightmarket.items.diceGame.big') }}</button>
+                    <button class="btn-small" @click="chooseSide('SMALL')">{{ t('nightmarket.items.diceGame.small') }}</button>
                 </div>
             </div>
         </div>
 
         <div v-if="gameState === 'RESULT'" class="overlay-modal">
             <div class="modal-content">
-                <h1>{{ finalMessage }}</h1>
-                <p>You chose: <strong>{{ playerChoice }}</strong></p>
+                <h1>{{ t('nightmarket.items.diceGame.' + finalMessage) }}</h1>
+                <p>{{ t('nightmarket.items.diceGame.youChose') }}: <strong>{{ playerChoice }}</strong></p>
                 <div class="result-details">
-                    <span>Player: {{ totalscore }}</span> vs <span>Banker: {{ bankerTotalScore }}</span>
+                    <span>{{ t('nightmarket.items.diceGame.player') }}: {{ totalscore }}</span> vs <span>{{ t('nightmarket.items.diceGame.banker') }}: {{ bankerTotalScore }}</span>
                 </div>
                 <div class="result-btn-wrapper">
-                    <button class=".btn-action btn-retry" @click="resetGame">PLAY AGAIN</button>
+                    <button class=".btn-action btn-retry" @click="resetGame">{{ t('nightmarket.items.diceGame.playAgain') }}</button>
                     
                     <button class="btn-action btn-check" @click="showCardOverlay = true">
-                        CHECK YOUR LEDGER
+                        {{ t('nightmarket.items.diceGame.checkLedger') }}
                     </button>
                 </div>
 

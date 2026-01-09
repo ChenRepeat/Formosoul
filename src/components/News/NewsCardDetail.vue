@@ -17,9 +17,20 @@ const newsDataStore = useNewsData(); // 吃pinia
 const allNewsData = computed(() => newsDataStore.allNewsData);
 
 const currentArticle = computed(() => {
-  return allNewsData.value.find(item => item.id == route.params.id);
+  if (!allNewsData.value || allNewsData.value.length === 0) {
+    return null;
+  }
+  const found = allNewsData.value.find((item) => {
+    return item.id == route.params.id;
+  });
+  const target = found || items.value[0];
+  if (!target) return null;
+  return {
+    ...target,
+    displayTitle: target[`title_${langStore.dbSuffix}`],
+    displayContext: target[`content_${langStore.dbSuffix}`],
+  };
 });
-
 // ★★★ 新增：自訂時間的平滑滾動函式 ★★★
 // duration = 毫秒 (例如 1000 = 1秒)
 const scrollToTop = (duration = 800) => {
@@ -44,13 +55,8 @@ const scrollToTop = (duration = 800) => {
   requestAnimationFrame(animate);
 };
 
-const goBack = () => {
-  if (window.history.state.back) {
-    router.back(); // 有上一頁 -> 回上一頁 (保留捲動位置)
-  } else {
-    router.push('/news'); // 沒上一頁 -> 回列表
-  }
-}
+const goBack = () => router.push({ path: '/news', hash: '#updates' })
+
 const isEnglish = computed(() => {
   return langStore.locale === 'en-US'; 
 });
@@ -76,8 +82,7 @@ onMounted( async () => {
     <h6 class="page-guide">
         <router-link to="/news">{{$t('nav.news')}}</router-link>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
-        <h6 v-if="isEnglish">{{ currentArticle?.title_en }}</h6>
-        <h6 v-else>{{ currentArticle?.title_zh }}</h6>
+        {{ currentArticle?.displayTitle }}
     </h6>
     <div class="content-container">
       <aside>
@@ -85,9 +90,9 @@ onMounted( async () => {
           <li v-for="(item,key) in allNewsData" :key="key">
             <router-link :to="`/news/${item.id}`" replace>
               <div>
-                <h5 v-if="isEnglish">{{ item.title_en }}</h5>
-                <h5 v-else>{{ item.title_zh }}</h5>
-                <p>{{ item.update }}</p>
+                <h6 v-if="isEnglish">{{ item.title_en }}</h6>
+                <h6 v-else>{{ item.title_zh }}</h6>
+                <p>{{ item.createdate }}</p>
               </div>
               <span><font-awesome-icon :icon="['fas', 'caret-down']" size="3x" class="arrow-icon"/></span>
             </router-link>
@@ -100,22 +105,21 @@ onMounted( async () => {
           <div v-if="currentArticle" :key="currentArticle.id">
             <img :src="`${ baseUrl }${currentArticle.pic}`" alt="#">
             <div class="text-area">
-              <h3 v-if="isEnglish">{{ currentArticle.title_en }}</h3>
-              <h3 v-else>{{ currentArticle.title_zh }}</h3>
-              <h5>{{ currentArticle.update }}</h5>
-              <p v-if="isEnglish">{{ currentArticle.content_en }}</p>
-              <p v-else>{{ currentArticle.content_zh }}</p>
+              <h3 >{{ currentArticle?.displayTitle }}</h3>
+              <h5>{{ currentArticle.createdate }}</h5>
+              <p>{{ currentArticle.displayContext }}</p>
+
+              <div class="btn-back-layout">
+                    <a href="#" class="back-to-news" @click.prevent="goBack">
+                    <font-awesome-icon :icon="['fas', 'arrow-left']" class="back-icon" />
+                    <p> {{$t('nav.backPrepage')}}</p> 
+                </a>
+              </div>
             </div>
           </div>
 
         </Transition>
       </main>
-    </div>
-    <div class="btn-back-layout">
-          <a href="#" class="back-to-news" @click.prevent="goBack">
-          <font-awesome-icon :icon="['fas', 'arrow-left']" class="back-icon" />
-          <p> {{$t('nav.backPrepage')}}</p> 
-      </a>
     </div>
   </div>
 </template>
@@ -263,7 +267,7 @@ onMounted( async () => {
     color: #fff;
     text-decoration: none;
     position: relative;
-    margin: 140px -60px 100px 0;
+    margin: 140px 0 60px 0;
     transition: all 0.3s ease;
   }
 

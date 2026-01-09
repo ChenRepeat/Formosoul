@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import ListLayout from './ListLayout.vue'
   import { useRouter } from 'vue-router'
   import { ArrowDown } from '@element-plus/icons-vue' 
@@ -7,14 +7,13 @@
 
   const currentPage = ref(1)
   const pageSize = ref(10)
-  const total = ref(0)
   const router = useRouter()
 
   // 搜尋與篩選變數
   const couponSearch = ref('')
   const filterStatus = ref('全部') 
   const filterType = ref('全部')   
-  
+   
   const couponData = ref([])
 
   // ★★★ 核心篩選邏輯 ★★★
@@ -23,11 +22,12 @@
 
     // 1. 關鍵字搜尋 (編號 或 名稱)
     if (couponSearch.value) {
-      const keyword = couponSearch.value.toLowerCase();
-      data = data.filter(item => 
-        (item.name && item.name.toLowerCase().includes(keyword)) || 
-        (item.coupons_ID && item.coupons_ID.toString().includes(keyword)) // 確保有 coupons_ID
-      );
+      const keyword = couponSearch.value.toLowerCase().trim();
+      data = data.filter(item => {
+        const nameMatch = item.name ? item.name.toLowerCase().includes(keyword) : false;
+        const idMatch = item.coupons_ID ? String(item.coupons_ID).toLowerCase().includes(keyword) : false;
+        return nameMatch || idMatch;
+      });
     }
 
     // 2. 狀態篩選
@@ -46,10 +46,13 @@
 
   // 分頁邏輯
   const pagedData = computed(() => {
-    total.value = filteredData.value.length;
     const start = (currentPage.value - 1) * pageSize.value;
     const end = currentPage.value * pageSize.value;
     return filteredData.value.slice(start, end);
+  })
+
+  watch([couponSearch, filterStatus], () => {
+    currentPage.value = 1;
   })
 
   // 取得資料
@@ -61,7 +64,6 @@
       const response = await fetch(API_URL);
       const data = await response.json();
       couponData.value = data;
-      total.value = data.length;
     } catch (error) {
       console.error(error);
       ElMessage.error('無法取得優惠券資料');
@@ -74,28 +76,26 @@
   }
 
   // ★★★ 新增 Helper: 根據 discount 數值回傳分類名稱 (用於篩選比對) ★★★
-  const getDiscountCategory = (val) => {
-    const discount = Number(val);
-    if (discount === 0) {
-      return '免運';
-    } else if (discount > 0 && discount < 100) {
-      return '折扣百分比';
-    } else if (discount >= 100) {
-      return '定額折抵';
-    }
-    return '其他';
-  }
+  // const getDiscountCategory = (val) => {
+  //   const discount = Number(val);
+  //   if (discount === 0) {
+  //     return '免運';
+  //   } else if (discount > 0 && discount < 100) {
+  //     return '折扣百分比';
+  //   } else if (discount >= 100) {
+  //     return '定額折抵';
+  //   }
+  //   return '其他';
+  // }
 
   // Handler: 狀態下拉選單
   const handleStatusCommand = (command) => {
     filterStatus.value = command;
-    currentPage.value = 1; 
   }
 
   // Handler: 類型下拉選單
   const handleTypeCommand = (command) => {
     filterType.value = command;
-    currentPage.value = 1; 
   }
 
   const addCoupon = () => {
@@ -127,7 +127,7 @@
 
         <el-dropdown trigger="click" @command="handleStatusCommand">
           <div class="capsule-btn">
-            <span class="label">狀態: {{ filterStatus }}</span>
+            <span class="label">狀態:{{ filterStatus }}</span>
             <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </div>
           <template #dropdown>
@@ -139,22 +139,7 @@
           </template>
         </el-dropdown>
 
-        <el-dropdown trigger="click" @command="handleTypeCommand">
-          <div class="capsule-btn">
-            <span class="label">類型: {{ filterType }}</span>
-            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="全部">全部</el-dropdown-item>
-              <el-dropdown-item command="折扣百分比">折扣百分比</el-dropdown-item>
-              <el-dropdown-item command="定額折抵">定額折抵</el-dropdown-item>
-              <el-dropdown-item command="免運">免運</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
-      </div>
+        </div>
     </template>
 
     <template #controls>
@@ -169,22 +154,10 @@
       
       <el-table-column label="名稱" prop="name" min-width="200px"></el-table-column>
       
-   <el-table-column label="折扣內容" prop="discount" width="160px">
+   <el-table-column label="折扣" prop="discount" width="160px">
         <template #default="scope">
-          
-          <span v-if="Number(scope.row.discount) === 0">
-            免運
-          </span>
-
-          <span v-else-if="Number(scope.row.discount) > 0 && Number(scope.row.discount) < 100">
-            折扣 {{ scope.row.discount }}%
-          </span>
-
-          <span v-else-if="Number(scope.row.discount) >= 100">
-            定額折抵 NT${{ scope.row.discount }}
-          </span>
-
-        </template>
+          <span>{{ scope.row.discount }}</span>          
+          </template>
       </el-table-column>
 
       <el-table-column label="使用門檻" prop="threshold" width="100px">
@@ -228,11 +201,11 @@
 
     <template #footer>
       <div class="pagination-text">
-        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(total / pageSize) || 1 }} 頁</p>
+        <p>本頁有 {{ pagedData.length }} 筆 第 {{ currentPage }} 頁 / 共 {{ Math.ceil(filteredData.length / pageSize) || 1 }} 頁</p>
       </div>
       <el-pagination 
         v-model:current-page="currentPage"
-        :total="total"
+        :total="filteredData.length"
         :page-size="pageSize"
         layout="prev, pager, next"
         background

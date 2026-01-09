@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, onMounted, computed } from 'vue';
 import MemberLedger from "@/components/Member/information/memberLedger.vue";
 import { useMemberStore } from '@/stores/member';
+import { useclassesStore } from '@/stores/classes';
+
+const useClass = useclassesStore()
 const memberStore = useMemberStore();
 const passTimes = ref(memberStore.gameData.bue.pass)
 
@@ -76,8 +79,10 @@ onMounted( async () => {
     5: {name:'末吉',text:'classes.stick5'},
     6: {name:'衰',text:'classes.stick6'},
   }
-
+  const isChouqianing = ref(false);
   function chouqian(){
+    if(isChouqianing.value)return;
+    isChouqianing.value = true;
     chouqianFes.value = 0;
     stickResult.value = 0;
     setTimeout(() => {
@@ -132,11 +137,14 @@ const buaBue = () => {
       if (isBue1Yin && isBue2Yin) {
         finalResult.value = 'classes.bue2Name';
         siannCount.value = 0;
+        useClass.bueResult = 2;
       } else if (!isBue1Yin && !isBue2Yin) {
         finalResult.value = 'classes.bue1Name'; 
         siannCount.value = 0;
+        useClass.bueResult = 1;
       } else {
         finalResult.value = 'classes.bue3Name'; 
+        useClass.bueResult = 3;
         siannCount.value ++
 
         if(siannCount.value == 3){
@@ -152,6 +160,7 @@ const buaBue = () => {
             showCardOverlay.value = true;
 
             if(isFirstPass){
+              memberStore.rewards_coupon();
               setTimeout(() => {
                 activeTriggers.value.bue = true;
                 setTimeout(() => {
@@ -182,6 +191,7 @@ const buaBue = () => {
                 pass: memberStore.gameData.bue.pass
               });
               
+              memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass }).catch(err => console.error("儲存進度失敗:", err));
               console.log('[背景] 擲筊遊戲資料儲存完成');
         } catch (err) {
             console.error("[背景] 擲筊遊戲儲存失敗:", err);
@@ -190,7 +200,6 @@ const buaBue = () => {
     }
   }
          
-      memberStore.saveGameResult('bue', { pass: memberStore.gameData.bue.pass }).catch(err => console.error("儲存進度失敗:", err));
     }, 1500);
   }, 50);
 };
@@ -278,7 +287,7 @@ const ledgerClose = ()=> showCardOverlay.value = false;
       <img src="/Classes/bue-yang.png" alt="陽面">
     </div>
       <transition name="fade" mode="out-in">
-        <h3 :key="bue">{{ $t(finalResult)}}</h3>
+        <h3 :key="bue" v-if="finalResult">{{ $t(finalResult)}}</h3>
       </transition>
     </div>
   </section>
@@ -333,7 +342,7 @@ const ledgerClose = ()=> showCardOverlay.value = false;
 
 
   .divination-right{width: 100%;height: 100%;gap: 60px;
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1366px) {
         gap: 30px;
       }
   }
@@ -364,7 +373,10 @@ const ledgerClose = ()=> showCardOverlay.value = false;
         position: absolute;
         transition: scale 1s ease, translate 1s ease;
         img{height: 100%;position: absolute;left: 0;top: 0;transform: scaleX(0.5);}
-        p{width: 40%;position: absolute;left: 16px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;font-size: 12px;}
+        p{width: 40%;position: absolute;left: 16px;z-index: 2;color: $color-fsRed;font-weight: bold;opacity: 0;transition: opacity 1s ease;font-size: 12px;
+        @media (max-width: 1366px) {
+          left: 13px;
+        }}
       }
       #qianCase{
         height: 85%;
@@ -506,7 +518,7 @@ const ledgerClose = ()=> showCardOverlay.value = false;
       position: absolute;
       transform-style: preserve-3d;
       transition: transform 0.1s;
-      @media screen and (max-width: 1200px) {
+      @media screen and (max-width: 1366px) {
         width: 220px;
         height: 220px;;
       }

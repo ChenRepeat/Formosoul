@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 // ================ 試試看用 props 寫法 ================
 const props = defineProps({
+  i18nText: {type: Boolean, default: false},
   text: { type: String, default:'' },
   description: { type: String, default: '' },
   width: { type: String, default: '280px'},
@@ -19,16 +20,25 @@ const emit = defineEmits(['click'])
 
 
 <template>
-<div class="survival-text-frame" :style="{ width: props.width, maxWidth: '100%', height: props.height }">
+<div class="survival-text-frame" :style="{ width: props.width, maxWidth: '100%', minHeight: props.height, textAlign: props.align }">
 
   <template v-if="props.description">
-    <h4 class="text-content title-style" :style="{textAlign: props.align}">
+    <h4 v-if="props.i18nText" class="text-content title-style" :style="{textAlign: props.align}">
+       {{ $t(props.text) }} 
+    </h4>
+    <h4 v-else class="text-content title-style" :style="{textAlign: props.align}">
        {{ props.text }}
     </h4>
     <p class="desc-content" :style="{textAlign: props.align}">
       {{ props.description }}
       <slot name="descriptionExtra"></slot>
     </p>
+  </template>
+
+  <template v-else-if ="props.i18nText">
+    <h4 class="text-content title-style i18nText" :style="{textAlign: props.align}">
+       {{ $t(props.text) }} 
+    </h4>
   </template>
 
   <template v-else>
@@ -70,14 +80,52 @@ function handleClick() {
 .survival-text-frame {
   background-color: $color-fsBlue50 ;
   border-radius: 7px;
-  min-height: 100px;
+  height: auto;
+  // min-height: 100px;
   display: flex;           
   flex-direction: column;
   justify-content: center;  
   align-items: center;
   padding: 20px 15px;
-  outline: 1px solid $color-fsTitle;
-  outline-offset: -10px;
+  outline: 10px solid $color-fsBlue50;
+  border: 1px solid $color-fsTitle;
+  // outline-offset: -10px;
+}
+
+.survival-text-frame button {
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+  color: #000;
+  padding: 14px 45px;
+  background-color: $color-fsGold300;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+  box-shadow: 3px 3px 0 #000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid #1A1A1A;
+
+  &::before {
+    top: -3px;
+    left: -3px;
+  }
+
+  &::after {
+    bottom: -3px;
+    right: -3px;
+  }
+
+  &:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0 #000;
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+  }
 }
 
 .title-style {
@@ -96,30 +144,25 @@ function handleClick() {
   white-space: pre-line;
 }
 
-.survival-text-frame button {
-  // color: #000;
-  // display: block;
-  // margin: 0 auto;
-  // background-color: $color-fsGold300 ;
-  // width: 170px;
-  // height: 48px;
-  // border: none;
-  // border-radius: 7px;
-  // cursor: pointer;
-  font-size: 16px;
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-  color: $color-fsTitle;
-  padding: 8px 40px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background-color: $color-fsGold300;
-  cursor: pointer;
-  transition: transform 0.2s;
-  margin-bottom: 16px;
+// .survival-text-frame button {
+//   font-size: 16px;
+//   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+//   color: $color-fsTitle;
+//   padding: 8px 40px;
+//   border-radius: 10px;
+//   border: 1px solid transparent;
+//   background-color: $color-fsGold300;
+//   cursor: pointer;
+//   transition: transform 0.2s;
+//   margin-bottom: 16px;
 
-  &:hover {
-    transform: scale(1.05); 
-  }
+//   &:hover {
+//     transform: scale(1.05); 
+//   }
+// }
+
+.survival-text-frame .text-content.i18nText {
+  margin-bottom: 0;
 }
 
 </style>

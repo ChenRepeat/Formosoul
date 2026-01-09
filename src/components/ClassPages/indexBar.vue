@@ -62,8 +62,10 @@ const offsetMenuBorder = () => {
 };
 
 const clickItem = (index) => {
-  activeIndex.value = index;
-  offsetMenuBorder();
+  if (index != activeIndex.value) {
+    activeIndex.value = index;
+    offsetMenuBorder();
+  }
  
 };
 
@@ -128,11 +130,10 @@ onUnmounted(() => {
         :key="index"
         :ref="el => itemsRef[index] = el"
         class="menu__item"
-        :class="{ 'active': activeIndex === index }"
-        :style="{ '--bgColorItem': item.itemBg }"
+        :class="{ 'active': activeIndex == index }"
         @click="clickItem(index),turnPage(item.toPage)"
       >
-        <component :is="item.icon" class="icon"/>
+        <component :is="item.icon" class="icon" :class="`icon${index+1}`"/>
       </button>
 
       <div 
@@ -160,7 +161,7 @@ onUnmounted(() => {
   left: 0;
   z-index: 100;
   animation: shining 3s 0.5s ease infinite;
-  @media (max-width: 1200px) {
+  @media (max-width: 1366px) {
     animation: shiningD 3s 0.5s ease infinite;
   }
 }
@@ -195,7 +196,7 @@ onUnmounted(() => {
   &:not(.menu-open){
     background-color: #1d1d27;
   }
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1366px) {
     left: -7.5em;
   }
   &.menu-open{
@@ -216,6 +217,7 @@ onUnmounted(() => {
 
     &.active {
       transform: translate3d(1.2em, 0, 0);
+
     }
 
     &::before {
@@ -231,7 +233,8 @@ onUnmounted(() => {
 
     &.active::before {
       transform: scale(1.3);
-      background-color: var(--bgColorItem);
+      background-color: $color-fsGold;
+
     }
   }
 
@@ -260,8 +263,9 @@ onUnmounted(() => {
 }
 .menu__item.active .icon {
   animation: strokeL 3s 0.5s ease forwards;
-
 }
+.icon4{transform: scale(0.8);}
+.icon6{transform: translate(2px,4px);}
 @keyframes strokeL {
     0%{
       stroke-dashoffset: 400;

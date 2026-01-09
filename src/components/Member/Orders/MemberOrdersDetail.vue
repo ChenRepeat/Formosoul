@@ -2,7 +2,7 @@
         <div v-for="order in calorderpage" :key="order.order_id" class="orders-contain">
             <p>{{ order.order_number }}</p> 
             <p>{{ order.orderdate }}</p>
-            <p>{{ order.total }}</p>
+            <p>{{ order.total_amount }}</p>
             <p>{{ order.payment }}</p>
             <p>{{ order.statuscode }}</p>
             <p>{{ order.shippingcode }}</p>
@@ -14,7 +14,7 @@
                     class="btn-yellow-fill" 
                     @click="handleCheckOrder(order.order_number)"
                 >
-                    <p>Check</p>
+                    <p class="Check">{{$t('member.check')}}</p>
                 </basic-button>
                 </router-link>
             </p>
@@ -78,11 +78,9 @@
             orders.value = realArray.map((order, index) => {
                     const couponInfo = countArray[index] || {};
                     const subtotalInfo = realArray[index] || {};
-
                     const count = parseInt(subtotalInfo.subtotal)|| 0;
                     const discount = parseInt(couponInfo.discount) || 0;
                     const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
-
                     const finalTotal =  count + shippingFee - discount; 
                     emit('order-updated', order_response.success);
                     return {
@@ -118,12 +116,12 @@
             zh: { 0: '已出貨', 1: '未出貨', 2: '已完成', 3: "已付款", 4: "付款失敗", 5: "等待付款" }
         };
         const shippingMapByLang = {
-            en: { '宅配': 'Delivery', '超商取貨': 'Pickup' },
-            zh: { '宅配': '宅配', '超商取貨': '超商取貨' }
+            en: { 'homeDelivery': 'homeDelivery', '超商取貨': 'Pickup' },
+            zh: { 'homeDelivery': '宅配', '超商取貨': '超商取貨' }
         };
         const paymentMapByLang = {
-            en: { 'Credit Card': 'Credit Card', 'Apple Pay': 'Apple Pay' },
-            zh: { 'Credit Card': '信用卡', 'Apple Pay': 'Apple Pay' }
+            en: { 'creditCard': 'Credit Card', 'applePay': 'Apple Pay' },
+            zh: { 'creditCard': '信用卡', 'applePay': 'Apple Pay' }
         };
         const currentLang = lang.value;
         // console.log(statusMapByLang[currentLang][order.status]);
@@ -160,9 +158,11 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-
     }
-    
+    .orders-contain > p:first-child{
+        width: 180px;
+            justify-content: start;
+    }
     .btn-yellow-fill > a{
         display: flex;
         width: 100%;
@@ -170,9 +170,20 @@
         color: $color-fsTitle;
         text-decoration: none;
     }
+    .btn-yellow-fill:hover,
+    .Check:hover{
+        background-color: $color-fsContent;
+        color: $color-fsWhite;
+    }
+
     .btn-yellow-fill > p{
         // width: 100%;
         // height: 100%;
     }
-
+    @media screen and (max-width: 1300px) {
+    .orders-contain > p:first-child{
+        width: 200px;
+            justify-content: start;
+    }
+    }
 </style>
