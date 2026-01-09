@@ -101,11 +101,12 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="全部">全部</el-dropdown-item>
-              <el-dropdown-item command="已付款">已付款</el-dropdown-item>
-              <el-dropdown-item command="未付款">未付款</el-dropdown-item>
               <el-dropdown-item command="已出貨">已出貨</el-dropdown-item>
+              <el-dropdown-item command="未出貨">未出貨</el-dropdown-item>
               <el-dropdown-item command="已完成">已完成</el-dropdown-item>
-              <el-dropdown-item command="已取消">已取消</el-dropdown-item>
+              <el-dropdown-item command="已付款">已付款</el-dropdown-item>
+              <el-dropdown-item command="付款失敗">付款失敗</el-dropdown-item>
+              <el-dropdown-item command="等待付款">等待付款</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -113,11 +114,10 @@
     </template>
 
     <el-table :data="pagedData" stripe style="position: absolute; width: 100%; height: 100%;">
-      <el-table-column label="訂單編號" width="120px" prop="order_ID"></el-table-column>
+      <el-table-column label="訂單編號" width="120px" prop="order_number"></el-table-column>
       <el-table-column label="會員姓名" prop="name_en" min-width="150px"></el-table-column>
       <el-table-column label="付款方式" prop="payment" width="120px"></el-table-column>
       <el-table-column label="運送方式" prop="shipping" width="120px"></el-table-column>
-      
       <el-table-column label="訂單狀態" prop="status" width="120px">
         <template #default="scope">
           <span>
@@ -130,7 +130,7 @@
       
       <el-table-column label="明細" width="80px" align="center">
         <template #default="{ row }">
-          <router-link :to="{name:'OrderDetails', params:{id: row.order_ID}}">
+          <router-link :to="{name:'OrderDetails', params:{id: row.order_number}}">
             <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
           </router-link>
         </template>
