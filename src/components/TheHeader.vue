@@ -15,6 +15,7 @@ const props = defineProps({
     default: false
   }
 });
+const userStr = localStorage.getItem('user'); 
 const router = useRouter();
 const authStore = useAuthStore();
 const memberStore = useMemberStore();
@@ -308,6 +309,7 @@ onUnmounted(() => {
         <li><router-link to="/member/orderslist" @click="closeMenu"><h6>{{$t('nav.orderslist')}}</h6></router-link></li>
         <li><router-link to="/member/mycollections" @click="closeMenu"><h6>{{$t('nav.mycollections')}}</h6></router-link></li>
         <li><router-link to="/member/coupons" @click="closeMenu"><h6>{{$t('nav.coupons')}}</h6></router-link></li>
+        <li v-if="parseInt(JSON.parse(userStr).role) === 1"><router-link to="/Admin" @click="closeMenu" target="_blank"><h6>{{$t('nav.admin')}}</h6></router-link></li>
         <hr class="memberhr">
         <li @click="handlelogout" class="logout"><h5>{{$t('nav.logout')}}</h5></li>
       </ul>
