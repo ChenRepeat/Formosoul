@@ -78,11 +78,9 @@
             orders.value = realArray.map((order, index) => {
                     const couponInfo = countArray[index] || {};
                     const subtotalInfo = realArray[index] || {};
-
                     const count = parseInt(subtotalInfo.subtotal)|| 0;
                     const discount = parseInt(couponInfo.discount) || 0;
                     const shippingFee = (couponInfo.shipping === '宅配') ? 80 : 60;
-                    console.log(realArray);
                     const finalTotal =  count + shippingFee - discount; 
                     emit('order-updated', order_response.success);
                     return {

@@ -280,6 +280,7 @@ const lang = computed( () => {
       v-for="(product, index) in products" 
       :key="product.product_ID" 
       class="product-card dp-flex-col"
+      :class="{ 'withwhite': withwhite}"
       @click="goProductDetail(product.product_ID)"
     >
     <!-- 從商品陣列中取出每一個物件及物件再陣列中的索引
@@ -310,9 +311,9 @@ const lang = computed( () => {
         <font-awesome-icon icon="fa-solid fa-cart-shopping" @click.stop="cartstore.addToCart(product)"/>
       </div>
   
-      <h6 class="product-name" >{{product[`name_${lang}`]}}</h6>
+      <h6 class="product-name" :class="{ 'withwhite': withwhite}">{{product[`name_${lang}`]}}</h6>
       <div class="product-content dp-flex" >
-        <p class="product-tag">#{{product[`type_${lang}`]}}</p>
+        <p class="product-tag" :class="{ 'withwhite': withwhite}">#{{product[`type_${lang}`]}}</p>
         <h6 class="product-price">NT {{product.price}}</h6>
       </div>
       <!-- <h6 class="product-name" >Bamboo Helicopter</h6>
@@ -348,7 +349,10 @@ const lang = computed( () => {
   }
 
  .product-card:hover{
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) ;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      &.withwhite{
+      box-shadow: 0 0 20px $color-fsBlue900;
+    }
  }
 
  .product-card:hover .fa-cart-shopping{
@@ -396,6 +400,9 @@ const lang = computed( () => {
     align-self: flex-start;
     padding: 12px 20px;
     height: 88px;
+    &.withwhite{
+      color: $color-fsTitle;
+    }
   }
 
   .product-content{
@@ -410,6 +417,9 @@ const lang = computed( () => {
     border-radius: 10px;
     padding: 0 8px;
     font-size: 1.2rem;
+    &.withwhite{
+      color: $color-fsWhite;
+    }
   }
 
   .product-price{

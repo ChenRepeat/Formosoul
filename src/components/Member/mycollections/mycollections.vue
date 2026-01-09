@@ -16,7 +16,6 @@
             </span>
             <span class="list-page noborder" @click="nextPage"><font-awesome-icon icon="fa-solid fa-angle-right" /></span>
         </div>
-        
     </div>
 </template>
 
@@ -25,7 +24,13 @@ import BasicButton from '@/components/BasicButton.vue';
 import ProductCard from '@/components/ProductCard.vue';
 import TestProductCard from '@/components/TestProductCard.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+
+const collectionlist =  ref([]);
+
+
+
+
 
 const products = ref([
   {
@@ -762,6 +767,48 @@ const products = ref([
   }
 ]);
 
+function getcollectionlist(){
+          const storedUser = localStorage.getItem('user');
+          const apiBase = import.meta.env.VITE_API_BASE;
+          const API_URL = `${apiBase}/getmembercollectionlist.php`;
+          if(!storedUser) return;
+          const userData = JSON.parse(storedUser); 
+          const { member_ID } = userData;
+          
+          return fetch(API_URL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type' : 'application/json'
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                  member_ID, 
+              })
+          }
+          ).then( res => res.json()
+          ).then(collection_list => {
+          const collection_Array = collection_list.data || [];
+          collectionlist.value = collection_Array.map((item, index) => {
+            const collectionInfo = collection_Array[index] || {};
+            let processedImages = collectionInfo.image;
+            if (typeof processedImages === 'string') {
+                processedImages = processedImages.split('|');
+            }
+            if (Array.isArray(processedImages)) {
+                processedImages = processedImages.map(path => {
+                    return path.startsWith('Shop/') ? path : `Shop/${path}`;
+                });
+            }
+            return {
+                ...item,
+                image: processedImages,
+                isLike: Number(item.collect_status) == 1 
+            };
+        });
+        
+    });
+};
+
     // 設定現在在一頁(預設是第一頁)
     const currentPage = ref(1);
     // 取每一頁需要幾張卡片
@@ -770,11 +817,11 @@ const products = ref([
     const calcollectionspage = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        return products.value.slice(start, end);
+        return collectionlist.value.slice(start, end);
     })
     // 總頁數 ceil是除完後無條件 +1
     const totalPages = computed(() => {
-        return Math.ceil(products.value.length / itemsPerPage);
+        return Math.ceil(collectionlist.value.length / itemsPerPage);
     });
     // 下面兩個為上一頁跟下一頁 邏輯就是用條件式去判斷 currentPage 是要 +1 還是 -1 判斷的條件一個是不能超過第一頁另一個是不能大於總頁數
     const prevPage = () => {
@@ -795,6 +842,11 @@ const products = ref([
             // console.log(pageNumber);
         }
     };
+
+onMounted(() => {
+    getcollectionlist();
+
+});
 </script>
 
 <style scoped lang="scss">
