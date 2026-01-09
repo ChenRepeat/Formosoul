@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import gsap from 'gsap'; 
 import Wave from '@/components/Wave.vue';
+import ToTopBottom from '@/components/ToTopBottom.vue';
 const baseUrl = import.meta.env.BASE_URL
 
 // 1. 綁定 DOM 元素
@@ -98,6 +99,7 @@ onUnmounted(() => {
 
 <template>
   <Wave/>
+  <ToTopBottom />
   <div class="about-container">
 
     <div class="island-text">
