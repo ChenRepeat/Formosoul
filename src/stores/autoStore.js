@@ -131,8 +131,6 @@ export const useAuthStore = defineStore('auth', () => {
                 wandcore_member_popup(userData.member_ID, coreData.core);
                 sessionStorage.removeItem('guest'); 
             }   
-        }else{
-            console.log('沒存到');
         }
 
         if(loginView.value != 'loginpage'){

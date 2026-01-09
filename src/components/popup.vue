@@ -2,7 +2,6 @@
     <div 
     class="bg-frostedGlass" :class="{ 'active': authStore.isLoginModalOpen}" 
     @click.self="authStore.closeLoginModal()"
-    @keydown="handleKeyDown"
     >
         <div class="Loginout">
         <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
@@ -18,29 +17,32 @@
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
     import Loginpage from './Member/Login/loginpage.vue';
-    import { onMounted, onUnmounted } from 'vue';
+    import { onMounted, onUnmounted, ref } from 'vue';
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import TheCoreSelection from './Home/TheCoreSelection.vue';
-import Membercard from './Member/information/membercard.vue';
-import Editcardpage from './Member/information/editcardpage.vue';
+    import Membercard from './Member/information/membercard.vue';
+    import Editcardpage from './Member/information/editcardpage.vue';
+import { useRoute } from 'vue-router';
     const authStore = useAuthStore();
 
+    // if(route.path.includes('member/information')){
+    //     membercoreselection.value = true;
+    // }
+    // function handleKeyDown( e ){
+    //     if(e.key == 'Escape'){
+    //         authStore.closeLoginModal();
+    //     }
+    // };
 
-    function handleKeyDown( e ){
-        if(e.key == 'Escape'){
-            authStore.closeLoginModal();
-        }
-    };
+    // onMounted(() => {
+    //     window.addEventListener('keydown', handleKeyDown);
+    // });
 
-    onMounted(() => {
-        window.addEventListener('keydown', handleKeyDown);
-    });
-
-    onUnmounted(() => {
-        window.removeEventListener('keydown', handleKeyDown);
-    });
+    // onUnmounted(() => {
+    //     window.removeEventListener('keydown', handleKeyDown);
+    // });
 </script>
 
 <style lang="scss" scoped>
@@ -79,7 +81,9 @@ import Editcardpage from './Member/information/editcardpage.vue';
 
         }
     }
-
+    .membercoreselect{
+        background-color: rgba(0,0,0,0.5);
+    }
     .Loginout{
         overflow: auto;
         width: 100%;

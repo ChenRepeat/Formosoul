@@ -1,7 +1,7 @@
 <template>
     <div class="no-orders dp-flex-col" v-if="!hasOrders">
-        <h3>No Orders</h3>
-        <router-link to="/shop"><h4>Buy Something Now ~ </h4></router-link>
+        <h3>{{$t('member.NoOrders')}}</h3>
+        <router-link to="/shop"><h4>{{$t('member.BuyNow')}}</h4></router-link>
     </div>
     <template v-else-if="!hasChildRoute">
             <div class="member-orders">

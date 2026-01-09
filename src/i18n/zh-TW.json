@@ -640,7 +640,10 @@
     "PaymentInformation": "付款資訊",
     "ProductsInformation": "商品資訊",
     "backtoqueryorders": "回到訂單列表",
-    "check": "查看"
+    "check": "查看",
+    "nocollection": "還沒有收藏",
+    "NoOrders": "沒有訂單",
+    "BuyNow": "逛逛商店~"
 
   },
   "about":{
