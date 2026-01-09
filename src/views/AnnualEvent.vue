@@ -15,16 +15,14 @@ const items = computed(() => eventData.eventDatas || []);
 /** ===== Config ===== **/
 const VISIBLE_COUNT = 4;
 const intervalMs = 4000;
-
-const HOVER_DELAY = 350; // hover 慢一點再開影片（250~600 自己調）
+const HOVER_DELAY = 350;
 
 /** ===== State ===== **/
-const currentIndex = ref(0);
+const currentIndex = ref(0); // ✅ 用「第幾張卡」當狀態
 const hoveredIndex = ref(null);
 
 const timerId = ref(null);
 const isMobile = ref(false);
-
 const hoverTimer = ref(null);
 
 /** ===== Helpers ===== **/
@@ -66,7 +64,7 @@ function isPlaying(visibleIdx, item) {
   return hoveredIndex.value === visibleIdx && !!item?.video;
 }
 
-/** ===== Dots (4 items per page) ===== **/
+/** ===== Pages / Dots ===== **/
 const totalPages = computed(() => {
   const total = items.value.length;
   return total === 0 ? 0 : Math.ceil(total / VISIBLE_COUNT);
@@ -77,42 +75,49 @@ const currentPage = computed(() => {
   return Math.floor(currentIndex.value / VISIBLE_COUNT) % totalPages.value;
 });
 
+
+
 function goToPage(page) {
   const total = items.value.length;
   if (total === 0) return;
 
-  const maxStart = Math.max(0, total - VISIBLE_COUNT);
-  const target = page * VISIBLE_COUNT;
-
-  currentIndex.value = Math.min(target, maxStart);
+  hoveredIndex.value = null;                 // 清 hover
+  currentIndex.value = (page * VISIBLE_COUNT) % total; // ✅ 跳到該頁第一張
   startAutoSlide();
 }
 
-/** ===== Visible items ===== **/
+
+/** ===== Visible items (page-based) ===== **/
 const visibleItems = computed(() => {
   const total = items.value.length;
   if (total === 0) return [];
 
+  const start = ((currentIndex.value % total) + total) % total;
+
   const result = [];
   for (let offset = 0; offset < VISIBLE_COUNT; offset++) {
-    const idx = (currentIndex.value + offset) % total;
-    result.push(items.value[idx]);
+    result.push(items.value[(start + offset) % total]);
   }
   return result;
 });
 
-/** ===== Navigation ===== **/
+
+
+/** ===== Navigation (page-based) ===== **/
 function nextSlide() {
   const total = items.value.length;
   if (total === 0) return;
+  hoveredIndex.value = null; // 建議：換卡清掉 hover
   currentIndex.value = (currentIndex.value + 1) % total;
 }
 
 function prevSlide() {
   const total = items.value.length;
   if (total === 0) return;
+  hoveredIndex.value = null;
   currentIndex.value = (currentIndex.value - 1 + total) % total;
 }
+
 
 /** ===== Hover delay ===== **/
 function handleMouseEnter(visibleIdx) {
@@ -138,10 +143,7 @@ function openDetail(item) {
     ? item.title_en_s.join("-")
     : String(item?.title_en || "").trim().split(/\s+/).join("-");
 
-  router.push({
-    name: "FestivalDetail",
-    params: { slug },
-  });
+  router.push({ name: "FestivalDetail", params: { slug } });
 }
 
 function onSlideClick(item) {
@@ -158,7 +160,7 @@ function startAutoSlide() {
   if (isMobile.value) return;
   stopAutoSlide();
   timerId.value = setInterval(() => {
-    if (hoveredIndex.value === null) nextSlide();
+    if (hoveredIndex.value === null) nextSlide(); // ✅ hover 就暫停
   }, intervalMs);
 }
 
@@ -182,6 +184,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", updateIsMobile);
 });
 </script>
+
 
 
 <template>
@@ -269,6 +272,9 @@ onBeforeUnmount(() => {
           type="button"
           @click="goToPage(p - 1)" />
       </div>
+
+
+
     </div>
   </section>
 </template>
