@@ -56,77 +56,77 @@
 
 ## 視覺設計規範 (Visual Design Guidelines)
 
-本專案視覺系統以「魔法學院」為核心，結合台灣在地色彩元素。
-
 ### 1. 色彩規範 (Color System)
 
 #### 品牌主色 (Primary Colors)
-| 色彩名稱 | 色碼 (Hex) | 變數建議 | 說明 |
+| 色彩名稱 | 色碼 (Hex) | 變數名稱 (SCSS) | 說明 |
 | :--- | :--- | :--- | :--- |
-| **海洋藍 Blue** | `#00529F` | `color-primary-blue` | 品牌標準主色 |
-| Blue 950 | `#041426` | `color-blue-950` | 極深藍 (標題文字用) |
-| Blue 900 | `#0a3d70` | `color-blue-900` | 深藍 |
-| Blue 600 | `#0a8aed` | `color-blue-600` | 亮藍 |
-| Blue 50 | `#f0f7ff` | `color-blue-50` | 極淺藍 (背景底色) |
-| **太陽金 Gold** | `#FF9810` | `color-primary-gold` | 品牌標準輔助色 |
-| Gold 950 | `#2B0E00` | `color-gold-950` | 極深褐金 |
-| Gold 700 | `#bb4702` | `color-gold-700` | 深橘金 |
-| Gold 300 | `#ffcc46` | `color-gold-300` | 亮金 (文字連結用) |
-| Gold 50 | `#FFFBEA` | `color-gold-50` | 極淺金 |
+| **海洋藍 Blue** | `#00529F` | `$color-fsBlue` | 品牌標準主色 |
+| **太陽金 Gold** | `#FF9010` | `$color-fsGold` | 品牌標準輔助色 |
+| **森林綠 Green** | `#4F7A26` | `$color-fsGreen` | 品牌次要色 |
+| **Formosoul 紅** | `#CC202B` | `$color-fsRed` | 品牌次要色 |
 
-#### 次要色 (Secondary Colors)
-| 色彩名稱 | 色碼 (Hex) | 變數建議 |
-| :--- | :--- | :--- |
-| **森林綠 Green** | `#617E46` | `color-secondary-green` |
-| **Formosoul 紅** | `#CC202B` | `color-secondary-red` |
+#### 階層色與功能色 (UI Colors)
+| 應用項目 | 色碼 (Hex) | 變數名稱 (SCSS) | 說明 |
+| :--- | :--- | :--- | :--- |
+| **各級標題** | `#041426` | `$color-fsTitle` | Blue 950 |
+| **內文資訊** | `#5D5D5D` | `$color-fsContent` | Black 600 |
+| **輔助資訊** | `#B0B0B0` | `$color-fsCaption` | Black 300 |
+| **彈窗背景** | `#F6F6F6` | `$color-fsPopup` | Black 50 |
+| **純白** | `#FFFFFF` | `$color-fsWhite` | |
 
-#### 無彩色系 (Neutrals / Grayscale)
-| 名稱 | 色碼 (Hex) | 說明 |
-| :--- | :--- | :--- |
-| Black_LOGO | `#000000` | 純黑 |
-| Black | `#262626` | 接近純黑 |
-| Black 900 | `#3d3d3d` | 深灰 |
-| Black 600 | `#5d5d5d` | 中深灰 (標準內文用色) |
-| Black 400 | `#7F7F7F` | 中灰 |
-| Black 300 | `#b0b0b0` | 淺灰 (輔助資訊用色) |
-| Black 200 | `#d1d1d1` | 極淺灰 |
-| Black 50 | `#f6f6f6` | 灰白背景 |
+#### 色階延伸 (Extended Palette)
+* **Gold:** `$color-fsGold700` (`#BB4702`), `$color-fsGold300` (`#ffcc46`), `$color-fsGold50` (`#FFFBEA`)
+* **Blue:** `$color-fsBlue900` (`#0A3D70`), `$color-fsBlue300` (`#93c8fd`), `$color-fsBlue50` (`#F0F7FF`)
+
+---
 
 ### 2. 字級規範 (Typography System)
 
 #### 字體家族 (Font Family)
-* **繁體中文 (Traditional Chinese):** Noto Sans TC
-* **英文 (English):** Roboto, Ubuntu
-* **字重 (Weights):** Light (300), Regular (400), Medium (500), Bold (700)
+* **全域設定:** `'Ubuntu'`, `'Roboto'`, `'Noto Sans TC'`, sans-serif
+* **內文專用:** `'Roboto'`, `'Noto Sans TC'`, sans-serif
 
-#### 字體顏色應用 (Font Color Usage)
-| 應用項目 | 色碼 (Hex) | 對應色系 |
-| :--- | :--- | :--- |
-| **各級標題** | `#041426` | Blue 950 |
-| **內文資訊** | `#5d5d5d` | Black 600 |
-| **輔助資訊** | `#b0b0b0` | Black 300 |
-| **文字連結** | `#ffcc46` | Gold 300 |
-| **收藏、金額** | `#B00020` | Red (Custom) |
+#### 基礎排版設定
+* **根字級 (Root size):** `62.5%` (1rem = 10px)
+* **字距 (Letter Spacing):** 全域 `0.05em`
+* **行高規則:** 標題 (H1-H6) `160%` / 內文 (p) `180%`
 
 #### 字級階層表 (Type Scale)
-* **Letter Spacing:** 全域 5%
-* **行高規則:** H1-H6 (160%), Desktop Body (200%), Mobile Body (160%)
-
-| 級別 | 字級 (px) | 字重 | 適用裝置 | 說明 |
-| :--- | :--- | :--- | :--- | :--- |
-| **H1** | 60 | Medium | 通用 | 特殊大標題 |
-| **H2** | 52 | Medium | Desktop | 頁面主標題 |
-| **H3** | 40 | Medium | Desktop | 彈窗主標題 |
-| **H4** | 32 | Medium | Mobile | 彈窗大標題 |
-| **H5** | 28 | Regular | Desktop | 彈窗次標題、頁面次標題 |
-| **H6** | 20 | Medium | Mobile | 彈窗次標題 |
-| **Subtitle 2**| 20 | Light | Desktop | 彈窗內文 |
-| **Body 1** | 16 | Medium/Regular | Desktop | 內文資訊、按鈕 |
-| **Body 2** | 14 | Medium/Regular | Mobile | 內文資訊、彈窗內文、按鈕 |
-| **Caption 1** | 12 | Regular | Desktop | 輔助資訊 |
-| **Caption 2** | 12 | Regular | Mobile | 輔助資訊 |
+| 級別 | 尺寸 (rem/px) | 適用範圍 |
+| :--- | :--- | :--- |
+| **H1** | 6.0rem (60px) | 特殊大標題 |
+| **H2** | 5.2rem (52px) | 頁面主標題 |
+| **H3** | 4.0rem (40px) | 彈窗主標題 |
+| **H4** | 3.2rem (32px) | 中型標題 |
+| **H5** | 2.8rem (28px) | 次要標題 |
+| **H6** | 2.0rem (20px) | 小型標題 |
+| **p** | 1.6rem (16px) | 標準內文資訊 |
 
 ---
+
+### 3. 排版與組件規範 (Layout & Components)
+
+#### 字體樣式 Class
+* **對齊方式:** `.ta-justify` (中文段落分散對齊)
+* **字體粗細:**
+    * `.fw200`: Light (200)
+    * `Default`: Regular (400)
+    * `.fw600`: Medium/Bold (600)
+
+#### 佈局工具 (Flexbox)
+* `.dp-flex`: `display: flex; flex-direction: row;`
+* `.dp-flex-col`: `display: flex; flex-direction: column;`
+* `.dp-none`: `display: none;`
+
+#### UI 特效與元件
+* **毛玻璃背景 (`.bg-frostedGlass`):**
+    * `backdrop-filter: blur(70px)`
+    * `box-shadow`: 內陰影 `inset 0 2px 6px rgba(255,255,255,0.05)` 與外陰影
+    * `border-radius`: `10px`
+* **標準輸入框 (`.input-text`):**
+    * 尺寸: `height: 44px`, `font-size: 2rem`
+    * Focus 狀態: 邊框色改為 `$color-fsGold` 並增加外陰影
 
 ## 開發規範 (Coding Conventions)
 
@@ -381,4 +381,4 @@
 * **25.11.06**：專案啟動。確立主題 (Theme)、網站架構 (Structure)、Logo 設計。
 
 ---
-*Last Updated: 2025.12.16*
+*Last Updated: 2026.01.10*
