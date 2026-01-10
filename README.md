@@ -1,5 +1,5 @@
 # Formosoul - 台灣文化魔法學院
-
+|<img src="src\assets\LOGO_blackColor.svg" width="auto" alt="Lexcy 首頁" />|
 > **Project Formosoul** > 一個結合「魔法學院」沉浸式體驗，面向外國人的台灣文化介紹網站。  
 > — A magical nexus weaving through diverse civilizations.
 
