@@ -1,6 +1,6 @@
 <template>
     <div 
-    class="bg-frostedGlass" :class="{ 'active': authStore.isLoginModalOpen}" 
+    class="bg-frostedGlass" :class="{ 'active': authStore.isLoginModalOpen, 'membercoreselect': ismembercoreselect}" 
     @click.self="authStore.closeLoginModal()"
     >
         <div class="Loginout">
@@ -17,7 +17,7 @@
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
     import Loginpage from './Member/Login/loginpage.vue';
-    import { onMounted, onUnmounted, ref } from 'vue';
+    import { computed, onMounted, onUnmounted, ref } from 'vue';
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -26,10 +26,11 @@
     import Editcardpage from './Member/information/editcardpage.vue';
 import { useRoute } from 'vue-router';
     const authStore = useAuthStore();
+    const route = useRoute();
+    const ismembercoreselect = computed(() => 
+    authStore.memberView === 'coreselection' && route.path.includes('/member/information')
+    )
 
-    // if(route.path.includes('member/information')){
-    //     membercoreselection.value = true;
-    // }
     // function handleKeyDown( e ){
     //     if(e.key == 'Escape'){
     //         authStore.closeLoginModal();
@@ -81,8 +82,9 @@ import { useRoute } from 'vue-router';
 
         }
     }
+    // 這邊加背景色
     .membercoreselect{
-        background-color: rgba(0,0,0,0.5);
+        // transform:  scale(1.2);
     }
     .Loginout{
         overflow: auto;
