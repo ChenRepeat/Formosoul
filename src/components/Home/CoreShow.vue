@@ -16,14 +16,17 @@ const emit = defineEmits(['restart-coregame', 'wand-selected', 'refresh-data']);
     // const User_store_core = localStorage.getItem('core');
     // const coreData = JSON.parse(User_store_core); 
 // const { member_ID, pointscard_ID } = userData;
+const testwandcore = ref();
 function goToEnroll(){
     if(storedUser && userData.member_ID){
         if(userData.wandcore_ID){
+            testwandcore.value = userData.wandcore_ID;
             memberStore.memberData.wandcore_ID = userData.wandcore_ID;
             authStore.closeLoginModal();
         }else{
             wandcore_store_member(userData.member_ID, corenumber.value);
-            memberStore.memberData.wandcore_ID = userData.wandcore_ID;
+            testwandcore.value = corenumber.value;
+            memberStore.memberData.wandcore_ID = testwandcore.value;
             authStore.closeLoginModal();
             sessionStorage.removeItem('guest');
             // window.location.reload();

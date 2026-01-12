@@ -77,9 +77,6 @@ const gotowandcore = () => {
     if(wandcore_ID == null){
         authStore.openLoginModal();
         authStore.setmemberView('coreselection');
-    }else{
-        authStore.openLoginModal();
-        authStore.setmemberView('coreselection');
     }
 };
 

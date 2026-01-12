@@ -127,10 +127,17 @@ export const useAuthStore = defineStore('auth', () => {
         document.documentElement.style.overflow = '';
         memberStore.memberData.isEditing = false;
         if(memberView.value == 'coreselection' && storedUser && userData.member_ID){
-            if(userData.wandcore_ID == null){
+            if (
+            memberView.value === 'coreselection' &&
+            storedUser &&
+            userData?.member_ID &&
+            coreData?.core 
+            ) {
+            if (userData.wandcore_ID == null) {
                 wandcore_member_popup(userData.member_ID, coreData.core);
-                sessionStorage.removeItem('guest'); 
-            }   
+                sessionStorage.removeItem('guest');
+            }
+            }
         }
 
         if(loginView.value != 'loginpage'){
