@@ -73,18 +73,18 @@ const props = defineProps({
 const gotowandcore = () => {
     const username = localStorage.getItem('user');
     const { wandcore_ID } = JSON.parse(username);
+    // console.log(wandcore_ID);
     if(wandcore_ID == null){
+        authStore.openLoginModal();
+        authStore.setmemberView('coreselection');
+    }else{
         authStore.openLoginModal();
         authStore.setmemberView('coreselection');
     }
 };
 
 const isNameNull = computed(() => {
-    const username = localStorage.getItem('user');
-    if (!username) return true;
-    const nameobj = JSON.parse(username);
-    return !nameobj.name;
-
+    return memberStore.memberData.tempName == null || memberStore.memberData.tempName == '';
 });
 
 const fileChange = ( e ) => {

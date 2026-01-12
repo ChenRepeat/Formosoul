@@ -6,6 +6,11 @@
 
     const memberStore = useMemberStore();
     const passTimes = ref(memberStore.gameData?.wand?.pass || 0);
+    const emit = defineEmits(['refresh-data']);
+    const handleRefreshData = () => {
+        console.log('coregame');
+        emit('refresh-data');
+    }
 
     const props = defineProps({
         wandPassed: Boolean
@@ -157,6 +162,7 @@ onMounted(async () => {
     v-if="currentView === 'core'" 
     @restart-coregame="doRestartGame"    
     @wand-selected="handleCoreSelected"
+    @refresh-data="handleRefreshData"
     /> 
     <!-- @restart-coregame="doRestartGame"  監聽 restart-game 事件，如果子組件有發送，接收到後要做什麼事 -->
 

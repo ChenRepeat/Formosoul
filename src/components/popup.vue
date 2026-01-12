@@ -5,9 +5,9 @@
     >
         <div class="Loginout">
         <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff; filter: drop-shadow(0px 0px 2px black);"/></div>
-        <TheCoreSelection v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
+        <TheCoreSelection @refresh-data="handleRefreshData" v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
         <loginpage v-else-if="authStore.memberView == 'login'"></loginpage>
-        <cardpage v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
+        <cardpage @refresh-data="handleRefreshData" v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
         <ledgerpage v-else-if="authStore.memberView == 'ledger'"></ledgerpage>
         <Editcardpage v-else-if="authStore.memberView == 'cardcontain'"></Editcardpage>
         </div>
@@ -24,13 +24,20 @@
     import TheCoreSelection from './Home/TheCoreSelection.vue';
     import Membercard from './Member/information/membercard.vue';
     import Editcardpage from './Member/information/editcardpage.vue';
-import { useRoute } from 'vue-router';
+    import { useRoute } from 'vue-router';
+import { useMemberStore } from '@/stores/member';
     const authStore = useAuthStore();
+    const memberStore = useMemberStore();
     const route = useRoute();
     const ismembercoreselect = computed(() => 
     authStore.memberView === 'coreselection' && route.path.includes('/member/information')
     )
-
+    const emit = defineEmits(['refresh-data']);
+    const handleRefreshData = async () => {
+        console.log('popup');
+        await memberStore.loadMemberData();
+        emit('refresh-data');
+    };
     // function handleKeyDown( e ){
     //     if(e.key == 'Escape'){
     //         authStore.closeLoginModal();

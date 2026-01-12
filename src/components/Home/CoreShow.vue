@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/autoStore';
 import BasicButton from '../BasicButton.vue';
 import { ref, computed, defineEmits, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';     //語系控制
+import { useMemberStore } from '@/stores/member';
 
 // 頁面串聯 - 前往註冊頁面  -------------------------------------------------------
 const authStore = useAuthStore();
@@ -10,17 +11,24 @@ const storedUser = localStorage.getItem('user');
 const userData = JSON.parse(storedUser);
 const storeCore = sessionStorage.getItem('guest');
 const coreData = JSON.parse(storeCore);
+const memberStore = useMemberStore();
+const emit = defineEmits(['restart-coregame', 'wand-selected', 'refresh-data']);
     // const User_store_core = localStorage.getItem('core');
     // const coreData = JSON.parse(User_store_core); 
 // const { member_ID, pointscard_ID } = userData;
 function goToEnroll(){
     if(storedUser && userData.member_ID){
         if(userData.wandcore_ID){
-            authStore.closeLoginModal();    
+            memberStore.memberData.wandcore_ID = userData.wandcore_ID;
+            authStore.closeLoginModal();
         }else{
             wandcore_store_member(userData.member_ID, corenumber.value);
+            memberStore.memberData.wandcore_ID = userData.wandcore_ID;
             authStore.closeLoginModal();
             sessionStorage.removeItem('guest');
+            // window.location.reload();
+            console.log('coreshow');
+            emit('refresh-data');
         }
     }else{
         wandcore_store_guest();
@@ -39,7 +47,6 @@ function goToEnroll(){
 // 不能再重抽
 
 // 頁面串聯 - 重新感應杖心  -------------------------------------------------------
-const emit = defineEmits(['restart-coregame', 'wand-selected']);
 function goToSensing(){
     emit('restart-coregame');
 
@@ -486,6 +493,9 @@ function wandcore(){
             // const user_core = localStorage.setItem('core', JSON.stringify(corenumber.value));
             // console.log(user_core);
             wandcore_store_guest();
+
+// console.log(wandCore_list.value);
+
 
         })
     };

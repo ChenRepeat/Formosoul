@@ -10,6 +10,7 @@
       m.updatetime,
       m.headshot,
       m.role,
+      m.wandcore_ID,
       p.pointscard_ID,
       w.nameEn,
       w.nameZh,

@@ -1,5 +1,5 @@
 <template>
-    <div class="information-wrapper">
+    <div  class="information-wrapper">
         <!-- <Cardpage></Cardpage>         -->
         <Cardpage v-if="authStore.informationView == 'informationmembercard'" hasgap haspadding fontscolor ></Cardpage>
         <Ledgerpage v-else-if="authStore.informationView == 'informationledger'"  hasgap haspadding fontscolor withoutbtn hascenter></Ledgerpage>
@@ -12,13 +12,17 @@
 import Cardpage from '../Login/cardpage.vue';
     import Ledgerpage from '../Login/ledgerpage.vue';
     import { useAuthStore } from '@/stores/autoStore';
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 
     
     const authStore = useAuthStore();
-
     const memberStore = useMemberStore();
-
+    watch(
+    () => memberStore.memberData.wandcore_ID,
+    async () => {
+        console.log('兄弟自動更新')
+        await memberStore.loadMemberData();
+    })
     onMounted(() => {
         memberStore.loadMemberData();
     });

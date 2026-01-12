@@ -9,6 +9,11 @@ import axios from 'axios';
 const currentView = ref('intro')
 
 const authStore = useAuthStore();
+const emit = defineEmits(['refresh-data']);
+const handleRefreshData = () => {
+    console.log('selection');
+    emit('refresh-data');
+}
 
 // 1 判斷是否登入 要先搶先一步判斷這個集點卡到底有無蓋章過
 const passedGames = ref({ shrimp: false, dice: false, ringtoss: false, bue: false, bike: false, wand: false });
@@ -88,7 +93,7 @@ function showCore(){
 </script>
 
 <template>
-    <div class="coregame-wrapper">
+    <div @refresh-data="handleRefreshData" class="coregame-wrapper">
         <div v-if="currentView === 'intro'" class="coregame-intro">   
             <!-- 在標籤中，currentView 不用再寫.value，因為 vue 會自動解開 ref
                  function 需要是因為那是 js -->
@@ -115,6 +120,7 @@ function showCore(){
         <CoreGame 
   v-else-if="currentView === 'game'"
   :wand-passed="passedGames.wand"
+  @refresh-data="handleRefreshData"
 />        
 
     </div>
