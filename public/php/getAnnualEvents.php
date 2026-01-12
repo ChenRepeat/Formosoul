@@ -23,7 +23,7 @@ try {
     } else {
 
         //取得全部列表
-        $sql = "SELECT * FROM annalevent WHERE launchdate > CURDATE() ORDER BY launchdate ASC";
+        $sql = "SELECT * FROM annalevent ORDER BY launchdate ASC";
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute();

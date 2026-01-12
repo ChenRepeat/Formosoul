@@ -33,15 +33,14 @@ const orderItems = ref([])
 const goBack = () => {
   router.push('/admin/order-management') 
 }
-
 const getStatusType = (status) => {
   const s = Number(status); 
-  if (s === 0) return 'warning'; // 未付款
-  if (s === 1) return 'success'; // 已付款
-  if (s === 2) return 'primary'; // 已出貨
-  if (s === 3) return 'success'; // 已完成
-  if (s === 4) return 'info';    // 已取消
-  if (s === 5) return 'danger';  // 付款失敗
+  if (s === 0) return 'warning'; // 已出貨
+  if (s === 1) return 'success'; // 未出貨
+  if (s === 2) return 'primary'; // 已完成
+  if (s === 3) return 'success'; // 已付款
+  if (s === 4) return 'info';    // 付款失敗
+  if (s === 5) return 'danger';  // 等待付款
   return 'info'; 
 }
 
@@ -49,12 +48,12 @@ const getStatusText = (status) => {
   if (status === '' || status === undefined || status === null) return '';
   const s = Number(status);
   const statusMap = {
-    0: '未付款',
-    1: '已付款',
-    2: '已出貨',
-    3: '已完成',
-    4: '已取消',
-    5: '付款失敗'
+    0: '已出貨',
+    1: '未出貨',
+    2: '已完成',
+    3: '已付款',
+    4: '付款失敗',
+    5: '等待付款',
   };
   return statusMap[s] || '未知狀態';
 }
