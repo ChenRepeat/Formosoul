@@ -72,12 +72,10 @@ const props = defineProps({
 
 const gotowandcore = () => {
     const username = localStorage.getItem('user');
-    if(username.wandcore_ID != null){
+    const { wandcore_ID } = JSON.parse(username);
+    if(wandcore_ID == null){
         authStore.openLoginModal();
         authStore.setmemberView('coreselection');
-    }else{
-        authStore.openLoginModal();
-        authStore.setmemberView('coreselection'); 
     }
 };
 

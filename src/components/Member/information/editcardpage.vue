@@ -26,7 +26,7 @@ const isLoading = ref(false);
         const userData = JSON.parse(storedUser);
         const { member_ID } = userData;
         const originalName = userData.name;
-        const originalimg = userData.headshot;
+        const originalimg = memberStore.imgURL;
         const tempName = memberStore.memberData.tempName;
         const tempimg = memberStore.imgURL;
         if(!tempName){

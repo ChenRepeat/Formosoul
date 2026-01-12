@@ -75,6 +75,7 @@ onMounted(() => {
 
     function editcard(){
         if (!isPopupReady.value) return;
+        // memberStore.loadMemberData();
         setTimeout(() => {
             memberStore.memberData.isEditing = true;
         }, 300);

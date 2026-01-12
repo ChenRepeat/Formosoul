@@ -84,7 +84,7 @@ import { useRoute } from 'vue-router';
     }
     // 這邊加背景色
     .membercoreselect{
-        // transform:  scale(1.2);
+        background-color: rgba(0,0,0,0.5);
     }
     .Loginout{
         overflow: auto;
