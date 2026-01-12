@@ -671,7 +671,11 @@
     "acceptBtn":"Accept Terms and Enroll",
     "loading":"Loading...",
     "saveBtn":"Save changes",
+    
+"enrollmentEmail": "Enter Your Enrollment Email",
     "forgetPwd":"It seems your memory has been tampered with by an Obliviate Charm! \n Don't worry, resetting your login incantation only takes a few simple steps.  \n Please enter your registered email address below, and we will dispatch a messenger owl with the link to reset your password.",
     "forgetBtn":"Send Password Reset Link"
+    
+
   }
 }

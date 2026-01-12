@@ -16,7 +16,7 @@
             type="email"
             v-model="email"
             class="input-text"
-            placeholder="Enter Your Enrollment Email"
+            :placeholder="$t('loginPage.enrollmentEmail')"
             :disabled="isLoading"
             @keydown="handleKeyDown"
             />
@@ -27,7 +27,7 @@
         @click="handleforgetpassword"
         :disabled="isLoading"
         >
-            {{ isLoading ? 'Loading...' : 'Send Password Reset Link'}}
+            {{ isLoading ? $t('loginPage.loading') : $t('loginPage.forgetBtn')}}
         </BasicButton>
     </div>
 </template>
