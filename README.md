@@ -1,5 +1,5 @@
 # Formosoul - 台灣文化魔法學院
-
+|<img src="src\assets\LOGO_blackColor.svg" width="auto" alt="Lexcy 首頁" />|
 > **Project Formosoul** > 一個結合「魔法學院」沉浸式體驗，面向外國人的台灣文化介紹網站。  
 > — A magical nexus weaving through diverse civilizations.
 
@@ -7,95 +7,126 @@
 
 ## 技術堆疊 (Tech Stack)
 
-本專案採用 Vue.js 生態系進行開發，並整合多種高階互動函式庫。
+本專案採用 Vue.js 生態系進行開發，並整合多種函式庫。
 
-* **Core Framework:** Vue.js 3
-* **Styling:** SCSS (Sass), BEM Naming Convention
-* **UI Components:** Element-Plus
-* **Animation & Interaction:**
-    * **GSAP**: 核心動畫控制
-    * **Lenis**: 平滑捲動 (Smooth Scrolling)
-    * **Page-Flip**: 書籍翻頁效果 (用於 Classes 頁面)
-    * **Three.js**: 3D 效果實驗
-    * **Swiper**: 輪播組件
-* **Icons:** FontAwesome, SVG Components
-* **Tools:** Vite, Git
+* **Core Framework**
+  * **Vue.js 3**
+
+* **Backend & Database**
+  * **PHP**: 伺服器端邏輯處理、API 開發
+  * **MySQL**: 關聯式資料庫系統,負責儲存會員、商品、訂單及年度盛事等動態資料
+
+* **Routing & State Management**
+  * **Vue Router**: 官方路由管理
+  * **Pinia**: 核心狀態管理管理
+
+* **Styling**
+  * **SCSS (Sass)**: CSS 預處理器
+  * **BEM Naming Convention**: CSS 命名規範
+
+* **UI Components**
+  * **Element-Plus**: UI 組件庫
+
+* **Animation & Interaction**
+  * **GSAP**: 核心動畫控制
+  * **Lenis**: 平滑捲動 (Smooth Scrolling)
+  * **Page-Flip**: 書籍翻頁效果 (用於 Classes 頁面)
+  * **Three.js**: 3D 效果實驗
+  * **Swiper**: 輪播組件
+
+* **Networking & Services**
+  * **Axios**: Promise 基礎 HTTP 客戶端,用於與 PHP 後端進行 API 串接
+  * **EmailJS**: 用於前端直接發送電子郵件功能
+  * **Leaflet**: 互動式地圖呈現 (用於夜市地圖位置)
+  * **Js-cookie**: 輕量級 Cookie 管理,用於登入狀態記錄
+
+* **Internationalization & Auth**
+  * **Vue-i18n**: 多國語言支援系統 (支援中、英)
+  * **Vue3-google-login**: 第三方 Google 帳號登入整合
+
+* **Icons**
+  * **FontAwesome**: SVG Core, Brands, Regular, Solid
+  * **SVG Components**: 自訂 SVG 圖標組件
+
+* **Tools**
+  * **Vite**: 前端開發與打包工具
+  * **Sass-embedded**:  Sass 編譯
 
 ---
 
 ## 視覺設計規範 (Visual Design Guidelines)
 
-本專案視覺系統以「魔法學院」為核心，結合台灣在地色彩元素。
-
 ### 1. 色彩規範 (Color System)
 
 #### 品牌主色 (Primary Colors)
-| 色彩名稱 | 色碼 (Hex) | 變數建議 | 說明 |
+| 色彩名稱 | 色碼 (Hex) | 變數名稱 (SCSS) | 說明 |
 | :--- | :--- | :--- | :--- |
-| **海洋藍 Blue** | `#00529F` | `color-primary-blue` | 品牌標準主色 |
-| Blue 950 | `#041426` | `color-blue-950` | 極深藍 (標題文字用) |
-| Blue 900 | `#0a3d70` | `color-blue-900` | 深藍 |
-| Blue 600 | `#0a8aed` | `color-blue-600` | 亮藍 |
-| Blue 50 | `#f0f7ff` | `color-blue-50` | 極淺藍 (背景底色) |
-| **太陽金 Gold** | `#FF9810` | `color-primary-gold` | 品牌標準輔助色 |
-| Gold 950 | `#2B0E00` | `color-gold-950` | 極深褐金 |
-| Gold 700 | `#bb4702` | `color-gold-700` | 深橘金 |
-| Gold 300 | `#ffcc46` | `color-gold-300` | 亮金 (文字連結用) |
-| Gold 50 | `#FFFBEA` | `color-gold-50` | 極淺金 |
+| **海洋藍 Blue** | `#00529F` | `$color-fsBlue` | 品牌標準主色 |
+| **太陽金 Gold** | `#FF9010` | `$color-fsGold` | 品牌標準輔助色 |
+| **森林綠 Green** | `#4F7A26` | `$color-fsGreen` | 品牌次要色 |
+| **Formosoul 紅** | `#CC202B` | `$color-fsRed` | 品牌次要色 |
 
-#### 次要色 (Secondary Colors)
-| 色彩名稱 | 色碼 (Hex) | 變數建議 |
-| :--- | :--- | :--- |
-| **森林綠 Green** | `#617E46` | `color-secondary-green` |
-| **Formosoul 紅** | `#CC202B` | `color-secondary-red` |
+#### 階層色與功能色 (UI Colors)
+| 應用項目 | 色碼 (Hex) | 變數名稱 (SCSS) | 說明 |
+| :--- | :--- | :--- | :--- |
+| **各級標題** | `#041426` | `$color-fsTitle` | Blue 950 |
+| **內文資訊** | `#5D5D5D` | `$color-fsContent` | Black 600 |
+| **輔助資訊** | `#B0B0B0` | `$color-fsCaption` | Black 300 |
+| **彈窗背景** | `#F6F6F6` | `$color-fsPopup` | Black 50 |
+| **純白** | `#FFFFFF` | `$color-fsWhite` | |
 
-#### 無彩色系 (Neutrals / Grayscale)
-| 名稱 | 色碼 (Hex) | 說明 |
-| :--- | :--- | :--- |
-| Black_LOGO | `#000000` | 純黑 |
-| Black | `#262626` | 接近純黑 |
-| Black 900 | `#3d3d3d` | 深灰 |
-| Black 600 | `#5d5d5d` | 中深灰 (標準內文用色) |
-| Black 400 | `#7F7F7F` | 中灰 |
-| Black 300 | `#b0b0b0` | 淺灰 (輔助資訊用色) |
-| Black 200 | `#d1d1d1` | 極淺灰 |
-| Black 50 | `#f6f6f6` | 灰白背景 |
+#### 色階延伸 (Extended Palette)
+* **Gold:** `$color-fsGold700` (`#BB4702`), `$color-fsGold300` (`#ffcc46`), `$color-fsGold50` (`#FFFBEA`)
+* **Blue:** `$color-fsBlue900` (`#0A3D70`), `$color-fsBlue300` (`#93c8fd`), `$color-fsBlue50` (`#F0F7FF`)
+
+---
 
 ### 2. 字級規範 (Typography System)
 
 #### 字體家族 (Font Family)
-* **繁體中文 (Traditional Chinese):** Noto Sans TC
-* **英文 (English):** Roboto, Ubuntu
-* **字重 (Weights):** Light (300), Regular (400), Medium (500), Bold (700)
+* **全域設定:** `'Ubuntu'`, `'Roboto'`, `'Noto Sans TC'`, sans-serif
+* **內文專用:** `'Roboto'`, `'Noto Sans TC'`, sans-serif
 
-#### 字體顏色應用 (Font Color Usage)
-| 應用項目 | 色碼 (Hex) | 對應色系 |
-| :--- | :--- | :--- |
-| **各級標題** | `#041426` | Blue 950 |
-| **內文資訊** | `#5d5d5d` | Black 600 |
-| **輔助資訊** | `#b0b0b0` | Black 300 |
-| **文字連結** | `#ffcc46` | Gold 300 |
-| **收藏、金額** | `#B00020` | Red (Custom) |
+#### 基礎排版設定
+* **根字級 (Root size):** `62.5%` (1rem = 10px)
+* **字距 (Letter Spacing):** 全域 `0.05em`
+* **行高規則:** 標題 (H1-H6) `160%` / 內文 (p) `180%`
 
 #### 字級階層表 (Type Scale)
-* **Letter Spacing:** 全域 5%
-* **行高規則:** H1-H6 (160%), Desktop Body (200%), Mobile Body (160%)
-
-| 級別 | 字級 (px) | 字重 | 適用裝置 | 說明 |
-| :--- | :--- | :--- | :--- | :--- |
-| **H1** | 60 | Medium | 通用 | 特殊大標題 |
-| **H2** | 52 | Medium | Desktop | 頁面主標題 |
-| **H3** | 40 | Medium | Desktop | 彈窗主標題 |
-| **H4** | 32 | Medium | Mobile | 彈窗大標題 |
-| **H5** | 28 | Regular | Desktop | 彈窗次標題、頁面次標題 |
-| **H6** | 20 | Medium | Mobile | 彈窗次標題 |
-| **Subtitle 2**| 20 | Light | Desktop | 彈窗內文 |
-| **Body 1** | 16 | Medium/Regular | Desktop | 內文資訊、按鈕 |
-| **Body 2** | 14 | Medium/Regular | Mobile | 內文資訊、彈窗內文、按鈕 |
-| **Caption 1** | 12 | Regular | Desktop | 輔助資訊 |
-| **Caption 2** | 12 | Regular | Mobile | 輔助資訊 |
+| 級別 | 尺寸 (rem/px) | 適用範圍 |
+| :--- | :--- | :--- |
+| **H1** | 6.0rem (60px) | 特殊大標題 |
+| **H2** | 5.2rem (52px) | 頁面主標題 |
+| **H3** | 4.0rem (40px) | 彈窗主標題 |
+| **H4** | 3.2rem (32px) | 中型標題 |
+| **H5** | 2.8rem (28px) | 次要標題 |
+| **H6** | 2.0rem (20px) | 小型標題 |
+| **p** | 1.6rem (16px) | 標準內文資訊 |
 
 ---
+
+### 3. 排版與組件規範 (Layout & Components)
+
+#### 字體樣式 Class
+* **對齊方式:** `.ta-justify` (中文段落分散對齊)
+* **字體粗細:**
+    * `.fw200`: Light (200)
+    * `Default`: Regular (400)
+    * `.fw600`: Medium/Bold (600)
+
+#### 佈局工具 (Flexbox)
+* `.dp-flex`: `display: flex; flex-direction: row;`
+* `.dp-flex-col`: `display: flex; flex-direction: column;`
+* `.dp-none`: `display: none;`
+
+#### UI 特效與元件
+* **毛玻璃背景 (`.bg-frostedGlass`):**
+    * `backdrop-filter: blur(70px)`
+    * `box-shadow`: 內陰影 `inset 0 2px 6px rgba(255,255,255,0.05)` 與外陰影
+    * `border-radius`: `10px`
+* **標準輸入框 (`.input-text`):**
+    * 尺寸: `height: 44px`, `font-size: 2rem`
+    * Focus 狀態: 邊框色改為 `$color-fsGold` 並增加外陰影
 
 ## 開發規範 (Coding Conventions)
 
@@ -137,6 +168,126 @@
 > - `[v]` Confirm (確認)
 > - `[!]` Major Decision (重大修改決策)
 ### Phase 3: 收尾與優化 (Optimization & Finalization)
+
+* **26.01.09**
+    * `[+]` 系統開發：實作會員收藏功能，支援點擊後重新渲染狀態。
+    * `[+]` 多國語言：全站 i18n 內容校對，包含關於頁面與會員列表修正。
+    * `[M]` 介面優化：修正年度盛事 (AnnualEvent) 的內距 (Padding) 與點選範圍。
+    * `[M]` 邏輯優化：調整入學小遊戲速度、登入後自動關閉登入視窗邏輯。
+    * `[M]` 後台管理：修正後台新聞與年度盛事圖片拖曳上傳、修正訂單資料位移。
+
+* **26.01.08**
+    * `[+]` 系統功能：新增登入註冊驗證碼、實作分享商品功能。
+    * `[+]` 多國語言：首頁、商品詳細頁、會員中心 i18n 翻譯補全。
+    * `[+]` 後台管理：新增會員搜尋功能、修改後台商品 ID 形式。
+    * `[M]` 遊戲互動：修正魔藥小遊戲 (Potion Game) 邏輯、加入成功過關動畫。
+    * `[M]` 視覺優化：壓縮全站圖片、微調 CSS 效能、修正 Header 點擊 Bug。
+
+* **26.01.07**
+    * `[+]` 系統串接：完成綠界金流串接與回傳網址配置。
+    * `[+]` 系統功能：第三方登入整合 (LINE、Google)，並修正登入取消邏輯。
+    * `[+]` 互動開發：新增天氣動畫效果、地圖與列表頁面修復。
+    * `[+]` 後台管理：年度盛事列表編輯功能 (新增、刪除、活動管理)。
+    * `[M]` 性能優化：修正訪客登出後清除資料邏輯、優化擲骰子音效。
+
+* **26.01.06**
+    * `[+]` 後台管理：新增優惠券管理功能、修正訂單與商品列表排序。
+    * `[M]` 多國語言：入學小遊戲、年度盛事 i18n 邏輯整合。
+    * `[M]` 邏輯修正：優化入學小遊戲選單切換、修正前往會員中心路徑。
+
+* **26.01.05**
+    * `[+]` 系統開發：實作訂單清單 (OrderList) 打包、金流 API 參數設定。
+    * `[+]` 內容擴充：新增全站版權 (Copyright) i18n 翻譯。
+    * `[M]` 遊戲優化：修正釣蝦與套圈圈遊戲判定、整合集點卡動畫與邏輯。
+    * `[M]` 後台管理：後台商品分類修正、上架狀態切換。
+
+* **26.01.04**
+    * `[+]` 系統串接：購物車取得會員 ID 邏輯、登入時同步取得 PHP 訂單資料。
+    * `[+]` 內容新增：新聞資訊串接 MySQL 資料庫。
+    * `[+]` 內容新增：Classes 索引列 i18n、新聞資訊串接資料庫。
+    * `[M]` 視覺修正：調整魔杖芯 (Wandcore) 資料庫渲染、修正大頭貼顯示。
+    * `[M]` 佈局優化：調整年度盛事影片形狀、Classes 窄版寬度適配。
+
+* **26.01.03**
+    * `[+]` 系統開發：實作年度盛事動態資料串接 (Dynamic Data)。
+    * `[+]` 視覺優化：新增天氣 API 與對應動畫效果。
+    * `[M]` 佈局優化：調整索引標籤 RWD、修正 Index Bar 文字顏色與邏輯。
+
+* **26.01.02**
+    * `[+]` 系統開發：Google 登入 API 整合、後台商品編輯與刪除功能。
+    * `[M]` 佈局優化：夜市地點 Google Sheet 整合、i18n 切換支援。
+    * `[M]` 視覺修正：修正 Google & LINE 登入圖標大小、Loading 動效優化。
+
+* **26.01.01**
+    * `[+]` HAPPY NEW YEAR !! 專案正式版細節調整。
+    * `[+]` 系統功能：新增運費計算、最終結帳金額計算、信用卡與地址類型欄位。
+    * `[+]` 多國語言：抽籤、存檔系統、Classes 內容 i18n 翻譯切換。
+
+* **25.12.31**
+    * `[+]` 系統開發：串接 OrderList 與 Cart.js、實作購買數量上限提示。
+    * `[+]` 互動更新：新增抽籤存檔、自行車遊戲存檔、點數卡 i18n。
+    * `[M]` 邏輯優化：修正 LINE 第三方登入與後台編輯商品權限、修正會員頭貼更新。
+
+* **25.12.30**
+    * `[+]` 系統開發：實作查詢訂單完成功能、Cart.js 基礎架構、煙火特效 (Fireworks)。
+    * `[M]` 邏輯優化：將抽籤邏輯從 Emit/Props 遷移至 Pinia (Store) 管理。
+    * `[M]` RWD 修正：調整 1200px 斷點佈局、Header Icon 購物車數量標記 (Qty)。
+
+* **25.12.29**
+    * `[+]` 系統開發：實作串接 LINE 第三方登入、新增魔杖蓋章互動效果。
+    * `[M]` 遊戲優化：修復機車遊戲結果判定與 RWD、修正魔杖蓋章動畫 Bug。
+    * `[M]` 後台管理：編輯商品列表邏輯優化、調整伺服器環境變數。
+
+* **25.12.28**
+    * `[+]` 系統開發：新增修改密碼邏輯、Pinia 整合 ProductList。
+    * `[+]` 內容新增：新增魔藥小遊戲 (Potion Game) 素材與邏輯。
+    * `[M]` 視覺優化：重構 Loading 動畫元件、修正跳轉時 RWD 圖標遺失。
+
+* **25.12.27**
+    * `[+]` 系統開發：實作信用卡資料驗證與自動跳轉、新增 Pinia 管理 product.js。
+    * `[M]` 視覺優化：修正 Classes 翻頁與 RWD Logo 顯示邏輯。
+
+* **25.12.26**
+    * `[+]` 系統開發：實作後台商品/訂單列表、會員權限門禁、註冊加入名字驗證。
+    * `[+]` 內容新增：新增套圈圈遊戲 (Ring Toss) 雛形與 i18n、新增台灣地址下拉選擇。
+    * `[M]` 邏輯優化：登入後自動寫入 Cookie 紀錄。
+
+* **25.12.25**
+    * `[+]` 系統開發：實作註冊後端初版、新增商品分頁與動態顯示邏輯。
+    * `[M]` 效能優化：修正 PHP 環境變數路徑、刪除多餘測試照片。
+
+* **25.12.24**
+    * `[+]` 內容新增：新增生存守則英雄頁面與夜市篇章中文內容。
+    * `[M]` 邏輯修正：修正 Dice Game 手部動畫、修正錯誤訊息彈窗樣式。
+
+* **25.12.23**
+    * `[+]` 系統開發：新增環境變數檔案、實作全站中英切換邏輯。
+    * `[M]` 邏輯優化：重構商品詳細頁圖片切換與 RWD 調整。
+
+* **25.12.22**
+    * `[+]` 內容新增：Classes i18n 內容、新增魔杖芯 (WandCores) 資料數組。
+    * `[M]` 視覺優化：新增機車遊戲原型、調整夜市地圖 RWD。
+
+* **25.12.21**
+    * `[+]` 系統開發：實作收藏功能點擊切換與防止冒泡邏輯。
+    * `[M]` 視覺特效：新增過場動畫、修正商品陣列加入 isLike 欄位。
+
+* **25.12.20**
+    * `[+]` 系統開發：實作重新開始按鈕邏輯 (Restart Btn)、確認遊戲存檔資料邏輯。
+    * `[M]` 邏輯優化：修正遊戲骰子手勢與位置判定。
+
+* **25.12.19**
+    * `[+]` 組件開發：實作點擊漢堡選單外部自動關閉功能、Header 語言切換測試。
+
+* **25.12.18**
+    * `[+]` 系統開發：購物車步驟切換組件拆分、商品詳細頁加入數量加減功能。
+    * `[M]` 視覺優化：新增首頁小遊戲發光入口、修正年度盛事內容區域高度偏移。
+
+* **25.12.17**
+    * `[+]` 內容開發：About 頁面海浪特效與島嶼浮動效果優化。
+    * `[+]` 組件開發：商品詳細頁 Tab 切換與立即購買點擊邏輯。
+    * `[M]` 邏輯修正：修復會員資料與收藏頁面 Bug、修正 SVG 模糊問題。
+
 * **25.12.16**
     * `[+]` 專案部署：上傳至伺服器，修正頁面與圖片路徑 (Deploy Fixes)。
     * `[+]` 功能新增：入學遊戲連結、About 頁面、年度盛事詳細頁。
@@ -230,4 +381,4 @@
 * **25.11.06**：專案啟動。確立主題 (Theme)、網站架構 (Structure)、Logo 設計。
 
 ---
-*Last Updated: 2025.12.16*
+*Last Updated: 2026.01.10*

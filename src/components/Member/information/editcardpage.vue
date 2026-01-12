@@ -18,8 +18,7 @@ const authStore = useAuthStore();
 const memberStore = useMemberStore();
 const isLoading = ref(false);
     const data_change = async() => {
-                isLoading.value = true;
-
+        // isLoading.value = true;
         const storedUser = localStorage.getItem('user');
         const apiBase = import.meta.env.VITE_API_BASE;
         const API_URL = `${apiBase}/changememberinformation.php`;
@@ -27,11 +26,11 @@ const isLoading = ref(false);
         const userData = JSON.parse(storedUser);
         const { member_ID } = userData;
         const originalName = userData.name;
-        const originalimg = userData.headshot;
+        const originalimg = memberStore.imgURL;
         const tempName = memberStore.memberData.tempName;
         const tempimg = memberStore.imgURL;
         if(!tempName){
-            alert('Please enter your name.');
+            authStore.closeLoginModal();
             return
         }
         if (originalName === tempName && originalimg === tempimg) {
@@ -43,7 +42,7 @@ const isLoading = ref(false);
             userData.name = tempName;
         };
         try{
-
+            isLoading.value = true;
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers:{
@@ -65,18 +64,24 @@ const isLoading = ref(false);
             }
         }catch(error){
             console.error('沒改到');
+        }finally{
+            isLoading.value = false;
         }
     };
 
 
 async function upload(){
     try{
-            authStore.closeLoginModal();
-            memberStore.data_uptime();
-            alert('已修改完成');
+        authStore.closeLoginModal();
+        memberStore.data_uptime();
+        memberStore.loadMemberData();
+        alert('已修改完成');
+        isLoading.value = false;
             
     }catch(error){
         console.error(error);
+    }finally{
+            isLoading.value = false;
     }
 };
 

@@ -1,14 +1,13 @@
 <template>
     <div 
-    class="bg-frostedGlass" :class="{ 'active': authStore.isLoginModalOpen}" 
+    class="bg-frostedGlass" :class="{ 'active': authStore.isLoginModalOpen, 'membercoreselect': ismembercoreselect}" 
     @click.self="authStore.closeLoginModal()"
-    @keydown="handleKeyDown"
     >
         <div class="Loginout">
-        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
-        <TheCoreSelection v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
+        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff; filter: drop-shadow(0px 0px 2px black);"/></div>
+        <TheCoreSelection @refresh-data="handleRefreshData" v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
         <loginpage v-else-if="authStore.memberView == 'login'"></loginpage>
-        <cardpage v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
+        <cardpage @refresh-data="handleRefreshData" v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
         <ledgerpage v-else-if="authStore.memberView == 'ledger'"></ledgerpage>
         <Editcardpage v-else-if="authStore.memberView == 'cardcontain'"></Editcardpage>
         </div>
@@ -18,29 +17,40 @@
 <script setup>
     import { useAuthStore } from '@/stores/autoStore';
     import Loginpage from './Member/Login/loginpage.vue';
-    import { onMounted, onUnmounted } from 'vue';
+    import { computed, onMounted, onUnmounted, ref } from 'vue';
     import Cardpage from './Member/Login/cardpage.vue';
     import Ledgerpage from './Member/Login/ledgerpage.vue';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import TheCoreSelection from './Home/TheCoreSelection.vue';
-import Membercard from './Member/information/membercard.vue';
-import Editcardpage from './Member/information/editcardpage.vue';
+    import Membercard from './Member/information/membercard.vue';
+    import Editcardpage from './Member/information/editcardpage.vue';
+    import { useRoute } from 'vue-router';
+import { useMemberStore } from '@/stores/member';
     const authStore = useAuthStore();
-
-
-    function handleKeyDown( e ){
-        if(e.key == 'Escape'){
-            authStore.closeLoginModal();
-        }
+    const memberStore = useMemberStore();
+    const route = useRoute();
+    const ismembercoreselect = computed(() => 
+    authStore.memberView === 'coreselection' && route.path.includes('/member/information')
+    )
+    const emit = defineEmits(['refresh-data']);
+    const handleRefreshData = async () => {
+        console.log('popup');
+        await memberStore.loadMemberData();
+        emit('refresh-data');
     };
+    // function handleKeyDown( e ){
+    //     if(e.key == 'Escape'){
+    //         authStore.closeLoginModal();
+    //     }
+    // };
 
-    onMounted(() => {
-        window.addEventListener('keydown', handleKeyDown);
-    });
+    // onMounted(() => {
+    //     window.addEventListener('keydown', handleKeyDown);
+    // });
 
-    onUnmounted(() => {
-        window.removeEventListener('keydown', handleKeyDown);
-    });
+    // onUnmounted(() => {
+    //     window.removeEventListener('keydown', handleKeyDown);
+    // });
 </script>
 
 <style lang="scss" scoped>
@@ -79,7 +89,10 @@ import Editcardpage from './Member/information/editcardpage.vue';
 
         }
     }
-
+    // 這邊加背景色
+    .membercoreselect{
+        background-color: rgba(0,0,0,0.5);
+    }
     .Loginout{
         overflow: auto;
         width: 100%;

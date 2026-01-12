@@ -24,8 +24,10 @@ export const useMemberStore = defineStore('member', () => {
         orders.value = orderNumber;
     };
     const memberData = ref({
-        name: 'Your Name',
-        wandcore: 'Select Your WandCore',
+        nameEn: 'Your Name',
+        nameZh: '您的名字',
+        wandcoreEn: 'Select Your WandCore',
+        wandcoreZh: '選擇您的仗芯',
         number: 'Your Number',
         date: 'Enrollment Date',
         isEditing: false, 
@@ -33,6 +35,8 @@ export const useMemberStore = defineStore('member', () => {
         pointscard_ID:'',
         charmImg:'',
         role:0,
+        wandcore_ID: ''
+
     });
     const pointsStatus = ref({
         dice: 0, 
@@ -94,14 +98,31 @@ export const useMemberStore = defineStore('member', () => {
             if(result.success){
                 const dbData = result.data;
                 const wandcoreKey = computed(() => {
+                    // if (!dbData || !lang.value) return 'Select Your WandCore';
                     const langKey = `name${lang.value}`
-                    return dbData[langKey] || 'Select Your WandCore';
+                    const langwand = `wandcore${lang.value}`
+                    return dbData[langKey] || memberData.value[langwand] ;
                 })
-                memberData.value.tempName = dbData.name;
+                // console.log(dbData.name);
+                console.log(dbData.name);
+                if(dbData.name == null || dbData.name == ''){
+                    const namekey = computed(() => {
+                        // if (!dbData || !lang.value) return 'Select Your WandCore';
+                        const langname = `name${lang.value}`
+                        console.log(langname);
+                        return memberData.value[langname];
+                    })
+                    console.log(namekey.value);
+                    memberData.value.name = namekey;
+
+                }else{
+                    memberData.value.tempName = dbData.name;
+                }
                 memberData.value.number = dbData.member_ID;
                 memberData.value.date =  dbData.createdate;
                 memberData.value.wandcore = wandcoreKey;
-                memberData.value.pointscard_ID = dbData.pointscard_ID || 'Select Your WandCore';
+                memberData.value.pointscard_ID = dbData.pointscard_ID;
+                memberData.value.wandcore_ID = dbData.wandcore_ID;
                 memberData.value.role = dbData.role;
                 imgURL.value = dbData.headshot || '';
 
@@ -153,7 +174,7 @@ export const useMemberStore = defineStore('member', () => {
                     score: dbData.shrimpgame_score,
                 };
                 // console.log(dbData);
-                
+                return true
             }else{
                 console.error(result.message);
             }
@@ -177,8 +198,7 @@ export const useMemberStore = defineStore('member', () => {
 
             if(response.data.success){
                 pointsStatus.value[columnName] = 1;
-                
-                console.log(columnName)
+            
                 await fetchPointsStatus();
             } else {
                 console.error('蓋章失敗', response.data.message);

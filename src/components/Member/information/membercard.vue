@@ -3,13 +3,13 @@
         <div class="membercard">
             <div class="memberphoto">
                 <div v-if="!memberStore.imgURL" class="add">+</div>
-                    <div v-else-if="memberStore.imgURL" class="fiximg">
+                        <div v-else-if="memberStore.imgURL" class="fiximg">
                         <img :src="memberStore.imgURL" alt="會員頭像">
                     </div>
-                <div class="mask" v-if="authStore.memberView == 'cardcontain' || route.path == 'member/information'">
+                <div class="mask" v-if="authStore.isLoginModalOpen == true" :disabled="authStore.isLoginModalOpen == false">
                     <font-awesome-icon icon="fa-solid fa-pen" style="font-size: 20px; "/>
                 </div>
-                <input type="file" class="thefile" @change="fileChange" :disabled="authStore.memberView !== 'cardcontain' || route.path == 'member/information'">
+                <input type="file" class="thefile" @change="fileChange" :disabled="authStore.isLoginModalOpen == false">
             </div>
 
             <div class="memberinformation">
@@ -26,15 +26,14 @@
                 <div v-if="memberStore.memberData.isEditing">
                     <input
                         v-model="memberStore.memberData.tempName" 
-                        @keyup.enter="saveName(memberStore.memberData.tempName)"
                         class="input-text"
                     >
                 </div> 
-                <h6 v-else-if="isNameNull" class="fw200">{{ memberStore.memberData.name }}</h6>
+                <h6 v-else-if="isNameNull" class="fw200 noname">{{ memberStore.memberData.name }}</h6>
                 <h6 v-else class="fw200">{{ memberStore.memberData.tempName }}</h6>
-                <p>{{ $t('member.wandCore') }}</p>
-                <h6 class="fw200">{{ memberStore.memberData.wandcore }}</h6>
-
+                <p >{{ $t('member.wandCore') }}</p>
+                <h6 @click="gotowandcore"   class="fw200" :class="{ 'noname': memberStore.memberData.wandcore == 'Select Your WandCore' || memberStore.memberData.wandcore == '選擇您的仗芯' }">{{ memberStore.memberData.wandcore }}</h6>
+                <!-- <h6 class="fw200" >{{ memberStore.memberData.wandcore }}</h6> -->
                 <p>{{ $t('member.enrollmentNo') }}</p>
                 <h6 class="fw200">{{ memberStore.memberData.number }}</h6>
 
@@ -71,16 +70,18 @@ const props = defineProps({
 
 });
 
-
-
+const gotowandcore = () => {
+    const username = localStorage.getItem('user');
+    const { wandcore_ID } = JSON.parse(username);
+    // console.log(wandcore_ID);
+    if(wandcore_ID == null){
+        authStore.openLoginModal();
+        authStore.setmemberView('coreselection');
+    }
+};
 
 const isNameNull = computed(() => {
-
-    const username = localStorage.getItem('user');
-    if (!username) return true;
-    const nameobj = JSON.parse(username);
-    return !nameobj.name;
-
+    return memberStore.memberData.tempName == null || memberStore.memberData.tempName == '';
 });
 
 const fileChange = ( e ) => {
@@ -241,15 +242,20 @@ const saveName = () => {
     .input-text{
         height: 32px;
     }
-
+    .noname{
+        color: $color-fsRed;
+    }
     .add{
         font: bold 100px Tahoma;
         color: #CCC;
-        top: 50%;
-        left: 50%;
         position: absolute;
-        transform: translate(-50%, -50%);
-        padding-bottom: 48px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        top: 40%;  
+        left: 70%;
+        transform: translate(-52%, -40%);
+        // padding-bottom: 48px; 
     }
 
     .memberinformation{

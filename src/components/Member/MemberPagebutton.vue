@@ -1,6 +1,6 @@
 <template>
     <div class="members-page-button">
-            <button class="memberpage-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/member/information">{{$t('member.memberInfo')}}</router-link></button>
+            <button  @refresh-data="handleRefreshData" class="memberpage-button" @click="activeIndex = 0" :class="{ active: activeIndex === 0 }"><router-link to="/member/information">{{$t('member.memberInfo')}}</router-link></button>
             <button class="memberpage-button" @click="activeIndex = 1" :class="{ active: activeIndex === 1 }"><router-link to="/member/changepassword">{{$t('member.PWChange')}}</router-link></button>
             <button class="memberpage-button" @click="activeIndex = 2" :class="{ active: activeIndex === 2 }"><router-link to="/member/orderslist">{{$t('member.myOrders')}}</router-link></button>
             <button class="memberpage-button" @click="activeIndex = 3" :class="{ active: activeIndex === 3 }"><router-link to="/member/mycollections">{{$t('member.myCollect')}}</router-link></button>
@@ -15,6 +15,7 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 import Pagelinebar from './Pagelinebar.vue';
 import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
+import { useMemberStore } from '@/stores/member';
 
 const props = defineProps({
   page:{
@@ -22,7 +23,13 @@ const props = defineProps({
     validator: (value) => value >= 0 && value <= 4,
   },
 });
-
+  const memberStore = useMemberStore();
+    const emit = defineEmits(['refresh-data']);
+    const handleRefreshData = async () => {
+        console.log('MemberPagebutton');
+        await memberStore.loadMemberData();
+        emit('refresh-data');
+    };
 
 const activeIndex = ref(props.page);
 const route = useRoute();
