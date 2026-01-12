@@ -9,7 +9,7 @@
             type="text" 
             name="oldpassword" 
             id="oldpassword"
-            placeholder="Current password"/>
+            :placeholder="$t('member.placeholderOldPW')"/>
 
             <label for="Newpassword"><h6>{{$t('member.newPW')}}</h6></label>
             <input 
@@ -19,7 +19,7 @@
             class="input-text"
             id="Newpassword"
             @input="validateNewPassword"
-            placeholder="New password"/>
+            :placeholder="$t('member.placeholderNewPW')"/>
             
             
             <label for="confirmpassword"><h6>{{$t('member.newPWConf')}}</h6></label>
@@ -30,12 +30,12 @@
             name="confirmpassword" 
             id="confirmpassword"
             @input="validateConfirmPassword"
-            placeholder="Confirm new password"/>
+            :placeholder="$t('member.placeholderNewPWConf')"/>
             
             <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
             <p class="text">{{$t('member.PWWarning')}}</p>
 
-            <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword" :disabled="isLoading">{{ isLoading ? 'Loading...' : 'Save Change'}}</BasicButton>
+            <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword" :disabled="isLoading">{{ isLoading ? $t('loginPage.loading') : $t('loginPage.saveBtnSingular')}}</BasicButton>
         </div>  
     </div>
 </template>

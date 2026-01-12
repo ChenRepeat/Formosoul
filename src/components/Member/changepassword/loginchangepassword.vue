@@ -3,7 +3,7 @@
         <!-- <h3>Change password</h3> -->
         <div class="contain">
 
-            <label><h6>OTP：</h6></label>
+            <label><h6>{{$t('loginPage.otpLabel')}}：</h6></label>
             <input
             class="input-text"
             v-model="changeotp"
@@ -11,9 +11,9 @@
             name="changeotp" 
             id="changeotp"
             @input="validatechangeotp"
-            placeholder="One-Time Password (OTP)"/>
+            :placeholder="$t('loginPage.otp')"/>
 
-            <label for="Newpassword"><h6>New password：</h6></label>
+            <label for="Newpassword"><h6>{{$t('loginPage.newPasswordLabel')}}：</h6></label>
             <input 
             v-model="Newpassword"
             type="text"
@@ -21,10 +21,10 @@
             class="input-text"
             id="Newpassword"
             @input="validateNewPassword"
-            placeholder="New password"/>
+            :placeholder="$t('loginPage.newPasswordLabel')"/>
             
             
-            <label for="confirmpassword"><h6>Confirm new password：</h6></label>
+            <label for="confirmpassword"><h6>{{$t('loginPage.confirmNewPasswordLabel')}}：</h6></label>
             <input 
             class="input-text"
             v-model="confirmpassword"
@@ -32,12 +32,13 @@
             name="confirmpassword" 
             id="confirmpassword"
             @input="validateConfirmPassword"
-            placeholder="Confirm new password"/>
+            :placeholder="$t('loginPage.confirmNewPasswordLabel')"/>
             
             <div v-if="errorMessage" class="error-message"><p>{{ errorMessage }}</p></div>
-            <p class="text">* Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.</p>
+            <p class="text">{{$t('loginPage.pwdRule')}}</p>
 
-            <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword" :disabled="isLoading">{{ isLoading ? 'Loading...' : 'Save Change'}}</BasicButton>
+            <BasicButton class="btn-yellow-fill" id="changepassword" @click="handleChangePassword" :disabled="isLoading">
+                {{ isLoading ? $t('loginPage.loading') : $t('loginPage.saveBtnSingular')}}</BasicButton>
         </div>  
     </div>
 </template>

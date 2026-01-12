@@ -594,6 +594,9 @@
     "oldPW":"Current password：",
     "newPW":"New password：",
     "newPWConf":"Confirm new password：",
+    "placeholderOldPW":"Current password",
+    "placeholderNewPW":"New password",
+    "placeholderNewPWConf":"Confirm new password：",
     "PWWarning":"＊ Please enter a string that is 8 to 16 characters long and includes uppercase letters, lowercase letters, and numbers.",
     "pointCardName":"House Point Ledger",
     "pointGetInfoTitle":"How to Earn Points:",
@@ -674,10 +677,13 @@
     "acceptBtn":"Accept Terms and Enroll",
     "loading":"Loading...",
     "saveBtn":"Save changes",
-    
-"enrollmentEmail": "Enter Your Enrollment Email",
+    "enrollmentEmail": "Enter Your Enrollment Email",
     "forgetPwd":"It seems your memory has been tampered with by an Obliviate Charm! \n Don't worry, resetting your login incantation only takes a few simple steps.  \n Please enter your registered email address below, and we will dispatch a messenger owl with the link to reset your password.",
-    "forgetBtn":"Send Password Reset Link"
+    "forgetBtn":"Send Password Reset Link",
+    "saveBtnSingular":"Save change",
+    "otpLabel": "OTP",
+    "newPasswordLabel": "New password",
+    "confirmNewPasswordLabel": "Confirm new password"
     
 
   }

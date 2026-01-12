@@ -616,6 +616,9 @@
     "oldPW":"請輸入舊密碼",
     "newPW":"請輸入新密碼",
     "newPWConf":"請確認新密碼",
+    "placeholderOldPW": "目前密碼",
+    "placeholderNewPW": "新密碼",
+    "placeholderNewPWConf": "確認新密碼",
     "PWWarning":"＊ 密碼設定時，長度應為 8 至 16 字元，並包含英文大小寫及數字",
     "pointCardName":"學分登記卡",
     "pointGetInfoTitle":"如何賺取學分：",
@@ -697,9 +700,13 @@
     "acceptBtn":"接受條款並入學",
     "loading":"載入中...",
     "saveBtn":"儲存變更",
+    "enrollmentEmail": "請輸入您的入學信箱",
     "forgetPwd":"看起來您的記憶被「遺忘咒」干擾了！ \n 不用擔心，要重鑄您的登入咒語只需要幾個簡單的步驟。 \n 請在下方輸入您註冊的電子郵件信箱，我們將派遣一隻信使貓頭鷹，將重設密碼的連結送給您。",
     "forgetBtn":"發送連結",
-    "enrollmentEmail": "請輸入您的入學信箱"
+    "saveBtnSingular":"儲存變更",
+    "otpLabel": "驗證碼",
+    "newPasswordLabel": "新密碼",
+    "confirmNewPasswordLabel": "確認新密碼"
 
   }
 }
