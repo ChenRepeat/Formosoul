@@ -4,7 +4,7 @@
     @click.self="authStore.closeLoginModal()"
     >
         <div class="Loginout">
-        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff;"/></div>
+        <div class="closebutton" ><font-awesome-icon @click="authStore.closeLoginModal()" icon="fa-solid fa-xmark"  style="font-size: 32px; color: #f0f7ff; filter: drop-shadow(0px 0px 2px black);"/></div>
         <TheCoreSelection v-if="authStore.memberView == 'coreselection'"></TheCoreSelection>
         <loginpage v-else-if="authStore.memberView == 'login'"></loginpage>
         <cardpage v-else-if="authStore.memberView == 'membercard'" withedit hascenter></cardpage>
