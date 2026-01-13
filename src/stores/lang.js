@@ -9,6 +9,7 @@ export const useLangStore = defineStore('lang', {
       const map = {
         'en-US': 'en',
         'zh-TW': 'zh',
+        'ja-JP': 'ja'
       };
       return map[state.locale] || state.locale.split('-')[0];
     }

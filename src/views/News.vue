@@ -46,7 +46,7 @@ const randomCard=()=>{
         cards.value.push({
           id : i+1,
           src: `${ baseUrl }${ allNewsData.value[i].pic }`,
-          style: { width:`${rW}px`,height:`${rW}px`,top: `${rY+ 10 * i}%`, right: `${rX}%`},
+          style: { width:`${rW}px`,height:`${rW}px`,top: `${rY+ 10 * (i+1.1)}%`, right: `${rX}%`},
           speed: rs,
         })
       }
@@ -330,6 +330,8 @@ onUnmounted(() => {
   margin-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   max-width: 1200px;
+  width: 95%;
+  margin-left: 2%;
   
 }
 

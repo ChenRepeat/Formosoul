@@ -1,5 +1,5 @@
 <script setup>
-import { ref , computed, onMounted, onUnmounted, inject} from 'vue';
+import { ref , computed, onMounted, onUnmounted, inject, nextTick, watch} from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/autoStore';
@@ -37,36 +37,70 @@ const langStore = useLangStore();
 //     langStore.setLanguage('zh-TW');
 //   }
 // }
-const isEnglish = computed({
-  get: () => langStore.locale === 'en-US',
-  set: (val) => langStore.setLanguage(val ? 'en-US' : 'zh-TW')
+// 第二版雙語系切換
+// const isEnglish = computed({
+//   get: () => langStore.locale === 'en-US',
+//   set: (val) => langStore.setLanguage(val ? 'en-US' : 'zh-TW')
+// });
+// function toggleLang() {
+//   execLanguageChange(() => {
+//     isEnglish.value = !isEnglish.value;
+//   });
+// }
+// 第三版 多語系切換
+// 語系選項清單 如有需要可在 option裡面增加
+const isLangMenuOpen = ref(false); // 控制語系選單
+const langRollerRef = ref(null);   // GSAP 動畫目標
+const langOptions = [
+  { label: '繁體中文', short: 'ZH', value: 'zh-TW', index: 0 },
+  { label: 'ENGLISH', short: 'EN', value: 'en-US', index: 1 },
+  { label: '日本語', short: 'JA', value: 'ja-JP', index: 2 }
+];
+
+const currentLang = computed(() => langStore.locale);
+let currentVirtualIndex = 0; 
+let currentIndex = 0;
+
+watch(currentLang, (newVal) => {
+  const targetIndex = langOptions.find(opt => opt.value === newVal)?.index || 0;
+  const logicalTotal = langOptions.length; 
+  let diff = targetIndex - currentIndex;
+  if (diff <= 0) {
+    diff += logicalTotal;
+  }
+  const extraLaps = 3; 
+  const totalSteps = diff + (extraLaps * logicalTotal);
+  currentVirtualIndex += totalSteps;
+  currentIndex = targetIndex;
+  const visualTotalItems = logicalTotal * 2;
+  const itemStepPercent = 100 / visualTotalItems;
+  const targetYPercent = -(currentVirtualIndex * itemStepPercent);
+
+  if (langRollerRef.value) {
+    gsap.to(langRollerRef.value, {
+      yPercent: targetYPercent, 
+      duration: 1.2,
+      ease: "power3.out", 
+      
+      modifiers: {
+        yPercent: gsap.utils.unitize((y) => {
+          return parseFloat(y) % 50; 
+        })
+      }
+    });
+  }
 });
-function toggleLang() {
+
+function selectLang(langValue) {
+  if (langValue === currentLang.value) {
+    isLangMenuOpen.value = false;
+    return;
+  }
+  isLangMenuOpen.value = false;
   execLanguageChange(() => {
-    isEnglish.value = !isEnglish.value;
+    langStore.setLanguage(langValue);
   });
 }
-
-
-function handleUserIconClick( e ){
- e.preventDefault();
- if(authStore.isLoggedIn){
-  if (isMenuOpen.value) {
-    isMenuOpen.value = false;
-    setTimeout(() => {
-      isMemberMenuOpen.value = true;
-      
-    }, 350);
-  } else {
-      isMemberMenuOpen.value = !isMemberMenuOpen.value;
-  }
-}else{
-  isMenuOpen.value = false;
-  authStore.openLoginModal();
-  authStore.setmemberView('login');
-  authStore.setloginView('loginpage');
- }
-};
 
 function handlelogout() {
   if(!confirm(`${authStore.user.name || 'USER' }確定要登出嗎?`)){
@@ -113,7 +147,7 @@ const headerRef = ref(null);
 
 const handleClickOutside = (e) => {
   if (headerRef.value && !headerRef.value.contains(e.target)) {
-    if (isMenuOpen.value || isMemberMenuOpen.value) {
+    if (isMenuOpen.value || isMemberMenuOpen.value || isLangMenuOpen.value) {
       closeMenu();
     }
   }
@@ -179,36 +213,72 @@ const restoreHeaderPosition = () => {
     }
   });
 };
-function toggleMenu() {
-  if (!isMenuOpen.value && isMemberMenuOpen.value) {
-    isMemberMenuOpen.value = false;
-    setTimeout(() => {
-      isMenuOpen.value = true;
-    }, 350);
-  } 
-  else {
-    if (!isMenuOpen.value) {
-        isMenuOpen.value = true;
-        isMemberMenuOpen.value = false;
-    } 
-    else {
-        isMenuOpen.value = false;
-        isMemberMenuOpen.value = false;
-        restoreHeaderPosition();
-    }
-  }
-};
 
-function closeMenu() {
-  if (isMenuOpen.value || isMemberMenuOpen.value) {
+// 選單開關按鈕統邏輯區
+const MENU_DELAY = 350;
+function closeAllMenus() {
+  if (isMenuOpen.value) {
+    restoreHeaderPosition(); 
   }
-  isMemberMenuOpen.value = false;
+  
   isMenuOpen.value = false;
+  isMemberMenuOpen.value = false;
+  isLangMenuOpen.value = false;
+}
+function handleMenuSwitch(targetRef) {
+  if (targetRef.value) {
+    closeAllMenus();
+    return;
+  }
+
+  const isAnyOpen = isMenuOpen.value || isMemberMenuOpen.value || isLangMenuOpen.value;
+  if (isAnyOpen) {
+    closeAllMenus();
+    setTimeout(() => {
+      targetRef.value = true;
+    }, MENU_DELAY);
+  } else {
+    targetRef.value = true;
+  }
 }
 
+const toggleMenu=()=> handleMenuSwitch(isMenuOpen);
+
+const toggleLangMenu = () => handleMenuSwitch(isLangMenuOpen);
+
+function handleUserIconClick(e) {
+  if (e) e.preventDefault();
+  if (authStore.isLoggedIn) {
+    handleMenuSwitch(isMemberMenuOpen);
+  } else {
+    closeAllMenus();
+    authStore.openLoginModal();
+    authStore.setmemberView('login');
+    authStore.setloginView('loginpage');
+  }
+}
+const closeMenu = ()=> closeAllMenus();
+// 選單開關按鈕統邏輯區
+
 onMounted(() => {
-  initDraggable()
+  initDraggable();
   document.addEventListener('click', handleClickOutside);
+
+  nextTick(() => {
+    const savedLocale = langStore.locale; 
+    const initIndex = langOptions.findIndex(opt => opt.value === savedLocale);
+    const targetIndex = initIndex !== -1 ? initIndex : 0;
+    currentIndex = targetIndex;
+    currentVirtualIndex = targetIndex;
+    const logicalTotal = langOptions.length;
+    const visualTotalItems = logicalTotal * 2; 
+    const initPercent = -(targetIndex * (100 / visualTotalItems));
+    if (langRollerRef.value) {
+      gsap.set(langRollerRef.value, { 
+        yPercent: initPercent 
+      });
+    }
+  })
 });
 
 onUnmounted(() => {
@@ -233,14 +303,21 @@ onUnmounted(() => {
       <div class="liquidGlass-shine"></div>
 
       <!-- 內容層 -->
-      <div class="liquidGlass-content dp-flex" style="align-items: center; gap: 16px; width: auto;">
+      <div class="liquidGlass-content dp-flex" style="align-items: center; width: auto;">
         
-        <div class="header-lang-trigger dp-flex"  @click="toggleLang" :class="{ right: isEnglish }">
-          <div class="header-lang-switcher" :class="{ right: isEnglish }"></div>
-          <h6 class="trigger-lang">EN</h6>
-          <h6 class="trigger-lang">ZH</h6>
+        <div class="header-lang-trigger dp-flex" 
+          @click.stop="toggleLangMenu" 
+          :class="{ 'active': isLangMenuOpen }">
+          <div class="lang-roller-window">
+            <div class="lang-roller-list" ref="langRollerRef">
+              <h6 v-for="(opt, i) in [...langOptions, ...langOptions]" 
+                :key="i"
+                class="trigger-lang dp-flex">
+                {{ opt.short }}
+              </h6>
+            </div>
+          </div>
         </div>
-
         <div class="header-icons-list dp-flex">
           <router-link to="/shoppingcart" class="no-i18n-anim ">
             <font-awesome-icon icon="fa-solid fa-bag-shopping" class="header-icon cart-icon"
@@ -313,6 +390,19 @@ onUnmounted(() => {
         <li @click="handlelogout" class="logout"><h5>{{$t('nav.logout')}}</h5></li>
       </ul>
       </transition>
+      <Transition 
+        @enter="onEnter"
+        @leave="onLeave"
+        :css="false">
+        <ul v-if="isLangMenuOpen" class="burger-list active">
+          <li v-for="opt in langOptions" :key="opt.value">
+            <a href="#" @click.prevent.stop="selectLang(opt.value)" 
+              :class="{ 'current-lang': currentLang === opt.value }">
+              <h5>{{ opt.label }}</h5>
+            </a>
+          </li>
+        </ul>
+      </Transition>
     </div>
   </div>
 
@@ -378,60 +468,57 @@ onUnmounted(() => {
 }
 img { object-fit: none; }
 
-.trigger-lang { 
-  color: $color-fsWhite;
-  margin: 0; 
+.header-lang-trigger {
+  border: 1px solid $color-fsWhite;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: $color-fsTitle;
+  transition: all 0.3s ease;
+
+  &.active {
+    background-color: transparent;
+  }
+
   @media screen and (max-width: 1366px){
-    font-size: 16px;
+    height: 30px;
+    width: 30px;
   }
 }
 
-.header-lang-trigger {
-  width: 85px;
+.lang-roller-window {
   height: 40px;
-  border: 1px solid $color-fsWhite;
-  padding: 0 10px;
-  justify-content: space-around;
-  align-items: center;
-  border-radius: 20px;
+  width: 40px;
+  overflow: hidden;
   position: relative;
-  cursor: pointer;
-  background-color: unset;
-  transition: all 1s 0.3s;
-  &.right{
-  border: 1px solid $color-fsTitle;
-  background-color: $color-fsTitle;
-  }
+  pointer-events: none;
+  
   @media screen and (max-width: 1366px){
-    width: 65px;
     height: 30px;
-    justify-content: center;
-    gap: 4px;
-    padding:10px;
   }
 }
-.header-lang-switcher{
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  background-color: $color-fsTitle;
-  z-index: 1001;
-  border-radius: 50%;
-  top: 4px;
-  left: 10px;
-  transition: all 1s ease;
-  &.right{
-  left: 43px;
-  background-color: $color-fsWhite;
-  }
+
+.lang-roller-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.trigger-lang {
+  color: $color-fsWhite;
+  height: 40px;      
+  line-height: 40px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-weight: bold;
   @media screen and (max-width: 1366px){
-    width: 24px;
-    height: 24px;
-    top: 2px;
-    left: 6px;
-     &.right{
-      left: 32px;
-    }
+    height: 30px;
+    line-height: 30px;
   }
 }
 .header-link {
@@ -486,9 +573,10 @@ img { object-fit: none; }
 .liquidGlass-tint { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.28); z-index: 1; }
 .liquidGlass-shine { position: absolute; inset: 0; box-shadow: inset 2px 2px 1px rgba(255,255,255,0.4), inset -2px -2px 2px rgba(255,255,255,0.2); z-index: 2; }
 
-.liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 16px; width: 100%; 
+.liquidGlass-content { position: relative; z-index: 10; align-items: center; gap: 20px; width: 100%; 
   @media screen and (max-width: 1366px){
     padding: 4px 16px;
+    gap: 8px;
   }}
 
 .header-icons-list { gap: 20px; align-items: center; 
@@ -702,14 +790,7 @@ img { object-fit: none; }
 
 .black{
   .trigger-lang { color: $color-fsTitle;}
-  .header-lang-trigger {border: 1px solid $color-fsTitle;background-color: unset;}
-  .header-lang-trigger.right{
-    border: 1px solid $color-fsWhite;
-    background-color: $color-fsTitle;
-  }
-  .right .trigger-lang { color: $color-fsWhite;}
-  .header-lang-switcher{background-color: $color-fsTitle;}
-  .header-lang-switcher.right{background-color: $color-fsWhite;}
+  .header-lang-trigger {border: 1px solid $color-fsWhite;background-color: unset;}
   .header-icon { color: $color-fsTitle;}
   .burger-list{ color: $color-fsTitle;}
   .burger-list li a { color: $color-fsTitle;}
