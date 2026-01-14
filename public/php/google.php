@@ -9,7 +9,7 @@
   $wandcore_ID = $member['wandcore_ID'] ?? null;
   require_once 'vendor/autoload.php';
 
-  $resData=[];// 儲存回傳到前端的DATA
+  $resData=[];// 儲存回傳到前端的DATA // 每次點擊登入 執行到後端這行都會重新宣告 $resData 為空陣列 
 
   $googleToken = $member['google_token'];
   if (!$googleToken) { // 沒有取得token 直接離開php
