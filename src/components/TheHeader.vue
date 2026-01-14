@@ -488,8 +488,8 @@ img { object-fit: none; }
 }
 
 .lang-roller-window {
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   overflow: hidden;
   position: relative;
   pointer-events: none;
@@ -508,15 +508,15 @@ img { object-fit: none; }
 
 .trigger-lang {
   color: $color-fsWhite;
-  height: 40px;      
-  line-height: 40px; 
+  height: 30px;      
+  line-height: 30px; 
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
   @media screen and (max-width: 1366px){
-    height: 30px;
-    line-height: 30px;
+    height: 28px;
+    line-height: 28px;
   }
 }
 .header-link {
