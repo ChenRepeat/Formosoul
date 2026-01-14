@@ -80,6 +80,26 @@ function openEnroll(){
   authStore.setmemberView('login');
   authStore.setloginView('loginpage');
 }
+
+// const get_pointscard = async ()=> {
+//     const storeUser = localStorage.getItem('user');
+//     const apiBase = import.meta.env.VITE_API_BASE;
+//     const API_URL = `{apiBase}/getPointsCard.php`
+//     if(!storeUser) return; 
+//     const userData = JSON.parse(storeUser);
+//     const { member_ID } = userData;
+//     try {
+//         const response = await axios.post(API_URL, { member_ID});
+//         const pointscard_res = response.data;
+//         console.log('取得學分登記卡資料：', pointscard_res);
+//         if(pointscard_res.success && pointscard_res.data){
+//             pointsStatus.value = pointscard_res.data
+//         }
+//     }catch(error){
+//         console.error('學分登記卡 API 讀取失敗:', error)      
+//     }
+// };
+
 onMounted(async () => {
     // 不管是遊戲內還是會員中心，都先載入資料
     const storedUser = localStorage.getItem('user');
@@ -87,8 +107,12 @@ onMounted(async () => {
         await memberStore.fetchPointsStatus();
         internalPointsStatus.value = memberStore.pointsStatus;
         console.log('[MemberLedger] 載入狀態:', internalPointsStatus.value);
-    }
+        // await get_pointscard();
+      } 
 });
+
+
+
 </script>
 
 <template>
