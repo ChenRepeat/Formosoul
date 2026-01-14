@@ -157,7 +157,6 @@ const totalscore = computed(() => {
 
 // 正則化角度
 function normalizeAngle(angle){
-
     let normalized = angle % 360;
     if (normalized < 0) normalized += 360;
     
@@ -170,7 +169,6 @@ function normalizeAngle(angle){
 function getSingleDiceScore(rawX, rawY){
     const x = normalizeAngle(rawX);
     const y = normalizeAngle(rawY);
-
     if( x === 0){
         if(y === 0) return 3;
         if(y === 90) return 2;
@@ -178,7 +176,7 @@ function getSingleDiceScore(rawX, rawY){
         if(y === 270) return 4;
     }
     if (x === 180){
-        if(y === 0) return 6;
+        if(y === 0) return 5;
         if(y === 90) return 4;
         if(y === 180) return 3;
         if(y === 270) return 2;
@@ -214,7 +212,7 @@ function randomRoll(){
         dice.y = (baseSpins + randomFaceY);
     });
     
-    console.log(mouseX.value);
+    // console.log(mouseX.value);
 
     setTimeout(() => {
         dicelist.value.forEach((dice) => {
