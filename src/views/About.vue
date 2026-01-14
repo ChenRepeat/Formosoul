@@ -18,7 +18,7 @@ const isPortkeyVisible = ref(false);
 let observer;
 
 const airports = ref([
-  { id: 1, name: 'about.aboutPort1', code: 'TSA', top: 75, left: 93 }, 
+  { id: 1, name: 'about.aboutPort1', code: 'TSA', top: 75, left: 93 },
   { id: 2, name: 'about.aboutPort2', code: 'TPE', top: 53, left: 85 },
   { id: 3, name: 'about.aboutPort3', code: 'RMQ', top: 20, left: 59 },
   { id: 4, name: 'about.aboutPort4', code: 'KHH', top: 12, left: 31 },

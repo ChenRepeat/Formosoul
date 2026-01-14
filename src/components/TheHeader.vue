@@ -469,18 +469,16 @@ onUnmounted(() => {
 img { object-fit: none; }
 
 .header-lang-trigger {
-  border: 1px solid $color-fsWhite;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  background-color: $color-fsTitle;
   transition: all 0.3s ease;
 
   &.active {
-    background-color: transparent;
+    box-shadow: 0 0 4px $color-fsWhite;
   }
 
   @media screen and (max-width: 1366px){
@@ -505,6 +503,7 @@ img { object-fit: none; }
   display: flex;
   flex-direction: column;
   width: 100%;
+  
 }
 
 .trigger-lang {
@@ -515,7 +514,6 @@ img { object-fit: none; }
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  font-weight: bold;
   @media screen and (max-width: 1366px){
     height: 30px;
     line-height: 30px;
@@ -790,7 +788,7 @@ img { object-fit: none; }
 
 .black{
   .trigger-lang { color: $color-fsTitle;}
-  .header-lang-trigger {border: 1px solid $color-fsWhite;background-color: unset;}
+  .header-lang-trigger {background-color: unset;}
   .header-icon { color: $color-fsTitle;}
   .burger-list{ color: $color-fsTitle;}
   .burger-list li a { color: $color-fsTitle;}

@@ -1,11 +1,11 @@
 @import './reset.css';
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&family=Shippori+Mincho+B1&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 
 //基本設定
 
 html {
-  font-family: 'Ubuntu', 'Roboto', 'Noto Sans TC', sans-serif;
+  font-family: 'Ubuntu', 'Roboto', 'Noto Sans TC', 'Shippori Mincho B1' ,sans-serif;
   font-size: 62.5%;
   /* 預設字級調整為10px */
   letter-spacing: 0.05em;
