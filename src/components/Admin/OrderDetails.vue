@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue' // ★ 加入 watch, computed
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeft } from '@element-plus/icons-vue' 
 import { ElMessage } from 'element-plus'
@@ -8,13 +8,13 @@ import ListLayout from './ListLayout.vue'
 const route = useRoute()
 const router = useRouter()
 
-//'ORD2026xxxx' 字串
 const currentOrderNumber = route.params.id 
 const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE;
 
 const loading = ref(true) 
+// 儲存資料庫原始狀態
+const originalStatus = ref(null)
 
-// ★ 定義狀態選項
 const statusOptions = [
   { value: 0, label: '已出貨' },
   { value: 1, label: '未出貨' },
@@ -31,7 +31,7 @@ const OrderData = ref({
   phone: '',
   address: '',
   paymentMethod: '',
-  status: 1, // 預設給數字 1
+  status: 1, 
   createTime: '',
   updateTime: '',
   isCancel: false, 
@@ -40,9 +40,9 @@ const OrderData = ref({
 
 const orderItems = ref([])
 
-// ★ 計算屬性：判斷是否鎖定 (已出貨=0 或 已完成=2 時鎖定)
+//判斷 originalStatus (原始狀態)
 const isLocked = computed(() => {
-  const s = Number(OrderData.value.status);
+  const s = Number(originalStatus.value);
   return s === 0 || s === 2;
 })
 
@@ -52,12 +52,12 @@ const goBack = () => {
 
 const getStatusType = (status) => {
   const s = Number(status); 
-  if (s === 0) return 'warning'; // 已出貨
-  if (s === 1) return 'success'; // 未出貨
-  if (s === 2) return 'primary'; // 已完成
-  if (s === 3) return 'success'; // 已付款
-  if (s === 4) return 'info';    // 付款失敗
-  if (s === 5) return 'danger';  // 等待付款
+  if (s === 0) return 'warning'; 
+  if (s === 1) return 'success'; 
+  if (s === 2) return 'primary'; 
+  if (s === 3) return 'success'; 
+  if (s === 4) return 'info';    
+  if (s === 5) return 'danger';  
   return 'info'; 
 }
 
@@ -89,13 +89,14 @@ const getOrderDetail = async () => {
           phone: data.info.phone,
           address: data.info.address_en,
           paymentMethod: data.info.payment,
-          // ★ 重要：轉為 Number 類型，確保 select 能選中
           status: Number(data.info.status), 
           createTime: data.info.date,
           updateTime: new Date().toISOString().split('T')[0],
           isCancel: Number(data.info.status) === 4, 
           cancelReason: data.info.remark
         }
+        // 存原始狀態，作為鎖定依據
+        originalStatus.value = Number(data.info.status);
     }
 
     if (data && data.items) {
@@ -110,7 +111,6 @@ const getOrderDetail = async () => {
   }
 }
 
-// 儲存變更
 const saveChanges = async () => {
     loading.value = true;
     
@@ -119,7 +119,7 @@ const saveChanges = async () => {
         recipientName: OrderData.value.recipientName,
         phone: OrderData.value.phone,
         address: OrderData.value.address,
-        status: OrderData.value.status, // ★ 傳送狀態
+        status: OrderData.value.status, 
         isCancel: OrderData.value.isCancel,
         cancelReason: OrderData.value.cancelReason 
     };
@@ -142,7 +142,6 @@ const saveChanges = async () => {
             ElMessage.success('訂單更新成功！');
             await getOrderDetail();
         } else {
-            // 這裡會顯示後端回傳的錯誤 (例如：無法修改)
             ElMessage.error(data.message || '更新失敗');
         }
 
@@ -154,10 +153,8 @@ const saveChanges = async () => {
     }
 }
 
-// ★ 監聽器：當下拉選單改變時
 watch(() => OrderData.value.status, (newStatus) => {
     const s = Number(newStatus);
-    // 如果選了 4 (取消/付款失敗)，自動勾選下方 checkbox
     if (s === 4) {
         OrderData.value.isCancel = true;
     } else {
@@ -165,12 +162,10 @@ watch(() => OrderData.value.status, (newStatus) => {
     }
 });
 
-// ★ 監聽器：當 checkbox 改變時
 watch(() => OrderData.value.isCancel, (isCancel) => {
     if (isCancel) {
         OrderData.value.status = 4;
     } else {
-        // 取消勾選時，若原本是 4，則跳回 1 (未出貨)，或是你想跳回原本的狀態
         if (Number(OrderData.value.status) === 4) {
             OrderData.value.status = 1;
         }
@@ -305,7 +300,7 @@ onMounted(() => {
                     border 
                     class="cancel-checkbox"
                     :disabled="isLocked"
-                 />
+                  />
               </el-form-item>
               
               <transition name="el-zoom-in-top">
@@ -369,7 +364,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* 佈局容器設定 */
 .scroll-container {
   height: calc(100vh - 250px);
   overflow-y: auto;
@@ -381,7 +375,6 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-/* 標題樣式微調 */
 .header-title-flex {
   display: flex;
   align-items: center;
@@ -396,7 +389,6 @@ onMounted(() => {
   font-weight: bold;
 }
 
-/* 返回按鈕 */
 .back-btn {
   border-color: #F0F7FF;
   background-color: #F0F7FF;
@@ -410,7 +402,6 @@ onMounted(() => {
   color: #409eff;
 }
 
-/* 卡片與內容樣式 */
 .content-card {
   background: #fff;
   border-radius: 8px;
@@ -436,7 +427,6 @@ onMounted(() => {
   font-weight: normal;
 }
 
-/* Info Section */
 .info-item {
   margin-bottom: 10px;
 }
@@ -453,10 +443,9 @@ onMounted(() => {
   background-color: #f5f7fa; 
   padding: 8px 12px;
   border-radius: 4px;
-  min-height: 23px; /* 防止內容為空時塌陷 */
+  min-height: 23px; 
 }
 
-/* 表單樣式 */
 .order-form :deep(.el-form-item__label) {
   color: #444;
   font-weight: 500;
@@ -466,7 +455,6 @@ onMounted(() => {
   box-shadow: 0 0 0 1px #e4e7ed inset !important;
 }
 
-/* 取消訂單區塊 */
 .cancel-section {
   margin-top: 20px;
   padding-top: 20px;
@@ -484,7 +472,6 @@ onMounted(() => {
   font-weight: bold;
 }
 
-/* 明細列表 */
 .items-table-header {
   display: flex;
   background-color: #F8F9FA;
@@ -525,7 +512,6 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* 底部按鈕 */
 .footer-actions {
   display: flex;
   justify-content: center;
