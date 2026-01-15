@@ -100,11 +100,11 @@
               <el-col :span="12">
                   <div class="system-info-group">
                     <el-form-item label="商品編號">
-                       <el-input 
-                         placeholder="由系統生成" 
-                         disabled 
-                         class="bg-gray"
-                       />
+                        <el-input 
+                          placeholder="由系統生成" 
+                          disabled 
+                          class="bg-gray"
+                        />
                     </el-form-item>
                     <el-form-item label="建立日期">
                         <el-input v-model="displayDate" disabled placeholder="自動生成" class="bg-gray"/>
@@ -121,8 +121,9 @@
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品主圖 (封面)</span>
-                    <span class="hint">建議 1200x1200px, JPG/PNG (拖曳可直接替換)</span>
+                    <span class="hint">建議 1200x1200px, JPG/PNG</span>
                   </div>
+                  
                   <el-upload
                     ref="mainUploaderRef"
                     class="main-uploader"
@@ -130,16 +131,21 @@
                     action="#"
                     :auto-upload="false"
                     :limit="1"
-                    :show-file-list="true"
-                    v-model:file-list="mainImage"
-                    list-type="picture"
-                    @exceed="handleExceed"
+                    :show-file-list="false" 
+                    :on-exceed="handleMainExceed"
+                    :on-change="handleMainFileChange"
+                    accept="image/*"
                   >
-                    <div class="upload-content">
-                      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                      <div class="el-upload__text">
-                        拖曳圖片至此或 <em>點擊上傳</em>
+                    <div v-if="mainPreview" class="preview-container">
+                      <img :src="mainPreview" class="preview-img" />
+                      <div class="overlay">
+                        <span>更換圖片</span>
                       </div>
+                    </div>
+
+                    <div v-else class="upload-placeholder">
+                      <el-icon class="upload-icon"><Plus /></el-icon>
+                      <div class="upload-text">拖曳圖片至此或 點擊上傳</div>
                     </div>
                   </el-upload>
                 </div>
@@ -149,9 +155,10 @@
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品更多視角 (最多 4 張)</span>
-                    <span class="hint">建議 800x800px</span>
+                    <span class="hint">建議 800x800px (拖曳可直接取代舊圖)</span>
                   </div>
                   <el-upload
+                    ref="subUploaderRef"
                     v-model:file-list="subImages"
                     action="#"
                     list-type="picture-card"
@@ -160,6 +167,7 @@
                     multiple
                     drag
                     class="sub-uploader"
+                    :on-exceed="handleSubExceed"
                   >
                     <el-icon><Plus /></el-icon>
                   </el-upload>
@@ -243,22 +251,23 @@
 <script setup>
 import { reactive, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { Plus, UploadFilled, ArrowLeft } from '@element-plus/icons-vue'
-import { ElMessage, genFileId } from 'element-plus' // ★ 引入 genFileId
+import { Plus, ArrowLeft } from '@element-plus/icons-vue'
+import { ElMessage, genFileId } from 'element-plus'
 
 const router = useRouter()
 const loading = ref(false)
-
-// ★ 1. 為了主圖覆蓋功能，新增 ref
 const mainUploaderRef = ref(null)
+const subUploaderRef = ref(null) // ★ 新增副圖 ref
 
-// 顯示當前日期
+// 主圖相關變數
+const mainPreview = ref(null)
+const mainFile = ref(null)
+
 const displayDate = computed(() => {
     const now = new Date();
     return now.toISOString().split('T')[0]; 
 });
 
-// 表單資料模型
 const addProductForm = reactive({
   nameZh: '',
   nameEn: '',
@@ -288,19 +297,49 @@ watch(() => addProductForm.typeEn, (newValue) => {
   }
 })
 
-// 圖片檔案列表
-const mainImage = ref([])
+// 副圖列表
 const subImages = ref([])
 
-// ★ 2. 新增：處理主圖拖曳覆蓋 (當檔案超出 limit 1 時觸發)
-const handleExceed = (files) => {
-  // 清空目前的檔案列表
+// ★ 主圖超出限制處理 (覆蓋舊圖)
+const handleMainExceed = (files) => {
   mainUploaderRef.value.clearFiles()
   const file = files[0]
-  // 產生新的檔案 ID (Element Plus 內部需要)
   file.uid = genFileId()
-  // 手動執行上傳前處理，這樣就會把新圖放進去
   mainUploaderRef.value.handleStart(file)
+}
+
+// ★ 副圖超出限制處理 (覆蓋所有舊圖)
+const handleSubExceed = (files) => {
+  // 當數量超過 limit 或直接拖曳多張時，清空舊的，換上新的
+  subUploaderRef.value.clearFiles()
+  
+  // 取得新拖曳進來的檔案 (最多取前4張)
+  const newFiles = Array.from(files).slice(0, 4)
+  
+  newFiles.forEach((file) => {
+    file.uid = genFileId()
+    subUploaderRef.value.handleStart(file)
+  })
+}
+
+// 主圖檔案變更處理
+const handleMainFileChange = (uploadFile) => {
+  const file = uploadFile.raw
+  if (!file) return
+
+  if (!file.type.startsWith('image/')) {
+    ElMessage.warning('請上傳圖片格式')
+    mainUploaderRef.value.clearFiles()
+    return
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    ElMessage.warning('圖片大小請勿超過 2MB')
+    mainUploaderRef.value.clearFiles()
+    return
+  }
+
+  mainFile.value = file
+  mainPreview.value = URL.createObjectURL(file)
 }
 
 const goBack = () => {
@@ -325,8 +364,8 @@ const submitForm = async () => {
     fd.append(key, value === undefined || value === null ? '' : value);
   }
 
-  if (mainImage.value.length > 0) {
-    fd.append('mainImage', mainImage.value[0].raw);
+  if (mainFile.value) {
+    fd.append('mainImage', mainFile.value);
   }
 
   subImages.value.forEach((file) => {
@@ -358,7 +397,7 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
-/* 樣式保持原樣，只有 .bg-gray 有用到 */
+/* 佈局容器 */
 .scroll-container {
   height: calc(100vh - 250px);
   overflow-y: auto;
@@ -370,12 +409,13 @@ const submitForm = async () => {
   margin: 0 auto;
 }
 
-/* 卡片與內容樣式 */
+/* 卡片與標題 */
 .content-card {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
   margin-bottom: 24px;
+  padding: 24px;
 }
 
 .card-title {
@@ -386,7 +426,7 @@ const submitForm = async () => {
   padding-left: 10px;
 }
 
-/* 狀態 Radio 樣式 */
+/* Form Styles */
 .radio-content {
   display: flex;
   align-items: center;
@@ -400,7 +440,6 @@ const submitForm = async () => {
 .status-dot.active { background-color: #67C23A; }
 .status-dot.inactive { background-color: #909399; }
 
-/* 系統資訊群組 (ID, Date) */
 .system-info-group {
     display: flex;
     gap: 20px;
@@ -409,17 +448,17 @@ const submitForm = async () => {
     flex: 1;
 }
 
-/* 背景灰 (Disabled Input) */
 .bg-gray :deep(.el-input__wrapper) {
   background-color: #f5f7fa !important;
   box-shadow: 0 0 0 1px #e4e7ed inset !important;
 }
 
-/* 圖片上傳區優化 */
+/* === 圖片上傳區樣式優化 === */
 .upload-block {
     display: flex;
     flex-direction: column;
 }
+
 .field-header {
     margin-bottom: 12px;
     display: flex;
@@ -435,44 +474,101 @@ const submitForm = async () => {
     font-size: 13px;
 }
 
+/* --- 主圖上傳器 (大方框) --- */
+.main-uploader {
+    width: 100%;
+    display: block;
+}
+.main-uploader :deep(.el-upload) {
+    width: 100%;
+    display: block;
+}
 .main-uploader :deep(.el-upload-dragger) {
-    height: 220px;
+    width: 100%;
+    height: 350px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f8f9fa;
-    border: 2px dashed #dcdfe6;
+    background-color: #fafafa;
+    border: 1px dashed #dcdfe6;
+    border-radius: 6px;
     transition: all 0.3s;
+    padding: 0;
 }
 .main-uploader :deep(.el-upload-dragger:hover) {
-    border-color: #003060;
+    border-color: #409eff;
     background-color: #f0f7ff;
 }
-.el-icon--upload {
-    color: #003060;
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #909399;
+    height: 100%;
+    width: 100%;
+}
+.upload-icon {
+    font-size: 48px;
+    color: #dcdfe6;
     margin-bottom: 10px;
 }
+.upload-text {
+    font-size: 14px;
+}
 
-/* 副圖 Grid */
+.preview-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+.overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; transition: opacity 0.3s;
+    color: white; font-size: 16px;
+    z-index: 10;
+}
+.main-uploader:hover .overlay { opacity: 1; }
+
+
+/* --- 副圖上傳器 (Grid) --- */
 .sub-uploader :deep(.el-upload-list--picture-card .el-upload-list__item),
 .sub-uploader :deep(.el-upload--picture-card) {
     width: 100px;
     height: 100px;
     margin: 0 10px 10px 0;
 }
-/* ★ 新增：修正副圖開啟 drag 後，拖曳區域的排版 */
 .sub-uploader :deep(.el-upload-dragger) {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none; /* 移除 dragger 自帶的框，沿用 picture-card 的 */
+    border: none; 
     background: transparent;
 }
 
-/* 底部按鈕區 */
+/* ★ 關鍵樣式：強制顯示 picture-card 的上傳框 (即使滿了也不隱藏) */
+/* 這樣使用者才能繼續拖曳新圖片進去觸發 handleSubExceed */
+.sub-uploader :deep(.el-upload--picture-card) {
+    display: inline-flex !important;
+}
+
+/* 底部按鈕 */
 .footer-actions {
   display: flex;
   justify-content: center;

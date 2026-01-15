@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue' // ★ 加入 watch, computed
 import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeft } from '@element-plus/icons-vue' 
 import { ElMessage } from 'element-plus'
@@ -8,11 +8,21 @@ import ListLayout from './ListLayout.vue'
 const route = useRoute()
 const router = useRouter()
 
-// 這裡抓到的就是 'ORD2026xxxx' 字串
+//'ORD2026xxxx' 字串
 const currentOrderNumber = route.params.id 
 const imgBase = import.meta.env.VITE_PRODUCT_IMG_BASE;
 
 const loading = ref(true) 
+
+// ★ 定義狀態選項
+const statusOptions = [
+  { value: 0, label: '已出貨' },
+  { value: 1, label: '未出貨' },
+  { value: 2, label: '已完成' },
+  { value: 3, label: '已付款' },
+  { value: 4, label: '付款失敗/取消' },
+  { value: 5, label: '等待付款' },
+]
 
 const OrderData = ref({
   orderId: '',
@@ -21,7 +31,7 @@ const OrderData = ref({
   phone: '',
   address: '',
   paymentMethod: '',
-  status: '', 
+  status: 1, // 預設給數字 1
   createTime: '',
   updateTime: '',
   isCancel: false, 
@@ -30,9 +40,16 @@ const OrderData = ref({
 
 const orderItems = ref([])
 
+// ★ 計算屬性：判斷是否鎖定 (已出貨=0 或 已完成=2 時鎖定)
+const isLocked = computed(() => {
+  const s = Number(OrderData.value.status);
+  return s === 0 || s === 2;
+})
+
 const goBack = () => {
   router.push('/admin/order-management') 
 }
+
 const getStatusType = (status) => {
   const s = Number(status); 
   if (s === 0) return 'warning'; // 已出貨
@@ -47,15 +64,8 @@ const getStatusType = (status) => {
 const getStatusText = (status) => {
   if (status === '' || status === undefined || status === null) return '';
   const s = Number(status);
-  const statusMap = {
-    0: '已出貨',
-    1: '未出貨',
-    2: '已完成',
-    3: '已付款',
-    4: '付款失敗',
-    5: '等待付款',
-  };
-  return statusMap[s] || '未知狀態';
+  const found = statusOptions.find(opt => opt.value === s);
+  return found ? found.label : '未知狀態';
 }
 
 const getOrderDetail = async () => {
@@ -63,7 +73,6 @@ const getOrderDetail = async () => {
   
   try {
     const apiBase = import.meta.env.VITE_API_BASE;
-    // 傳送訂單編號字串給後端
     const response = await fetch(`${apiBase}/getOrderDetail.php?id=${currentOrderNumber}`);
     const data = await response.json();
 
@@ -74,18 +83,17 @@ const getOrderDetail = async () => {
 
     if (data && data.info) {
         OrderData.value = {
-          // ★ 修改：顯示訂單編號 (字串)
           orderId: data.info.order_number, 
-          // 如果你的資料庫有 name_en 則用，否則用 member_ID 或需要 JOIN member 表
           memberName: data.info.name_en || data.info.member_ID, 
-          recipientName: data.info.name_en, // 假設收件人同會員，若有獨立欄位請修改
+          recipientName: data.info.name_en, 
           phone: data.info.phone,
           address: data.info.address_en,
           paymentMethod: data.info.payment,
-          status: data.info.status,
+          // ★ 重要：轉為 Number 類型，確保 select 能選中
+          status: Number(data.info.status), 
           createTime: data.info.date,
           updateTime: new Date().toISOString().split('T')[0],
-          isCancel: Number(data.info.status) === 4, // 如果狀態是 4 則視為取消
+          isCancel: Number(data.info.status) === 4, 
           cancelReason: data.info.remark
         }
     }
@@ -107,13 +115,13 @@ const saveChanges = async () => {
     loading.value = true;
     
     const payload = {
-        // 傳送訂單編號給後端更新
         orderId: OrderData.value.orderId, 
         recipientName: OrderData.value.recipientName,
         phone: OrderData.value.phone,
         address: OrderData.value.address,
+        status: OrderData.value.status, // ★ 傳送狀態
         isCancel: OrderData.value.isCancel,
-        cancelReason: OrderData.value.cancelReason // 注意這裡原本寫 remark，對應 v-model 是 cancelReason
+        cancelReason: OrderData.value.cancelReason 
     };
 
     try {
@@ -134,6 +142,7 @@ const saveChanges = async () => {
             ElMessage.success('訂單更新成功！');
             await getOrderDetail();
         } else {
+            // 這裡會顯示後端回傳的錯誤 (例如：無法修改)
             ElMessage.error(data.message || '更新失敗');
         }
 
@@ -144,6 +153,29 @@ const saveChanges = async () => {
         loading.value = false;
     }
 }
+
+// ★ 監聽器：當下拉選單改變時
+watch(() => OrderData.value.status, (newStatus) => {
+    const s = Number(newStatus);
+    // 如果選了 4 (取消/付款失敗)，自動勾選下方 checkbox
+    if (s === 4) {
+        OrderData.value.isCancel = true;
+    } else {
+        OrderData.value.isCancel = false;
+    }
+});
+
+// ★ 監聽器：當 checkbox 改變時
+watch(() => OrderData.value.isCancel, (isCancel) => {
+    if (isCancel) {
+        OrderData.value.status = 4;
+    } else {
+        // 取消勾選時，若原本是 4，則跳回 1 (未出貨)，或是你想跳回原本的狀態
+        if (Number(OrderData.value.status) === 4) {
+            OrderData.value.status = 1;
+        }
+    }
+});
 
 onMounted(() => {
   getOrderDetail();
@@ -185,19 +217,40 @@ onMounted(() => {
           
           <div class="info-group">
              <el-row :gutter="24">
-               <el-col :span="8">
+               <el-col :span="6">
                  <div class="info-item">
                    <label>會員姓名</label>
                    <div class="info-value">{{ OrderData.memberName }}</div>
                  </div>
                </el-col>
-               <el-col :span="8">
+               
+               <el-col :span="6">
                  <div class="info-item">
                    <label>付款方式</label>
                    <div class="info-value">{{ OrderData.paymentMethod }}</div>
                  </div>
                </el-col>
-               <el-col :span="8">
+
+               <el-col :span="6">
+                 <div class="info-item">
+                   <label>訂單狀態</label>
+                   <el-select 
+                     v-model="OrderData.status" 
+                     placeholder="狀態" 
+                     :disabled="isLocked"
+                     style="width: 100%"
+                   >
+                     <el-option
+                       v-for="item in statusOptions"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value"
+                     />
+                   </el-select>
+                 </div>
+               </el-col>
+
+               <el-col :span="6">
                  <div class="info-item">
                    <label>建立時間</label>
                    <div class="info-value">{{ OrderData.createTime }}</div>
@@ -216,13 +269,17 @@ onMounted(() => {
             <el-row :gutter="24">
                 <el-col :span="12">
                   <el-form-item label="收件人">
-                    <el-input v-model="OrderData.recipientName" placeholder="Enter name" />
+                    <el-input 
+                        v-model="OrderData.recipientName" 
+                        placeholder="Enter name" 
+                        :disabled="isLocked"
+                    />
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                   <el-form-item label="聯絡電話">
-                    <el-input v-model="OrderData.phone"/>
+                    <el-input v-model="OrderData.phone" :disabled="isLocked"/>
                   </el-form-item>
                 </el-col>
                 
@@ -233,6 +290,7 @@ onMounted(() => {
                       type="textarea" 
                       :rows="2"
                       autosize
+                      :disabled="isLocked"
                     />
                   </el-form-item>
                 </el-col>
@@ -240,7 +298,14 @@ onMounted(() => {
 
             <div class="cancel-section">
               <el-form-item label-width="0">
-                 <el-checkbox v-model="OrderData.isCancel" label="取消此訂單" size="large" border class="cancel-checkbox"/>
+                 <el-checkbox 
+                    v-model="OrderData.isCancel" 
+                    label="取消此訂單" 
+                    size="large" 
+                    border 
+                    class="cancel-checkbox"
+                    :disabled="isLocked"
+                 />
               </el-form-item>
               
               <transition name="el-zoom-in-top">
@@ -251,6 +316,7 @@ onMounted(() => {
                       type="textarea" 
                       :rows="3"
                       placeholder="例如：訂錯商品、更換付款方式..." 
+                      :disabled="isLocked"
                     />
                   </el-form-item>
                 </div>
@@ -283,15 +349,17 @@ onMounted(() => {
         </div>
 
         <div class="footer-actions">
-           <el-button @click="goBack" size="large" class="cancel-btn">取消</el-button>
+           <el-button @click="goBack" size="large" class="cancel-btn">返回</el-button>
+           
            <el-button 
              type="primary" 
              color="#003060" 
              @click="saveChanges" 
              size="large" 
              :loading="loading"
+             :disabled="isLocked"
            >
-             儲存變更
+             {{ isLocked ? '訂單已鎖定' : '儲存變更' }}
            </el-button>
         </div>
 
@@ -385,6 +453,7 @@ onMounted(() => {
   background-color: #f5f7fa; 
   padding: 8px 12px;
   border-radius: 4px;
+  min-height: 23px; /* 防止內容為空時塌陷 */
 }
 
 /* 表單樣式 */
