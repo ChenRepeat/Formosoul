@@ -398,7 +398,7 @@ onUnmounted(() => {
           <li v-for="opt in langOptions" :key="opt.value">
             <a href="#" @click.prevent.stop="selectLang(opt.value)" 
               :class="{ 'current-lang': currentLang === opt.value }">
-              <h5>{{ opt.label }}</h5>
+              <h6 class="langli">{{ opt.label }}</h6>
             </a>
           </li>
         </ul>
@@ -624,6 +624,11 @@ img { object-fit: none; }
   h6{
     text-transform: capitalize;
     text-indent: 1em;
+  }
+
+  .langli{
+    text-indent: unset;
+
   }
   
 }
