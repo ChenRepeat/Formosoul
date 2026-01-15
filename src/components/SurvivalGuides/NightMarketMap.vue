@@ -992,7 +992,6 @@ function closeWelcomeFrame (){
   box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
 }
 
-
 // RWD 1200 
 @media screen and (max-width:1200px) {
     .btn-blue-fill {
