@@ -686,5 +686,152 @@
     "confirmNewPasswordLabel": "Confirm new password"
     
 
+  },
+  "policy":{
+    "deliveryTitle":"▌ Shipping Costs",
+    "delivery1":[
+      "｜Taiwan｜ (Included its offshore islands)",
+      "- Delivered by Taiwan Pelican Express with NT$80 flat rate for order under NT$2000.",
+      "- Free shipping for order over NT$2000."
+    ],
+    "delivery2":[
+      "｜International｜",
+      "- Air delivered by DPEX.",
+      "- No free shipping for oversea.",
+      "- The cost of oversea shipping is based upon the weight of the items you order. (shipping fee will be calculated automatically on the checkout page)"
+    ],
+    "paymentTitle":"▌ Taiwan Payment",
+    "paymentText1":"｜Credit Card Payments｜",
+    "paymentText2":"- Accepted credit cards: VISA, MasterCard, and JCB",
+    "paymentText3":"｜Credit card installment plan with cooperated banks｜",
+    "paymentText4":"- Cooperated banks: The Shanghai Commercial & Savings Bank, JihSun Bank, Taipei Fubon Bank, Tashin International Bank, Taiwan Business Bank, Shin Kong Bank, Bank SinoPac, E. Sun Bank, Taiwan Cooperative Bank, Entie Commercial Bank, Cathay United Bank, First Bank, Standard Chartered Bank, Hua Nan Bank, Hwatai Bank, Sunny Bank, KGI Bank, Chang Hwa Bank, Far Eastern International Bank, Union Bank of Taiwan.",
+    "paymentText5":"▌Oversea Payment",
+    "paymentText6":"｜Credit Card Payment｜",
+    "paymentText7":"- Accepted Credit Card: VISA, MasterCard, JCB, UnionPay.",
+    "returnTitle":"▌ Inquiries Regarding Online Shopping",
+    "returnSubTitle":"- Please contact us via our customer service email: service@formosoul.com",
+    "return1":"▌ Product Returns & Exchanges \nPlease note that when returning or exchanging an item, it must be restored to its original condition. This means the item must be in the brand-new state in which you received it, including: tags attached, and all product/inner/outer packaging, documents, and gifts must be new and unused. We cannot accept returns or exchanges if the item is stained, damaged, retains odors, or has incomplete packaging. Returns/Exchanges are limited to one time per order.",
+    "return2":"｜Customized Products｜",
+    "return3":"- Products that are customized or made-to-order based on consumer requirements are exclusive and difficult to resell. Therefore, in accordance with the law, the 7-day appreciation period does not apply. Returns are not accepted unless the product itself is defective or the wrong item was sent.",
+    "return4":"｜Taiwan Region｜",
+    "return5":"- In accordance with Taiwan’s Consumer Protection Act, Formosoul provides a 7-day appreciation period. Please apply for a return within 7 days of the product's delivery.",
+    "return6":"｜International Regions｜",
+    "return7":"- To provide a consistent experience for international consumers, Formosoul also offers a return application period of 7 days starting from the day after delivery. However, due to high international logistics costs, international orders are eligible for returns only; exchanges are not available. We appreciate your understanding.",
+    "return8":[
+      "▌Return & Exchange Application Process \n- If you receive a defective item or an item that does not match your order, please strictly contact us within 7 days of delivery. We cannot provide return/exchange services after this period. Customer service will reply to your application email within 3 business days (excluding weekends and holidays).",
+      "｜Taiwan Region｜  Please ensure your email includes the following information:",
+      "- Order Number",
+      "- Name",
+      "- Phone Number",
+      "- E-MAIL",
+      "- Product Name / Quantity / Amount",
+      "- Reason for Return/Exchange"
+    ],
+    "return9":[
+      "｜International Regions｜ \nPlease contact customer service before mailing the return and provide the following information:",
+      "- Order Number",
+      "- Name",
+      "- Phone Number",
+      "- E-MAIL",
+      "- Product Name / Quantity / Amount",
+      "- Reason for Return/Exchange"
+    ],
+    "return10":"▌ Photos of the actual product and outer packaging (Required) Once customer service confirms the item meets return conditions, we will provide the designated return address and instructions. Please do not mail the item back on your own without confirmation; if you do so, you will be responsible for the return shipping costs, and your rights may be affected.",
+    "return11":[
+      "｜Credit Card Refund Policy｜",
+      "- If you paid via credit card (one-time payment) or Apple Pay, we will process the refund directly online; no bank account details are needed. (Bank processing times vary; refunds typically take 7-21 business days to complete and appear on your next billing statement.)",
+      "- Please confirm the item is in brand-new condition (tags attached, packaging/documents/gifts intact); otherwise, the return/exchange cannot be processed."
+    ],
+    "return12":[
+      "｜Home Pickup (Taiwan Only)｜",
+      "- Applicable only to home delivery orders; Logistics partner: Pelican Delivery (宅配通).",
+      "- Upon receiving your application, we will send an 'Acceptance Notification' and arrange for a courier to pick up the package.",
+      "- Please pack the item securely and hand it to the courier; you do not need to pay shipping fees. We will process the refund or exchange immediately after receiving the item."
+    ],
+    "return13":[
+      "｜International Order Fees｜",
+      "- Except for defective items or shipping errors, the consumer is responsible for international return shipping costs and any potential customs duties or handling fees. Original shipping fees are non-refundable.",
+      "- If a package is returned due to incorrect address information, refusal to accept, or failure to pick up within the local holding period, the refund will be the order amount minus actual round-trip shipping costs and related taxes. No re-shipment will be offered.",
+      "- International returns are limited to one time; please confirm the items and quantity before applying to avoid unnecessary international shipping costs."
+    ],
+    "return14":[
+      "▌ Returns and exchanges will NOT be accepted under the following circumstances",
+      "｜Taiwan Region｜",
+      "- Items not securely packaged, leading to potential staining or damage during return.",
+      "- Items clearly worn (not just tried on), containing odors (e.g., perfume), hair, or makeup marks.",
+      "- Damage or stains caused by the customer.",
+      "- Items with tags removed, or missing labels/accessories.",
+      "- Items where the returned state differs significantly from the delivery state (including outer boxes and accessories).",
+      "- Exchange requests for non-defective items.",
+      "- Requests to exchange for a different model or style.",
+      "- No price difference compensation will be provided if the same item goes on sale during the exchange process.",
+      "- We reserve the right to refuse future orders from customers who repeatedly request returns or cancel orders due to personal reasons."
+    ],
+    "return15":[
+      "｜International Regions｜",
+      "- International orders are eligible for returns only; requests for exchanges of any kind will not be accepted.",
+      "- Failure to contact customer service within 7 days to provide product and packaging photos and obtain return authorization.",
+      "- Items deemed ineligible for return after customer service review of the provided photos.",
+      "- Failure to return the item via the designated address and method, or sending the item to an unauthorized address.",
+      "- Products that have been used, contain odors, have had tags removed, are missing accessories, or have damaged/incomplete packaging.",
+      "- We reserve the right to refuse future orders from customers who repeatedly request returns or cancel orders due to personal reasons."
+    ],
+    "privacyTitle":"Privacy Policy",
+    "privacySubTitle":"This Privacy Policy explains how we collect, use, protect, and handle your personal information when you use our services. By accessing or using our services, you agree to the terms described below.",
+    "privacy1":[
+      "I. Information We Collect",
+      "We may collect the following types of information to provide and improve our services:",
+      "1. Basic Information: Name, nickname, email address, phone number, and other contact details.",
+      "2. Transaction Information: Payment records, shipping details, and order history.",
+      "3. Technical Data: IP address, device information, browser type, access time, and cookie data.",
+      "4. User-Provided Content: Messages, uploaded files, forms, or other information you submit."
+    ],
+    "privacy2":[
+      "II. How We Use Your Information",
+      "Your personal data may be used for the following purposes:",
+      "1. To provide and maintain our products or services.",
+      "2. To process payments, verify identity, and manage orders.",
+      "3. To respond to inquiries and provide customer support.",
+      "4. To improve website performance and enhance user experience.",
+      "5. To send important notifications such as updates or policy changes."
+    ],
+    "privacy3":[
+      "III. Data Protection",
+      "We implement reasonable technical and administrative measures to safeguard your personal information from unauthorized access, disclosure, alteration, or destruction."
+    ],
+    "privacy4":[
+      "IV. Sharing Information with Third Parties",
+      "We do not sell or trade your personal information. Your data may be shared only under the following circumstances:",
+      "1. With your prior consent.",
+      "2. When required to complete a transaction (e.g., logistics providers, payment processors).",
+      "3. When required to comply with legal obligations or protect legitimate rights.。"
+    ],
+    "privacy5":[
+      "V. Data Retention",
+      "We retain personal information only for the duration necessary to fulfill the intended purposes. When the purpose is completed, or when required by law, we will delete or anonymize your data."
+    ],
+    "privacy6":[
+      "VI. Cookies and Tracking Technologies",
+      "We may use cookies or similar technologies to enhance user experience, analyze site traffic, and provide personalized content. You may disable cookies through your browser settings, but certain features may not function properly."
+    ],
+    "privacy7":[
+      "VII. Your Rights",
+      "You have the right to:",
+      "- Request access to your personal data",
+      "- Request a copy of your data",
+      "- Request corrections or updates",
+      "- Request to stop data processing",
+      "- Request deletion of your personal data",
+      "To exercise these rights, please contact our support team."
+    ],
+    "privacy8":[
+      "VIII. Changes to This Privacy Policy",
+      "We may update this Privacy Policy due to legal requirements or service adjustments. The latest version will always be available on our website, and we encourage you to review it periodically."
+    ],
+    "privacy9":[
+      "IX. Contact Information",
+      "If you have any questions regarding this Privacy Policy or your personal data, please contact our customer support."
+    ]
+    
   }
 }
