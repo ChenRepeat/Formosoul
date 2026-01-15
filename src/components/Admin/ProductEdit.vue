@@ -88,14 +88,15 @@
           </div>
 
           <div class="content-card">
-            <h5 class="card-title">商品圖片</h5>
+            <h5 class="card-title">圖片</h5>
             <el-row :gutter="40">
               <el-col :span="10">
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品主圖 (封面)</span>
-                    <span class="hint">建議 1200x1200px, JPG/PNG (拖曳可直接替換)</span>
+                    <span class="hint">建議 1200x1200px, JPG/PNG</span>
                   </div>
+                  
                   <el-upload
                     ref="mainUploaderRef"
                     class="main-uploader"
@@ -103,16 +104,21 @@
                     action="#"
                     :auto-upload="false"
                     :limit="1"
-                    :show-file-list="true"
-                    v-model:file-list="mainImage"
-                    list-type="picture"
-                    @exceed="handleExceed"
+                    :show-file-list="false" 
+                    :on-exceed="handleMainExceed"
+                    :on-change="handleMainFileChange"
+                    accept="image/*"
                   >
-                    <div class="upload-content">
-                      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                      <div class="el-upload__text">
-                        拖曳圖片至此或 <em>點擊上傳</em>
+                    <div v-if="mainPreview" class="preview-container">
+                      <img :src="mainPreview" class="preview-img" />
+                      <div class="overlay">
+                        <span>更換圖片</span>
                       </div>
+                    </div>
+
+                    <div v-else class="upload-placeholder">
+                      <el-icon class="upload-icon"><Plus /></el-icon>
+                      <div class="upload-text">拖曳圖片至此或 點擊上傳</div>
                     </div>
                   </el-upload>
                 </div>
@@ -122,16 +128,19 @@
                 <div class="upload-block">
                   <div class="field-header">
                     <span class="label">商品更多視角 (最多 4 張)</span>
-                    <span class="hint">建議 800x800px</span>
+                    <span class="hint">建議 800x800px (拖曳可直接取代舊圖)</span>
                   </div>
                   <el-upload
+                    ref="subUploaderRef"
                     v-model:file-list="subImages"
                     action="#"
                     list-type="picture-card"
                     :auto-upload="false"
                     :limit="4"
                     multiple
+                    drag
                     class="sub-uploader"
+                    :on-exceed="handleSubExceed"
                   >
                     <el-icon><Plus /></el-icon>
                   </el-upload>
@@ -210,8 +219,8 @@
 <script setup>
 import { reactive, ref, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Plus, UploadFilled, ArrowLeft } from '@element-plus/icons-vue'
-import { ElMessage, genFileId } from 'element-plus' // ★ 修改 2: 引入 genFileId
+import { Plus, ArrowLeft } from '@element-plus/icons-vue' // 移除 UploadFilled
+import { ElMessage, genFileId } from 'element-plus'
 import ListLayout from './ListLayout.vue'
 
 const router = useRouter()
@@ -219,8 +228,13 @@ const route = useRoute()
 const loading = ref(false)
 const productID = route.params.id
 
-// ★ 修改 3: 新增 uploader 的 ref
+// Uploader Refs
 const mainUploaderRef = ref(null)
+const subUploaderRef = ref(null)
+
+// ★ 主圖相關變數 (新增)
+const mainPreview = ref(null)
+const mainFile = ref(null)
 
 // 表單資料
 const addProductForm = reactive({
@@ -254,18 +268,47 @@ watch(() => addProductForm.typeEn, (newValue) => {
   }
 })
 
-// 圖片檔案列表
-const mainImage = ref([])
+// 副圖列表
 const subImages = ref([])
 
-// 覆蓋圖片
-const handleExceed = (files) => {
-  // 清除當前檔案 (包含舊圖)
+// ★ 主圖覆蓋邏輯 (與新增頁面相同)
+const handleMainExceed = (files) => {
   mainUploaderRef.value.clearFiles()
   const file = files[0]
-  file.uid = genFileId() // 賦予新 ID
-  // 手動觸發上傳流程 (這樣就會被判定為新加入的檔案，擁有 .raw 屬性)
+  file.uid = genFileId()
   mainUploaderRef.value.handleStart(file)
+}
+
+// ★ 主圖檔案變更處理 (處理預覽圖)
+const handleMainFileChange = (uploadFile) => {
+  const file = uploadFile.raw
+  if (!file) return
+
+  if (!file.type.startsWith('image/')) {
+    ElMessage.warning('請上傳圖片格式')
+    mainUploaderRef.value.clearFiles()
+    return
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    ElMessage.warning('圖片大小請勿超過 2MB')
+    mainUploaderRef.value.clearFiles()
+    return
+  }
+
+  mainFile.value = file
+  // 建立本地預覽連結
+  mainPreview.value = URL.createObjectURL(file)
+}
+
+// 副圖覆蓋邏輯
+const handleSubExceed = (files) => {
+  subUploaderRef.value.clearFiles()
+  const newFiles = Array.from(files).slice(0, 4)
+  
+  newFiles.forEach((file) => {
+    file.uid = genFileId()
+    subUploaderRef.value.handleStart(file)
+  })
 }
 
 const goBack = () => {
@@ -304,24 +347,22 @@ const fetchProductDetails = async (id) => {
           addProductForm.useEn = detail.use_en
       }
       
-      // 圖片處理
+      // ★ 圖片處理：讀取資料庫圖片顯示於預覽
       const rawImageStr = data.image || '';
       const allImages = rawImageStr ? rawImageStr.split('|') : [];
 
       if (allImages.length > 0) {
-         mainImage.value = [{
-           name: 'current_main.png',
-           url: `${imgBase}${allImages[0]}`
-         }];
+         // 設定主圖預覽網址
+         mainPreview.value = `${imgBase}${allImages[0]}`;
       } else {
-         mainImage.value = [];
+         mainPreview.value = null;
       }
 
       if (allImages.length > 1) {
         subImages.value = allImages.slice(1).map((filename, index) => ({
           name: `sub_${index}.png`,
           url: `${imgBase}${filename}`,
-          rawName: filename // 保留原始檔名供參考
+          rawName: filename
         }));
       } else {
         subImages.value = [];
@@ -358,12 +399,12 @@ const submitForm = async () => {
     fd.append(key, value === undefined || value === null ? '' : value);
   }
 
-  // (A) 主圖邏輯：如果有 .raw 代表是使用者新拖曳進去的，需要上傳
-  if (mainImage.value.length > 0 && mainImage.value[0].raw) {
-    fd.append('mainImage', mainImage.value[0].raw);
+  // ★ 主圖：如果有新選的檔案 (mainFile 有值)，才加入 FormData
+  if (mainFile.value) {
+    fd.append('mainImage', mainFile.value);
   }
 
-  // (B) 副圖
+  // 副圖：如果有 .raw 代表是新上傳的
   subImages.value.forEach((file) => {
     if (file.raw) {
        fd.append('subImages[]', file.raw);
@@ -380,9 +421,6 @@ const submitForm = async () => {
 
     if (data.success) {
       ElMessage.success('商品更新成功！');
-      // 可以選擇更新後重新撈取資料，顯示最新圖片 (選用)
-      // fetchProductDetails(productID); 
-      // 或者直接跳回列表
       router.push('/admin/product-management');
     } else {
       ElMessage.error('更新失敗：' + (data.message || '未知錯誤'));
@@ -450,6 +488,8 @@ onMounted (() =>{
   background-color: #f5f7fa !important;
   box-shadow: 0 0 0 1px #e4e7ed inset !important;
 }
+
+/* === 圖片上傳區樣式 (與新增商品一致) === */
 .upload-block {
     display: flex;
     flex-direction: column;
@@ -468,30 +508,99 @@ onMounted (() =>{
     color: #999;
     font-size: 13px;
 }
+
+/* --- 主圖上傳器 (大方框) --- */
+.main-uploader {
+    width: 100%;
+    display: block;
+}
+.main-uploader :deep(.el-upload) {
+    width: 100%;
+    display: block;
+}
 .main-uploader :deep(.el-upload-dragger) {
-    height: 220px;
+    width: 100%;
+    height: 350px; /* 高度對齊新增頁面 */
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f8f9fa;
-    border: 2px dashed #dcdfe6;
+    background-color: #fafafa;
+    border: 1px dashed #dcdfe6;
+    border-radius: 6px;
     transition: all 0.3s;
+    padding: 0;
 }
 .main-uploader :deep(.el-upload-dragger:hover) {
-    border-color: #003060;
+    border-color: #409eff;
     background-color: #f0f7ff;
 }
-.el-icon--upload {
-    color: #003060;
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #909399;
+    height: 100%;
+    width: 100%;
+}
+.upload-icon {
+    font-size: 48px;
+    color: #dcdfe6;
     margin-bottom: 10px;
 }
+.upload-text {
+    font-size: 14px;
+}
+
+/* 預覽圖與遮罩 */
+.preview-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+.overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; transition: opacity 0.3s;
+    color: white; font-size: 16px;
+    z-index: 10;
+}
+.main-uploader:hover .overlay { opacity: 1; }
+
+/* --- 副圖上傳器 (Grid) --- */
 .sub-uploader :deep(.el-upload-list--picture-card .el-upload-list__item),
 .sub-uploader :deep(.el-upload--picture-card) {
     width: 100px;
     height: 100px;
     margin: 0 10px 10px 0;
 }
+.sub-uploader :deep(.el-upload-dragger) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none; 
+    background: transparent;
+}
+/* 強制顯示 picture-card 的上傳框 */
+.sub-uploader :deep(.el-upload--picture-card) {
+    display: inline-flex !important;
+}
+
 .footer-actions {
   display: flex;
   justify-content: center;
