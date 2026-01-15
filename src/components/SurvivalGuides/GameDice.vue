@@ -338,9 +338,7 @@ const handleCheckLedger = () => {
     showCardOverlay.value = true;
 };
 
-'localhost/tjd103/public/php/test.php'
 
-'/hjkhk'
 //  重置遊戲 init , play again
 const resetGame = () => {
   gameState.value = "IDLE";

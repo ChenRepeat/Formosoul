@@ -325,13 +325,12 @@ const fetchWeather = async (cityName, locationName) => {
 
     if (weatherText.includes('雨') || weatherText.includes('雷') || weatherText.includes('陣雨')){
       weatherStatus.value = 'Rainy';
-      console.log(`✅ ${locationName} 天氣：${weatherText} → 雨天`);
+      // console.log(`✅ ${locationName} 天氣：${weatherText} → 雨天`);
+    } else if (weatherText.includes('晴') || weatherText.includes('sun') || lowerWeatherText.includes('clear')) {      weatherStatus.value = 'Clear';
+      // console.log(`✅ ${locationName} 天氣：${weatherText} → 晴天`);
     } else if (weatherText.includes('陰') || weatherText.includes('多雲')) {
       weatherStatus.value = 'Cloudy';
-      console.log(`✅ ${locationName} 天氣：${weatherText} → 陰天`);
-    } else if (weatherText.includes('晴') || weatherText.includes('sun') || lowerWeatherText.includes('clear')) {
-      weatherStatus.value = 'Clear';
-      console.log(`✅ ${locationName} 天氣：${weatherText} → 晴天`);
+      // console.log(`✅ ${locationName} 天氣：${weatherText} → 陰天`);
     } else {
       weatherStatus.value = null;
     }
@@ -704,12 +703,6 @@ defineExpose({
           ✕
         </button>
       </div>
-      <!-- 測試按鈕 (可選，用於測試天氣效果) -->
-      <!-- <div class="weather-test-controls">
-        <button @click="weatherStatus = 'Clear'">☀️ 晴天</button>
-        <button @click="weatherStatus = 'Cloudy'">☁️ 陰天</button>
-        <button @click="weatherStatus = 'Rainy'">🌧️ 雨天</button>
-      </div> -->
     </div>
   </div>
 
@@ -877,7 +870,7 @@ defineExpose({
 
 :deep(.sunray) {
   position: absolute;
-  top: -50px;
+  top: -100px;
   width: 22%;
   height: 80%;
   background: linear-gradient(to bottom, 
@@ -924,5 +917,6 @@ defineExpose({
     opacity: 1;
   }
 };
+
 
 </style>
