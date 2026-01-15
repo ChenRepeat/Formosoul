@@ -120,13 +120,7 @@ const handleCheckLedger = () => {
 };
 
 
-// --- 障礙物類型定義陣列 ---
-const obstacleConfigs = [
-  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Motor.png`, width: 60, score: 10 },
-  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Taxi.png`, width: 120, score: 5 },
-  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Truck.png`, width: 150, score: 15 },
 
-];
 
 // --- 配置常數 ---
 const BIKE_WIDTH = 100;
@@ -174,8 +168,8 @@ const update = (time, deltaTime) => {
   // 玩家移動
   const moveSpeed = 1000 * dt;
   let targetTilt = 0;
-  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 15; }
-  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -15; }
+  if (keys.ArrowLeft) { playerX.value -= moveSpeed; targetTilt = 10; }
+  else if (keys.ArrowRight) { playerX.value += moveSpeed; targetTilt = -10; }
   
   playerTilt.value = gsap.utils.interpolate(playerTilt.value, targetTilt, 0.3);
 
@@ -208,7 +202,15 @@ const update = (time, deltaTime) => {
     if (obs.z > Z_DESPAWN) obstacles.splice(i, 1);
   }
 };
-
+const motorWidth = ref(0)
+const taxiWidth = ref(0)
+const truckWidth = ref(0)
+// --- 障礙物類型定義陣列 ---
+const obstacleConfigs = [
+  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Motor.png`, width: motorWidth, score: 10 },
+  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Taxi.png`, width: taxiWidth, score: 5 },
+  { img: `${import.meta.env.BASE_URL}/Classes/MotorGame/Truck.png`, width: truckWidth, score: 15 },
+];
 const spawnObstacle = () => {
   const roadWidth = containerWidth.value * 0.92;
   const laneCenters = [-roadWidth * 0.3, 0, roadWidth * 0.3];
@@ -281,7 +283,12 @@ const endGame = () => {
 };
 
 const updateSize = () => {
-  if (container.value) {containerWidth.value = container.value.getBoundingClientRect().width;}
+  if (container.value) {
+    containerWidth.value = container.value.getBoundingClientRect().width;
+    motorWidth.value = containerWidth.value*(3/26)
+    taxiWidth.value = containerWidth.value*(6/26)
+    truckWidth.value = containerWidth.value*(7/26)
+  }
  
 };
 

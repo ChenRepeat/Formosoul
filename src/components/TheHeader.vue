@@ -310,11 +310,11 @@ onUnmounted(() => {
           :class="{ 'active': isLangMenuOpen }">
           <div class="lang-roller-window">
             <div class="lang-roller-list" ref="langRollerRef">
-              <h6 v-for="(opt, i) in [...langOptions, ...langOptions]" 
+              <p v-for="(opt, i) in [...langOptions, ...langOptions]" 
                 :key="i"
                 class="trigger-lang dp-flex">
                 {{ opt.short }}
-              </h6>
+            </p>
             </div>
           </div>
         </div>

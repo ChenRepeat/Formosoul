@@ -162,7 +162,8 @@ onMounted( async () => {
 
   }
   .content-container aside{
-    width: 315px;
+    width: 25%;
+    max-width: 315px;
     flex-shrink: 0;
     margin-right: 64px;
     z-index: 99;
@@ -198,7 +199,9 @@ onMounted( async () => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.content-container main{
+  width: 100%;
+}
   .content-container img{
     width: 100%;
     max-width: 820px;
@@ -206,6 +209,7 @@ onMounted( async () => {
     display: block; 
     margin-bottom: 60px; 
     border-radius: 7px;
+    object-fit: contain;
   }
   .article-container{
     width: 100%;
@@ -220,6 +224,7 @@ onMounted( async () => {
     white-space: pre-wrap;
     padding: 40px;
     border-radius: 7px;
+    width: 100%;
   }
   .text-area h3{
     margin-bottom: 20px;
