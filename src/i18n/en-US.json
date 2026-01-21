@@ -357,6 +357,7 @@
     "recipientInformation":"Recipient Information",
     "name":"Name",
     "phoneNumber":"Phone Number",
+    "phoneEx":"(Country code + Phone. Ex: +81-XXXXXXXX)",
     "address":"Address",
     "city":"Select City",
     "dist":"Select District",

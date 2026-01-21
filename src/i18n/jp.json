@@ -346,6 +346,7 @@
     "recipientInformation": "受取人情報",
     "name": "氏名",
     "phoneNumber": "電話番号",
+    "phoneEx":"(国番号＋電話番号。例：+81-XXXXXXXX)",
     "address": "住所",
     "city": "都市を選択",
     "dist": "地区を選択",
