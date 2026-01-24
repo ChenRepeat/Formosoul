@@ -45,6 +45,7 @@ const xNow = ref(0)
 const distance = ref(0)
 const isOpen = ref(false);
 const isPress =ref(false) 
+const hasHint = ref(true)
 
 
 for(let i=0; i< all.length * 2; i++){
@@ -78,13 +79,11 @@ const closeInfo = () => {
 }
 
 const loadedCount = ref(0);
-const hasHint = ref(true)
 
 function loadSuccess(){
   loadedCount.value++;
   if (loadedCount.value == doubleAll.value.length) {
     authStore.isLoading = false;
-    setTimeout( ()=>hasHint.value = false, (loadedCount.value + 5 ) * 1000) // load 完再顯示 5 秒
   }
 }
 
@@ -110,7 +109,7 @@ const onMousemove = (e) => { // mousemove 1px 呼叫一次
   
   xNow.value = e.clientX // 滑鼠按下&&移動時的當下位置
   distance.value = xNow.value - xStart.value // 距離按下時的總位移
-
+  
 }
 const offPress =()=>{
   isPress.value = false
@@ -119,6 +118,7 @@ const offPress =()=>{
 
 
 onMounted(() => { // DOM 生成後
+  setTimeout( ()=>hasHint.value = false, 5000) // DOM 載入完再顯示 5 秒
     // ------------------------------------swiper 屬性---------------------------------------------
 
 let Carousel = new Swiper(".professor-carousel-container", {
