@@ -258,7 +258,8 @@
 
   },
 "professor":{ 
-    "title":"アカデミーの師",
+    "title":"教授介紹",
+    "hint":"拖曳或點擊圖片",
     "skillTitle":"技能：",
     "name1": "九天玄女",
     "job1": "占卜學",
