@@ -59,6 +59,7 @@
     "vue3-google-login": "^2.0.34"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@vitejs/plugin-vue": "^6.0.2",
     "sass": "^1.94.2",
     "sass-embedded": "^1.93.3",
