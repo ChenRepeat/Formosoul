@@ -295,6 +295,8 @@ async function likeHeart(){
     }
 
   }else{
+    // 如果沒登入，愛心也要變回來，然後跳出登入視窗
+    showDetail.value.isLike = !showDetail.value.isLike;
     authStore.openLoginModal();
     authStore.setmemberView('login');
     // router.push(''); 這句表示跳到這頁的最上面  

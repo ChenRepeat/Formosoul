@@ -532,8 +532,14 @@ async function goOrder(){
                             <input v-model="receiptName" class="input-text" type="text" required>
                         </div>
                         <div class="received-phone">
-                            <p>{{$t('shoppingcart.phoneNumber')}}</p>
-                            <input v-model="receiptPhone" class="input-text" type="text" @input="checkNumber" required>
+                            <div v-if="cartstore.selectCountry !== 'taiwan'">
+                                <p>{{$t('shoppingcart.phoneNumber')}}<span>{{$t('shoppingcart.phoneEx')}}</span></p>
+                                <input v-model="receiptPhone" class="input-text" type="text" @input="checkNumber" required>
+                            </div>
+                            <div v-else>
+                                <p>{{$t('shoppingcart.phoneNumber')}}</p>
+                                <input v-model="receiptPhone" class="input-text" type="text" @input="checkNumber"  placeholder="0912-345678" maxlength="11" required>
+                            </div>
                         </div>
                     </div>
                     <div class="received-address">
@@ -834,6 +840,14 @@ async function goOrder(){
     .received-name, .received-phone{
         flex-basis: 0;
         flex-grow: 1;
+    }
+
+    .received-phone{
+        & span{
+            font-size: 12px;
+            font-weight: 200;
+            margin-left: 8px;
+        }
     }
 
     .received-address{

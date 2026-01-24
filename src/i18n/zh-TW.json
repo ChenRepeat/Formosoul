@@ -365,6 +365,7 @@
     "recipientInformation":"收件資訊",
     "name":"姓名",
     "phoneNumber":"手機號碼",
+    "phoneEx":"(國碼＋電話。例如：+81-XXXXXXXX)",
     "address":"地址",
     "city":"請選擇縣市",
     "dist":"請選擇區域",
