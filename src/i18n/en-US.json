@@ -251,6 +251,7 @@
   },
   "professor":{
     "title":"Professor",
+    "hint":"Drag or Click pictures",
     "skillTitle":"Skills: ",
     "name1": "Jiǔtiān Xuánnǚ",
     "job1": "Professor of Divination",
