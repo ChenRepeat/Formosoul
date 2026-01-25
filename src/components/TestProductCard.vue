@@ -131,9 +131,26 @@ onMounted(() => {
 
 //step3. 監聽 products 的變化。 
 // ＊＊現在因為陣列中有isLike，所以他改變就會讓canvas重繪，如果之後從後端取出的還是有isLike，可以先把陣列轉換成沒有isLike的陣列，作為重繪的基礎依據
+// 如果只是單純用.map處理陣列，卡片還是會重畫，因為每次的變動，.map都會回傳新的陣列，所以會被程式當作新的東西，依然會重畫 => 轉成字串，比對新就值來決定要不要重畫
 watch(
-  () => props.products,
+  // 基礎功能
+  //() => props.products,   //這樣寫，isLike有變化時，卡片也會跟著重新畫一次
+  // 進階功能-step1
+  // () =>props.products.map(product => {
+  //   const {isLike, ...others} = product; //解構賦值... =>把 isLike 拆出來之後，剩下的放到 others 中
+  //   return others;  //回傳沒有 isLike 的陣列
+  // }),
+  // 進階功能-step2
   () =>{
+    const newProducts = props.products.map(product => {
+    const {isLike, ...others} = product; //解構賦值... =>把 isLike 拆出來之後，剩下的放到 others 中
+    return others;  //回傳沒有 isLike 的陣列
+    });
+    return JSON.stringify(newProducts);  //轉成字串
+  },
+  (newVal, oldVal) =>{
+
+    if(newVal === oldVal) return;    //if else 的簡短寫法
 
     // 清空舊的 canvas，避免殘留
     canvasRefs.value = [];
