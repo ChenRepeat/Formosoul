@@ -236,8 +236,9 @@ const receiptAddr = ref('');         //只記錄使用者填寫的部分，完�
 const receiptRemark = ref('');
 const saveAddr = ref(false);         // 是否儲存為常用地址
 
-// 完整地址需要組合
 
+
+// 完整地址需要組合
 const finalAddr = computed(()=>{
     // pinia 通常會自動解包，所以不用.value
     if(cartstore.selectCountry !=='taiwan'){
@@ -323,15 +324,25 @@ async function goOrder(){
             // 清空購物車
             cartstore.clearCart();
             
-            // 跳轉訂單成功畫面
-            // router.push({
-            //     name: 'OrderSuccess',
-            // });
 
 
-            // 拿訂單編號，跳轉綠界
-            const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
-            window.location.href = payURL;
+            //測試環境避開綠界付款
+            const isDev = import.meta.env.DEV;       // vite 內建變數： 開發環境 (npm run dev) = true   正式環境 (npm run build) = false
+            const skipEcpay = false;       //測試環境想測金流，改成false，跳過金流 改成true
+
+            if(isDev && skipEcpay){
+                // 跳轉訂單成功畫面
+                router.push({
+                    name: 'OrderSuccess',
+                });
+            }else{
+
+                // 拿訂單編號，跳轉綠界
+                const payURL = `${apiBase}/ecpay.php?order_number=${response.data.orderID}`; 
+                window.location.href = payURL;
+            }
+
+
         
         }else{
             alert('訂單建立失敗：' + response.data.message);
@@ -534,7 +545,7 @@ async function goOrder(){
                         <div class="received-phone">
                             <div v-if="cartstore.selectCountry !== 'taiwan'">
                                 <p>{{$t('shoppingcart.phoneNumber')}}<span>{{$t('shoppingcart.phoneEx')}}</span></p>
-                                <input v-model="receiptPhone" class="input-text" type="text" @input="checkNumber" required>
+                                <input v-model="receiptPhone" class="input-text" type="text" @input="checkNumber" maxlength="12"required> <!--因為資料庫欄位設定12碼，所以這邊也先鎖12碼，避免報錯-->
                             </div>
                             <div v-else>
                                 <p>{{$t('shoppingcart.phoneNumber')}}</p>

@@ -48,7 +48,7 @@ try {
     // 🔥 只要改這個變數就好，不用改下面的邏輯
     // Ngrok 網址 (測試階段專用)
     $ngrok_domain = "https://carri-luscious-nanci.ngrok-free.dev"; 
-    // tibame 網址 (測試階段專用)
+    // tibame 網址 (正式環境)
     $tibame_domain = "https://tibamef2e.com/tjd103";
 
 
