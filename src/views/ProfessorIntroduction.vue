@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted, nextTick, effect } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import IconWandCore from '@/components/icons/SVG/IconWandCore.vue';
 import Swiper from 'swiper';
-import { Autoplay, FreeMode,EffectCoverflow  } from 'swiper/modules';
+import { Autoplay, FreeMode, EffectCoverflow  } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import { useAuthStore } from "@/stores/autoStore";
@@ -37,18 +37,20 @@ const mouseAt = ref({x:0, y:0}) // 紀錄滑鼠位置
 const professsor = ref('')
 const job = ref('')
 const skillDetail = ref('')
-const refBigPhoto =ref('')
+const refCard =ref('')
 const clickedPhoto = ref('')
-const xStart = ref(0) //起點
+const hint = ref('')
+const xStart = ref(0) // 起點
 const xNow = ref(0)
 const distance = ref(0)
 const isOpen = ref(false);
 const isPress =ref(false) 
+const hasHint = ref(true)
 
 
 for(let i=0; i< all.length * 2; i++){
   let src = all[i % all.length]
-  doubleAll.value.push(src); 
+  doubleAll.value.push(src);  // 複製資料寫入 doubleAll
 } 
 const isIn = ref(Array(doubleAll.value.length*3).fill(false)) // hover 待修復
 const InOrOut= (targetIndex, status)=>{ // 更新 mouseenter 的狀態
@@ -64,24 +66,38 @@ const InOrOut= (targetIndex, status)=>{ // 更新 mouseenter 的狀態
 const openInfo = (index) => {
   if(!info.value[0]) return
   if(index > all.length - 1 ){ index = index - all.length } // 把複製資料的 index 對應到原始資料的
-  if(distance.value > 5) return
+  if(distance.value > 5) return // mousedown ~ mouseup 游標移動的範圍夠小才是單純點擊事件 
   professsor.value = info.value[index].name
   job.value = info.value[index].job
   skillDetail.value = info.value[index].skill
   clickedPhoto.value = all[index]
   isOpen.value = true
+  
 }
 const closeInfo = () => {
   isOpen.value = false
 }
 
 const loadedCount = ref(0);
+
 function loadSuccess(){
   loadedCount.value++;
   if (loadedCount.value == doubleAll.value.length) {
     authStore.isLoading = false;
   }
 }
+
+function onScroll(){
+  const vh = window.innerHeight 
+  if(window.scrollY >= vh / 20){ // user 下滑 5vh 提示詞消失
+    hasHint.value = false
+  }
+  else if(window.scrollY == 0){ // user 重新滑到最上面時提示詞回來 3 秒 
+    hasHint.value = true
+    setTimeout(()=>hasHint.value = false, 3000)
+  }
+}
+
 
 const onMousemove = (e) => { // mousemove 1px 呼叫一次
   // 1. 偵測滑鼠位置，slideChanged()判斷hover。
@@ -93,7 +109,7 @@ const onMousemove = (e) => { // mousemove 1px 呼叫一次
   
   xNow.value = e.clientX // 滑鼠按下&&移動時的當下位置
   distance.value = xNow.value - xStart.value // 距離按下時的總位移
-
+  
 }
 const offPress =()=>{
   isPress.value = false
@@ -102,11 +118,11 @@ const offPress =()=>{
 
 
 onMounted(() => { // DOM 生成後
+  setTimeout( ()=>hasHint.value = false, 5000) // DOM 載入完再顯示 5 秒
     // ------------------------------------swiper 屬性---------------------------------------------
 
 let Carousel = new Swiper(".professor-carousel-container", {
   modules:[Autoplay, FreeMode, EffectCoverflow],
-  // freeMode:true,
   autoplay: {
     delay: 0,
     pauseOnMouseEnter: false,
@@ -120,16 +136,15 @@ let Carousel = new Swiper(".professor-carousel-container", {
     slideShadows : true
   },
   slidesPerView: 'auto',
-  loopedSlides: 32,
+  loopedSlides: 15, // 此處設定在無縫接軌複製區段時 須至少保留多少張
   speed: 1500, // FOR MARQUEE SPEED
   loop: true,
   loopAdditionalSlides: 10,
+  watchSlidesProgress: true,
   resistance: true,
   resistanceRatio: 0,
   allowTouchMove: true,
-  // mousewheel: true,
-  grabCursor: true,
-
+  velocityRatio: 0.5,
 });
 
 // REVERSE MARQUEE
@@ -150,15 +165,15 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
     slideShadows : true
   },
   slidesPerView: 'auto',
-  loopedSlides: 32,
+  loopedSlides: 15,
   speed: 1750, // FOR MARQUEE SPEED
   loop: true,
   loopAdditionalSlides: 10,
-  spaceBetween: 12,
+  watchSlidesProgress: true,
   resistance: true,
   resistanceRatio: 0,
   allowTouchMove: true,
-  grabCursor: true,
+  velocityRatio: 0.5,
 });
 
 
@@ -166,6 +181,7 @@ let reverseMarqueeCarousel = new Swiper(".professor-reverse-carousel-container",
   document.addEventListener('mouseup', offPress)  
   document.addEventListener('touchstart', onMousemove)
   document.addEventListener('touchend', offPress)
+  document.addEventListener('scroll', onScroll)
 })
 
 onUnmounted(()=>{
@@ -180,12 +196,13 @@ onUnmounted(()=>{
   <section class="professor-page-wrapper "> 
     <!-- class 對應 變更嘗試  -->
     <h2 class="professor-title">{{$t('professor.title')}}</h2>
+    <h5 ref="hint" 
+      class="professor-hint"
+      :style="{ opacity: hasHint? 1 : 0 }" >{{$t('professor.hint')}}</h5>
 
     <!-- swiper testing -->
     <div class="carousel-field">
-
-  
-  <div class="professor-carousel-container upper" > <!-- class 對應 -->
+    <div class="professor-carousel-container upper" > <!-- class 對應 -->
     <ul class="professor-list swiper-wrapper " :ref='(ul)=>{if(ul) refLists[0]=ul}'
       @mousedown.prevent="onPress" >
       <li ref='refCard' class="professor-photo-wrapper swiper-slide upper"
@@ -197,7 +214,7 @@ onUnmounted(()=>{
       @mouseleave="InOrOut(index, false)">
       <img :src='photo' class="professor-photo "
       :class="{'mouse-enter':isIn[index]==true}" 
-      @click="openInfo(index)" @load="loadSuccess"
+      @click="openInfo(index)" @load="loadSuccess" 
        >
     </li>
   </ul>   
@@ -270,13 +287,25 @@ onUnmounted(()=>{
   }
 }
 .professor-title{
-color: $color-fsWhite; 
-width: fit-content;
-margin: 0 auto;
-position: relative;
-z-index: 80;
+  color: $color-fsWhite; 
+  width: fit-content;
+  margin: 0 auto;
+  position: relative;
+  z-index: 80;
 }
-
+.professor-hint{
+  width: max-content;
+  height: max-content;
+  color: $color-fsWhite;
+  opacity: 1;
+  position: fixed;
+  bottom: 5vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 99;
+  pointer-events: none;
+}
  // ------------------------大卡片-----------------------------
 
 
@@ -374,6 +403,9 @@ z-index: 80;
     &.lower{
       top: 60px;
     }
+    &:active{
+      cursor: grabbing;
+    }
     .swiper-wrapper { // ul
       display: flex;
       
@@ -387,10 +419,14 @@ z-index: 80;
         border-radius: 8px;
         
         &.mouse-enter ,&:hover{
-        transform: rotate(2deg) scale(1.1); 
-        z-index: 20;
-        cursor: pointer;
-       }  
+          transform: rotate(2deg) scale(1.1); 
+          z-index: 20;
+          cursor:grab;
+        }
+        &:active{
+          cursor: grabbing;
+
+        }
         .professor-photo { 
           width: 100%;
           filter: brightness(.7);
@@ -445,13 +481,10 @@ z-index: 80;
         max-width: 95vw;
   
       }
-      // &.active{
-      //   // flex-direction: column;
-      // }
+
       .professor-text{
         // width: 95vw;
         max-width: 95vw;
-        
         padding: 8%;
         overflow: visible;
         
