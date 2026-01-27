@@ -32,7 +32,7 @@ const getPopupClass = computed (()=>{
     return '';
 })
 
-// 動態取得上下左右 text frane 座標的 Computed
+// 動態取得上下左右 text frame 座標的 Computed
 const popupStyle = computed(()=>{
     if(!activeItemData.value || !activeItemData.value.pos) return {};
 
