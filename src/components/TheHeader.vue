@@ -52,11 +52,12 @@ const langStore = useLangStore();
 const isLangMenuOpen = ref(false); // 控制語系選單
 const langRollerRef = ref(null);   // GSAP 動畫目標
 const langOptions = [
-  { label: '繁體中文', short: 'ZH', value: 'zh-TW', index: 0 },
-  { label: 'ENGLISH', short: 'EN', value: 'en-US', index: 1 },
-  { label: '日本語', short: 'JA', value: 'ja-JP', index: 2 }
+  { label: '繁體中文', short: 'ZH', value: 'zh-TW', index: 0 ,bgimg:'Lang-Flag/flag-taiwan.svg'},
+  { label: 'ENGLISH', short: 'EN', value: 'en-US', index: 1 ,bgimg:'Lang-Flag/flag-uk.svg' },
+  { label: '日本語', short: 'JA', value: 'ja-JP', index: 2  ,bgimg:'Lang-Flag/flag-jp.svg'}
 ];
-
+const displayedBgImg = ref('');
+const isBgVisible = ref(true);
 const currentLang = computed(() => langStore.locale);
 let currentVirtualIndex = 0; 
 let currentIndex = 0;
@@ -75,7 +76,8 @@ watch(currentLang, (newVal) => {
   const visualTotalItems = logicalTotal * 2;
   const itemStepPercent = 100 / visualTotalItems;
   const targetYPercent = -(currentVirtualIndex * itemStepPercent);
-
+  const targetOption = langOptions.find(opt => opt.value === newVal);
+  isBgVisible.value = false;
   if (langRollerRef.value) {
     gsap.to(langRollerRef.value, {
       yPercent: targetYPercent, 
@@ -86,6 +88,12 @@ watch(currentLang, (newVal) => {
         yPercent: gsap.utils.unitize((y) => {
           return parseFloat(y) % 50; 
         })
+      },
+      onComplete: () => {
+        if (targetOption && targetOption.bgimg) {
+          displayedBgImg.value = `url(${targetOption.bgimg})`;
+        }
+        isBgVisible.value = true;
       }
     });
   }
@@ -278,6 +286,10 @@ onMounted(() => {
         yPercent: initPercent 
       });
     }
+    const initOption = langOptions.find(opt => opt.value === savedLocale);
+    if (initOption && initOption.bgimg) {
+      displayedBgImg.value = `url('${initOption.bgimg}')`;
+    }
   })
 });
 
@@ -308,6 +320,10 @@ onUnmounted(() => {
         <div class="header-lang-trigger dp-flex" 
           @click.stop="toggleLangMenu" 
           :class="{ 'active': isLangMenuOpen }">
+          <div class="lang-bg-layer" 
+            :class="{ 'show': isBgVisible }" 
+            :style="{ backgroundImage: displayedBgImg }">
+          </div>
           <div class="lang-roller-window">
             <div class="lang-roller-list" ref="langRollerRef">
               <p v-for="(opt, i) in [...langOptions, ...langOptions]" 
@@ -469,6 +485,8 @@ onUnmounted(() => {
 img { object-fit: none; }
 
 .header-lang-trigger {
+  height: 30px;
+  width: 30px;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
@@ -476,7 +494,6 @@ img { object-fit: none; }
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-
   &.active {
     box-shadow: 0 0 4px $color-fsWhite;
   }
@@ -485,8 +502,19 @@ img { object-fit: none; }
     height: 30px;
     width: 30px;
   }
+  .lang-bg-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    &.show {
+      opacity: 0.7;
+    }
+  }
 }
-
 .lang-roller-window {
   height: 30px;
   width: 30px;
@@ -514,6 +542,7 @@ img { object-fit: none; }
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  filter: drop-shadow(0 0 2px black);
   @media screen and (max-width: 1366px){
     height: 28px;
     line-height: 28px;
@@ -792,7 +821,7 @@ img { object-fit: none; }
 }
 
 .black{
-  .trigger-lang { color: $color-fsTitle;}
+  .trigger-lang { color: $color-fsTitle;filter: unset;}
   .header-lang-trigger {background-color: unset;}
   .header-icon { color: $color-fsTitle;}
   .burger-list{ color: $color-fsTitle;}
