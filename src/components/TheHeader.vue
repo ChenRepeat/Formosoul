@@ -51,6 +51,7 @@ const langStore = useLangStore();
 // 語系選項清單 如有需要可在 option裡面增加
 const isLangMenuOpen = ref(false); // 控制語系選單
 const langRollerRef = ref(null);   // GSAP 動畫目標
+const baseURL = import.meta.env.VITE_LINE_API_BASE;
 const langOptions = [
   { label: '繁體中文', short: 'ZH', value: 'zh-TW', index: 0 ,bgimg:'Lang-Flag/flag-taiwan.svg'},
   { label: 'ENGLISH', short: 'EN', value: 'en-US', index: 1 ,bgimg:'Lang-Flag/flag-uk.svg' },
@@ -91,7 +92,7 @@ watch(currentLang, (newVal) => {
       },
       onComplete: () => {
         if (targetOption && targetOption.bgimg) {
-          displayedBgImg.value = `url(${targetOption.bgimg})`;
+          displayedBgImg.value = `url('${baseURL}${targetOption.bgimg}')`;
         }
         isBgVisible.value = true;
       }
@@ -288,7 +289,7 @@ onMounted(() => {
     }
     const initOption = langOptions.find(opt => opt.value === savedLocale);
     if (initOption && initOption.bgimg) {
-      displayedBgImg.value = `url('${initOption.bgimg}')`;
+      displayedBgImg.value =`url('${baseURL}${initOption.bgimg}')`;
     }
   })
 });
@@ -543,6 +544,8 @@ img { object-fit: none; }
   justify-content: center;
   white-space: nowrap;
   filter: drop-shadow(0 0 2px black);
+  text-shadow: 0 0 1px black;
+
   @media screen and (max-width: 1366px){
     height: 28px;
     line-height: 28px;
@@ -821,7 +824,7 @@ img { object-fit: none; }
 }
 
 .black{
-  .trigger-lang { color: $color-fsTitle;filter: unset;}
+  .trigger-lang { color: $color-fsTitle;filter: drop-shadow(0 0 1px $color-fsWhite);text-shadow: (0 0 1px $color-fsWhite);}
   .header-lang-trigger {background-color: unset;}
   .header-icon { color: $color-fsTitle;}
   .burger-list{ color: $color-fsTitle;}
